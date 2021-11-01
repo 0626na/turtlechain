@@ -1,13 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-const App = function () {
-  return <h1>터틀체인 2.0</h1>;
-};
+import Router from "router";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router />
   </React.StrictMode>,
   document.getElementById("root")
 );
