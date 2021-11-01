@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { LoginPage, FindIdPage } from "pages";
+import { LoginPage, FindIdPage, ResetPasswordPage } from "pages";
 
 const Router = function () {
   return (
@@ -9,6 +9,7 @@ const Router = function () {
         <Suspense fallback="로딩중...">
           <Route path="/login" component={LoginPage} />
           <Route path="/find-id" component={FindIdPage} />
+          <Route path="/reset-password" component={ResetPasswordPage} />
         </Suspense>
       </Switch>
     </BrowserRouter>
