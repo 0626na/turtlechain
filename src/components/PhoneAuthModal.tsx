@@ -1,5 +1,13 @@
 import styled from "styled-components";
 import { Modal, Form, Input, Button } from "antd";
+import {
+  AUTH_PHONE,
+  PHONE,
+  CREATE_AUTH_NUM,
+  VERIFY_AUTH_NUM,
+  AUTH_NUM,
+  CLOSE,
+} from "constant/string";
 
 interface SuccessData {
   phone: string;
@@ -15,25 +23,25 @@ interface Props {
 const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   return (
     <Modal
-      title="휴대번호 인증"
+      title={AUTH_PHONE}
       width={400}
       closable={false}
       visible={visible}
-      footer={[<Button onClick={onClose && onClose}>닫기</Button>]}
+      footer={[<Button onClick={onClose && onClose}>{CLOSE}</Button>]}
     >
       <Form>
         <Form.Item>
           <ActionContainer>
-            <Input placeholder="휴대번호" />
-            <Button type="primary">인증번호 전송</Button>
+            <Input placeholder={PHONE} />
+            <Button type="primary">{CREATE_AUTH_NUM}</Button>
           </ActionContainer>
         </Form.Item>
         <Form.Item>
-          <Input placeholder="인증번호" />
+          <Input placeholder={AUTH_NUM} />
         </Form.Item>
         <Form.Item>
           <Button block type="primary">
-            인증번호 확인
+            {VERIFY_AUTH_NUM}
           </Button>
         </Form.Item>
       </Form>
