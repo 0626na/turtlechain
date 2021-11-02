@@ -3,6 +3,17 @@ import logo from "images/logo.png";
 import { Link } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Checkbox, Divider, Typography } from "antd";
+import { LOGIN_PAGE } from "constant/description";
+import {
+  ID,
+  PASSWORD,
+  AUTO_LOGIN,
+  FIND_ID,
+  RESET_PASSWORD,
+  LOGIN,
+  SIGN_UP,
+  FIND_MEMBERSHIP,
+} from "constant/string";
 
 const LoginForm = function () {
   return (
@@ -14,23 +25,23 @@ const LoginForm = function () {
       <Form.Item>
         <Input //
           size="large"
-          placeholder="아이디"
+          placeholder={ID}
           prefix={<UserOutlined />}
         />
       </Form.Item>
       <Form.Item>
         <Input.Password //
           size="large"
-          placeholder="비밀번호"
+          placeholder={PASSWORD}
           prefix={<LockOutlined />}
         />
       </Form.Item>
       <Form.Item>
-        <Checkbox>자동 로그인</Checkbox>
+        <Checkbox>{AUTO_LOGIN}</Checkbox>
         <LinkContainer float="right">
-          <Link to="/find-id">아이디 찾기</Link>
+          <Link to="/find-id">{FIND_ID}</Link>
           <Divider type="vertical" />
-          <Link to="/reset-password">비밀번호 재설정</Link>
+          <Link to="/reset-password">{RESET_PASSWORD}</Link>
         </LinkContainer>
       </Form.Item>
       <Form.Item>
@@ -39,16 +50,18 @@ const LoginForm = function () {
           size="large"
           type="primary"
         >
-          로그인
+          {LOGIN}
         </Button>
       </Form.Item>
       <Divider />
       <LinkContainer>
         <Typography>
-          아직 회원이 아니신가요? <Link to="/signup">가입 신청하기</Link>
+          {LOGIN_PAGE.NOT_MEMBER_DESCRIPTION}{" "}
+          <Link to="/signup">{SIGN_UP}</Link>
         </Typography>
         <Typography>
-          다양한 요금제가 궁금하신가요? <Link to="#">멤버쉽 알아보기</Link>
+          {LOGIN_PAGE.FIND_MEMBERSHIP_DESCRIPTION}{" "}
+          <Link to="#">{FIND_MEMBERSHIP}</Link>
         </Typography>
       </LinkContainer>
     </Form>
