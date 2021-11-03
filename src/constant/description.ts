@@ -4,5 +4,5 @@ export const LOGIN_PAGE = {
 };
 
 export const FIND_ID_PAGE = {
-  AUTH_PHONE: "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요.",
+  AUTH_PHONE_DESCRIPTION: "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요.",
 };

@@ -27,7 +27,7 @@ const FindIdForm = function () {
       <Form layout="vertical">
         <Typography.Title level={3}>{FIND_ID}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {FIND_ID_PAGE.AUTH_PHONE}
+          {FIND_ID_PAGE.AUTH_PHONE_DESCRIPTION}
         </Typography>
         <Form.Item>
           <Button //
