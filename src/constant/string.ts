@@ -12,7 +12,7 @@ export const AUTO_LOGIN = "자동 로그인";
 
 // 휴대번호
 export const PHONE = "휴대번호";
-export const AUTH_PHONE = "휴대번호 인증";
+export const AUTH_PHONE = "휴대번호 인증하기";
 
 // 인증번호
 export const AUTH_NUM = "인증번호";
