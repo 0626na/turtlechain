@@ -1,11 +1,18 @@
 import ReactDOM from "react-dom";
-import Router from "router";
 import { RecoilRoot } from "recoil";
+import { QueryClientProvider, QueryClient } from "react-query";
+import Router from "router";
 import "antd/dist/antd.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 ReactDOM.render(
   <RecoilRoot>
-    <Router />
+    <QueryClientProvider client={queryClient}>
+      <Router />
+    </QueryClientProvider>
   </RecoilRoot>,
   document.getElementById("root")
 );
