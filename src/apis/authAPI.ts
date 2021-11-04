@@ -34,9 +34,28 @@ const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
   return response.data.data;
 };
 
+// 아이디 찾기
+interface RequestGetUserID {
+  phone: string;
+  token: string;
+}
+
+interface ResponseGetUserID {
+  data: Array<{ id: number; user_id: string }>;
+}
+
+const getUserID = async function (data: RequestGetUserID) {
+  const { phone, token } = data;
+  const url = `auth/user?phone=${phone}`;
+  const config = { headers: { Authorization: `Api-Key ${token}` } };
+  const response = await customAxios.get<ResponseGetUserID>(url, config);
+  return response.data.data;
+};
+
 const authAPI = {
   createPhoneOTP,
   verifyPhoneOTP,
+  getUserID,
 };
 
 export default authAPI;
