@@ -26,6 +26,13 @@ const ResetPasswordForm = function () {
   const [phone, setPhone] = useState("");
   const [token, setToken] = useState("");
 
+  // 상태 초기화
+  const resetState = () => {
+    form.resetFields();
+    setPhone("");
+    setToken("");
+  };
+
   // 비밀번호 재설정 요청
   const resetPasswordQuery = useMutation(
     ["resetPassword"],
@@ -39,8 +46,7 @@ const ResetPasswordForm = function () {
         message.error(error.response?.data?.msg);
       },
       onSuccess: () => {
-        setPhone("");
-        setToken("");
+        resetState();
         message.success(RESET_PASSWORD_SUCCESS_MESSAGE);
       },
     }
