@@ -23,3 +23,4 @@ export const VERIFY_AUTH_NUM = "인증번호 확인";
 export const CLOSE = "닫기";
 export const SIGN_UP = "서비스 신청하기";
 export const FIND_MEMBERSHIP = "멤버쉽 알아보기";
+export const ONLY_NUMBER = "숫자만";
