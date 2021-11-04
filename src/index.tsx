@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import { RecoilRoot } from "recoil";
 import { QueryClientProvider, QueryClient } from "react-query";
 import Router from "router";
-import "antd/dist/antd.css";
+import "antd/dist/antd.less";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
