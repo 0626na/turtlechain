@@ -55,6 +55,7 @@ const getUserID = async function (data: RequestGetUserID) {
 // 비밀번호 재설정
 interface RequestResetPassword {
   id: string;
+  phone: string;
   password: string;
   token: string;
 }
