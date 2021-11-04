@@ -23,6 +23,7 @@ import PhoneAuthModal from "components/PhoneAuthModal";
 const ResetPasswordForm = function () {
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [form] = Form.useForm();
+  const [phone, setPhone] = useState("");
   const [token, setToken] = useState("");
 
   // 비밀번호 재설정 요청
@@ -31,13 +32,14 @@ const ResetPasswordForm = function () {
     () => {
       const id = form.getFieldValue("id");
       const password = form.getFieldValue("password");
-      return authAPI.resetPassword({ id, password, token });
+      return authAPI.resetPassword({ id, phone, password, token });
     },
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
       onSuccess: () => {
+        setPhone("");
         setToken("");
         message.success(RESET_PASSWORD_SUCCESS_MESSAGE);
       },
@@ -56,8 +58,9 @@ const ResetPasswordForm = function () {
 
   // 인증 성공 콜백
   const onAuthSuccess = (data: { phone: string; token: string }) => {
-    const { token } = data;
+    const { token, phone } = data;
     setToken(token);
+    setPhone(phone);
   };
 
   // 비밀번호 재설정
@@ -88,7 +91,7 @@ const ResetPasswordForm = function () {
             {AUTH_PHONE}
           </Button>
         </Form.Item>
-        {token && (
+        {phone && token && (
           <>
             <Form.Item name="id" label={ID}>
               <Input />
