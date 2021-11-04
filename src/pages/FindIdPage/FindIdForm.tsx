@@ -1,56 +1,104 @@
-import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Divider, Typography } from "antd";
+import { AxiosError } from "axios";
+import { useQuery, useQueryClient } from "react-query";
+import { authAPI } from "apis";
+import { Form, Button, Divider, Typography, message, List, Spin } from "antd";
 import { FIND_ID_PAGE } from "constant/description";
 import { FIND_ID, AUTH_PHONE, LOGIN, RESET_PASSWORD } from "constant/string";
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 const FindIdForm = function () {
-  const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const queryClient = useQueryClient();
 
-  const openPhoneAuthModal = () => {
+  const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [token, setToken] = useState("");
+
+  // 아이디 리스트 요청
+  const getUserIDQuery = useQuery(
+    ["getUserID"],
+    () => {
+      return authAPI.getUserID({ phone, token });
+    },
+    {
+      enabled: false,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (phone && token) {
+      getUserIDQuery.refetch();
+    }
+  }, [phone, token]);
+
+  // 요청 데이터 초기화
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries(["getUserID"]);
+    };
+  }, []);
+
+  // 인증 모달 열기
+  const openAuthModal = () => {
     setVisiblePhoneAuthModal(true);
   };
 
-  const closePhoneAuthModal = () => {
+  // 인증 모달 닫기
+  const closeAuthModal = () => {
     setVisiblePhoneAuthModal(false);
+  };
+
+  // 인증 성공 콜백
+  const onAuthSuccess = (data: { phone: string; token: string }) => {
+    const { phone, token } = data;
+    setPhone(phone);
+    setToken(token);
   };
 
   return (
     <>
       <PhoneAuthModal
         visible={visiblePhoneAuthModal}
-        onClose={closePhoneAuthModal}
+        onClose={closeAuthModal}
+        onSuccess={onAuthSuccess}
       />
-
       <Form layout="vertical">
         <Typography.Title level={3}>{FIND_ID}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
           {FIND_ID_PAGE.AUTH_PHONE_DESCRIPTION}
         </Typography>
         <Form.Item>
-          <Button //
-            type="primary"
-            onClick={openPhoneAuthModal}
-          >
+          <Button type="primary" onClick={openAuthModal}>
             {AUTH_PHONE}
           </Button>
         </Form.Item>
+        {getUserIDQuery.isFetching && (
+          <Spin style={{ display: "block", textAlign: "center" }} />
+        )}
+        {getUserIDQuery.data && (
+          <Form.Item>
+            <List
+              bordered
+              style={{ maxHeight: 200, overflowY: "scroll" }}
+              size="small"
+              dataSource={getUserIDQuery.data}
+              renderItem={(item) => <List.Item>{item.user_id}</List.Item>}
+            />
+          </Form.Item>
+        )}
         <Divider />
-        <LinkContainer>
+        <Form.Item style={{ float: "right" }}>
           <Link to="/login">{LOGIN}</Link>
           <Divider type="vertical" />
           <Link to="/reset-password">{RESET_PASSWORD}</Link>
-        </LinkContainer>
+        </Form.Item>
       </Form>
     </>
   );
 };
-
-const LinkContainer = styled.div`
-  float: right;
-  text-align: center;
-`;
 
 export default FindIdForm;
