@@ -4,6 +4,7 @@ export const FIND_ID = "아이디 찾기";
 
 // 비밀번호
 export const PASSWORD = "비밀번호";
+export const CONFIRM_PASSWORD = "비밀번호 확인";
 export const RESET_PASSWORD = "비밀번호 재설정";
 
 // 로그인

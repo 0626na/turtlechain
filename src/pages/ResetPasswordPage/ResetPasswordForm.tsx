@@ -1,56 +1,136 @@
-import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Divider, Typography } from "antd";
+import { AxiosError } from "axios";
+import { useMutation } from "react-query";
+import { authAPI } from "apis";
+import { Form, Button, Divider, Typography, message, Input } from "antd";
 import { RESET_PASSWORD_PAGE } from "constant/description";
-import { FIND_ID, AUTH_PHONE, LOGIN, RESET_PASSWORD } from "constant/string";
+import {
+  RESET_PASSWORD_SUCCESS_MESSAGE,
+  NOT_MATCH_PASSWORD_MESSAGE,
+} from "constant/message";
+import {
+  ID,
+  FIND_ID,
+  PASSWORD,
+  CONFIRM_PASSWORD,
+  RESET_PASSWORD,
+  AUTH_PHONE,
+  LOGIN,
+} from "constant/string";
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 const ResetPasswordForm = function () {
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [form] = Form.useForm();
+  const [token, setToken] = useState("");
 
-  const openPhoneAuthModal = () => {
+  // 비밀번호 재설정 요청
+  const resetPasswordQuery = useMutation(
+    ["resetPassword"],
+    () => {
+      const id = form.getFieldValue("id");
+      const password = form.getFieldValue("password");
+      return authAPI.resetPassword({ id, password, token });
+    },
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: () => {
+        setToken("");
+        message.success(RESET_PASSWORD_SUCCESS_MESSAGE);
+      },
+    }
+  );
+
+  // 인증 모달 열기
+  const openAuthModal = () => {
     setVisiblePhoneAuthModal(true);
   };
 
-  const closePhoneAuthModal = () => {
+  // 인증 모달 닫기
+  const closeAuthModal = () => {
     setVisiblePhoneAuthModal(false);
+  };
+
+  // 인증 성공 콜백
+  const onAuthSuccess = (data: { phone: string; token: string }) => {
+    const { token } = data;
+    setToken(token);
+  };
+
+  // 비밀번호 재설정
+  const handleReset = () => {
+    const id = form.getFieldValue("id");
+    const password = form.getFieldValue("password");
+    const confirmPassword = form.getFieldValue("confirmPassword");
+
+    if (id && password && password === confirmPassword) {
+      resetPasswordQuery.mutate();
+    }
   };
 
   return (
     <>
       <PhoneAuthModal
         visible={visiblePhoneAuthModal}
-        onClose={closePhoneAuthModal}
+        onClose={closeAuthModal}
+        onSuccess={onAuthSuccess}
       />
-
-      <Form layout="vertical">
+      <Form form={form} layout="vertical">
         <Typography.Title level={3}>{RESET_PASSWORD}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
           {RESET_PASSWORD_PAGE.AUTH_PHONE_DESCRIPTION}
         </Typography>
         <Form.Item>
-          <Button //
-            type="primary"
-            onClick={openPhoneAuthModal}
-          >
+          <Button type="primary" onClick={openAuthModal}>
             {AUTH_PHONE}
           </Button>
         </Form.Item>
+        {token && (
+          <>
+            <Form.Item name="id" label={ID}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="password" label={PASSWORD}>
+              <Input.Password />
+            </Form.Item>
+            <Form.Item
+              name="confirmPassword"
+              label={CONFIRM_PASSWORD}
+              rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    } else {
+                      return Promise.reject(
+                        new Error(NOT_MATCH_PASSWORD_MESSAGE)
+                      );
+                    }
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button block type="primary" onClick={handleReset}>
+                {RESET_PASSWORD}
+              </Button>
+            </Form.Item>
+          </>
+        )}
         <Divider />
-        <LinkContainer>
+        <Form.Item style={{ float: "right" }}>
           <Link to="/login">{LOGIN}</Link>
           <Divider type="vertical" />
           <Link to="/find-id">{FIND_ID}</Link>
-        </LinkContainer>
+        </Form.Item>
       </Form>
     </>
   );
 };
-
-const LinkContainer = styled.div`
-  float: right;
-  text-align: center;
-`;
 
 export default ResetPasswordForm;
