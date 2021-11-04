@@ -52,10 +52,30 @@ const getUserID = async function (data: RequestGetUserID) {
   return response.data.data;
 };
 
+// 비밀번호 재설정
+interface RequestResetPassword {
+  id: string;
+  password: string;
+  token: string;
+}
+
+interface ResponseResetPassword {
+  data: null;
+}
+
+const resetPassword = async function (data: RequestResetPassword) {
+  const { token } = data;
+  const url = `auth/user/password`;
+  const config = { headers: { Authorization: `Api-Key ${token}` } };
+  const response = await customAxios.put<ResponseResetPassword>(url, data, config);
+  return response.data.data;
+};
+
 const authAPI = {
   createPhoneOTP,
   verifyPhoneOTP,
   getUserID,
+  resetPassword,
 };
 
 export default authAPI;
