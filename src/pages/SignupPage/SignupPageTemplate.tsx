@@ -9,7 +9,7 @@ const SignupPageTemplate = function ({ children }: Props) {
 };
 
 const Container = styled.div`
-  width: 800px;
+  width: 400px;
   margin: 0 auto;
 `;
 
