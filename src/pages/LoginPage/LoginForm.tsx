@@ -3,7 +3,10 @@ import logo from "images/logo.png";
 import { Link } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Checkbox, Divider, Typography } from "antd";
-import { LOGIN_PAGE } from "constant/description";
+import {
+  NOT_MEMBER_DESCRIPTION,
+  FIND_MEMBERSHIP_DESCRIPTION,
+} from "constant/description";
 import {
   ID,
   PASSWORD,
@@ -56,12 +59,10 @@ const LoginForm = function () {
       <Divider />
       <LinkContainer>
         <Typography>
-          {LOGIN_PAGE.NOT_MEMBER_DESCRIPTION}{" "}
-          <Link to="/signup">{SIGN_UP}</Link>
+          {NOT_MEMBER_DESCRIPTION} <Link to="/signup">{SIGN_UP}</Link>
         </Typography>
         <Typography>
-          {LOGIN_PAGE.FIND_MEMBERSHIP_DESCRIPTION}{" "}
-          <Link to="#">{FIND_MEMBERSHIP}</Link>
+          {FIND_MEMBERSHIP_DESCRIPTION} <Link to="#">{FIND_MEMBERSHIP}</Link>
         </Typography>
       </LinkContainer>
     </Form>
