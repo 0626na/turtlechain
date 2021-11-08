@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
 import { Form, Button, Divider, Typography, message, Input } from "antd";
-import { RESET_PASSWORD_PAGE } from "constant/description";
+import { AUTH_PHONE_DESCRIPTION } from "constant/description";
 import {
   RESET_PASSWORD_SUCCESS_MESSAGE,
   NOT_MATCH_PASSWORD_MESSAGE,
@@ -90,7 +90,7 @@ const ResetPasswordForm = function () {
       <Form form={form} layout="vertical">
         <Typography.Title level={3}>{RESET_PASSWORD}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {RESET_PASSWORD_PAGE.AUTH_PHONE_DESCRIPTION}
+          {AUTH_PHONE_DESCRIPTION}
         </Typography>
         <Form.Item>
           <Button type="primary" onClick={openAuthModal}>

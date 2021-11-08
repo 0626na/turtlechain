@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import { authAPI } from "apis";
 import { Form, Button, Divider, Typography, message, List, Spin } from "antd";
-import { FIND_ID_PAGE } from "constant/description";
+import { AUTH_PHONE_DESCRIPTION } from "constant/description";
 import { FIND_ID, AUTH_PHONE, LOGIN, RESET_PASSWORD } from "constant/string";
 import PhoneAuthModal from "components/PhoneAuthModal";
 
@@ -69,7 +69,7 @@ const FindIdForm = function () {
       <Form layout="vertical">
         <Typography.Title level={3}>{FIND_ID}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {FIND_ID_PAGE.AUTH_PHONE_DESCRIPTION}
+          {AUTH_PHONE_DESCRIPTION}
         </Typography>
         <Form.Item>
           <Button type="primary" onClick={openAuthModal}>
