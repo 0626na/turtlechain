@@ -1,15 +1,20 @@
 import { Steps } from "antd";
+import {
+  BUSINESS_INFORMATION,
+  ADMIN_ACCOUNT,
+  SIGN_UP_SUCCESS,
+} from "constant/string";
 
 interface Props {
-  steps: string[];
   current: number;
 }
 
-const SignupSteps = function ({ steps, current }: Props) {
+const SignupSteps = function ({ current }: Props) {
+  const steps = [BUSINESS_INFORMATION, ADMIN_ACCOUNT, SIGN_UP_SUCCESS];
   return (
-    <Steps style={{ padding: "40px 0" }} size="small" current={current}>
-      {steps.map((title, index) => {
-        return <Steps.Step key={index} title={title} />;
+    <Steps style={{ marginBottom: 40 }} size="small" current={current}>
+      {steps.map((step) => {
+        return <Steps.Step key={step} title={step} />;
       })}
     </Steps>
   );
