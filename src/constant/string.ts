@@ -26,6 +26,10 @@ export const FIND_POSTCODE = "우편번호 찾기";
 export const DETAIL_ADDRESS = "상세 주소";
 
 // 사업자
+export const CORPORATE_BUSINESS = "법인 사업자";
+export const INDIVIDUAL_BUSINESS = "개인 사업자";
+export const BUSINESS_TYPE = "사업자 종류";
+export const OWNER_NAME = "대표자명";
 export const BUSINESS_INFORMATION = "사업자 정보";
 export const BUSINESS_NAME = "사업자명";
 export const BUSINESS_NUMBER = "사업자 등록번호";

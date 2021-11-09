@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
+  BUSINESS_TYPE,
+  CORPORATE_BUSINESS,
+  INDIVIDUAL_BUSINESS,
+  OWNER_NAME,
   BUSINESS_NAME,
   BUSINESS_NUMBER,
   BUSINESS_ADDRESS,
@@ -13,7 +18,7 @@ import {
 } from "constant/string";
 import { IMAGE_FORM_DESCRIPTION } from "constant/description";
 import { FileImageOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Upload, Typography } from "antd";
+import { Button, Form, Input, Upload, Typography, Radio } from "antd";
 import PostcodeModal from "components/DaumPostcodeModal";
 
 interface Props {
@@ -21,6 +26,7 @@ interface Props {
 }
 
 const CompanyForm = function ({ onNextStep }: Props) {
+  const history = useHistory();
   const [form] = Form.useForm();
   const [visiblePostcodeModal, setVisiblePostcodeModal] = useState(false);
 
@@ -36,7 +42,7 @@ const CompanyForm = function ({ onNextStep }: Props) {
 
   // 이전 단계
   const handlePrev = () => {
-    onNextStep();
+    history.goBack();
   };
 
   // 다음 단계
@@ -51,6 +57,15 @@ const CompanyForm = function ({ onNextStep }: Props) {
         onClose={closePostcodeModal}
       />
       <Form form={form} layout="vertical">
+        <Form.Item label={BUSINESS_TYPE}>
+          <Radio.Group>
+            <Radio>{CORPORATE_BUSINESS}</Radio>
+            <Radio>{INDIVIDUAL_BUSINESS}</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label={OWNER_NAME}>
+          <Input />
+        </Form.Item>
         <Form.Item label={BUSINESS_NAME}>
           <Input />
         </Form.Item>
