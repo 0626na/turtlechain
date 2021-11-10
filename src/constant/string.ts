@@ -1,3 +1,6 @@
+// 토큰
+export const TOKEN_NAME = "TURTLECHAIN_V2_TOKEN";
+
 // 아이디
 export const ID = "아이디";
 export const FIND_ID = "아이디 찾기";
