@@ -1,11 +1,14 @@
-import { useSetRecoilState } from "recoil";
-import { tokenState } from "store/tokenState";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "images/logo.png";
-import { Link } from "react-router-dom";
+// store
+import { useSetRecoilState } from "recoil";
+import { tokenState } from "store/tokenState";
+// async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
+// antd
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import {
   Form,
@@ -16,6 +19,7 @@ import {
   Typography,
   message,
 } from "antd";
+// constant
 import {
   NOT_MEMBER_DESCRIPTION,
   FIND_MEMBERSHIP_DESCRIPTION,
@@ -33,37 +37,27 @@ import {
 } from "constant/string";
 
 const LoginForm = function () {
-  const setToken = useSetRecoilState(tokenState);
   const [form] = Form.useForm();
+  const setToken = useSetRecoilState(tokenState);
 
   // 로그인 요청
-  const loginQuery = useMutation(
-    ["login"],
-    () => {
-      const data = {
-        login_id: form.getFieldValue("login_id"),
-        password: form.getFieldValue("password"),
-      };
-      return authAPI.login(data);
+  const loginQuery = useMutation(["login"], authAPI.login, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
-        const { token } = data;
-        const { autoLogin } = form.getFieldsValue();
-        if (autoLogin) localStorage.setItem(TOKEN_NAME, token);
-        setToken(token);
-      },
-    }
-  );
+    onSuccess: (data) => {
+      const { token } = data;
+      const { autoLogin } = form.getFieldsValue();
+      if (autoLogin) localStorage.setItem(TOKEN_NAME, token);
+      setToken(token);
+    },
+  });
 
   // 로그인
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: { login_id: string; password: string }) => {
     const { login_id, password } = values;
     if (login_id && password) {
-      loginQuery.mutate();
+      loginQuery.mutate({ login_id, password });
     }
   };
 
