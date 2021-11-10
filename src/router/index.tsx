@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+import { useRecoilState } from "recoil";
+import { tokenState } from "store/tokenState";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Layout } from "antd";
 import Header from "components/Header";
@@ -10,13 +12,24 @@ import {
   SignupPage,
   HomePage,
 } from "pages";
+import { TOKEN_NAME } from "constant/string";
 
 const Router = function () {
-  const token = "";
+  const localStorageToken = localStorage.getItem(TOKEN_NAME);
+  const [storeToken, setToken] = useRecoilState(tokenState);
+
+  useEffect(() => {
+    if (localStorageToken) {
+      setToken(localStorageToken);
+    }
+  }, []);
+
+  if (localStorageToken && !storeToken) return null;
+
   return (
     <BrowserRouter>
       <Suspense fallback="로딩중...">
-        {token ? (
+        {storeToken ? (
           <Layout>
             <Header />
             <Layout>
