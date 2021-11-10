@@ -1,10 +1,13 @@
-import moment from "moment";
-import { emailPattern } from "utils/pattern";
 import { useState, useEffect } from "react";
+import { emailPattern } from "utils/pattern";
+import moment from "moment";
+// async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
+// antd
 import { Modal, Form, Input, Button, message } from "antd";
+// constant
 import {
   CREATE_PHONE_OTP_SUCCESS_MESSAGE,
   VERIFY_PHONE_OTP_SUCCESS_MESSAGE,
@@ -32,13 +35,6 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   const [session_key, setSessionKey] = useState("");
   const [expire_time, setExpireTime] = useState<null | number>(null);
 
-  // 상태 초기화
-  const resetState = () => {
-    form.resetFields();
-    setSessionKey("");
-    setExpireTime(null);
-  };
-
   // 남은 시간 계산
   const calculateExpireTime = (time: Date) => {
     return moment.duration(moment(time).diff(moment())).asSeconds() * 1000;
@@ -47,10 +43,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   // 인증번호 생성 요청
   const createPhoneOTPQuery = useMutation(
     ["createPhoneOTP"],
-    () => {
-      const data = { phone: form.getFieldValue("phone") };
-      return authAPI.createPhoneOTP(data);
-    },
+    authAPI.createPhoneOTP,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -67,10 +60,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   // 인증번호 확인 요청
   const verifyPhoneOTPQuery = useMutation(
     ["verifyPhoneOTP"],
-    () => {
-      const data = { session_key, otp_code: form.getFieldValue("otp_code") };
-      return authAPI.verifyPhoneOTP(data);
-    },
+    authAPI.verifyPhoneOTP,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -80,7 +70,6 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
         const token = data;
         const phone = form.getFieldValue("phone");
         onClose();
-        resetState();
         onSuccess && onSuccess({ token, phone });
       },
     }
@@ -88,15 +77,16 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
 
   // 인증코드 생성
   const handleCreate = () => {
-    const phone = form.getFieldValue("phone");
+    const { phone } = form.getFieldsValue();
     if (emailPattern.test(phone)) {
-      createPhoneOTPQuery.mutate();
+      createPhoneOTPQuery.mutate({ phone });
     }
   };
 
   // 인증코드 확인
   const handleVerify = () => {
-    verifyPhoneOTPQuery.mutate();
+    const { otp_code } = form.getFieldsValue();
+    verifyPhoneOTPQuery.mutate({ session_key, otp_code });
   };
 
   // 인증 남은 시간 카운트다운
@@ -118,6 +108,15 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
     }
   }, [expire_time, visible]);
 
+  // 상태 초기화
+  useEffect(() => {
+    if (!visible) {
+      form.resetFields();
+      setSessionKey("");
+      setExpireTime(null);
+    }
+  }, [visible]);
+
   return (
     <Modal
       width={400}
@@ -125,13 +124,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
       closable={false}
       visible={visible}
       footer={[
-        <Button
-          key="close"
-          onClick={() => {
-            resetState();
-            onClose();
-          }}
-        >
+        <Button key="close" onClick={onClose}>
           {CLOSE}
         </Button>,
       ]}
