@@ -1,4 +1,20 @@
-import { customAxios } from "apis";
+import { v1Axios, v2Axios } from "apis";
+
+// 로그인
+interface RequestLogin {
+  login_id: string;
+  password: string;
+}
+
+interface ResponseLogin {
+  token: string;
+}
+
+const login = async function (data: RequestLogin) {
+  const url = "/login";
+  const response = await v1Axios.post<ResponseLogin>(url, data);
+  return response.data;
+};
 
 // OTP 생성
 interface RequestCreatePhoneOTP {
@@ -14,7 +30,7 @@ interface ResponseCreatePhoneOTP {
 
 const createPhoneOTP = async function (data: RequestCreatePhoneOTP) {
   const url = "/auth/phone_otp";
-  const response = await customAxios.post<ResponseCreatePhoneOTP>(url, data);
+  const response = await v2Axios.post<ResponseCreatePhoneOTP>(url, data);
   return response.data.data;
 };
 
@@ -30,7 +46,7 @@ interface ResponseVerifyPhoneOTP {
 
 const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
   const url = "/auth/phone_otp/verify";
-  const response = await customAxios.post<ResponseVerifyPhoneOTP>(url, data);
+  const response = await v2Axios.post<ResponseVerifyPhoneOTP>(url, data);
   return response.data.data;
 };
 
@@ -48,7 +64,7 @@ const getUserID = async function (data: RequestGetUserID) {
   const { phone, token } = data;
   const url = `auth/user?phone=${phone}`;
   const config = { headers: { Authorization: `Api-Key ${token}` } };
-  const response = await customAxios.get<ResponseGetUserID>(url, config);
+  const response = await v2Axios.get<ResponseGetUserID>(url, config);
   return response.data.data;
 };
 
@@ -68,11 +84,12 @@ const resetPassword = async function (data: RequestResetPassword) {
   const { token } = data;
   const url = `auth/user/password`;
   const config = { headers: { Authorization: `Api-Key ${token}` } };
-  const response = await customAxios.put<ResponseResetPassword>(url, data, config);
+  const response = await v2Axios.put<ResponseResetPassword>(url, data, config);
   return response.data.data;
 };
 
 const authAPI = {
+  login,
   createPhoneOTP,
   verifyPhoneOTP,
   getUserID,
