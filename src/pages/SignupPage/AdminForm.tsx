@@ -57,6 +57,25 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
     setVisiblePhoneAuthModal(false);
   };
 
+  // 휴대번호 인증 성공 콜백
+  const onPhoneAuthSuccess = (data: { phone: string; token: string }) => {
+    const { phone } = data;
+    setAdmin({ ...admin, mobile_tel: phone });
+  };
+
+  // text change 이벤트
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdmin({ ...admin, [name]: value });
+  };
+
+  // 아이디 중복 체크
+  const onDupCheck = () => {
+    if (admin.login_id) {
+      idDupCheck.mutate({ id: admin.login_id });
+    }
+  };
+
   // 이전 단계
   const handlePrev = () => {
     setCurrentStep((prevStep) => prevStep - 1);
@@ -65,25 +84,6 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
   // 다음 단계
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
-  };
-
-  // input change 이벤트
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setAdmin({ ...admin, [name]: value });
-  };
-
-  // 휴대번호 인증 성공 콜백
-  const onPhoneAuthSuccess = (data: { phone: string; token: string }) => {
-    const { phone } = data;
-    setAdmin({ ...admin, mobile_tel: phone });
-  };
-
-  // 아이디 중복 체크
-  const onDupCheck = () => {
-    if (admin.login_id) {
-      idDupCheck.mutate({ id: admin.login_id });
-    }
   };
 
   return (
@@ -115,14 +115,14 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
           <Input //
             name="name"
             value={admin.name}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item label={EMAIL}>
           <Input //
             name="email"
             value={admin.email}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item
@@ -133,7 +133,7 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
           <Input //
             name="login_id"
             value={admin.login_id}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
             suffix={
               <Button type="link" onClick={onDupCheck}>
                 {DUPLICATE_CHECK}
@@ -145,14 +145,14 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
           <Input.Password //
             name="password"
             value={admin.password}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item label={CONFIRM_PASSWORD}>
           <Input.Password //
             name="confirmPassword"
             value={admin.confirmPassword}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item>
