@@ -11,3 +11,7 @@ export const AUTH_PHONE_DESCRIPTION =
 // 이미지 양식
 export const IMAGE_FORM_DESCRIPTION =
   "이미지 양식은 jpg, jpeg, png, pdf만 가능합니다.";
+
+// 회원가입 성공 시
+export const SIGN_UP_SUCCESS_DESCRIPTION =
+  "관리자에 의해 가입 승인이 완료된 후, 로그인이 가능합니다. 승인 결과는 신청 시 입력한 이메일로 전달될 예정입니다.";
