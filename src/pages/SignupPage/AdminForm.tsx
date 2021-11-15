@@ -18,7 +18,7 @@ import {
   PASSWORD,
   CONFIRM_PASSWORD,
   PREV,
-  NEXT,
+  SIGN_UP,
   DUPLICATE_CHECK,
 } from "constant/string";
 // components
@@ -28,9 +28,17 @@ interface Props {
   admin: Admin;
   setAdmin: React.Dispatch<React.SetStateAction<Admin>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  isSubmitting: boolean;
+  onSubmit: () => Promise<void>;
 }
 
-const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
+const AdminForm = function ({
+  admin,
+  setAdmin,
+  setCurrentStep,
+  isSubmitting,
+  onSubmit,
+}: Props) {
   const [form] = Form.useForm();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [isDupChecked, setIsDupChecked] = useState(false);
@@ -82,8 +90,8 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
   };
 
   // 다음 단계
-  const handleNext = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+  const handleSubmit = () => {
+    onSubmit();
   };
 
   return (
@@ -160,8 +168,13 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
             <Button block onClick={handlePrev}>
               {PREV}
             </Button>
-            <Button block type="primary" onClick={handleNext}>
-              {NEXT}
+            <Button
+              block
+              type="primary"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              {SIGN_UP}
             </Button>
           </HorizontalContainer>
         </Form.Item>

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+import { retailerCompanyAPI, userAPI } from "apis";
+import { message } from "antd";
 import SignupPageTemplate from "./SignupPageTemplate";
 import SignupSteps from "./SignupSteps";
 import CompanyForm from "./CompanyForm";
@@ -27,6 +29,7 @@ export interface Admin {
 
 const SignupPage = function () {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [company, setCompany] = useState<Company>({
     biz_type: "entity",
     owner: "",
@@ -45,6 +48,24 @@ const SignupPage = function () {
     confirmPassword: "",
   });
 
+  const submit = async () => {
+    try {
+      setIsSubmitting(true);
+      // 사업자 생성 요청
+      const { company_id } = await retailerCompanyAPI.create({
+        ...company,
+        biz_license_file: company.biz_license_file as File,
+      });
+      // 유저 생성 요청
+      await userAPI.create({ ...admin, company_id });
+      setCurrentStep((prevStep) => prevStep + 1);
+    } catch (error: any) {
+      message.error(error.response?.data?.msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const steps = [
     <CompanyForm
       company={company}
@@ -55,6 +76,8 @@ const SignupPage = function () {
       admin={admin}
       setAdmin={setAdmin}
       setCurrentStep={setCurrentStep}
+      isSubmitting={isSubmitting}
+      onSubmit={submit}
     />,
     <SignupResult />,
   ];
