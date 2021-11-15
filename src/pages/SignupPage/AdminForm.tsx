@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Button, Form, Input } from "antd";
+import { Admin } from "pages/SignupPage";
 import {
   PHONE,
   AUTH_PHONE,
@@ -15,11 +16,12 @@ import {
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 interface Props {
-  onPrevStep: () => void;
-  onNextStep: () => void;
+  admin: Admin;
+  setAdmin: React.Dispatch<React.SetStateAction<Admin>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const AdminForm = function ({ onPrevStep, onNextStep }: Props) {
+const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
   const [form] = Form.useForm();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
 
@@ -35,12 +37,24 @@ const AdminForm = function ({ onPrevStep, onNextStep }: Props) {
 
   // 이전 단계
   const handlePrev = () => {
-    onPrevStep();
+    setCurrentStep((prevStep) => prevStep - 1);
   };
 
   // 다음 단계
   const handleNext = () => {
-    onNextStep();
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  // input change 이벤트
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdmin({ ...admin, [name]: value });
+  };
+
+  // 휴대번호 인증 성공 콜백
+  const onPhoneAuthSuccess = (data: { phone: string; token: string }) => {
+    const { phone } = data;
+    setAdmin({ ...admin, mobile_tel: phone });
   };
 
   return (
@@ -48,27 +62,55 @@ const AdminForm = function ({ onPrevStep, onNextStep }: Props) {
       <PhoneAuthModal
         visible={visiblePhoneAuthModal}
         onClose={closeAuthModal}
+        onSuccess={onPhoneAuthSuccess}
       />
       <Form form={form} layout="vertical">
         <Form.Item label={PHONE}>
-          <Button type="primary" onClick={openAuthModal}>
-            {AUTH_PHONE}
-          </Button>
+          <Input
+            readOnly
+            name="mobile_tel"
+            value={admin.mobile_tel}
+            suffix={
+              <Button type="link" onClick={openAuthModal}>
+                {AUTH_PHONE}
+              </Button>
+            }
+          />
         </Form.Item>
         <Form.Item label={USER_NAME}>
-          <Input />
+          <Input //
+            name="name"
+            value={admin.name}
+            onChange={handleInputChange}
+          />
         </Form.Item>
         <Form.Item label={EMAIL}>
-          <Input />
+          <Input //
+            name="email"
+            value={admin.email}
+            onChange={handleInputChange}
+          />
         </Form.Item>
         <Form.Item label={ID}>
-          <Input />
+          <Input //
+            name="login_id"
+            value={admin.login_id}
+            onChange={handleInputChange}
+          />
         </Form.Item>
         <Form.Item label={PASSWORD}>
-          <Input />
+          <Input.Password //
+            name="password"
+            value={admin.password}
+            onChange={handleInputChange}
+          />
         </Form.Item>
         <Form.Item label={CONFIRM_PASSWORD}>
-          <Input />
+          <Input.Password //
+            name="confirmPassword"
+            value={admin.confirmPassword}
+            onChange={handleInputChange}
+          />
         </Form.Item>
         <Form.Item>
           <HorizontalContainer>
