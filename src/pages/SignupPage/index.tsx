@@ -6,20 +6,54 @@ import CompanyForm from "./CompanyForm";
 import AdminForm from "./AdminForm";
 import SignupResult from "./SignupResult";
 
+export interface Company {
+  owner: string;
+  name: string;
+  biz_num: string;
+  address: string;
+  biz_license_file: null | File;
+  memo: string;
+}
+
+export interface Admin {
+  mobile_tel: string;
+  name: string;
+  email: string;
+  login_id: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const SignupPage = function () {
   const [currentStep, setCurrentStep] = useState(0);
-
-  const handlePrevStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  const handleNextStep = () => {
-    setCurrentStep(currentStep + 1);
-  };
+  const [company, setCompany] = useState<Company>({
+    owner: "",
+    name: "",
+    biz_num: "",
+    address: "",
+    biz_license_file: null,
+    memo: "",
+  });
+  const [admin, setAdmin] = useState<Admin>({
+    mobile_tel: "",
+    name: "",
+    email: "",
+    login_id: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const steps = [
-    <CompanyForm onNextStep={handleNextStep} />,
-    <AdminForm onPrevStep={handlePrevStep} onNextStep={handleNextStep} />,
+    <CompanyForm
+      company={company}
+      setCompany={setCompany}
+      setCurrentStep={setCurrentStep}
+    />,
+    <AdminForm
+      admin={admin}
+      setAdmin={setAdmin}
+      setCurrentStep={setCurrentStep}
+    />,
     <SignupResult />,
   ];
 
