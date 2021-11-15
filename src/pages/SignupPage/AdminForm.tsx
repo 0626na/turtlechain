@@ -1,7 +1,14 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Button, Form, Input } from "antd";
 import { Admin } from "pages/SignupPage";
+// async
+import { AxiosError } from "axios";
+import { useMutation } from "react-query";
+import { userAPI } from "apis";
+// antd
+import { Button, Form, Input, message } from "antd";
+// constant
+import { NO_DUPLICATE_VALUES } from "constant/message";
 import {
   PHONE,
   AUTH_PHONE,
@@ -12,7 +19,9 @@ import {
   CONFIRM_PASSWORD,
   PREV,
   NEXT,
+  DUPLICATE_CHECK,
 } from "constant/string";
+// components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 interface Props {
@@ -24,6 +33,19 @@ interface Props {
 const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
   const [form] = Form.useForm();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [isDupChecked, setIsDupChecked] = useState(false);
+
+  // 아이디 중복 체크 요청
+  const idDupCheck = useMutation(["idDupCheck"], userAPI.dupCheck, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+      setIsDupChecked(false);
+    },
+    onSuccess: () => {
+      message.success(NO_DUPLICATE_VALUES);
+      setIsDupChecked(true);
+    },
+  });
 
   // 인증 모달 열기
   const openAuthModal = () => {
@@ -57,6 +79,13 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
     setAdmin({ ...admin, mobile_tel: phone });
   };
 
+  // 아이디 중복 체크
+  const onDupCheck = () => {
+    if (admin.login_id) {
+      idDupCheck.mutate({ id: admin.login_id });
+    }
+  };
+
   return (
     <>
       <PhoneAuthModal
@@ -65,9 +94,14 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
         onSuccess={onPhoneAuthSuccess}
       />
       <Form form={form} layout="vertical">
-        <Form.Item label={PHONE}>
+        <Form.Item
+          label={PHONE}
+          hasFeedback
+          validateStatus={admin.mobile_tel ? "success" : ""}
+        >
           <Input
             readOnly
+            disabled
             name="mobile_tel"
             value={admin.mobile_tel}
             suffix={
@@ -91,11 +125,20 @@ const AdminForm = function ({ admin, setAdmin, setCurrentStep }: Props) {
             onChange={handleInputChange}
           />
         </Form.Item>
-        <Form.Item label={ID}>
+        <Form.Item
+          label={ID}
+          hasFeedback
+          validateStatus={isDupChecked ? "success" : ""}
+        >
           <Input //
             name="login_id"
             value={admin.login_id}
             onChange={handleInputChange}
+            suffix={
+              <Button type="link" onClick={onDupCheck}>
+                {DUPLICATE_CHECK}
+              </Button>
+            }
           />
         </Form.Item>
         <Form.Item label={PASSWORD}>

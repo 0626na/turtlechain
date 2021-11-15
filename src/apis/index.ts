@@ -1,5 +1,6 @@
 import axios from "axios";
 import authAPI from "./authAPI";
+import userAPI from "./userAPI";
 
 export const v1Axios = axios.create({
   baseURL:
@@ -17,4 +18,4 @@ export const v2Axios = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-export { authAPI };
+export { authAPI, userAPI };

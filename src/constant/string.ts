@@ -58,3 +58,4 @@ export const EMAIL = "이메일";
 export const CLOSE = "닫기";
 export const FIND_MEMBERSHIP = "멤버쉽 알아보기";
 export const ONLY_NUMBER = "숫자만";
+export const DUPLICATE_CHECK = "중복체크";
