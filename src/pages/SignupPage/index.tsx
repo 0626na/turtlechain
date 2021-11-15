@@ -7,6 +7,7 @@ import AdminForm from "./AdminForm";
 import SignupResult from "./SignupResult";
 
 export interface Company {
+  biz_type: "personal" | "entity" | "simple";
   owner: string;
   name: string;
   biz_num: string;
@@ -27,6 +28,7 @@ export interface Admin {
 const SignupPage = function () {
   const [currentStep, setCurrentStep] = useState(0);
   const [company, setCompany] = useState<Company>({
+    biz_type: "entity",
     owner: "",
     name: "",
     biz_num: "",

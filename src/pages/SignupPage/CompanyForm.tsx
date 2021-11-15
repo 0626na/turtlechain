@@ -2,7 +2,13 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Company } from "pages/SignupPage";
+// antd
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from "antd";
+// constant
+import { BUSINESS_TYPE_OPTIONS } from "constant/options";
 import {
+  BUSINESS_TYPE,
   OWNER_NAME,
   BUSINESS_NAME,
   BUSINESS_NUMBER,
@@ -13,8 +19,7 @@ import {
   PREV,
   NEXT,
 } from "constant/string";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Upload } from "antd";
+// components
 import PostcodeModal from "components/DaumPostcodeModal";
 
 interface Props {
@@ -27,6 +32,18 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
   const history = useHistory();
   const [visiblePostcodeModal, setVisiblePostcodeModal] = useState(false);
 
+  // upload file props
+  const uploadProps = {
+    fileList: company.biz_license_file ? [company.biz_license_file as any] : [],
+    onRemove: () => {
+      setCompany({ ...company, biz_license_file: null });
+    },
+    beforeUpload: (file: File) => {
+      setCompany({ ...company, biz_license_file: file });
+      return false;
+    },
+  };
+
   // 주소 찾기 모달 열기
   const openPostcodeModal = () => {
     setVisiblePostcodeModal(true);
@@ -35,6 +52,25 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
   // 주소 찾기 모달 닫기
   const closePostcodeModal = () => {
     setVisiblePostcodeModal(false);
+  };
+
+  // 주소 얻기
+  const getAddress = (address: string) => {
+    setCompany({ ...company, address });
+  };
+
+  // text change 이벤트
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setCompany({ ...company, [name]: value });
+  };
+
+  // radio change 이벤트
+  const handleRadioChange = (e: RadioChangeEvent) => {
+    const { name, value } = e.target;
+    setCompany({ ...company, [name as string]: value });
   };
 
   // 이전 단계
@@ -47,35 +83,6 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
     setCurrentStep((prevStep) => prevStep + 1);
   };
 
-  // 주소 얻기
-  const getAddress = (address: string) => {
-    setCompany({ ...company, address });
-  };
-
-  // input change 이벤트
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCompany({ ...company, [name]: value });
-  };
-
-  // textarea change 이벤트
-  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCompany({ ...company, [name]: value });
-  };
-
-  // upload props
-  const uploadProps = {
-    fileList: company.biz_license_file ? [company.biz_license_file as any] : [],
-    onRemove: () => {
-      setCompany({ ...company, biz_license_file: null });
-    },
-    beforeUpload: (file: File) => {
-      setCompany({ ...company, biz_license_file: file });
-      return false;
-    },
-  };
-
   return (
     <>
       <PostcodeModal
@@ -84,30 +91,47 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
         onGetAddress={getAddress}
       />
       <Form layout="vertical">
+        <Form.Item label={BUSINESS_TYPE}>
+          <Radio.Group
+            name="biz_type"
+            value={company.biz_type}
+            onChange={handleRadioChange}
+          >
+            {BUSINESS_TYPE_OPTIONS.map((option) => {
+              const { value, label } = option;
+              return (
+                <Radio key={value} value={value}>
+                  {label}
+                </Radio>
+              );
+            })}
+          </Radio.Group>
+        </Form.Item>
         <Form.Item label={OWNER_NAME}>
-          <Input //
+          <Input
             name="owner"
             value={company.owner}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item label={BUSINESS_NAME}>
           <Input //
             name="name"
             value={company.name}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item label={BUSINESS_NUMBER}>
           <Input //
             name="biz_num"
             value={company.biz_num}
-            onChange={handleInputChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item label={BUSINESS_ADDRESS}>
           <Input
             readOnly
+            disabled
             name="address"
             value={company.address}
             suffix={
@@ -133,7 +157,7 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
             style={{ height: 150 }}
             name="memo"
             value={company.memo}
-            onChange={handleTextAreaChange}
+            onChange={handleTextChange}
           />
         </Form.Item>
         <ButtonContainer>
