@@ -1,0 +1,30 @@
+import { v2Axios } from "apis";
+
+// 소매 사업자 생성
+interface RequestCreate {
+  biz_type: "personal" | "entity" | "simple";
+  owner: string;
+  name: string;
+  biz_num: string;
+  address: string;
+  biz_license_file: File;
+  memo: string;
+}
+
+interface ResponseCreate {
+  data: {
+    company_id: number;
+  };
+}
+
+const create = async function (data: RequestCreate) {
+  const url = "/provisioning/retailer_company";
+  const response = await v2Axios.post<ResponseCreate>(url, data);
+  return response.data.data;
+};
+
+const retailerCompanyAPI = {
+  create,
+};
+
+export default retailerCompanyAPI;
