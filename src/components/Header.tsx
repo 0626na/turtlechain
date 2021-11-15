@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import logo from "images/horizontal_logo.png";
 import { useHistory } from "react-router-dom";
-import { Layout } from "antd";
+import useLogout from "hooks/useLogout";
+import { Layout, Button } from "antd";
+import { LOGOUT } from "constant/string";
 
 const Header = function () {
   const history = useHistory();
+  const { logout } = useLogout();
 
   const handleLogoClick = () => {
     history.push("/home");
@@ -13,6 +16,7 @@ const Header = function () {
   return (
     <Container>
       <LogoImage src={logo} alt="Logo" onClick={handleLogoClick} />
+      <Button onClick={logout}>{LOGOUT}</Button>
     </Container>
   );
 };
@@ -22,6 +26,7 @@ const Container = styled(Layout.Header)`
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const LogoImage = styled.img`

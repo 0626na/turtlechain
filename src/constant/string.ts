@@ -14,6 +14,9 @@ export const RESET_PASSWORD = "비밀번호 재설정";
 export const LOGIN = "로그인";
 export const AUTO_LOGIN = "자동 로그인";
 
+// 로그아웃
+export const LOGOUT = "로그아웃";
+
 // 휴대번호
 export const PHONE = "휴대번호";
 export const AUTH_PHONE = "휴대번호 인증하기";
