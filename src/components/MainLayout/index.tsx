@@ -8,16 +8,19 @@ interface Props {
 }
 
 const MainLayout = function ({ content }: Props) {
+  const headerHeight = 70;
+  const siderWidth = 200;
+
   return (
     <Layout>
-      <Header />
+      <Header headerHeight={headerHeight} />
       <Layout>
-        <Sider />
+        <Sider headerHeight={headerHeight} siderWidth={siderWidth} />
         <Layout.Content
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            marginTop: headerHeight,
+            marginLeft: siderWidth,
+            backgroundColor: "#fff",
             padding: 20,
           }}
         >
