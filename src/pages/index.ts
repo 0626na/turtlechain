@@ -7,3 +7,4 @@ export const SignupPage = lazy(() => import("./SignupPage"));
 
 export const HomePage = lazy(() => import("./HomePage"));
 export const MyInformationPage = lazy(() => import("./MyInformationPage"));
+export const MyCompanyPage = lazy(() => import("./MyCompanyPage"));
