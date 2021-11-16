@@ -9,13 +9,9 @@ const Header = function () {
   const history = useHistory();
   const { logout } = useLogout();
 
-  const handleLogoClick = () => {
-    history.push("/home");
-  };
-
   return (
     <Container>
-      <LogoImage src={logo} alt="Logo" onClick={handleLogoClick} />
+      <LogoImage src={logo} alt="Logo" onClick={() => history.push("/home")} />
       <Button onClick={logout}>{LOGOUT}</Button>
     </Container>
   );
@@ -23,7 +19,7 @@ const Header = function () {
 
 const Container = styled(Layout.Header)`
   background-color: #fff;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #dee2e6;
   display: flex;
   align-items: center;
   justify-content: space-between;

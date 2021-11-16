@@ -1,17 +1,28 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { MY_PAGE, MY_INFORMATION } from "constant/string";
 
-const menu = [
+const menu: Array<{
+  title: string;
+  icon: React.ReactNode | null;
+  url: string | null;
+  submenu: null | Array<{
+    title: string;
+    url: string;
+  }>;
+}> = [
   {
     title: "HOME",
+    icon: <HomeOutlined />,
     url: "/home",
     submenu: null,
   },
   {
     title: MY_PAGE,
+    icon: <UserOutlined />,
     url: null,
     submenu: [
       {
@@ -26,7 +37,7 @@ const Sider = function () {
   const history = useHistory();
   const [selectedKeys, setSelectedKeys] = useState(history.location.pathname);
 
-  const handleClick = (url: null | string) => {
+  const handleMenuClick = (url: null | string) => {
     if (url && url !== selectedKeys) {
       history.push(url);
       setSelectedKeys(history.location.pathname);
@@ -38,17 +49,17 @@ const Sider = function () {
   }, [history.location.pathname]);
 
   return (
-    <Container width={200}>
-      <Menu mode="inline" selectedKeys={[selectedKeys]}>
+    <Container>
+      <Menu mode="inline" theme="dark" selectedKeys={[selectedKeys]}>
         {menu.map((item) => {
-          const { title, url, submenu } = item;
+          const { title, icon, url, submenu } = item;
           if (submenu) {
             return (
-              <Menu.SubMenu key={title} title={title}>
+              <Menu.SubMenu key={title} title={title} icon={icon}>
                 {submenu.map((item) => {
                   const { title, url } = item;
                   return (
-                    <Menu.Item key={url} onClick={() => handleClick(url)}>
+                    <Menu.Item key={url} onClick={() => handleMenuClick(url)}>
                       {title}
                     </Menu.Item>
                   );
@@ -57,7 +68,11 @@ const Sider = function () {
             );
           } else {
             return (
-              <Menu.Item key={url} onClick={() => handleClick(url)}>
+              <Menu.Item
+                key={url}
+                onClick={() => handleMenuClick(url)}
+                icon={icon}
+              >
                 {title}
               </Menu.Item>
             );
@@ -69,7 +84,7 @@ const Sider = function () {
 };
 
 const Container = styled(Layout.Sider)`
-  background: #fff;
+  width: 200px;
   min-height: calc(100vh - 64px);
 `;
 
