@@ -11,6 +11,7 @@ import {
   ResetPasswordPage,
   SignupPage,
   HomePage,
+  MyInformationPage,
 } from "pages";
 import { TOKEN_NAME } from "constant/string";
 
@@ -36,6 +37,7 @@ const Router = function () {
               <Sider />
               <Switch>
                 <Route exact path="/home" component={HomePage} />
+                <Route exact path="/my/information" component={MyInformationPage} />
                 <Redirect path="*" to="/home" />
               </Switch>
             </Layout>
