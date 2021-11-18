@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import { MY_PAGE, MY_INFORMATION, BUSINESS_INFORMATION } from "constant/string";
+import {
+  MY_PAGE,
+  MY_INFORMATION,
+  BUSINESS_INFORMATION,
+  SHOPPING_MALL_INFORMATION,
+} from "constant/string";
 
 interface Props {
   headerHeight: number;
@@ -52,6 +57,10 @@ const Sider = function ({ headerHeight, siderWidth }: Props) {
         {
           title: BUSINESS_INFORMATION,
           url: "/my/company",
+        },
+        {
+          title: SHOPPING_MALL_INFORMATION,
+          url: "/my/store",
         },
       ],
     },

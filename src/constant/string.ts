@@ -5,6 +5,9 @@ export const TOKEN_NAME = "TURTLECHAIN_V2_TOKEN";
 export const MY_PAGE = "마이 페이지";
 export const MY_INFORMATION = "내 정보";
 
+// Shopping Mall
+export const SHOPPING_MALL_INFORMATION = "쇼핑몰 정보";
+
 // 아이디
 export const ID = "아이디";
 export const FIND_ID = "아이디 찾기";
