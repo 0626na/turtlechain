@@ -5,20 +5,10 @@ import { Company } from "pages/SignupPage";
 // antd
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from "antd";
+// lang
+import { useTranslation } from "react-i18next";
 // constant
-import { BUSINESS_TYPE_OPTIONS } from "constant/options";
-import {
-  BUSINESS_TYPE,
-  OWNER_NAME,
-  BUSINESS_NAME,
-  BUSINESS_NUMBER,
-  BUSINESS_ADDRESS,
-  BUSINESS_LICENSE,
-  FIND_ADDRESS,
-  ETC,
-  PREV,
-  NEXT,
-} from "constant/string";
+import { BIZ_TYPE_OPTIONS } from "constant";
 // components
 import PostcodeModal from "components/DaumPostcodeModal";
 
@@ -29,7 +19,9 @@ interface Props {
 }
 
 const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
+  const { t } = useTranslation();
   const history = useHistory();
+
   const [visiblePostcodeModal, setVisiblePostcodeModal] = useState(false);
 
   // upload file props
@@ -91,44 +83,44 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
         onGetAddress={getAddress}
       />
       <Form layout="vertical">
-        <Form.Item label={BUSINESS_TYPE}>
+        <Form.Item label={t("biz type")}>
           <Radio.Group
             name="biz_type"
             value={company.biz_type}
             onChange={handleRadioChange}
           >
-            {BUSINESS_TYPE_OPTIONS.map((option) => {
-              const { value, label } = option;
+            {BIZ_TYPE_OPTIONS.map((option) => {
+              const label = t(`biz ${option}`);
               return (
-                <Radio key={value} value={value}>
+                <Radio key={option} value={option}>
                   {label}
                 </Radio>
               );
             })}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label={OWNER_NAME}>
+        <Form.Item label={t("owner")}>
           <Input
             name="owner"
             value={company.owner}
             onChange={handleTextChange}
           />
         </Form.Item>
-        <Form.Item label={BUSINESS_NAME}>
+        <Form.Item label={t("biz name")}>
           <Input //
             name="name"
             value={company.name}
             onChange={handleTextChange}
           />
         </Form.Item>
-        <Form.Item label={BUSINESS_NUMBER}>
+        <Form.Item label={t("biz num")}>
           <Input //
             name="biz_num"
             value={company.biz_num}
             onChange={handleTextChange}
           />
         </Form.Item>
-        <Form.Item label={BUSINESS_ADDRESS}>
+        <Form.Item label={t("biz address")}>
           <Input
             readOnly
             disabled
@@ -136,23 +128,23 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
             value={company.address}
             suffix={
               <Button type="link" onClick={openPostcodeModal}>
-                {FIND_ADDRESS}
+                {t("find address")}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={BUSINESS_LICENSE}>
+        <Form.Item label={t("biz license")}>
           <Upload listType="picture" {...uploadProps}>
             <Button
               type="primary"
               disabled={company.biz_license_file !== null}
               icon={<UploadOutlined />}
             >
-              {BUSINESS_LICENSE}
+              {t("biz license")}
             </Button>
           </Upload>
         </Form.Item>
-        <Form.Item label={ETC}>
+        <Form.Item label={t("etc")}>
           <Input.TextArea
             style={{ height: 150 }}
             name="memo"
@@ -162,10 +154,10 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
         </Form.Item>
         <ButtonContainer>
           <Button block onClick={handlePrev}>
-            {PREV}
+            {t("prev")}
           </Button>
           <Button block type="primary" onClick={handleNext}>
-            {NEXT}
+            {t("next")}
           </Button>
         </ButtonContainer>
       </Form>

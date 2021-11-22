@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+// antd
 import { Result, Button } from "antd";
-// constant
-import { SIGN_UP_SUCCESS_DESCRIPTION } from "constant/description";
-import { SIGN_UP_SUCCESS_MESSAGE } from "constant/message";
-import { GO_HOME } from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
 
 const SignupResult = function () {
+  const { t } = useTranslation();
   const history = useHistory();
 
   const onClickGoHome = () => {
@@ -17,11 +17,11 @@ const SignupResult = function () {
     <Container>
       <Result
         status="success"
-        title={SIGN_UP_SUCCESS_MESSAGE}
-        subTitle={SIGN_UP_SUCCESS_DESCRIPTION}
+        title={t("message.success")}
+        subTitle={t("description.sign up completed")}
       />
       <Button type="primary" onClick={onClickGoHome}>
-        {GO_HOME}
+        {t("go home")}
       </Button>
     </Container>
   );

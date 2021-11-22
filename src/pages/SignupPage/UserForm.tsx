@@ -1,44 +1,34 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Admin } from "pages/SignupPage";
+import { User } from "pages/SignupPage";
 // async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { userAPI } from "apis";
 // antd
 import { Button, Form, Input, message } from "antd";
-// constant
-import { NO_DUPLICATE_VALUES } from "constant/message";
-import {
-  PHONE,
-  AUTH_PHONE,
-  USER_NAME,
-  ID,
-  EMAIL,
-  PASSWORD,
-  CONFIRM_PASSWORD,
-  PREV,
-  SIGN_UP,
-  DUPLICATE_CHECK,
-} from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
 // components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 interface Props {
-  admin: Admin;
-  setAdmin: React.Dispatch<React.SetStateAction<Admin>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   isSubmitting: boolean;
   onSubmit: () => Promise<void>;
 }
 
-const AdminForm = function ({
-  admin,
-  setAdmin,
+const UserForm = function ({
+  user,
+  setUser,
   setCurrentStep,
   isSubmitting,
   onSubmit,
 }: Props) {
+  const { t } = useTranslation();
+
   const [form] = Form.useForm();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [isDupChecked, setIsDupChecked] = useState(false);
@@ -50,7 +40,7 @@ const AdminForm = function ({
       setIsDupChecked(false);
     },
     onSuccess: () => {
-      message.success(NO_DUPLICATE_VALUES);
+      message.success(t("message.no duplicate values"));
       setIsDupChecked(true);
     },
   });
@@ -68,19 +58,19 @@ const AdminForm = function ({
   // 휴대번호 인증 성공 콜백
   const onPhoneAuthSuccess = (data: { phone: string; token: string }) => {
     const { phone } = data;
-    setAdmin({ ...admin, mobile_tel: phone });
+    setUser({ ...user, mobile_tel: phone });
   };
 
   // text change 이벤트
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setAdmin({ ...admin, [name]: value });
+    setUser({ ...user, [name]: value });
   };
 
   // 아이디 중복 체크
   const onDupCheck = () => {
-    if (admin.login_id) {
-      idDupCheck.mutate({ id: admin.login_id });
+    if (user.login_id) {
+      idDupCheck.mutate({ id: user.login_id });
     }
   };
 
@@ -103,70 +93,70 @@ const AdminForm = function ({
       />
       <Form form={form} layout="vertical">
         <Form.Item
-          label={PHONE}
+          label={t("phone")}
           hasFeedback
-          validateStatus={admin.mobile_tel ? "success" : ""}
+          validateStatus={user.mobile_tel ? "success" : ""}
         >
           <Input
             readOnly
             disabled
             name="mobile_tel"
-            value={admin.mobile_tel}
+            value={user.mobile_tel}
             suffix={
               <Button type="link" onClick={openAuthModal}>
-                {AUTH_PHONE}
+                {t("auth phone")}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={USER_NAME}>
+        <Form.Item label={t("user name")}>
           <Input //
             name="name"
-            value={admin.name}
+            value={user.name}
             onChange={handleTextChange}
           />
         </Form.Item>
-        <Form.Item label={EMAIL}>
+        <Form.Item label={t("email")}>
           <Input //
             name="email"
-            value={admin.email}
+            value={user.email}
             onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item
-          label={ID}
+          label={t("id")}
           hasFeedback
           validateStatus={isDupChecked ? "success" : ""}
         >
           <Input //
             name="login_id"
-            value={admin.login_id}
+            value={user.login_id}
             onChange={handleTextChange}
             suffix={
               <Button type="link" onClick={onDupCheck}>
-                {DUPLICATE_CHECK}
+                {t("duplicate check")}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={PASSWORD}>
+        <Form.Item label={t("password")}>
           <Input.Password //
             name="password"
-            value={admin.password}
+            value={user.password}
             onChange={handleTextChange}
           />
         </Form.Item>
-        <Form.Item label={CONFIRM_PASSWORD}>
+        <Form.Item label={t("confirm password")}>
           <Input.Password //
             name="confirmPassword"
-            value={admin.confirmPassword}
+            value={user.confirmPassword}
             onChange={handleTextChange}
           />
         </Form.Item>
         <Form.Item>
-          <HorizontalContainer>
+          <ButtonContainer>
             <Button block onClick={handlePrev}>
-              {PREV}
+              {t("prev")}
             </Button>
             <Button
               block
@@ -174,16 +164,16 @@ const AdminForm = function ({
               loading={isSubmitting}
               onClick={handleSubmit}
             >
-              {SIGN_UP}
+              {t("next")}
             </Button>
-          </HorizontalContainer>
+          </ButtonContainer>
         </Form.Item>
       </Form>
     </>
   );
 };
 
-const HorizontalContainer = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -192,4 +182,4 @@ const HorizontalContainer = styled.div`
   }
 `;
 
-export default AdminForm;
+export default UserForm;

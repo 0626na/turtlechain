@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+// async
 import { retailerCompanyAPI, userAPI } from "apis";
+// antd
 import { message } from "antd";
+// lang
+import { useTranslation } from "react-i18next";
+// components
 import SignupPageTemplate from "./SignupPageTemplate";
 import SignupSteps from "./SignupSteps";
 import CompanyForm from "./CompanyForm";
-import AdminForm from "./AdminForm";
+import UserForm from "./UserForm";
 import SignupResult from "./SignupResult";
 
 export interface Company {
@@ -18,7 +23,7 @@ export interface Company {
   memo: string;
 }
 
-export interface Admin {
+export interface User {
   mobile_tel: string;
   name: string;
   email: string;
@@ -28,6 +33,9 @@ export interface Admin {
 }
 
 const SignupPage = function () {
+  const { t } = useTranslation();
+  const title = `${t("turtlechain")} - ${t("sign up")}`;
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [company, setCompany] = useState<Company>({
@@ -39,7 +47,7 @@ const SignupPage = function () {
     biz_license_file: null,
     memo: "",
   });
-  const [admin, setAdmin] = useState<Admin>({
+  const [user, setUser] = useState<User>({
     mobile_tel: "",
     name: "",
     email: "",
@@ -48,6 +56,7 @@ const SignupPage = function () {
     confirmPassword: "",
   });
 
+  // 서비스 가입 요청
   const submit = async () => {
     try {
       setIsSubmitting(true);
@@ -57,7 +66,7 @@ const SignupPage = function () {
         biz_license_file: company.biz_license_file as File,
       });
       // 유저 생성 요청
-      await userAPI.create({ ...admin, company_id });
+      await userAPI.create({ ...user, company_id });
       setCurrentStep((prevStep) => prevStep + 1);
     } catch (error: any) {
       message.error(error.response?.data?.msg);
@@ -72,9 +81,9 @@ const SignupPage = function () {
       setCompany={setCompany}
       setCurrentStep={setCurrentStep}
     />,
-    <AdminForm
-      admin={admin}
-      setAdmin={setAdmin}
+    <UserForm
+      user={user}
+      setUser={setUser}
       setCurrentStep={setCurrentStep}
       isSubmitting={isSubmitting}
       onSubmit={submit}
@@ -84,7 +93,7 @@ const SignupPage = function () {
 
   return (
     <SignupPageTemplate>
-      <Helmet title="터틀체인 - 서비스 가입신청" />
+      <Helmet title={title} />
       <SignupSteps current={currentStep} />
       {steps[currentStep]}
     </SignupPageTemplate>
