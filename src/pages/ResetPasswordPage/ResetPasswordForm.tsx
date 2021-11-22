@@ -1,26 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+// async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
+// antd
 import { Form, Button, Divider, Typography, message, Input } from "antd";
-import { AUTH_PHONE_DESCRIPTION } from "constant/description";
-import {
-  RESET_PASSWORD_SUCCESS_MESSAGE,
-  NOT_MATCH_PASSWORD_MESSAGE,
-} from "constant/message";
-import {
-  ID,
-  FIND_ID,
-  PASSWORD,
-  CONFIRM_PASSWORD,
-  RESET_PASSWORD,
-  AUTH_PHONE,
-  LOGIN,
-} from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
+// components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 const ResetPasswordForm = function () {
+  const { t } = useTranslation();
+
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [form] = Form.useForm();
   const [phone, setPhone] = useState("");
@@ -47,7 +40,7 @@ const ResetPasswordForm = function () {
       },
       onSuccess: () => {
         resetState();
-        message.success(RESET_PASSWORD_SUCCESS_MESSAGE);
+        message.success(`${t("message.success reset password")}.`);
       },
     }
   );
@@ -88,26 +81,26 @@ const ResetPasswordForm = function () {
         onSuccess={onAuthSuccess}
       />
       <Form form={form} layout="vertical">
-        <Typography.Title level={3}>{RESET_PASSWORD}</Typography.Title>
+        <Typography.Title level={3}>{t("reset password")}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {AUTH_PHONE_DESCRIPTION}
+          {`${t("description.please phone auth")}.`}
         </Typography>
         <Form.Item>
           <Button type="primary" onClick={openAuthModal}>
-            {AUTH_PHONE}
+            {t("auth phone")}
           </Button>
         </Form.Item>
         {phone && token && (
           <>
-            <Form.Item name="id" label={ID}>
+            <Form.Item name="id" label={t("id")}>
               <Input />
             </Form.Item>
-            <Form.Item name="password" label={PASSWORD}>
+            <Form.Item name="password" label={t("password")}>
               <Input.Password />
             </Form.Item>
             <Form.Item
               name="confirmPassword"
-              label={CONFIRM_PASSWORD}
+              label={t("confirm password")}
               rules={[
                 ({ getFieldValue }) => ({
                   validator(_, value) {
@@ -115,7 +108,7 @@ const ResetPasswordForm = function () {
                       return Promise.resolve();
                     } else {
                       return Promise.reject(
-                        new Error(NOT_MATCH_PASSWORD_MESSAGE)
+                        new Error(t("message.not match password"))
                       );
                     }
                   },
@@ -126,16 +119,16 @@ const ResetPasswordForm = function () {
             </Form.Item>
             <Form.Item>
               <Button block type="primary" onClick={handleReset}>
-                {RESET_PASSWORD}
+                {t("reset password")}
               </Button>
             </Form.Item>
           </>
         )}
         <Divider />
         <Form.Item style={{ float: "right" }}>
-          <Link to="/login">{LOGIN}</Link>
+          <Link to="/login">{t("login")}</Link>
           <Divider type="vertical" />
-          <Link to="/find-id">{FIND_ID}</Link>
+          <Link to="/find-id">{t("find id")}</Link>
         </Form.Item>
       </Form>
     </>
