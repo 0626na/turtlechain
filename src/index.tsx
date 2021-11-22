@@ -3,6 +3,7 @@ import { RecoilRoot } from "recoil";
 import { QueryClientProvider, QueryClient } from "react-query";
 import Router from "router";
 import "antd/dist/antd.less";
+import "./i18n";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
