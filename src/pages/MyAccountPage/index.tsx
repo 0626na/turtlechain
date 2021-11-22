@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 
-const MyInformationPage = function () {
+const MyAccountPage = function () {
   return (
     <>
       <Helmet title="터틀체인 - 내 정보" />
@@ -8,4 +8,4 @@ const MyInformationPage = function () {
   );
 };
 
-export default MyInformationPage;
+export default MyAccountPage;
