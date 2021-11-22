@@ -1,7 +1,8 @@
 {
   "description": {
     "not member": "아직 회원이 아니신가요",
-    "about membership": "다양한 요금제가 궁금하신가요"
+    "about membership": "다양한 요금제가 궁금하신가요",
+    "please phone auth": "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요"
   },
   "turtlechain": "터틀체인",
   "id": "아이디",
@@ -11,5 +12,7 @@
   "login": "로그인",
   "auto login": "자동 로그인",
   "sign up": "회원가입",
-  "about membership": "멤버쉽 알아보기"
+  "about membership": "멤버쉽 알아보기",
+  "phone": "휴대번호",
+  "auth phone": "휴대번호 인증하기"
 }

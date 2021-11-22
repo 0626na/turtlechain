@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+// async
 import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import { authAPI } from "apis";
+// antd
 import { Form, Button, Divider, Typography, message, List, Spin } from "antd";
-import { AUTH_PHONE_DESCRIPTION } from "constant/description";
-import { FIND_ID, AUTH_PHONE, LOGIN, RESET_PASSWORD } from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
+// components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 const FindIdForm = function () {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
@@ -67,13 +71,13 @@ const FindIdForm = function () {
         onSuccess={onAuthSuccess}
       />
       <Form layout="vertical">
-        <Typography.Title level={3}>{FIND_ID}</Typography.Title>
+        <Typography.Title level={3}>{t("find id")}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {AUTH_PHONE_DESCRIPTION}
+          {`${t("description.please phone auth")}.`}
         </Typography>
         <Form.Item>
           <Button type="primary" onClick={openAuthModal}>
-            {AUTH_PHONE}
+            {t("auth phone")}
           </Button>
         </Form.Item>
         {getUserIDQuery.isFetching && (
@@ -92,9 +96,9 @@ const FindIdForm = function () {
         )}
         <Divider />
         <Form.Item style={{ float: "right" }}>
-          <Link to="/login">{LOGIN}</Link>
+          <Link to="/login">{t("login")}</Link>
           <Divider type="vertical" />
-          <Link to="/reset-password">{RESET_PASSWORD}</Link>
+          <Link to="/reset-password">{t("reset password")}</Link>
         </Form.Item>
       </Form>
     </>
