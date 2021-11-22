@@ -9,7 +9,7 @@ interface Props {
 
 const SignupSteps = function ({ current }: Props) {
   const { t } = useTranslation();
-  const steps = [t("biz info"), t("admin account"), t("sign up completed")];
+  const steps = [t("biz info"), t("admin account"), t("signup completed")];
 
   return (
     <Steps style={{ marginBottom: 40 }} size="small" current={current}>

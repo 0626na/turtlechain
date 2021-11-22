@@ -18,7 +18,7 @@ const SignupResult = function () {
       <Result
         status="success"
         title={t("message.success")}
-        subTitle={t("description.sign up completed")}
+        subTitle={t("description.signup completed")}
       />
       <Button type="primary" onClick={onClickGoHome}>
         {t("go home")}

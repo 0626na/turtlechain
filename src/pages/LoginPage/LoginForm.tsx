@@ -92,7 +92,7 @@ const LoginForm = function () {
       <BottomContainer>
         <Typography>
           {t("description.not member")}{" "}
-          <Link to="/signup">{t("sign up")}</Link>
+          <Link to="/signup">{t("signup")}</Link>
         </Typography>
         <Typography>
           {t("description.about membership")}{" "}

@@ -34,7 +34,7 @@ export interface User {
 
 const SignupPage = function () {
   const { t } = useTranslation();
-  const title = `${t("turtlechain")} - ${t("sign up")}`;
+  const title = `${t("turtlechain")} - ${t("signup")}`;
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
