@@ -1,12 +1,12 @@
 import { useResetRecoilState } from "recoil";
 import { tokenState } from "store/tokenState";
-import { TOKEN_NAME } from "constant/string";
+import { TOKEN } from "constant";
 
 const useLogout = function () {
   const resetToken = useResetRecoilState(tokenState);
   const logout = () => {
     resetToken();
-    localStorage.removeItem(TOKEN_NAME);
+    localStorage.removeItem(TOKEN);
   };
 
   return { logout };
