@@ -73,7 +73,7 @@ const FindIdForm = function () {
       <Form layout="vertical">
         <Typography.Title level={3}>{t("find id")}</Typography.Title>
         <Typography style={{ marginBottom: 20 }}>
-          {`${t("description.please phone auth")}.`}
+          {t("description.please phone auth")}
         </Typography>
         <Form.Item>
           <Button type="primary" onClick={openAuthModal}>

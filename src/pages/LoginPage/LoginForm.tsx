@@ -91,11 +91,11 @@ const LoginForm = function () {
       <Divider />
       <BottomContainer>
         <Typography>
-          {`${t("description.not member")}?`}{" "}
+          {t("description.not member")}{" "}
           <Link to="/signup">{t("sign up")}</Link>
         </Typography>
         <Typography>
-          {`${t("description.about membership")}?`}{" "}
+          {t("description.about membership")}{" "}
           <Link to="#">{t("about membership")}</Link>
         </Typography>
       </BottomContainer>
