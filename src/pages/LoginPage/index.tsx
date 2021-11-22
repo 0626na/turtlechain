@@ -1,11 +1,14 @@
 import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
 import Template from "./LoginPageTemplate";
 import Form from "./LoginForm";
 
 const LoginPage = function () {
+  const { t } = useTranslation();
+  const title = `${t("turtlechain")} - ${t("login")}`;
   return (
     <Template>
-      <Helmet title="터틀체인 - 로그인" />
+      <Helmet title={title} />
       <Form />
     </Template>
   );

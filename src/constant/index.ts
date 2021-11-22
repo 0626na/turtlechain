@@ -1,0 +1,2 @@
+// TOKEN
+export const TOKEN = "TURTLECHAIN_V2_TOKEN";

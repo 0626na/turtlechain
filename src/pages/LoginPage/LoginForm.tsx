@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "images/logo.png";
+import { Link } from "react-router-dom";
 // store
 import { useSetRecoilState } from "recoil";
 import { tokenState } from "store/tokenState";
@@ -19,24 +19,13 @@ import {
   Typography,
   message,
 } from "antd";
+// lang
+import { useTranslation } from "react-i18next";
 // constant
-import {
-  NOT_MEMBER_DESCRIPTION,
-  FIND_MEMBERSHIP_DESCRIPTION,
-} from "constant/description";
-import {
-  ID,
-  PASSWORD,
-  AUTO_LOGIN,
-  FIND_ID,
-  RESET_PASSWORD,
-  LOGIN,
-  SIGN_UP,
-  FIND_MEMBERSHIP,
-  TOKEN_NAME,
-} from "constant/string";
+import { TOKEN } from "constant";
 
 const LoginForm = function () {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const setToken = useSetRecoilState(tokenState);
 
@@ -48,7 +37,7 @@ const LoginForm = function () {
     onSuccess: (data) => {
       const { token } = data;
       const { autoLogin } = form.getFieldsValue();
-      if (autoLogin) localStorage.setItem(TOKEN_NAME, token);
+      if (autoLogin) localStorage.setItem(TOKEN, token);
       setToken(token);
     },
   });
@@ -65,19 +54,28 @@ const LoginForm = function () {
     <Form form={form} onFinish={onSubmit}>
       <LogoImage src={logo} alt="Logo" />
       <Form.Item name="login_id">
-        <Input placeholder={ID} prefix={<UserOutlined />} />
+        <Input //
+          placeholder={t("id")}
+          prefix={<UserOutlined />}
+        />
       </Form.Item>
       <Form.Item name="password">
-        <Input.Password placeholder={PASSWORD} prefix={<LockOutlined />} />
+        <Input.Password //
+          placeholder={t("password")}
+          prefix={<LockOutlined />}
+        />
       </Form.Item>
       <FormItemContainer>
-        <Form.Item name="autoLogin" valuePropName="checked">
-          <Checkbox>{AUTO_LOGIN}</Checkbox>
+        <Form.Item //
+          name="autoLogin"
+          valuePropName="checked"
+        >
+          <Checkbox>{t("auto login")}</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Link to="/find-id">{FIND_ID}</Link>
+          <Link to="/find-id">{t("find id")}</Link>
           <Divider type="vertical" />
-          <Link to="/reset-password">{RESET_PASSWORD}</Link>
+          <Link to="/reset-password">{t("reset password")}</Link>
         </Form.Item>
       </FormItemContainer>
       <Form.Item>
@@ -87,16 +85,18 @@ const LoginForm = function () {
           htmlType="submit"
           loading={loginQuery.isLoading}
         >
-          {LOGIN}
+          {t("login")}
         </Button>
       </Form.Item>
       <Divider />
       <BottomContainer>
         <Typography>
-          {NOT_MEMBER_DESCRIPTION} <Link to="/signup">{SIGN_UP}</Link>
+          {`${t("description.not member")}?`}{" "}
+          <Link to="/signup">{t("sign up")}</Link>
         </Typography>
         <Typography>
-          {FIND_MEMBERSHIP_DESCRIPTION} <Link to="#">{FIND_MEMBERSHIP}</Link>
+          {`${t("description.about membership")}?`}{" "}
+          <Link to="#">{t("about membership")}</Link>
         </Typography>
       </BottomContainer>
     </Form>
