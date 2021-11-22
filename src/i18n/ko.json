@@ -1,17 +1,25 @@
 {
   "description": {
-    "not member": "아직 회원이 아니신가요",
-    "about membership": "다양한 요금제가 궁금하신가요",
-    "please phone auth": "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요",
-    "sign up completed": "관리자에 의해 가입 승인이 완료된 후, 로그인이 가능합니다. 승인 결과는 신청 시 입력한 이메일로 전달될 예정입니다"
+    "not member": "아직 회원이 아니신가요?",
+    "about membership": "다양한 요금제가 궁금하신가요?",
+    "please phone auth": "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요.",
+    "sign up completed": "관리자에 의해 가입 승인이 완료된 후, 로그인이 가능합니다. 승인 결과는 신청 시 입력한 이메일로 전달될 예정입니다.",
+    "only number": "숫자만 입력하세요."
   },
   "message": {
-    "success reset password": "비밀번호가 변경되었습니다",
-    "success sign up": "서비스 신청이 완료 되었습니다",
-    "not match password": "비밀번호가 일치하지 않습니다",
-    "no duplicate values": "중복된 값이 없습니다."
+    "success reset password": "비밀번호가 변경되었습니다.",
+    "success sign up": "서비스 신청이 완료 되었습니다.",
+    "success create auth num": "인증번호를 생성하였습니다.",
+    "success verify auth num": "인증번호를 확인하였습니다.",
+    "error phone validation": "올바른 휴대번호를 입력하세요.",
+    "not match password": "비밀번호가 일치하지 않습니다.",
+    "no duplicate values": "중복된 값이 없습니다.",
+    "expired auth time": "인증시간이 만료되었습니다."
   },
   "turtlechain": "터틀체인",
+  "auth num": "인증번호",
+  "create auth num": "인증번호 생성하기",
+  "verify auth num": "인증번호 검증하기",
   "id": "아이디",
   "find id": "아이디 찾기",
   "password": "비밀번호",
@@ -41,5 +49,6 @@
   "prev": "이전",
   "next": "다음",
   "find address": "주소 찾기",
-  "duplicate check": "중복 체크"
+  "duplicate check": "중복 체크",
+  "close": "닫기"
 }

@@ -7,22 +7,8 @@ import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
 import { Modal, Form, Input, Button, message } from "antd";
-// constant
-import {
-  CREATE_PHONE_OTP_SUCCESS_MESSAGE,
-  VERIFY_PHONE_OTP_SUCCESS_MESSAGE,
-  AUTH_TIME_EXPIRED_MESSAGE,
-  PHONE_VALIDATE_ERROR_MESSAGE,
-} from "constant/message";
-import {
-  AUTH_PHONE,
-  PHONE,
-  CREATE_AUTH_NUM,
-  VERIFY_AUTH_NUM,
-  AUTH_NUM,
-  CLOSE,
-  ONLY_NUMBER,
-} from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
 
 interface Props {
   visible: boolean;
@@ -31,6 +17,8 @@ interface Props {
 }
 
 const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
+  const { t } = useTranslation();
+
   const [form] = Form.useForm();
   const [session_key, setSessionKey] = useState("");
   const [expire_time, setExpireTime] = useState<null | number>(null);
@@ -49,7 +37,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        message.success(CREATE_PHONE_OTP_SUCCESS_MESSAGE);
+        message.success(t("message.success create auth num"));
         const { session_key, expire_time } = data;
         setSessionKey(session_key);
         setExpireTime(calculateExpireTime(expire_time));
@@ -66,7 +54,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        message.success(VERIFY_PHONE_OTP_SUCCESS_MESSAGE);
+        message.success(t("message.success verify auth num"));
         const token = data;
         const phone = form.getFieldValue("phone");
         onClose();
@@ -98,7 +86,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
         } else {
           setExpireTime(null);
           clearTimeout(countdown);
-          message.success(AUTH_TIME_EXPIRED_MESSAGE);
+          message.success(t("message.expired auth time"));
         }
       }, 1000);
 
@@ -120,24 +108,27 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   return (
     <Modal
       width={400}
-      title={AUTH_PHONE}
+      title={t("auth phone")}
       closable={false}
       visible={visible}
       footer={[
         <Button key="close" onClick={onClose}>
-          {CLOSE}
+          {t("close")}
         </Button>,
       ]}
     >
       <Form form={form} layout="vertical">
         <Form.Item
           name="phone"
-          label={PHONE}
+          label={t("phone")}
           rules={[
-            { pattern: emailPattern, message: PHONE_VALIDATE_ERROR_MESSAGE },
+            {
+              pattern: emailPattern,
+              message: t("message.error phone validation"),
+            },
           ]}
         >
-          <Input placeholder={ONLY_NUMBER} />
+          <Input placeholder={t("description.only number")} />
         </Form.Item>
         <Form.Item>
           <Button
@@ -146,10 +137,10 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
             loading={createPhoneOTPQuery.isLoading}
             onClick={handleCreate}
           >
-            {CREATE_AUTH_NUM}
+            {t("create auth num")}
           </Button>
         </Form.Item>
-        <Form.Item name="otp_code" label={AUTH_NUM}>
+        <Form.Item name="otp_code" label={t("auth num")}>
           <Input suffix={expire_time && moment(expire_time).format("mm:ss")} />
         </Form.Item>
         <Form.Item>
@@ -160,7 +151,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
             loading={verifyPhoneOTPQuery.isLoading}
             onClick={handleVerify}
           >
-            {VERIFY_AUTH_NUM}
+            {t("verify auth num")}
           </Button>
         </Form.Item>
       </Form>
