@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+// antd
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import {
-  MY_PAGE,
-  MY_INFORMATION,
-  BUSINESS_INFORMATION,
-  SHOPPING_MALL_INFORMATION,
-} from "constant/string";
+// lang
+import { useTranslation } from "react-i18next";
 
 interface Props {
   headerHeight: number;
@@ -16,7 +13,9 @@ interface Props {
 }
 
 const Sider = function ({ headerHeight, siderWidth }: Props) {
+  const { t } = useTranslation();
   const history = useHistory();
+
   const [selectedKeys, setSelectedKeys] = useState(history.location.pathname);
 
   const handleMenuClick = (url: null | string) => {
@@ -46,20 +45,20 @@ const Sider = function ({ headerHeight, siderWidth }: Props) {
       submenu: null,
     },
     {
-      title: MY_PAGE,
+      title: t("my page"),
       icon: <UserOutlined />,
       url: null,
       submenu: [
         {
-          title: MY_INFORMATION,
-          url: "/my/information",
+          title: t("my account"),
+          url: "/my/account",
         },
         {
-          title: BUSINESS_INFORMATION,
+          title: t("biz info"),
           url: "/my/company",
         },
         {
-          title: SHOPPING_MALL_INFORMATION,
+          title: t("mall info"),
           url: "/my/store",
         },
       ],
