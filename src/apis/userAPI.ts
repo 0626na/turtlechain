@@ -10,7 +10,7 @@ interface ResponseDupCheck {
 }
 
 const dupCheck = async function (data: RequestDupCheck) {
-  const url = "/auth/user/dup_check";
+  const url = "/provisioning/user/dup_check";
   const response = await v2Axios.post<ResponseDupCheck>(url, data);
   return response.data.data;
 };
@@ -23,6 +23,7 @@ interface RequestCreate {
   login_id: string;
   password: string;
   company_id: number;
+  type: "rt" | "ws" | "st" | "pi";
 }
 
 interface ResponseCreate {
@@ -30,7 +31,7 @@ interface ResponseCreate {
 }
 
 const create = async function (data: RequestCreate) {
-  const url = "/auth/user";
+  const url = "/provisioning/user";
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data.data;
 };
