@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { Company } from "pages/SignupPage";
 // antd
@@ -15,79 +15,50 @@ import PostcodeModal from "components/DaumPostcodeModal";
 interface Props {
   company: Company;
   setCompany: React.Dispatch<React.SetStateAction<Company>>;
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  onNext: () => void;
 }
 
-const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
+const CompanyForm = function ({ company, setCompany, onNext }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
-
   const [visiblePostcodeModal, setVisiblePostcodeModal] = useState(false);
 
-  // upload file props
-  const uploadProps = {
-    fileList: company.biz_license_file ? [company.biz_license_file as any] : [],
-    onRemove: () => {
-      setCompany({ ...company, biz_license_file: null });
-    },
-    beforeUpload: (file: File) => {
-      setCompany({ ...company, biz_license_file: file });
-      return false;
-    },
+  const handleChangeRadio = (e: RadioChangeEvent) => {
+    const { name, value } = e.target;
+    setCompany({ ...company, [name as string]: value });
   };
 
-  // 주소 찾기 모달 열기
-  const openPostcodeModal = () => {
-    setVisiblePostcodeModal(true);
-  };
-
-  // 주소 찾기 모달 닫기
-  const closePostcodeModal = () => {
-    setVisiblePostcodeModal(false);
-  };
-
-  // 주소 얻기
-  const getAddress = (address: string) => {
-    setCompany({ ...company, address });
-  };
-
-  // text change 이벤트
-  const handleTextChange = (
+  const handleChangeText = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setCompany({ ...company, [name]: value });
   };
 
-  // radio change 이벤트
-  const handleRadioChange = (e: RadioChangeEvent) => {
-    const { name, value } = e.target;
-    setCompany({ ...company, [name as string]: value });
-  };
-
-  // 이전 단계
-  const handlePrev = () => {
-    history.push("/");
-  };
-
-  // 다음 단계
-  const handleNext = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
+  const nextDisabled = useMemo(() => {
+    const { owner, name, biz_num, address_main, biz_license_file } = company;
+    if (!owner || !name || !biz_num || !address_main || !biz_license_file) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [company]);
 
   return (
     <>
       <PostcodeModal
         visible={visiblePostcodeModal}
-        onClose={closePostcodeModal}
-        onGetAddress={getAddress}
+        onClose={() => setVisiblePostcodeModal(false)}
+        onGetAddress={(address_main) => {
+          setCompany({ ...company, address_main });
+        }}
       />
       <Form layout="vertical">
         <Form.Item label={t("biz type")}>
           <Radio.Group
             name="biz_type"
             value={company.biz_type}
-            onChange={handleRadioChange}
+            onChange={handleChangeRadio}
           >
             {BIZ_TYPE_OPTIONS.map((option) => {
               const label = t(`biz ${option}`);
@@ -103,38 +74,57 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
           <Input
             name="owner"
             value={company.owner}
-            onChange={handleTextChange}
+            onChange={handleChangeText}
           />
         </Form.Item>
         <Form.Item label={t("biz name")}>
           <Input //
             name="name"
             value={company.name}
-            onChange={handleTextChange}
+            onChange={handleChangeText}
           />
         </Form.Item>
         <Form.Item label={t("biz num")}>
-          <Input //
+          <Input
             name="biz_num"
+            placeholder={t("description.only number")}
             value={company.biz_num}
-            onChange={handleTextChange}
+            onChange={handleChangeText}
           />
         </Form.Item>
         <Form.Item label={t("biz address")}>
-          <Input
+          <Input //
             readOnly
-            disabled
             name="address"
-            value={company.address}
+            value={company.address_main}
             suffix={
-              <Button type="link" onClick={openPostcodeModal}>
+              <Button type="link" onClick={() => setVisiblePostcodeModal(true)}>
                 {t("find address")}
               </Button>
             }
           />
         </Form.Item>
+        <Form.Item label={t("biz detail address")}>
+          <Input
+            name="address_sub"
+            value={company.address_sub}
+            onChange={handleChangeText}
+          />
+        </Form.Item>
         <Form.Item label={t("biz license")}>
-          <Upload listType="picture" {...uploadProps}>
+          <Upload
+            listType="picture"
+            fileList={
+              company.biz_license_file ? [company.biz_license_file as any] : []
+            }
+            beforeUpload={(file: File) => {
+              setCompany({ ...company, biz_license_file: file });
+              return false;
+            }}
+            onRemove={() => {
+              setCompany({ ...company, biz_license_file: null });
+            }}
+          >
             <Button
               type="primary"
               disabled={company.biz_license_file !== null}
@@ -146,17 +136,17 @@ const CompanyForm = function ({ company, setCompany, setCurrentStep }: Props) {
         </Form.Item>
         <Form.Item label={t("etc")}>
           <Input.TextArea
-            style={{ height: 150 }}
+            style={{ height: 100 }}
             name="memo"
             value={company.memo}
-            onChange={handleTextChange}
+            onChange={handleChangeText}
           />
         </Form.Item>
         <ButtonContainer>
-          <Button block onClick={handlePrev}>
+          <Button block onClick={() => history.push("/")}>
             {t("prev")}
           </Button>
-          <Button block type="primary" onClick={handleNext}>
+          <Button block disabled={nextDisabled} type="primary" onClick={onNext}>
             {t("next")}
           </Button>
         </ButtonContainer>
