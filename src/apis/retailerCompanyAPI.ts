@@ -6,7 +6,8 @@ interface RequestCreate {
   owner: string;
   name: string;
   biz_num: string;
-  address: string;
+  address_main: string;
+  address_sub: string;
   biz_license_file: File;
   memo: string;
 }
