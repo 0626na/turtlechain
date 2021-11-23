@@ -14,8 +14,8 @@ export const v1Axios = axios.create({
 export const v2Axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://api.turtleship.io/v2"
-      : "https://dev.turtleship.io/v2",
+      ? "https://alpha.turtleship.io/v2"
+      : "https://alpha.turtleship.io/v2",
   headers: { "Content-Type": "application/json" },
 });
 
