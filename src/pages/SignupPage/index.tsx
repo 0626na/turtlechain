@@ -18,15 +18,16 @@ export interface Company {
   owner: string;
   name: string;
   biz_num: string;
-  address: string;
+  address_main: string;
+  address_sub: string;
   biz_license_file: null | File;
   memo: string;
 }
 
 export interface User {
-  mobile_tel: string;
   name: string;
   email: string;
+  mobile_tel: string;
   login_id: string;
   password: string;
   confirmPassword: string;
@@ -38,35 +39,38 @@ const SignupPage = function () {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [company, setCompany] = useState<Company>({
     biz_type: "entity",
     owner: "",
     name: "",
     biz_num: "",
-    address: "",
+    address_main: "",
+    address_sub: "",
     biz_license_file: null,
     memo: "",
   });
   const [user, setUser] = useState<User>({
-    mobile_tel: "",
     name: "",
     email: "",
+    mobile_tel: "",
     login_id: "",
     password: "",
     confirmPassword: "",
   });
 
-  // 서비스 가입 요청
+  // 서비스 가입 신청
+  // 1. 사업자 생성 완료
+  // 2. 유저 생성 완료
+  // 3. 가입 신청 완료
   const submit = async () => {
     try {
       setIsSubmitting(true);
-      // 사업자 생성 요청
       const { company_id } = await retailerCompanyAPI.create({
         ...company,
         biz_license_file: company.biz_license_file as File,
       });
-      // 유저 생성 요청
-      await userAPI.create({ ...user, company_id });
+      await userAPI.create({ ...user, type: "rt", company_id });
       setCurrentStep((prevStep) => prevStep + 1);
     } catch (error: any) {
       message.error(error.response?.data?.msg);
@@ -79,14 +83,14 @@ const SignupPage = function () {
     <CompanyForm
       company={company}
       setCompany={setCompany}
-      setCurrentStep={setCurrentStep}
+      onNext={() => setCurrentStep(currentStep + 1)}
     />,
     <UserForm
       user={user}
-      setUser={setUser}
-      setCurrentStep={setCurrentStep}
       isSubmitting={isSubmitting}
-      onSubmit={submit}
+      setUser={setUser}
+      onPrev={() => setCurrentStep(currentStep - 1)}
+      onSignup={submit}
     />,
     <SignupResult />,
   ];
