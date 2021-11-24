@@ -40,7 +40,7 @@ const resetPassword = async function (data: RequestResetPassword) {
 
 // 아이디 중복 체크
 interface RequestDupCheck {
-  id: string;
+  login_id: string;
 }
 
 interface ResponseDupCheck {

@@ -1,8 +1,12 @@
 import styled from "styled-components";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { User } from "pages/SignupPage";
+// async
+import { AxiosError } from "axios";
+import { useMutation } from "react-query";
+import { userAPI } from "apis";
 // antd
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 // lang
 import { useTranslation } from "react-i18next";
 // components
@@ -25,11 +29,28 @@ const UserForm = function ({
 }: Props) {
   const { t } = useTranslation();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [isDuplicated, setIsDuplicated] = useState(true);
 
   const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
+
+  // 아이디 중복체크 요청
+  const dupCheckQuery = useMutation(["dupCheck"], userAPI.dupCheck, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      message.success(t("message.no duplicate values"));
+      setIsDuplicated(false);
+    },
+  });
+
+  // 아이디 입력 값 변경하면 중복체크 완료 해제
+  useEffect(() => {
+    setIsDuplicated(true);
+  }, [user.login_id]);
 
   const signupDisabled = useMemo(() => {
     const { name, email, mobile_tel, password, confirmPassword } = user;
@@ -37,6 +58,7 @@ const UserForm = function ({
       !email ||
       !name ||
       !mobile_tel ||
+      isDuplicated ||
       !password ||
       password !== confirmPassword
     ) {
@@ -88,11 +110,25 @@ const UserForm = function ({
             }
           />
         </Form.Item>
-        <Form.Item label={t("id")}>
+        <Form.Item
+          label={t("id")}
+          hasFeedback
+          validateStatus={!isDuplicated ? "success" : ""}
+        >
           <Input
             name="login_id"
             value={user.login_id}
             onChange={handleChangeText}
+            suffix={
+              <Button
+                type="link"
+                onClick={() =>
+                  dupCheckQuery.mutate({ login_id: user.login_id })
+                }
+              >
+                {t("duplicate check")}
+              </Button>
+            }
           />
         </Form.Item>
         <Form.Item label={t("password")}>
