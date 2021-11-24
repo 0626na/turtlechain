@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
-import { authAPI } from "apis";
+import { userAPI } from "apis";
 // antd
 import { Form, Button, Divider, Typography, message, Input } from "antd";
 // lang
@@ -30,9 +30,9 @@ const ResetPasswordForm = function () {
   const resetPasswordQuery = useMutation(
     ["resetPassword"],
     () => {
-      const id = form.getFieldValue("id");
+      const login_id = form.getFieldValue("login_id");
       const password = form.getFieldValue("password");
-      return authAPI.resetPassword({ id, phone, password, token });
+      return userAPI.resetPassword({ login_id, phone, password, token });
     },
     {
       onError: (error: AxiosError) => {
@@ -45,30 +45,13 @@ const ResetPasswordForm = function () {
     }
   );
 
-  // 인증 모달 열기
-  const openAuthModal = () => {
-    setVisiblePhoneAuthModal(true);
-  };
-
-  // 인증 모달 닫기
-  const closeAuthModal = () => {
-    setVisiblePhoneAuthModal(false);
-  };
-
-  // 인증 성공 콜백
-  const onAuthSuccess = (data: { phone: string; token: string }) => {
-    const { token, phone } = data;
-    setToken(token);
-    setPhone(phone);
-  };
-
   // 비밀번호 재설정
   const handleReset = () => {
-    const id = form.getFieldValue("id");
+    const login_id = form.getFieldValue("login_id");
     const password = form.getFieldValue("password");
     const confirmPassword = form.getFieldValue("confirmPassword");
 
-    if (id && password && password === confirmPassword) {
+    if (login_id && password && password === confirmPassword) {
       resetPasswordQuery.mutate();
     }
   };
@@ -77,8 +60,12 @@ const ResetPasswordForm = function () {
     <>
       <PhoneAuthModal
         visible={visiblePhoneAuthModal}
-        onClose={closeAuthModal}
-        onSuccess={onAuthSuccess}
+        onClose={() => setVisiblePhoneAuthModal(false)}
+        onSuccess={(data) => {
+          const { token, phone } = data;
+          setToken(token);
+          setPhone(phone);
+        }}
       />
       <Form form={form} layout="vertical">
         <Typography.Title level={3}>{t("reset password")}</Typography.Title>
@@ -86,13 +73,16 @@ const ResetPasswordForm = function () {
           {t("description.please phone auth")}
         </Typography>
         <Form.Item>
-          <Button type="primary" onClick={openAuthModal}>
+          <Button //
+            type="primary"
+            onClick={() => setVisiblePhoneAuthModal(true)}
+          >
             {t("auth phone")}
           </Button>
         </Form.Item>
         {phone && token && (
           <>
-            <Form.Item name="id" label={t("id")}>
+            <Form.Item name="login_id" label={t("id")}>
               <Input />
             </Form.Item>
             <Form.Item name="password" label={t("password")}>

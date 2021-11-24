@@ -18,6 +18,26 @@ const getID = async function (data: RequestGetID) {
   return response.data.data;
 };
 
+// 비밀번호 재설정
+interface RequestResetPassword {
+  login_id: string;
+  password: string;
+  phone: string;
+  token: string;
+}
+
+interface ResponseResetPassword {
+  data: null;
+}
+
+const resetPassword = async function (data: RequestResetPassword) {
+  const { token } = data;
+  const url = "/provisioning/user/password";
+  const config = { headers: { Authorization: `Api-Key ${token}` } };
+  const response = await v2Axios.put<ResponseResetPassword>(url, data, config);
+  return response.data.data;
+};
+
 // 아이디 중복 체크
 interface RequestDupCheck {
   id: string;
@@ -56,6 +76,7 @@ const create = async function (data: RequestCreate) {
 
 const userAPI = {
   getID,
+  resetPassword,
   dupCheck,
   create,
 };
