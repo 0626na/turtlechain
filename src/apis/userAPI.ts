@@ -55,9 +55,9 @@ const dupCheck = async function (data: RequestDupCheck) {
 
 // 유저 생성
 interface RequestCreate {
-  mobile_tel: string;
   name: string;
   email: string;
+  mobile_phone: string;
   login_id: string;
   password: string;
   company_id: number;

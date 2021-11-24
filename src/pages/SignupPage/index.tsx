@@ -27,10 +27,9 @@ export interface Company {
 export interface User {
   name: string;
   email: string;
-  mobile_tel: string;
+  mobile_phone: string;
   login_id: string;
   password: string;
-  confirmPassword: string;
 }
 
 const SignupPage = function () {
@@ -53,10 +52,9 @@ const SignupPage = function () {
   const [user, setUser] = useState<User>({
     name: "",
     email: "",
-    mobile_tel: "",
+    mobile_phone: "",
     login_id: "",
     password: "",
-    confirmPassword: "",
   });
 
   // 서비스 가입 신청

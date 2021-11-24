@@ -30,6 +30,7 @@ const UserForm = function ({
   const { t } = useTranslation();
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,11 +54,11 @@ const UserForm = function ({
   }, [user.login_id]);
 
   const signupDisabled = useMemo(() => {
-    const { name, email, mobile_tel, password, confirmPassword } = user;
+    const { name, email, mobile_phone, password } = user;
     if (
       !email ||
       !name ||
-      !mobile_tel ||
+      !mobile_phone ||
       isDuplicated ||
       !password ||
       password !== confirmPassword
@@ -66,7 +67,7 @@ const UserForm = function ({
     } else {
       return false;
     }
-  }, [user]);
+  }, [user, confirmPassword]);
 
   return (
     <>
@@ -74,7 +75,7 @@ const UserForm = function ({
         visible={visiblePhoneAuthModal}
         onClose={() => setVisiblePhoneAuthModal(false)}
         onSuccess={(data) => {
-          setUser({ ...user, mobile_tel: data.phone });
+          setUser({ ...user, mobile_phone: data.phone });
         }}
       />
       <Form layout="vertical">
@@ -95,11 +96,11 @@ const UserForm = function ({
         <Form.Item
           label={t("phone")}
           hasFeedback
-          validateStatus={user.mobile_tel ? "success" : ""}
+          validateStatus={user.mobile_phone ? "success" : ""}
         >
           <Input
             readOnly
-            value={user.mobile_tel}
+            value={user.mobile_phone}
             suffix={
               <Button
                 type="link"
@@ -141,8 +142,8 @@ const UserForm = function ({
         <Form.Item label={t("confirm password")}>
           <Input.Password
             name="confirmPassword"
-            value={user.confirmPassword}
-            onChange={handleChangeText}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </Form.Item>
         <Form.Item>
