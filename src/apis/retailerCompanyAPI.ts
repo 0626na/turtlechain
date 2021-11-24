@@ -20,7 +20,12 @@ interface ResponseCreate {
 
 const create = async function (data: RequestCreate) {
   const url = "/provisioning/retailer_company";
-  const response = await v2Axios.post<ResponseCreate>(url, data);
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+  }
+
+  const response = await v2Axios.post<ResponseCreate>(url, formData);
   return response.data.data;
 };
 
