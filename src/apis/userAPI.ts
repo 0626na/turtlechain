@@ -1,5 +1,23 @@
 import { v2Axios } from "apis";
 
+// 아이디 찾기
+interface RequestGetID {
+  phone: string;
+  token: string;
+}
+
+interface ResponseGetID {
+  data: Array<{ id: number; user_id: string }>;
+}
+
+const getID = async function (data: RequestGetID) {
+  const { phone, token } = data;
+  const url = `/provisioning/user?phone=${phone}`;
+  const config = { headers: { Authorization: `Api-Key ${token}` } };
+  const response = await v2Axios.get<ResponseGetID>(url, config);
+  return response.data.data;
+};
+
 // 아이디 중복 체크
 interface RequestDupCheck {
   id: string;
@@ -37,6 +55,7 @@ const create = async function (data: RequestCreate) {
 };
 
 const userAPI = {
+  getID,
   dupCheck,
   create,
 };

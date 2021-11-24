@@ -50,24 +50,6 @@ const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
   return response.data.data;
 };
 
-// 아이디 찾기
-interface RequestGetUserID {
-  phone: string;
-  token: string;
-}
-
-interface ResponseGetUserID {
-  data: Array<{ id: number; user_id: string }>;
-}
-
-const getUserID = async function (data: RequestGetUserID) {
-  const { phone, token } = data;
-  const url = `auth/user?phone=${phone}`;
-  const config = { headers: { Authorization: `Api-Key ${token}` } };
-  const response = await v2Axios.get<ResponseGetUserID>(url, config);
-  return response.data.data;
-};
-
 // 비밀번호 재설정
 interface RequestResetPassword {
   id: string;
@@ -92,7 +74,6 @@ const authAPI = {
   login,
   createPhoneOTP,
   verifyPhoneOTP,
-  getUserID,
   resetPassword,
 };
 

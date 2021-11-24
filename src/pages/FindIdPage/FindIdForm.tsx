@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // async
 import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
-import { authAPI } from "apis";
+import { userAPI } from "apis";
 // antd
 import { Form, Button, Divider, Typography, message, List, Spin } from "antd";
 // lang
@@ -20,10 +20,10 @@ const FindIdForm = function () {
   const [token, setToken] = useState("");
 
   // 아이디 리스트 요청
-  const getUserIDQuery = useQuery(
-    ["getUserID"],
+  const getIDQuery = useQuery(
+    ["getID"],
     () => {
-      return authAPI.getUserID({ phone, token });
+      return userAPI.getID({ phone, token });
     },
     {
       enabled: false,
@@ -35,40 +35,27 @@ const FindIdForm = function () {
 
   useEffect(() => {
     if (phone && token) {
-      getUserIDQuery.refetch();
+      getIDQuery.refetch();
     }
   }, [phone, token]);
 
   // 요청 데이터 초기화
   useEffect(() => {
     return () => {
-      queryClient.removeQueries(["getUserID"]);
+      queryClient.removeQueries(["getID"]);
     };
   }, []);
-
-  // 인증 모달 열기
-  const openAuthModal = () => {
-    setVisiblePhoneAuthModal(true);
-  };
-
-  // 인증 모달 닫기
-  const closeAuthModal = () => {
-    setVisiblePhoneAuthModal(false);
-  };
-
-  // 인증 성공 콜백
-  const onAuthSuccess = (data: { phone: string; token: string }) => {
-    const { phone, token } = data;
-    setPhone(phone);
-    setToken(token);
-  };
 
   return (
     <>
       <PhoneAuthModal
         visible={visiblePhoneAuthModal}
-        onClose={closeAuthModal}
-        onSuccess={onAuthSuccess}
+        onClose={() => setVisiblePhoneAuthModal(false)}
+        onSuccess={(data) => {
+          const { phone, token } = data;
+          setPhone(phone);
+          setToken(token);
+        }}
       />
       <Form layout="vertical">
         <Typography.Title level={3}>{t("find id")}</Typography.Title>
@@ -76,20 +63,23 @@ const FindIdForm = function () {
           {t("description.please phone auth")}
         </Typography>
         <Form.Item>
-          <Button type="primary" onClick={openAuthModal}>
+          <Button //
+            type="primary"
+            onClick={() => setVisiblePhoneAuthModal(true)}
+          >
             {t("auth phone")}
           </Button>
         </Form.Item>
-        {getUserIDQuery.isFetching && (
+        {getIDQuery.isFetching && (
           <Spin style={{ display: "block", textAlign: "center" }} />
         )}
-        {getUserIDQuery.data && (
+        {getIDQuery.data && (
           <Form.Item>
             <List
               bordered
               style={{ maxHeight: 200, overflowY: "scroll" }}
               size="small"
-              dataSource={getUserIDQuery.data}
+              dataSource={getIDQuery.data}
               renderItem={(item) => <List.Item>{item.user_id}</List.Item>}
             />
           </Form.Item>
