@@ -1,5 +1,7 @@
 {
   "description": {
+    "first way to manage malls": "1개의 사업자등록증으로 다수 쇼핑몰을 운영중인 경우, 쇼핑몰을 추가하여 통합 관리가 가능합니다.",
+    "second way to manage malls": "다른 사업자등록증으로 운영중인 쇼핑몰은 별도의 가입신청 바랍니다.",
     "not member": "아직 회원이 아니신가요?",
     "about membership": "다양한 요금제가 궁금하신가요?",
     "please phone auth": "휴대번호 인증버튼을 눌러 휴대번호를 인증해 주세요.",
@@ -46,6 +48,10 @@
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
   "mall info": "쇼핑몰 정보",
+  "mall name": "쇼핑몰명",
+  "mall url": "쇼핑몰 URL",
+  "mall phone": "쇼핑몰 전화",
+  "add mall": "쇼핑몰 추가하기",
   "admin account": "관리자 계정",
   "user name": "사용자명",
   "go home": "홈으로",
@@ -56,5 +62,6 @@
   "find address": "주소 찾기",
   "duplicate check": "중복 체크",
   "close": "닫기",
-  "email": "이메일"
+  "email": "이메일",
+  "created time": "생성 시간"
 }
