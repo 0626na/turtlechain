@@ -1,4 +1,4 @@
-import { v1Axios, v2Axios } from "apis";
+import { v2Axios } from "apis";
 
 // 로그인
 interface RequestLogin {
@@ -11,8 +11,8 @@ interface ResponseLogin {
 }
 
 const login = async function (data: RequestLogin) {
-  const url = "/login";
-  const response = await v1Axios.post<ResponseLogin>(url, data);
+  const url = "auth/login";
+  const response = await v2Axios.post<ResponseLogin>(url, data);
   return response.data;
 };
 
