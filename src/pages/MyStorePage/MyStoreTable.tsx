@@ -16,7 +16,9 @@ import SimplePagination from "components/SimplePagination";
 const MyStoreTable = function () {
   const { t } = useTranslation();
 
+  const [visibleCreateModal, setVisibleCreateModal] = useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
+
   const [selectedRowID, selectRowID] = useState<undefined | number>(undefined);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,6 +93,11 @@ const MyStoreTable = function () {
   return (
     <>
       <StoreModal
+        type="create"
+        visible={visibleCreateModal}
+        onClose={() => setVisibleCreateModal(false)}
+      />
+      <StoreModal
         type="update"
         visible={visibleUpdateModal}
         store_id={selectedRowID}
@@ -155,6 +162,7 @@ const MyStoreTable = function () {
             <Button //
               type="primary"
               icon={<PlusIcon />}
+              onClick={() => setVisibleCreateModal(true)}
             >
               {t("create mall")}
             </Button>

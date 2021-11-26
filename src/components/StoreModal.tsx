@@ -34,6 +34,14 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
     },
   });
 
+  // 추가하기 요청
+  const createQuery = useMutation(["createQuery"], retailerStoreAPI.create, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {},
+  });
+
   // 수정하기 요청
   const updateeQuery = useMutation(["updateeQuery"], retailerStoreAPI.update, {
     onError: (error: AxiosError) => {
@@ -55,6 +63,7 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
       .validateFields()
       .then((value) => {
         if (type === "create") {
+          createQuery.mutate(value);
         } else {
           updateeQuery.mutate({ ...value, store_id });
         }
@@ -71,7 +80,7 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
       okText={type === "create" ? t("create mall") : t("update mall")}
       onCancel={handleClose}
       onOk={handleSubmit}
-      confirmLoading={updateeQuery.isLoading}
+      confirmLoading={createQuery.isLoading || updateeQuery.isLoading}
     >
       <Form //
         form={form}
