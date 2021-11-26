@@ -10,11 +10,14 @@ import { useTranslation } from "react-i18next";
 import { PlusOutlined as PlusIcon } from "@ant-design/icons";
 import { Table, Typography, Input, message, Button } from "antd";
 // components
+import StoreModal from "components/StoreModal";
 import SimplePagination from "components/SimplePagination";
 
 const MyStoreTable = function () {
   const { t } = useTranslation();
 
+  const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
+  const [selectedRowID, selectRowID] = useState<undefined | number>(undefined);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState<RequestGetStores>({
@@ -35,35 +38,6 @@ const MyStoreTable = function () {
       },
     }
   );
-
-  // 리스트 컬럼
-  const columns = [
-    {
-      title: t("mall name"),
-      dataIndex: "name",
-      width: "20%",
-    },
-    {
-      title: t("alimtalk name"),
-      dataIndex: "alimtalk_name",
-      width: "20%",
-    },
-    {
-      title: t("mall url"),
-      dataIndex: "mall_url",
-      width: "30%",
-    },
-    {
-      title: t("mall phone"),
-      dataIndex: "phone",
-      width: "15%",
-    },
-    {
-      title: t("created time"),
-      dataIndex: "created_time",
-      width: "15%",
-    },
-  ];
 
   // 쇼핑몰 리스트
   const dataSource = useMemo(() => {
@@ -108,47 +82,99 @@ const MyStoreTable = function () {
     setCurrentPage(1);
   };
 
+  // 로우 클릭
+  const handleRowClick = (id: number) => {
+    selectRowID(id);
+    setVisibleUpdateModal(true);
+  };
+
   return (
-    <Table
-      bordered
-      size="small"
-      scroll={{ y: 400 }}
-      pagination={false}
-      loading={getStoresQuery.isLoading}
-      columns={columns}
-      dataSource={dataSource}
-      rowKey={(record) => record.id}
-      title={() => (
-        <Header>
-          <Input.Search
-            enterButton
-            style={{ width: 400 }}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onSearch={handleSearch}
-          />
-          <Button //
-            type="primary"
-            icon={<PlusIcon />}
-          >
-            {t("add mall")}
-          </Button>
-        </Header>
-      )}
-      footer={() => (
-        <Footer>
-          <Typography.Text strong>{`Total : ${totalCount}`}</Typography.Text>
-          <SimplePagination
-            currentPage={currentPage}
-            pageSize={query.offset}
-            totalCount={totalCount}
-            isLoading={getStoresQuery.isLoading}
-            onPrev={handlePrev}
-            onNext={handleNext}
-          />
-        </Footer>
-      )}
-    />
+    <>
+      <StoreModal
+        type="update"
+        visible={visibleUpdateModal}
+        store_id={selectedRowID}
+        onClose={() => setVisibleUpdateModal(false)}
+      />
+      <Table
+        bordered
+        size="small"
+        scroll={{ y: 400 }}
+        pagination={false}
+        loading={getStoresQuery.isLoading}
+        columns={[
+          {
+            title: t("mall name"),
+            dataIndex: "name",
+          },
+          {
+            title: t("alimtalk name"),
+            dataIndex: "alimtalk_name",
+          },
+          {
+            title: t("mall url"),
+            dataIndex: "mall_url",
+          },
+          {
+            title: t("mall phone"),
+            dataIndex: "phone",
+          },
+          {
+            title: "",
+            dataIndex: "action",
+            render: (text, record) => (
+              <Button
+                size="small"
+                type="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRowClick(record.id);
+                }}
+              >
+                {t("view details")}
+              </Button>
+            ),
+          },
+        ]}
+        dataSource={dataSource}
+        rowKey={(record) => record.id}
+        onRow={(record) => {
+          return {
+            onClick: () => handleRowClick(record.id),
+          };
+        }}
+        title={() => (
+          <Header>
+            <Input.Search
+              enterButton
+              style={{ width: 400 }}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              onSearch={handleSearch}
+            />
+            <Button //
+              type="primary"
+              icon={<PlusIcon />}
+            >
+              {t("create mall")}
+            </Button>
+          </Header>
+        )}
+        footer={() => (
+          <Footer>
+            <Typography.Text strong>{`Total : ${totalCount}`}</Typography.Text>
+            <SimplePagination
+              currentPage={currentPage}
+              pageSize={query.offset}
+              totalCount={totalCount}
+              isLoading={getStoresQuery.isLoading}
+              onPrev={handlePrev}
+              onNext={handleNext}
+            />
+          </Footer>
+        )}
+      />
+    </>
   );
 };
 
