@@ -1,5 +1,17 @@
 import { v2Axios } from "apis";
 
+export interface Store {
+  id: number;
+  name: string;
+  mall_url: string;
+  phone: string;
+  alimtalk_name: string;
+  created_tiem: Date;
+  updated_time: Date;
+  created_by: string;
+  updated_by: string;
+}
+
 // 쇼핑몰 리스트 가져오기
 export interface RequestGetStores {
   offset: number;
@@ -12,13 +24,7 @@ export interface RequestGetStores {
 export interface ResponseGetStores {
   data: {
     total_count: number;
-    data: Array<{
-      id: number;
-      name: string;
-      mall_url: string;
-      phone: string;
-      alimtalk_name: string;
-    }>;
+    data: Array<Store>;
   };
 }
 
@@ -31,8 +37,22 @@ const getStores = async function (query: RequestGetStores) {
   return response.data;
 };
 
+// 개별 쇼핑몰 가져오기
+export type RequestGetStore = number | undefined;
+
+export interface ResponseGetStore {
+  data: Store;
+}
+
+const getStore = async function (store_id: RequestGetStore) {
+  let url = `/provisioning/retailer_store/${store_id}`;
+  const response = await v2Axios.get<ResponseGetStore>(url);
+  return response.data;
+};
+
 const retailerStoreAPI = {
   getStores,
+  getStore,
 };
 
 export default retailerStoreAPI;
