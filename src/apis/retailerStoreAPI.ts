@@ -17,6 +17,7 @@ export interface ResponseGetStores {
       name: string;
       mall_url: string;
       phone: string;
+      alimtalk_name: string;
     }>;
   };
 }

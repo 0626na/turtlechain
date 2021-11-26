@@ -41,12 +41,17 @@ const MyStoreTable = function () {
     {
       title: t("mall name"),
       dataIndex: "name",
-      width: "35%",
+      width: "20%",
+    },
+    {
+      title: t("alimtalk name"),
+      dataIndex: "alimtalk_name",
+      width: "20%",
     },
     {
       title: t("mall url"),
       dataIndex: "mall_url",
-      width: "35%",
+      width: "30%",
     },
     {
       title: t("mall phone"),
