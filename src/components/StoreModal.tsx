@@ -2,7 +2,7 @@
 import { useTranslation } from "react-i18next";
 // async
 import { AxiosError } from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
 import { Modal, Form, Input, message } from "antd";
@@ -34,6 +34,14 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
     },
   });
 
+  // 수정하기 요청
+  const updateeQuery = useMutation(["updateeQuery"], retailerStoreAPI.update, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {},
+  });
+
   // 모달 닫기
   const handleClose = () => {
     form.resetFields();
@@ -46,7 +54,10 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
     form //
       .validateFields()
       .then((value) => {
-        console.log(value);
+        if (type === "create") {
+        } else {
+          updateeQuery.mutate({ ...value, store_id });
+        }
       });
   };
 
@@ -60,6 +71,7 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
       okText={type === "create" ? t("create mall") : t("update mall")}
       onCancel={handleClose}
       onOk={handleSubmit}
+      confirmLoading={updateeQuery.isLoading}
     >
       <Form //
         form={form}
