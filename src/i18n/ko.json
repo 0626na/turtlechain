@@ -10,6 +10,8 @@
     "required item": "필수 입력값입니다."
   },
   "message": {
+    "success create mall": "쇼핑몰을 추가하였습니다.",
+    "success update mall": "쇼핑몰을 수정하였습니다.",
     "success reset password": "비밀번호가 변경되었습니다.",
     "success signup": "서비스 신청이 완료 되었습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",

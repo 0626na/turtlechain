@@ -34,7 +34,7 @@ const Container = styled(Layout.Header)<{ headerHeight: number }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 9999;
+  z-index: 1;
 `;
 
 const LogoImage = styled.img`

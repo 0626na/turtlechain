@@ -5,16 +5,23 @@ import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
-import { Modal, Form, Input, message } from "antd";
+import { Modal, Form, Input, message, notification } from "antd";
 
 interface Props {
   type: "create" | "update";
   visible: boolean;
   store_id?: number;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
+const StoreModal = function ({
+  type,
+  visible,
+  store_id,
+  onClose,
+  onSuccess,
+}: Props) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
@@ -39,7 +46,14 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      handleClose();
+      notification.open({
+        type: "success",
+        message: t("message.success create mall"),
+      });
+    },
   });
 
   // 수정하기 요청
@@ -47,7 +61,14 @@ const StoreModal = function ({ type, visible, store_id, onClose }: Props) {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      handleClose();
+      notification.open({
+        type: "success",
+        message: t("message.success update mall"),
+      });
+    },
   });
 
   // 모달 닫기
