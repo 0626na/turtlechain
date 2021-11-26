@@ -117,6 +117,7 @@ const MyStoreTable = function () {
       loading={getStoresQuery.isLoading}
       columns={columns}
       dataSource={dataSource}
+      rowKey={(record) => record.id}
       title={() => (
         <Header>
           <Input.Search
