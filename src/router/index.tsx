@@ -1,19 +1,21 @@
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { tokenState } from "store/tokenState";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
+import useLogin from "hooks/useLogin";
 import MainLayout from "components/MainLayout";
 import { TOKEN } from "constant";
 import LoginRouter from "./LoginRouter";
 import MainRouter from "./MainRouter";
 
 const Router = function () {
+  const { login } = useLogin();
   const localStorageToken = localStorage.getItem(TOKEN);
-  const [storeToken, setToken] = useRecoilState(tokenState);
+  const storeToken = useRecoilValue(tokenState);
 
   useEffect(() => {
     if (localStorageToken) {
-      setToken(localStorageToken);
+      login(localStorageToken);
     }
   }, []);
 
