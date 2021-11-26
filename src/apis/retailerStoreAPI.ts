@@ -69,10 +69,29 @@ const update = async function (data: RequestUpdate) {
   return response.data;
 };
 
+// 추가하기
+export interface RequestCreate {
+  name: string;
+  mall_url: string;
+  phone: string;
+  alimtalk_name: string;
+}
+
+export interface ResponseCreate {
+  data: null;
+}
+
+const create = async function (data: RequestCreate) {
+  let url = `/provisioning/retailer_store`;
+  const response = await v2Axios.post<ResponseCreate>(url, data);
+  return response.data;
+};
+
 const retailerStoreAPI = {
   getStores,
   getStore,
   update,
+  create,
 };
 
 export default retailerStoreAPI;
