@@ -50,9 +50,29 @@ const getStore = async function (store_id: RequestGetStore) {
   return response.data;
 };
 
+// 수정하기
+export interface RequestUpdate {
+  store_id: number;
+  name: string;
+  mall_url: string;
+  phone: string;
+  alimtalk_name: string;
+}
+
+export interface ResponseUpdate {
+  data: null;
+}
+
+const update = async function (data: RequestUpdate) {
+  let url = `/provisioning/retailer_store/${data.store_id}`;
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
+  return response.data;
+};
+
 const retailerStoreAPI = {
   getStores,
   getStore,
+  update,
 };
 
 export default retailerStoreAPI;
