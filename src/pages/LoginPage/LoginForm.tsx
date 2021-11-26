@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import logo from "images/logo.png";
 import { Link } from "react-router-dom";
-// store
-import { useSetRecoilState } from "recoil";
-import { tokenState } from "store/tokenState";
+// custom hooks
+import useLogin from "hooks/useLogin";
 // async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
@@ -27,7 +26,7 @@ import { TOKEN } from "constant";
 const LoginForm = function () {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const setToken = useSetRecoilState(tokenState);
+  const { login } = useLogin();
 
   // 로그인 요청
   const loginQuery = useMutation(["login"], authAPI.login, {
@@ -38,7 +37,7 @@ const LoginForm = function () {
       const { token } = data;
       const { autoLogin } = form.getFieldsValue();
       if (autoLogin) localStorage.setItem(TOKEN, token);
-      setToken(token);
+      login(token);
     },
   });
 
@@ -91,8 +90,7 @@ const LoginForm = function () {
       <Divider />
       <BottomContainer>
         <Typography>
-          {t("description.not member")}{" "}
-          <Link to="/signup">{t("signup")}</Link>
+          {t("description.not member")} <Link to="/signup">{t("signup")}</Link>
         </Typography>
         <Typography>
           {t("description.about membership")}{" "}
