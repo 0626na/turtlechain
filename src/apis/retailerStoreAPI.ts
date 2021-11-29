@@ -7,7 +7,7 @@ export interface Store {
   phone: string;
   alimtalk_name: string;
   is_closed: boolean;
-  created_tiem: Date;
+  created_time: Date;
   updated_time: Date;
   created_by: string;
   updated_by: string;

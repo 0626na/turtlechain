@@ -74,6 +74,7 @@
   "view details": "상세보기",
   "close": "닫기",
   "email": "이메일",
-  "created time": "생성 날짜",
-  "updated time": "수정 날짜"
+  "date": "날짜",
+  "created time": "생성 시간",
+  "updated time": "수정 시간"
 }

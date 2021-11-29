@@ -5,7 +5,15 @@ import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
-import { Modal, Form, Input, message, notification, Radio } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  message,
+  notification,
+  Radio,
+  Typography,
+} from "antd";
 
 interface Props {
   visible: boolean;
@@ -29,15 +37,19 @@ const UpdateStoreModal = function ({
   ];
 
   // 쇼핑몰 정보 요청
-  useQuery(["getStore"], () => retailerStoreAPI.getStore(store_id), {
-    enabled: visible && store_id ? true : false,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-    onSuccess: (data) => {
-      form.setFieldsValue(data.data);
-    },
-  });
+  const { data: storeData } = useQuery(
+    ["getStore"],
+    () => retailerStoreAPI.getStore(store_id),
+    {
+      enabled: visible && store_id ? true : false,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        form.setFieldsValue(data.data);
+      },
+    }
+  );
 
   // 수정하기 요청
   const updateeQuery = useMutation(["updateeQuery"], retailerStoreAPI.update, {
@@ -122,6 +134,17 @@ const UpdateStoreModal = function ({
           rules={requiredRules}
         >
           <Input />
+        </Form.Item>
+        <Form.Item>
+          <Typography.Text>
+            {t("created time")} : {storeData?.data.created_time}(
+            {storeData?.data.created_by})
+          </Typography.Text>
+          <br />
+          <Typography.Text>
+            {t("updated time")} : {storeData?.data.updated_time}(
+            {storeData?.data.updated_by})
+          </Typography.Text>
         </Form.Item>
       </Form>
     </Modal>
