@@ -6,6 +6,7 @@ export interface Store {
   mall_url: string;
   phone: string;
   alimtalk_name: string;
+  is_closed: boolean;
   created_tiem: Date;
   updated_time: Date;
   created_by: string;

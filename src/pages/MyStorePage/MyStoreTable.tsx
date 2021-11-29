@@ -8,7 +8,7 @@ import retailerStoreAPI, { RequestGetStores } from "apis/retailerStoreAPI";
 import { useTranslation } from "react-i18next";
 // antd
 import { PlusOutlined as PlusIcon } from "@ant-design/icons";
-import { Table, Typography, Input, message, Button } from "antd";
+import { Table, Typography, Input, message, Button, Tag } from "antd";
 // components
 import CreateStoreModal from "./CreateStoreModal";
 import UpdateStoreModal from "./UpdateStoreModal";
@@ -109,6 +109,17 @@ const MyStoreTable = function () {
         pagination={false}
         loading={getStoresQuery.isLoading}
         columns={[
+          {
+            title: t("biz status"),
+            dataIndex: "is_closed",
+            width: 100,
+            render: (text, record) => {
+              const { is_closed } = record;
+              const color = is_closed ? "red" : "green";
+              const str = is_closed ? t("status.closed") : t("status.open");
+              return <Tag color={color}>{str}</Tag>;
+            },
+          },
           {
             title: t("mall name"),
             dataIndex: "name",

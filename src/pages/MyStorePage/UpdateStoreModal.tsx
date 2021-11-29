@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
-import { Modal, Form, Input, message, notification } from "antd";
+import { Modal, Form, Input, message, notification, Radio } from "antd";
 
 interface Props {
   visible: boolean;
@@ -86,6 +86,16 @@ const UpdateStoreModal = function ({
         form={form}
         layout="vertical"
       >
+        <Form.Item //
+          name="is_closed"
+          label={t("biz status")}
+          rules={requiredRules}
+        >
+          <Radio.Group>
+            <Radio value={false}>{t("status.open")}</Radio>
+            <Radio value={true}>{t("status.closed")}</Radio>
+          </Radio.Group>
+        </Form.Item>
         <Form.Item //
           name="name"
           label={t("mall name")}

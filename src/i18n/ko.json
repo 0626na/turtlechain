@@ -21,6 +21,10 @@
     "no duplicate values": "중복된 값이 없습니다.",
     "expired auth time": "인증시간이 만료되었습니다."
   },
+  "status": {
+    "open": "영업",
+    "closed": "폐점"
+  },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",
@@ -40,6 +44,7 @@
   "auth phone": "휴대번호 인증하기",
   "my page": "마이페이지",
   "my account": "내 계정",
+  "biz status": "영업 상태",
   "biz name": "사업자명",
   "biz num": "사업자번호",
   "biz address": "사업자주소",
