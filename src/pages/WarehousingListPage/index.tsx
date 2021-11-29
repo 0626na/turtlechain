@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+import PageHeader from "./PageHeader";
+import WarehousingTable from "./WarehousingTable";
 
 const WarehousingListPage = function () {
   const { t } = useTranslation();
@@ -7,7 +9,8 @@ const WarehousingListPage = function () {
   return (
     <>
       <Helmet title={title} />
-      입고 관리
+      <PageHeader />
+      <WarehousingTable />
     </>
   );
 };

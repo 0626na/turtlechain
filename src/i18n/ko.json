@@ -27,6 +27,9 @@
   },
   "warehousing management": "입고 관리",
   "warehousing list": "입고 목록",
+  "warehousing time": "입고 일시",
+  "warehousing quantity": "입고 수량",
+  "warehousing amount": "입고 금액",
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",
@@ -77,6 +80,7 @@
   "close": "닫기",
   "email": "이메일",
   "date": "날짜",
+  "all": "전체",
   "created time": "생성 시간",
   "updated time": "수정 시간"
 }
