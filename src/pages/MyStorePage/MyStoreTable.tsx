@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useMemo, useState } from "react";
 // async
 import { AxiosError } from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import retailerStoreAPI, { RequestGetStores } from "apis/retailerStoreAPI";
 // lang
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,7 @@ import SimplePagination from "components/SimplePagination";
 
 const MyStoreTable = function () {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const [visibleCreateModal, setVisibleCreateModal] = useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
@@ -91,16 +92,39 @@ const MyStoreTable = function () {
     setVisibleUpdateModal(true);
   };
 
+  // 상태 리셋
+  const resetState = () => {
+    queryClient.removeQueries(["getStores"]);
+    selectRowID(undefined);
+    setSearchText("");
+    setCurrentPage(1);
+    setQuery({
+      offset: 100,
+      last_id: -1,
+      switch_type: "next",
+      search_type: "",
+      search_query: "",
+    });
+  };
+
   return (
     <>
       <CreateStoreModal
         visible={visibleCreateModal}
-        onClose={() => setVisibleCreateModal(false)}
+        onSuccess={resetState}
+        onClose={() => {
+          setVisibleCreateModal(false);
+          selectRowID(undefined);
+        }}
       />
       <UpdateStoreModal
         visible={visibleUpdateModal}
         store_id={selectedRowID}
-        onClose={() => setVisibleUpdateModal(false)}
+        onSuccess={resetState}
+        onClose={() => {
+          setVisibleUpdateModal(false);
+          selectRowID(undefined);
+        }}
       />
       <Table
         bordered
