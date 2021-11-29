@@ -7,26 +7,22 @@ import { Layout, Button } from "antd";
 // lang
 import { useTranslation } from "react-i18next";
 
-interface Props {
-  headerHeight: number;
-}
-
-const Header = function ({ headerHeight }: Props) {
+const Header = function () {
   const { t } = useTranslation();
   const history = useHistory();
   const { logout } = useLogout();
 
   return (
-    <Container headerHeight={headerHeight}>
+    <Container>
       <LogoImage src={logo} alt="Logo" onClick={() => history.push("/home")} />
       <Button onClick={logout}>{t("logout")}</Button>
     </Container>
   );
 };
 
-const Container = styled(Layout.Header)<{ headerHeight: number }>`
+const Container = styled(Layout.Header)`
   width: 100%;
-  height: ${(props) => `${props.headerHeight}px`};
+  height: 70px;
   position: fixed;
   top: 0;
   background-color: #fff;

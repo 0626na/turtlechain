@@ -1,82 +1,81 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 // antd
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 // lang
 import { useTranslation } from "react-i18next";
 
-interface Props {
-  headerHeight: number;
-  siderWidth: number;
-}
-
-const Sider = function ({ headerHeight, siderWidth }: Props) {
+const Sider = function () {
   const { t } = useTranslation();
   const history = useHistory();
+  const { pathname } = useLocation();
 
-  const [selectedKeys, setSelectedKeys] = useState(history.location.pathname);
+  const [selectedKeys, setSelectedKeys] = useState(pathname);
 
-  const handleMenuClick = (url: null | string) => {
-    if (url && url !== selectedKeys) {
-      history.push(url);
-      setSelectedKeys(history.location.pathname);
+  const handleMenuClick = (pathname: null | string) => {
+    if (pathname && pathname !== selectedKeys) {
+      history.push(pathname);
+      setSelectedKeys(pathname);
     }
   };
 
   useEffect(() => {
-    setSelectedKeys(history.location.pathname);
-  }, [history.location.pathname]);
+    setSelectedKeys(pathname);
+  }, [pathname]);
 
   const menu: Array<{
     title: string;
     icon: React.ReactNode | null;
-    url: string | null;
+    pathname: string | null;
     submenu: null | Array<{
       title: string;
-      url: string;
+      pathname: string;
     }>;
   }> = [
     {
       title: "HOME",
       icon: <HomeOutlined />,
-      url: "/home",
+      pathname: "/home",
       submenu: null,
     },
     {
       title: t("my page"),
       icon: <UserOutlined />,
-      url: null,
+      pathname: null,
       submenu: [
         {
           title: t("my account"),
-          url: "/my/account",
+          pathname: "/my/account",
         },
         {
           title: t("biz info"),
-          url: "/my/company",
+          pathname: "/my/company",
         },
         {
           title: t("mall info"),
-          url: "/my/store",
+          pathname: "/my/store",
         },
       ],
     },
   ];
 
   return (
-    <Container headerHeight={headerHeight} siderWidth={siderWidth}>
+    <Container>
       <Menu mode="inline" theme="dark" selectedKeys={[selectedKeys]}>
         {menu.map((item) => {
-          const { title, icon, url, submenu } = item;
+          const { title, icon, pathname, submenu } = item;
           if (submenu) {
             return (
               <Menu.SubMenu key={title} title={title} icon={icon}>
                 {submenu.map((item) => {
-                  const { title, url } = item;
+                  const { title, pathname } = item;
                   return (
-                    <Menu.Item key={url} onClick={() => handleMenuClick(url)}>
+                    <Menu.Item
+                      key={pathname}
+                      onClick={() => handleMenuClick(pathname)}
+                    >
                       {title}
                     </Menu.Item>
                   );
@@ -86,8 +85,8 @@ const Sider = function ({ headerHeight, siderWidth }: Props) {
           } else {
             return (
               <Menu.Item
-                key={url}
-                onClick={() => handleMenuClick(url)}
+                key={pathname}
+                onClick={() => handleMenuClick(pathname)}
                 icon={icon}
               >
                 {title}
@@ -100,14 +99,11 @@ const Sider = function ({ headerHeight, siderWidth }: Props) {
   );
 };
 
-const Container = styled(Layout.Sider)<{
-  headerHeight: number;
-  siderWidth: number;
-}>`
-  width: ${(props) => `${props.siderWidth}px`};
-  height: ${(props) => `calc(100vh - ${props.headerHeight}px)`};
+const Container = styled(Layout.Sider)`
+  width: 200px;
+  height: calc(100vh - 70px);
   position: fixed;
-  top: ${(props) => `${props.headerHeight}px`};
+  top: 70px;
   left: 0;
   overflow: auto;
 `;

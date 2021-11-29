@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Layout } from "antd";
 import Header from "./Header";
 import Sider from "./Sider";
@@ -8,27 +9,22 @@ interface Props {
 }
 
 const MainLayout = function ({ content }: Props) {
-  const headerHeight = 70;
-  const siderWidth = 200;
-
   return (
     <Layout>
-      <Header headerHeight={headerHeight} />
+      <Header />
       <Layout>
-        <Sider headerHeight={headerHeight} siderWidth={siderWidth} />
-        <Layout.Content
-          style={{
-            marginTop: headerHeight,
-            marginLeft: siderWidth,
-            backgroundColor: "#fff",
-            padding: 20,
-          }}
-        >
-          {content}
-        </Layout.Content>
+        <Sider />
+        <Content>{content}</Content>
       </Layout>
     </Layout>
   );
 };
+
+const Content = styled(Layout.Content)`
+  margin-top: 70px;
+  margin-left: 200px;
+  background-color: white;
+  padding: 20px;
+`;
 
 export default MainLayout;
