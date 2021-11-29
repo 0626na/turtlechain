@@ -10,7 +10,8 @@ import { useTranslation } from "react-i18next";
 import { PlusOutlined as PlusIcon } from "@ant-design/icons";
 import { Table, Typography, Input, message, Button } from "antd";
 // components
-import StoreModal from "components/StoreModal";
+import CreateStoreModal from "./CreateStoreModal";
+import UpdateStoreModal from "./UpdateStoreModal";
 import SimplePagination from "components/SimplePagination";
 
 const MyStoreTable = function () {
@@ -92,13 +93,11 @@ const MyStoreTable = function () {
 
   return (
     <>
-      <StoreModal
-        type="create"
+      <CreateStoreModal
         visible={visibleCreateModal}
         onClose={() => setVisibleCreateModal(false)}
       />
-      <StoreModal
-        type="update"
+      <UpdateStoreModal
         visible={visibleUpdateModal}
         store_id={selectedRowID}
         onClose={() => setVisibleUpdateModal(false)}
