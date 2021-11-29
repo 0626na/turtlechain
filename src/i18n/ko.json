@@ -25,6 +25,8 @@
     "open": "영업",
     "closed": "폐점"
   },
+  "warehousing management": "입고 관리",
+  "warehousing list": "입고 목록",
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",

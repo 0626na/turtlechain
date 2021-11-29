@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 // antd
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, UserOutlined, InboxOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 // lang
 import { useTranslation } from "react-i18next";
@@ -39,6 +39,17 @@ const Sider = function () {
       icon: <HomeOutlined />,
       pathname: "/home",
       submenu: null,
+    },
+    {
+      title: t("warehousing management"),
+      icon: <InboxOutlined />,
+      pathname: null,
+      submenu: [
+        {
+          title: t("warehousing list"),
+          pathname: "/warehousing/list",
+        },
+      ],
     },
     {
       title: t("my page"),

@@ -1,5 +1,11 @@
 import { Switch, Route, Redirect } from "react-router-dom";
-import { HomePage, MyAccountPage, MyCompanyPage, MyStorePage } from "pages";
+import {
+  HomePage,
+  MyAccountPage,
+  MyCompanyPage,
+  MyStorePage,
+  WarehousingListPage,
+} from "pages";
 
 const MainRouter = function () {
   return (
@@ -8,6 +14,7 @@ const MainRouter = function () {
       <Route exact path="/my/account" component={MyAccountPage} />
       <Route exact path="/my/company" component={MyCompanyPage} />
       <Route exact path="/my/store" component={MyStorePage} />
+      <Route exact path="/warehousing/list" component={WarehousingListPage} />
       <Redirect path="*" to="/home" />
     </Switch>
   );
