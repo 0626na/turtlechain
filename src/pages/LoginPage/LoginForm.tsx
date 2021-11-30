@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import logo from "images/logo.png";
+import logo from "assets/logo/logo_v.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { TOKEN } from "constant";

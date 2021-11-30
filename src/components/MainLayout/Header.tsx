@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import logo from "images/horizontal_logo.png";
+import logo from "assets/logo/logo_h.png";
 import { useHistory } from "react-router-dom";
 import useLogout from "hooks/useLogout";
 // antd

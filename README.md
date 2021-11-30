@@ -41,6 +41,7 @@ build             # 빌드된 파일이 저장될 디렉토리
 public            # 정적 파일을 넣는 디렉토리
 src
   apis            # api 요청 함수 및 axios 인스턴스가 있는 디렉토리
+  assets          # assets 관련 디렉토리
   components      # 전역에서 또는 자주 사용되는 컴포넌트가 있는 디렉토리
   constant        # 상수 값이 있는 디렉토리
   hooks           # custom hooks가 있는 디렉토리
