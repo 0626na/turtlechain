@@ -1,16 +1,16 @@
-import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Template from "./LoginPageTemplate";
-import Form from "./LoginForm";
+import { Helmet } from "react-helmet";
+import PageTemplate from "./PageTemplate";
+import LoginForm from "./LoginForm";
 
 const LoginPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("login")}`;
   return (
-    <Template>
+    <PageTemplate>
       <Helmet title={title} />
-      <Form />
-    </Template>
+      <LoginForm />
+    </PageTemplate>
   );
 };
 

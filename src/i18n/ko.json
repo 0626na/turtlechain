@@ -17,6 +17,7 @@
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
     "error phone validation": "올바른 휴대번호를 입력하세요.",
+    "error login": "아이디 또는 비밀번호를 잘못 입력하셨습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "no duplicate values": "중복된 값이 없습니다.",
     "expired auth time": "인증시간이 만료되었습니다."

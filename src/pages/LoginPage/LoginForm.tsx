@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import logo from "images/logo.png";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { TOKEN } from "constant";
 // custom hooks
 import useLogin from "hooks/useLogin";
 // async
-import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
@@ -18,20 +19,21 @@ import {
   Typography,
   message,
 } from "antd";
-// lang
-import { useTranslation } from "react-i18next";
-// constant
-import { TOKEN } from "constant";
 
 const LoginForm = function () {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
   const { login } = useLogin();
+  const [form] = Form.useForm();
+
+  const requiredRules = [
+    { required: true, message: t("description.required item") },
+  ];
 
   // 로그인 요청
   const loginQuery = useMutation(["login"], authAPI.login, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+    onError: () => {
+      const errorMsg = t("message.error login");
+      message.error(errorMsg);
     },
     onSuccess: (data) => {
       const { token } = data;
@@ -44,21 +46,25 @@ const LoginForm = function () {
   // 로그인
   const onSubmit = (values: { login_id: string; password: string }) => {
     const { login_id, password } = values;
-    if (login_id && password) {
-      loginQuery.mutate({ login_id, password });
-    }
+    loginQuery.mutate({ login_id, password });
   };
 
   return (
     <Form form={form} onFinish={onSubmit}>
       <LogoImage src={logo} alt="Logo" />
-      <Form.Item name="login_id">
+      <Form.Item //
+        name="login_id"
+        rules={requiredRules}
+      >
         <Input //
           placeholder={t("id")}
           prefix={<UserOutlined />}
         />
       </Form.Item>
-      <Form.Item name="password">
+      <Form.Item //
+        name="password"
+        rules={requiredRules}
+      >
         <Input.Password //
           placeholder={t("password")}
           prefix={<LockOutlined />}
