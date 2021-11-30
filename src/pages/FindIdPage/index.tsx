@@ -1,16 +1,16 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Template from "./FindIdPageTemplate";
-import Form from "./FindIdForm";
+import PageTemplate from "./PageTemplate";
+import FindIdForm from "./FindIdForm";
 
 const FindIdPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("find id")}`;
   return (
-    <Template>
+    <PageTemplate>
       <Helmet title={title} />
-      <Form />
-    </Template>
+      <FindIdForm />
+    </PageTemplate>
   );
 };
 

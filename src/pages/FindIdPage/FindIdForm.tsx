@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // async
 import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import { userAPI } from "apis";
 // antd
-import { Form, Button, Divider, Typography, message, List, Spin } from "antd";
-// lang
-import { useTranslation } from "react-i18next";
+import { Form, Button, Divider, Typography, message, List } from "antd";
 // components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
@@ -15,42 +14,34 @@ const FindIdForm = function () {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [visibleAuthModal, setVisibleAuthModal] = useState(false);
   const [phone, setPhone] = useState("");
   const [token, setToken] = useState("");
 
   // 아이디 리스트 요청
   const getIDQuery = useQuery(
-    ["getID"],
-    () => {
-      return userAPI.getID({ phone, token });
-    },
+    ["getID", phone, token],
+    () => userAPI.getID({ phone, token }),
     {
-      enabled: false,
+      enabled: phone && token ? true : false,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
     }
   );
 
-  useEffect(() => {
-    if (phone && token) {
-      getIDQuery.refetch();
-    }
-  }, [phone, token]);
-
   // 요청 데이터 초기화
   useEffect(() => {
     return () => {
-      queryClient.removeQueries(["getID"]);
+      queryClient.removeQueries(["getID", phone, token]);
     };
-  }, []);
+  }, [queryClient, phone, token]);
 
   return (
     <>
       <PhoneAuthModal
-        visible={visiblePhoneAuthModal}
-        onClose={() => setVisiblePhoneAuthModal(false)}
+        visible={visibleAuthModal}
+        onClose={() => setVisibleAuthModal(false)}
         onSuccess={(data) => {
           const { phone, token } = data;
           setPhone(phone);
@@ -65,14 +56,12 @@ const FindIdForm = function () {
         <Form.Item>
           <Button //
             type="primary"
-            onClick={() => setVisiblePhoneAuthModal(true)}
+            loading={getIDQuery.isFetching}
+            onClick={() => setVisibleAuthModal(true)}
           >
             {t("auth phone")}
           </Button>
         </Form.Item>
-        {getIDQuery.isFetching && (
-          <Spin style={{ display: "block", textAlign: "center" }} />
-        )}
         {getIDQuery.data && (
           <Form.Item>
             <List

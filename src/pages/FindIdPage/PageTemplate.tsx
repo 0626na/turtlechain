@@ -4,7 +4,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const FindIdPageTemplate = function ({ children }: Props) {
+const PageTemplate = function ({ children }: Props) {
   return <Container>{children}</Container>;
 };
 
@@ -16,4 +16,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default FindIdPageTemplate;
+export default PageTemplate;
