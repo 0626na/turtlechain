@@ -1,45 +1,39 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // async
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { userAPI } from "apis";
 // antd
 import { Form, Button, Divider, Typography, message, Input } from "antd";
-// lang
-import { useTranslation } from "react-i18next";
 // components
 import PhoneAuthModal from "components/PhoneAuthModal";
 
 const ResetPasswordForm = function () {
   const { t } = useTranslation();
 
-  const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
+  const [visibleAuthModal, setVisibleAuthModal] = useState(false);
   const [form] = Form.useForm();
   const [phone, setPhone] = useState("");
   const [token, setToken] = useState("");
 
-  // 상태 초기화
-  const resetState = () => {
-    form.resetFields();
-    setPhone("");
-    setToken("");
-  };
+  const requiredRules = [
+    { required: true, message: t("description.required item") },
+  ];
 
   // 비밀번호 재설정 요청
   const resetPasswordQuery = useMutation(
     ["resetPassword"],
-    () => {
-      const login_id = form.getFieldValue("login_id");
-      const password = form.getFieldValue("password");
-      return userAPI.resetPassword({ login_id, phone, password, token });
-    },
+    userAPI.resetPassword,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
       onSuccess: () => {
-        resetState();
+        form.resetFields();
+        setPhone("");
+        setToken("");
         message.success(t("message.success reset password"));
       },
     }
@@ -47,20 +41,19 @@ const ResetPasswordForm = function () {
 
   // 비밀번호 재설정
   const handleReset = () => {
-    const login_id = form.getFieldValue("login_id");
-    const password = form.getFieldValue("password");
-    const confirmPassword = form.getFieldValue("confirmPassword");
-
-    if (login_id && password && password === confirmPassword) {
-      resetPasswordQuery.mutate();
-    }
+    form //
+      .validateFields()
+      .then((value) => {
+        const { login_id, password } = value;
+        resetPasswordQuery.mutate({ login_id, password, phone, token });
+      });
   };
 
   return (
     <>
       <PhoneAuthModal
-        visible={visiblePhoneAuthModal}
-        onClose={() => setVisiblePhoneAuthModal(false)}
+        visible={visibleAuthModal}
+        onClose={() => setVisibleAuthModal(false)}
         onSuccess={(data) => {
           const { token, phone } = data;
           setToken(token);
@@ -75,23 +68,32 @@ const ResetPasswordForm = function () {
         <Form.Item>
           <Button //
             type="primary"
-            onClick={() => setVisiblePhoneAuthModal(true)}
+            onClick={() => setVisibleAuthModal(true)}
           >
             {t("auth phone")}
           </Button>
         </Form.Item>
         {phone && token && (
           <>
-            <Form.Item name="login_id" label={t("id")}>
+            <Form.Item //
+              name="login_id"
+              label={t("id")}
+              rules={requiredRules}
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="password" label={t("password")}>
+            <Form.Item //
+              name="password"
+              label={t("password")}
+              rules={requiredRules}
+            >
               <Input.Password />
             </Form.Item>
-            <Form.Item
+            <Form.Item //
               name="confirmPassword"
               label={t("confirm password")}
               rules={[
+                ...requiredRules,
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
@@ -108,7 +110,12 @@ const ResetPasswordForm = function () {
               <Input.Password />
             </Form.Item>
             <Form.Item>
-              <Button block type="primary" onClick={handleReset}>
+              <Button //
+                block
+                type="primary"
+                loading={resetPasswordQuery.isLoading}
+                onClick={handleReset}
+              >
                 {t("reset password")}
               </Button>
             </Form.Item>
