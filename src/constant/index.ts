@@ -1,3 +1,7 @@
+// MAIN LAYOUT
+export const MAIN_HEADER_HEIGHT = "60px";
+export const MAIN_SIDER_WIDTH = "200px";
+
 // TOKEN
 export const TOKEN = "TURTLECHAIN_V2_TOKEN";
 

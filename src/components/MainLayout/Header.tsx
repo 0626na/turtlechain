@@ -1,28 +1,56 @@
 import styled from "styled-components";
 import logo from "assets/logo/logo_h.png";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import useLogout from "hooks/useLogout";
+import { MAIN_HEADER_HEIGHT } from "constant";
 // antd
-import { Layout, Button } from "antd";
-// lang
-import { useTranslation } from "react-i18next";
+import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Layout, Button, Avatar, Menu, Dropdown } from "antd";
 
 const Header = function () {
   const { t } = useTranslation();
   const history = useHistory();
   const { logout } = useLogout();
 
+  const menu = (
+    <Menu>
+      <Button //
+        type="link"
+        onClick={logout}
+        icon={<LogoutOutlined />}
+      >
+        {t("logout")}
+      </Button>
+    </Menu>
+  );
+
   return (
     <Container>
-      <LogoImage src={logo} alt="Logo" onClick={() => history.push("/home")} />
-      <Button onClick={logout}>{t("logout")}</Button>
+      <div>
+        <Button type="link" icon={<MenuOutlined />} />
+        <LogoImage
+          src={logo}
+          alt="Logo"
+          onClick={() => history.push("/home")}
+        />
+      </div>
+      <div>
+        <Avatar />
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <Button type="link">
+            {t("turtlechain")}
+            <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
     </Container>
   );
 };
 
 const Container = styled(Layout.Header)`
   width: 100%;
-  height: 70px;
+  height: ${MAIN_HEADER_HEIGHT};
   position: fixed;
   top: 0;
   background-color: #fff;
@@ -34,7 +62,7 @@ const Container = styled(Layout.Header)`
 `;
 
 const LogoImage = styled.img`
-  width: 100px;
+  width: 80px;
   cursor: pointer;
 `;
 

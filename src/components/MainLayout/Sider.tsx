@@ -1,20 +1,34 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-// antd
-import { HomeOutlined, UserOutlined, InboxOutlined } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
-// lang
 import { useTranslation } from "react-i18next";
+import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
+// svg
+import HomeSvg from "assets/svg/home.svg";
+import WarehouseSvg from "assets/svg/warehouse.svg";
+import SettingSvg from "assets/svg/setting.svg";
+// antd
+import { Layout, Menu } from "antd";
+// components
+import SvgIcon from "components/SvgIcon";
+
+type MenuType = Array<{
+  title: string;
+  pathname?: string;
+  icon?: React.ReactNode;
+  submenu?: Array<{
+    title: string;
+    pathname: string;
+  }>;
+}>;
 
 const Sider = function () {
   const { t } = useTranslation();
   const history = useHistory();
   const { pathname } = useLocation();
-
   const [selectedKeys, setSelectedKeys] = useState(pathname);
 
-  const handleMenuClick = (pathname: null | string) => {
+  const handleMenuClick = (pathname?: string) => {
     if (pathname && pathname !== selectedKeys) {
       history.push(pathname);
       setSelectedKeys(pathname);
@@ -25,25 +39,23 @@ const Sider = function () {
     setSelectedKeys(pathname);
   }, [pathname]);
 
-  const menu: Array<{
-    title: string;
-    icon: React.ReactNode | null;
-    pathname: string | null;
-    submenu: null | Array<{
-      title: string;
-      pathname: string;
-    }>;
-  }> = [
+  const menu: MenuType = [
     {
       title: "HOME",
-      icon: <HomeOutlined />,
       pathname: "/home",
-      submenu: null,
+      icon: (
+        <div>
+          <SvgIcon src={HomeSvg} alt="home" />
+        </div>
+      ),
     },
     {
       title: t("warehousing management"),
-      icon: <InboxOutlined />,
-      pathname: null,
+      icon: (
+        <div>
+          <SvgIcon src={WarehouseSvg} alt="warehousing" />
+        </div>
+      ),
       submenu: [
         {
           title: t("warehousing list"),
@@ -52,9 +64,12 @@ const Sider = function () {
       ],
     },
     {
-      title: t("my page"),
-      icon: <UserOutlined />,
-      pathname: null,
+      title: t("setting"),
+      icon: (
+        <div>
+          <SvgIcon src={SettingSvg} alt="warehousing" />
+        </div>
+      ),
       submenu: [
         {
           title: t("my account"),
@@ -74,7 +89,11 @@ const Sider = function () {
 
   return (
     <Container>
-      <Menu mode="inline" theme="dark" selectedKeys={[selectedKeys]}>
+      <Menu //
+        mode="inline"
+        selectedKeys={[selectedKeys]}
+        style={{ height: "calc(100vh - 60px)" }}
+      >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
           if (submenu) {
@@ -111,10 +130,9 @@ const Sider = function () {
 };
 
 const Container = styled(Layout.Sider)`
-  width: 200px;
-  height: calc(100vh - 70px);
+  width: ${MAIN_SIDER_WIDTH};
   position: fixed;
-  top: 70px;
+  top: ${MAIN_HEADER_HEIGHT};
   left: 0;
   overflow: auto;
 `;

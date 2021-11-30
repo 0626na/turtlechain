@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import { Layout } from "antd";
 import Header from "./Header";
 import Sider from "./Sider";
+import Content from "./Content";
 
 interface Props {
   content?: React.ReactNode;
@@ -19,12 +19,5 @@ const MainLayout = function ({ content }: Props) {
     </Layout>
   );
 };
-
-const Content = styled(Layout.Content)`
-  margin-top: 70px;
-  margin-left: 200px;
-  background-color: white;
-  padding: 20px;
-`;
 
 export default MainLayout;
