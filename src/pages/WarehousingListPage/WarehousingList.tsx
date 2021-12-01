@@ -28,8 +28,8 @@ const WarehousingList = function () {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [query, setQuery] = useState<RequestGetSheet>({
-    mall_id: "all",
-    is_confirmed: "all",
+    mall_id: "",
+    is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     offset: 100,
@@ -87,6 +87,7 @@ const WarehousingList = function () {
       <Form layout="inline">
         <Form.Item label={t("mall")}>
           <StoreSelect
+            emptyValueText={t("all")}
             width={250}
             value={query.mall_id}
             onChange={(value) => setQuery({ ...query, mall_id: value })}
@@ -109,7 +110,7 @@ const WarehousingList = function () {
             value={query.is_confirmed}
             onChange={(value) => setQuery({ ...query, is_confirmed: value })}
           >
-            <Select.Option value="all">{t("all")}</Select.Option>
+            <Select.Option value="">{t("all")}</Select.Option>
             <Select.Option value={0}>
               {t("warehousing unconfirmed")}
             </Select.Option>

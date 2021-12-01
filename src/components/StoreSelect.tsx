@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 // async
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
@@ -7,14 +6,18 @@ import retailerStoreAPI from "apis/retailerStoreAPI";
 import { Select, message } from "antd";
 
 interface Props {
+  emptyValueText: string;
   width?: string | number;
-  value?: "all" | number;
-  onChange?: (value: "all" | number) => void;
+  value?: "" | number;
+  onChange?: (value: "" | number) => void;
 }
 
-const StoreSelect = function ({ width, value, onChange }: Props) {
-  const { t } = useTranslation();
-
+const StoreSelect = function ({
+  emptyValueText,
+  width,
+  value,
+  onChange,
+}: Props) {
   const getStoresQuery = useQuery(
     ["getStores"],
     () =>
@@ -36,11 +39,11 @@ const StoreSelect = function ({ width, value, onChange }: Props) {
     <Select //
       style={{ width }}
       loading={getStoresQuery.isLoading}
-      defaultValue="all"
+      defaultValue=""
       value={value && value}
       onChange={onChange && onChange}
     >
-      <Select.Option value={"all"}>{t("all")}</Select.Option>
+      <Select.Option value="">{emptyValueText}</Select.Option>
       {getStoresQuery.data?.data.data.map((store) => {
         const { id, name } = store;
         return (

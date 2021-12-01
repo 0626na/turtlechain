@@ -16,8 +16,8 @@ export interface WarehousingSheet {
 
 // 입고장 리스트 가져오기
 export interface RequestGetSheet {
-  mall_id: number | "all";
-  is_confirmed: number | "all";
+  mall_id: number | "";
+  is_confirmed: number | "";
   start_date: string;
   end_date: string;
   offset: number;
@@ -35,7 +35,7 @@ export interface ResponseGetSheet {
 const getSheet = async function (query: RequestGetSheet) {
   let url = "warehousing/sheet?";
   for (const [key, value] of Object.entries(query)) {
-    value !== "all" && (url = url + `${key}=${value}&`);
+    value !== "" && (url = url + `${key}=${value}&`);
   }
 
   const response: any = await v2Axios.get<ResponseGetSheet>(url);
