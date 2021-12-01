@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import PageHeader from "./PageHeader";
+import PageHeader from "components/PageHeader";
+import SvgIcon from "components/SvgIcon";
 import WarehousingTable from "./WarehousingTable";
 
 const WarehousingListPage = function () {
@@ -9,7 +10,17 @@ const WarehousingListPage = function () {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader />
+      <PageHeader
+        icon={
+          <SvgIcon
+            filled={false}
+            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
+            alt="warehousing"
+          />
+        }
+        title={t("warehousing list")}
+        breadcrumbList={[t("warehousing management"), t("warehousing list")]}
+      />
       <WarehousingTable />
     </>
   );
