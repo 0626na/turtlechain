@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
-import WarehousingTable from "./WarehousingTable";
+import WarehousingList from "./WarehousingList";
 
 const WarehousingListPage = function () {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ const WarehousingListPage = function () {
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
-      <WarehousingTable />
+      <WarehousingList />
     </>
   );
 };

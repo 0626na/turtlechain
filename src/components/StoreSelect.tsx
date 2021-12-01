@@ -8,8 +8,8 @@ import { Select, message } from "antd";
 
 interface Props {
   width?: string | number;
-  value?: "" | number;
-  onChange?: (value: "" | number) => void;
+  value?: "all" | number;
+  onChange?: (value: "all" | number) => void;
 }
 
 const StoreSelect = function ({ width, value, onChange }: Props) {
@@ -36,11 +36,11 @@ const StoreSelect = function ({ width, value, onChange }: Props) {
     <Select //
       style={{ width }}
       loading={getStoresQuery.isLoading}
-      defaultValue=""
+      defaultValue="all"
       value={value && value}
       onChange={onChange && onChange}
     >
-      <Select.Option value={""}>{t("all")}</Select.Option>
+      <Select.Option value={"all"}>{t("all")}</Select.Option>
       {getStoresQuery.data?.data.data.map((store) => {
         const { id, name } = store;
         return (
