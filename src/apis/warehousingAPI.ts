@@ -20,10 +20,16 @@ export interface RequestGetSheet {
   is_confirmed: number | "all";
   start_date: string;
   end_date: string;
+  offset: number;
+  last_id: number;
+  switch_type: "next" | "prev";
 }
 
 export interface ResponseGetSheet {
-  data: Array<WarehousingSheet>;
+  data: {
+    data: Array<WarehousingSheet>;
+    total_count: number;
+  };
 }
 
 const getSheet = async function (query: RequestGetSheet) {
@@ -33,7 +39,7 @@ const getSheet = async function (query: RequestGetSheet) {
   }
 
   const response: any = await v2Axios.get<ResponseGetSheet>(url);
-  return response.data;
+  return response.data.data;
 };
 
 const warehousingAPI = {
