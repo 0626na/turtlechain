@@ -1,0 +1,43 @@
+import { v2Axios } from "apis";
+
+export interface WarehousingSheet {
+  id: number;
+  mall_id: number;
+  mall_name: string;
+  created_date: Date;
+  created_time: Date;
+  is_deleted: boolean;
+  total_price: number;
+  total_item_count: number;
+  total_store_count: number;
+  total_item_subcount: number;
+  created_by: number;
+}
+
+// 입고장 리스트 가져오기
+export interface RequestGetSheet {
+  mall_id: number | "";
+  is_confirmed: number | "";
+  start_date: string;
+  end_date: string;
+}
+
+export interface ResponseGetSheet {
+  data: Array<WarehousingSheet>;
+}
+
+const getSheet = async function (query: RequestGetSheet) {
+  let url = "warehousing/sheet?";
+  for (const [key, value] of Object.entries(query)) {
+    value && (url = url + `${key}=${value}&`);
+  }
+
+  const response: any = await v2Axios.get<ResponseGetSheet>(url);
+  return response.data;
+};
+
+const warehousingAPI = {
+  getSheet,
+};
+
+export default warehousingAPI;
