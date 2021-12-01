@@ -14,6 +14,7 @@ import {
   Typography,
   DatePicker,
   Select,
+  Tag,
   message,
 } from "antd";
 // components
@@ -125,6 +126,18 @@ const WarehousingList = function () {
         dataSource={dataSource}
         columns={[
           {
+            title: t("progress"),
+            dataIndex: "is_confirmed",
+            render: (_, record) => {
+              const { is_confirmed } = record;
+              const color = is_confirmed ? "green" : "red";
+              const text = is_confirmed
+                ? t("warehousing confirmed")
+                : t("warehousing unconfirmed");
+              return <Tag color={color}>{text}</Tag>;
+            },
+          },
+          {
             title: t("mall name"),
             dataIndex: "mall_name",
           },
@@ -132,20 +145,27 @@ const WarehousingList = function () {
             title: t("warehousing time"),
             dataIndex: "created_time",
             render: (_, record) => {
-              return moment(record.created_time).format("YYYY-MM-DD HH:MM:SS");
+              const { created_time } = record;
+              return moment(created_time).format("YYYY-MM-DD HH:MM:SS");
             },
           },
           {
             title: t("warehousing quantity"),
             dataIndex: "total_item_count",
             align: "right",
-            render: (_, record) => record.total_item_count.toLocaleString(),
+            render: (_, record) => {
+              const { total_item_count } = record;
+              return total_item_count.toLocaleString();
+            },
           },
           {
             title: t("warehousing amount"),
             dataIndex: "total_price",
             align: "right",
-            render: (_, record) => record.total_item_count.toLocaleString(),
+            render: (_, record) => {
+              const { total_price } = record;
+              return total_price.toLocaleString();
+            },
           },
           {
             title: "",
