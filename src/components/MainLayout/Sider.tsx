@@ -63,6 +63,10 @@ const Sider = function () {
           title: t("warehousing list"),
           pathname: "/warehousing/list",
         },
+        {
+          title: t("warehousing create"),
+          pathname: "/warehousing/create",
+        },
       ],
     },
     {

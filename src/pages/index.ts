@@ -7,6 +7,7 @@ export const SignupPage = lazy(() => import("./SignupPage"));
 
 export const HomePage = lazy(() => import("./HomePage"));
 export const WarehousingListPage = lazy(() => import("./WarehousingListPage"));
+export const WarehousingCreatePage = lazy(() => import("./WarehousingCreatePage"));
 export const MyAccountPage = lazy(() => import("./MyAccountPage"));
 export const MyCompanyPage = lazy(() => import("./MyCompanyPage"));
 export const MyStorePage = lazy(() => import("./MyStorePage"));
