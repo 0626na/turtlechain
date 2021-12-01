@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import logo from "assets/logo/logo_h.png";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import useLogout from "hooks/useLogout";
@@ -30,8 +29,8 @@ const Header = function () {
       <div>
         <Button type="link" icon={<MenuOutlined />} />
         <LogoImage
-          src={logo}
-          alt="Logo"
+          src={`${process.env.PUBLIC_URL}/assets/img/logo_h.png`}
+          alt="logo"
           onClick={() => history.push("/home")}
         />
       </div>

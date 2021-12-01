@@ -3,10 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
-// svg
-import HomeSvg from "assets/svg/home.svg";
-import WarehouseSvg from "assets/svg/warehouse.svg";
-import SettingSvg from "assets/svg/setting.svg";
 // antd
 import { Layout, Menu } from "antd";
 // components
@@ -45,7 +41,10 @@ const Sider = function () {
       pathname: "/home",
       icon: (
         <div>
-          <SvgIcon src={HomeSvg} alt="home" />
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
+            alt="home"
+          />
         </div>
       ),
     },
@@ -53,7 +52,10 @@ const Sider = function () {
       title: t("warehousing management"),
       icon: (
         <div>
-          <SvgIcon src={WarehouseSvg} alt="warehousing" />
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
+            alt="warehousing"
+          />
         </div>
       ),
       submenu: [
@@ -67,7 +69,10 @@ const Sider = function () {
       title: t("setting"),
       icon: (
         <div>
-          <SvgIcon src={SettingSvg} alt="warehousing" />
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
+            alt="setting"
+          />
         </div>
       ),
       submenu: [

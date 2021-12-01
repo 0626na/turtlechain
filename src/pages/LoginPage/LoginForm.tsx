@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import logo from "assets/logo/logo_v.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { TOKEN } from "constant";
@@ -51,7 +50,10 @@ const LoginForm = function () {
 
   return (
     <Form form={form} onFinish={onSubmit}>
-      <LogoImage src={logo} alt="Logo" />
+      <LogoImage
+        src={`${process.env.PUBLIC_URL}/assets/img/logo_v.png`}
+        alt="logo"
+      />
       <Form.Item //
         name="login_id"
         rules={requiredRules}
