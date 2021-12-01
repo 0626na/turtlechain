@@ -1,29 +1,28 @@
 import styled from "styled-components";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 // antd
-import {
-  CaretLeftOutlined as PrevIcon,
-  CaretRightOutlined as NextIcon,
-} from "@ant-design/icons";
 import { Button, Typography } from "antd";
 
 interface Props {
-  currentPage: number;
-  pageSize: number;
-  totalCount: number;
-  isLoading: boolean;
-  onPrev: () => void;
-  onNext: () => void;
+  currentPage?: number;
+  pageSize?: number;
+  totalCount?: number;
+  isLoading?: boolean;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
 const SimplePagination = function ({
-  currentPage,
-  pageSize,
-  totalCount,
-  isLoading,
+  currentPage = 1,
+  pageSize = 1,
+  totalCount = 1,
+  isLoading = false,
   onPrev,
   onNext,
 }: Props) {
+  const { t } = useTranslation();
+
   const lastPage = useMemo(() => {
     return Math.ceil(totalCount / pageSize);
   }, [totalCount, pageSize]);
@@ -32,20 +31,22 @@ const SimplePagination = function ({
     <Container>
       <Button //
         size="small"
+        type="link"
         disabled={currentPage === 1 || isLoading}
         onClick={onPrev}
       >
-        <PrevIcon />
+        {t("prev")}
       </Button>
       <Typography>
         {currentPage} / {lastPage}
       </Typography>
       <Button //
         size="small"
+        type="link"
         disabled={currentPage === lastPage || isLoading}
         onClick={onNext}
       >
-        <NextIcon />
+        {t("next")}
       </Button>
     </Container>
   );
