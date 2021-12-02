@@ -7,6 +7,7 @@ export interface WarehousingSheet {
   created_date: Date;
   created_time: Date;
   is_deleted: boolean;
+  is_confirmed: boolean;
   total_price: number;
   total_item_count: number;
   total_store_count: number;
