@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import warehousingAPI, { SheetItemList } from "apis/warehousingAPI";
 
-import { Modal, Form, Select, Table, message, Input } from "antd";
+import { Modal, Form, Select, Table, message, Input, InputNumber } from "antd";
 
 type SearchType = "store_name" | "product_code" | "product_name";
 
@@ -94,8 +94,8 @@ const WarehousingSheetItemModal = function ({
           <Input
             value={searchText}
             placeholder={t("search text")}
-            onChange={(event) => {
-              setSearchText(event.target.value);
+            onChange={(e) => {
+              setSearchText(e.target.value);
             }}
           />
         </Form.Item>
@@ -115,18 +115,93 @@ const WarehousingSheetItemModal = function ({
           {
             title: t("wholesaler name"),
             dataIndex: "store_name",
+            render: (_, record) => {
+              return (
+                <Input //
+                  size="small"
+                  defaultValue={record.store_name}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, store_name: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
           {
             title: t("wholesaler address"),
             dataIndex: "address",
+            render: (_, record) => {
+              return (
+                <Input //
+                  size="small"
+                  defaultValue={record.address}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, address: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
           {
             title: t("product code"),
             dataIndex: "product_code",
+            render: (_, record) => {
+              return (
+                <InputNumber //
+                  size="small"
+                  value={record.product_code}
+                  onChange={(value) => {
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, product_code: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
           {
             title: t("product name"),
             dataIndex: "product_name",
+            render: (_, record) => {
+              return (
+                <Input //
+                  size="small"
+                  defaultValue={record.product_name}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, product_name: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
           {
             title: t("size"),
@@ -139,10 +214,46 @@ const WarehousingSheetItemModal = function ({
           {
             title: t("warehousing quantity"),
             dataIndex: "count",
+            render: (_, record) => {
+              return (
+                <InputNumber //
+                  size="small"
+                  value={record.count}
+                  onChange={(value) => {
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, count: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
           {
             title: t("product price"),
             dataIndex: "price",
+            render: (_, record) => {
+              return (
+                <InputNumber //
+                  size="small"
+                  defaultValue={record.price}
+                  onChange={(value) => {
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, price: value };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                />
+              );
+            },
           },
         ]}
       />
