@@ -38,7 +38,7 @@ const getSheet = async function (query: RequestGetSheet) {
     value !== "" && (url = url + `${key}=${value}&`);
   }
 
-  const response: any = await v2Axios.get<ResponseGetSheet>(url);
+  const response = await v2Axios.get<ResponseGetSheet>(url);
   return response.data.data;
 };
 
