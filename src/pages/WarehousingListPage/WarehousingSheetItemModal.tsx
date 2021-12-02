@@ -5,7 +5,16 @@ import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import warehousingAPI, { SheetItemList } from "apis/warehousingAPI";
 
-import { Modal, Form, Select, Table, message, Input, InputNumber } from "antd";
+import {
+  Modal,
+  Form,
+  Select,
+  Table,
+  message,
+  Input,
+  InputNumber,
+  Button,
+} from "antd";
 
 type SearchType = "store_name" | "product_code" | "product_name";
 
@@ -105,7 +114,10 @@ const WarehousingSheetItemModal = function ({
         loading={getSheetItemQuery.isLoading}
         pagination={false}
         dataSource={dataSource.filter((item) => {
-          if (item[searchType].toString().indexOf(searchText) !== -1) {
+          if (
+            item[searchType].toString().indexOf(searchText) !== -1 &&
+            !item.is_deleted
+          ) {
             return true;
           } else {
             return false;
@@ -252,6 +264,33 @@ const WarehousingSheetItemModal = function ({
                     setDataSource(newDataSource);
                   }}
                 />
+              );
+            },
+          },
+          {
+            title: "",
+            dataIndex: "action",
+            align: "center",
+            render: (_, record) => {
+              return (
+                <Button //
+                  danger
+                  size="small"
+                  shape="round"
+                  type="primary"
+                  onClick={() => {
+                    const newDataSource = dataSource.map((item) => {
+                      if (item.id === record.id) {
+                        return { ...item, is_deleted: true };
+                      } else {
+                        return item;
+                      }
+                    });
+                    setDataSource(newDataSource);
+                  }}
+                >
+                  {t("delete")}
+                </Button>
               );
             },
           },
