@@ -14,14 +14,20 @@ interface Props {
   searchQuery: RequestGetSheet;
   currentPage: number;
   pageSize: number;
+  onClickRow: (value: {
+    sheet_id: number;
+    mall_name: string;
+    created_time: string;
+  }) => void;
   onPrev: (last_id: number) => void;
   onNext: (last_id: number) => void;
 }
 
-const WarehousingList = function ({
+const WarehousingSheetList = function ({
   searchQuery,
   currentPage,
   pageSize,
+  onClickRow,
   onPrev,
   onNext,
 }: Props) {
@@ -88,7 +94,7 @@ const WarehousingList = function ({
           },
         },
         {
-          title: t("warehousing quantity"),
+          title: t("warehousing total quantity"),
           dataIndex: "total_item_count",
           align: "right",
           render: (_, record) => {
@@ -97,7 +103,7 @@ const WarehousingList = function ({
           },
         },
         {
-          title: t("warehousing amount"),
+          title: t("warehousing total amount"),
           dataIndex: "total_price",
           align: "right",
           render: (_, record) => {
@@ -109,15 +115,28 @@ const WarehousingList = function ({
           title: "",
           dataIndex: "action",
           align: "center",
-          render: () => (
-            <Button //
-              size="small"
-              shape="round"
-              type="primary"
-            >
-              {t("view details")}
-            </Button>
-          ),
+          render: (_, record) => {
+            const { id, mall_name, created_time } = record;
+            const rowValue = {
+              sheet_id: id,
+              mall_name,
+              created_time: moment(created_time).format("YYYY-MM-DD HH:MM:SS"),
+            };
+
+            return (
+              <Button //
+                size="small"
+                shape="round"
+                type="primary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onClickRow(rowValue);
+                }}
+              >
+                {t("view details")}
+              </Button>
+            );
+          },
         },
       ]}
       title={() => (
@@ -157,4 +176,4 @@ const BottomContainer = styled.div`
   justify-content: center;
 `;
 
-export default WarehousingList;
+export default WarehousingSheetList;

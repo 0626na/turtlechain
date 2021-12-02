@@ -1,20 +1,5 @@
 import { v2Axios } from "apis";
 
-export interface WarehousingSheet {
-  id: number;
-  mall_id: number;
-  mall_name: string;
-  created_date: Date;
-  created_time: Date;
-  is_deleted: boolean;
-  is_confirmed: boolean;
-  total_price: number;
-  total_item_count: number;
-  total_store_count: number;
-  total_item_subcount: number;
-  created_by: number;
-}
-
 // 입고장 리스트 가져오기
 export interface RequestGetSheet {
   mall_id: number | "";
@@ -28,7 +13,20 @@ export interface RequestGetSheet {
 
 export interface ResponseGetSheet {
   data: {
-    data: Array<WarehousingSheet>;
+    data: Array<{
+      id: number;
+      mall_id: number;
+      mall_name: string;
+      created_date: Date;
+      created_time: Date;
+      is_deleted: boolean;
+      is_confirmed: boolean;
+      total_price: number;
+      total_item_count: number;
+      total_store_count: number;
+      total_item_subcount: number;
+      created_by: number;
+    }>;
     total_count: number;
   };
 }
@@ -43,8 +41,40 @@ const getSheet = async function (query: RequestGetSheet) {
   return response.data.data;
 };
 
+// 입고장 상세내역 리스트 가져오기
+export type RequestGetSheetItem = number;
+
+export interface ResponseGetSheetItem {
+  data: Array<{
+    id: number;
+    sheet_id: number;
+    is_deleted: boolean;
+    mall_id: boolean;
+    mall_name: string;
+    store_code: number;
+    store_name: string;
+    address: string;
+    size: string;
+    color: string;
+    count: number;
+    price: number;
+    product_code: number;
+    product_name: string;
+    memo: string | null;
+    created_by: number;
+    created_time: string;
+  }>;
+}
+
+const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
+  const url = `warehousing/item?sheet_id=${sheet_id}`;
+  const response = await v2Axios.get<ResponseGetSheetItem>(url);
+  return response.data;
+};
+
 const warehousingAPI = {
   getSheet,
+  getSheetItem,
 };
 
 export default warehousingAPI;
