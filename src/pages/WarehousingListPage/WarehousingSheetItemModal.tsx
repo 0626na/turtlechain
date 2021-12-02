@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AxiosError } from "axios";
 import { useQuery, useQueryClient } from "react-query";
-import warehousingAPI from "apis/warehousingAPI";
+import warehousingAPI, { SheetItemList } from "apis/warehousingAPI";
 
-import { Modal, Table, message } from "antd";
+import { Modal, Form, Select, Table, message, Input } from "antd";
+
+type SearchType = "store_name" | "product_code" | "product_name";
 
 interface Props {
   visible?: boolean;
@@ -25,6 +27,10 @@ const WarehousingSheetItemModal = function ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
+  const [searchType, setSearchType] = useState<SearchType>("store_name");
+  const [searchText, setSearchText] = useState("");
+  const [dataSource, setDataSource] = useState<SheetItemList>([]);
+
   // 입고장 상세내역 리스트 요청
   const getSheetItemQuery = useQuery(
     ["getSheetItem"],
@@ -34,12 +40,17 @@ const WarehousingSheetItemModal = function ({
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+      onSuccess: (data) => {
+        setDataSource(data.data);
+      },
     }
   );
 
+  // 데이터 리셋
   useEffect(() => {
     if (!visible) {
       return () => {
+        setDataSource([]);
         queryClient.removeQueries(["getSheetItem"]);
       };
     }
@@ -54,9 +65,52 @@ const WarehousingSheetItemModal = function ({
       title={`${mall_name} ${t("warehousing detail list")}`}
       footer={[]}
     >
+      <Form //
+        style={{ margin: "10px 0" }}
+        layout="inline"
+      >
+        <Form.Item>
+          <Select
+            value={searchType}
+            onChange={(value) => {
+              setSearchType(value);
+            }}
+          >
+            <Select.Option value="store_name">
+              {t("wholesaler name")}
+            </Select.Option>
+            <Select.Option value="address">
+              {t("wholesaler address")}
+            </Select.Option>
+            <Select.Option value="product_code">
+              {t("product code")}
+            </Select.Option>
+            <Select.Option value="product_name">
+              {t("product name")}
+            </Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item>
+          <Input
+            value={searchText}
+            placeholder={t("search text")}
+            onChange={(event) => {
+              setSearchText(event.target.value);
+            }}
+          />
+        </Form.Item>
+      </Form>
       <Table
         size="small"
+        loading={getSheetItemQuery.isLoading}
         pagination={false}
+        dataSource={dataSource.filter((item) => {
+          if (item[searchType].toString().indexOf(searchText) !== -1) {
+            return true;
+          } else {
+            return false;
+          }
+        })}
         columns={[
           {
             title: t("wholesaler name"),
@@ -69,10 +123,6 @@ const WarehousingSheetItemModal = function ({
           {
             title: t("product code"),
             dataIndex: "product_code",
-          },
-          {
-            title: t("product name"),
-            dataIndex: "product_name",
           },
           {
             title: t("product name"),
@@ -95,9 +145,6 @@ const WarehousingSheetItemModal = function ({
             dataIndex: "price",
           },
         ]}
-        dataSource={
-          getSheetItemQuery.data?.data ? getSheetItemQuery.data?.data : []
-        }
       />
     </Modal>
   );

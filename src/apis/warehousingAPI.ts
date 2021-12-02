@@ -1,6 +1,21 @@
 import { v2Axios } from "apis";
 
 // 입고장 리스트 가져오기
+export type SheetList = Array<{
+  id: number;
+  mall_id: number;
+  mall_name: string;
+  created_date: Date;
+  created_time: Date;
+  is_deleted: boolean;
+  is_confirmed: boolean;
+  total_price: number;
+  total_item_count: number;
+  total_store_count: number;
+  total_item_subcount: number;
+  created_by: number;
+}>;
+
 export interface RequestGetSheet {
   mall_id: number | "";
   is_confirmed: number | "";
@@ -13,20 +28,7 @@ export interface RequestGetSheet {
 
 export interface ResponseGetSheet {
   data: {
-    data: Array<{
-      id: number;
-      mall_id: number;
-      mall_name: string;
-      created_date: Date;
-      created_time: Date;
-      is_deleted: boolean;
-      is_confirmed: boolean;
-      total_price: number;
-      total_item_count: number;
-      total_store_count: number;
-      total_item_subcount: number;
-      created_by: number;
-    }>;
+    data: SheetList;
     total_count: number;
   };
 }
@@ -42,28 +44,30 @@ const getSheet = async function (query: RequestGetSheet) {
 };
 
 // 입고장 상세내역 리스트 가져오기
+export type SheetItemList = Array<{
+  id: number;
+  sheet_id: number;
+  is_deleted: boolean;
+  mall_id: boolean;
+  mall_name: string;
+  store_code: number;
+  store_name: string;
+  address: string;
+  size: string;
+  color: string;
+  count: number;
+  price: number;
+  product_code: number;
+  product_name: string;
+  memo: string | null;
+  created_by: number;
+  created_time: string;
+}>;
+
 export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
-  data: Array<{
-    id: number;
-    sheet_id: number;
-    is_deleted: boolean;
-    mall_id: boolean;
-    mall_name: string;
-    store_code: number;
-    store_name: string;
-    address: string;
-    size: string;
-    color: string;
-    count: number;
-    price: number;
-    product_code: number;
-    product_name: string;
-    memo: string | null;
-    created_by: number;
-    created_time: string;
-  }>;
+  data: SheetItemList;
 }
 
 const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
