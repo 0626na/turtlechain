@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +21,6 @@ import {
   Statistic,
   Card,
 } from "antd";
-import styled from "styled-components";
 
 type SearchType = "store_name" | "product_code" | "product_name";
 
@@ -254,10 +254,11 @@ const WarehousingSheetItemModal = function ({
               dataIndex: "product_code",
               render: (_, record) => {
                 return (
-                  <InputNumber //
+                  <Input //
                     size="small"
                     value={record.product_code}
-                    onChange={(value) => {
+                    onChange={(e) => {
+                      const { value } = e.target;
                       const newDataSource = dataSource.map((item) => {
                         if (item.id === record.id) {
                           return { ...item, product_code: value };
@@ -295,12 +296,27 @@ const WarehousingSheetItemModal = function ({
               },
             },
             {
-              title: t("size"),
-              dataIndex: "size",
-            },
-            {
-              title: t("color"),
-              dataIndex: "color",
+              title: t("option"),
+              dataIndex: "option",
+              render: (_, record) => {
+                return (
+                  <Input //
+                    size="small"
+                    value={record.option}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      const newDataSource = dataSource.map((item) => {
+                        if (item.id === record.id) {
+                          return { ...item, option: value };
+                        } else {
+                          return item;
+                        }
+                      });
+                      setDataSource(newDataSource);
+                    }}
+                  />
+                );
+              },
             },
             {
               title: t("warehousing quantity"),

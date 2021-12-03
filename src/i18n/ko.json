@@ -8,7 +8,8 @@
     "signup completed": "관리자에 의해 가입 승인이 완료된 후, 로그인이 가능합니다. 승인 결과는 신청 시 입력한 이메일로 전달될 예정입니다.",
     "only number": "숫자만 입력하세요.",
     "required item": "필수 입력값입니다.",
-    "really update": "수정사항을 반영하시겠습니까?"
+    "really update": "수정하시겠습니까?",
+    "really register": "등록하시겠습니까?"
   },
   "message": {
     "success update warehousing detail list": "상세 입고 내역을 수정하였습니다.",
@@ -102,6 +103,7 @@
   "list": "리스트",
   "size": "사이즈",
   "color": "컬러",
+  "option": "옵션",
   "progress": "진행 상태",
   "setting": "환경 설정",
   "reflect update": "수정사항 반영하기",

@@ -29,11 +29,10 @@ export interface SheetItem {
   store_code: number;
   store_name: string;
   address: string;
-  size: string;
-  color: string;
+  option: string;
   count: number;
   price: number;
-  product_code: number;
+  product_code: string;
   product_name: string;
   memo: string | null;
   created_by: number;
