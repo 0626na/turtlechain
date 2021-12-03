@@ -7,58 +7,50 @@ import StoreSelect from "components/StoreSelect";
 
 interface Props {
   searchQuery: RequestGetSheet;
-  onChangeStore: (mall_id: number | "") => void;
-  onChangeDate: (start_date: string, end_date: string) => void;
-  onChangeConfirmed: (is_confirmed: number | "") => void;
+  setSearchQuery: React.Dispatch<React.SetStateAction<RequestGetSheet>>;
 }
 
 const WarehousingSearchFilter = function ({
   searchQuery,
-  onChangeStore,
-  onChangeDate,
-  onChangeConfirmed,
+  setSearchQuery,
 }: Props) {
   const { t } = useTranslation();
-  const { mall_id, start_date, end_date, is_confirmed } = searchQuery;
-
   return (
     <Form layout="inline">
       <Form.Item label={t("mall")}>
         <StoreSelect
           emptyValueText={t("all")}
           width={250}
-          value={mall_id}
-          onChange={(value) => {
-            onChangeStore(value);
+          value={searchQuery.mall_id}
+          onChange={(mall_id) => {
+            setSearchQuery({ ...searchQuery, mall_id });
           }}
         />
       </Form.Item>
       <Form.Item label={t("warehousing time")}>
         <DatePicker.RangePicker
           allowClear={false}
-          value={[moment(start_date), moment(end_date)]}
+          value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
           onChange={(_, dateStrings) => {
             const start_date = dateStrings[0];
             const end_date = dateStrings[1];
-            onChangeDate(start_date, end_date);
+            setSearchQuery({ ...searchQuery, start_date, end_date });
           }}
         />
       </Form.Item>
       <Form.Item label={t("progress")}>
         <Select
           style={{ width: 100 }}
-          value={is_confirmed}
-          onChange={(value) => {
-            onChangeConfirmed(value);
+          value={searchQuery.is_confirmed}
+          onChange={(is_confirmed) => {
+            setSearchQuery({ ...searchQuery, is_confirmed });
           }}
         >
           <Select.Option value="">{t("all")}</Select.Option>
           <Select.Option value={0}>
             {t("warehousing unconfirmed")}
           </Select.Option>
-          <Select.Option value={1}>
-            {t("warehousing confirmed")}
-          </Select.Option>
+          <Select.Option value={1}>{t("warehousing confirmed")}</Select.Option>
         </Select>
       </Form.Item>
     </Form>

@@ -41,15 +41,7 @@ const WarehousingListPage = function () {
       />
       <WarehousingSearchFilter
         searchQuery={searchQuery}
-        onChangeStore={(mall_id) => {
-          setSearchQuery({ ...searchQuery, mall_id });
-        }}
-        onChangeDate={(start_date, end_date) => {
-          setSearchQuery({ ...searchQuery, start_date, end_date });
-        }}
-        onChangeConfirmed={(is_confirmed) => {
-          setSearchQuery({ ...searchQuery, is_confirmed });
-        }}
+        setSearchQuery={setSearchQuery}
       />
       <WarehousingSheetList
         searchQuery={searchQuery}
