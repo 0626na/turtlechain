@@ -16,33 +16,29 @@ export interface Sheet {
   created_by: number;
 }
 
-// 입고장 리스트 타입
-export type SheetList = Array<Sheet>;
-
-// 입고장 아이템 타입
+// 입고장 상세내역 타입
 export interface SheetItem {
   id: number;
   sheet_id: number;
-  is_deleted: boolean;
-  mall_id: boolean;
+  mall_id: number;
   mall_name: string;
+  store_id: number;
   store_code: number;
   store_name: string;
   address: string;
+  product_id: number;
+  product_code: string;
+  product_name: string;
   option: string;
   count: number;
   price: number;
-  product_code: string;
-  product_name: string;
-  memo: string | null;
+  memo: string;
   created_by: number;
-  created_time: string;
+  created_time: Date;
+  is_deleted: boolean;
 }
 
-// 입고장 아이템 리스트 타입
-export type SheetItemList = Array<SheetItem>;
-
-// 입고장 리스트 가져오기
+// 입고장 요청 타입
 export interface RequestGetSheet {
   mall_id: number | "";
   is_confirmed: number | "";
@@ -55,11 +51,65 @@ export interface RequestGetSheet {
 
 export interface ResponseGetSheet {
   data: {
-    data: SheetList;
+    data: Array<Sheet>;
     total_count: number;
   };
 }
 
+// 입고장 상세내역 요청 타입
+export type RequestGetSheetItem = number;
+
+export interface ResponseGetSheetItem {
+  data: Array<SheetItem>;
+}
+
+// 입고장 수정하기 요청 타입
+export interface RequestUpdateSheet {
+  sheet_id: number;
+  item_obj?: Sheet;
+  items?: Array<SheetItem>;
+}
+
+export interface ResponseUpdateSheet {
+  data: Sheet | null;
+}
+
+// 입고장 추가하기 요청 타입
+export interface RequestCreateSheet {
+  created_date: string;
+  retailer_id: number;
+  retailer_name: string;
+}
+
+export interface ResponseCreateSheet {
+  data: number;
+}
+
+// 입고장 상세내역 추가하기 요청 타입
+export interface RequestCreateSheetItem {
+  sheet_id: number;
+  item_list: Array<{
+    mall_id: number;
+    mall_name: string;
+    store_id: number;
+    store_code: number;
+    store_name: string;
+    address: string;
+    product_id: number;
+    product_code: string;
+    product_name: string;
+    option: string;
+    count: number;
+    price: number;
+    memo: string;
+  }>;
+}
+
+export interface ResponseCreateSheetItem {
+  data: null;
+}
+
+// 입고장 가져오기
 const getSheet = async function (query: RequestGetSheet) {
   let url = "warehousing/sheet?";
   for (const [key, value] of Object.entries(query)) {
@@ -70,40 +120,40 @@ const getSheet = async function (query: RequestGetSheet) {
   return response.data.data;
 };
 
-// 입고장 수정하기
-export interface RequestUpdateSheet {
-  sheet_id: number;
-  item_obj?: Sheet;
-  items?: SheetItemList;
-}
-
-export interface ResponseUpdateSheet {
-  data: Sheet | null;
-}
-
-const updateSheet = async function (data: RequestUpdateSheet) {
-  const url = `warehousing/sheet/${data.sheet_id}`;
-  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
-  return response.data.data;
-};
-
-// 입고장 상세내역 리스트 가져오기
-export type RequestGetSheetItem = number;
-
-export interface ResponseGetSheetItem {
-  data: SheetItemList;
-}
-
+// 입고장 상세내역 가져오기
 const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
   const url = `warehousing/item?sheet_id=${sheet_id}`;
   const response = await v2Axios.get<ResponseGetSheetItem>(url);
   return response.data;
 };
 
+// 입고장 수정하기
+const updateSheet = async function (data: RequestUpdateSheet) {
+  const url = `warehousing/sheet/${data.sheet_id}`;
+  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
+  return response.data.data;
+};
+
+// 입고장 추가하기
+const createSheet = async function (data: RequestCreateSheet) {
+  const url = "warehousing/sheet";
+  const response = await v2Axios.post<ResponseCreateSheet>(url, data);
+  return response.data;
+};
+
+// 입고장 상세내역 추가하기
+const createSheetItem = async function (data: RequestCreateSheetItem) {
+  const url = "warehousing/item";
+  const response = await v2Axios.post<ResponseCreateSheetItem>(url, data);
+  return response.data;
+};
+
 const warehousingAPI = {
   getSheet,
-  updateSheet,
   getSheetItem,
+  updateSheet,
+  createSheet,
+  createSheetItem,
 };
 
 export default warehousingAPI;
