@@ -1,8 +1,13 @@
 import moment from "moment";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import { RequestGetSheet } from "apis/warehousingAPI";
+
+import { AxiosError } from "axios";
+import { useQuery } from "react-query";
+import warehousingAPI, { RequestGetSheet } from "apis/warehousingAPI";
+
+import { message } from "antd";
 
 import SvgIcon from "components/SvgIcon";
 import PageHeader from "components/PageHeader";
@@ -25,6 +30,51 @@ const WarehousingListPage = function () {
     switch_type: "next",
   });
 
+  // 입고장 리스트 요청
+  const getSheetQuery = useQuery(
+    ["getSheet", searchQuery],
+    () => warehousingAPI.getSheet(searchQuery),
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+    }
+  );
+
+  // 입고장 리스트
+  const list = useMemo(() => {
+    if (getSheetQuery.data) {
+      return getSheetQuery.data.data;
+    } else {
+      return [];
+    }
+  }, [getSheetQuery.data]);
+
+  // 전체 데이터 수
+  const totalCount = useMemo(() => {
+    if (getSheetQuery.data) {
+      return getSheetQuery.data.total_count;
+    } else {
+      return 0;
+    }
+  }, [getSheetQuery.data]);
+
+  // 이전 페이지
+  const onPrev = () => {
+    const switch_type = "prev";
+    const last_id = list[0].id;
+    setSearchQuery({ ...searchQuery, switch_type, last_id });
+    setCurrentPage(currentPage - 1);
+  };
+
+  // 다음 페이지
+  const onNext = () => {
+    const switch_type = "next";
+    const last_id = list[list.length - 1].id;
+    setSearchQuery({ ...searchQuery, switch_type, last_id });
+    setCurrentPage(currentPage + 1);
+  };
+
   return (
     <>
       <Helmet title={title} />
@@ -44,19 +94,13 @@ const WarehousingListPage = function () {
         setSearchQuery={setSearchQuery}
       />
       <WarehousingSheetList
-        searchQuery={searchQuery}
+        isFetching={getSheetQuery.isLoading}
+        list={list}
+        totalCount={totalCount}
         currentPage={currentPage}
         pageSize={searchQuery.offset}
-        onPrev={(last_id) => {
-          const switch_type = "prev";
-          setSearchQuery({ ...searchQuery, switch_type, last_id });
-          setCurrentPage(currentPage - 1);
-        }}
-        onNext={(last_id) => {
-          const switch_type = "next";
-          setSearchQuery({ ...searchQuery, switch_type, last_id });
-          setCurrentPage(currentPage + 1);
-        }}
+        onPrev={onPrev}
+        onNext={onNext}
       />
     </>
   );
