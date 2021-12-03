@@ -11,6 +11,7 @@
     "really update": "수정사항을 반영하시겠습니까?"
   },
   "message": {
+    "success update warehousing detail list": "상세 입고 내역을 수정하였습니다.",
     "success create mall": "쇼핑몰을 추가하였습니다.",
     "success update mall": "쇼핑몰을 수정하였습니다.",
     "success reset password": "비밀번호가 변경되었습니다.",
