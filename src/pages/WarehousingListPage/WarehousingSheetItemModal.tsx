@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { SheetItemList } from "apis/warehousingAPI";
+import warehousingAPI, { SheetItem } from "apis/warehousingAPI";
 
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
@@ -48,7 +48,7 @@ const WarehousingSheetItemModal = function ({
 
   const [searchType, setSearchType] = useState<SearchType>("store_name");
   const [searchText, setSearchText] = useState("");
-  const [dataSource, setDataSource] = useState<SheetItemList>([]);
+  const [dataSource, setDataSource] = useState<Array<SheetItem>>([]);
 
   // 입고 수량 합계
   const totalItemCount = useMemo(() => {
