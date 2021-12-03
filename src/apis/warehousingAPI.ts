@@ -38,6 +38,23 @@ export interface SheetItem {
   is_deleted: boolean;
 }
 
+// 입고장 상세내역 추가 타입
+export interface CreateSheetItem {
+  mall_id: number;
+  mall_name: string;
+  store_id: number;
+  store_code: number;
+  store_name: string;
+  address: string;
+  product_id: number;
+  product_code: string;
+  product_name: string;
+  option: string;
+  count: number;
+  price: number;
+  memo: string;
+}
+
 // 입고장 요청 타입
 export interface RequestGetSheet {
   mall_id: number | "";
@@ -77,8 +94,8 @@ export interface ResponseUpdateSheet {
 // 입고장 추가하기 요청 타입
 export interface RequestCreateSheet {
   created_date: string;
-  retailer_id: number;
-  retailer_name: string;
+  mall_id: number;
+  mall_name: string;
 }
 
 export interface ResponseCreateSheet {
@@ -88,21 +105,7 @@ export interface ResponseCreateSheet {
 // 입고장 상세내역 추가하기 요청 타입
 export interface RequestCreateSheetItem {
   sheet_id: number;
-  item_list: Array<{
-    mall_id: number;
-    mall_name: string;
-    store_id: number;
-    store_code: number;
-    store_name: string;
-    address: string;
-    product_id: number;
-    product_code: string;
-    product_name: string;
-    option: string;
-    count: number;
-    price: number;
-    memo: string;
-  }>;
+  item_list: Array<CreateSheetItem>;
 }
 
 export interface ResponseCreateSheetItem {

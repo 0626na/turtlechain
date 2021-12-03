@@ -9,9 +9,11 @@
     "only number": "숫자만 입력하세요.",
     "required item": "필수 입력값입니다.",
     "really update": "수정하시겠습니까?",
-    "really register": "등록하시겠습니까?"
+    "really register": "등록하시겠습니까?",
+    "select mall": "쇼핑몰을 선택하세요."
   },
   "message": {
+    "success create warehousing": "입고를 등록하였습니다.",
     "success update warehousing detail list": "상세 입고 내역을 수정하였습니다.",
     "success create mall": "쇼핑몰을 추가하였습니다.",
     "success update mall": "쇼핑몰을 수정하였습니다.",
@@ -102,6 +104,7 @@
   "email": "이메일",
   "date": "날짜",
   "all": "전체",
+  "select": "선택",
   "list": "리스트",
   "size": "사이즈",
   "color": "컬러",

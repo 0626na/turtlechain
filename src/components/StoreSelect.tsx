@@ -9,7 +9,7 @@ interface Props {
   emptyValueText: string;
   width?: string | number;
   value?: "" | number;
-  onChange?: (value: "" | number) => void;
+  onChange?: (value: "" | number, label: string) => void;
 }
 
 const StoreSelect = function ({
@@ -41,7 +41,9 @@ const StoreSelect = function ({
       loading={getStoresQuery.isLoading}
       defaultValue=""
       value={value && value}
-      onChange={onChange && onChange}
+      onChange={(value, option: any) => {
+        onChange && onChange(value, option.children);
+      }}
     >
       <Select.Option value="">{emptyValueText}</Select.Option>
       {getStoresQuery.data?.data.data.map((store) => {
