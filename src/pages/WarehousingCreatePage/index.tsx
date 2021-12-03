@@ -1,7 +1,11 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
+
+import WarehousingCreateForm from "./WarehousingCreateForm";
+import WarehousingPreviewList from "./WarehousingPreviewList";
 
 const WarehousingCreatePage = function () {
   const { t } = useTranslation();
@@ -20,6 +24,8 @@ const WarehousingCreatePage = function () {
         title={t("warehousing create")}
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
       />
+      <WarehousingCreateForm />
+      <WarehousingPreviewList />
     </>
   );
 };
