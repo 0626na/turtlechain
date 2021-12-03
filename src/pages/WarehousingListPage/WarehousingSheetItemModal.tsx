@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AxiosError } from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import warehousingAPI, { SheetItemList } from "apis/warehousingAPI";
 
+import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
   Form,
@@ -14,6 +15,7 @@ import {
   Input,
   InputNumber,
   Button,
+  Popconfirm,
 } from "antd";
 
 type SearchType = "store_name" | "product_code" | "product_name";
@@ -55,6 +57,18 @@ const WarehousingSheetItemModal = function ({
     }
   );
 
+  // 입고장 상세내역 수정 요청
+  const updateSheetQuery = useMutation(
+    ["updateSheet"],
+    warehousingAPI.updateSheet,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: () => {},
+    }
+  );
+
   // 데이터 리셋
   useEffect(() => {
     if (!visible) {
@@ -72,7 +86,24 @@ const WarehousingSheetItemModal = function ({
       visible={visible}
       onCancel={onClose}
       title={`${mall_name} ${t("warehousing detail list")}`}
-      footer={[]}
+      footer={[
+        <Popconfirm
+          title={t("description.really update")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={() => {
+            updateSheetQuery.mutate({ sheet_id, items: dataSource });
+          }}
+        >
+          <Button
+            type="primary"
+            icon={<SyncOutlined />}
+            loading={updateSheetQuery.isLoading}
+          >
+            {t("reflect update")}
+          </Button>
+        </Popconfirm>,
+      ]}
     >
       <Form //
         style={{ margin: "10px 0" }}
@@ -275,6 +306,7 @@ const WarehousingSheetItemModal = function ({
               return (
                 <Button //
                   danger
+                  icon={<DeleteFilled />}
                   size="small"
                   shape="round"
                   type="primary"
