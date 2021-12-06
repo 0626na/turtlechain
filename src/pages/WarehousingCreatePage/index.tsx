@@ -16,17 +16,18 @@ import StoreSelect from "components/StoreSelect";
 import WarehousingCreateForm from "./WarehousingCreateForm";
 import WarehousingPreviewList from "./WarehousingPreviewList";
 
+interface SheetItem extends CreateSheetItem {
+  temp_id: number;
+}
+
 const WarehousingCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("warehousing create")}`;
 
   const [mall_id, setMallId] = useState(-1);
   const [mall_name, setMallName] = useState("");
-  const [previewList, setPreviewList] = useState<Array<CreateSheetItem>>([]);
-
-  const handleCreate = (value: CreateSheetItem) => {
-    setPreviewList([...previewList, value]);
-  };
+  const [temp_id, setTempId] = useState(1);
+  const [list, setList] = useState<Array<SheetItem>>([]);
 
   // 입고장 생성 절차
   // 1. 입고장 추가하기 요청
@@ -43,7 +44,7 @@ const WarehousingCreatePage = function () {
       onSuccess: (data) => {
         createSheetItemQuery.mutate({
           sheet_id: data.data,
-          item_list: previewList.map((item) => ({
+          item_list: list.map((item) => ({
             ...item,
             mall_id,
             mall_name,
@@ -64,7 +65,8 @@ const WarehousingCreatePage = function () {
       onSuccess: () => {
         setMallId(-1);
         setMallName("");
-        setPreviewList([]);
+        setTempId(1);
+        setList([]);
         notification.open({
           type: "success",
           message: t("message.success create warehousing"),
@@ -72,6 +74,25 @@ const WarehousingCreatePage = function () {
       },
     }
   );
+
+  // 입고장 아이템 추가
+  const onCreate = (value: CreateSheetItem) => {
+    setList([...list, { ...value, temp_id }]);
+    setTempId(temp_id + 1);
+  };
+
+  // 입고장 등록
+  const onSubmit = () => {
+    if (mall_id === -1 || !mall_name) {
+      message.error(t("description.select mall"));
+    } else {
+      createSheetQuery.mutate({
+        created_date: moment().format("YYYY-MM-DD"),
+        mall_id,
+        mall_name,
+      });
+    }
+  };
 
   return (
     <>
@@ -98,23 +119,12 @@ const WarehousingCreatePage = function () {
           }}
         />
       </div>
-      <WarehousingCreateForm onCreate={handleCreate} />
+      <WarehousingCreateForm onCreate={onCreate} />
       <WarehousingPreviewList
-        previewList={previewList}
-        isCreating={
-          createSheetQuery.isLoading || createSheetItemQuery.isLoading
-        }
-        onCreate={() => {
-          if (mall_id !== -1 && mall_name !== "") {
-            createSheetQuery.mutate({
-              created_date: moment().format("YYYY-MM-DD"),
-              mall_id,
-              mall_name,
-            });
-          } else {
-            message.error(t("description.select mall"));
-          }
-        }}
+        isLoading={createSheetQuery.isLoading || createSheetItemQuery.isLoading}
+        list={list}
+        setList={setList}
+        onSubmit={onSubmit}
       />
     </>
   );

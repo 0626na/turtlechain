@@ -6,14 +6,14 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Form, Input, Button, InputNumber, Card } from "antd";
 
 interface Props {
-  onCreate?: (value: CreateSheetItem) => void;
+  onCreate: (value: CreateSheetItem) => void;
 }
 
 const WarehousingCreateForm = function ({ onCreate }: Props) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
-  const handleCreate = () => {
+  const onFinish = () => {
     const {
       store_name,
       address,
@@ -24,30 +24,30 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
       price,
     } = form.getFieldsValue();
 
+    onCreate({
+      mall_id: -1,
+      mall_name: "",
+      store_id: -1,
+      store_code: -1,
+      store_name,
+      address,
+      product_id: -1,
+      product_code,
+      product_name,
+      option,
+      count,
+      price,
+      memo: "",
+    });
+
     form.resetFields();
-    onCreate &&
-      onCreate({
-        mall_id: -1,
-        mall_name: "",
-        store_id: -1,
-        store_code: -1,
-        store_name,
-        address,
-        product_id: -1,
-        product_code,
-        product_name,
-        option,
-        count,
-        price,
-        memo: "",
-      });
   };
 
   return (
     <Form //
       layout="vertical"
       form={form}
-      onFinish={handleCreate}
+      onFinish={onFinish}
     >
       <Card style={{ backgroundColor: "#fbfbfb" }}>
         <ItemGroup>
@@ -65,6 +65,8 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
           >
             <Input />
           </Form.Item>
+        </ItemGroup>
+        <ItemGroup>
           <Form.Item //
             label={t("product code")}
             name="product_code"
@@ -86,8 +88,6 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
           >
             <Input />
           </Form.Item>
-        </ItemGroup>
-        <ItemGroup>
           <Form.Item //
             label={t("warehousing quantity")}
             name="count"
