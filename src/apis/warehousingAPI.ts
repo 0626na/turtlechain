@@ -81,14 +81,22 @@ export interface ResponseGetSheetItem {
 }
 
 // 입고장 수정하기 요청 타입
-export interface RequestUpdateSheet {
+export interface RequestUpdateSheet extends Sheet {
   sheet_id: number;
-  item_obj?: Sheet;
-  items?: Array<SheetItem>;
 }
 
 export interface ResponseUpdateSheet {
-  data: Sheet | null;
+  data: Sheet;
+}
+
+// 입고장 상세내역 대량 수정하기 타입
+export interface RequestBulkUpdateSheetItem {
+  sheet_id: number;
+  items: Array<SheetItem>;
+}
+
+export interface ResponseBulkUpdateSheetItem {
+  data: null;
 }
 
 // 입고장 추가하기 요청 타입
@@ -133,9 +141,15 @@ const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
 // 입고장 수정하기
 const updateSheet = async function (data: RequestUpdateSheet) {
   const url = `warehousing/sheet/${data.sheet_id}`;
-  const updateData = data?.item_obj ? { ...data, ...data.item_obj } : data;
-  const response = await v2Axios.put<ResponseUpdateSheet>(url, updateData);
+  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
   return response.data.data;
+};
+
+// 입고장 상세내역 대량 수정하기
+const bulkUpdateSheetItem = async function (data: RequestBulkUpdateSheetItem) {
+  const url = "warehousing/item/bulk_update";
+  const response = await v2Axios.put<ResponseBulkUpdateSheetItem>(url, data);
+  return response.data;
 };
 
 // 입고장 추가하기
@@ -156,6 +170,7 @@ const warehousingAPI = {
   getSheet,
   getSheetItem,
   updateSheet,
+  bulkUpdateSheetItem,
   createSheet,
   createSheetItem,
 };

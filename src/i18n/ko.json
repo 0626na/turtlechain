@@ -12,7 +12,8 @@
     "really update": "정말 수정하시겠습니까?",
     "really register": "정말 등록하시겠습니까?",
     "really confirmed": "정말 마감하시겠습니까?",
-    "select mall": "쇼핑몰을 선택하세요."
+    "select mall": "쇼핑몰을 선택하세요.",
+    "changed data": "변경된 데이터가 있습니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",

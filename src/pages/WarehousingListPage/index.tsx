@@ -162,24 +162,24 @@ const WarehousingListPage = function () {
           selectRow({
             sheet_id: row.id,
             mall_name: row.mall_name,
-            created_time: moment(row.created_time).format(
-              "YYYY-MM-DD HH:MM:SS"
-            ),
+            created_time: moment(row.created_time).format("YYYY-MM-DD"),
             is_confirmed: row.is_confirmed,
           });
         }}
         // 삭제
         onDelete={(row) => {
           deleteSheetQuery.mutate({
+            ...row,
             sheet_id: row.id,
-            item_obj: { ...row, is_deleted: true },
+            is_deleted: true,
           });
         }}
         // 마감
         onConfirm={(row) => {
           confirmSheetQuery.mutate({
+            ...row,
             sheet_id: row.id,
-            item_obj: { ...row, is_confirmed: true },
+            is_confirmed: true,
           });
         }}
       />
