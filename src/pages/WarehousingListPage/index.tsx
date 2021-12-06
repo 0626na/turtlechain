@@ -59,8 +59,13 @@ const WarehousingListPage = function () {
         message.error(error.response?.data?.msg);
       },
       onSuccess: () => {
-        setCurrentPage(1);
-        setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+        if (currentPage === 1) {
+          getSheetQuery.refetch();
+        } else {
+          setCurrentPage(1);
+          setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+        }
+
         notification.open({
           type: "success",
           message: t("message.success delete warehousing"),
@@ -114,10 +119,13 @@ const WarehousingListPage = function () {
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
       <WarehousingSheetItemModal
-        visible={visibleDetailModal}
         {...selectedRow}
+        visible={visibleDetailModal}
         onClose={() => {
           setVisibleDetailModal(false);
+        }}
+        onUpdated={() => {
+          getSheetQuery.refetch();
         }}
       />
       <WarehousingSearchFilter

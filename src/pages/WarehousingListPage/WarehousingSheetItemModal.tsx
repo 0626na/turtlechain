@@ -22,7 +22,7 @@ import {
   Card,
 } from "antd";
 
-type SearchType = "store_name" | "product_code" | "product_name";
+type SearchType = "store_name" | "address" | "product_code" | "product_name";
 
 interface Props {
   visible: boolean;
@@ -48,17 +48,7 @@ const WarehousingSheetItemModal = function ({
 
   const [searchType, setSearchType] = useState<SearchType>("store_name");
   const [searchText, setSearchText] = useState("");
-  const [dataSource, setDataSource] = useState<Array<SheetItem>>([]);
-
-  // 입고 수량 합계
-  const totalItemCount = useMemo(() => {
-    return dataSource.reduce((acc, cur) => acc + cur.count, 0);
-  }, [dataSource]);
-
-  // 입고 금액 합계
-  const totalItemPrice = useMemo(() => {
-    return dataSource.reduce((acc, cur) => acc + cur.price, 0);
-  }, [dataSource]);
+  const [list, setList] = useState<Array<SheetItem>>([]);
 
   // 입고장 상세내역 리스트 요청
   const getSheetItemQuery = useQuery(
@@ -70,7 +60,7 @@ const WarehousingSheetItemModal = function ({
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setDataSource(data.data);
+        setList(data.data);
       },
     }
   );
@@ -93,11 +83,49 @@ const WarehousingSheetItemModal = function ({
     }
   );
 
+  // 입고 수량 합계
+  const totalItemCount = useMemo(
+    () =>
+      list.reduce((acc, cur) => {
+        if (!cur.is_deleted) {
+          return acc + cur.count;
+        } else {
+          return 0;
+        }
+      }, 0),
+    [list]
+  );
+
+  // 입고 금액 합계
+  const totalItemPrice = useMemo(
+    () =>
+      list.reduce((acc, cur) => {
+        if (!cur.is_deleted) {
+          return acc + cur.count * cur.price;
+        } else {
+          return 0;
+        }
+      }, 0),
+    [list]
+  );
+
+  // 필터된 리스트
+  const filteredList = useMemo(
+    () =>
+      list.filter((item) =>
+        item[searchType].toString().indexOf(searchText) !== -1 &&
+        !item.is_deleted
+          ? true
+          : false
+      ),
+    [list, searchType, searchText]
+  );
+
   // 데이터 리셋
   useEffect(() => {
     if (!visible) {
       return () => {
-        setDataSource([]);
+        setList([]);
         queryClient.removeQueries(["getSheetItem"]);
       };
     }
@@ -118,7 +146,7 @@ const WarehousingSheetItemModal = function ({
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={() => {
-              updateSheetQuery.mutate({ sheet_id, items: dataSource });
+              updateSheetQuery.mutate({ sheet_id, items: list });
             }}
           >
             <Button
@@ -159,6 +187,7 @@ const WarehousingSheetItemModal = function ({
         >
           <Form.Item>
             <Select
+              style={{ width: 150 }}
               value={searchType}
               onChange={(value) => {
                 setSearchType(value);
@@ -192,16 +221,7 @@ const WarehousingSheetItemModal = function ({
           size="small"
           loading={getSheetItemQuery.isLoading}
           pagination={false}
-          dataSource={dataSource.filter((item) => {
-            if (
-              item[searchType].toString().indexOf(searchText) !== -1 &&
-              !item.is_deleted
-            ) {
-              return true;
-            } else {
-              return false;
-            }
-          })}
+          dataSource={filteredList}
           columns={[
             {
               title: t("wholesaler name"),
@@ -212,15 +232,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     defaultValue={record.store_name}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, store_name: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, store_name: e.target.value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -235,15 +253,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     defaultValue={record.address}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, address: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, address: e.target.value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -258,15 +274,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     value={record.product_code}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, product_code: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, product_code: e.target.value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -281,15 +295,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     defaultValue={record.product_name}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, product_name: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, product_name: e.target.value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -304,15 +316,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     value={record.option}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, option: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, option: e.target.value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -327,14 +337,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     value={record.count}
                     onChange={(value) => {
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, count: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, count: value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -349,14 +358,13 @@ const WarehousingSheetItemModal = function ({
                     size="small"
                     defaultValue={record.price}
                     onChange={(value) => {
-                      const newDataSource = dataSource.map((item) => {
-                        if (item.id === record.id) {
-                          return { ...item, price: value };
-                        } else {
-                          return item;
-                        }
-                      });
-                      setDataSource(newDataSource);
+                      setList(
+                        list.map((item) =>
+                          item.id === record.id
+                            ? { ...item, price: value }
+                            : item
+                        )
+                      );
                     }}
                   />
                 );
@@ -376,14 +384,13 @@ const WarehousingSheetItemModal = function ({
                       shape="round"
                       type="primary"
                       onClick={() => {
-                        const newDataSource = dataSource.map((item) => {
-                          if (item.id === record.id) {
-                            return { ...item, is_deleted: true };
-                          } else {
-                            return item;
-                          }
-                        });
-                        setDataSource(newDataSource);
+                        setList(
+                          list.map((item) =>
+                            item.id === record.id
+                              ? { ...item, is_deleted: true }
+                              : item
+                          )
+                        );
                       }}
                     >
                       {t("delete")}

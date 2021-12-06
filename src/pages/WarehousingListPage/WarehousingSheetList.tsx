@@ -96,7 +96,7 @@ const WarehousingSheetList = function ({
           },
         },
         {
-          width: 300,
+          width: 350,
           align: "center",
           title: "",
           dataIndex: "action",
@@ -109,6 +109,7 @@ const WarehousingSheetList = function ({
               >
                 <Button //
                   size="small"
+                  shape="round"
                   onClick={() => {
                     onSelectRow(record);
                   }}
@@ -130,6 +131,7 @@ const WarehousingSheetList = function ({
                         danger
                         type="primary"
                         size="small"
+                        shape="round"
                       >
                         {t("warehousing")} {t("delete")}
                       </Button>
@@ -146,6 +148,7 @@ const WarehousingSheetList = function ({
                         icon={<CheckOutlined />}
                         type="primary"
                         size="small"
+                        shape="round"
                       >
                         {t("warehousing confirmed")}
                       </Button>
