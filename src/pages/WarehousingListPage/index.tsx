@@ -4,20 +4,29 @@ import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 
 import { AxiosError } from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import warehousingAPI, { RequestGetSheet } from "apis/warehousingAPI";
 
-import { message } from "antd";
+import { message, notification } from "antd";
 
 import SvgIcon from "components/SvgIcon";
 import PageHeader from "components/PageHeader";
 
+import WarehousingSheetItemModal from "./WarehousingSheetItemModal";
 import WarehousingSearchFilter from "./WarehousingSearchFilter";
 import WarehousingSheetList from "./WarehousingSheetList";
 
 const WarehousingListPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;
+
+  const [visibleDetailModal, setVisibleDetailModal] = useState(false);
+  const [selectedRow, selectRow] = useState({
+    sheet_id: -1,
+    mall_name: "",
+    created_time: "",
+    is_confirmed: false,
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
@@ -41,39 +50,54 @@ const WarehousingListPage = function () {
     }
   );
 
-  // 입고장 리스트
-  const list = useMemo(() => {
-    if (getSheetQuery.data) {
-      return getSheetQuery.data.data;
-    } else {
-      return [];
+  // 입고장 삭제 요청
+  const deleteSheetQuery = useMutation(
+    ["deleteSheet"],
+    warehousingAPI.updateSheet,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: () => {
+        setCurrentPage(1);
+        setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+        notification.open({
+          type: "success",
+          message: t("message.success delete warehousing"),
+        });
+      },
     }
-  }, [getSheetQuery.data]);
+  );
+
+  // 입고장 수정 요청
+  const confirmSheetQuery = useMutation(
+    ["confirmSheet"],
+    warehousingAPI.updateSheet,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: () => {
+        getSheetQuery.refetch();
+        notification.open({
+          type: "success",
+          message: t("message.success confirm warehousing"),
+        });
+      },
+    }
+  );
+
+  // 입고장 리스트
+  const list = useMemo(
+    () => (getSheetQuery.data ? getSheetQuery.data.data : []),
+    [getSheetQuery.data]
+  );
 
   // 전체 데이터 수
-  const totalCount = useMemo(() => {
-    if (getSheetQuery.data) {
-      return getSheetQuery.data.total_count;
-    } else {
-      return 0;
-    }
-  }, [getSheetQuery.data]);
-
-  // 이전 페이지
-  const onPrev = () => {
-    const switch_type = "prev";
-    const last_id = list[0].id;
-    setSearchQuery({ ...searchQuery, switch_type, last_id });
-    setCurrentPage(currentPage - 1);
-  };
-
-  // 다음 페이지
-  const onNext = () => {
-    const switch_type = "next";
-    const last_id = list[list.length - 1].id;
-    setSearchQuery({ ...searchQuery, switch_type, last_id });
-    setCurrentPage(currentPage + 1);
-  };
+  const totalCount = useMemo(
+    () => (getSheetQuery.data ? getSheetQuery.data.total_count : 0),
+    [getSheetQuery.data]
+  );
 
   return (
     <>
@@ -89,18 +113,67 @@ const WarehousingListPage = function () {
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
+      <WarehousingSheetItemModal
+        visible={visibleDetailModal}
+        {...selectedRow}
+        onClose={() => {
+          setVisibleDetailModal(false);
+        }}
+      />
       <WarehousingSearchFilter
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
       <WarehousingSheetList
-        isFetching={getSheetQuery.isLoading}
+        isLoading={
+          getSheetQuery.isLoading ||
+          deleteSheetQuery.isLoading ||
+          confirmSheetQuery.isLoading
+        }
         list={list}
         totalCount={totalCount}
         currentPage={currentPage}
         pageSize={searchQuery.offset}
-        onPrev={onPrev}
-        onNext={onNext}
+        // 이전 페이지
+        onPrev={() => {
+          const switch_type = "prev";
+          const last_id = list[0].id;
+          setSearchQuery({ ...searchQuery, switch_type, last_id });
+          setCurrentPage(currentPage - 1);
+        }}
+        // 다음 페이지
+        onNext={() => {
+          const switch_type = "next";
+          const last_id = list[list.length - 1].id;
+          setSearchQuery({ ...searchQuery, switch_type, last_id });
+          setCurrentPage(currentPage + 1);
+        }}
+        // 행 선택
+        onSelectRow={(row) => {
+          setVisibleDetailModal(true);
+          selectRow({
+            sheet_id: row.id,
+            mall_name: row.mall_name,
+            created_time: moment(row.created_time).format(
+              "YYYY-MM-DD HH:MM:SS"
+            ),
+            is_confirmed: row.is_confirmed,
+          });
+        }}
+        // 삭제
+        onDelete={(row) => {
+          deleteSheetQuery.mutate({
+            sheet_id: row.id,
+            item_obj: { ...row, is_deleted: true },
+          });
+        }}
+        // 마감
+        onConfirm={(row) => {
+          confirmSheetQuery.mutate({
+            sheet_id: row.id,
+            item_obj: { ...row, is_confirmed: true },
+          });
+        }}
       />
     </>
   );

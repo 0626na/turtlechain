@@ -133,7 +133,8 @@ const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
 // 입고장 수정하기
 const updateSheet = async function (data: RequestUpdateSheet) {
   const url = `warehousing/sheet/${data.sheet_id}`;
-  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
+  const updateData = data?.item_obj ? { ...data, ...data.item_obj } : data;
+  const response = await v2Axios.put<ResponseUpdateSheet>(url, updateData);
   return response.data.data;
 };
 

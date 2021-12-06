@@ -2,39 +2,57 @@ import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { Sheet } from "apis/warehousingAPI";
-import { Table, Typography, Tag } from "antd";
+
+import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
+import { Table, Typography, Tag, Button, Popconfirm } from "antd";
+
 import SimplePagination from "components/SimplePagination";
 
 interface Props {
-  isFetching: boolean;
+  isLoading: boolean;
   list: Array<Sheet>;
   totalCount: number;
   currentPage: number;
   pageSize: number;
   onPrev: () => void;
   onNext: () => void;
+  onSelectRow: (row: Sheet) => void;
+  onDelete: (row: Sheet) => void;
+  onConfirm: (row: Sheet) => void;
 }
 
 const WarehousingSheetList = function ({
-  isFetching,
+  isLoading,
   list,
   totalCount,
   currentPage,
   pageSize,
   onPrev,
   onNext,
+  onSelectRow,
+  onDelete,
+  onConfirm,
 }: Props) {
   const { t } = useTranslation();
+
   return (
     <Table
       size="small"
       scroll={{ y: 400 }}
       pagination={false}
-      loading={isFetching}
+      onRow={(record) => {
+        return {
+          onClick: () => {
+            onSelectRow(record);
+          },
+        };
+      }}
+      loading={isLoading}
       dataSource={list}
       rowKey={(record) => record.id}
       columns={[
         {
+          width: 100,
           title: t("progress"),
           dataIndex: "is_confirmed",
           render: (_, record) => {
@@ -51,6 +69,7 @@ const WarehousingSheetList = function ({
           dataIndex: "mall_name",
         },
         {
+          width: 200,
           title: t("warehousing time"),
           dataIndex: "created_time",
           render: (_, record) => {
@@ -76,6 +95,67 @@ const WarehousingSheetList = function ({
             return total_price.toLocaleString();
           },
         },
+        {
+          width: 300,
+          align: "center",
+          title: "",
+          dataIndex: "action",
+          render: (_, record) => {
+            return (
+              <ActionContainer
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Button //
+                  size="small"
+                  onClick={() => {
+                    onSelectRow(record);
+                  }}
+                >
+                  {t("view details")}
+                </Button>
+                {!record.is_confirmed && (
+                  <>
+                    <Popconfirm
+                      title={t("description.really delete")}
+                      okText={t("yes")}
+                      cancelText={t("no")}
+                      onConfirm={() => {
+                        onDelete(record);
+                      }}
+                    >
+                      <Button
+                        icon={<DeleteFilled />}
+                        danger
+                        type="primary"
+                        size="small"
+                      >
+                        {t("warehousing")} {t("delete")}
+                      </Button>
+                    </Popconfirm>
+                    <Popconfirm
+                      title={t("description.really confirmed")}
+                      okText={t("yes")}
+                      cancelText={t("no")}
+                      onConfirm={() => {
+                        onConfirm(record);
+                      }}
+                    >
+                      <Button //
+                        icon={<CheckOutlined />}
+                        type="primary"
+                        size="small"
+                      >
+                        {t("warehousing confirmed")}
+                      </Button>
+                    </Popconfirm>
+                  </>
+                )}
+              </ActionContainer>
+            );
+          },
+        },
       ]}
       title={() => (
         <Typography.Title level={5}>
@@ -88,7 +168,7 @@ const WarehousingSheetList = function ({
             currentPage={currentPage}
             pageSize={pageSize}
             totalCount={totalCount}
-            isLoading={isFetching}
+            isLoading={isLoading}
             onPrev={onPrev}
             onNext={onNext}
           />
@@ -101,6 +181,12 @@ const WarehousingSheetList = function ({
 const Footer = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const ActionContainer = styled.div`
+  & > * + * {
+    margin-left: 10px;
+  }
 `;
 
 export default WarehousingSheetList;
