@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateSheetItem } from "apis/warehousingAPI";
 
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Form, Input, Button, InputNumber, Card } from "antd";
 
 interface Props {
@@ -11,35 +12,32 @@ interface Props {
 
 const WarehousingCreateForm = function ({ onCreate }: Props) {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
+  const [tempId, setTempId] = useState(1); // 임시 아이디
+  const [form] = Form.useForm<CreateSheetItem>();
+
+  // 임시 입고 추가
+  const onCreateTempWarehousing = () => {
+    setTempId(tempId + 1);
+    form.setFieldsValue({
+      store_name: `${t("wholesaler name")}(${tempId})`,
+      address: `${t("wholesaler address")}(${tempId})`,
+      product_code: `${t("product code")}(${tempId})`,
+      product_name: `${t("product name")}(${tempId})`,
+      option: `${t("option")}(${tempId})`,
+      price: tempId * 1000,
+    });
+  };
 
   const onFinish = () => {
-    const {
-      store_name,
-      address,
-      product_code,
-      product_name,
-      option,
-      count,
-      price,
-    } = form.getFieldsValue();
-
     onCreate({
+      ...form.getFieldsValue(),
       mall_id: -1,
       mall_name: "",
       store_id: -1,
       store_code: -1,
-      store_name,
-      address,
       product_id: -1,
-      product_code,
-      product_name,
-      option,
-      count,
-      price,
       memo: "",
     });
-
     form.resetFields();
   };
 
@@ -50,63 +48,72 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
       onFinish={onFinish}
     >
       <Card style={{ backgroundColor: "#fbfbfb" }}>
+        <Form.Item>
+          <Button //
+            type="primary"
+            icon={<SearchOutlined />}
+            onClick={onCreateTempWarehousing}
+          >
+            {t("search product")}
+          </Button>
+        </Form.Item>
         <ItemGroup>
           <Form.Item //
-            label={t("wholesaler name")}
             name="store_name"
+            label={t("wholesaler name")}
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
           <Form.Item //
-            label={t("wholesaler address")}
             name="address"
+            label={t("wholesaler address")}
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
-        </ItemGroup>
-        <ItemGroup>
           <Form.Item //
-            label={t("product code")}
             name="product_code"
+            label={t("product code")}
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
           <Form.Item //
-            label={t("product name")}
             name="product_name"
+            label={t("product name")}
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
           <Form.Item //
-            label={t("option")}
             name="option"
+            label={t("option")}
             rules={[{ required: true }]}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item //
-            label={t("warehousing quantity")}
-            name="count"
-            rules={[{ required: true }]}
-          >
-            <InputNumber style={{ width: 200 }} />
+            <Input readOnly />
           </Form.Item>
           <Form.Item //
             label={t("product price")}
             name="price"
             rules={[{ required: true }]}
           >
+            <Input readOnly />
+          </Form.Item>
+        </ItemGroup>
+        <ItemGroup>
+          <Form.Item //
+            name="count"
+            label={t("warehousing quantity")}
+            rules={[{ required: true }]}
+          >
             <InputNumber style={{ width: 200 }} />
           </Form.Item>
           <Form.Item label=" ">
             <Button //
-              icon={<PlusOutlined />}
               type="primary"
               htmlType="submit"
+              icon={<PlusOutlined />}
             >
               {t("create")}
             </Button>
