@@ -16,18 +16,13 @@ import StoreSelect from "components/StoreSelect";
 import WarehousingCreateForm from "./WarehousingCreateForm";
 import WarehousingPreviewList from "./WarehousingPreviewList";
 
-interface SheetItem extends CreateSheetItem {
-  temp_id: number;
-}
-
 const WarehousingCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("warehousing create")}`;
 
   const [mall_id, setMallId] = useState(-1);
   const [mall_name, setMallName] = useState("");
-  const [temp_id, setTempId] = useState(1);
-  const [list, setList] = useState<Array<SheetItem>>([]);
+  const [list, setList] = useState<Array<CreateSheetItem>>([]);
 
   // 입고장 생성 절차
   // 1. 입고장 추가하기 요청
@@ -65,7 +60,6 @@ const WarehousingCreatePage = function () {
       onSuccess: () => {
         setMallId(-1);
         setMallName("");
-        setTempId(1);
         setList([]);
         notification.open({
           type: "success",
@@ -77,8 +71,7 @@ const WarehousingCreatePage = function () {
 
   // 입고장 아이템 추가
   const onCreate = (value: CreateSheetItem) => {
-    setList([...list, { ...value, temp_id }]);
-    setTempId(temp_id + 1);
+    setList([...list, { ...value }]);
   };
 
   // 입고장 등록
