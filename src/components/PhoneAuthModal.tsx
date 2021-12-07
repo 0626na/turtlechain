@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { phonePattern } from "utils/pattern";
+import { emailPattern } from "utils/pattern";
 import moment from "moment";
 // async
 import { AxiosError } from "axios";
@@ -66,7 +66,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
   // 인증코드 생성
   const handleCreate = () => {
     const { phone } = form.getFieldsValue();
-    if (phonePattern.test(phone)) {
+    if (emailPattern.test(phone)) {
       createPhoneOTPQuery.mutate({ phone });
     }
   };
@@ -123,7 +123,7 @@ const PhoneAuthModal = function ({ visible, onClose, onSuccess }: Props) {
           label={t("phone")}
           rules={[
             {
-              pattern: phonePattern,
+              pattern: emailPattern,
               message: t("message.error phone validation"),
             },
           ]}

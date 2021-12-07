@@ -1,5 +1,5 @@
 // 이메일 패턴
-export const phonePattern =
+export const emailPattern =
   /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
 
 // 숫자 패턴
