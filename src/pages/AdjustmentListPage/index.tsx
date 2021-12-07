@@ -1,7 +1,10 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
+
+import AdjustmentSearchFilter from "./AdjustmentSearchFilter";
 
 const AdjustmentListPage = function () {
   const { t } = useTranslation();
@@ -20,6 +23,7 @@ const AdjustmentListPage = function () {
         title={t("adjustment list")}
         breadcrumbList={[t("adjustment management"), t("adjustment list")]}
       />
+      <AdjustmentSearchFilter />
     </>
   );
 };
