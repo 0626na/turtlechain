@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+import PageHeader from "components/PageHeader";
+import SvgIcon from "components/SvgIcon";
 
 const AdjustmentListPage = function () {
   const { t } = useTranslation();
@@ -7,6 +9,17 @@ const AdjustmentListPage = function () {
   return (
     <>
       <Helmet title={title} />
+      <PageHeader
+        icon={
+          <SvgIcon
+            filled={false}
+            src={`${process.env.PUBLIC_URL}/assets/svg/check-list.svg`}
+            alt="adjustment"
+          />
+        }
+        title={t("adjustment list")}
+        breadcrumbList={[t("adjustment management"), t("adjustment list")]}
+      />
     </>
   );
 };
