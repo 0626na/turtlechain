@@ -138,7 +138,7 @@ const AdjustmentList = function ({}: Props) {
       title={() => (
         <b>
           {`${t("adjustment")} ${t("list")}`}
-          {MOCK_LIST.length.toLocaleString()}
+          {`(${MOCK_LIST.length.toLocaleString()})`}
         </b>
       )}
       footer={() => (

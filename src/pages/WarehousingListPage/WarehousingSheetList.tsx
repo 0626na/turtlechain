@@ -2,10 +2,8 @@ import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { Sheet } from "apis/warehousingAPI";
-
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
-import { Table, Typography, Tag, Button, Popconfirm } from "antd";
-
+import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
 
 interface Props {
@@ -38,7 +36,7 @@ const WarehousingSheetList = function ({
   return (
     <Table
       size="small"
-      scroll={{ y: 400 }}
+      scroll={{ x: "auto", y: 400 }}
       pagination={false}
       onRow={(record) => {
         return {
@@ -53,14 +51,13 @@ const WarehousingSheetList = function ({
       columns={[
         {
           width: 100,
+          align: "center",
           title: t("progress"),
           dataIndex: "is_confirmed",
           render: (_, record) => {
             const { is_confirmed } = record;
             const color = is_confirmed ? "green" : "red";
-            const text = is_confirmed
-              ? t("warehousing confirmed")
-              : t("warehousing unconfirmed");
+            const text = is_confirmed ? t("confirmed") : t("waiting");
             return <Tag color={color}>{text}</Tag>;
           },
         },
@@ -69,34 +66,27 @@ const WarehousingSheetList = function ({
           dataIndex: "mall_name",
         },
         {
-          width: 200,
-          title: t("warehousing time"),
+          width: 120,
+          align: "center",
+          title: t("warehousing date"),
           dataIndex: "created_time",
-          render: (_, record) => {
-            const { created_time } = record;
-            return moment(created_time).format("YYYY-MM-DD HH:MM:SS");
-          },
+          render: (_, record) =>
+            moment(record.created_time).format("YYYY-MM-DD"),
         },
         {
-          title: t("warehousing total quantity"),
+          align: "right",
+          title: t("warehousing total count"),
           dataIndex: "total_item_count",
-          align: "right",
-          render: (_, record) => {
-            const { total_item_count } = record;
-            return total_item_count.toLocaleString();
-          },
+          render: (_, record) => record.total_item_count.toLocaleString(),
         },
         {
-          title: t("warehousing total amount"),
+          align: "right",
+          title: t("total supply price"),
           dataIndex: "total_price",
-          align: "right",
-          render: (_, record) => {
-            const { total_price } = record;
-            return total_price.toLocaleString();
-          },
+          render: (_, record) => record.total_price.toLocaleString(),
         },
         {
-          width: 350,
+          width: 300,
           align: "center",
           title: "",
           dataIndex: "action",
@@ -133,7 +123,7 @@ const WarehousingSheetList = function ({
                         size="small"
                         shape="round"
                       >
-                        {t("warehousing")} {t("delete")}
+                        {t("delete")}
                       </Button>
                     </Popconfirm>
                     <Popconfirm
@@ -150,7 +140,7 @@ const WarehousingSheetList = function ({
                         size="small"
                         shape="round"
                       >
-                        {t("warehousing confirmed")}
+                        {t("confirmed")}
                       </Button>
                     </Popconfirm>
                   </>
@@ -161,9 +151,10 @@ const WarehousingSheetList = function ({
         },
       ]}
       title={() => (
-        <Typography.Title level={5}>
-          {t("warehousing")} {t("list")} {`(${totalCount.toLocaleString()})`}
-        </Typography.Title>
+        <b>
+          {`${t("warehousing")} ${t("list")}`}
+          {`(${totalCount.toLocaleString()})`}
+        </b>
       )}
       footer={() => (
         <Footer>

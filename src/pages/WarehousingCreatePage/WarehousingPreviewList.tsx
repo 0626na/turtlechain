@@ -153,7 +153,7 @@ const WarehousingPreviewList = function ({
           {
             align: "right",
             title: t("supply price"),
-            dataIndex: "price",
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             width: 100,

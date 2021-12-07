@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import warehousingAPI, { SheetItem } from "apis/warehousingAPI";
-
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -21,8 +19,6 @@ import {
   Statistic,
   Card,
 } from "antd";
-
-type SearchType = "store_name" | "address" | "product_code" | "product_name";
 
 interface Props {
   visible: boolean;
@@ -46,8 +42,28 @@ const WarehousingSheetItemModal = function ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
+  type SearchType = "store_name" | "address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("store_name");
   const [searchText, setSearchText] = useState("");
+  const search_options = [
+    {
+      value: "store_name",
+      label: t("client name"),
+    },
+    {
+      value: "address",
+      label: t("client address"),
+    },
+    {
+      value: "product_code",
+      label: t("product code"),
+    },
+    {
+      value: "product_name",
+      label: t("product name"),
+    },
+  ];
+
   const [list, setList] = useState<Array<SheetItem>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 
@@ -98,7 +114,7 @@ const WarehousingSheetItemModal = function ({
     [list]
   );
 
-  // 입고 금액 합계
+  // 공급가 합계
   const totalItemPrice = useMemo(
     () =>
       list.reduce((acc, cur) => {
@@ -191,27 +207,24 @@ const WarehousingSheetItemModal = function ({
         <StatisticContainer>
           <Card>
             <Statistic //
-              title={t("warehousing time")}
+              title={t("warehousing date")}
               value={created_time}
             />
           </Card>
           <Card>
             <Statistic //
-              title={t("warehousing total quantity")}
+              title={t("warehousing total count")}
               value={totalItemCount}
             />
           </Card>
           <Card>
             <Statistic //
-              title={t("warehousing total amount")}
+              title={t("total supply price")}
               value={totalItemPrice}
             />
           </Card>
         </StatisticContainer>
-        <Form //
-          style={{ margin: "20px 0" }}
-          layout="inline"
-        >
+        <Form layout="inline">
           <Form.Item>
             <Select
               style={{ width: 150 }}
@@ -220,18 +233,11 @@ const WarehousingSheetItemModal = function ({
                 setSearchType(value);
               }}
             >
-              <Select.Option value="store_name">
-                {t("wholesaler name")}
-              </Select.Option>
-              <Select.Option value="address">
-                {t("wholesaler address")}
-              </Select.Option>
-              <Select.Option value="product_code">
-                {t("product code")}
-              </Select.Option>
-              <Select.Option value="product_name">
-                {t("product name")}
-              </Select.Option>
+              {search_options.map((item) => (
+                <Select.Option key={item.value} value={item.value}>
+                  {item.label}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item>
@@ -252,11 +258,11 @@ const WarehousingSheetItemModal = function ({
           rowKey={(record) => record.id}
           columns={[
             {
-              title: t("wholesaler name"),
+              title: t("client name"),
               dataIndex: "store_name",
             },
             {
-              title: t("wholesaler address"),
+              title: t("client address"),
               dataIndex: "address",
             },
             {
@@ -273,61 +279,52 @@ const WarehousingSheetItemModal = function ({
             },
             {
               align: "right",
-              title: t("warehousing quantity"),
+              title: t("warehousing count"),
               dataIndex: "count",
-              render: (_, record) => {
-                return (
-                  <InputNumber //
-                    size="small"
-                    value={record.count}
-                    onChange={(value) => {
-                      setIsUpdated(true);
-                      setList(
-                        list.map((item) =>
-                          item.id === record.id
-                            ? { ...item, count: value }
-                            : item
-                        )
-                      );
-                    }}
-                  />
-                );
-              },
+              render: (_, record) => (
+                <InputNumber //
+                  size="small"
+                  defaultValue={record.count}
+                  onChange={(value) => {
+                    const newList = list.map((item) =>
+                      item.product_code === record.product_code
+                        ? { ...item, count: value }
+                        : item
+                    );
+                    setList(newList);
+                    setIsUpdated(true);
+                  }}
+                />
+              ),
             },
             {
               align: "right",
-              title: t("product price"),
-              dataIndex: "price",
+              title: t("supply price"),
+              render: (_, record) => record.price.toLocaleString(),
             },
             {
+              width: 100,
+              align: "center",
               title: "",
               dataIndex: "action",
-              align: "center",
-              render: (_, record) => {
-                if (!is_confirmed) {
-                  return (
-                    <Button //
-                      danger
-                      icon={<DeleteFilled />}
-                      size="small"
-                      shape="round"
-                      type="primary"
-                      onClick={() => {
-                        setIsUpdated(true);
-                        setList(
-                          list.map((item) =>
-                            item.id === record.id
-                              ? { ...item, is_deleted: true }
-                              : item
-                          )
-                        );
-                      }}
-                    >
-                      {t("delete")}
-                    </Button>
-                  );
-                }
-              },
+              render: (_, record) => (
+                <Button //
+                  danger
+                  size="small"
+                  shape="round"
+                  type="primary"
+                  icon={<DeleteFilled />}
+                  onClick={() => {
+                    const newList = list.filter(
+                      (item) => item.product_code !== record.product_code
+                    );
+                    setList(newList);
+                    setIsUpdated(true);
+                  }}
+                >
+                  {t("delete")}
+                </Button>
+              ),
             },
           ]}
         />
@@ -339,6 +336,9 @@ const WarehousingSheetItemModal = function ({
 const ModalInner = styled.div`
   height: 70vh;
   overflow: auto;
+  & > * + * {
+    margin-top: 20px;
+  }
 `;
 
 const StatisticContainer = styled.div`

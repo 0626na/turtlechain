@@ -1,7 +1,6 @@
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { RequestGetSheet } from "apis/warehousingAPI";
-
 import { Form, DatePicker, Select } from "antd";
 import StoreSelect from "components/StoreSelect";
 
@@ -20,14 +19,14 @@ const WarehousingSearchFilter = function ({
       <Form.Item label={t("mall")}>
         <StoreSelect
           emptyValueText={t("all")}
-          width={250}
+          width={200}
           value={searchQuery.mall_id}
           onChange={(mall_id) => {
             setSearchQuery({ ...searchQuery, mall_id });
           }}
         />
       </Form.Item>
-      <Form.Item label={t("warehousing time")}>
+      <Form.Item label={t("warehousing date")}>
         <DatePicker.RangePicker
           allowClear={false}
           value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
@@ -47,10 +46,8 @@ const WarehousingSearchFilter = function ({
           }}
         >
           <Select.Option value="">{t("all")}</Select.Option>
-          <Select.Option value={0}>
-            {t("warehousing unconfirmed")}
-          </Select.Option>
-          <Select.Option value={1}>{t("warehousing confirmed")}</Select.Option>
+          <Select.Option value={0}>{t("waiting")}</Select.Option>
+          <Select.Option value={1}>{t("confirmed")}</Select.Option>
         </Select>
       </Form.Item>
     </Form>
