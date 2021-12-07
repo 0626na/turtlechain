@@ -2,48 +2,44 @@ import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
-import { Table, Typography, Tag, Button, Popconfirm } from "antd";
+import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
 
-interface Props {
-  isLoading: boolean;
-  list: any[];
-  totalCount: number;
-  currentPage: number;
-  pageSize: number;
-  onPrev: () => void;
-  onNext: () => void;
-  onSelectRow: () => void;
-  onDelete: () => void;
-  onConfirm: () => void;
-}
+// MOCK DATA
+const MOCK_LIST = [
+  {
+    is_confirmed: false,
+    mall_name: "스타일날까",
+    created_time: new Date(),
+    adjustment_type: "주문",
+    client_name: "세기모자",
+    account_info: "기업 01050221059 테스트",
+    supply_price: 20000,
+  },
+  {
+    is_confirmed: true,
+    mall_name: "스타일날까",
+    created_time: new Date(),
+    adjustment_type: "미송",
+    client_name: "세기모자",
+    account_info: "기업 01050221059 테스트",
+    supply_price: 30000,
+  },
+];
 
-const AdjustmentList = function ({
-  isLoading,
-  list,
-  totalCount,
-  currentPage,
-  pageSize,
-  onPrev,
-  onNext,
-  onSelectRow,
-  onDelete,
-  onConfirm,
-}: Props) {
+interface Props {}
+
+const AdjustmentList = function ({}: Props) {
   const { t } = useTranslation();
-
   return (
     <Table
       size="small"
       scroll={{ x: "auto", y: 400 }}
       pagination={false}
-      // onRow={() => {}}
-      loading={isLoading}
-      dataSource={list}
-      // rowKey={(record) => record.id}
+      dataSource={MOCK_LIST}
       columns={[
         {
-          width: 80,
+          width: 100,
           align: "center",
           title: t("progress"),
           dataIndex: "is_confirmed",
@@ -59,37 +55,35 @@ const AdjustmentList = function ({
           align: "center",
           title: t("adjustment date"),
           dataIndex: "created_time",
-          render: (_, record) => {
-            const { created_time } = record;
-            return moment(created_time).format("YYYY-MM-DD");
-          },
+          render: (_, record) =>
+            moment(record.created_time).format("YYYY-MM-DD"),
         },
         {
           title: t("mall name"),
           dataIndex: "mall_name",
         },
         {
-          width: 80,
-          align: "center",
-          title: t("adjustment type"),
-          dataIndex: "adjustment_type",
-        },
-        {
-          title: t("wholesaler name"),
-          dataIndex: "store_name",
+          title: t("client name"),
+          dataIndex: "client_name",
         },
         {
           title: t("account info"),
           dataIndex: "account_info",
         },
         {
+          width: 100,
+          align: "center",
+          title: t("adjustment type"),
+          dataIndex: "adjustment_type",
+        },
+        {
           align: "right",
           title: t("supply price"),
           dataIndex: "price",
-          render: (_, record) => record.price.toLocaleString(),
+          render: (_, record) => record.supply_price.toLocaleString(),
         },
         {
-          width: 280,
+          width: 300,
           align: "center",
           title: "",
           dataIndex: "action",
@@ -109,7 +103,6 @@ const AdjustmentList = function ({
                       title={t("description.really delete")}
                       okText={t("yes")}
                       cancelText={t("no")}
-                      onConfirm={() => {}}
                     >
                       <Button
                         icon={<DeleteFilled />}
@@ -125,7 +118,6 @@ const AdjustmentList = function ({
                       title={t("description.really confirmed")}
                       okText={t("yes")}
                       cancelText={t("no")}
-                      onConfirm={() => {}}
                     >
                       <Button //
                         icon={<CheckOutlined />}
@@ -144,20 +136,14 @@ const AdjustmentList = function ({
         },
       ]}
       title={() => (
-        <Typography.Title level={5}>
-          {t("adjustment")} {t("list")} {`(${totalCount.toLocaleString()})`}
-        </Typography.Title>
+        <b>
+          {`${t("adjustment")} ${t("list")}`}
+          {MOCK_LIST.length.toLocaleString()}
+        </b>
       )}
       footer={() => (
         <Footer>
-          <SimplePagination
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            isLoading={isLoading}
-            onPrev={onPrev}
-            onNext={onNext}
-          />
+          <SimplePagination />
         </Footer>
       )}
     />
