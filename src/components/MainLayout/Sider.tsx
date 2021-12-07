@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
-// antd
 import { Layout, Menu } from "antd";
-// components
 import SvgIcon from "components/SvgIcon";
 
 type MenuType = Array<{
@@ -54,18 +52,39 @@ const Sider = function () {
         <div>
           <SvgIcon
             src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing"
+            alt="warehousing management"
           />
         </div>
       ),
       submenu: [
         {
+          title: t("warehousing create"),
+          pathname: "/warehousing/create",
+        },
+        {
           title: t("warehousing list"),
           pathname: "/warehousing/list",
         },
+      ],
+    },
+    {
+      title: t("adjustment management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/check-list.svg`}
+            alt="adjustment management"
+          />
+        </div>
+      ),
+      submenu: [
         {
-          title: t("warehousing create"),
-          pathname: "/warehousing/create",
+          title: t("adjustment create"),
+          pathname: "/adjustment/create",
+        },
+        {
+          title: t("adjustment list"),
+          pathname: "/adjustment/list",
         },
       ],
     },
