@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-
 import { Form, DatePicker, Select } from "antd";
 import StoreSelect from "components/StoreSelect";
 
@@ -10,7 +9,7 @@ const AdjustmentSearchFilter = function ({}: Props) {
   return (
     <Form layout="inline">
       <Form.Item label={t("mall")}>
-        <StoreSelect emptyValueText={t("all")} width={250} />
+        <StoreSelect emptyValueText={t("all")} width={200} />
       </Form.Item>
       <Form.Item label={t("adjustment date")}>
         <DatePicker.RangePicker allowClear={false} />
@@ -18,9 +17,12 @@ const AdjustmentSearchFilter = function ({}: Props) {
       <Form.Item label={t("progress")}>
         <Select style={{ width: 100 }}>
           <Select.Option value="">{t("all")}</Select.Option>
-          <Select.Option value={0}>{t("adjustment unconfirmed")}</Select.Option>
-          <Select.Option value={1}>{t("adjustment confirmed")}</Select.Option>
+          <Select.Option value={0}>{t("waiting")}</Select.Option>
+          <Select.Option value={1}>{t("confirmed")}</Select.Option>
         </Select>
+      </Form.Item>
+      <Form.Item label={t("adjustment type")}>
+        <Select style={{ width: 100 }}></Select>
       </Form.Item>
     </Form>
   );
