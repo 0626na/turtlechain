@@ -21,7 +21,7 @@ const MOCK_LIST = [
   },
 ];
 
-const MOCK_SUPPLY_PRICE = MOCK_LIST.reduce(
+const MOCK_TOTAL_SUPPLY_PRICE = MOCK_LIST.reduce(
   (acc, cur) => acc + cur.supply_price,
   0
 );
@@ -83,7 +83,7 @@ const WarehousingSheetList = function ({}: Props) {
         <Footer>
           <b>
             {`${t("total supply price")} : `}
-            {MOCK_SUPPLY_PRICE.toLocaleString()}
+            {MOCK_TOTAL_SUPPLY_PRICE.toLocaleString()}
           </b>
           <Popconfirm
             title={t("description.really register")}
