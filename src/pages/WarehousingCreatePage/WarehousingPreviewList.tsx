@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateSheetItem } from "apis/warehousingAPI";
-
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
 import {
   Button,
@@ -14,8 +13,6 @@ import {
   Select,
   Input,
 } from "antd";
-
-type SearchType = "store_name" | "address" | "product_code" | "product_name";
 
 interface Props {
   isLoading: boolean;
@@ -32,8 +29,27 @@ const WarehousingPreviewList = function ({
 }: Props) {
   const { t } = useTranslation();
 
+  type SearchType = "store_name" | "address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("store_name");
   const [searchText, setSearchText] = useState("");
+  const search_options = [
+    {
+      value: "store_name",
+      label: t("client name"),
+    },
+    {
+      value: "address",
+      label: t("client address"),
+    },
+    {
+      value: "product_code",
+      label: t("product code"),
+    },
+    {
+      value: "product_name",
+      label: t("product name"),
+    },
+  ];
 
   // 필터된 리스트
   const filteredList = useMemo(
@@ -50,7 +66,7 @@ const WarehousingPreviewList = function ({
     [list]
   );
 
-  // 입고 금액 합계
+  // 공급가 합계
   const totalItemPrice = useMemo(
     () => list.reduce((acc, cur) => acc + cur.count * cur.price, 0),
     [list]
@@ -71,18 +87,11 @@ const WarehousingPreviewList = function ({
               setSearchType(value);
             }}
           >
-            <Select.Option value="store_name">
-              {t("wholesaler name")}
-            </Select.Option>
-            <Select.Option value="address">
-              {t("wholesaler address")}
-            </Select.Option>
-            <Select.Option value="product_code">
-              {t("product code")}
-            </Select.Option>
-            <Select.Option value="product_name">
-              {t("product name")}
-            </Select.Option>
+            {search_options.map((item) => (
+              <Select.Option key={item.value} value={item.value}>
+                {item.label}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item>
@@ -97,17 +106,17 @@ const WarehousingPreviewList = function ({
       </Form>
       <Table
         size="small"
-        scroll={{ y: 400 }}
+        scroll={{ x: "auto", y: 400 }}
         pagination={false}
         dataSource={filteredList}
         rowKey={(record) => record.product_code}
         columns={[
           {
-            title: t("wholesaler name"),
+            title: t("client name"),
             dataIndex: "store_name",
           },
           {
-            title: t("wholesaler address"),
+            title: t("client address"),
             dataIndex: "address",
           },
           {
@@ -124,69 +133,64 @@ const WarehousingPreviewList = function ({
           },
           {
             align: "right",
-            title: t("warehousing quantity"),
+            title: t("warehousing count"),
             dataIndex: "count",
-            render: (_, record) => {
-              return (
-                <InputNumber //
-                  size="small"
-                  defaultValue={record.count}
-                  onChange={(value) => {
-                    const newList = list.map((item) =>
-                      item.product_code === record.product_code
-                        ? { ...item, count: value }
-                        : item
-                    );
-                    setList(newList);
-                  }}
-                />
-              );
-            },
+            render: (_, record) => (
+              <InputNumber //
+                size="small"
+                defaultValue={record.count}
+                onChange={(value) => {
+                  const newList = list.map((item) =>
+                    item.product_code === record.product_code
+                      ? { ...item, count: value }
+                      : item
+                  );
+                  setList(newList);
+                }}
+              />
+            ),
           },
           {
             align: "right",
-            title: t("product price"),
+            title: t("supply price"),
             dataIndex: "price",
           },
           {
+            width: 100,
             align: "center",
             title: "",
             dataIndex: "action",
-            render: (_, record) => {
-              return (
-                <Button //
-                  danger
-                  icon={<DeleteFilled />}
-                  size="small"
-                  shape="round"
-                  type="primary"
-                  onClick={() => {
-                    const newList = list.filter(
-                      (item) => item.product_code !== record.product_code
-                    );
-                    setList(newList);
-                  }}
-                >
-                  {t("delete")}
-                </Button>
-              );
-            },
+            render: (_, record) => (
+              <Button //
+                danger
+                size="small"
+                shape="round"
+                type="primary"
+                icon={<DeleteFilled />}
+                onClick={() => {
+                  const newList = list.filter(
+                    (item) => item.product_code !== record.product_code
+                  );
+                  setList(newList);
+                }}
+              >
+                {t("delete")}
+              </Button>
+            ),
           },
         ]}
         footer={() => (
-          <BottomContainer>
-            <StatisticContainer>
-              <Typography.Text strong>
-                {`${t(
-                  "warehousing total quantity"
-                )} : ${totalItemCount.toLocaleString()}`}
-              </Typography.Text>
-              <Typography.Text strong>
-                {`${t(
-                  "warehousing total amount"
-                )} : ${totalItemPrice.toLocaleString()}`}
-              </Typography.Text>
-            </StatisticContainer>
+          <Footer>
+            <TotalContainer>
+              <b>
+                {`${t("warehousing total count")} : `}
+                {totalItemCount.toLocaleString()}
+              </b>
+              <b>
+                {`${t("total supply price")} : `}
+                {totalItemPrice.toLocaleString()}
+              </b>
+            </TotalContainer>
             <Popconfirm
               disabled={!list.length || isLoading}
               title={t("description.really register")}
@@ -207,7 +211,7 @@ const WarehousingPreviewList = function ({
                 {t("warehousing create")}
               </Button>
             </Popconfirm>
-          </BottomContainer>
+          </Footer>
         )}
       />
     </TableContainer>
@@ -223,16 +227,16 @@ const TableContainer = styled.div`
   }
 `;
 
-const BottomContainer = styled.div`
+const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const StatisticContainer = styled.div`
+const TotalContainer = styled.div`
   display: flex;
   & > * + * {
-    margin-left: 10px;
+    margin-left: 20px;
   }
 `;
 

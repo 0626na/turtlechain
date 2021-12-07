@@ -2,17 +2,13 @@ import moment from "moment";
 import { Helmet } from "react-helmet";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import warehousingAPI, { CreateSheetItem } from "apis/warehousingAPI";
-
-import { message, notification } from "antd";
-
+import { Form, message, notification } from "antd";
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
 import StoreSelect from "components/StoreSelect";
-
 import WarehousingCreateForm from "./WarehousingCreateForm";
 import WarehousingPreviewList from "./WarehousingPreviewList";
 
@@ -101,7 +97,7 @@ const WarehousingCreatePage = function () {
         title={t("warehousing create")}
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
       />
-      <div>
+      <Form>
         <StoreSelect
           width={200}
           emptyValueText={`${t("mall")} ${t("select")}`}
@@ -111,7 +107,7 @@ const WarehousingCreatePage = function () {
             setMallName(label);
           }}
         />
-      </div>
+      </Form>
       <WarehousingCreateForm onCreate={onCreate} />
       <WarehousingPreviewList
         isLoading={createSheetQuery.isLoading || createSheetItemQuery.isLoading}

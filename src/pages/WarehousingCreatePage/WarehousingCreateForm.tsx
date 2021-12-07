@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateSheetItem } from "apis/warehousingAPI";
-
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Form, Input, Button, InputNumber, Card } from "antd";
 
@@ -19,8 +18,8 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
   const onCreateTempWarehousing = () => {
     setTempId(tempId + 1);
     form.setFieldsValue({
-      store_name: `${t("wholesaler name")}(${tempId})`,
-      address: `${t("wholesaler address")}(${tempId})`,
+      store_name: `${t("client name")}(${tempId})`,
+      address: `${t("client address")}(${tempId})`,
       product_code: `${t("product code")}(${tempId})`,
       product_name: `${t("product name")}(${tempId})`,
       option: `${t("option")}(${tempId})`,
@@ -60,14 +59,14 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
         <ItemGroup>
           <Form.Item //
             name="store_name"
-            label={t("wholesaler name")}
+            label={t("client name")}
             rules={[{ required: true }]}
           >
             <Input readOnly />
           </Form.Item>
           <Form.Item //
             name="address"
-            label={t("wholesaler address")}
+            label={t("client address")}
             rules={[{ required: true }]}
           >
             <Input readOnly />
@@ -94,7 +93,7 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
             <Input readOnly />
           </Form.Item>
           <Form.Item //
-            label={t("product price")}
+            label={t("supply price")}
             name="price"
             rules={[{ required: true }]}
           >
@@ -104,7 +103,7 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
         <ItemGroup>
           <Form.Item //
             name="count"
-            label={t("warehousing quantity")}
+            label={t("warehousing count")}
             rules={[{ required: true }]}
           >
             <InputNumber style={{ width: 200 }} />
