@@ -15,7 +15,7 @@ const AdjustmentListPage = function () {
         icon={
           <SvgIcon
             filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/check-list.svg`}
+            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
             alt="adjustment"
           />
         }

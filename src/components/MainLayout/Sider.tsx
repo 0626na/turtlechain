@@ -47,6 +47,30 @@ const Sider = function () {
       ),
     },
     {
+      title: t("order management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
+            alt="order"
+          />
+        </div>
+      ),
+      submenu: [],
+    },
+    {
+      title: t("samle return management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/samle-return.svg`}
+            alt="samle return"
+          />
+        </div>
+      ),
+      submenu: [],
+    },
+    {
       title: t("warehousing management"),
       icon: (
         <div>
@@ -72,7 +96,7 @@ const Sider = function () {
       icon: (
         <div>
           <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/check-list.svg`}
+            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
             alt="adjustment management"
           />
         </div>
@@ -87,6 +111,30 @@ const Sider = function () {
           pathname: "/adjustment/list",
         },
       ],
+    },
+    {
+      title: t("client management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`}
+            alt="refund"
+          />
+        </div>
+      ),
+      submenu: [],
+    },
+    {
+      title: t("refund management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/refund.svg`}
+            alt="refund"
+          />
+        </div>
+      ),
+      submenu: [],
     },
     {
       title: t("setting"),
