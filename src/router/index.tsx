@@ -24,13 +24,19 @@ const Router = function () {
   } else {
     return (
       <BrowserRouter>
-        <Suspense fallback="로딩중...">
-          {storeToken ? (
-            <MainLayout content={<MainRouter />} />
-          ) : (
+        {storeToken ? (
+          <MainLayout
+            content={
+              <Suspense fallback="loading">
+                <MainRouter />
+              </Suspense>
+            }
+          />
+        ) : (
+          <Suspense fallback="loading">
             <LoginRouter />
-          )}
-        </Suspense>
+          </Suspense>
+        )}
       </BrowserRouter>
     );
   }
