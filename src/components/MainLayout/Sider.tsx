@@ -63,7 +63,7 @@ const Sider = function () {
       icon: (
         <div>
           <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/samle-return.svg`}
+            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
             alt="samle return"
           />
         </div>
@@ -113,23 +113,35 @@ const Sider = function () {
       ],
     },
     {
-      title: t("client management"),
+      title: t("settlement management"),
       icon: (
         <div>
           <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`}
-            alt="refund"
+            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
+            alt="settlement"
           />
         </div>
       ),
       submenu: [],
     },
     {
-      title: t("refund management"),
+      title: t("product management"),
       icon: (
         <div>
           <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/refund.svg`}
+            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
+            alt="product"
+          />
+        </div>
+      ),
+      submenu: [],
+    },
+    {
+      title: t("client management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`}
             alt="refund"
           />
         </div>
