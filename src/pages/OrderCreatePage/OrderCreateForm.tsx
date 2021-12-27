@@ -5,11 +5,9 @@ import { useTranslation } from "react-i18next";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Form, Input, Button, InputNumber, Card } from "antd";
 
-interface Props {
-  
-}
+interface Props {}
 
-const OrderCreateForm = function ({} : Props) {
+const OrderCreateForm = function ({}: Props) {
   const { t } = useTranslation();
   const [tempId, setTempId] = useState(1); // 임시 아이디
   const [form] = Form.useForm<any>(); // type 정의 수정 필요
@@ -20,11 +18,15 @@ const OrderCreateForm = function ({} : Props) {
     form.setFieldsValue({
       store_name: `${t("client name")}(${tempId})`,
       address: `${t("client address")}(${tempId})`,
+      phone: `${t("phone")}(${tempId})`,
       product_code: `${t("product code")}(${tempId})`,
-      product_name: `${t("product name")}(${tempId})`,
+      //product_name: `${t("product name")}(${tempId})`,
       option: `${t("option")}(${tempId})`,
       price: tempId * 1000,
+      count: tempId * 10,
+      memo: `${t("memo")}(${tempId})`,
     });
+    console.log(form);
   };
 
   return (
@@ -42,6 +44,7 @@ const OrderCreateForm = function ({} : Props) {
             {t("search product")}
           </Button>
         </Form.Item>
+
         <ItemGroup>
           <Form.Item // 거래처명 Input
             name="store_name"
@@ -65,6 +68,7 @@ const OrderCreateForm = function ({} : Props) {
             <Input readOnly />
           </Form.Item>
         </ItemGroup>
+
         <ItemGroup>
           <Form.Item // 상품 바코드 Input
             name="product_code"
@@ -95,6 +99,7 @@ const OrderCreateForm = function ({} : Props) {
             <InputNumber style={{ width: 200 }} />
           </Form.Item>
         </ItemGroup>
+
         <ItemGroup>
           {/* TODO : 주문종류 Select Box 추가 */}
           <Form.Item // 메모 Input
