@@ -56,7 +56,16 @@ const Sider = function () {
           />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("order create"),
+          pathname: "/order/create",
+        },
+        {
+          title: t("order list"),
+          pathname: "/order/list",
+        }
+      ],
     },
     {
       title: t("samle return management"),

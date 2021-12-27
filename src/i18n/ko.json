@@ -59,6 +59,9 @@
   "my account": "내 계정",
   "order": "주문",
   "order management": "주문 관리",
+  "order create": "주문 등록",
+  "order list": "주문내역 조회",
+  "order count": "발주량",
   "samle return": "샘플 반납",
   "samle return management": "샘플 반납 관리",
   "adjustment": "매입조정",
@@ -143,5 +146,6 @@
   "yes": "네",
   "no": "아니오",
   "created time": "생성 시간",
-  "updated time": "수정 시간"
+  "updated time": "수정 시간",
+  "memo" : "메모"
 }
