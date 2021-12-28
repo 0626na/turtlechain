@@ -7,21 +7,32 @@ import { Form, Input, Button, InputNumber, Card, Radio } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
 
-interface Props {}
+interface Props {
+  onCreate: (value: CreateOrderItem) => void;
+}
 
-const OrderCreateForm = function ({}: Props) {
+const OrderCreateForm = function ({ onCreate }: Props) {
   const { t } = useTranslation();
   const [tempId, setTempId] = useState(1); // 임시 아이디
   const [form] = Form.useForm<CreateOrderItem>(); // type 정의 수정 필요
 
   const [orderType, setOrderType] = useState<string>("order");
 
-  const onChange = (e: any) => {
-    console.log("radio checked", e.target.value);
+  // 추가 버튼 클릭
+  const onFinish = () => {
+    onCreate({
+      ...form.getFieldsValue(),
+      order_count: form.getFieldValue("order_count"),
+    });
+    form.resetFields();
+  };
+
+  // 주문 종류 변경
+  const onChangeOrderType = (e: any) => {
     setOrderType(e.target.value);
   };
 
-  // 임시 주문 추가
+  // 임시 상품 추가
   const onCreateTempOrder = () => {
     setTempId(tempId + 1);
     form.setFieldsValue({
@@ -29,20 +40,20 @@ const OrderCreateForm = function ({}: Props) {
       address: `${t("client address")}(${tempId})`,
       phone: `${t("phone")}(${tempId})`,
       product_code: `${t("product code")}(${tempId})`,
-      //product_name: `${t("product name")}(${tempId})`,
+      product_name: `${t("product name")}(${tempId})`,
       option: `${t("option")}(${tempId})`,
       price: tempId * 1000,
-      count: tempId * 10,
+      //count: tempId * 10,
       order_type: orderType,
       memo: `${t("memo")}(${tempId})`,
     });
-    console.log(form.getFieldsValue());
   };
 
   return (
     <Form //
       layout="vertical"
       form={form}
+      onFinish={onFinish}
     >
       <Card style={{ backgroundColor: "#fbfbfb" }}>
         <Form.Item>
@@ -77,12 +88,19 @@ const OrderCreateForm = function ({}: Props) {
           >
             <Input readOnly />
           </Form.Item>
-        </ItemGroup>
-
-        <ItemGroup>
           <Form.Item // 상품 바코드 Input
             name="product_code"
             label={t("product code")}
+            rules={[{ required: true }]}
+          >
+            <Input readOnly />
+          </Form.Item>
+        </ItemGroup>
+
+        <ItemGroup>
+          <Form.Item // 상품 이름 Input
+            name="product_name"
+            label={t("product name")}
             rules={[{ required: true }]}
           >
             <Input readOnly />
@@ -102,7 +120,7 @@ const OrderCreateForm = function ({}: Props) {
             <Input readOnly />
           </Form.Item>
           <Form.Item // 발주량
-            name="count"
+            name="order_count"
             label={t("order count")}
             rules={[{ required: true }]}
           >
@@ -111,12 +129,12 @@ const OrderCreateForm = function ({}: Props) {
         </ItemGroup>
 
         <ItemGroup>
-          <Form.Item // 주문종류 Radio
+          <Form.Item // 주문종류 Radio Box
             name="order_type"
             label={t("order type")}
             rules={[{ required: true }]}
           >
-            <Radio.Group onChange={onChange} value={orderType}>
+            <Radio.Group onChange={onChangeOrderType} value={orderType}>
               <Radio value={"order"}>{t("order")}</Radio>
               <Radio value={"reserved"}>{t("reserved")}</Radio>
               <Radio value={"take_back"}>{t("take back")}</Radio>

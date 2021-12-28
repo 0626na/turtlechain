@@ -6,9 +6,10 @@ export interface CreateOrderItem {
   address: string;
   phone: string;
   product_code: string;
+  product_name: string;
   option: string;
   price: number;
-  count: number;
+  order_count: number;
   order_type: string;
   memo: string;
 }

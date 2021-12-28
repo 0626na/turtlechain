@@ -5,10 +5,21 @@ import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
 import StoreSelect from "components/StoreSelect";
 import OrderCreateForm from "./OrderCreateForm";
+import OrderPreviewList from "./OrderPreviewList";
+import { useState } from "react";
+import { CreateOrderItem } from "apis/orderAPI";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order create")}`;
+  const [list, setList] = useState<Array<CreateOrderItem>>([]);
+
+  // 주문 아이템 추가
+  const onCreate = (value: CreateOrderItem) => {
+    setList([...list, { ...value }]);
+    console.log(list);
+  };
+
   return (
     <>
       <Helmet title={title} />
@@ -29,7 +40,8 @@ const OrderCreatePage = function () {
           emptyValueText={`${t("mall")} ${t("select")}`}
         />
       </Form>
-      <OrderCreateForm />
+      <OrderCreateForm onCreate={onCreate} />
+      <OrderPreviewList list={list} setList={setList} />
     </>
   );
 };
