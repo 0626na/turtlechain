@@ -62,6 +62,8 @@
   "order create": "주문 등록",
   "order list": "주문내역 조회",
   "order count": "발주량",
+  "order type": "주문종류",
+  "samle": "샘플",
   "samle return": "샘플 반납",
   "samle return management": "샘플 반납 관리",
   "adjustment": "매입조정",
@@ -147,5 +149,9 @@
   "no": "아니오",
   "created time": "생성 시간",
   "updated time": "수정 시간",
-  "memo" : "메모"
+  "memo": "메모",
+  "take back": "반품",
+  "reserved": "미송",
+  "exchange": "교환",
+  "pickup": "픽업"
 }

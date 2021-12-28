@@ -3,14 +3,23 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Form, Input, Button, InputNumber, Card } from "antd";
+import { Form, Input, Button, InputNumber, Card, Radio } from "antd";
+// api
+import { CreateOrderItem } from "apis/orderAPI";
 
 interface Props {}
 
 const OrderCreateForm = function ({}: Props) {
   const { t } = useTranslation();
   const [tempId, setTempId] = useState(1); // 임시 아이디
-  const [form] = Form.useForm<any>(); // type 정의 수정 필요
+  const [form] = Form.useForm<CreateOrderItem>(); // type 정의 수정 필요
+
+  const [orderType, setOrderType] = useState<string>("order");
+
+  const onChange = (e: any) => {
+    console.log("radio checked", e.target.value);
+    setOrderType(e.target.value);
+  };
 
   // 임시 주문 추가
   const onCreateTempOrder = () => {
@@ -24,9 +33,10 @@ const OrderCreateForm = function ({}: Props) {
       option: `${t("option")}(${tempId})`,
       price: tempId * 1000,
       count: tempId * 10,
+      order_type: orderType,
       memo: `${t("memo")}(${tempId})`,
     });
-    console.log(form);
+    console.log(form.getFieldsValue());
   };
 
   return (
@@ -101,7 +111,21 @@ const OrderCreateForm = function ({}: Props) {
         </ItemGroup>
 
         <ItemGroup>
-          {/* TODO : 주문종류 Select Box 추가 */}
+          <Form.Item // 주문종류 Radio
+            name="order_type"
+            label={t("order type")}
+            rules={[{ required: true }]}
+          >
+            <Radio.Group onChange={onChange} value={orderType}>
+              <Radio value={"order"}>{t("order")}</Radio>
+              <Radio value={"reserved"}>{t("reserved")}</Radio>
+              <Radio value={"take_back"}>{t("take back")}</Radio>
+              <Radio value={"exchange"}>{t("exchange")}</Radio>
+              <Radio value={"samle"}>{t("samle")}</Radio>
+              <Radio value={"pickup"}>{t("pickup")}</Radio>
+              <Radio value={"etc"}>{t("etc")}</Radio>
+            </Radio.Group>
+          </Form.Item>
           <Form.Item // 메모 Input
             name="memo"
             label={t("memo")}
