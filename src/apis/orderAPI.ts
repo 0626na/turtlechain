@@ -14,6 +14,14 @@ export interface CreateOrderItem {
   memo: string;
 }
 
+// 상품 검색 response 타입
+export interface responseGetProduct {
+  product_code: number;
+  product_name: string;
+  option: string;
+  supply_price: number;
+}
+
 const orderAPI = {};
 
 export default orderAPI;

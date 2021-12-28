@@ -9,9 +9,10 @@ import { CreateOrderItem } from "apis/orderAPI";
 
 interface Props {
   onCreate: (value: CreateOrderItem) => void;
+  openModal: () => void;
 }
 
-const OrderCreateForm = function ({ onCreate }: Props) {
+const OrderCreateForm = function ({ onCreate, openModal }: Props) {
   const { t } = useTranslation();
   const [tempId, setTempId] = useState(1); // 임시 아이디
   const [form] = Form.useForm<CreateOrderItem>(); // type 정의 수정 필요
@@ -60,7 +61,7 @@ const OrderCreateForm = function ({ onCreate }: Props) {
           <Button // 상품 조회하기 Button
             type="primary"
             icon={<SearchOutlined />}
-            onClick={onCreateTempOrder}
+            onClick={openModal}
           >
             {t("search product")}
           </Button>

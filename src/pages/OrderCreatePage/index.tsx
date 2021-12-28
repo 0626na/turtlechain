@@ -8,11 +8,14 @@ import OrderCreateForm from "./OrderCreateForm";
 import OrderPreviewList from "./OrderPreviewList";
 import { useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
+import SearchProductModal from "./SearchProductModal";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order create")}`;
   const [list, setList] = useState<Array<CreateOrderItem>>([]);
+  const [searchProductModalVisible, setSearchProductModalVisible] =
+    useState<boolean>(false);
 
   // 주문 아이템 추가
   const onCreate = (value: CreateOrderItem) => {
@@ -40,8 +43,17 @@ const OrderCreatePage = function () {
           emptyValueText={`${t("mall")} ${t("select")}`}
         />
       </Form>
-      <OrderCreateForm onCreate={onCreate} />
+      <OrderCreateForm
+        onCreate={onCreate}
+        openModal={() => setSearchProductModalVisible(true)}
+      />
       <OrderPreviewList list={list} setList={setList} />
+      <SearchProductModal
+        visible={searchProductModalVisible}
+        onClose={() => {
+          setSearchProductModalVisible(false);
+        }}
+      />
     </>
   );
 };

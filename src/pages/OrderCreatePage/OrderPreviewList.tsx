@@ -2,16 +2,7 @@ import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
-import {
-  Button,
-  Table,
-  Popconfirm,
-  Typography,
-  InputNumber,
-  Form,
-  Select,
-  Input,
-} from "antd";
+import { Button, Table, Typography } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
 
 interface Props {
