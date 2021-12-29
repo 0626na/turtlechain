@@ -26,7 +26,7 @@ const OrderListPage = function () {
             alt="order"
           />
         }
-        title={orderDetailVisible ? t("order list") : t("order detail")}
+        title={orderDetailVisible ? t("order detail") : t("order list")}
         breadcrumbList={[t("order management"), t("order list")]}
       />
       {orderDetailVisible ? (
