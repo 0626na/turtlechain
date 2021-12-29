@@ -20,7 +20,6 @@ const MainRouter = function () {
       <Route exact path="/order/list" component={OrderListPage} />
       <Route exact path="/warehousing/create" component={WarehousingCreatePage} />
       <Route exact path="/warehousing/list" component={WarehousingListPage} />
-      <Route exact path="/warehousing/list" component={WarehousingListPage} />
       <Route exact path="/adjustment/create" component={AdjustmentCreatePage} />
       <Route exact path="/adjustment/list" component={AdjustmentListPage} />
       <Route exact path="/my/account" component={MyAccountPage} />
