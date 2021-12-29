@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, Typography } from "antd";
 import SimplePagination from "components/SimplePagination";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ const OrderSheetDetails = function ({ onClose }: Props) {
 
   return (
     <>
-      <Table
+      <Table // 주문 정보 테이블
         size="small"
         scroll={{ x: "auto", y: 400 }}
         pagination={false}
@@ -55,15 +55,14 @@ const OrderSheetDetails = function ({ onClose }: Props) {
             align: "center",
             title: `${t("order")} ${t("count")}`,
             dataIndex: "order_count",
-            render: (_, record) => record.order_count + " 건",
+            render: (_, record) => record.order_count,
           },
           {
             width: 100,
             align: "center",
             title: `${t("order")} ${t("price")}`,
             dataIndex: "order_sheet_price",
-            render: (_, record) =>
-              record.order_sheet_price.toLocaleString() + " 원",
+            render: (_, record) => record.order_sheet_price.toLocaleString(),
           },
         ]}
         title={() => {
@@ -85,6 +84,85 @@ const OrderSheetDetails = function ({ onClose }: Props) {
           </Footer>
         )}
       />
+
+      <Table
+        size="small"
+        scroll={{ x: 1000, y: 400 }}
+        pagination={false}
+        //dataSource={list}
+        title={() => {
+          return (
+            <>
+              <b>주문서 리스트</b>
+              <br /* TODO : 주문서 리스트 밑에 박스들 추가 */></br>
+              <br />
+              <br />
+              등록요청 : 00건, 정상 : 00건, 도매정보필요 : 00건
+            </>
+          );
+        }}
+        rowKey={(record) => record.product_code}
+        columns={[
+          {
+            title: t("sequence"),
+            dataIndex: "sequence",
+          },
+          {
+            title: t("client name"),
+            dataIndex: "store_name",
+          },
+          {
+            title: t("client address"),
+            dataIndex: "address",
+          },
+          {
+            title: t("phone"),
+            dataIndex: "phone",
+          },
+          {
+            title: t("product name"),
+            dataIndex: "product_name",
+          },
+          {
+            title: t("option"),
+            dataIndex: "option",
+          },
+          {
+            title: t("order count"),
+            dataIndex: "order_count",
+          },
+          {
+            title: t("supply price"),
+            dataIndex: "price",
+          },
+          {
+            title: t("order type"),
+            dataIndex: "order_type",
+          },
+          {
+            title: t("memo"),
+            dataIndex: "memo",
+          },
+          {
+            width: 100,
+            align: "center",
+            title: "",
+            dataIndex: "action",
+            render: (_, record) => (
+              <Button //
+                danger
+                size="small"
+                shape="round"
+                type="primary"
+                //icon={<DeleteFilled />}
+                onClick={() => {}}
+              >
+                {t("delete")}
+              </Button>
+            ),
+          },
+        ]}
+      />
     </>
   );
 };
@@ -92,12 +170,6 @@ const OrderSheetDetails = function ({ onClose }: Props) {
 const Footer = styled.div`
   display: flex;
   justify-content: center;
-`;
-
-const ActionContainer = styled.div`
-  & > * + * {
-    margin-left: 10px;
-  }
 `;
 
 const FormTitleContainer = styled.div`

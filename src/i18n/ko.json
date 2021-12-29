@@ -167,5 +167,6 @@
   "info": "정보",
   "go list": "목록으로",
   "price": "금액",
-  "count": "건수"
+  "count": "건수",
+  "sequence": "순서"
 }
