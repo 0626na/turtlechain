@@ -12,6 +12,7 @@
     "really update": "정말 수정하시겠습니까?",
     "really register": "정말 등록하시겠습니까?",
     "really confirmed": "정말 마감하시겠습니까?",
+    "really resend": "정말 재전송하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
     "changed data": "변경된 데이터가 있습니다."
   },
@@ -63,6 +64,10 @@
   "order list": "주문내역 조회",
   "order count": "발주량",
   "order type": "주문종류",
+  "order time": "주문일시",
+  "order content": "주문내용",
+  "order sheet": "주문장",
+  "order detail": "주문 상세정보",
   "samle": "샘플",
   "samle return": "샘플 반납",
   "samle return management": "샘플 반납 관리",
@@ -155,5 +160,12 @@
   "take back": "반품",
   "reserved": "미송",
   "exchange": "교환",
-  "pickup": "픽업"
+  "pickup": "픽업",
+  "send status": "발송 상태",
+  "type": "타입",
+  "resend": "재전송",
+  "info": "정보",
+  "go list": "목록으로",
+  "price": "금액",
+  "count": "건수"
 }

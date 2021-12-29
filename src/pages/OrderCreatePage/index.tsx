@@ -6,18 +6,20 @@ import SvgIcon from "components/SvgIcon";
 import StoreSelect from "components/StoreSelect";
 import OrderCreateForm from "./OrderCreateForm";
 import OrderPreviewList from "./OrderPreviewList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import SearchProductModal from "./SearchProductModal";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order create")}`;
+
+  const [form] = Form.useForm<CreateOrderItem>();
   const [list, setList] = useState<Array<CreateOrderItem>>([]);
   const [searchProductModalVisible, setSearchProductModalVisible] =
     useState<boolean>(false);
 
-  // 주문 아이템 추가
+  // 주문 아이템 주문 미리보기에 추가
   const onCreate = (value: CreateOrderItem) => {
     setList([...list, { ...value }]);
     console.log(list);
@@ -37,19 +39,20 @@ const OrderCreatePage = function () {
         title={t("order create")}
         breadcrumbList={[t("order management"), t("order create")]}
       />
-      <Form>
-        <StoreSelect
-          width={200}
-          emptyValueText={`${t("mall")} ${t("select")}`}
-        />
+      <Form layout="inline">
+        <Form.Item label={t("mall")}>
+          <StoreSelect emptyValueText={t("all")} width={200} />
+        </Form.Item>
       </Form>
       <OrderCreateForm
+        form={form}
         onCreate={onCreate}
         openModal={() => setSearchProductModalVisible(true)}
       />
       <OrderPreviewList list={list} setList={setList} />
       <SearchProductModal
         visible={searchProductModalVisible}
+        form={form}
         onClose={() => {
           setSearchProductModalVisible(false);
         }}

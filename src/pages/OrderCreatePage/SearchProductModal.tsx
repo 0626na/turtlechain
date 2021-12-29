@@ -10,22 +10,48 @@ import { responseGetProduct } from "apis/orderAPI";
 
 interface Props {
   visible: boolean;
+  form: any;
   onClose: () => void;
 }
 
-const SearchProductModal = function ({ visible, onClose }: Props) {
+const SearchProductModal = function ({ visible, form, onClose }: Props) {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [searchText, setSearchText] = useState<string>("");
-  const [productList, setProductList] = useState<Array<any>>([]);
 
+  const [searchText, setSearchText] = useState<string>("");
+  const [productList, setProductList] = useState<Array<responseGetProduct>>([]);
+
+  // 상품명 또는 상품번호 검색
   const searchProduct = (e: any) => {
     setSearchText(e.target.value);
-    createBulkProduct();
+    console.log("hi", searchText);
+    /*
+    loadTmpProductList();
+    console.log(searchText);
+    if (searchText !== "") {
+      filterProductList();
+    }
+    */
   };
 
-  const createBulkProduct = () => {
-    const newProductList: Array<responseGetProduct> = [
+  // 해당 상품 filter
+  const filterProductList = () => {
+    const filteredProductList: Array<responseGetProduct> = productList.filter(
+      (product) => {
+        if (
+          product.product_code.toString().includes(searchText) ||
+          product.product_name.includes(searchText)
+        ) {
+          return product;
+        }
+      },
+    );
+    setProductList([...filteredProductList]);
+    console.log("filter 완료");
+  };
+
+  // 임시 상품목록 불러오기
+  const loadTmpProductList = () => {
+    const tmpProductList: Array<responseGetProduct> = [
       {
         product_code: 1121111,
         product_name: "상품1",
@@ -44,9 +70,20 @@ const SearchProductModal = function ({ visible, onClose }: Props) {
         option: "옵션3",
         supply_price: 20000,
       },
+      {
+        product_code: 999999,
+        product_name: "구구구",
+        option: "옵션3",
+        supply_price: 20000,
+      },
+      {
+        product_code: 888888,
+        product_name: "팔팔팔",
+        option: "옵션3",
+        supply_price: 20000,
+      },
     ];
-    setProductList([...productList, ...newProductList]);
-    console.log(productList);
+    setProductList([...tmpProductList]);
   };
 
   return (
@@ -75,7 +112,6 @@ const SearchProductModal = function ({ visible, onClose }: Props) {
               value={searchText}
               placeholder={t("search text")}
               onChange={(e) => {
-                console.log("hi");
                 searchProduct(e);
               }}
             />

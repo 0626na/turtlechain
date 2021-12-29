@@ -4,10 +4,17 @@ import { Form } from "antd";
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
 import StoreSelect from "components/StoreSelect";
+import OrderSearchFilter from "./OrderSearchFilter";
+import OrderSheetList from "./OrderSheetList";
+import { useState } from "react";
+import OrderSheetDetails from "./OrderSheetDetails";
 
 const OrderListPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order list")}`;
+
+  const [orderDetailVisible, setOrderDetailVisible] = useState<boolean>(false);
+
   return (
     <>
       <Helmet title={title} />
@@ -19,15 +26,25 @@ const OrderListPage = function () {
             alt="order"
           />
         }
-        title={t("order create")}
+        title={orderDetailVisible ? t("order list") : t("order detail")}
         breadcrumbList={[t("order management"), t("order list")]}
       />
-      <Form>
-        <StoreSelect
-          width={200}
-          emptyValueText={`${t("mall")} ${t("select")}`}
+      {orderDetailVisible ? (
+        <OrderSheetDetails
+          onClose={() => {
+            setOrderDetailVisible(false);
+          }}
         />
-      </Form>
+      ) : (
+        <>
+          <OrderSearchFilter />
+          <OrderSheetList
+            openOrderDetail={() => {
+              setOrderDetailVisible(true);
+            }}
+          />
+        </>
+      )}
     </>
   );
 };

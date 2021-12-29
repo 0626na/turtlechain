@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
@@ -8,14 +8,14 @@ import { Form, Input, Button, InputNumber, Card, Radio } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
 
 interface Props {
+  form: any; // Form.useForm() 의 타입???
   onCreate: (value: CreateOrderItem) => void;
   openModal: () => void;
 }
 
-const OrderCreateForm = function ({ onCreate, openModal }: Props) {
+const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
   const { t } = useTranslation();
   const [tempId, setTempId] = useState(1); // 임시 아이디
-  const [form] = Form.useForm<CreateOrderItem>(); // type 정의 수정 필요
 
   const [orderType, setOrderType] = useState<string>("order");
 
