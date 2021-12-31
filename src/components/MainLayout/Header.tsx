@@ -56,7 +56,6 @@ const Container = styled(Layout.Header)`
   z-index: 1;
   top: 0;
   background-color: #fff;
-  border-bottom: 1px solid #dee2e6;
 `;
 
 const LogoImage = styled.img`

@@ -64,7 +64,7 @@ const Sider = function () {
         {
           title: t("order list"),
           pathname: "/order/list",
-        }
+        },
       ],
     },
     {
@@ -189,7 +189,7 @@ const Sider = function () {
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)" }}
+        style={{ height: "calc(100vh - 60px)", padding: "2rem 0" }}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
@@ -230,8 +230,12 @@ const Container = styled(Layout.Sider)`
   width: ${MAIN_SIDER_WIDTH};
   position: fixed;
   top: ${MAIN_HEADER_HEIGHT};
-  left: 0;
   overflow: auto;
+  background: #f0f2f5;
+  margin: 2px 0;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  box-shadow: 10px 10px 10px #e5e5e5;
 `;
 
 export default Sider;
