@@ -7,7 +7,8 @@ import koKR from "antd/es/locale/ko_KR";
 import "moment/locale/ko";
 import "antd/dist/antd.less";
 import "./i18n";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { theme } from "utils/theme";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
@@ -26,8 +27,10 @@ ReactDOM.render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={koKR}>
-        <GlobalStyle />
-        <Router />
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Router />
+        </ThemeProvider>
       </ConfigProvider>
     </QueryClientProvider>
   </RecoilRoot>,
