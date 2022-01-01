@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Breadcrumb, Typography } from "antd";
+import { Breadcrumb, Col, Divider, Row, Typography } from "antd";
 
 interface Props {
   icon?: React.ReactNode;
@@ -9,39 +9,32 @@ interface Props {
 
 const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
   return (
-    <Container>
-      <TitleContainer>
-        {icon}
-        <Typography>{title}</Typography>
-      </TitleContainer>
-      {breadcrumbList && (
-        <BreadcrumbContainer separator=">">
-          {breadcrumbList.map((item) => (
-            <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
-          ))}
-        </BreadcrumbContainer>
-      )}
-    </Container>
+    <>
+      <Row align="middle" justify="space-between">
+        <Col style={{ display: "flex", alignItems: "center" }}>
+          {icon}
+          <Typography.Title level={3} style={{ margin: "0.2rem 0 0 0.7rem" }}>
+            {title}
+          </Typography.Title>
+        </Col>
+        <Col>
+          {breadcrumbList && (
+            <BreadcrumbContainer separator=">">
+              {breadcrumbList.map((item) => (
+                <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
+              ))}
+            </BreadcrumbContainer>
+          )}
+        </Col>
+      </Row>
+      <CustomDivider />
+    </>
   );
 };
 
-const Container = styled.div`
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #dee2e6;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  & > * + * {
-    margin-left: 10px;
-  }
+const CustomDivider = styled(Divider)`
+  padding: 0;
+  margin: 0;
 `;
 
 const BreadcrumbContainer = styled(Breadcrumb)`

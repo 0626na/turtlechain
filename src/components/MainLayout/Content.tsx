@@ -28,7 +28,7 @@ const Contents = styled.div`
   border-radius: 2rem;
   background-color: white;
   & > * {
-    padding: 2rem;
+    padding: 1.5rem;
   }
 `;
 

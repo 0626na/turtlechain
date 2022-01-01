@@ -4,41 +4,27 @@ interface Props {
   filled?: boolean;
   src: string;
   alt: string;
-  size?: string | number;
-  margin?: string | number;
 }
 
-const SvgIcon = function ({
-  filled = true,
-  src,
-  alt,
-  size = "1rem",
-  margin,
-}: Props) {
+const SvgIcon = function ({ filled = true, src, alt }: Props) {
   if (filled) {
     return (
-      <FilledContainer size={size} margin={margin}>
-        <img style={{ width: size }} src={src} alt={alt} />
+      <FilledContainer>
+        <img src={src} alt={alt} />
       </FilledContainer>
     );
   } else {
-    return <img style={{ width: size, margin }} src={src} alt={alt} />;
+    return <img src={src} alt={alt} width="25px" height="25px" />;
   }
 };
 
-interface FilledContainerProps {
-  size?: string | number;
-  margin?: string | number;
-}
-
-const FilledContainer = styled.div<FilledContainerProps>`
-  width: ${(props) => props.size};
-  height: ${(props) => props.size};
-  margin: ${(props) => props.margin};
+const FilledContainer = styled.div`
+  width: 2rem;
+  height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.8rem;
+  padding: 1rem;
   background-color: #eee;
   border-radius: 50%;
 `;

@@ -185,11 +185,11 @@ const Sider = function () {
   ];
 
   return (
-    <Container>
+    <Container width={270}>
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)", padding: "2rem 0" }}
+        style={{ height: "calc(100vh - 60px)", padding: "3rem 0" }}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
@@ -227,7 +227,7 @@ const Sider = function () {
 };
 
 const Container = styled(Layout.Sider)`
-  width: ${MAIN_SIDER_WIDTH};
+  min-width: ${MAIN_SIDER_WIDTH};
   position: fixed;
   top: ${MAIN_HEADER_HEIGHT};
   overflow: auto;
