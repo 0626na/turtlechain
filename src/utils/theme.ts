@@ -7,6 +7,7 @@ interface Colors {
   grey_3: string;
   grey_4: string;
   grey_5: string;
+  grey_10: string;
   navy: string;
   skyBlue: string;
   beige: string;
@@ -29,6 +30,7 @@ const colors: Colors = {
   grey_3: "#e0e4e7",
   grey_4: "#ced4da",
   grey_5: "#0B133333",
+  grey_10: "#d9d9d9",
   navy: "#033A88",
   skyBlue: "#017cff",
   beige: "#edece4",
@@ -48,6 +50,7 @@ interface Theme {
   text: string;
   greyButton: string;
   skyBlueButton: string;
+  border: string;
 }
 
 const theme: Theme = {
@@ -56,6 +59,7 @@ const theme: Theme = {
   text: colors.black,
   greyButton: colors.grey_5,
   skyBlueButton: colors.skyBlue,
+  border: colors.grey_10,
 };
 
 export default theme;

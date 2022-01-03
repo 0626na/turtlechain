@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Form, Input, Button, InputNumber, Card, Radio } from "antd";
+import { Form, Input, Button, InputNumber, Card, Radio, Row, Col } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
+import CustomSearchInput from "components/common/CustomSearchInput";
 
 interface Props {
   form: any; // Form.useForm() 의 타입???
@@ -56,18 +57,30 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
       form={form}
       onFinish={onFinish}
     >
-      <Card style={{ backgroundColor: "#fbfbfb" }}>
-        <Form.Item>
-          <Button // 상품 조회하기 Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={openModal}
+      <Row gutter={24}>
+        <Col span={6}>
+          <CustomSearchInput
+            name="store_name"
+            label={t("client name")}
+            rules={[{ required: true }]}
+            placeholder={t("placeholder.client name")}
+          />
+          <Form.Item // 거래처 주소 Input
+            name="address"
+            label={t("client address")}
+            rules={[{ required: true }]}
           >
-            {t("search product")}
-          </Button>
-        </Form.Item>
-
-        <ItemGroup>
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item // 휴대번호 Input
+            name="phone"
+            label={t("phone")}
+            rules={[{ required: true }]}
+          >
+            <Input readOnly />
+          </Form.Item>
+        </Col>
+        <Col span={6}>
           <Form.Item // 거래처명 Input
             name="store_name"
             label={t("client name")}
@@ -89,80 +102,8 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
           >
             <Input readOnly />
           </Form.Item>
-          <Form.Item // 상품 바코드 Input
-            name="product_code"
-            label={t("product code")}
-            rules={[{ required: true }]}
-          >
-            <Input readOnly />
-          </Form.Item>
-        </ItemGroup>
-
-        <ItemGroup>
-          <Form.Item // 상품 이름 Input
-            name="product_name"
-            label={t("product name")}
-            rules={[{ required: true }]}
-          >
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item // 옵션 Input
-            name="option"
-            label={t("option")}
-            rules={[{ required: true }]}
-          >
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item // 공급가 Input
-            label={t("supply price")}
-            name="price"
-            rules={[{ required: true }]}
-          >
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item // 발주량
-            name="order_count"
-            label={t("order count")}
-            rules={[{ required: true }]}
-          >
-            <InputNumber style={{ width: 200 }} />
-          </Form.Item>
-        </ItemGroup>
-
-        <ItemGroup>
-          <Form.Item // 주문종류 Radio Box
-            name="order_type"
-            label={t("order type")}
-            rules={[{ required: true }]}
-          >
-            <Radio.Group onChange={onChangeOrderType} value={orderType}>
-              <Radio value={"order"}>{t("order")}</Radio>
-              <Radio value={"reserved"}>{t("reserved")}</Radio>
-              <Radio value={"take_back"}>{t("take back")}</Radio>
-              <Radio value={"exchange"}>{t("exchange")}</Radio>
-              <Radio value={"samle"}>{t("samle")}</Radio>
-              <Radio value={"pickup"}>{t("pickup")}</Radio>
-              <Radio value={"etc"}>{t("etc")}</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item // 메모 Input
-            name="memo"
-            label={t("memo")}
-            rules={[{ required: true }]}
-          >
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item label=" ">
-            <Button // 추가 Button
-              type="primary"
-              htmlType="submit"
-              icon={<PlusOutlined />}
-            >
-              {t("create")}
-            </Button>
-          </Form.Item>
-        </ItemGroup>
-      </Card>
+        </Col>
+      </Row>
     </Form>
   );
 };
