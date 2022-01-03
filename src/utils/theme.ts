@@ -4,36 +4,58 @@ interface Colors {
   grey_0: string;
   grey_1: string;
   grey_2: string;
-  red: string;
-  blue: string;
-  purple: string;
+  grey_3: string;
+  grey_4: string;
+  grey_5: string;
+  navy: string;
+  skyBlue: string;
+  beige: string;
+  mint: string;
+  lightMint: string;
+  pastelGreen: string;
+  lightPastelGreen: string;
+  pastelRed: string;
+  pastelOrange: string;
+  magenta: string;
+  orange: string;
 }
 
 const colors: Colors = {
   white: "#ffffff",
   black: "#000000",
-  grey_0: "#e5e5e5",
-  grey_1: "#d5d5d5",
-  grey_2: "#a6a6a6",
-  red: "#e84118",
-  blue: "#3679fe",
-  purple: "#571C73",
+  grey_0: "#fdfdfe",
+  grey_1: "#f7f8f9",
+  grey_2: "#eef2f2",
+  grey_3: "#e0e4e7",
+  grey_4: "#ced4da",
+  grey_5: "#0B133333",
+  navy: "#033A88",
+  skyBlue: "#017cff",
+  beige: "#edece4",
+  mint: "#00bb88",
+  lightMint: "#66e2b8",
+  pastelGreen: "#9ef2d4",
+  lightPastelGreen: "#ccfeec",
+  pastelRed: "#ffadc0",
+  pastelOrange: "#ffdc99",
+  magenta: "#fe3363",
+  orange: "#ffa800",
 };
 
 interface Theme {
   primary: string;
   background: string;
   text: string;
-  inputBackground: string;
-  inputText: string;
-  grayLine: string;
+  greyButton: string;
+  skyBlueButton: string;
 }
 
-export const theme: Theme = {
-  primary: colors.purple,
+const theme: Theme = {
+  primary: colors.navy,
   background: colors.white,
   text: colors.black,
-  inputBackground: colors.grey_0,
-  inputText: colors.white,
-  grayLine: colors.grey_2,
+  greyButton: colors.grey_5,
+  skyBlueButton: colors.skyBlue,
 };
+
+export default theme;
