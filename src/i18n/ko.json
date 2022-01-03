@@ -59,6 +59,7 @@
   "my page": "마이페이지",
   "my account": "내 계정",
   "order": "주문",
+  "order sheet": "주문서",
   "order management": "주문 관리",
   "order create": "주문 등록",
   "order list": "주문 내역",
@@ -114,7 +115,7 @@
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
-  "mall": "쇼핑몰",
+  "mall": "쇼핑몰명",
   "mall info": "쇼핑몰 정보",
   "mall name": "쇼핑몰명",
   "mall url": "쇼핑몰 URL",
@@ -168,5 +169,6 @@
   "go list": "목록으로",
   "price": "금액",
   "count": "건수",
-  "sequence": "순서"
+  "upload": "업로드",
+  "load": "불러오기"
 }

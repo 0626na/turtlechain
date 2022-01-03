@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
 import { Select, message } from "antd";
+import styled from "styled-components";
 
 interface Props {
   emptyValueText: string;
@@ -32,7 +33,7 @@ const StoreSelect = function ({
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-    }
+    },
   );
 
   return (

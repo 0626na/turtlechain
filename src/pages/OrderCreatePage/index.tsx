@@ -9,6 +9,7 @@ import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import SearchProductModal from "./SearchProductModal";
+import CustomStoreSelect from "components/CustomStoreSelect";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
@@ -39,11 +40,7 @@ const OrderCreatePage = function () {
         title={t("order create")}
         breadcrumbList={[t("order management"), t("order create")]}
       />
-      <Form layout="inline">
-        <Form.Item label={t("mall")}>
-          <StoreSelect emptyValueText={t("all")} width={200} />
-        </Form.Item>
-      </Form>
+      <CustomStoreSelect />
       <OrderCreateForm
         form={form}
         onCreate={onCreate}
