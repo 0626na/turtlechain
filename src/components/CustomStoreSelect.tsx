@@ -3,6 +3,7 @@ import { Button, Col, Form, Row, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import CustomSelect from "./common/CustomSelect";
 import CustomButton from "./common/CustomButton";
+import styled from "styled-components";
 
 function CustomStoreSelect() {
   const { t } = useTranslation();
@@ -11,7 +12,7 @@ function CustomStoreSelect() {
     <Row gutter={24} align={"middle"} justify="space-between">
       <Col>
         <Space size="large">
-          {t("mall")}
+          <StyledTitle level={5}>{t("mall")}</StyledTitle>
           <CustomSelect />
         </Space>
       </Col>
@@ -28,5 +29,9 @@ function CustomStoreSelect() {
     </Row>
   );
 }
+
+const StyledTitle = styled(Typography.Title)`
+  margin-bottom: 0 !important;
+`;
 
 export default CustomStoreSelect;

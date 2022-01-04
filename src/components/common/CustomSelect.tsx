@@ -16,7 +16,6 @@ function CustomSelect() {
 const StyledSelect = styled(Select)`
   .ant-select-selector {
     width: 20rem !important;
-    border-radius: 0.4rem !important;
   }
 `;
 

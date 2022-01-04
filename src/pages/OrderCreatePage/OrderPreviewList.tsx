@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
-import { Button, Table, Typography } from "antd";
+import { Button, Row, Space, Table, Typography } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
 
 interface Props {
@@ -10,14 +10,14 @@ interface Props {
   setList: React.Dispatch<React.SetStateAction<CreateOrderItem[]>>;
 }
 
-const WarehousingPreviewList = function ({ list, setList }: Props) {
+const OrderPreviewList = function ({ list, setList }: Props) {
   const { t } = useTranslation();
 
   return (
-    <TableContainer>
-      <Typography.Text strong>
-        {t("order")} {t("preview")}{" "}
-      </Typography.Text>
+    <Row>
+      <Typography.Title level={5}>
+        {t("order sheet")} {t("preview")}
+      </Typography.Title>
       <Table
         size="small"
         scroll={{ x: 1000, y: 400 }}
@@ -90,7 +90,7 @@ const WarehousingPreviewList = function ({ list, setList }: Props) {
           },
         ]}
         footer={() => (
-          <Footer>
+          <Row justify="end">
             <Button //
               icon={<UploadOutlined />}
               disabled={!list.length /* || isLoading */}
@@ -99,24 +99,11 @@ const WarehousingPreviewList = function ({ list, setList }: Props) {
             >
               {t("order create")}
             </Button>
-          </Footer>
+          </Row>
         )}
       />
-    </TableContainer>
+    </Row>
   );
 };
 
-const TableContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  & > * + * {
-    margin-top: 20px;
-  }
-`;
-
-const Footer = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`;
-
-export default WarehousingPreviewList;
+export default OrderPreviewList;

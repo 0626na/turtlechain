@@ -17,8 +17,7 @@ const OrderCreatePage = function () {
 
   const [form] = Form.useForm<CreateOrderItem>();
   const [list, setList] = useState<Array<CreateOrderItem>>([]);
-  const [searchProductModalVisible, setSearchProductModalVisible] =
-    useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // 주문 아이템 주문 미리보기에 추가
   const onCreate = (value: CreateOrderItem) => {
@@ -44,14 +43,14 @@ const OrderCreatePage = function () {
       <OrderCreateForm
         form={form}
         onCreate={onCreate}
-        openModal={() => setSearchProductModalVisible(true)}
+        openModal={() => setModalVisible(true)}
       />
       <OrderPreviewList list={list} setList={setList} />
       <SearchProductModal
-        visible={searchProductModalVisible}
+        visible={modalVisible}
         form={form}
         onClose={() => {
-          setSearchProductModalVisible(false);
+          setModalVisible(false);
         }}
       />
     </>

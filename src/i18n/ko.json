@@ -42,7 +42,12 @@
   "placeholder": {
     "client name": "거래처명을 검색 또는 입력하세요.",
     "client address": "거래처 주소를 정확히 입력하세요.",
-    "phone": "휴대번호를 정확히 입력하세요"
+    "phone": "휴대번호를 정확히 입력하세요",
+    "product name": "상품명을 검색 또는 입력하세요.",
+    "memo": "메모를 입력해주세요."
+  },
+  "button": {
+    "add": "추가하기"
   },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
@@ -68,11 +73,10 @@
   "order management": "주문 관리",
   "order create": "주문 등록",
   "order list": "주문 내역",
-  "order count": "발주량",
+  "order count": "발주 수량",
   "order type": "주문종류",
   "order time": "주문일시",
   "order content": "주문내용",
-  "order sheet": "주문장",
   "order detail": "주문 상세정보",
   "samle": "샘플",
   "samle return": "샘플 반납",
@@ -153,7 +157,7 @@
   "list": "리스트",
   "size": "사이즈",
   "color": "컬러",
-  "option": "옵션명",
+  "option": "옵션",
   "preview": "미리보기",
   "progress": "진행 상태",
   "setting": "환경 설정",

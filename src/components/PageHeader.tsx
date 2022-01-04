@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Breadcrumb, Col, Divider, Row, Typography } from "antd";
+import CustomDivider from "./common/CustomDivider";
 
 interface Props {
   icon?: React.ReactNode;
@@ -31,11 +32,6 @@ const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
     </>
   );
 };
-
-const CustomDivider = styled(Divider)`
-  padding: 0;
-  margin: 0;
-`;
 
 const BreadcrumbContainer = styled(Breadcrumb)`
   background-color: #f1f3f5;

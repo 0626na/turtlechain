@@ -5,11 +5,12 @@ interface Props {
   children?: React.ReactChild;
   type?: "primary";
   color?: "grey" | "skyBlue";
+  htmlType?: "submit";
 }
 
-function CustomButton({ children, type, color }: Props) {
+function CustomButton({ children, type, color, htmlType }: Props) {
   return (
-    <StyledButton shape="round" type={type} color={color}>
+    <StyledButton shape="round" type={type} color={color} htmlType={htmlType}>
       {children}
     </StyledButton>
   );
@@ -17,7 +18,7 @@ function CustomButton({ children, type, color }: Props) {
 
 const StyledButton = styled(Button)`
   background-color: ${({ theme, type, color }) =>
-    type && color && theme[color + "Button"]};
+    type === "primary" && color && theme[color + "Button"]};
   border: ${({ type }) => type && 0};
 `;
 
