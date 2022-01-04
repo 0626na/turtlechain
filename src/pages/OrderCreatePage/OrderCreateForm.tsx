@@ -11,6 +11,7 @@ import CustomTextArea from "components/common/CustomTextArea";
 import CustomButton from "components/common/CustomButton";
 import CustomDivider from "components/common/CustomDivider";
 import CustomText from "components/common/CustomText";
+import CustomInputNumber from "components/common/CustomInputNumber";
 
 interface Props {
   form: any; // Form.useForm() 의 타입???
@@ -42,10 +43,12 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
             <CustomInput // 거래처 주소 Input
               name="address"
               label={t("client address")}
+              disabled={true}
             />
             <CustomInput // 휴대번호 Input
               name="phone"
               label={t("phone")}
+              disabled={true}
             />
           </Col>
           <Col span={6}>
@@ -54,19 +57,22 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
               label={t("product name")}
               placeholder={t("placeholder.product name")}
             />
-            <CustomInput // 상품명 Input
+            <CustomInput // 상품 바코드 Input
               name="product_code"
               label={t("product code")}
+              disabled={true}
             />
             <CustomInput // 옵션 Input
               name="option"
               label={t("option")}
+              disabled={true}
             />
             <CustomInput // 공급가 Input
               label={t("supply price")}
               name="price"
+              disabled={true}
             />
-            <CustomInput // 발주수량 Input
+            <CustomInputNumber // 발주수량 Input
               name="count"
               label={t("order count")}
             />
