@@ -2,28 +2,28 @@ import styled from "styled-components";
 import { Breadcrumb, Col, Divider, Row, Space, Typography } from "antd";
 import CustomDivider from "./common/CustomDivider";
 import CustomBreadCrumb from "./common/CustomBreadCrumb";
+import CustomIcon from "./common/CustomIcon";
 
 interface Props {
-  icon?: React.ReactNode;
+  pageName: string;
   title: string;
   breadcrumbList: Array<string>;
 }
 
-const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
+const PageHeader = function ({ pageName, title, breadcrumbList }: Props) {
   return (
     <>
       <Row align="middle" justify="space-between">
         <Col>
           <Space>
-            {icon}
+            <CustomIcon
+              src={`${process.env.PUBLIC_URL}/assets/svg/${pageName}.svg`}
+              alt={pageName}
+            />
             <StyledTitle level={3}>{title}</StyledTitle>
           </Space>
         </Col>
-        <Col>
-          {breadcrumbList && (
-            <CustomBreadCrumb list={breadcrumbList}></CustomBreadCrumb>
-          )}
-        </Col>
+        <Col>{breadcrumbList && <CustomBreadCrumb list={breadcrumbList}></CustomBreadCrumb>}</Col>
       </Row>
       <CustomDivider />
     </>

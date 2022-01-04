@@ -43,74 +43,60 @@ const WarehousingListPage = function () {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-    }
+    },
   );
 
   // 입고장 삭제 요청
-  const deleteSheetQuery = useMutation(
-    ["deleteSheet"],
-    warehousingAPI.updateSheet,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        if (currentPage === 1) {
-          getSheetQuery.refetch();
-        } else {
-          setCurrentPage(1);
-          setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
-        }
+  const deleteSheetQuery = useMutation(["deleteSheet"], warehousingAPI.updateSheet, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      if (currentPage === 1) {
+        getSheetQuery.refetch();
+      } else {
+        setCurrentPage(1);
+        setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+      }
 
-        notification.open({
-          type: "success",
-          message: t("message.success delete warehousing"),
-        });
-      },
-    }
-  );
+      notification.open({
+        type: "success",
+        message: t("message.success delete warehousing"),
+      });
+    },
+  });
 
   // 입고장 수정 요청
-  const confirmSheetQuery = useMutation(
-    ["confirmSheet"],
-    warehousingAPI.updateSheet,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        getSheetQuery.refetch();
-        notification.open({
-          type: "success",
-          message: t("message.success confirm warehousing"),
-        });
-      },
-    }
-  );
+  const confirmSheetQuery = useMutation(["confirmSheet"], warehousingAPI.updateSheet, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      getSheetQuery.refetch();
+      notification.open({
+        type: "success",
+        message: t("message.success confirm warehousing"),
+      });
+    },
+  });
 
   // 입고장 리스트
   const list = useMemo(
     () => (getSheetQuery.data ? getSheetQuery.data.data : []),
-    [getSheetQuery.data]
+    [getSheetQuery.data],
   );
 
   // 전체 데이터 수
   const totalCount = useMemo(
     () => (getSheetQuery.data ? getSheetQuery.data.total_count : 0),
-    [getSheetQuery.data]
+    [getSheetQuery.data],
   );
 
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing"
-          />
-        }
+        pageName="warehousing"
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
@@ -124,15 +110,10 @@ const WarehousingListPage = function () {
           getSheetQuery.refetch();
         }}
       />
-      <WarehousingSearchFilter
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-      />
+      <WarehousingSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <WarehousingSheetList
         isLoading={
-          getSheetQuery.isLoading ||
-          deleteSheetQuery.isLoading ||
-          confirmSheetQuery.isLoading
+          getSheetQuery.isLoading || deleteSheetQuery.isLoading || confirmSheetQuery.isLoading
         }
         list={list}
         totalCount={totalCount}

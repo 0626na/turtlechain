@@ -12,13 +12,7 @@ const AdjustmentListPage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
-            alt="adjustment"
-          />
-        }
+        pageName="adjustment"
         title={t("adjustment list")}
         breadcrumbList={[t("adjustment management"), t("adjustment list")]}
       />

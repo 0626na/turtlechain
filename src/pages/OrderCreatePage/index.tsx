@@ -21,29 +21,18 @@ const OrderCreatePage = function () {
   // 주문 아이템 주문 미리보기에 추가
   const onCreate = (value: CreateOrderItem) => {
     setList([...list, { ...value }]);
-    console.log(list);
   };
 
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
-            alt="order"
-          />
-        }
+        pageName="order"
         title={t("order create")}
         breadcrumbList={[t("order management"), t("order create")]}
       />
       <MallFilter />
-      <OrderCreateForm
-        form={form}
-        onCreate={onCreate}
-        openModal={() => setModalVisible(true)}
-      />
+      <OrderCreateForm form={form} onCreate={onCreate} openModal={() => setModalVisible(true)} />
       <OrderPreviewList list={list} setList={setList} />
       <SearchProductModal
         visible={modalVisible}

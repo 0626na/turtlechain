@@ -1,39 +1,29 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import { Form } from "antd";
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
-import StoreSelect from "components/StoreSelect";
-import OrderSearchFilter from "./OrderSearchFilter";
 import OrderSheetList from "./OrderSheetList";
 import { useState } from "react";
-import OrderSheetDetails from "./OrderSheetDetails";
 import MallFilter from "./MallFilter";
 
 const OrderListPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order list")}`;
 
-  const [orderDetailVisible, setOrderDetailVisible] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
-            alt="order"
-          />
-        }
+        pageName="order"
         title={t("order list")}
         breadcrumbList={[t("order management"), t("order list")]}
       />
       <MallFilter />
       <OrderSheetList
         openOrderDetail={() => {
-          setOrderDetailVisible(true);
+          setModalVisible(true);
         }}
       />
     </>
