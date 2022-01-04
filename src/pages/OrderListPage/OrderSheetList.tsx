@@ -3,8 +3,9 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { Sheet } from "apis/warehousingAPI";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
-import { Table, Tag, Button, Popconfirm } from "antd";
+import { Table, Tag, Button, Popconfirm, Row } from "antd";
 import SimplePagination from "components/SimplePagination";
+import CustomText from "components/common/CustomText";
 
 interface Props {
   openOrderDetail: () => void;
@@ -59,97 +60,94 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
   ];
 
   return (
-    <Table
-      size="small"
-      scroll={{ x: "auto", y: 400 }}
-      pagination={false}
-      //loading={isLoading}
-      dataSource={testList}
-      rowKey={(record) => record.order_content}
-      columns={[
-        {
-          width: 200,
-          align: "center",
-          title: t("order time"),
-          dataIndex: "order_time",
-          render: (_, record) =>
-            moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
-        },
-        {
-          align: "center",
-          title: t("order content"),
-          dataIndex: "order_content",
-        },
-        {
-          width: 170,
-          align: "center",
-          title: `${t("order sheet")} ${t("send status")}`,
-          dataIndex: "order_sheet_status",
-        },
-        {
-          width: 100,
-          align: "center",
-          title: `${t("order sheet")} ${t("type")}`,
-          dataIndex: "order_sheet_type",
-        },
-        {
-          width: 100,
-          align: "center",
-          title: `${t("order sheet")} ${t("resend")}`,
-          dataIndex: "order_sheet_resend",
-          render: (_, record) => {
-            return (
-              <Popconfirm
-                title={t("description.really resend")}
-                okText={t("yes")}
-                cancelText={t("no")}
-                onConfirm={() => {}}
-              >
-                <Button danger type="primary" size="small" shape="round">
-                  {t("resend")}
-                </Button>
-              </Popconfirm>
-            );
+    <Row>
+      <CustomText>{`${t("order")} ${t("list")}`}</CustomText>
+      <Table
+        size="small"
+        scroll={{ x: "auto", y: 400 }}
+        pagination={false}
+        //loading={isLoading}
+        dataSource={testList}
+        rowKey={(record) => record.order_content}
+        columns={[
+          {
+            width: 200,
+            align: "center",
+            title: t("order time"),
+            dataIndex: "order_time",
+            render: (_, record) =>
+              moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
           },
-        },
-        {
-          width: 100,
-          align: "center",
-          title: t("view details"),
-          dataIndex: "action",
-          render: (_, record) => {
-            return (
-              <ActionContainer
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Button //
-                  size="small"
-                  shape="round"
-                  onClick={openOrderDetail}
+          {
+            align: "center",
+            title: t("order content"),
+            dataIndex: "order_content",
+          },
+          {
+            width: 170,
+            align: "center",
+            title: `${t("order sheet")} ${t("send status")}`,
+            dataIndex: "order_sheet_status",
+          },
+          {
+            width: 100,
+            align: "center",
+            title: `${t("order sheet")} ${t("type")}`,
+            dataIndex: "order_sheet_type",
+          },
+          {
+            width: 100,
+            align: "center",
+            title: `${t("order sheet")} ${t("resend")}`,
+            dataIndex: "order_sheet_resend",
+            render: (_, record) => {
+              return (
+                <Popconfirm
+                  title={t("description.really resend")}
+                  okText={t("yes")}
+                  cancelText={t("no")}
+                  onConfirm={() => {}}
                 >
-                  {t("view details")}
-                </Button>
-              </ActionContainer>
-            );
+                  <Button danger type="primary" size="small" shape="round">
+                    {t("resend")}
+                  </Button>
+                </Popconfirm>
+              );
+            },
           },
-        },
-      ]}
-      title={() => <b>{`${t("order")} ${t("list")}`}</b>}
-      footer={() => (
-        <Footer>
-          <SimplePagination />
-        </Footer>
-      )}
-    />
+          {
+            width: 100,
+            align: "center",
+            title: t("view details"),
+            dataIndex: "action",
+            render: (_, record) => {
+              return (
+                <ActionContainer
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Button //
+                    size="small"
+                    shape="round"
+                    onClick={openOrderDetail}
+                  >
+                    {t("view details")}
+                  </Button>
+                </ActionContainer>
+              );
+            },
+          },
+        ]}
+        footer={() => (
+          <Row justify="center">
+            <SimplePagination />
+          </Row>
+        )}
+      />
+    </Row>
   );
 };
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 const ActionContainer = styled.div`
   & > * + * {

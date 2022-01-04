@@ -8,6 +8,9 @@ import OrderSearchFilter from "./OrderSearchFilter";
 import OrderSheetList from "./OrderSheetList";
 import { useState } from "react";
 import OrderSheetDetails from "./OrderSheetDetails";
+import MallFilter from "./MallFilter";
+import moment from "moment";
+import { RequestGetSheet } from "apis/warehousingAPI";
 
 const OrderListPage = function () {
   const { t } = useTranslation();
@@ -26,25 +29,15 @@ const OrderListPage = function () {
             alt="order"
           />
         }
-        title={orderDetailVisible ? t("order detail") : t("order list")}
+        title={t("order list")}
         breadcrumbList={[t("order management"), t("order list")]}
       />
-      {orderDetailVisible ? (
-        <OrderSheetDetails
-          onClose={() => {
-            setOrderDetailVisible(false);
-          }}
-        />
-      ) : (
-        <>
-          <OrderSearchFilter />
-          <OrderSheetList
-            openOrderDetail={() => {
-              setOrderDetailVisible(true);
-            }}
-          />
-        </>
-      )}
+      <MallFilter />
+      <OrderSheetList
+        openOrderDetail={() => {
+          setOrderDetailVisible(true);
+        }}
+      />
     </>
   );
 };

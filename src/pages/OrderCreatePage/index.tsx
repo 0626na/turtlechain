@@ -3,13 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Form } from "antd";
 import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
-import StoreSelect from "components/StoreSelect";
 import OrderCreateForm from "./OrderCreateForm";
 import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import SearchProductModal from "./SearchProductModal";
-import CustomStoreSelect from "components/CustomStoreSelect";
+import MallFilter from "./MallFilter";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
@@ -39,7 +38,7 @@ const OrderCreatePage = function () {
         title={t("order create")}
         breadcrumbList={[t("order management"), t("order create")]}
       />
-      <CustomStoreSelect />
+      <MallFilter />
       <OrderCreateForm
         form={form}
         onCreate={onCreate}

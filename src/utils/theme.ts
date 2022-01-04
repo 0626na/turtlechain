@@ -51,6 +51,7 @@ interface Theme {
   greyButton: string;
   skyBlueButton: string;
   border: string;
+  breadcrumb: string;
 }
 
 const theme: Theme = {
@@ -60,6 +61,7 @@ const theme: Theme = {
   greyButton: colors.grey_5,
   skyBlueButton: colors.skyBlue,
   border: colors.grey_10,
+  breadcrumb: colors.grey_1,
 };
 
 export default theme;

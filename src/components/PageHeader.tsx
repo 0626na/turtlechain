@@ -1,30 +1,27 @@
 import styled from "styled-components";
-import { Breadcrumb, Col, Divider, Row, Typography } from "antd";
+import { Breadcrumb, Col, Divider, Row, Space, Typography } from "antd";
 import CustomDivider from "./common/CustomDivider";
+import CustomBreadCrumb from "./common/CustomBreadCrumb";
 
 interface Props {
   icon?: React.ReactNode;
-  title?: string;
-  breadcrumbList?: Array<string>;
+  title: string;
+  breadcrumbList: Array<string>;
 }
 
 const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
   return (
     <>
       <Row align="middle" justify="space-between">
-        <Col style={{ display: "flex", alignItems: "center" }}>
-          {icon}
-          <Typography.Title level={3} style={{ margin: "0.2rem 0 0 0.7rem" }}>
-            {title}
-          </Typography.Title>
+        <Col>
+          <Space>
+            {icon}
+            <StyledTitle level={3}>{title}</StyledTitle>
+          </Space>
         </Col>
         <Col>
           {breadcrumbList && (
-            <BreadcrumbContainer separator=">">
-              {breadcrumbList.map((item) => (
-                <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
-              ))}
-            </BreadcrumbContainer>
+            <CustomBreadCrumb list={breadcrumbList}></CustomBreadCrumb>
           )}
         </Col>
       </Row>
@@ -33,10 +30,9 @@ const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
   );
 };
 
-const BreadcrumbContainer = styled(Breadcrumb)`
-  background-color: #f1f3f5;
-  padding: 5px 10px;
-  border-radius: 20px;
+const StyledTitle = styled(Typography.Title)`
+  margin: 0.4rem 0 0 0.7rem;
+  margin-bottom: 0 !important;
 `;
 
 export default PageHeader;

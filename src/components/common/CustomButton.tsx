@@ -2,7 +2,7 @@ import { Button } from "antd";
 import styled from "styled-components";
 
 interface Props {
-  children?: React.ReactChild;
+  children: React.ReactChild;
   type?: "primary";
   color?: "grey" | "skyBlue";
   htmlType?: "submit";

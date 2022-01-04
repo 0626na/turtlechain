@@ -1,19 +1,16 @@
-import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Form, Col, Typography, Row, Space } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
 import CustomSearchInput from "components/common/CustomSearchInput";
-import Search from "antd/lib/transfer/search";
 import CustomInput from "components/common/CustomInput";
 import CustomRadio from "components/common/CustomRadio";
-import TextArea from "antd/lib/input/TextArea";
 import CustomTextArea from "components/common/CustomTextArea";
 import CustomButton from "components/common/CustomButton";
 import CustomDivider from "components/common/CustomDivider";
+import CustomText from "components/common/CustomText";
 
 interface Props {
   form: any; // Form.useForm() 의 타입???
@@ -34,7 +31,7 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
   return (
     <>
       <Form layout="vertical" form={form}>
-        <Typography.Title level={5}>주문서 정보 입력</Typography.Title>
+        <CustomText>{`${t("order sheet")} ${t("info")} ${t("input")}`}</CustomText>
         <Row gutter={32}>
           <Col span={6}>
             <CustomSearchInput // 거래처명 검색 Input
@@ -81,11 +78,7 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
               value={orderType}
               onChange={onChangeOrderType}
             />
-            <CustomTextArea
-              name="memo"
-              label={t("memo")}
-              placeholder={t("placeholder.memo")}
-            />
+            <CustomTextArea name="memo" label={t("memo")} placeholder={t("placeholder.memo")} />
           </Col>
         </Row>
         <Row justify="center">

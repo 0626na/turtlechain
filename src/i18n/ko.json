@@ -179,5 +179,7 @@
   "price": "금액",
   "count": "건수",
   "upload": "업로드",
-  "load": "불러오기"
+  "load": "불러오기",
+  "download": "다운로드",
+  "input": "입력"
 }

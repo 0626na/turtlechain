@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
 import { Button, Row, Space, Table, Typography } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
+import CustomText from "components/common/CustomText";
 
 interface Props {
   list: Array<CreateOrderItem>;
@@ -15,9 +16,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
 
   return (
     <Row>
-      <Typography.Title level={5}>
-        {t("order sheet")} {t("preview")}
-      </Typography.Title>
+      <CustomText>{`${t("order sheet")} ${t("preview")}`}</CustomText>
       <Table
         size="small"
         scroll={{ x: 1000, y: 400 }}
