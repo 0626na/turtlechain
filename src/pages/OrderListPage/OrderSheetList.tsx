@@ -5,7 +5,7 @@ import { Sheet } from "apis/warehousingAPI";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm, Row } from "antd";
 import SimplePagination from "components/SimplePagination";
-import CustomText from "components/common/CustomText";
+import TurtleText from "components/common/TurtleText";
 
 interface Props {
   openOrderDetail: () => void;
@@ -61,7 +61,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
 
   return (
     <Row>
-      <CustomText>{`${t("order")} ${t("list")}`}</CustomText>
+      <TurtleText>{`${t("order")} ${t("list")}`}</TurtleText>
       <Table
         size="small"
         scroll={{ x: "auto", y: 400 }}
@@ -75,8 +75,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
             align: "center",
             title: t("order time"),
             dataIndex: "order_time",
-            render: (_, record) =>
-              moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
+            render: (_, record) => moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
           },
           {
             align: "center",

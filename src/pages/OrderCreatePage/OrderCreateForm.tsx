@@ -4,14 +4,14 @@ import { useTranslation } from "react-i18next";
 import { Form, Col, Typography, Row, Space } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
-import CustomSearchInput from "components/common/CustomSearchInput";
-import CustomInput from "components/common/CustomInput";
-import CustomRadio from "components/common/CustomRadio";
-import CustomTextArea from "components/common/CustomTextArea";
-import CustomButton from "components/common/CustomButton";
-import CustomDivider from "components/common/CustomDivider";
-import CustomText from "components/common/CustomText";
-import CustomInputNumber from "components/common/CustomInputNumber";
+import TurtleSearchInput from "components/common/TurtleSearchInput";
+import TurtleInput from "components/common/TurtleInput";
+import TurtleRadio from "components/common/TurtleRadio";
+import TurtleTextArea from "components/common/TurtleTextArea";
+import TurtleButton from "components/common/TurtleButton";
+import TurtleDivider from "components/common/TurtleDivider";
+import TurtleText from "components/common/TurtleText";
+import TurtleInputNumber from "components/common/TurtleInputNumber";
 
 interface Props {
   form: any; // Form.useForm() 의 타입???
@@ -32,66 +32,66 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
   return (
     <>
       <Form layout="vertical" form={form}>
-        <CustomText>{`${t("order sheet")} ${t("info")} ${t("input")}`}</CustomText>
+        <TurtleText>{`${t("order sheet")} ${t("info")} ${t("input")}`}</TurtleText>
         <Row gutter={32}>
           <Col span={6}>
-            <CustomSearchInput // 거래처명 검색 Input
+            <TurtleSearchInput // 거래처명 검색 Input
               name="store_name"
               label={t("client name")}
               placeholder={t("placeholder.client name")}
             />
-            <CustomInput // 거래처 주소 Input
+            <TurtleInput // 거래처 주소 Input
               name="address"
               label={t("client address")}
               disabled={true}
             />
-            <CustomInput // 휴대번호 Input
+            <TurtleInput // 휴대번호 Input
               name="phone"
               label={t("phone")}
               disabled={true}
             />
           </Col>
           <Col span={6}>
-            <CustomSearchInput
+            <TurtleSearchInput
               name="product_name"
               label={t("product name")}
               placeholder={t("placeholder.product name")}
             />
-            <CustomInput // 상품 바코드 Input
+            <TurtleInput // 상품 바코드 Input
               name="product_code"
               label={t("product code")}
               disabled={true}
             />
-            <CustomInput // 옵션 Input
+            <TurtleInput // 옵션 Input
               name="option"
               label={t("option")}
               disabled={true}
             />
-            <CustomInput // 공급가 Input
+            <TurtleInput // 공급가 Input
               label={t("supply price")}
               name="price"
               disabled={true}
             />
-            <CustomInputNumber // 발주수량 Input
+            <TurtleInputNumber // 발주수량 Input
               name="count"
               label={t("order count")}
             />
           </Col>
           <Col span={12}>
-            <CustomRadio
+            <TurtleRadio
               name="order_type"
               label={t("order type")}
               value={orderType}
               onChange={onChangeOrderType}
             />
-            <CustomTextArea name="memo" label={t("memo")} placeholder={t("placeholder.memo")} />
+            <TurtleTextArea name="memo" label={t("memo")} placeholder={t("placeholder.memo")} />
           </Col>
         </Row>
         <Row justify="center">
-          <CustomButton htmlType="submit">추가하기</CustomButton>
+          <TurtleButton htmlType="submit">추가하기</TurtleButton>
         </Row>
       </Form>
-      <CustomDivider />
+      <TurtleDivider />
     </>
   );
 };

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
 import { Button, Row, Space, Table, Typography } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
-import CustomText from "components/common/CustomText";
+import TurtleText from "components/common/TurtleText";
 
 interface Props {
   list: Array<CreateOrderItem>;
@@ -16,7 +16,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
 
   return (
     <Row>
-      <CustomText>{`${t("order sheet")} ${t("preview")}`}</CustomText>
+      <TurtleText>{`${t("order sheet")} ${t("preview")}`}</TurtleText>
       <Table
         size="small"
         scroll={{ x: 1000, y: 400 }}
@@ -77,9 +77,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
                 type="primary"
                 icon={<DeleteFilled />}
                 onClick={() => {
-                  const newList = list.filter(
-                    (item) => item.product_code !== record.product_code,
-                  );
+                  const newList = list.filter((item) => item.product_code !== record.product_code);
                   setList(newList);
                 }}
               >

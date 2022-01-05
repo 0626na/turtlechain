@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Breadcrumb, Col, Divider, Row, Space, Typography } from "antd";
-import CustomDivider from "./common/CustomDivider";
-import CustomBreadCrumb from "./common/CustomBreadCrumb";
-import CustomIcon from "./common/CustomIcon";
+import TurtleDivider from "./common/TurtleDivider";
+import TurtleBreadCrumb from "./common/TurtleBreadCrumb";
+import TurtleIcon from "./common/TurtleIcon";
 
 interface Props {
   pageName: string;
@@ -16,16 +16,16 @@ const PageHeader = function ({ pageName, title, breadcrumbList }: Props) {
       <Row align="middle" justify="space-between">
         <Col>
           <Space>
-            <CustomIcon
+            <TurtleIcon
               src={`${process.env.PUBLIC_URL}/assets/svg/${pageName}.svg`}
               alt={pageName}
             />
             <StyledTitle level={3}>{title}</StyledTitle>
           </Space>
         </Col>
-        <Col>{breadcrumbList && <CustomBreadCrumb list={breadcrumbList}></CustomBreadCrumb>}</Col>
+        <Col>{breadcrumbList && <TurtleBreadCrumb list={breadcrumbList}></TurtleBreadCrumb>}</Col>
       </Row>
-      <CustomDivider />
+      <TurtleDivider />
     </>
   );
 };

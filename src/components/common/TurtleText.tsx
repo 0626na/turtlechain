@@ -5,7 +5,7 @@ interface Props {
   children: React.ReactChild;
 }
 
-function CustomText({ children }: Props) {
+function TurtleText({ children }: Props) {
   return <StyledText>{children}</StyledText>;
 }
 
@@ -15,4 +15,4 @@ const StyledText = styled(Typography.Text)`
   font-size: 15px;
 `;
 
-export default CustomText;
+export default TurtleText;

@@ -5,7 +5,7 @@ interface Props {
   list: Array<string>;
 }
 
-function CustomBreadCrumb({ list }: Props) {
+function TurtleBreadCrumb({ list }: Props) {
   return (
     <StyledBreadcrumb separator=">">
       {list.map((item) => (
@@ -21,4 +21,4 @@ const StyledBreadcrumb = styled(Breadcrumb)`
   border-radius: 1rem;
 `;
 
-export default CustomBreadCrumb;
+export default TurtleBreadCrumb;

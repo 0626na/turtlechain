@@ -8,7 +8,7 @@ import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import SearchProductModal from "./SearchProductModal";
-import MallFilter from "./MallFilter";
+import StoreFilter from "./StoreFilter";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ const OrderCreatePage = function () {
         title={t("order create")}
         breadcrumbList={[t("order management"), t("order create")]}
       />
-      <MallFilter />
+      <StoreFilter />
       <OrderCreateForm form={form} onCreate={onCreate} openModal={() => setModalVisible(true)} />
       <OrderPreviewList list={list} setList={setList} />
       <SearchProductModal

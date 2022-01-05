@@ -6,7 +6,7 @@ interface Props {
   alt: string;
 }
 
-function CustomIcon({ filled, src, alt }: Props) {
+function TurtleIcon({ filled, src, alt }: Props) {
   if (filled) {
     return (
       <FilledDiv>
@@ -34,4 +34,4 @@ const StyledImg = styled.img`
   height: 25px;
 `;
 
-export default CustomIcon;
+export default TurtleIcon;

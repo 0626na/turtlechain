@@ -1,10 +1,9 @@
 import { Col, Row, Space, Typography } from "antd";
-import CustomButton from "components/common/CustomButton";
-import CustomSelect from "components/common/CustomSelect";
-import styled from "styled-components";
+import TurtleButton from "components/common/TurtleButton";
+import TurtleSelect from "components/common/TurtleSelect";
 import { useTranslation } from "react-i18next";
 
-function MallFilter() {
+function StoreFilter() {
   const { t } = useTranslation();
 
   return (
@@ -12,21 +11,21 @@ function MallFilter() {
       <Col>
         <Space size="large">
           <Typography.Text>{t("mall")}</Typography.Text>
-          <CustomSelect />
+          <TurtleSelect />
         </Space>
       </Col>
       <Col>
         <Space>
-          <CustomButton type="primary" color="grey">
+          <TurtleButton type="primary" color="grey">
             {`${t("order sheet")} ${t("upload")}`}
-          </CustomButton>
-          <CustomButton type="primary" color="skyBlue">
+          </TurtleButton>
+          <TurtleButton type="primary" color="skyBlue">
             {`${t("adjustment")} ${t("load")}`}
-          </CustomButton>
+          </TurtleButton>
         </Space>
       </Col>
     </Row>
   );
 }
 
-export default MallFilter;
+export default StoreFilter;

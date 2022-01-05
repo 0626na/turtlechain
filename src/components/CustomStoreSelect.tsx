@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Col, Form, Row, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
-import CustomSelect from "./common/CustomSelect";
-import CustomButton from "./common/CustomButton";
+import TurtleSelect from "./common/TurtleSelect";
+import TurtleButton from "./common/TurtleButton";
 import styled from "styled-components";
 
 function CustomStoreSelect() {
@@ -13,17 +13,17 @@ function CustomStoreSelect() {
       <Col>
         <Space size="large">
           <StyledTitle level={5}>{t("mall")}</StyledTitle>
-          <CustomSelect />
+          <TurtleSelect />
         </Space>
       </Col>
       <Col>
         <Space>
-          <CustomButton type="primary" color="grey">
+          <TurtleButton type="primary" color="grey">
             {`${t("order sheet")} ${t("upload")}`}
-          </CustomButton>
-          <CustomButton type="primary" color="skyBlue">
+          </TurtleButton>
+          <TurtleButton type="primary" color="skyBlue">
             {`${t("adjustment")} ${t("load")}`}
-          </CustomButton>
+          </TurtleButton>
         </Space>
       </Col>
     </Row>

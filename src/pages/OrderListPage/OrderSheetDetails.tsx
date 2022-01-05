@@ -37,8 +37,7 @@ const OrderSheetDetails = function ({ onClose }: Props) {
             align: "center",
             title: t("order time"),
             dataIndex: "order_time",
-            render: (_, record) =>
-              moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
+            render: (_, record) => moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
           },
           {
             align: "center",

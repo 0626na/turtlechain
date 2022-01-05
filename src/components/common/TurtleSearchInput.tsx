@@ -9,7 +9,7 @@ interface Props {
   placeholder: string;
 }
 
-function CustomSearchInput({ name, label, placeholder }: Props) {
+function TurtleSearchInput({ name, label, placeholder }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
       <Search placeholder={placeholder} onSearch={() => {}} enterButton />
@@ -17,4 +17,4 @@ function CustomSearchInput({ name, label, placeholder }: Props) {
   );
 }
 
-export default CustomSearchInput;
+export default TurtleSearchInput;

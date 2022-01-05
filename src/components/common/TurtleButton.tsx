@@ -8,7 +8,7 @@ interface Props {
   htmlType?: "submit";
 }
 
-function CustomButton({ children, type, color, htmlType }: Props) {
+function TurtleButton({ children, type, color, htmlType }: Props) {
   return (
     <StyledButton shape="round" type={type} color={color} htmlType={htmlType}>
       {children}
@@ -22,4 +22,4 @@ const StyledButton = styled(Button)`
   border: ${({ type }) => type && 0};
 `;
 
-export default CustomButton;
+export default TurtleButton;

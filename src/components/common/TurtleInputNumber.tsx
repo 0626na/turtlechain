@@ -5,7 +5,7 @@ interface Props {
   name: string;
   label: string;
 }
-function CustomInputNumber({ name, label }: Props) {
+function TurtleInputNumber({ name, label }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
       <StyledInputNumber min={1} />
@@ -17,4 +17,4 @@ const StyledInputNumber = styled(InputNumber)`
   width: 100%;
 `;
 
-export default CustomInputNumber;
+export default TurtleInputNumber;

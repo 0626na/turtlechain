@@ -8,15 +8,11 @@ interface Props {
   onChange: (e: any) => void;
 }
 
-function CustomRadio({ name, label, value, onChange }: Props) {
+function TurtleRadio({ name, label, value, onChange }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Form.Item
-      name="order_type"
-      label={t("order type")}
-      rules={[{ required: true }]}
-    >
+    <Form.Item name="order_type" label={t("order type")} rules={[{ required: true }]}>
       <Radio.Group onChange={onChange} value={value} defaultValue="order">
         <Radio value="order">{t("order")}</Radio>
         <Radio value="reserved">{t("reserved")}</Radio>
@@ -30,4 +26,4 @@ function CustomRadio({ name, label, value, onChange }: Props) {
   );
 }
 
-export default CustomRadio;
+export default TurtleRadio;

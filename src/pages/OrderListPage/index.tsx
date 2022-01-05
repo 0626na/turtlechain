@@ -4,7 +4,7 @@ import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
 import OrderSheetList from "./OrderSheetList";
 import { useState } from "react";
-import MallFilter from "./MallFilter";
+import StoreFilter from "./StoreFilter";
 
 const OrderListPage = function () {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const OrderListPage = function () {
         title={t("order list")}
         breadcrumbList={[t("order management"), t("order list")]}
       />
-      <MallFilter />
+      <StoreFilter />
       <OrderSheetList
         openOrderDetail={() => {
           setModalVisible(true);

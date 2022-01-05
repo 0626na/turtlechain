@@ -1,7 +1,7 @@
 import { Divider } from "antd";
 import styled from "styled-components";
 
-function CustomDivider() {
+function TurtleDivider() {
   return <StyledDivider />;
 }
 
@@ -10,4 +10,4 @@ const StyledDivider = styled(Divider)`
   margin: 0;
 `;
 
-export default CustomDivider;
+export default TurtleDivider;

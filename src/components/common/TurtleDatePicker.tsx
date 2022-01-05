@@ -5,7 +5,7 @@ interface Props {
   label: string;
 }
 
-function CustomDatePicker({ label }: Props) {
+function TurtleDatePicker({ label }: Props) {
   return (
     <Space size="large">
       <Typography.Text>{label}</Typography.Text>
@@ -14,4 +14,4 @@ function CustomDatePicker({ label }: Props) {
   );
 }
 
-export default CustomDatePicker;
+export default TurtleDatePicker;

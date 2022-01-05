@@ -1,10 +1,10 @@
 import { Col, Row, Space, Typography } from "antd";
-import CustomButton from "components/common/CustomButton";
-import CustomSelect from "components/common/CustomSelect";
+import TurtleButton from "components/common/TurtleButton";
+import TurtleSelect from "components/common/TurtleSelect";
 import { useTranslation } from "react-i18next";
-import CustomDatePicker from "components/common/CustomDatePicker";
+import TurtleDatePicker from "components/common/TurtleDatePicker";
 
-function MallFilter() {
+function StoreFilter() {
   const { t } = useTranslation();
 
   return (
@@ -12,19 +12,19 @@ function MallFilter() {
       <Col>
         <Space size="large">
           <Typography.Text>{t("mall")}</Typography.Text>
-          <CustomSelect />
-          <CustomDatePicker label={`${t("order")} ${t("date")}`} />
+          <TurtleSelect />
+          <TurtleDatePicker label={`${t("order")} ${t("date")}`} />
         </Space>
       </Col>
       <Col>
         <Space>
-          <CustomButton type="primary" color="grey">
+          <TurtleButton type="primary" color="grey">
             {`${t("order list")} ${t("download")}`}
-          </CustomButton>
+          </TurtleButton>
         </Space>
       </Col>
     </Row>
   );
 }
 
-export default MallFilter;
+export default StoreFilter;

@@ -7,7 +7,7 @@ interface Props {
   label: string;
   placeholder: string;
 }
-function CustomTextArea({ name, label, placeholder }: Props) {
+function TurtleTextArea({ name, label, placeholder }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
       <TextArea placeholder={placeholder} allowClear rows={13} />
@@ -15,4 +15,4 @@ function CustomTextArea({ name, label, placeholder }: Props) {
   );
 }
 
-export default CustomTextArea;
+export default TurtleTextArea;

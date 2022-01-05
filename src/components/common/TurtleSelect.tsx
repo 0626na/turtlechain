@@ -1,7 +1,7 @@
 import { Select } from "antd";
 import styled from "styled-components";
 
-function CustomSelect() {
+function TurtleSelect() {
   const { Option } = Select;
 
   return (
@@ -19,4 +19,4 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-export default CustomSelect;
+export default TurtleSelect;
