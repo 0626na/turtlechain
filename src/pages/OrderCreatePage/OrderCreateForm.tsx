@@ -37,12 +37,12 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
           <Col span={6}>
             <TurtleSearchInput // 거래처명 검색 Input
               name="store_name"
-              label={t("client name")}
+              label={t("client.name")}
               placeholder={t("placeholder.client name")}
             />
             <TurtleInput // 거래처 주소 Input
               name="address"
-              label={t("client address")}
+              label={t("client.address")}
               disabled={true}
             />
             <TurtleInput // 휴대번호 Input
@@ -54,12 +54,12 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
           <Col span={6}>
             <TurtleSearchInput
               name="product_name"
-              label={t("product name")}
+              label={t("product.name")}
               placeholder={t("placeholder.product name")}
             />
             <TurtleInput // 상품 바코드 Input
               name="product_code"
-              label={t("product code")}
+              label={t("product.code")}
               disabled={true}
             />
             <TurtleInput // 옵션 Input

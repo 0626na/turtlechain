@@ -29,13 +29,13 @@ const WarehousingSheetItemModal = function ({ visible, openModal, closeModal }: 
       centered
       width="90%"
       maskClosable={false}
-      title="상세 주문 내역"
+      title={t("order.detail")}
       visible={visible}
       onOk={closeModal}
       onCancel={closeModal}
     >
       <Table // 상단 주문서 정보 테이블
-        size="small"
+        size="middle"
         scroll={{ x: "auto", y: 400 }}
         pagination={false}
         //loading={isLoading}
@@ -74,24 +74,6 @@ const WarehousingSheetItemModal = function ({ visible, openModal, closeModal }: 
             render: (_, record) => record.order_sheet_price.toLocaleString(),
           },
         ]}
-        title={() => {
-          return (
-            <FormTitleContainer>
-              <b>{`${t("order.")} ${t("info")}`}</b>
-              <Button // 주문 리스트로 돌아가는 Button
-                type="primary"
-                onClick={closeModal}
-              >
-                {t("go list")}
-              </Button>
-            </FormTitleContainer>
-          );
-        }}
-        footer={() => (
-          <Footer>
-            <SimplePagination />
-          </Footer>
-        )}
       />
 
       <Table

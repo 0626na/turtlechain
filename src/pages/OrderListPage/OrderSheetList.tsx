@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Table, Tag, Button, Popconfirm, Row } from "antd";
 import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
+import TurtleButton from "components/common/TurtleButton";
 
 interface Props {
   openOrderDetail: () => void;
@@ -12,67 +13,34 @@ interface Props {
 const OrderSheetList = function ({ openOrderDetail }: Props) {
   const { t } = useTranslation();
 
-  const testList = [
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-    {
-      order_time: new Date(),
-      order_content: "거래처명/매입상품명 등 86개 품목 주문",
-      order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-      order_sheet_type: "최초",
-    },
-  ];
+  const testOrderSheet = {
+    order_time: new Date(),
+    order_content: "주문00 / 미송0 / 반품0 / 교환0 / 샘플0 / 픽업0 / 기타0",
+    order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
+    order_status: "최초",
+  };
+
+  const list = [];
+  for (let i = 0; i < 20; i++) {
+    list.push(testOrderSheet);
+  }
 
   return (
     <Row>
       <TurtleText>{`${t("order.")} ${t("list")}`}</TurtleText>
       <Table
         size="small"
-        scroll={{ x: "auto", y: 400 }}
+        scroll={{ x: "auto", y: 500 }}
         pagination={false}
         //loading={isLoading}
-        dataSource={testList}
+        dataSource={list}
         rowKey={(record) => record.order_content}
         columns={[
           {
             width: 100,
             align: "center",
-            title: `${t("order.sheet")} ${t("type")}`,
-            dataIndex: "order_sheet_type",
+            title: t("order.status"),
+            dataIndex: "order_status",
           },
           {
             width: 200,
@@ -87,13 +55,13 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
             dataIndex: "order_content",
           },
           {
-            width: 170,
+            width: 200,
             align: "center",
             title: `${t("order.sheet")} ${t("send status")}`,
             dataIndex: "order_sheet_status",
           },
           {
-            width: 100,
+            width: 150,
             align: "center",
             title: `${t("order.sheet")} ${t("resend")}`,
             dataIndex: "order_sheet_resend",
@@ -113,7 +81,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
             },
           },
           {
-            width: 100,
+            width: 150,
             align: "center",
             title: t("view details"),
             dataIndex: "action",
@@ -124,13 +92,9 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
                     e.stopPropagation();
                   }}
                 >
-                  <Button //
-                    size="small"
-                    shape="round"
-                    onClick={openOrderDetail}
-                  >
+                  <TurtleButton size="small" color="mint" onClick={openOrderDetail}>
                     {t("view details")}
-                  </Button>
+                  </TurtleButton>
                 </ActionContainer>
               );
             },

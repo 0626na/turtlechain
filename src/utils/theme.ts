@@ -50,6 +50,7 @@ interface Theme {
   text: string;
   greyButton: string;
   skyBlueButton: string;
+  mintButton: string;
   border: string;
   breadcrumb: string;
   imgBackground: string;
@@ -61,6 +62,7 @@ const theme: Theme = {
   text: colors.black,
   greyButton: colors.grey_5,
   skyBlueButton: colors.skyBlue,
+  mintButton: colors.mint,
   border: colors.grey_10,
   breadcrumb: colors.grey_1,
   imgBackground: colors.grey_1,

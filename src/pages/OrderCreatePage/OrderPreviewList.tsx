@@ -25,15 +25,15 @@ const OrderPreviewList = function ({ list, setList }: Props) {
         rowKey={(record) => record.product_code}
         columns={[
           {
-            title: t("product code"),
+            title: t("product.code"),
             dataIndex: "product_code",
           },
           {
-            title: t("client name"),
+            title: t("client.name"),
             dataIndex: "store_name",
           },
           {
-            title: t("client address"),
+            title: t("client.address"),
             dataIndex: "address",
           },
           {
@@ -41,7 +41,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
             dataIndex: "phone",
           },
           {
-            title: t("product name"),
+            title: t("product.name"),
             dataIndex: "product_name",
           },
           {

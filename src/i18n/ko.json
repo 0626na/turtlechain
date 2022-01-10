@@ -14,7 +14,8 @@
     "really confirmed": "정말 마감하시겠습니까?",
     "really resend": "정말 재전송하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
-    "changed data": "변경된 데이터가 있습니다."
+    "changed data": "변경된 데이터가 있습니다.",
+    "find client by": "거래처명, 휴대번호 또는 계좌번호를 입력하여 거래처를 찾아볼 수 있습니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
@@ -57,9 +58,26 @@
     "list": "주문 내역",
     "count": "발주 수량",
     "type": "주문종류",
-    "time": "주문일시",
-    "content": "주문내용",
-    "detail": "주문 상세정보"
+    "time": "주문 날짜",
+    "content": "주문 내용",
+    "detail": "상세 주문 내역",
+    "status": "진행 상태"
+  },
+  "product": {
+    "": "상품",
+    "search": "상품 조회하기",
+    "management": "상품 관리",
+    "code": "상품 바코드",
+    "name": "상품명"
+  },
+  "client": {
+    "": "거래처",
+    "register": "거래처 등록",
+    "list": "거래처 목록",
+    "management": "거래처 관리",
+    "name": "거래처명",
+    "address": "거래처 주소",
+    "search": "거래처 조회하기"
   },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
@@ -102,17 +120,8 @@
   "warehousing total count": "입고 수량 합계",
   "warehousing unconfirmed": "입고 대기",
   "warehousing confirmed": "입고 마감",
-  "client management": "거래처 관리",
-  "client name": "거래처명",
-  "client address": "거래처 주소",
   "settlement": "정산",
   "settlement management": "정산 관리",
-  "search client": "거래처 조회하기",
-  "product": "상품",
-  "search product": "상품 조회하기",
-  "product management": "상품 관리",
-  "product code": "상품 바코드",
-  "product name": "상품명",
   "supply price": "공급가",
   "total supply price": "공급가 합계",
   "biz status": "영업 상태",
