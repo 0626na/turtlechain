@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
-import { Sheet } from "apis/warehousingAPI";
-import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm, Row } from "antd";
 import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
@@ -61,7 +59,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
 
   return (
     <Row>
-      <TurtleText>{`${t("order")} ${t("list")}`}</TurtleText>
+      <TurtleText>{`${t("order.")} ${t("list")}`}</TurtleText>
       <Table
         size="small"
         scroll={{ x: "auto", y: 400 }}
@@ -71,33 +69,33 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
         rowKey={(record) => record.order_content}
         columns={[
           {
+            width: 100,
+            align: "center",
+            title: `${t("order.sheet")} ${t("type")}`,
+            dataIndex: "order_sheet_type",
+          },
+          {
             width: 200,
             align: "center",
-            title: t("order time"),
+            title: t("order.time"),
             dataIndex: "order_time",
             render: (_, record) => moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
           },
           {
             align: "center",
-            title: t("order content"),
+            title: t("order.content"),
             dataIndex: "order_content",
           },
           {
             width: 170,
             align: "center",
-            title: `${t("order sheet")} ${t("send status")}`,
+            title: `${t("order.sheet")} ${t("send status")}`,
             dataIndex: "order_sheet_status",
           },
           {
             width: 100,
             align: "center",
-            title: `${t("order sheet")} ${t("type")}`,
-            dataIndex: "order_sheet_type",
-          },
-          {
-            width: 100,
-            align: "center",
-            title: `${t("order sheet")} ${t("resend")}`,
+            title: `${t("order.sheet")} ${t("resend")}`,
             dataIndex: "order_sheet_resend",
             render: (_, record) => {
               return (

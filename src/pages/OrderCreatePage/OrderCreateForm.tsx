@@ -32,7 +32,7 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
   return (
     <>
       <Form layout="vertical" form={form}>
-        <TurtleText>{`${t("order sheet")} ${t("info")} ${t("input")}`}</TurtleText>
+        <TurtleText>{`${t("order.sheet")} ${t("info")} ${t("input")}`}</TurtleText>
         <Row gutter={32}>
           <Col span={6}>
             <TurtleSearchInput // 거래처명 검색 Input
@@ -74,13 +74,13 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
             />
             <TurtleInputNumber // 발주수량 Input
               name="count"
-              label={t("order count")}
+              label={t("order.count")}
             />
           </Col>
           <Col span={12}>
             <TurtleRadio
               name="order_type"
-              label={t("order type")}
+              label={t("order.type")}
               value={orderType}
               onChange={onChangeOrderType}
             />

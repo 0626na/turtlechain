@@ -1,14 +1,16 @@
-import { Button, Popconfirm, Table, Typography } from "antd";
+import { Button, Modal, Table } from "antd";
 import SimplePagination from "components/SimplePagination";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 interface Props {
-  onClose: () => void;
+  visible: boolean;
+  openModal: () => void;
+  closeModal: () => void;
 }
 
-const OrderSheetDetails = function ({ onClose }: Props) {
+const WarehousingSheetItemModal = function ({ visible, openModal, closeModal }: Props) {
   const { t } = useTranslation();
 
   const testOrderSheet = [
@@ -23,8 +25,16 @@ const OrderSheetDetails = function ({ onClose }: Props) {
   ];
 
   return (
-    <>
-      <Table // 주문 정보 테이블
+    <Modal
+      centered
+      width="90%"
+      maskClosable={false}
+      title="상세 주문 내역"
+      visible={visible}
+      onOk={closeModal}
+      onCancel={closeModal}
+    >
+      <Table // 상단 주문서 정보 테이블
         size="small"
         scroll={{ x: "auto", y: 400 }}
         pagination={false}
@@ -70,7 +80,7 @@ const OrderSheetDetails = function ({ onClose }: Props) {
               <b>{`${t("order.")} ${t("info")}`}</b>
               <Button // 주문 리스트로 돌아가는 Button
                 type="primary"
-                onClick={onClose}
+                onClick={closeModal}
               >
                 {t("go list")}
               </Button>
@@ -154,7 +164,7 @@ const OrderSheetDetails = function ({ onClose }: Props) {
           },
         ]}
       />
-    </>
+    </Modal>
   );
 };
 
@@ -168,4 +178,4 @@ const FormTitleContainer = styled.div`
   justify-content: space-between;
 `;
 
-export default OrderSheetDetails;
+export default WarehousingSheetItemModal;

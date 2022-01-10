@@ -1,14 +1,34 @@
 import { Select } from "antd";
+import { SelectValue } from "antd/lib/select";
+import { ResponseGetStores, Store } from "apis/retailerStoreAPI";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-function TurtleSelect() {
-  const { Option } = Select;
+interface Props {
+  options?: Array<Store>;
+  loading?: boolean;
+}
+
+function TurtleSelect({ options, loading }: Props) {
+  const { t } = useTranslation();
+
+  const handleChange = (value: SelectValue) => {
+    console.log(`selected ${value}`);
+  };
 
   return (
-    <StyledSelect placeholder="필요한 쇼핑몰을 선택하세요">
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="Yiminghe">yiminghe</Option>
+    <StyledSelect
+      placeholder={t("description.select mall")}
+      loading={loading}
+      onChange={handleChange}
+    >
+      {options?.map(({ name, id }) => {
+        return (
+          <Select.Option key={id} value={id}>
+            {name}
+          </Select.Option>
+        );
+      })}
     </StyledSelect>
   );
 }

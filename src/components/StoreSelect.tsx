@@ -13,12 +13,7 @@ interface Props {
   onChange?: (value: "" | number, label: string) => void;
 }
 
-const StoreSelect = function ({
-  emptyValueText,
-  width,
-  value,
-  onChange,
-}: Props) {
+const StoreSelect = function ({ emptyValueText, width, value, onChange }: Props) {
   const getStoresQuery = useQuery(
     ["getStores"],
     () =>

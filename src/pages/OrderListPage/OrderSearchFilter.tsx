@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, DatePicker } from "antd";
-import StoreSelect from "components/StoreSelect";
 import CustomStoreSelect from "components/CustomStoreSelect";
 
 interface Props {}

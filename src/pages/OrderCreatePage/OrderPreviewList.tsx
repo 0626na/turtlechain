@@ -16,7 +16,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
 
   return (
     <Row>
-      <TurtleText>{`${t("order sheet")} ${t("preview")}`}</TurtleText>
+      <TurtleText>{`${t("order.sheet")} ${t("preview")}`}</TurtleText>
       <Table
         size="small"
         scroll={{ x: 1000, y: 400 }}
@@ -49,7 +49,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
             dataIndex: "option",
           },
           {
-            title: t("order count"),
+            title: t("order.count"),
             dataIndex: "order_count",
           },
           {
@@ -57,7 +57,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
             dataIndex: "price",
           },
           {
-            title: t("order type"),
+            title: t("order.type"),
             dataIndex: "order_type",
           },
           {
@@ -94,7 +94,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
               //loading={isLoading}
               type="primary"
             >
-              {t("order create")}
+              {t("order.create")}
             </Button>
           </Row>
         )}

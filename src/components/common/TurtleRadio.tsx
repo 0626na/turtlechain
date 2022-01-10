@@ -12,9 +12,9 @@ function TurtleRadio({ name, label, value, onChange }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Form.Item name="order_type" label={t("order type")} rules={[{ required: true }]}>
+    <Form.Item name="order_type" label={t("order.type")} rules={[{ required: true }]}>
       <Radio.Group onChange={onChange} value={value} defaultValue="order">
-        <Radio value="order">{t("order")}</Radio>
+        <Radio value="order">{t("order.")}</Radio>
         <Radio value="reserved">{t("reserved")}</Radio>
         <Radio value="take_back">{t("take back")}</Radio>
         <Radio value="exchange">{t("exchange")}</Radio>

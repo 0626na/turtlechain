@@ -8,12 +8,13 @@ import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import SearchProductModal from "./SearchProductModal";
-import StoreFilter from "./StoreFilter";
+import Filter from "./Filter";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
-  const title = `${t("turtlechain")} - ${t("order create")}`;
+  const title = `${t("turtlechain")} - ${t("order.create")}`;
 
+  const [storeId, setStoreId] = useState();
   const [form] = Form.useForm<CreateOrderItem>();
   const [list, setList] = useState<Array<CreateOrderItem>>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,10 +29,10 @@ const OrderCreatePage = function () {
       <Helmet title={title} />
       <PageHeader
         pageName="order"
-        title={t("order create")}
-        breadcrumbList={[t("order management"), t("order create")]}
+        title={t("order.create")}
+        breadcrumbList={[t("order.management"), t("order.create")]}
       />
-      <StoreFilter />
+      <Filter />
       <OrderCreateForm form={form} onCreate={onCreate} openModal={() => setModalVisible(true)} />
       <OrderPreviewList list={list} setList={setList} />
       <SearchProductModal

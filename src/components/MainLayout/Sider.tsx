@@ -39,30 +39,24 @@ const Sider = function () {
       pathname: "/home",
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
-            alt="home"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`} alt="home" />
         </div>
       ),
     },
     {
-      title: t("order management"),
+      title: t("order.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
-            alt="order"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`} alt="order" />
         </div>
       ),
       submenu: [
         {
-          title: t("order create"),
+          title: t("order.create"),
           pathname: "/order/create",
         },
         {
-          title: t("order list"),
+          title: t("order.list"),
           pathname: "/order/list",
         },
       ],
@@ -125,10 +119,7 @@ const Sider = function () {
       title: t("settlement management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
-            alt="settlement"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`} alt="settlement" />
         </div>
       ),
       submenu: [],
@@ -137,10 +128,7 @@ const Sider = function () {
       title: t("product management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="product"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`} alt="product" />
         </div>
       ),
       submenu: [],
@@ -149,10 +137,7 @@ const Sider = function () {
       title: t("client management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`}
-            alt="refund"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`} alt="refund" />
         </div>
       ),
       submenu: [],
@@ -161,10 +146,7 @@ const Sider = function () {
       title: t("setting"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
-            alt="setting"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`} alt="setting" />
         </div>
       ),
       submenu: [
@@ -199,10 +181,7 @@ const Sider = function () {
                 {submenu.map((item) => {
                   const { title, pathname } = item;
                   return (
-                    <Menu.Item
-                      key={pathname}
-                      onClick={() => handleMenuClick(pathname)}
-                    >
+                    <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)}>
                       {title}
                     </Menu.Item>
                   );
@@ -211,11 +190,7 @@ const Sider = function () {
             );
           } else {
             return (
-              <Menu.Item
-                key={pathname}
-                onClick={() => handleMenuClick(pathname)}
-                icon={icon}
-              >
+              <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)} icon={icon}>
                 {title}
               </Menu.Item>
             );
