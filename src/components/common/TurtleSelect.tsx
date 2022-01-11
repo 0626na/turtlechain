@@ -1,27 +1,21 @@
 import { Select } from "antd";
 import { SelectValue } from "antd/lib/select";
-import { ResponseGetStores, Store } from "apis/retailerStoreAPI";
-import { useTranslation } from "react-i18next";
+import { Store } from "apis/retailerStoreAPI";
 import styled from "styled-components";
 
 interface Props {
   options?: Array<Store>;
   loading?: boolean;
+  placeholder?: string;
 }
 
-function TurtleSelect({ options, loading }: Props) {
-  const { t } = useTranslation();
-
+function TurtleSelect({ options, loading, placeholder }: Props) {
   const handleChange = (value: SelectValue) => {
     console.log(`selected ${value}`);
   };
 
   return (
-    <StyledSelect
-      placeholder={t("description.select mall")}
-      loading={loading}
-      onChange={handleChange}
-    >
+    <StyledSelect placeholder={placeholder} loading={loading} onChange={handleChange}>
       {options?.map(({ name, id }) => {
         return (
           <Select.Option key={id} value={id}>

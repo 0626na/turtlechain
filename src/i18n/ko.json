@@ -41,27 +41,50 @@
     "closed": "폐점"
   },
   "placeholder": {
-    "client name": "거래처명을 검색 또는 입력하세요.",
-    "client address": "거래처 주소를 정확히 입력하세요.",
+    "vendor name": "거래처명을 검색 또는 입력하세요.",
+    "vendor address": "거래처 주소를 정확히 입력하세요.",
     "phone": "휴대번호를 정확히 입력하세요",
     "product name": "상품명을 검색 또는 입력하세요.",
     "memo": "메모를 입력해주세요."
   },
   "button": {
-    "add": "추가하기"
+    "add": "추가하기",
+    "delete": "삭제",
+    "resend": "재전송",
+    "details": "상세보기",
+    "upload order sheet": "주문서 업로드",
+    "load adjustment": "매입조정 불러오기",
+    "download order list": "주문 내역 다운로드"
   },
   "order": {
     "": "주문",
-    "sheet": "주문서",
     "management": "주문 관리",
     "create": "주문 등록",
     "list": "주문 내역",
-    "count": "발주 수량",
-    "type": "주문종류",
-    "time": "주문 날짜",
+    "date": "주문 날짜",
+    "time": "주문 시간",
     "content": "주문 내용",
     "detail": "상세 주문 내역",
-    "status": "진행 상태"
+    "status": "진행 상태",
+    "enter info": "주문서 정보 입력",
+    "memo": "메모",
+    "preview list": "주문서 미리보기",
+    "type": {
+      "": "주문종류",
+      "order": "주문",
+      "reserved": "미송",
+      "take back": "반품",
+      "exchange": "교환",
+      "sample": "샘플",
+      "pickup": "픽업",
+      "etc": "기타"
+    },
+    "sheet": {
+      "": "주문서",
+      "list": "주문 리스트",
+      "status": "주문서 발송 상태",
+      "resend": "주문서 재전송"
+    }
   },
   "sample return": {
     "": "샘플",
@@ -91,7 +114,10 @@
     "search": "상품 조회하기",
     "management": "상품 관리",
     "code": "상품 바코드",
-    "name": "상품명"
+    "name": "상품명",
+    "option": "옵션",
+    "price": "공급가",
+    "count": "발주수량"
   },
   "vendor": {
     "": "거래처",
@@ -100,7 +126,8 @@
     "management": "거래처 관리",
     "name": "거래처명",
     "address": "거래처 주소",
-    "search": "거래처 조회하기"
+    "search": "거래처 조회하기",
+    "phone": "휴대번호"
   },
   "account": {
     "": "계정",
@@ -111,12 +138,14 @@
     "info": "사업자 정보"
   },
   "store": {
+    "": "쇼핑몰",
     "name": "쇼핑몰명",
     "info": "쇼핑몰 정보",
     "url": "쇼핑몰 URL",
-    "phone": "쇼핑몰 전화",
+    "phone": "쇼핑몰 휴대번호",
     "create": "쇼핑몰 추가하기",
-    "update": "쇼핑몰 수정하기"
+    "update": "쇼핑몰 수정하기",
+    "address": "쇼핑몰 주소"
   },
   "common": {},
   "turtlechain": "터틀체인",
@@ -203,7 +232,6 @@
   "no": "아니오",
   "created time": "생성 시간",
   "updated time": "수정 시간",
-  "memo": "메모",
   "take back": "반품",
   "reserved": "미송",
   "exchange": "교환",

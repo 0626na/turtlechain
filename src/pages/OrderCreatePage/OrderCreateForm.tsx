@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
-import { Form, Col, Typography, Row, Space } from "antd";
+import { Form, Col, Row, FormInstance } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
@@ -14,12 +14,11 @@ import TurtleText from "components/common/TurtleText";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
 
 interface Props {
-  form: any; // Form.useForm() 의 타입???
+  form: FormInstance<CreateOrderItem>;
   onCreate: (value: CreateOrderItem) => void;
-  openModal: () => void;
 }
 
-const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
+const OrderCreateForm = function ({ form, onCreate }: Props) {
   const { t } = useTranslation();
 
   const [orderType, setOrderType] = useState("order");
@@ -32,22 +31,22 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
   return (
     <>
       <Form layout="vertical" form={form}>
-        <TurtleText>{`${t("order.sheet")} ${t("info")} ${t("input")}`}</TurtleText>
+        <TurtleText>{t("order.enter info")}</TurtleText>
         <Row gutter={32}>
           <Col span={6}>
             <TurtleSearchInput // 거래처명 검색 Input
-              name="store_name"
-              label={t("client.name")}
-              placeholder={t("placeholder.client name")}
+              name="vendor_name"
+              label={t("vendor.name")}
+              placeholder={t("placeholder.vendor name")}
             />
             <TurtleInput // 거래처 주소 Input
-              name="address"
-              label={t("client.address")}
+              name="vendor_address"
+              label={t("vendor.address")}
               disabled={true}
             />
-            <TurtleInput // 휴대번호 Input
-              name="phone"
-              label={t("phone")}
+            <TurtleInput // 거래처 휴대번호 Input
+              name="vendor_phone"
+              label={t("vendor.phone")}
               disabled={true}
             />
           </Col>
@@ -62,33 +61,39 @@ const OrderCreateForm = function ({ form, onCreate, openModal }: Props) {
               label={t("product.code")}
               disabled={true}
             />
-            <TurtleInput // 옵션 Input
-              name="option"
-              label={t("option")}
+            <TurtleInput // 상품 옵션 Input
+              name="product_option"
+              label={t("product.option")}
               disabled={true}
             />
-            <TurtleInput // 공급가 Input
-              label={t("supply price")}
-              name="price"
+            <TurtleInput // 상품 공급가 Input
+              name="product_price"
+              label={t("product.price")}
               disabled={true}
             />
-            <TurtleInputNumber // 발주수량 Input
-              name="count"
-              label={t("order.count")}
+            <TurtleInputNumber // 상품 발주수량 Input
+              name="product_count"
+              label={t("product.count")}
             />
           </Col>
           <Col span={12}>
-            <TurtleRadio
+            <TurtleRadio // 주문종류 Select
               name="order_type"
-              label={t("order.type")}
+              label={t("order.type.")}
               value={orderType}
               onChange={onChangeOrderType}
             />
-            <TurtleTextArea name="memo" label={t("memo")} placeholder={t("placeholder.memo")} />
+            <TurtleTextArea // 주문 메모 TextArea
+              name="order_memo"
+              label={t("order.memo")}
+              placeholder={t("placeholder.memo")}
+            />
           </Col>
         </Row>
         <Row justify="center">
-          <TurtleButton htmlType="submit">추가하기</TurtleButton>
+          <TurtleButton type="default" htmlType="submit">
+            {t("button.add")}
+          </TurtleButton>
         </Row>
       </Form>
       <TurtleDivider />

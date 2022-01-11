@@ -1,26 +1,26 @@
-import { Form, Radio } from "antd";
+import { Form, Radio, RadioChangeEvent } from "antd";
 import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
   label: string;
   value: string;
-  onChange: (e: any) => void;
+  onChange: (e: RadioChangeEvent) => void;
 }
 
 function TurtleRadio({ name, label, value, onChange }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Form.Item name="order_type" label={t("order.type")} rules={[{ required: true }]}>
-      <Radio.Group onChange={onChange} value={value} defaultValue="order">
-        <Radio value="order">{t("order.")}</Radio>
-        <Radio value="reserved">{t("reserved")}</Radio>
-        <Radio value="take_back">{t("take back")}</Radio>
-        <Radio value="exchange">{t("exchange")}</Radio>
-        <Radio value="samle">{t("samle")}</Radio>
-        <Radio value="pickup">{t("pickup")}</Radio>
-        <Radio value="etc">{t("etc")}</Radio>
+    <Form.Item name={name} label={label} rules={[{ required: true }]}>
+      <Radio.Group onChange={onChange} value={value}>
+        <Radio value="order">{t("order.type.order")}</Radio>
+        <Radio value="reserved">{t("order.type.reserved")}</Radio>
+        <Radio value="take_back">{t("order.type.take back")}</Radio>
+        <Radio value="exchange">{t("order.type.exchange")}</Radio>
+        <Radio value="sample">{t("order.type.sample")}</Radio>
+        <Radio value="pickup">{t("order.type.pickup")}</Radio>
+        <Radio value="etc">{t("order.type.etc")}</Radio>
       </Radio.Group>
     </Form.Item>
   );

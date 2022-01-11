@@ -5,6 +5,7 @@ import { Table, Tag, Button, Popconfirm, Row } from "antd";
 import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
+import { OrderSheet } from "apis/orderAPI";
 
 interface Props {
   openOrderDetail: () => void;
@@ -13,28 +14,29 @@ interface Props {
 const OrderSheetList = function ({ openOrderDetail }: Props) {
   const { t } = useTranslation();
 
-  const testOrderSheet = {
+  let fakeKey = 1;
+  const testOrderSheet: OrderSheet = {
+    order_status: "최초",
     order_time: new Date(),
     order_content: "주문00 / 미송0 / 반품0 / 교환0 / 샘플0 / 픽업0 / 기타0",
     order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-    order_status: "최초",
   };
 
-  const list = [];
-  for (let i = 0; i < 20; i++) {
+  const list: Array<OrderSheet> = [];
+  for (let i = 0; i < 7; i++) {
     list.push(testOrderSheet);
   }
 
   return (
     <Row>
-      <TurtleText>{`${t("order.")} ${t("list")}`}</TurtleText>
+      <TurtleText>{t("order.sheet.list")}</TurtleText>
       <Table
         size="small"
         scroll={{ x: "auto", y: 500 }}
         pagination={false}
         //loading={isLoading}
         dataSource={list}
-        rowKey={(record) => record.order_content}
+        rowKey={(record) => fakeKey++}
         columns={[
           {
             width: 100,
@@ -43,11 +45,11 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
             dataIndex: "order_status",
           },
           {
-            width: 200,
+            width: 100,
             align: "center",
             title: t("order.time"),
             dataIndex: "order_time",
-            render: (_, record) => moment(record.order_time).format("YYYY-MM-DD hh:mm:ss"),
+            render: (_, record) => moment(record.order_time).format("YYYY.MM.DD"),
           },
           {
             align: "center",
@@ -57,13 +59,13 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
           {
             width: 200,
             align: "center",
-            title: `${t("order.sheet")} ${t("send status")}`,
+            title: t("order.sheet.status"),
             dataIndex: "order_sheet_status",
           },
           {
             width: 150,
             align: "center",
-            title: `${t("order.sheet")} ${t("resend")}`,
+            title: t("order.sheet.resend"),
             dataIndex: "order_sheet_resend",
             render: (_, record) => {
               return (
@@ -74,7 +76,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
                   onConfirm={() => {}}
                 >
                   <Button danger type="primary" size="small" shape="round">
-                    {t("resend")}
+                    {t("button.resend")}
                   </Button>
                 </Popconfirm>
               );
@@ -93,7 +95,7 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
                   }}
                 >
                   <TurtleButton size="small" color="mint" onClick={openOrderDetail}>
-                    {t("view details")}
+                    {t("button.details")}
                   </TurtleButton>
                 </ActionContainer>
               );

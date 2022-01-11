@@ -3,8 +3,8 @@ import { TFunctionResult } from "i18next";
 import styled from "styled-components";
 
 interface Props {
-  children?: React.ReactChild | TFunctionResult;
-  type?: "primary";
+  children: TFunctionResult;
+  type?: "primary" | "default";
   color?: "grey" | "skyBlue" | "mint";
   htmlType?: "submit";
   size?: "small";
@@ -28,7 +28,7 @@ function TurtleButton({ children, type = "primary", color, htmlType, size, onCli
 
 const StyledButton = styled(Button)`
   background-color: ${({ theme, color }) => color && theme[color + "Button"]};
-  border: ${({ type }) => type && 0};
+  border: ${({ theme, color }) => color && theme[color + "Button"]};
   &:hover {
     background-color: ${({ theme, color }) => color && theme[color + "Button"]};
     opacity: 0.8;

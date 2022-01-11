@@ -1,4 +1,4 @@
-import { Col, Row, Space, Typography } from "antd";
+import { Col, Row, Space } from "antd";
 import TurtleButton from "components/common/TurtleButton";
 import { useTranslation } from "react-i18next";
 import TurtleDatePicker from "components/common/TurtleDatePicker";
@@ -12,13 +12,13 @@ function Filter() {
       <Col>
         <Space size="large">
           <CustomStoreSelect />
-          <TurtleDatePicker label={`${t("order.")} ${t("date")}`} />
+          <TurtleDatePicker label={t("order.date")} />
         </Space>
       </Col>
       <Col>
         <Space>
           <TurtleButton type="primary" color="grey">
-            {`${t("order.list")} ${t("download")}`}
+            {t("button.download order list")}
           </TurtleButton>
         </Space>
       </Col>

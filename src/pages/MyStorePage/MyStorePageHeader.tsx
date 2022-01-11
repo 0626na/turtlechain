@@ -7,7 +7,7 @@ import { PageHeader, Typography } from "antd";
 const MyStorePageHeader = function () {
   const { t } = useTranslation();
   return (
-    <PageHeader title={t("mall info")}>
+    <PageHeader title={t("store.info")}>
       <Typography.Text type="secondary">
         <InfoIcon /> {t("description.first way to manage malls")}
       </Typography.Text>
