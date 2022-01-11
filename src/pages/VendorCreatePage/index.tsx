@@ -1,6 +1,8 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+import Filter from "./Filter";
+import VendorCreateForm from "./VendorCreateForm";
 
 function VendorCreatePage() {
   const { t } = useTranslation();
@@ -13,7 +15,10 @@ function VendorCreatePage() {
         pageName="Vendor"
         title={t("vendor.create")}
         breadcrumbList={[t("vendor.management"), t("vendor.create")]}
+        info={t("description.search vendor")}
       />
+      <Filter />
+      <VendorCreateForm />
     </>
   );
 }
