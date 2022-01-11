@@ -134,7 +134,16 @@ const Sider = function () {
           <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("vendor.create"),
+          pathname: "/vendor/create",
+        },
+        {
+          title: t("vendor.list"),
+          pathname: "/vendor/list",
+        },
+      ],
     },
     {
       title: t("setting"),

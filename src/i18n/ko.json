@@ -121,7 +121,7 @@
   },
   "vendor": {
     "": "거래처",
-    "register": "거래처 등록",
+    "create": "거래처 등록",
     "list": "거래처 목록",
     "management": "거래처 관리",
     "name": "거래처명",
