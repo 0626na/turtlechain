@@ -63,6 +63,29 @@
     "detail": "상세 주문 내역",
     "status": "진행 상태"
   },
+  "sample return": {
+    "": "샘플",
+    "return": "샘플반납",
+    "management": "샘플반납 관리"
+  },
+  "warehousing": {
+    "": "입고",
+    "management": "입고 관리",
+    "create": "입고 등록",
+    "list": "입고 내역"
+  },
+  "adjustment": {
+    "": "매입조정",
+    "management": "매입조정 관리",
+    "create": "매입조정 등록",
+    "list": "매입조정 내역"
+  },
+  "settlement": {
+    "": "정산",
+    "management": "정산 관리",
+    "create": "정산 등록",
+    "list": "정산 내역"
+  },
   "product": {
     "": "상품",
     "search": "상품 조회하기",
@@ -70,7 +93,7 @@
     "code": "상품 바코드",
     "name": "상품명"
   },
-  "client": {
+  "vendor": {
     "": "거래처",
     "register": "거래처 등록",
     "list": "거래처 목록",
@@ -79,6 +102,23 @@
     "address": "거래처 주소",
     "search": "거래처 조회하기"
   },
+  "account": {
+    "": "계정",
+    "my": "내 계정"
+  },
+  "biz": {
+    "": "사업자",
+    "info": "사업자 정보"
+  },
+  "store": {
+    "name": "쇼핑몰명",
+    "info": "쇼핑몰 정보",
+    "url": "쇼핑몰 URL",
+    "phone": "쇼핑몰 전화",
+    "create": "쇼핑몰 추가하기",
+    "update": "쇼핑몰 수정하기"
+  },
+  "common": {},
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",
@@ -98,10 +138,6 @@
   "auth phone": "휴대번호 인증하기",
   "my page": "마이페이지",
   "my account": "내 계정",
-  "samle": "샘플",
-  "samle return": "샘플 반납",
-  "samle return management": "샘플 반납 관리",
-  "adjustment": "매입조정",
   "adjustment management": "매입조정 관리",
   "adjustment create": "매입조정 등록",
   "adjustment list": "매입조정 내역",
@@ -109,7 +145,6 @@
   "adjustment unconfirmed": "매입조정 대기",
   "adjustment confirmed": "매입조정 마감",
   "adjustment type": "매입조정 타입",
-  "warehousing": "입고",
   "warehousing management": "입고 관리",
   "warehousing create": "입고 등록",
   "warehousing list": "입고 내역",
@@ -120,8 +155,6 @@
   "warehousing total count": "입고 수량 합계",
   "warehousing unconfirmed": "입고 대기",
   "warehousing confirmed": "입고 마감",
-  "settlement": "정산",
-  "settlement management": "정산 관리",
   "supply price": "공급가",
   "total supply price": "공급가 합계",
   "biz status": "영업 상태",
@@ -135,13 +168,6 @@
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
-  "mall": "쇼핑몰명",
-  "mall info": "쇼핑몰 정보",
-  "mall name": "쇼핑몰명",
-  "mall url": "쇼핑몰 URL",
-  "mall phone": "쇼핑몰 전화",
-  "create mall": "쇼핑몰 추가하기",
-  "update mall": "쇼핑몰 수정하기",
   "account info": "은행 정보",
   "alimtalk name": "알림톡명",
   "admin account": "관리자 계정",

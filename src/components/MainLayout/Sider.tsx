@@ -62,61 +62,55 @@ const Sider = function () {
       ],
     },
     {
-      title: t("samle return management"),
+      title: t("sample return.management"),
       icon: (
         <div>
           <SvgIcon
             src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="samle return"
+            alt="sample return"
           />
         </div>
       ),
       submenu: [],
     },
     {
-      title: t("warehousing management"),
+      title: t("warehousing.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing management"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`} alt="warehousing" />
         </div>
       ),
       submenu: [
         {
-          title: t("warehousing create"),
+          title: t("warehousing.create"),
           pathname: "/warehousing/create",
         },
         {
-          title: t("warehousing list"),
+          title: t("warehousing.list"),
           pathname: "/warehousing/list",
         },
       ],
     },
     {
-      title: t("adjustment management"),
+      title: t("adjustment.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
-            alt="adjustment management"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`} alt="adjustment" />
         </div>
       ),
       submenu: [
         {
-          title: t("adjustment create"),
+          title: t("adjustment.create"),
           pathname: "/adjustment/create",
         },
         {
-          title: t("adjustment list"),
+          title: t("adjustment.list"),
           pathname: "/adjustment/list",
         },
       ],
     },
     {
-      title: t("settlement management"),
+      title: t("settlement.management"),
       icon: (
         <div>
           <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`} alt="settlement" />
@@ -125,7 +119,7 @@ const Sider = function () {
       submenu: [],
     },
     {
-      title: t("product management"),
+      title: t("product.management"),
       icon: (
         <div>
           <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`} alt="product" />
@@ -134,10 +128,10 @@ const Sider = function () {
       submenu: [],
     },
     {
-      title: t("client management"),
+      title: t("vendor.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`} alt="refund" />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
         </div>
       ),
       submenu: [],
@@ -151,15 +145,15 @@ const Sider = function () {
       ),
       submenu: [
         {
-          title: t("my account"),
+          title: t("account.my"),
           pathname: "/my/account",
         },
         {
-          title: t("biz info"),
+          title: t("biz.info"),
           pathname: "/my/company",
         },
         {
-          title: t("mall info"),
+          title: t("store.info"),
           pathname: "/my/store",
         },
       ],
