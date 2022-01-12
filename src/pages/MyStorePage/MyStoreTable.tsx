@@ -33,15 +33,11 @@ const MyStoreTable = function () {
   });
 
   // 쇼핑몰 리스트 요청
-  const getStoresQuery = useQuery(
-    ["getStores", query],
-    () => retailerStoreAPI.getStores(query),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-    }
-  );
+  const getStoresQuery = useQuery(["getStores", query], () => retailerStoreAPI.getStores(query), {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+  });
 
   // 쇼핑몰 리스트
   const dataSource = useMemo(() => {
@@ -145,7 +141,7 @@ const MyStoreTable = function () {
             },
           },
           {
-            title: t("mall name"),
+            title: t("store.name"),
             dataIndex: "name",
           },
           {
@@ -153,11 +149,11 @@ const MyStoreTable = function () {
             dataIndex: "alimtalk_name",
           },
           {
-            title: t("mall url"),
+            title: t("store.url"),
             dataIndex: "mall_url",
           },
           {
-            title: t("mall phone"),
+            title: t("store.phone"),
             dataIndex: "phone",
           },
           {
@@ -172,7 +168,7 @@ const MyStoreTable = function () {
                   handleRowClick(record.id);
                 }}
               >
-                {t("view details")}
+                {t("button.details")}
               </Button>
             ),
           },
@@ -198,7 +194,7 @@ const MyStoreTable = function () {
               icon={<PlusIcon />}
               onClick={() => setVisibleCreateModal(true)}
             >
-              {t("create mall")}
+              {t("button.add")}
             </Button>
           </Header>
         )}

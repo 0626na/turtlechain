@@ -6,27 +6,32 @@ interface Props {
   alt: string;
 }
 
-const SvgIcon = function ({ filled = true, src, alt }: Props) {
+function TurtleIcon({ filled, src, alt }: Props) {
   if (filled) {
     return (
-      <FilledContainer>
+      <FilledDiv>
         <img src={src} alt={alt} />
-      </FilledContainer>
+      </FilledDiv>
     );
   } else {
-    return <img src={src} alt={alt} width="25px" height="25px" />;
+    return <StyledImg src={src} alt={alt} />;
   }
-};
+}
 
-const FilledContainer = styled.div`
+const FilledDiv = styled.div`
   width: 2rem;
   height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  background-color: #eee;
+  background-color: ${({ theme }) => theme.imgBackground};
   border-radius: 50%;
 `;
 
-export default SvgIcon;
+const StyledImg = styled.img`
+  width: 25px;
+  height: 25px;
+`;
+
+export default TurtleIcon;

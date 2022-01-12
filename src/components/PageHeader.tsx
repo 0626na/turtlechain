@@ -1,53 +1,38 @@
 import styled from "styled-components";
-import { Breadcrumb, Typography } from "antd";
+import { Col, Row, Space, Typography } from "antd";
+import TurtleDivider from "./common/TurtleDivider";
+import TurtleBreadCrumb from "./common/TurtleBreadCrumb";
+import TurtleIcon from "./common/TurtleIcon";
 
 interface Props {
-  icon?: React.ReactNode;
-  title?: string;
-  breadcrumbList?: Array<string>;
+  pageName: string;
+  title: string;
+  breadcrumbList: Array<string>;
 }
 
-const PageHeader = function ({ icon, title, breadcrumbList }: Props) {
+const PageHeader = function ({ pageName, title, breadcrumbList }: Props) {
   return (
-    <Container>
-      <TitleContainer>
-        {icon}
-        <Typography>{title}</Typography>
-      </TitleContainer>
-      {breadcrumbList && (
-        <BreadcrumbContainer separator=">">
-          {breadcrumbList.map((item) => (
-            <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
-          ))}
-        </BreadcrumbContainer>
-      )}
-    </Container>
+    <>
+      <Row align="middle" justify="space-between">
+        <Col>
+          <Space>
+            <TurtleIcon
+              src={`${process.env.PUBLIC_URL}/assets/svg/${pageName}.svg`}
+              alt={pageName}
+            />
+            <StyledTitle level={3}>{title}</StyledTitle>
+          </Space>
+        </Col>
+        <Col>{breadcrumbList && <TurtleBreadCrumb list={breadcrumbList}></TurtleBreadCrumb>}</Col>
+      </Row>
+      <TurtleDivider />
+    </>
   );
 };
 
-const Container = styled.div`
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #dee2e6;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  & > * + * {
-    margin-left: 10px;
-  }
-`;
-
-const BreadcrumbContainer = styled(Breadcrumb)`
-  background-color: #f1f3f5;
-  padding: 5px 10px;
-  border-radius: 20px;
+const StyledTitle = styled(Typography.Title)`
+  margin: 0.4rem 0 0 0.7rem;
+  margin-bottom: 0 !important;
 `;
 
 export default PageHeader;

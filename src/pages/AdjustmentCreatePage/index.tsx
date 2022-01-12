@@ -14,21 +14,12 @@ const AdjustmentCreatePage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
-            alt="adjustment"
-          />
-        }
+        pageName="adjustment"
         title={t("adjustment create")}
         breadcrumbList={[t("adjustment management"), t("adjustment create")]}
       />
       <Form>
-        <StoreSelect
-          width={200}
-          emptyValueText={`${t("mall")} ${t("select")}`}
-        />
+        <StoreSelect width={200} emptyValueText={`${t("mall")} ${t("select")}`} />
       </Form>
       <AdjustmentCreateForm />
       <AdjustmentPreviewList />

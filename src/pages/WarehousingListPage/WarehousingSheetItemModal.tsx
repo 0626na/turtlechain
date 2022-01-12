@@ -79,7 +79,7 @@ const WarehousingSheetItemModal = function ({
       onSuccess: (data) => {
         setList(data.data);
       },
-    }
+    },
   );
 
   // 입고장 상세내역 수정 요청
@@ -98,7 +98,7 @@ const WarehousingSheetItemModal = function ({
         onClose();
         onUpdated();
       },
-    }
+    },
   );
 
   // 입고 수량 합계
@@ -111,7 +111,7 @@ const WarehousingSheetItemModal = function ({
           return 0;
         }
       }, 0),
-    [list]
+    [list],
   );
 
   // 공급가 합계
@@ -124,7 +124,7 @@ const WarehousingSheetItemModal = function ({
           return 0;
         }
       }, 0),
-    [list]
+    [list],
   );
 
   // 필터된 리스트
@@ -134,9 +134,9 @@ const WarehousingSheetItemModal = function ({
         item[searchType].toString().indexOf(searchText) !== -1 &&
         !item.is_deleted
           ? true
-          : false
+          : false,
       ),
-    [list, searchType, searchText]
+    [list, searchType, searchText],
   );
 
   // 모달창 닫기 확인
@@ -289,7 +289,7 @@ const WarehousingSheetItemModal = function ({
                     const newList = list.map((item) =>
                       item.product_code === record.product_code
                         ? { ...item, count: value }
-                        : item
+                        : item,
                     );
                     setList(newList);
                     setIsUpdated(true);
@@ -316,7 +316,7 @@ const WarehousingSheetItemModal = function ({
                   icon={<DeleteFilled />}
                   onClick={() => {
                     const newList = list.filter(
-                      (item) => item.product_code !== record.product_code
+                      (item) => item.product_code !== record.product_code,
                     );
                     setList(newList);
                     setIsUpdated(true);

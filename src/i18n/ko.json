@@ -12,8 +12,10 @@
     "really update": "정말 수정하시겠습니까?",
     "really register": "정말 등록하시겠습니까?",
     "really confirmed": "정말 마감하시겠습니까?",
+    "really resend": "정말 재전송하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
-    "changed data": "변경된 데이터가 있습니다."
+    "changed data": "변경된 데이터가 있습니다.",
+    "find client by": "거래처명, 휴대번호 또는 계좌번호를 입력하여 거래처를 찾아볼 수 있습니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
@@ -38,6 +40,114 @@
     "open": "영업",
     "closed": "폐점"
   },
+  "placeholder": {
+    "vendor name": "거래처명을 검색 또는 입력하세요.",
+    "vendor address": "거래처 주소를 정확히 입력하세요.",
+    "phone": "휴대번호를 정확히 입력하세요",
+    "product name": "상품명을 검색 또는 입력하세요.",
+    "memo": "메모를 입력해주세요."
+  },
+  "button": {
+    "add": "추가하기",
+    "delete": "삭제",
+    "resend": "재전송",
+    "details": "상세보기",
+    "upload order sheet": "주문서 업로드",
+    "load adjustment": "매입조정 불러오기",
+    "download order list": "주문 내역 다운로드"
+  },
+  "order": {
+    "": "주문",
+    "management": "주문 관리",
+    "create": "주문 등록",
+    "list": "주문 내역",
+    "date": "주문 날짜",
+    "time": "주문 시간",
+    "content": "주문 내용",
+    "detail": "상세 주문 내역",
+    "status": "진행 상태",
+    "enter info": "주문서 정보 입력",
+    "memo": "메모",
+    "preview list": "주문서 미리보기",
+    "type": {
+      "": "주문종류",
+      "order": "주문",
+      "reserved": "미송",
+      "take back": "반품",
+      "exchange": "교환",
+      "sample": "샘플",
+      "pickup": "픽업",
+      "etc": "기타"
+    },
+    "sheet": {
+      "": "주문서",
+      "list": "주문 리스트",
+      "status": "주문서 발송 상태",
+      "resend": "주문서 재전송"
+    }
+  },
+  "sample return": {
+    "": "샘플",
+    "return": "샘플반납",
+    "management": "샘플반납 관리"
+  },
+  "warehousing": {
+    "": "입고",
+    "management": "입고 관리",
+    "create": "입고 등록",
+    "list": "입고 내역"
+  },
+  "adjustment": {
+    "": "매입조정",
+    "management": "매입조정 관리",
+    "create": "매입조정 등록",
+    "list": "매입조정 내역"
+  },
+  "settlement": {
+    "": "정산",
+    "management": "정산 관리",
+    "create": "정산 등록",
+    "list": "정산 내역"
+  },
+  "product": {
+    "": "상품",
+    "search": "상품 조회하기",
+    "management": "상품 관리",
+    "code": "상품 바코드",
+    "name": "상품명",
+    "option": "옵션",
+    "price": "공급가",
+    "count": "발주수량"
+  },
+  "vendor": {
+    "": "거래처",
+    "register": "거래처 등록",
+    "list": "거래처 목록",
+    "management": "거래처 관리",
+    "name": "거래처명",
+    "address": "거래처 주소",
+    "search": "거래처 조회하기",
+    "phone": "휴대번호"
+  },
+  "account": {
+    "": "계정",
+    "my": "내 계정"
+  },
+  "biz": {
+    "": "사업자",
+    "info": "사업자 정보"
+  },
+  "store": {
+    "": "쇼핑몰",
+    "name": "쇼핑몰명",
+    "info": "쇼핑몰 정보",
+    "url": "쇼핑몰 URL",
+    "phone": "쇼핑몰 휴대번호",
+    "create": "쇼핑몰 추가하기",
+    "update": "쇼핑몰 수정하기",
+    "address": "쇼핑몰 주소"
+  },
+  "common": {},
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",
@@ -57,11 +167,6 @@
   "auth phone": "휴대번호 인증하기",
   "my page": "마이페이지",
   "my account": "내 계정",
-  "order": "주문",
-  "order management": "주문 관리",
-  "samle return": "샘플 반납",
-  "samle return management": "샘플 반납 관리",
-  "adjustment": "매입조정",
   "adjustment management": "매입조정 관리",
   "adjustment create": "매입조정 등록",
   "adjustment list": "매입조정 내역",
@@ -69,7 +174,6 @@
   "adjustment unconfirmed": "매입조정 대기",
   "adjustment confirmed": "매입조정 마감",
   "adjustment type": "매입조정 타입",
-  "warehousing": "입고",
   "warehousing management": "입고 관리",
   "warehousing create": "입고 등록",
   "warehousing list": "입고 내역",
@@ -80,16 +184,6 @@
   "warehousing total count": "입고 수량 합계",
   "warehousing unconfirmed": "입고 대기",
   "warehousing confirmed": "입고 마감",
-  "client management": "거래처 관리",
-  "client name": "거래처명",
-  "client address": "거래처 주소",
-  "settlement": "정산",
-  "settlement management": "정산 관리",
-  "search client": "거래처 조회하기",
-  "search product": "상품 조회하기",
-  "product management": "상품 관리",
-  "product code": "상품 바코드",
-  "product name": "상품명",
   "supply price": "공급가",
   "total supply price": "공급가 합계",
   "biz status": "영업 상태",
@@ -103,13 +197,6 @@
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
-  "mall": "쇼핑몰",
-  "mall info": "쇼핑몰 정보",
-  "mall name": "쇼핑몰명",
-  "mall url": "쇼핑몰 URL",
-  "mall phone": "쇼핑몰 전화",
-  "create mall": "쇼핑몰 추가하기",
-  "update mall": "쇼핑몰 수정하기",
   "account info": "은행 정보",
   "alimtalk name": "알림톡명",
   "admin account": "관리자 계정",
@@ -122,6 +209,7 @@
   "find address": "주소 찾기",
   "duplicate check": "중복 체크",
   "view details": "상세보기",
+  "search": "검색",
   "search text": "검색어",
   "close": "닫기",
   "create": "추가",
@@ -143,5 +231,20 @@
   "yes": "네",
   "no": "아니오",
   "created time": "생성 시간",
-  "updated time": "수정 시간"
+  "updated time": "수정 시간",
+  "take back": "반품",
+  "reserved": "미송",
+  "exchange": "교환",
+  "pickup": "픽업",
+  "send status": "발송 상태",
+  "type": "타입",
+  "resend": "재전송",
+  "info": "정보",
+  "go list": "목록으로",
+  "price": "금액",
+  "count": "건수",
+  "upload": "업로드",
+  "load": "불러오기",
+  "download": "다운로드",
+  "input": "입력"
 }

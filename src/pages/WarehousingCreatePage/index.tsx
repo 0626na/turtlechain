@@ -25,45 +25,37 @@ const WarehousingCreatePage = function () {
   // 2. 입고장 생성을 통해 얻은 sheet_id를 가지고 입고장 상세내역 추가하기 요청
 
   // 입고장 추가하기 요청
-  const createSheetQuery = useMutation(
-    ["createSheet"],
-    warehousingAPI.createSheet,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
-        createSheetItemQuery.mutate({
-          sheet_id: data.data,
-          item_list: list.map((item) => ({
-            ...item,
-            mall_id,
-            mall_name,
-          })),
-        });
-      },
-    }
-  );
+  const createSheetQuery = useMutation(["createSheet"], warehousingAPI.createSheet, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: (data) => {
+      createSheetItemQuery.mutate({
+        sheet_id: data.data,
+        item_list: list.map((item) => ({
+          ...item,
+          mall_id,
+          mall_name,
+        })),
+      });
+    },
+  });
 
   // 입고장 상세내역 추가하기 요청
-  const createSheetItemQuery = useMutation(
-    ["createSheetItem"],
-    warehousingAPI.createSheetItem,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        setMallId(-1);
-        setMallName("");
-        setList([]);
-        notification.open({
-          type: "success",
-          message: t("message.success create warehousing"),
-        });
-      },
-    }
-  );
+  const createSheetItemQuery = useMutation(["createSheetItem"], warehousingAPI.createSheetItem, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      setMallId(-1);
+      setMallName("");
+      setList([]);
+      notification.open({
+        type: "success",
+        message: t("message.success create warehousing"),
+      });
+    },
+  });
 
   // 입고장 아이템 추가
   const onCreate = (value: CreateSheetItem) => {
@@ -87,13 +79,7 @@ const WarehousingCreatePage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        icon={
-          <SvgIcon
-            filled={false}
-            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing"
-          />
-        }
+        pageName="warehousing"
         title={t("warehousing create")}
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
       />

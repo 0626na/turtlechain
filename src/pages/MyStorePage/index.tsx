@@ -5,7 +5,7 @@ import MyStoreTable from "./MyStoreTable";
 
 const MyStorePage = function () {
   const { t } = useTranslation();
-  const title = `${t("turtlechain")} - ${t("mall info")}`;
+  const title = `${t("turtlechain")} - ${t("store.info")}`;
   return (
     <>
       <Helmet title={title} />

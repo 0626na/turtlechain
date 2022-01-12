@@ -9,7 +9,11 @@ interface Props {
 }
 
 const Content = function ({ children }: Props) {
-  return <Container>{children}</Container>;
+  return (
+    <Container>
+      <Contents>{children}</Contents>
+    </Container>
+  );
 };
 
 const Container = styled(Layout.Content)`
@@ -18,9 +22,13 @@ const Container = styled(Layout.Content)`
   padding: 20px;
   min-height: calc(100vh - 60px);
   overflow: inherit;
+`;
+
+const Contents = styled.div`
+  border-radius: 2rem;
+  background-color: white;
   & > * {
-    padding: 20px;
-    background-color: white;
+    padding: 1.5rem;
   }
 `;
 

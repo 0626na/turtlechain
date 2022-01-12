@@ -1,6 +1,8 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 import {
   HomePage,
+  OrderCreatePage,
+  OrderListPage,
   WarehousingCreatePage,
   WarehousingListPage,
   AdjustmentCreatePage,
@@ -14,6 +16,8 @@ const MainRouter = function () {
   return (
     <Switch>
       <Route exact path="/home" component={HomePage} />
+      <Route exact path="/order/create" component={OrderCreatePage} />
+      <Route exact path="/order/list" component={OrderListPage} />
       <Route exact path="/warehousing/create" component={WarehousingCreatePage} />
       <Route exact path="/warehousing/list" component={WarehousingListPage} />
       <Route exact path="/adjustment/create" component={AdjustmentCreatePage} />

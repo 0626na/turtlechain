@@ -39,111 +39,99 @@ const Sider = function () {
       pathname: "/home",
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
-            alt="home"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`} alt="home" />
         </div>
       ),
     },
     {
-      title: t("order management"),
+      title: t("order.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
-            alt="order"
-          />
-        </div>
-      ),
-      submenu: [],
-    },
-    {
-      title: t("samle return management"),
-      icon: (
-        <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="samle return"
-          />
-        </div>
-      ),
-      submenu: [],
-    },
-    {
-      title: t("warehousing management"),
-      icon: (
-        <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing management"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`} alt="order" />
         </div>
       ),
       submenu: [
         {
-          title: t("warehousing create"),
+          title: t("order.create"),
+          pathname: "/order/create",
+        },
+        {
+          title: t("order.list"),
+          pathname: "/order/list",
+        },
+      ],
+    },
+    {
+      title: t("sample return.management"),
+      icon: (
+        <div>
+          <SvgIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
+            alt="sample return"
+          />
+        </div>
+      ),
+      submenu: [],
+    },
+    {
+      title: t("warehousing.management"),
+      icon: (
+        <div>
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`} alt="warehousing" />
+        </div>
+      ),
+      submenu: [
+        {
+          title: t("warehousing.create"),
           pathname: "/warehousing/create",
         },
         {
-          title: t("warehousing list"),
+          title: t("warehousing.list"),
           pathname: "/warehousing/list",
         },
       ],
     },
     {
-      title: t("adjustment management"),
+      title: t("adjustment.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
-            alt="adjustment management"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`} alt="adjustment" />
         </div>
       ),
       submenu: [
         {
-          title: t("adjustment create"),
+          title: t("adjustment.create"),
           pathname: "/adjustment/create",
         },
         {
-          title: t("adjustment list"),
+          title: t("adjustment.list"),
           pathname: "/adjustment/list",
         },
       ],
     },
     {
-      title: t("settlement management"),
+      title: t("settlement.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
-            alt="settlement"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`} alt="settlement" />
         </div>
       ),
       submenu: [],
     },
     {
-      title: t("product management"),
+      title: t("product.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="product"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`} alt="product" />
         </div>
       ),
       submenu: [],
     },
     {
-      title: t("client management"),
+      title: t("vendor.management"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/client.svg`}
-            alt="refund"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
         </div>
       ),
       submenu: [],
@@ -152,23 +140,20 @@ const Sider = function () {
       title: t("setting"),
       icon: (
         <div>
-          <SvgIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
-            alt="setting"
-          />
+          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`} alt="setting" />
         </div>
       ),
       submenu: [
         {
-          title: t("my account"),
+          title: t("account.my"),
           pathname: "/my/account",
         },
         {
-          title: t("biz info"),
+          title: t("biz.info"),
           pathname: "/my/company",
         },
         {
-          title: t("mall info"),
+          title: t("store.info"),
           pathname: "/my/store",
         },
       ],
@@ -176,11 +161,11 @@ const Sider = function () {
   ];
 
   return (
-    <Container>
+    <Container width={270}>
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)" }}
+        style={{ height: "calc(100vh - 60px)", padding: "3rem 0" }}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
@@ -190,10 +175,7 @@ const Sider = function () {
                 {submenu.map((item) => {
                   const { title, pathname } = item;
                   return (
-                    <Menu.Item
-                      key={pathname}
-                      onClick={() => handleMenuClick(pathname)}
-                    >
+                    <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)}>
                       {title}
                     </Menu.Item>
                   );
@@ -202,11 +184,7 @@ const Sider = function () {
             );
           } else {
             return (
-              <Menu.Item
-                key={pathname}
-                onClick={() => handleMenuClick(pathname)}
-                icon={icon}
-              >
+              <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)} icon={icon}>
                 {title}
               </Menu.Item>
             );
@@ -218,11 +196,15 @@ const Sider = function () {
 };
 
 const Container = styled(Layout.Sider)`
-  width: ${MAIN_SIDER_WIDTH};
+  min-width: ${MAIN_SIDER_WIDTH};
   position: fixed;
   top: ${MAIN_HEADER_HEIGHT};
-  left: 0;
   overflow: auto;
+  background: #f0f2f5;
+  margin: 2px 0;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  box-shadow: 10px 10px 10px #e5e5e5;
 `;
 
 export default Sider;
