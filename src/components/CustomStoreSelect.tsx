@@ -27,14 +27,12 @@ function CustomStoreSelect() {
   );
 
   return (
-    <Space size="large">
-      <Typography.Text>{t("store.name")}</Typography.Text>
-      <TurtleSelect
-        placeholder={t("description.select mall")}
-        options={getStoresQuery.data?.data.data}
-        loading={getStoresQuery.isLoading}
-      />
-    </Space>
+    <TurtleSelect
+      label={t("store.name")}
+      placeholder={t("description.select mall")}
+      options={getStoresQuery.data?.data.data}
+      loading={getStoresQuery.isLoading}
+    />
   );
 }
 

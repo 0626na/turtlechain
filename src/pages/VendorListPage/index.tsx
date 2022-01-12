@@ -1,6 +1,8 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
+import Filter from "./Filter";
+import VendorList from "./VendorList";
 
 function VendorListPage() {
   const { t } = useTranslation();
@@ -14,6 +16,8 @@ function VendorListPage() {
         title={t("vendor.list")}
         breadcrumbList={[t("vendor.management"), t("vendor.list")]}
       />
+      <Filter />
+      <VendorList />
     </>
   );
 }
