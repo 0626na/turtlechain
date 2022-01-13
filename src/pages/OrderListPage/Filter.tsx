@@ -2,7 +2,7 @@ import { Col, Row, Space } from "antd";
 import TurtleButton from "components/common/TurtleButton";
 import { useTranslation } from "react-i18next";
 import TurtleDatePicker from "components/common/TurtleDatePicker";
-import CustomStoreSelect from "components/CustomStoreSelect";
+import StoreSelect from "components/StoreSelect";
 
 function Filter() {
   const { t } = useTranslation();
@@ -11,7 +11,7 @@ function Filter() {
     <Row gutter={24} align="middle" justify="space-between">
       <Col>
         <Space size="large">
-          <CustomStoreSelect />
+          <StoreSelect />
           <TurtleDatePicker label={t("order.date")} />
         </Space>
       </Col>

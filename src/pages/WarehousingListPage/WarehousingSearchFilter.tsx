@@ -9,22 +9,12 @@ interface Props {
   setSearchQuery: React.Dispatch<React.SetStateAction<RequestGetSheet>>;
 }
 
-const WarehousingSearchFilter = function ({
-  searchQuery,
-  setSearchQuery,
-}: Props) {
+const WarehousingSearchFilter = function ({ searchQuery, setSearchQuery }: Props) {
   const { t } = useTranslation();
   return (
     <Form layout="inline">
       <Form.Item label={t("mall")}>
-        <StoreSelect
-          emptyValueText={t("all")}
-          width={200}
-          value={searchQuery.mall_id}
-          onChange={(mall_id) => {
-            setSearchQuery({ ...searchQuery, mall_id });
-          }}
-        />
+        <StoreSelect />
       </Form.Item>
       <Form.Item label={t("warehousing date")}>
         <DatePicker.RangePicker

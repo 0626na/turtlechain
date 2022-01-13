@@ -1,19 +1,13 @@
-// async
-import { AxiosError } from "axios";
+import { message, Select, Space, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
-import retailerStoreAPI from "apis/retailerStoreAPI";
-// antd
-import { Select, message } from "antd";
-import styled from "styled-components";
+import { retailerStoreAPI } from "apis";
+import { AxiosError } from "axios";
 
-interface Props {
-  emptyValueText: string;
-  width?: string | number;
-  value?: "" | number;
-  onChange?: (value: "" | number, label: string) => void;
-}
+function CustomStoreSelect() {
+  const { t } = useTranslation();
 
-const StoreSelect = function ({ emptyValueText, width, value, onChange }: Props) {
+  // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(
     ["getStores"],
     () =>
@@ -32,26 +26,23 @@ const StoreSelect = function ({ emptyValueText, width, value, onChange }: Props)
   );
 
   return (
-    <Select //
-      style={{ width }}
-      loading={getStoresQuery.isLoading}
-      defaultValue=""
-      value={value && value}
-      onChange={(value, option: any) => {
-        onChange && onChange(value, option.children);
-      }}
-    >
-      <Select.Option value="">{emptyValueText}</Select.Option>
-      {getStoresQuery.data?.data.data.map((store) => {
-        const { id, name } = store;
-        return (
-          <Select.Option key={id} value={id}>
-            {name}
-          </Select.Option>
-        );
-      })}
-    </Select>
+    <Space size="large">
+      <Typography.Text>{t("store.name")}</Typography.Text>
+      <Select
+        placeholder={t("description.select mall")}
+        loading={getStoresQuery.isLoading}
+        style={{ width: "16rem" }}
+      >
+        {getStoresQuery.data?.data.data.map(({ name, id }) => {
+          return (
+            <Select.Option key={id} value={id}>
+              {name}
+            </Select.Option>
+          );
+        })}
+      </Select>
+    </Space>
   );
-};
+}
 
-export default StoreSelect;
+export default CustomStoreSelect;

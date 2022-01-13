@@ -1,7 +1,7 @@
 import { Col, Row, Space } from "antd";
 import TurtleButton from "components/common/TurtleButton";
 import { useTranslation } from "react-i18next";
-import CustomStoreSelect from "components/CustomStoreSelect";
+import StoreSelect from "components/StoreSelect";
 
 function Filter() {
   const { t } = useTranslation();
@@ -10,7 +10,7 @@ function Filter() {
     <Row gutter={24} align="middle" justify="space-between">
       <Col>
         <Space size="large">
-          <CustomStoreSelect />
+          <StoreSelect />
         </Space>
       </Col>
       <Col>
