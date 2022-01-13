@@ -5,6 +5,7 @@ import retailerCompanyAPI from "./retailerCompanyAPI";
 import retailerStoreAPI from "./retailerStoreAPI";
 import warehousingAPI from "./warehousingAPI";
 import orderAPI from "./orderAPI";
+import vendorAPI from "./vendorAPI";
 
 export const v1Axios = axios.create({
   baseURL:
@@ -22,6 +23,11 @@ export const v2Axios = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+export const mockAxios = axios.create({
+  baseURL: "https://92f5fce6-d961-48c8-8ce3-4c190a701ace.mock.pstmn.io/",
+  headers: { "Content-Type": "application/json" },
+});
+
 export {
   authAPI,
   userAPI,
@@ -29,4 +35,5 @@ export {
   retailerStoreAPI,
   warehousingAPI,
   orderAPI,
+  vendorAPI,
 };
