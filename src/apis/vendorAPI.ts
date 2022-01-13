@@ -1,3 +1,4 @@
+import { mockAxios } from "./index";
 // 거래처 계좌 타입
 export interface VendorAccount {
   id: number;
@@ -37,8 +38,31 @@ export interface Vendor {
   };
 }
 
+// Request: 거래처 리스트 요청 타입
+export interface RequestGetVendors {
+  page: number;
+  type: string;
+  search_query: string;
+  rt_store_id: number;
+}
+
 // Response: 거래처 리스트 가져오기 타입
 export interface ResponseGetVendors {
   msg: string;
-  data: Array<Vendor>;
+  data: { data: Array<Vendor>; total_count: number };
 }
+
+const getVendors = async function (query: RequestGetVendors) {
+  let url = "/v2/vendor?";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await mockAxios.get<ResponseGetVendors>(url);
+  return response.data;
+};
+
+const vendorAPI = {
+  getVendors,
+};
+
+export default vendorAPI;

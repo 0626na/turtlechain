@@ -1,10 +1,13 @@
-import { Button, Input, Popconfirm, Row, Space, Switch, Table } from "antd";
+import { Button, Input, message, Popconfirm, Row, Space, Switch, Table } from "antd";
+import { vendorAPI } from "apis";
 import { Vendor } from "apis/vendorAPI";
+import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
 import SimplePagination from "components/SimplePagination";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 
 const rowSelection = {
@@ -19,55 +22,22 @@ const rowSelection = {
 function VendorList() {
   const { t } = useTranslation();
 
-  let fakeId = 1;
-  const fakeVendor: Vendor = {
-    id: 1,
-    vendor_id: "SS101",
-    ws_store_id: 12,
-    is_taxed: true,
-    memo: "테스트메모",
-    ws_store_info: {
-      store_account: [
-        {
-          id: 8495,
-          account_number: "110477669022",
-          account_holder: "최예원",
-          bank: "신한",
-          is_proxy: false,
-          is_deleted: true,
-        },
-        {
-          id: 8496,
-          account_number: "110477669002",
-          account_holder: "최예원",
-          bank: "신한",
-          is_proxy: false,
-          is_deleted: false,
-        },
-      ],
-      store_phone: [
-        {
-          id: 8412,
-          is_deleted: false,
-          phone: "01075300324",
-          send_alimtalk: true,
-          tag: "매장",
-        },
-      ],
-      name: "아를(A;RLES)",
-      phone: "0222325223",
-      building: "제일평화",
-      floor: "3",
-      col: "",
-      loc: "24",
-      ext: "",
+  // 거래처 목록 불러오기 요청
+  const getVendorsQuery = useQuery(
+    ["getVendors"],
+    () =>
+      vendorAPI.getVendors({
+        page: 1,
+        type: "",
+        search_query: "",
+        rt_store_id: 1,
+      }),
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
     },
-  };
-
-  const fakeList: Array<Vendor> = [];
-  for (let i = 0; i < 10; i++) {
-    fakeList.push({ ...fakeVendor, id: fakeId++ });
-  }
+  );
 
   return (
     <>
@@ -83,7 +53,7 @@ function VendorList() {
         }}
         //loading={isLoading}
         pagination={false}
-        dataSource={fakeList}
+        dataSource={getVendorsQuery.data?.data.data}
         rowKey={(record) => record.id}
         columns={[
           {
