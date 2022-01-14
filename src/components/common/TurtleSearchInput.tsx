@@ -10,7 +10,7 @@ interface Props {
 function TurtleSearchInput({ name, label, placeholder }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
-      <Search placeholder={placeholder} onSearch={() => {}} enterButton />
+      <Search placeholder={placeholder} onSearch={() => {}} />
     </Form.Item>
   );
 }

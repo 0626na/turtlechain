@@ -1,6 +1,6 @@
-import { message, Popconfirm, Row, Switch, Table } from "antd";
+import { Button, message, Popconfirm, Popover, Row, Switch, Table, Tag, Tooltip } from "antd";
 import { vendorAPI } from "apis";
-import { Vendor } from "apis/vendorAPI";
+import { Vendor, VendorAccount } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleText from "components/common/TurtleText";
@@ -9,15 +9,7 @@ import SimplePagination from "components/SimplePagination";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-
-const rowSelection = {
-  onChange: (selectedRowKeys: React.Key[], selectedRows: Vendor[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
-  },
-  getCheckboxProps: (record: Vendor) => ({
-    name: record.ws_store_info.name,
-  }),
-};
+import { QuestionCircleFilled } from "@ant-design/icons";
 
 function VendorList() {
   const { t } = useTranslation();
@@ -36,6 +28,8 @@ function VendorList() {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+      cacheTime: 0,
+      staleTime: 0,
     },
   );
 
@@ -47,46 +41,99 @@ function VendorList() {
       </StyledDiv>
       <Table
         size="small"
-        rowSelection={{ ...rowSelection }}
+        scroll={{ y: "auto" }}
         expandable={{
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.memo}</p>,
         }}
-        //loading={isLoading}
-        pagination={false}
+        loading={getVendorsQuery.isLoading}
         dataSource={getVendorsQuery.data?.data.data}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.ws_store_id}
+        pagination={false}
         columns={[
           {
-            align: "center",
+            width: "10%",
             title: t("vendor.code"),
             dataIndex: "vendor_id",
+            ellipsis: true,
           },
           {
-            align: "center",
+            width: "15%",
             title: t("vendor.name"),
             dataIndex: ["ws_store_info", "name"],
-            //render: (_, record) => moment(record.order_time).format("YYYY.MM.DD"),
+            ellipsis: true,
           },
           {
-            align: "center",
-            title: t("vendor.phone"),
-            dataIndex: ["ws_store_info", "phone"],
-          },
-          {
-            align: "center",
+            width: "15%",
             title: t("vendor.address"),
-            dataIndex: ["ws_store_info", "building"],
+            dataIndex: "",
+            render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
+              return `${building} ${floor} ${col} ${loc} ${ext}`;
+            },
           },
           {
-            align: "center",
+            width: "15%",
+            title: t("vendor.phone"),
+            dataIndex: "",
+            render: (_, { ws_store_info: { store_phone } }) => {
+              if (store_phone.length === 1) {
+                return store_phone[0].phone;
+              }
+
+              const phones: Array<string> = [];
+              store_phone.forEach(({ phone }) => {
+                phones.push(phone);
+              });
+
+              return (
+                <Popover content={phones} trigger="click">
+                  <Button>다중번호</Button>
+                </Popover>
+              );
+            },
+          },
+          {
+            width: "22%",
+            ellipsis: true,
             title: t("vendor.account"),
-            dataIndex: ["ws_store_info", "store_account", "account_number"],
+            dataIndex: "",
+            render: (_, { ws_store_info: { store_account } }) => {
+              if (store_account.length === 1) {
+                const { bank, account_holder, account_number } = store_account[0];
+                return `${bank} ${account_number} ${account_holder}`;
+              }
+
+              const accounts: Array<any> = [];
+              store_account.forEach(({ bank, account_holder, account_number }) => {
+                accounts.push({ bank, account_holder, account_number });
+              });
+
+              const content = accounts.map(({ bank, account_holder, account_number }) => {
+                return (
+                  <p>
+                    {bank} {account_number} {account_holder}
+                  </p>
+                );
+              });
+
+              return (
+                <Popover content={content} title="계좌정보" trigger="click">
+                  <Button>다중계좌</Button>
+                </Popover>
+              );
+            },
           },
           Table.EXPAND_COLUMN,
           {
-            align: "center",
+            align: "left",
             title: t("vendor.memo"),
             dataIndex: "",
+            render: (_, { memo }) => {
+              return (
+                <Popover content={memo} trigger="click">
+                  메모내용
+                </Popover>
+              );
+            },
           },
           {
             align: "center",
@@ -98,11 +145,13 @@ function VendorList() {
                   title={t("description.really update")}
                   okText={t("yes")}
                   cancelText={t("no")}
-                  onConfirm={() => {}}
+                  onConfirm={() => {
+                    record.is_taxed = !record.is_taxed;
+                  }}
                 >
                   <Switch
-                    checkedChildren="포함"
-                    unCheckedChildren="미포함"
+                    checkedChildren={t("button.include")}
+                    unCheckedChildren={t("button.exclude")}
                     checked={record.is_taxed}
                   />
                 </Popconfirm>
@@ -111,12 +160,20 @@ function VendorList() {
           },
           {
             align: "center",
-            title: t("common.update"),
+            title: () => {
+              return (
+                <>
+                  <Tooltip title={t("tooltip.request update")}>
+                    {t("common.request update")} <QuestionCircleFilled />
+                  </Tooltip>
+                </>
+              );
+            },
             dataIndex: "action",
             render: (_, record) => {
               return (
-                <TurtleButton size="small" type="default">
-                  {t("button.update")}
+                <TurtleButton size="small" ghost>
+                  {t("button.request update")}
                 </TurtleButton>
               );
             },
@@ -127,6 +184,7 @@ function VendorList() {
             <SimplePagination />
           </Row>
         )}
+
         // end of Table
       />
     </>
@@ -136,4 +194,5 @@ function VendorList() {
 const StyledDiv = styled.div`
   padding-bottom: 0;
 `;
+
 export default VendorList;

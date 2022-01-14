@@ -4,14 +4,23 @@ import styled from "styled-components";
 
 interface Props {
   children: TFunctionResult;
-  type?: "primary" | "default";
+  type?: "primary" | "default" | "ghost";
   color?: "grey" | "skyBlue" | "mint";
   htmlType?: "submit";
   size?: "small";
+  ghost?: boolean;
   onClick?: () => void;
 }
 
-function TurtleButton({ children, type = "primary", color, htmlType, size, onClick }: Props) {
+function TurtleButton({
+  children,
+  type = "primary",
+  color,
+  htmlType,
+  size,
+  ghost,
+  onClick,
+}: Props) {
   return (
     <StyledButton
       shape="round"
@@ -19,6 +28,7 @@ function TurtleButton({ children, type = "primary", color, htmlType, size, onCli
       color={color}
       htmlType={htmlType}
       size={size}
+      ghost={ghost}
       onClick={onClick}
     >
       {children}
@@ -27,8 +37,12 @@ function TurtleButton({ children, type = "primary", color, htmlType, size, onCli
 }
 
 const StyledButton = styled(Button)`
-  background-color: ${({ theme, color }) => color && theme[color + "Button"]};
-  border: ${({ theme, color }) => color && theme[color + "Button"]};
+  background-color: ${({ theme, color }) => {
+    return color && theme[color + "Button"];
+  }};
+  border: ${({ theme, color }) => {
+    return color && theme[color + "Button"];
+  }};
   &:hover {
     background-color: ${({ theme, color }) => color && theme[color + "Button"]};
     opacity: 0.8;

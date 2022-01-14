@@ -10,7 +10,7 @@ function VendorCreateForm() {
 
   return (
     <>
-      <Form layout="vertical" form={form} wrapperCol={{ span: 12 }}>
+      <Form layout="vertical" form={form} wrapperCol={{ span: 8 }}>
         <TurtleText>{t("vendor.basic info")}</TurtleText>
         <TurtleSearchInput // 거래처명 검색 Input
           name="vendor_name"

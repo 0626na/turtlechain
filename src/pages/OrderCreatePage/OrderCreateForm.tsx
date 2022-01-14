@@ -33,7 +33,7 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
       <Form layout="vertical" form={form}>
         <TurtleText>{t("order.enter info")}</TurtleText>
         <Row gutter={32}>
-          <Col span={6}>
+          <Col span={7}>
             <TurtleSearchInput // 거래처명 검색 Input
               name="vendor_name"
               label={t("vendor.name")}
@@ -50,7 +50,7 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
               disabled={true}
             />
           </Col>
-          <Col span={6}>
+          <Col span={7}>
             <TurtleSearchInput
               name="product_name"
               label={t("product.name")}
@@ -76,7 +76,7 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
               label={t("product.count")}
             />
           </Col>
-          <Col span={12}>
+          <Col span={10}>
             <TurtleRadio // 주문종류 Select
               name="order_type"
               label={t("order.type.")}
@@ -91,7 +91,7 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
           </Col>
         </Row>
         <Row justify="center">
-          <TurtleButton type="default" htmlType="submit">
+          <TurtleButton htmlType="submit" ghost>
             {t("button.add")}
           </TurtleButton>
         </Row>

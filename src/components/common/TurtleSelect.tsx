@@ -3,7 +3,7 @@ import { SelectValue } from "antd/lib/select";
 
 interface Props {
   label?: string;
-  options?: Array<{ name: string; id: number }>;
+  options?: Array<{ name: string; value: number | string }>;
   loading?: boolean;
   placeholder?: string;
   width?: "long" | "short";
@@ -23,9 +23,9 @@ function TurtleSelect({ label, options, loading, placeholder, width = "long" }: 
         onChange={handleChange}
         style={{ width: width === "long" ? "16rem" : "8rem" }}
       >
-        {options?.map(({ name, id }) => {
+        {options?.map(({ name, value }) => {
           return (
-            <Select.Option key={id} value={id}>
+            <Select.Option key={value} value={value}>
               {name}
             </Select.Option>
           );
