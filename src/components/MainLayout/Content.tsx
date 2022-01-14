@@ -3,25 +3,31 @@ import styled from "styled-components";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
 // antd
 import { Layout } from "antd";
+import { callbackify, inherits } from "util";
 
 interface Props {
   children?: React.ReactNode;
+  menuVisible: boolean;
 }
 
-const Content = function ({ children }: Props) {
+const Content = function ({ children, menuVisible }: Props) {
   return (
-    <Container>
+    <StyledContent
+      style={{
+        marginLeft: menuVisible ? "80px" : MAIN_SIDER_WIDTH,
+      }}
+    >
       <Contents>{children}</Contents>
-    </Container>
+    </StyledContent>
   );
 };
 
-const Container = styled(Layout.Content)`
+const StyledContent = styled(Layout.Content)`
   margin-top: ${MAIN_HEADER_HEIGHT};
-  margin-left: ${MAIN_SIDER_WIDTH};
   padding: 20px;
   min-height: calc(100vh - 60px);
   overflow: inherit;
+  transition: margin 0.25s;
 `;
 
 const Contents = styled.div`

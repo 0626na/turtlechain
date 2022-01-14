@@ -7,7 +7,10 @@ import { MAIN_HEADER_HEIGHT } from "constant";
 import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from "antd";
 
-const Header = function () {
+interface Props {
+  handleMenuVisible: () => void;
+}
+const Header = function ({ handleMenuVisible }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const { logout } = useLogout();
@@ -28,7 +31,7 @@ const Header = function () {
     <Container>
       <Row gutter={8} justify="space-between">
         <Col>
-          <Button type="link" icon={<MenuOutlined />} />
+          <Button type="link" icon={<MenuOutlined />} onClick={handleMenuVisible} />
           <LogoImage
             src={`${process.env.PUBLIC_URL}/assets/img/logo_h.png`}
             alt="logo"

@@ -16,7 +16,11 @@ type MenuType = Array<{
   }>;
 }>;
 
-const Sider = function () {
+type Props = {
+  collapsed: boolean;
+};
+
+const Sider = function ({ collapsed }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -170,11 +174,12 @@ const Sider = function () {
   ];
 
   return (
-    <Container width={270}>
+    <StyledSider trigger={null} collapsible collapsed={collapsed}>
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)", padding: "3rem 0" }}
+        style={{ height: "calc(100vh - 60px)", padding: "1.5rem 0" }}
+        inlineCollapsed={collapsed}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
@@ -200,19 +205,16 @@ const Sider = function () {
           }
         })}
       </Menu>
-    </Container>
+    </StyledSider>
   );
 };
 
-const Container = styled(Layout.Sider)`
-  min-width: ${MAIN_SIDER_WIDTH};
+const StyledSider = styled(Layout.Sider)`
   position: fixed;
-  top: ${MAIN_HEADER_HEIGHT};
+  top: 65px;
   overflow: auto;
-  background: #f0f2f5;
-  margin: 2px 0;
-  border-top-right-radius: 2rem;
-  border-bottom-right-radius: 2rem;
+  background: ${({ theme }) => theme.background};
+  border-radius: 0 2rem 2rem 0;
   box-shadow: 10px 10px 10px #e5e5e5;
 `;
 
