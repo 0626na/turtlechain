@@ -1,11 +1,9 @@
-import { Button, message, Popconfirm, Popover, Row, Switch, Table, Tag, Tooltip } from "antd";
+import { message, Pagination, Popconfirm, Row, Switch, Table, Tooltip } from "antd";
 import { vendorAPI } from "apis";
-import { Vendor, VendorAccount } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
-import SimplePagination from "components/SimplePagination";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -28,8 +26,6 @@ function VendorList() {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      cacheTime: 0,
-      staleTime: 0,
     },
   );
 
@@ -41,7 +37,6 @@ function VendorList() {
       </StyledDiv>
       <Table
         size="small"
-        scroll={{ y: "auto" }}
         expandable={{
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.memo}</p>,
         }}
@@ -51,92 +46,88 @@ function VendorList() {
         pagination={false}
         columns={[
           {
-            width: "10%",
+            width: "9%",
+            ellipsis: true,
             title: t("vendor.code"),
             dataIndex: "vendor_id",
-            ellipsis: true,
+            render: (id) => (
+              <Tooltip placement="topLeft" title={id}>
+                {id}
+              </Tooltip>
+            ),
           },
           {
-            width: "15%",
+            ellipsis: true,
             title: t("vendor.name"),
             dataIndex: ["ws_store_info", "name"],
-            ellipsis: true,
+            render: (name) => (
+              <Tooltip placement="topLeft" title={name}>
+                {name}
+              </Tooltip>
+            ),
           },
           {
-            width: "15%",
+            width: "13%",
+            ellipsis: true,
             title: t("vendor.address"),
             dataIndex: "",
             render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
-              return `${building} ${floor} ${col} ${loc} ${ext}`;
+              const address = `${building} ${floor} ${col} ${loc} ${ext}`;
+              return (
+                <Tooltip placement="topLeft" title={address}>
+                  {address}
+                </Tooltip>
+              );
             },
           },
           {
-            width: "15%",
+            width: "12%",
+            ellipsis: true,
             title: t("vendor.phone"),
             dataIndex: "",
             render: (_, { ws_store_info: { store_phone } }) => {
-              if (store_phone.length === 1) {
-                return store_phone[0].phone;
-              }
-
               const phones: Array<string> = [];
               store_phone.forEach(({ phone }) => {
                 phones.push(phone);
               });
 
               return (
-                <Popover content={phones} trigger="click">
-                  <Button>다중번호</Button>
-                </Popover>
+                <Tooltip placement="topLeft" title={phones}>
+                  {phones[0]}
+                </Tooltip>
               );
             },
           },
           {
-            width: "22%",
+            width: "20%",
             ellipsis: true,
             title: t("vendor.account"),
             dataIndex: "",
             render: (_, { ws_store_info: { store_account } }) => {
-              if (store_account.length === 1) {
-                const { bank, account_holder, account_number } = store_account[0];
-                return `${bank} ${account_number} ${account_holder}`;
-              }
-
               const accounts: Array<any> = [];
               store_account.forEach(({ bank, account_holder, account_number }) => {
                 accounts.push({ bank, account_holder, account_number });
               });
 
-              const content = accounts.map(({ bank, account_holder, account_number }) => {
-                return (
-                  <p>
-                    {bank} {account_number} {account_holder}
-                  </p>
-                );
+              const makeContent = ({ bank, account_holder, account_number }: any) => {
+                return `${bank} ${account_number} ${account_holder}`;
+              };
+
+              const contents = accounts.map((account) => {
+                return <p>{makeContent(account)}</p>;
               });
 
               return (
-                <Popover content={content} title="계좌정보" trigger="click">
-                  <Button>다중계좌</Button>
-                </Popover>
-              );
-            },
-          },
-          Table.EXPAND_COLUMN,
-          {
-            align: "left",
-            title: t("vendor.memo"),
-            dataIndex: "",
-            render: (_, { memo }) => {
-              return (
-                <Popover content={memo} trigger="click">
-                  메모내용
-                </Popover>
+                <Tooltip placement="topLeft" title={contents}>
+                  {makeContent(accounts[0])}
+                </Tooltip>
               );
             },
           },
           {
             align: "center",
+            width: "12%",
+            ellipsis: true,
             title: t("vendor.include tax"),
             dataIndex: "is_taxed",
             render: (_, record) => {
@@ -151,7 +142,7 @@ function VendorList() {
                 >
                   <Switch
                     checkedChildren={t("button.include")}
-                    unCheckedChildren={t("button.exclude")}
+                    //unCheckedChildren={t("button.exclude")}
                     checked={record.is_taxed}
                   />
                 </Popconfirm>
@@ -159,6 +150,8 @@ function VendorList() {
             },
           },
           {
+            width: "15%",
+            ellipsis: true,
             align: "center",
             title: () => {
               return (
@@ -181,7 +174,7 @@ function VendorList() {
         ]}
         footer={() => (
           <Row justify="center">
-            <SimplePagination />
+            <Pagination size="small" total={100} showSizeChanger={false} />
           </Row>
         )}
 
