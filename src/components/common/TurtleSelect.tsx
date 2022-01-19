@@ -1,5 +1,4 @@
-import { Select, Space, Typography } from "antd";
-import { SelectValue } from "antd/lib/select";
+import { Select, Typography } from "antd";
 
 interface Props {
   label?: string;
@@ -21,12 +20,12 @@ function TurtleSelect({
   onSelect,
 }: Props) {
   return (
-    <Space size="large">
-      <Typography.Text>{label}</Typography.Text>
+    <>
+      {label && <Typography.Text style={{ marginRight: "1rem" }}>{label}</Typography.Text>}
       <Select
         placeholder={placeholder}
         loading={loading}
-        style={{ width: width === "long" ? "16rem" : "8rem" }}
+        style={{ width: width === "long" ? "12rem" : "8rem" }}
         value={value}
         onSelect={onSelect}
       >
@@ -38,7 +37,7 @@ function TurtleSelect({
           );
         })}
       </Select>
-    </Space>
+    </>
   );
 }
 
