@@ -30,6 +30,7 @@
     "success signup": "서비스 신청이 완료 되었습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
+    "success update": "성공적으로 수정하였습니다",
     "error phone validation": "올바른 휴대번호를 입력하세요.",
     "error login": "아이디 또는 비밀번호를 잘못 입력하셨습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
@@ -67,7 +68,8 @@
     "exclude": "미포함"
   },
   "tooltip": {
-    "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다."
+    "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
+    "main account info": "다수의 계좌정보 중 주계좌로 설정된 계좌로 정산을 진행합니다."
   },
   "order": {
     "": "주문",
@@ -149,7 +151,8 @@
     "memo": "메모",
     "code": "거래처 코드",
     "account": "계좌정보",
-    "include tax": "부가세 포함 여부"
+    "include tax": "부가세 포함 여부",
+    "request update": "거래처 정보 수정 요청하기"
   },
   "account": {
     "": "계정",

@@ -1,4 +1,15 @@
-import { message, Pagination, Popconfirm, Row, Switch, Table, Tooltip } from "antd";
+import {
+  Col,
+  Input,
+  message,
+  notification,
+  Pagination,
+  Popconfirm,
+  Row,
+  Switch,
+  Table,
+  Tooltip,
+} from "antd";
 import { vendorAPI } from "apis";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
@@ -7,9 +18,12 @@ import SearchFilter from "components/SearchFilter";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
-import { QuestionCircleFilled } from "@ant-design/icons";
-import { RequestGetVendors } from "apis/vendorAPI";
+import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
+import { Vendor, RequestGetVendors } from "apis/vendorAPI";
 import { useState } from "react";
+import TurtleBadge from "components/common/TurtleBadge";
+import VendorUpdateModal from "./VendorUpdateModal";
+import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 
 interface Props {
   searchQuery: RequestGetVendors;
@@ -34,6 +48,28 @@ function VendorList({
 }: Props) {
   const { t } = useTranslation();
 
+  const [editable, setEditable] = useState(false);
+  const [memo, setMemo] = useState("");
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [selectedRow, selectRow] = useState<Vendor>({
+    id: -1,
+    vendor_id: "",
+    ws_store_id: -1,
+    is_taxed: false,
+    memo: "",
+    ws_store_info: {
+      store_account: [],
+      store_phone: [],
+      name: "",
+      phone: "",
+      building: "",
+      floor: "",
+      col: "",
+      loc: "",
+      ext: "",
+    },
+  });
+
   // 거래처 목록 불러오기 요청
   const getVendorsQuery = useQuery(
     ["getVendors", searchQuery], //
@@ -42,6 +78,8 @@ function VendorList({
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+      cacheTime: 0,
+      staleTime: 0,
     },
   );
 
@@ -51,9 +89,35 @@ function VendorList({
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {
-      // 구현예정
+      setEditable(false);
+      setMemo("");
+      getVendorsQuery.refetch();
+      notification.open({
+        type: "success",
+        message: t("message.success update"),
+      });
     },
   });
+
+  const onSelectRow = (record: Vendor) => {
+    selectRow({
+      ...record,
+      ws_store_info: {
+        ...record.ws_store_info,
+        store_account: [...record.ws_store_info.store_account],
+        store_phone: [...record.ws_store_info.store_phone],
+      },
+    });
+  };
+
+  const openModal = (record: Vendor) => {
+    selectRow(record);
+    setVisibleModal(true);
+  };
+
+  const closeModal = () => {
+    setVisibleModal(false);
+  };
 
   return (
     <>
@@ -71,7 +135,56 @@ function VendorList({
         size="small"
         scroll={{ x: "auto" }}
         expandable={{
-          expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.memo}</p>,
+          expandedRowRender: (record) => {
+            return editable ? (
+              <Row>
+                <Col span={22}>
+                  <Input
+                    size="small"
+                    defaultValue={record.memo}
+                    onChange={(e) => {
+                      setMemo(e.currentTarget.value);
+                    }}
+                  />
+                </Col>
+                <Col>
+                  <EditFilled
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => {
+                      if (memo === record.memo) {
+                        setEditable(false);
+                        return;
+                      }
+                      updateVendorQuery.mutate({
+                        id: record.id,
+                        is_taxed: record.is_taxed,
+                        memo: memo,
+                      });
+                      getVendorsQuery.refetch();
+                    }}
+                  />
+                </Col>
+              </Row>
+            ) : (
+              <>
+                <span>{record.memo}</span>
+                <EditFilled
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => {
+                    setMemo(record.memo);
+                    setEditable((editable) => !editable);
+                  }}
+                />
+              </>
+            );
+          },
+          expandIcon: ({ expanded, onExpand, record }) => {
+            return record.memo !== null ? (
+              <BookFilled onClick={(e) => onExpand(record, e)} />
+            ) : (
+              <BookOutlined onClick={(e) => onExpand(record, e)} />
+            );
+          },
         }}
         loading={getVendorsQuery.isLoading}
         dataSource={getVendorsQuery.data?.data.data}
@@ -116,7 +229,7 @@ function VendorList({
           {
             width: "12%",
             ellipsis: true,
-            title: t("vendor.phone"),
+            title: t("vendor.store phone"),
             dataIndex: "",
             render: (_, { ws_store_info: { store_phone } }) => {
               const phones: Array<string> = [];
@@ -125,9 +238,11 @@ function VendorList({
               });
 
               return (
-                <Tooltip placement="topLeft" title={phones}>
-                  {phones[0]}
-                </Tooltip>
+                <TurtleBadge count={phones.length}>
+                  <Tooltip placement="topLeft" title={phones}>
+                    {phones[0]}
+                  </Tooltip>
+                </TurtleBadge>
               );
             },
           },
@@ -151,12 +266,15 @@ function VendorList({
               });
 
               return (
-                <Tooltip placement="topLeft" title={contents}>
-                  {makeContent(accounts[0])}
-                </Tooltip>
+                <TurtleBadge count={contents.length}>
+                  <Tooltip placement="topLeft" title={contents}>
+                    {makeContent(accounts[0])}
+                  </Tooltip>
+                </TurtleBadge>
               );
             },
           },
+          Table.EXPAND_COLUMN,
           {
             align: "center",
             width: "12%",
@@ -170,7 +288,12 @@ function VendorList({
                   okText={t("yes")}
                   cancelText={t("no")}
                   onConfirm={() => {
-                    record.is_taxed = !record.is_taxed;
+                    updateVendorQuery.mutate({
+                      id: record.id,
+                      is_taxed: record.is_taxed,
+                      memo: record.memo,
+                    });
+                    getVendorsQuery.refetch();
                   }}
                 >
                   <Switch
@@ -189,16 +312,19 @@ function VendorList({
             title: () => {
               return (
                 <>
-                  <Tooltip title={t("tooltip.request update")}>
-                    {t("common.request update")} <QuestionCircleFilled />
-                  </Tooltip>
+                  {t("common.request update")}
+                  <TurtleQuestionTooltip content={t("tooltip.request update")} />
                 </>
               );
             },
             dataIndex: "action",
             render: (_, record) => {
               return (
-                <TurtleButton size="small" ghost>
+                <TurtleButton //
+                  size="small"
+                  ghost
+                  onClick={() => openModal(record)}
+                >
                   {t("button.request update")}
                 </TurtleButton>
               );
@@ -218,6 +344,10 @@ function VendorList({
         )}
 
         // end of Table
+      />
+      <VendorUpdateModal //
+        visible={visibleModal}
+        closeModal={closeModal}
       />
     </>
   );

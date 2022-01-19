@@ -9,6 +9,7 @@ import "antd/dist/antd.less";
 import "./i18n";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "utils/theme";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
@@ -28,6 +29,7 @@ ReactDOM.render(
       <ConfigProvider locale={koKR}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
+          <ReactQueryDevtools />
           <Router />
         </ThemeProvider>
       </ConfigProvider>

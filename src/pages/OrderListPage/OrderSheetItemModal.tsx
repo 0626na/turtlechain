@@ -150,14 +150,4 @@ const WarehousingSheetItemModal = function ({ visible, openModal, closeModal }: 
   );
 };
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const FormTitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export default WarehousingSheetItemModal;
