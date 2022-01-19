@@ -9,14 +9,16 @@ function Filter() {
   return (
     <Row gutter={24} align={"middle"} justify="space-between">
       <Col>
+        {/*
         <StoreSelect />
+        */}
       </Col>
       <Col>
         <Space>
           <TurtleButton type="primary" color="grey">
             {t("button.create bulk vendor")}
           </TurtleButton>
-          <TurtleButton type="primary" color="skyBlue">
+          <TurtleButton type="primary" color="grey">
             {t("button.load vendor")}
           </TurtleButton>
         </Space>

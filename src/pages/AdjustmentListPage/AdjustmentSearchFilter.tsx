@@ -9,7 +9,9 @@ const AdjustmentSearchFilter = function ({}: Props) {
   return (
     <Form layout="inline">
       <Form.Item label={t("mall")}>
+        {/*
         <StoreSelect />
+        */}
       </Form.Item>
       <Form.Item label={t("adjustment date")}>
         <DatePicker.RangePicker allowClear={false} />

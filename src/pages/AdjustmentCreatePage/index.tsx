@@ -18,7 +18,9 @@ const AdjustmentCreatePage = function () {
         breadcrumbList={[t("adjustment management"), t("adjustment create")]}
       />
       <Form>
+        {/*
         <StoreSelect />
+        */}
       </Form>
       <AdjustmentCreateForm />
       <AdjustmentPreviewList />

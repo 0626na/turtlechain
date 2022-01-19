@@ -15,7 +15,8 @@
     "really resend": "정말 재전송하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
     "changed data": "변경된 데이터가 있습니다.",
-    "search vendor": "거래처명으로 검색하면 쉽게 찾을 수 있습니다."
+    "search vendor": "거래처명으로 검색하면 쉽게 찾을 수 있습니다.",
+    "update tax included": "부가세 포함 여부를 변경하시겠습니까?"
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
@@ -140,7 +141,8 @@
     "name": "거래처명",
     "address": "거래처 주소",
     "search": "거래처 조회하기",
-    "phone": "휴대번호",
+    "phone": "매장번호",
+    "store phone": "휴대번호",
     "basic info": "거래처 기본 정보",
     "account info": "거래처 계좌 정보",
     "biz info": "거래처 사업자 정보",

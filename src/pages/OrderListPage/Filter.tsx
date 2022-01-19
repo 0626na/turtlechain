@@ -11,7 +11,9 @@ function Filter() {
     <Row gutter={24} align="middle" justify="space-between">
       <Col>
         <Space size="large">
-          <StoreSelect />
+          {/*
+        <StoreSelect />
+        */}
           <TurtleDatePicker label={t("order.date")} />
         </Space>
       </Col>

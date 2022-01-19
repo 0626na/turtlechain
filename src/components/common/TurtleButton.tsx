@@ -5,7 +5,7 @@ import styled from "styled-components";
 interface Props {
   children: TFunctionResult;
   type?: "primary" | "default" | "ghost";
-  color?: "grey" | "skyBlue" | "mint";
+  color?: "grey" | "mint";
   htmlType?: "submit";
   size?: "small";
   ghost?: boolean;
@@ -44,12 +44,22 @@ const StyledButton = styled(Button)`
     return color && theme[color + "Button"];
   }};
   &:hover {
-    background-color: ${({ theme, color }) => color && theme[color + "Button"]};
-    opacity: 0.8;
+    background-color: ${({ theme, color }) => {
+      if (color === "grey") return theme.skyBlueButton;
+      return color && theme[color + "Button"];
+    }};
+    opacity: ${({ color }) => {
+      if (color !== "grey") return "0.8";
+    }};
   }
   &:focus {
-    background-color: ${({ theme, color }) => color && theme[color + "Button"]};
-    opacity: 0.8;
+    background-color: ${({ theme, color }) => {
+      if (color === "grey") return theme.skyBlueButton;
+      return color && theme[color + "Button"];
+    }};
+    opacity: ${({ color }) => {
+      if (color !== "grey") return "0.8";
+    }};
   }
 `;
 

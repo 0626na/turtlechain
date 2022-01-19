@@ -38,15 +38,15 @@ export interface Vendor {
   };
 }
 
-// Request: 거래처 리스트 요청 타입
+// Request: 거래처 리스트
 export interface RequestGetVendors {
   page: number;
   type: string;
   search_query: string;
-  rt_store_id: number;
+  rt_store_id: number | "";
 }
 
-// Response: 거래처 리스트 가져오기 타입
+// Response: 거래처 리스트
 export interface ResponseGetVendors {
   msg: string;
   data: { data: Array<Vendor>; total_count: number };
@@ -61,8 +61,27 @@ const getVendors = async function (query: RequestGetVendors) {
   return response.data;
 };
 
+// Request: 거래처 수정
+export interface RequestUpdateVendor {
+  id: number;
+  memo: string;
+  is_taxed: boolean;
+}
+
+// Response: 거래처 수정
+export interface ResponseUpdateVendor {
+  msg: string;
+}
+
+const updateVendor = async function (data: RequestUpdateVendor) {
+  const url = `v2/vendor/${data.id}`;
+  const response = await mockAxios.put<ResponseUpdateVendor>(url, data);
+  return response.data;
+};
+
 const vendorAPI = {
   getVendors,
+  updateVendor,
 };
 
 export default vendorAPI;

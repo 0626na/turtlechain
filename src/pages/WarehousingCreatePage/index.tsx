@@ -84,7 +84,9 @@ const WarehousingCreatePage = function () {
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
       />
       <Form>
+        {/*
         <StoreSelect />
+        */}
       </Form>
       <WarehousingCreateForm onCreate={onCreate} />
       <WarehousingPreviewList

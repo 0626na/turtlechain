@@ -14,7 +14,9 @@ const WarehousingSearchFilter = function ({ searchQuery, setSearchQuery }: Props
   return (
     <Form layout="inline">
       <Form.Item label={t("mall")}>
+        {/*
         <StoreSelect />
+        */}
       </Form.Item>
       <Form.Item label={t("warehousing date")}>
         <DatePicker.RangePicker

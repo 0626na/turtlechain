@@ -7,21 +7,28 @@ interface Props {
   loading?: boolean;
   placeholder?: string;
   width?: "long" | "short";
+  value: string;
+  onSelect: (value: string) => void;
 }
 
-function TurtleSelect({ label, options, loading, placeholder, width = "long" }: Props) {
-  const handleChange = (value: SelectValue) => {
-    console.log(`selected ${value}`);
-  };
-
+function TurtleSelect({
+  label,
+  options,
+  loading,
+  placeholder,
+  width = "long",
+  value,
+  onSelect,
+}: Props) {
   return (
     <Space size="large">
       <Typography.Text>{label}</Typography.Text>
       <Select
         placeholder={placeholder}
         loading={loading}
-        onChange={handleChange}
         style={{ width: width === "long" ? "16rem" : "8rem" }}
+        value={value}
+        onSelect={onSelect}
       >
         {options?.map(({ name, value }) => {
           return (

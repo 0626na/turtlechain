@@ -5,23 +5,39 @@ import TurtleButton from "components/common/TurtleButton";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { QuestionCircleFilled } from "@ant-design/icons";
+import { RequestGetVendors } from "apis/vendorAPI";
+import { useState } from "react";
 
-function VendorList() {
+interface Props {
+  searchQuery: RequestGetVendors;
+  searchVendors: () => void;
+  searchType: string;
+  setSearchType: (type: string) => void;
+  searchString: string;
+  onChangeSearchString: (e: React.FormEvent<HTMLInputElement>) => void;
+  page: number;
+  selectPage: (page: number) => void;
+}
+
+function VendorList({
+  searchQuery,
+  searchVendors,
+  searchType,
+  setSearchType,
+  searchString,
+  onChangeSearchString,
+  page,
+  selectPage,
+}: Props) {
   const { t } = useTranslation();
 
   // 거래처 목록 불러오기 요청
   const getVendorsQuery = useQuery(
-    ["getVendors"],
-    () =>
-      vendorAPI.getVendors({
-        page: 1,
-        type: "",
-        search_query: "",
-        rt_store_id: 1,
-      }),
+    ["getVendors", searchQuery], //
+    () => vendorAPI.getVendors(searchQuery),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -29,14 +45,31 @@ function VendorList() {
     },
   );
 
+  // 거래처 부가세, 메모 수정 요청
+  const updateVendorQuery = useMutation(["updateVendor"], vendorAPI.updateVendor, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      // 구현예정
+    },
+  });
+
   return (
     <>
       <StyledDiv>
         <TurtleText>{t("vendor.lists")}</TurtleText>
-        <SearchFilter />
+        <SearchFilter
+          searchType={searchType}
+          onSelectSearchType={setSearchType}
+          searchString={searchString}
+          onChangeSearchString={onChangeSearchString}
+          onSearch={searchVendors}
+        />
       </StyledDiv>
       <Table
         size="small"
+        scroll={{ x: "auto" }}
         expandable={{
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.memo}</p>,
         }}
@@ -133,7 +166,7 @@ function VendorList() {
             render: (_, record) => {
               return (
                 <Popconfirm
-                  title={t("description.really update")}
+                  title={t("description.update tax included")}
                   okText={t("yes")}
                   cancelText={t("no")}
                   onConfirm={() => {
@@ -142,8 +175,8 @@ function VendorList() {
                 >
                   <Switch
                     checkedChildren={t("button.include")}
-                    //unCheckedChildren={t("button.exclude")}
                     checked={record.is_taxed}
+                    style={{ width: "52px" }}
                   />
                 </Popconfirm>
               );
@@ -174,7 +207,13 @@ function VendorList() {
         ]}
         footer={() => (
           <Row justify="center">
-            <Pagination size="small" total={100} showSizeChanger={false} />
+            <Pagination
+              size="small"
+              total={getVendorsQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={page}
+              onChange={selectPage}
+            />
           </Row>
         )}
 

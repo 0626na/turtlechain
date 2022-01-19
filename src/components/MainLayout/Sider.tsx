@@ -179,7 +179,6 @@ const Sider = function ({ collapsed }: Props) {
         mode="inline"
         selectedKeys={[selectedKeys]}
         style={{ height: "calc(100vh - 60px)", padding: "1.5rem 0" }}
-        inlineCollapsed={collapsed}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
