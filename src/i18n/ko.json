@@ -45,7 +45,8 @@
   "placeholder": {
     "vendor name": "거래처명을 검색 또는 입력하세요.",
     "vendor address": "거래처 주소를 정확히 입력하세요.",
-    "phone": "휴대번호를 정확히 입력하세요",
+    "store phone": "휴대번호를 정확히 입력하세요",
+    "phone": "매장번호를 정확히 입력하세요",
     "product name": "상품명을 검색 또는 입력하세요.",
     "memo": "메모를 입력해주세요.",
     "search": "검색어를 입력해주세요.",
@@ -69,7 +70,8 @@
     "load vendor": "거래처 불러오기",
     "download vendor": "거래처 다운로드",
     "include": "포함 ",
-    "exclude": "미포함"
+    "exclude": "미포함",
+    "add phone": "휴대번호 추가하기"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",

@@ -1,16 +1,30 @@
 import { Form, Input } from "antd";
 
 interface Props {
-  name: string;
+  required?: boolean;
+  name: Array<string> | string;
   label: string;
+  placeholder?: string;
   readOnly?: boolean;
   disabled?: boolean;
 }
 
-function TurtleInput({ name, label, readOnly = false, disabled }: Props) {
+function TurtleInput({
+  required = true,
+  name,
+  label,
+  placeholder,
+  readOnly = false,
+  disabled,
+}: Props) {
   return (
-    <Form.Item name={name} label={label} rules={[{ required: true }]}>
-      <Input readOnly={readOnly} disabled={disabled} />
+    <Form.Item required={required} name={name} label={label} rules={[{ required: true }]}>
+      <Input
+        placeholder={placeholder}
+        readOnly={readOnly}
+        disabled={disabled}
+        style={{ width: "96%" }}
+      />
     </Form.Item>
   );
 }

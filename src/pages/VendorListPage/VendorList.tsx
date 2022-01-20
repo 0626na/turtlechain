@@ -99,17 +99,6 @@ function VendorList({
     },
   });
 
-  const onSelectRow = (record: Vendor) => {
-    selectRow({
-      ...record,
-      ws_store_info: {
-        ...record.ws_store_info,
-        store_account: [...record.ws_store_info.store_account],
-        store_phone: [...record.ws_store_info.store_phone],
-      },
-    });
-  };
-
   const openModal = (record: Vendor) => {
     selectRow(record);
     setVisibleModal(true);
@@ -237,9 +226,13 @@ function VendorList({
                 phones.push(phone);
               });
 
+              const contents = phones.map((phone) => {
+                return <p>{phone}</p>;
+              });
+
               return (
                 <TurtleBadge count={phones.length}>
-                  <Tooltip placement="topLeft" title={phones}>
+                  <Tooltip placement="topLeft" title={contents}>
                     {phones[0]}
                   </Tooltip>
                 </TurtleBadge>
@@ -348,6 +341,7 @@ function VendorList({
       <VendorUpdateModal //
         visible={visibleModal}
         closeModal={closeModal}
+        selectedRow={selectedRow}
       />
     </>
   );

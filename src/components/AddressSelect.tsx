@@ -1,4 +1,4 @@
-import { Form, Input, message, Select, Space } from "antd";
+import { Col, Form, Input, message, Row, Select, Space } from "antd";
 import { basicDataAPI } from "apis";
 import { AxiosError } from "axios";
 import { useState } from "react";
@@ -31,16 +31,16 @@ function AddressSelect() {
   });
 
   return (
-    <Form.Item label={t("vendor.address")} required={true}>
-      <Space>
+    <Form.Item label={t("vendor.address")} required={false} wrapperCol={{ span: 24, offset: 1 }}>
+      <Input.Group compact>
         <Form.Item //
-          name={["address", "building"]}
+          name={["ws_store_info", "building"]}
           noStyle
           rules={[{ required: true }]}
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
-            style={{ width: "10rem" }}
+            style={{ width: "20%" }}
             onChange={(value: string) => {
               setAddress({ building: value, floor: "", col: "", loc: "", ext: "" });
             }}
@@ -53,14 +53,15 @@ function AddressSelect() {
               ))}
           </Select>
         </Form.Item>
+
         <Form.Item //
-          name={["address", "floor"]}
+          name={["ws_store_info", "floor"]}
           noStyle
           rules={[{ required: true }]}
         >
           <Select // 층 select
             placeholder={t("placeholder.floor")}
-            style={{ width: "10rem" }}
+            style={{ width: "15%" }}
             onChange={(value: string) => {
               setAddress({ ...address, floor: value, col: "", loc: "", ext: "" });
             }}
@@ -75,13 +76,13 @@ function AddressSelect() {
           </Select>
         </Form.Item>
         <Form.Item //
-          name={["address", "col loc"]}
+          name={["ws_store_info", "col"]}
           noStyle
           rules={[{ required: true }]}
         >
           <Select // 열,호 select
             placeholder={t("placeholder.col loc")}
-            style={{ width: "10rem" }}
+            style={{ width: "15%" }}
             onChange={(value: string) => {
               const [col, loc] = value.split(" ");
               setAddress({ ...address, col: col, loc: loc, ext: "" });
@@ -103,13 +104,16 @@ function AddressSelect() {
           </Select>
         </Form.Item>
         <Form.Item
-          name={["address", "ext"]}
+          name={["ws_store_info", "ext"]}
           noStyle
           rules={[{ required: true, message: "Province is required" }]}
         >
-          <Input style={{ width: "12rem" }} />
+          <Input //
+            style={{ width: "20%" }}
+            placeholder={t("placeholder.ext")}
+          />
         </Form.Item>
-      </Space>
+      </Input.Group>
     </Form.Item>
   );
 }
