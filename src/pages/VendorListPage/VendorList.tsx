@@ -65,6 +65,7 @@ function VendorList({
       building: "",
       floor: "",
       col: "",
+      row: "",
       loc: "",
       ext: "",
     },
@@ -78,8 +79,6 @@ function VendorList({
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      cacheTime: 0,
-      staleTime: 0,
     },
   );
 
@@ -227,7 +226,7 @@ function VendorList({
               });
 
               const contents = phones.map((phone) => {
-                return <p>{phone}</p>;
+                return <p key={phone}>{phone}</p>;
               });
 
               return (
@@ -255,7 +254,7 @@ function VendorList({
               };
 
               const contents = accounts.map((account) => {
-                return <p>{makeContent(account)}</p>;
+                return <p key={account.account_number}>{makeContent(account)}</p>;
               });
 
               return (

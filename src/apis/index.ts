@@ -7,6 +7,7 @@ import warehousingAPI from "./warehousingAPI";
 import orderAPI from "./orderAPI";
 import vendorAPI from "./vendorAPI";
 import basicDataAPI from "./basicDataAPI";
+import bucketListAPI from "./bucketListAPI";
 
 export const v1Axios = axios.create({
   baseURL:
@@ -38,4 +39,5 @@ export {
   orderAPI,
   vendorAPI,
   basicDataAPI,
+  bucketListAPI,
 };

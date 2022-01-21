@@ -33,6 +33,7 @@ export interface Vendor {
     building: string;
     floor: string;
     col: string;
+    row: string;
     loc: string;
     ext: string;
   };
