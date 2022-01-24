@@ -1,4 +1,5 @@
 import { mockAxios } from "./index";
+
 // 거래처 계좌 타입
 export interface VendorAccount {
   id: number;
@@ -33,7 +34,6 @@ export interface Vendor {
     building: string;
     floor: string;
     col: string;
-    row: string;
     loc: string;
     ext: string;
   };

@@ -31,7 +31,11 @@ const Header = function ({ handleMenuVisible }: Props) {
     <Container>
       <Row gutter={8} justify="space-between">
         <Col>
-          <Button type="link" icon={<MenuOutlined />} onClick={handleMenuVisible} />
+          <Button
+            type="link"
+            icon={<MenuOutlined style={{ color: "#FFFFFF" }} />}
+            onClick={handleMenuVisible}
+          />
           <LogoImage
             src={`${process.env.PUBLIC_URL}/assets/img/logo_h.png`}
             alt="logo"
@@ -41,7 +45,7 @@ const Header = function ({ handleMenuVisible }: Props) {
         <Col>
           <Avatar src="https://joeschmoe.io/api/v1/random" />
           <Dropdown overlay={menu} trigger={["click"]}>
-            <Button type="text">
+            <Button type="text" style={{ color: "#FFFFFF" }}>
               {t("turtlechain")}
               <DownOutlined />
             </Button>
@@ -53,12 +57,13 @@ const Header = function ({ handleMenuVisible }: Props) {
 };
 
 const Container = styled(Layout.Header)`
-  width: 100%;
   height: ${MAIN_HEADER_HEIGHT};
   position: fixed;
   z-index: 1;
+  width: 100%;
+  /*
   top: 0;
-  background-color: #fff;
+  */
 `;
 
 const LogoImage = styled.img`

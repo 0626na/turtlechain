@@ -65,7 +65,6 @@ function VendorList({
       building: "",
       floor: "",
       col: "",
-      row: "",
       loc: "",
       ext: "",
     },

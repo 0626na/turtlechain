@@ -2,11 +2,17 @@ import { Col, Form, FormInstance, Input, message, Row, Select, Space } from "ant
 import { basicDataAPI } from "apis";
 import { RequestCreateBucketList } from "apis/bucketListAPI";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
 interface Props {
-  form: FormInstance<RequestCreateBucketList>;
+  form: FormInstance<{
+    building: string;
+    floor: string;
+    col_loc: string;
+    ext: string;
+  }>;
 }
 
 function AddressSelect({ form }: Props) {
@@ -18,13 +24,20 @@ function AddressSelect({ form }: Props) {
     },
   });
 
+  // building 이 바뀔 때 마다, floor select 리랜더링
+  useEffect(() => {
+    console.log("change building");
+  }, []);
+
+  // floor 바뀔 때 마다, col_loc select 리랜더링
+
   return (
     <Form.Item label={t("vendor.address")} required={false} wrapperCol={{ span: 24, offset: 1 }}>
       <Input.Group compact>
         <Form.Item //
           name="building"
           noStyle
-          rules={[{ required: true }]}
+          rules={[{ required: false }]}
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
@@ -34,8 +47,7 @@ function AddressSelect({ form }: Props) {
                 ...form.getFieldsValue(),
                 building: value,
                 floor: "",
-                col: "",
-                row: "",
+                col_loc: "",
                 ext: "",
               });
             }}
@@ -52,7 +64,7 @@ function AddressSelect({ form }: Props) {
         <Form.Item //
           name="floor"
           noStyle
-          rules={[{ required: true }]}
+          rules={[{ required: false }]}
         >
           <Select // 층 select
             placeholder={t("placeholder.floor")}
@@ -61,8 +73,7 @@ function AddressSelect({ form }: Props) {
               form.setFieldsValue({
                 ...form.getFieldsValue(),
                 floor: value,
-                col: "",
-                row: "",
+                col_loc: "",
                 ext: "",
               });
             }}
@@ -81,19 +92,17 @@ function AddressSelect({ form }: Props) {
           </Select>
         </Form.Item>
         <Form.Item //
-          name="col"
+          name="col_loc"
           noStyle
-          rules={[{ required: true }]}
+          rules={[{ required: false }]}
         >
           <Select // 열,호 select
             placeholder={t("placeholder.col loc")}
             style={{ width: "15%" }}
             onChange={(value: string) => {
-              const [col, row] = value.split(" ");
               form.setFieldsValue({
                 ...form.getFieldsValue(),
-                col: col,
-                //row: row,
+                col_loc: value,
                 ext: "",
               });
             }}
@@ -114,7 +123,11 @@ function AddressSelect({ form }: Props) {
               })}
           </Select>
         </Form.Item>
-        <Form.Item name="ext" noStyle rules={[{ required: true, message: "Province is required" }]}>
+        <Form.Item
+          name="ext"
+          noStyle
+          rules={[{ required: false, message: "기타 주소 입력해주세요" }]}
+        >
           <Input //
             style={{ width: "20%" }}
             placeholder={t("placeholder.ext")}

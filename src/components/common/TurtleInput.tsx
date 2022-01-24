@@ -18,7 +18,7 @@ function TurtleInput({
   disabled,
 }: Props) {
   return (
-    <Form.Item required={required} name={name} label={label} rules={[{ required: true }]}>
+    <Form.Item required={required} name={name} label={label} rules={[{ required: required }]}>
       <Input
         placeholder={placeholder}
         readOnly={readOnly}

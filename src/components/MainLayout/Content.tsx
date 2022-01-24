@@ -30,10 +30,10 @@ const StyledContent = styled(Layout.Content)`
 `;
 
 const Contents = styled.div`
-  border-radius: 2rem;
   background-color: white;
+  border-radius: 12px;
   & > * {
-    padding: 1.5rem;
+    padding: 0.8rem 1.5rem;
   }
 `;
 

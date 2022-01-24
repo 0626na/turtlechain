@@ -23,7 +23,6 @@ function TurtleButton({
 }: Props) {
   return (
     <StyledButton
-      shape="round"
       type={type}
       color={color}
       htmlType={htmlType}
@@ -37,6 +36,7 @@ function TurtleButton({
 }
 
 const StyledButton = styled(Button)`
+  border-radius: 4px;
   background-color: ${({ theme, color }) => {
     return color && theme[color + "Button"];
   }};

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
 import { Layout, Menu } from "antd";
 import SvgIcon from "components/SvgIcon";
+import TurtleIcon from "components/common/TurtleIcon";
 
 type MenuType = Array<{
   title: string;
@@ -43,7 +44,10 @@ const Sider = function ({ collapsed }: Props) {
       pathname: "/home",
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`} alt="home" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
+            alt="home"
+          />
         </div>
       ),
     },
@@ -51,7 +55,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("order.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`} alt="order" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
+            alt="order"
+          />
         </div>
       ),
       submenu: [
@@ -69,7 +76,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("sample return.management"),
       icon: (
         <div>
-          <SvgIcon
+          <TurtleIcon
             src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
             alt="sample return"
           />
@@ -81,7 +88,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("warehousing.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`} alt="warehousing" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
+            alt="warehousing"
+          />
         </div>
       ),
       submenu: [
@@ -99,7 +109,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("adjustment.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`} alt="adjustment" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
+            alt="adjustment"
+          />
         </div>
       ),
       submenu: [
@@ -117,7 +130,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("settlement.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`} alt="settlement" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
+            alt="settlement"
+          />
         </div>
       ),
       submenu: [],
@@ -126,7 +142,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("product.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`} alt="product" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
+            alt="product"
+          />
         </div>
       ),
       submenu: [],
@@ -135,7 +154,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("vendor.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
+          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
         </div>
       ),
       submenu: [
@@ -153,7 +172,10 @@ const Sider = function ({ collapsed }: Props) {
       title: t("setting"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`} alt="setting" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
+            alt="setting"
+          />
         </div>
       ),
       submenu: [
@@ -210,11 +232,13 @@ const Sider = function ({ collapsed }: Props) {
 
 const StyledSider = styled(Layout.Sider)`
   position: fixed;
-  top: 65px;
+  top: 60px;
   overflow: auto;
+  /*
   background: ${({ theme }) => theme.background};
-  border-radius: 0 2rem 2rem 0;
   box-shadow: 10px 10px 10px #e5e5e5;
+  min-width: 240px !important;
+  */
 `;
 
 export default Sider;

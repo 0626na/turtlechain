@@ -19,7 +19,7 @@ interface Props {
 
 function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
   const { t } = useTranslation();
-  const [form] = Form.useForm<RequestCreateBucketList>();
+  const [form] = Form.useForm();
 
   // 렌더링 시 form객체 selectedRow로 채운다.
   useEffect(() => {
@@ -40,8 +40,9 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
       store_account: storeAccounts,
       building: selectedRow.ws_store_info.building,
       floor: selectedRow.ws_store_info.floor,
-      col: selectedRow.ws_store_info.col,
-      row: selectedRow.ws_store_info.row,
+      col_loc: `${selectedRow.ws_store_info.col ? selectedRow.ws_store_info.col : ""} ${
+        selectedRow.ws_store_info.loc
+      }`,
       ext: selectedRow.ws_store_info.ext,
       type: "update",
       ws_store_id: selectedRow.ws_store_id,
@@ -91,11 +92,17 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
           <TurtleQuestionTooltip content={t("tooltip.main account info")} />
         </TurtleText>
         {/*
-        <BankSelect />
-         */}
+        <BankSelect /> 
+        */}
         <Row justify="center">
           <Form.Item>
-            <TurtleButton type="primary" htmlType="submit">
+            <TurtleButton
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                console.log(form.getFieldsValue());
+              }}
+            >
               {t("button.request update")}
             </TurtleButton>
           </Form.Item>

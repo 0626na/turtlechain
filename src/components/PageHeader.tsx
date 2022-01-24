@@ -21,6 +21,7 @@ const PageHeader = function ({ pageName, title, breadcrumbList, info }: Props) {
             <TurtleIcon
               src={`${process.env.PUBLIC_URL}/assets/svg/${pageName}.svg`}
               alt={pageName}
+              color="green"
             />
             <StyledTitle level={3}>{title}</StyledTitle>
           </Space>

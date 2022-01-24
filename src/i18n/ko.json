@@ -182,7 +182,8 @@
   "common": {
     "all": "전체",
     "request update": "수정 요청",
-    "search": "검색"
+    "search": "검색",
+    "home": "Home"
   },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
