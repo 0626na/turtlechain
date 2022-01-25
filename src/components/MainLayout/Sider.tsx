@@ -127,16 +127,25 @@ const Sider = function ({ collapsed }: Props) {
       ],
     },
     {
-      title: t("settlement.management"),
+      title: t("clearing.management"),
       icon: (
         <div>
           <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
-            alt="settlement"
+            src={`${process.env.PUBLIC_URL}/assets/svg/clearing.svg`}
+            alt="clearing"
           />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("clearing.create"),
+          pathname: "/clearing/create",
+        },
+        {
+          title: t("clearing.list"),
+          pathname: "/clearing/list",
+        },
+      ],
     },
     {
       title: t("product.management"),

@@ -8,7 +8,7 @@ import ClearingList from "./ClearingList";
 
 function ClearingListPage() {
   const { t } = useTranslation();
-  const title = `${t("turtlechain")} - ${t("vendor.list")}`;
+  const title = `${t("turtlechain")} - ${t("clearing.list")}`;
 
   const [searchType, setSearchType] = useState("all");
   const [searchString, setSearchString] = useState("");
@@ -57,23 +57,14 @@ function ClearingListPage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="Vendor"
-        title={t("vendor.list")}
-        breadcrumbList={[t("vendor.management"), t("vendor.list")]}
+        pageName="Clearing"
+        title={t("clearing.list")}
+        breadcrumbList={[t("clearing.management"), t("clearing.list")]}
       />
       <Filter //
         selectStore={selectStore}
       />
-      <ClearingList //
-        searchQuery={searchQuery}
-        searchVendors={searchVendors}
-        searchType={searchType}
-        setSearchType={setSearchType}
-        searchString={searchString}
-        onChangeSearchString={onChangeSearchString}
-        page={page}
-        selectPage={selectPage}
-      />
+      <ClearingList />
     </>
   );
 }

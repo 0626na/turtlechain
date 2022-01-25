@@ -12,6 +12,8 @@ import {
   MyAccountPage,
   MyCompanyPage,
   MyStorePage,
+  ClearingCreatePage,
+  ClearingListPage,
 } from "pages";
 
 const MainRouter = function () {
@@ -29,6 +31,8 @@ const MainRouter = function () {
       <Route exact path="/my/account" component={MyAccountPage} />
       <Route exact path="/my/company" component={MyCompanyPage} />
       <Route exact path="/my/store" component={MyStorePage} />
+      <Route exact path="/clearing/create" component={ClearingCreatePage} />
+      <Route exact path="/clearing/list" component={ClearingListPage} />
       <Redirect path="*" to="/home" />
     </Switch>
   );

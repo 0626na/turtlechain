@@ -17,3 +17,5 @@ export const VendorListPage = lazy(() => import("./VendorListPage"));
 export const MyAccountPage = lazy(() => import("./MyAccountPage"));
 export const MyCompanyPage = lazy(() => import("./MyCompanyPage"));
 export const MyStorePage = lazy(() => import("./MyStorePage"));
+export const ClearingCreatePage = lazy(() => import("./ClearingCreatePage"));
+export const ClearingListPage = lazy(() => import("./ClearingListPage"));

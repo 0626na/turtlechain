@@ -125,7 +125,7 @@
     "create": "매입조정 등록",
     "list": "매입조정 내역"
   },
-  "settlement": {
+  "clearing": {
     "": "정산",
     "management": "정산 관리",
     "create": "정산 등록",

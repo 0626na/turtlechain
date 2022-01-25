@@ -6,16 +6,15 @@ import ClearingCreateForm from "./ClearingCreateForm";
 
 function ClearingCreatePage() {
   const { t } = useTranslation();
-  const title = `${t("turtlechain")} - ${t("vendor.create")}`;
+  const title = `${t("turtlechain")} - ${t("clearing.create")}`;
 
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="vendor"
-        title={t("vendor.create")}
-        breadcrumbList={[t("vendor.management"), t("vendor.create")]}
-        info={t("description.search vendor")}
+        pageName="clearing"
+        title={t("clearing.create")}
+        breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
       <Filter />
       <ClearingCreateForm />
