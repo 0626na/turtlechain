@@ -27,23 +27,23 @@ import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 
 interface Props {
   searchQuery: RequestGetVendors;
+  searchState: {
+    page: number;
+    type: string;
+    search_query: string;
+  };
   searchVendors: () => void;
-  searchType: string;
-  setSearchType: (type: string) => void;
-  searchString: string;
+  selectSearchType: (type: string) => void;
   onChangeSearchString: (e: React.FormEvent<HTMLInputElement>) => void;
-  page: number;
   selectPage: (page: number) => void;
 }
 
 function VendorList({
   searchQuery,
+  searchState,
   searchVendors,
-  searchType,
-  setSearchType,
-  searchString,
+  selectSearchType,
   onChangeSearchString,
-  page,
   selectPage,
 }: Props) {
   const { t } = useTranslation();
@@ -111,9 +111,9 @@ function VendorList({
       <StyledDiv>
         <TurtleText>{t("vendor.lists")}</TurtleText>
         <SearchFilter
-          searchType={searchType}
-          onSelectSearchType={setSearchType}
-          searchString={searchString}
+          searchType={searchState.type}
+          onSelectSearchType={selectSearchType}
+          searchString={searchState.search_query}
           onChangeSearchString={onChangeSearchString}
           onSearch={searchVendors}
         />
@@ -328,7 +328,7 @@ function VendorList({
               size="small"
               total={getVendorsQuery.data?.data.total_count}
               showSizeChanger={false}
-              current={page}
+              current={searchState.page}
               onChange={selectPage}
             />
           </Row>

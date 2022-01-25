@@ -1,6 +1,5 @@
 import { Col, Form, FormInstance, Input, message, Row, Select, Space } from "antd";
 import { basicDataAPI } from "apis";
-import { RequestCreateBucketList } from "apis/bucketListAPI";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

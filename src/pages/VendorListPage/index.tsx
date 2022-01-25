@@ -10,9 +10,16 @@ function VendorListPage() {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("vendor.list")}`;
 
-  const [searchType, setSearchType] = useState("all");
-  const [searchString, setSearchString] = useState("");
-  const [page, setPage] = useState(1);
+  const [searchState, setSearchState] = useState<{
+    page: number;
+    type: string;
+    search_query: string;
+  }>({
+    page: 1,
+    type: "all",
+    search_query: "",
+  });
+
   const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
     page: 1,
     type: "all",
@@ -22,9 +29,11 @@ function VendorListPage() {
 
   // 쇼핑몰 선택
   const selectStore = (storeId: number | "") => {
-    setSearchType("all");
-    setSearchString("");
-    setPage(1);
+    setSearchState({
+      page: 1,
+      type: "all",
+      search_query: "",
+    });
     setSearchQuery({
       page: 1,
       type: "all",
@@ -33,25 +42,53 @@ function VendorListPage() {
     });
   };
 
-  // 거래처 리스트 검색
+  // 검색 버튼 클릭
   const searchVendors = () => {
-    setPage(1);
-    setSearchQuery({ ...searchQuery, page: 1, type: searchType, search_query: searchString });
+    setSearchState({
+      ...searchState,
+      page: 1,
+    });
+    setSearchQuery({
+      ...searchQuery,
+      page: 1,
+      type: searchState.type,
+      search_query: searchState.search_query,
+    });
   };
+
+  // 검색 조건 선택
+  const selectSearchType = useCallback(
+    (type: string) => {
+      setSearchState({
+        ...searchState,
+        type: type,
+      });
+    },
+    [searchState],
+  );
 
   // 페이지 선택
   const selectPage = useCallback(
     (page: number) => {
-      setPage(page);
+      setSearchState({
+        ...searchState,
+        page,
+      });
       setSearchQuery({ ...searchQuery, page });
     },
-    [setPage, searchQuery],
+    [searchState, searchQuery],
   );
 
   // 거래처 검색 string 입력
-  const onChangeSearchString = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    setSearchString(e.currentTarget.value);
-  }, []);
+  const onChangeSearchString = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      setSearchState({
+        ...searchState,
+        search_query: e.currentTarget.value,
+      });
+    },
+    [searchState],
+  );
 
   return (
     <>
@@ -66,12 +103,10 @@ function VendorListPage() {
       />
       <VendorList //
         searchQuery={searchQuery}
+        searchState={searchState}
         searchVendors={searchVendors}
-        searchType={searchType}
-        setSearchType={setSearchType}
-        searchString={searchString}
+        selectSearchType={selectSearchType}
         onChangeSearchString={onChangeSearchString}
-        page={page}
         selectPage={selectPage}
       />
     </>
