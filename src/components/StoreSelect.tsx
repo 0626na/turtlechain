@@ -3,17 +3,17 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { retailerStoreAPI } from "apis";
 import { AxiosError } from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Props {
-  selectStore: (storeId: number | "") => void;
+  selectStore: (storeId: number) => void;
 }
 
 function CustomStoreSelect({ selectStore }: Props) {
   const { t } = useTranslation();
 
   // 쇼핑몰 식별 번호
-  const [storeId, setStoreId] = useState<number | "">();
+  const [storeId, setStoreId] = useState<number>();
 
   // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(
@@ -30,11 +30,15 @@ function CustomStoreSelect({ selectStore }: Props) {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+      onSuccess: (data) => {
+        setStoreId(data.data.data[0].id);
+        selectStore(data.data.data[0].id);
+      },
     },
   );
 
   // 쇼핑몰 선택
-  const handleChange = useCallback((value: number | "") => {
+  const handleChange = useCallback((value: number) => {
     setStoreId(value);
     selectStore(value);
   }, []);

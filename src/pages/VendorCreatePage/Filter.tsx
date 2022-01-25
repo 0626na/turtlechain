@@ -3,15 +3,17 @@ import TurtleButton from "components/common/TurtleButton";
 import StoreSelect from "components/StoreSelect";
 import { useTranslation } from "react-i18next";
 
-function Filter() {
+interface Props {
+  selectStore: (storeId: number) => void;
+}
+
+function Filter({ selectStore }: Props) {
   const { t } = useTranslation();
 
   return (
     <Row gutter={24} align={"middle"} justify="space-between">
       <Col>
-        {/*
-        <StoreSelect />
-        */}
+        <StoreSelect selectStore={selectStore} />
       </Col>
       <Col>
         <Space>

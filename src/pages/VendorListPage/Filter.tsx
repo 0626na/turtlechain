@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import StoreSelect from "components/StoreSelect";
 
 interface Props {
-  selectStore: (storeId: number | "") => void;
+  selectStore: (storeId: number) => void;
 }
 
 function Filter({ selectStore }: Props) {

@@ -54,20 +54,24 @@ function VendorList({
   const [selectedRow, selectRow] = useState<Vendor>({
     id: -1,
     vendor_id: "",
-    ws_store_id: -1,
+    vendor_name: "",
+    vendor_phone: "",
+    vendor_account: "",
     is_taxed: false,
     memo: "",
     ws_store_info: {
-      store_account: [],
-      store_phone: [],
+      id: -1,
       name: "",
       phone: "",
+      store_account: [],
+      store_phone: [],
       building: "",
       floor: "",
       col: "",
       loc: "",
       ext: "",
     },
+    ws_store_id: -1,
   });
 
   // 거래처 목록 불러오기 요청
@@ -174,7 +178,7 @@ function VendorList({
           },
         }}
         loading={getVendorsQuery.isLoading}
-        dataSource={getVendorsQuery.data?.data.data}
+        dataSource={getVendorsQuery.data?.data.vendor_list}
         rowKey={(record) => record.ws_store_id}
         pagination={false}
         columns={[
@@ -205,7 +209,7 @@ function VendorList({
             title: t("vendor.address"),
             dataIndex: "",
             render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
-              const address = `${building} ${floor} ${col} ${loc} ${ext}`;
+              const address = `${building} ${floor}층 ${col}${col ? "열" : ""} ${loc}호 ${ext}`;
               return (
                 <Tooltip placement="topLeft" title={address}>
                   {address}
@@ -281,7 +285,7 @@ function VendorList({
                   onConfirm={() => {
                     updateVendorQuery.mutate({
                       id: record.id,
-                      is_taxed: record.is_taxed,
+                      is_taxed: !record.is_taxed,
                       memo: record.memo,
                     });
                     getVendorsQuery.refetch();

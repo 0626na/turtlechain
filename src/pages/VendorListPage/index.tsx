@@ -24,11 +24,11 @@ function VendorListPage() {
     page: 1,
     type: "all",
     search_query: "",
-    rt_store_id: "",
+    rt_store_id: -1,
   });
 
   // 쇼핑몰 선택
-  const selectStore = (storeId: number | "") => {
+  const selectStore = (storeId: number) => {
     setSearchState({
       page: 1,
       type: "all",
@@ -94,9 +94,9 @@ function VendorListPage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="Vendor"
+        pageName="vendor"
         title={t("vendor.list")}
-        breadcrumbList={[t("vendor.management"), t("vendor.list")]}
+        breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.list")]}
       />
       <Filter //
         selectStore={selectStore}
