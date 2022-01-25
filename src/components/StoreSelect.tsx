@@ -1,19 +1,21 @@
-// async
-import { AxiosError } from "axios";
+import { message, Select, Space, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
-import retailerStoreAPI from "apis/retailerStoreAPI";
-// antd
-import { Select, message } from "antd";
-import styled from "styled-components";
+import { retailerStoreAPI } from "apis";
+import { AxiosError } from "axios";
+import { useCallback, useState } from "react";
 
 interface Props {
-  emptyValueText: string;
-  width?: string | number;
-  value?: "" | number;
-  onChange?: (value: "" | number, label: string) => void;
+  selectStore: (storeId: number | "") => void;
 }
 
-const StoreSelect = function ({ emptyValueText, width, value, onChange }: Props) {
+function CustomStoreSelect({ selectStore }: Props) {
+  const { t } = useTranslation();
+
+  // 쇼핑몰 식별 번호
+  const [storeId, setStoreId] = useState<number | "">();
+
+  // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(
     ["getStores"],
     () =>
@@ -31,27 +33,33 @@ const StoreSelect = function ({ emptyValueText, width, value, onChange }: Props)
     },
   );
 
-  return (
-    <Select //
-      style={{ width }}
-      loading={getStoresQuery.isLoading}
-      defaultValue=""
-      value={value && value}
-      onChange={(value, option: any) => {
-        onChange && onChange(value, option.children);
-      }}
-    >
-      <Select.Option value="">{emptyValueText}</Select.Option>
-      {getStoresQuery.data?.data.data.map((store) => {
-        const { id, name } = store;
-        return (
-          <Select.Option key={id} value={id}>
-            {name}
-          </Select.Option>
-        );
-      })}
-    </Select>
-  );
-};
+  // 쇼핑몰 선택
+  const handleChange = useCallback((value: number | "") => {
+    setStoreId(value);
+    selectStore(value);
+  }, []);
 
-export default StoreSelect;
+  return (
+    <Space size="large">
+      <Typography.Text style={{ fontSize: "16px" }}>{t("store.name")}</Typography.Text>
+      <Select
+        placeholder={t("description.select mall")}
+        loading={getStoresQuery.isLoading}
+        style={{ width: "20rem" }}
+        onChange={handleChange}
+        value={storeId}
+        size="large"
+      >
+        {getStoresQuery.data?.data.data.map(({ name, id }) => {
+          return (
+            <Select.Option key={id} value={id}>
+              {name}
+            </Select.Option>
+          );
+        })}
+      </Select>
+    </Space>
+  );
+}
+
+export default CustomStoreSelect;

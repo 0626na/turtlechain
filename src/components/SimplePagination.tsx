@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 // antd
-import { Button, Typography } from "antd";
+import { Button, Space, Typography } from "antd";
 
 interface Props {
   currentPage?: number;

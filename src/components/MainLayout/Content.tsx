@@ -6,29 +6,34 @@ import { Layout } from "antd";
 
 interface Props {
   children?: React.ReactNode;
+  menuVisible: boolean;
 }
 
-const Content = function ({ children }: Props) {
+const Content = function ({ children, menuVisible }: Props) {
   return (
-    <Container>
+    <StyledContent
+      style={{
+        marginLeft: menuVisible ? "80px" : MAIN_SIDER_WIDTH,
+      }}
+    >
       <Contents>{children}</Contents>
-    </Container>
+    </StyledContent>
   );
 };
 
-const Container = styled(Layout.Content)`
+const StyledContent = styled(Layout.Content)`
   margin-top: ${MAIN_HEADER_HEIGHT};
-  margin-left: ${MAIN_SIDER_WIDTH};
   padding: 20px;
   min-height: calc(100vh - 60px);
   overflow: inherit;
+  transition: margin 0.25s;
 `;
 
 const Contents = styled.div`
-  border-radius: 2rem;
   background-color: white;
+  border-radius: 12px;
   & > * {
-    padding: 1.5rem;
+    padding: 0.8rem 1.5rem;
   }
 `;
 

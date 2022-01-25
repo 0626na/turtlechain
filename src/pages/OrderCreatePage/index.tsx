@@ -56,7 +56,7 @@ const OrderCreatePage = function () {
       <PageHeader
         pageName="order"
         title={t("order.create")}
-        breadcrumbList={[t("order.management"), t("order.create")]}
+        breadcrumbList={[t("common.home"), t("order.management"), t("order.create")]}
       />
       <Filter />
       <OrderCreateForm form={form} onCreate={onCreate} />

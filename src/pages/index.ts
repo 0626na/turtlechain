@@ -12,6 +12,8 @@ export const WarehousingCreatePage = lazy(() => import("./WarehousingCreatePage"
 export const WarehousingListPage = lazy(() => import("./WarehousingListPage"));
 export const AdjustmentCreatePage = lazy(() => import("./AdjustmentCreatePage"));
 export const AdjustmentListPage = lazy(() => import("./AdjustmentListPage"));
+export const VendorCreatePage = lazy(() => import("./VendorCreatePage"));
+export const VendorListPage = lazy(() => import("./VendorListPage"));
 export const MyAccountPage = lazy(() => import("./MyAccountPage"));
 export const MyCompanyPage = lazy(() => import("./MyCompanyPage"));
 export const MyStorePage = lazy(() => import("./MyStorePage"));

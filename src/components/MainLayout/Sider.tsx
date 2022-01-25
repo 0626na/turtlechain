@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
 import { Layout, Menu } from "antd";
 import SvgIcon from "components/SvgIcon";
+import TurtleIcon from "components/common/TurtleIcon";
 
 type MenuType = Array<{
   title: string;
@@ -16,7 +17,11 @@ type MenuType = Array<{
   }>;
 }>;
 
-const Sider = function () {
+type Props = {
+  collapsed: boolean;
+};
+
+const Sider = function ({ collapsed }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -39,7 +44,10 @@ const Sider = function () {
       pathname: "/home",
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`} alt="home" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
+            alt="home"
+          />
         </div>
       ),
     },
@@ -47,7 +55,10 @@ const Sider = function () {
       title: t("order.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`} alt="order" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
+            alt="order"
+          />
         </div>
       ),
       submenu: [
@@ -65,7 +76,7 @@ const Sider = function () {
       title: t("sample return.management"),
       icon: (
         <div>
-          <SvgIcon
+          <TurtleIcon
             src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
             alt="sample return"
           />
@@ -77,7 +88,10 @@ const Sider = function () {
       title: t("warehousing.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`} alt="warehousing" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
+            alt="warehousing"
+          />
         </div>
       ),
       submenu: [
@@ -95,7 +109,10 @@ const Sider = function () {
       title: t("adjustment.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`} alt="adjustment" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
+            alt="adjustment"
+          />
         </div>
       ),
       submenu: [
@@ -113,7 +130,10 @@ const Sider = function () {
       title: t("settlement.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`} alt="settlement" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
+            alt="settlement"
+          />
         </div>
       ),
       submenu: [],
@@ -122,7 +142,10 @@ const Sider = function () {
       title: t("product.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`} alt="product" />
+          <TurtleIcon
+            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
+            alt="product"
+          />
         </div>
       ),
       submenu: [],
@@ -131,16 +154,28 @@ const Sider = function () {
       title: t("vendor.management"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
+          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("vendor.create"),
+          pathname: "/vendor/create",
+        },
+        {
+          title: t("vendor.list"),
+          pathname: "/vendor/list",
+        },
+      ],
     },
     {
       title: t("setting"),
       icon: (
         <div>
-          <SvgIcon src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`} alt="setting" />
+          <TurtleIcon //
+            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
+            alt="setting"
+          />
         </div>
       ),
       submenu: [
@@ -161,11 +196,11 @@ const Sider = function () {
   ];
 
   return (
-    <Container width={270}>
+    <StyledSider trigger={null} collapsible collapsed={collapsed}>
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)", padding: "3rem 0" }}
+        style={{ height: "calc(100vh - 60px)", padding: "1.5rem 0" }}
       >
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
@@ -191,20 +226,19 @@ const Sider = function () {
           }
         })}
       </Menu>
-    </Container>
+    </StyledSider>
   );
 };
 
-const Container = styled(Layout.Sider)`
-  min-width: ${MAIN_SIDER_WIDTH};
+const StyledSider = styled(Layout.Sider)`
   position: fixed;
-  top: ${MAIN_HEADER_HEIGHT};
+  top: 60px;
   overflow: auto;
-  background: #f0f2f5;
-  margin: 2px 0;
-  border-top-right-radius: 2rem;
-  border-bottom-right-radius: 2rem;
+  /*
+  background: ${({ theme }) => theme.background};
   box-shadow: 10px 10px 10px #e5e5e5;
+  min-width: 240px !important;
+  */
 `;
 
 export default Sider;

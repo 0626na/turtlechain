@@ -84,15 +84,9 @@ const WarehousingCreatePage = function () {
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
       />
       <Form>
-        <StoreSelect
-          width={200}
-          emptyValueText={`${t("mall")} ${t("select")}`}
-          value={mall_id === -1 ? "" : mall_id}
-          onChange={(value, label) => {
-            setMallId(value ? value : -1);
-            setMallName(label);
-          }}
-        />
+        {/*
+        <StoreSelect />
+        */}
       </Form>
       <WarehousingCreateForm onCreate={onCreate} />
       <WarehousingPreviewList

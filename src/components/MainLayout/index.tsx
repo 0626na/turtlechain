@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "antd";
 import Header from "./Header";
 import Sider from "./Sider";
@@ -9,12 +9,18 @@ interface Props {
 }
 
 const MainLayout = function ({ content }: Props) {
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const handleMenuVisible = () => {
+    setMenuVisible(!menuVisible);
+  };
+
   return (
     <Layout>
-      <Header />
+      <Header handleMenuVisible={handleMenuVisible} />
       <Layout>
-        <Sider />
-        <Content>{content}</Content>
+        <Sider collapsed={menuVisible} />
+        <Content menuVisible={menuVisible}>{content}</Content>
       </Layout>
     </Layout>
   );

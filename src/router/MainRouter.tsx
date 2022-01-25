@@ -7,6 +7,8 @@ import {
   WarehousingListPage,
   AdjustmentCreatePage,
   AdjustmentListPage,
+  VendorCreatePage,
+  VendorListPage,
   MyAccountPage,
   MyCompanyPage,
   MyStorePage,
@@ -22,6 +24,8 @@ const MainRouter = function () {
       <Route exact path="/warehousing/list" component={WarehousingListPage} />
       <Route exact path="/adjustment/create" component={AdjustmentCreatePage} />
       <Route exact path="/adjustment/list" component={AdjustmentListPage} />
+      <Route exact path="/vendor/create" component={VendorCreatePage} />
+      <Route exact path="/vendor/list" component={VendorListPage} />
       <Route exact path="/my/account" component={MyAccountPage} />
       <Route exact path="/my/company" component={MyCompanyPage} />
       <Route exact path="/my/store" component={MyStorePage} />

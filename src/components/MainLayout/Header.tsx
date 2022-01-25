@@ -7,7 +7,10 @@ import { MAIN_HEADER_HEIGHT } from "constant";
 import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from "antd";
 
-const Header = function () {
+interface Props {
+  handleMenuVisible: () => void;
+}
+const Header = function ({ handleMenuVisible }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
   const { logout } = useLogout();
@@ -28,9 +31,13 @@ const Header = function () {
     <Container>
       <Row gutter={8} justify="space-between">
         <Col>
-          <Button type="link" icon={<MenuOutlined />} />
+          <Button
+            type="link"
+            icon={<MenuOutlined style={{ color: "#FFFFFF" }} />}
+            onClick={handleMenuVisible}
+          />
           <LogoImage
-            src={`${process.env.PUBLIC_URL}/assets/img/logo_h.png`}
+            src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
             onClick={() => history.push("/home")}
           />
@@ -38,7 +45,7 @@ const Header = function () {
         <Col>
           <Avatar src="https://joeschmoe.io/api/v1/random" />
           <Dropdown overlay={menu} trigger={["click"]}>
-            <Button type="text">
+            <Button type="text" style={{ color: "#FFFFFF" }}>
               {t("turtlechain")}
               <DownOutlined />
             </Button>
@@ -50,16 +57,17 @@ const Header = function () {
 };
 
 const Container = styled(Layout.Header)`
-  width: 100%;
   height: ${MAIN_HEADER_HEIGHT};
   position: fixed;
   z-index: 1;
+  width: 100%;
+  /*
   top: 0;
-  background-color: #fff;
+  */
 `;
 
 const LogoImage = styled.img`
-  width: 6rem;
+  height: 16px;
   margin: 1rem;
   cursor: pointer;
 `;

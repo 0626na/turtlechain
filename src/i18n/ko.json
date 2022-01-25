@@ -15,7 +15,8 @@
     "really resend": "정말 재전송하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
     "changed data": "변경된 데이터가 있습니다.",
-    "find client by": "거래처명, 휴대번호 또는 계좌번호를 입력하여 거래처를 찾아볼 수 있습니다."
+    "search vendor": "거래처명으로 검색하면 쉽게 찾을 수 있습니다.",
+    "update tax included": "부가세 포함 여부를 변경하시겠습니까?"
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
@@ -29,6 +30,7 @@
     "success signup": "서비스 신청이 완료 되었습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
+    "success update": "성공적으로 수정하였습니다",
     "error phone validation": "올바른 휴대번호를 입력하세요.",
     "error login": "아이디 또는 비밀번호를 잘못 입력하셨습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
@@ -43,18 +45,38 @@
   "placeholder": {
     "vendor name": "거래처명을 검색 또는 입력하세요.",
     "vendor address": "거래처 주소를 정확히 입력하세요.",
-    "phone": "휴대번호를 정확히 입력하세요",
+    "store phone": "휴대번호를 정확히 입력하세요",
+    "phone": "매장번호를 정확히 입력하세요",
     "product name": "상품명을 검색 또는 입력하세요.",
-    "memo": "메모를 입력해주세요."
+    "memo": "메모를 입력해주세요.",
+    "search": "검색어를 입력해주세요.",
+    "all": "전체",
+    "building": "상가명을 선택하세요.",
+    "floor": "층을 입력하세요",
+    "col loc": "열·호를 입력하세요",
+    "ext": "기타 주소를 정확히 입력하세요"
   },
   "button": {
     "add": "추가하기",
     "delete": "삭제",
+    "update": "수정하기",
+    "request update": "수정 요청하기",
     "resend": "재전송",
     "details": "상세보기",
     "upload order sheet": "주문서 업로드",
     "load adjustment": "매입조정 불러오기",
-    "download order list": "주문 내역 다운로드"
+    "download order list": "주문 내역 다운로드",
+    "create bulk vendor": "거래처 대량 등록",
+    "load vendor": "거래처 불러오기",
+    "download vendor": "거래처 다운로드",
+    "include": "포함 ",
+    "exclude": "미포함",
+    "add phone": "휴대번호 추가하기",
+    "add account": "게좌정보 추가하기"
+  },
+  "tooltip": {
+    "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
+    "main account info": "다수의 계좌정보 중 주계좌로 설정된 계좌로 정산을 진행합니다."
   },
   "order": {
     "": "주문",
@@ -121,13 +143,23 @@
   },
   "vendor": {
     "": "거래처",
-    "register": "거래처 등록",
+    "create": "거래처 등록",
     "list": "거래처 목록",
+    "lists": "거래처 리스트",
     "management": "거래처 관리",
     "name": "거래처명",
     "address": "거래처 주소",
     "search": "거래처 조회하기",
-    "phone": "휴대번호"
+    "phone": "매장번호",
+    "store phone": "휴대번호",
+    "basic info": "거래처 기본 정보",
+    "account info": "거래처 계좌 정보",
+    "biz info": "거래처 사업자 정보",
+    "memo": "메모",
+    "code": "거래처 코드",
+    "account": "계좌정보",
+    "include tax": "부가세 포함 여부",
+    "request update": "거래처 정보 수정 요청하기"
   },
   "account": {
     "": "계정",
@@ -147,7 +179,12 @@
     "update": "쇼핑몰 수정하기",
     "address": "쇼핑몰 주소"
   },
-  "common": {},
+  "common": {
+    "all": "전체",
+    "request update": "수정 요청",
+    "search": "검색",
+    "home": "Home"
+  },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
   "create auth num": "인증번호 생성하기",

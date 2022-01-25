@@ -1,36 +1,45 @@
-import { Select } from "antd";
-import { SelectValue } from "antd/lib/select";
-import { Store } from "apis/retailerStoreAPI";
-import styled from "styled-components";
+import { Select, Typography } from "antd";
 
 interface Props {
-  options?: Array<Store>;
+  label?: string;
+  options?: Array<{ name: string; value: number | string }>;
   loading?: boolean;
   placeholder?: string;
+  width?: "long" | "short";
+  value: string;
+  onSelect: (value: string) => void;
 }
 
-function TurtleSelect({ options, loading, placeholder }: Props) {
-  const handleChange = (value: SelectValue) => {
-    console.log(`selected ${value}`);
-  };
-
+function TurtleSelect({
+  label,
+  options,
+  loading,
+  placeholder,
+  width = "long",
+  value,
+  onSelect,
+}: Props) {
   return (
-    <StyledSelect placeholder={placeholder} loading={loading} onChange={handleChange}>
-      {options?.map(({ name, id }) => {
-        return (
-          <Select.Option key={id} value={id}>
-            {name}
-          </Select.Option>
-        );
-      })}
-    </StyledSelect>
+    <>
+      {label && <Typography.Text style={{ marginRight: "1rem" }}>{label}</Typography.Text>}
+      <Select
+        placeholder={placeholder}
+        loading={loading}
+        style={{ width: width === "long" ? "12rem" : "8rem" }}
+        value={value}
+        onSelect={onSelect}
+        size="large"
+      >
+        {options?.map(({ name, value }) => {
+          return (
+            <Select.Option key={value} value={value}>
+              {name}
+            </Select.Option>
+          );
+        })}
+      </Select>
+    </>
   );
 }
-
-const StyledSelect = styled(Select)`
-  .ant-select-selector {
-    width: 20rem !important;
-  }
-`;
 
 export default TurtleSelect;
