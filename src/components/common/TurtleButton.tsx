@@ -7,7 +7,7 @@ interface Props {
   type?: "primary" | "default" | "ghost";
   color?: "grey" | "mint";
   htmlType?: "submit";
-  size?: "small";
+  size?: "small" | "large";
   ghost?: boolean;
   onClick?: () => void;
 }
@@ -16,8 +16,8 @@ function TurtleButton({
   children,
   type = "primary",
   color,
+  size = "large",
   htmlType,
-  size,
   ghost,
   onClick,
 }: Props) {
@@ -61,6 +61,7 @@ const StyledButton = styled(Button)`
       if (color !== "grey") return "0.8";
     }};
   }
+  font-size: 14px;
 `;
 
 export default TurtleButton;

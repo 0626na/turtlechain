@@ -11,7 +11,7 @@ function TurtleIcon({ color, src, alt }: Props) {
   if (color === "green") {
     return <GreenImg src={src} alt={alt} />;
   } else {
-    return <StyledImg src={src} alt={alt} />;
+    return <WhiteImg src={src} alt={alt} />;
   }
 }
 
@@ -26,7 +26,7 @@ const FilledDiv = styled.div`
   border-radius: 50%;
 `;
 
-const StyledImg = styled.img`
+const WhiteImg = styled.img`
   width: 20px;
   height: 20px;
 `;

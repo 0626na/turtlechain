@@ -37,7 +37,7 @@ const Header = function ({ handleMenuVisible }: Props) {
             onClick={handleMenuVisible}
           />
           <LogoImage
-            src={`${process.env.PUBLIC_URL}/assets/img/logo_h.png`}
+            src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
             onClick={() => history.push("/home")}
           />
@@ -67,7 +67,7 @@ const Container = styled(Layout.Header)`
 `;
 
 const LogoImage = styled.img`
-  width: 6rem;
+  height: 16px;
   margin: 1rem;
   cursor: pointer;
 `;

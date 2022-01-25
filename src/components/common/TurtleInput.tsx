@@ -24,6 +24,7 @@ function TurtleInput({
         readOnly={readOnly}
         disabled={disabled}
         style={{ width: "96%" }}
+        size="large"
       />
     </Form.Item>
   );

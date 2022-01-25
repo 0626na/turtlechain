@@ -62,6 +62,7 @@ function SearchFilter({
         onChange={onChangeSearchString}
         onSearch={onSearch}
         onKeyPress={onEnterPress}
+        size="large"
       />
     </Space>
   );

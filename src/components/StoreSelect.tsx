@@ -41,13 +41,14 @@ function CustomStoreSelect({ selectStore }: Props) {
 
   return (
     <Space size="large">
-      <Typography.Text>{t("store.name")}</Typography.Text>
+      <Typography.Text style={{ fontSize: "16px" }}>{t("store.name")}</Typography.Text>
       <Select
         placeholder={t("description.select mall")}
         loading={getStoresQuery.isLoading}
-        style={{ width: "16rem" }}
+        style={{ width: "20rem" }}
         onChange={handleChange}
         value={storeId}
+        size="large"
       >
         {getStoresQuery.data?.data.data.map(({ name, id }) => {
           return (

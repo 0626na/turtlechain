@@ -9,24 +9,14 @@ import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Divider,
-  Typography,
-  message,
-} from "antd";
+import { Form, Input, Button, Checkbox, Divider, Typography, message } from "antd";
 
 const LoginForm = function () {
   const { t } = useTranslation();
   const { login } = useLogin();
   const [form] = Form.useForm();
 
-  const requiredRules = [
-    { required: true, message: t("description.required item") },
-  ];
+  const requiredRules = [{ required: true, message: t("description.required item") }];
 
   // 로그인 요청
   const loginQuery = useMutation(["login"], authAPI.login, {
@@ -50,10 +40,7 @@ const LoginForm = function () {
 
   return (
     <Form form={form} onFinish={onSubmit}>
-      <LogoImage
-        src={`${process.env.PUBLIC_URL}/assets/img/logo_v.png`}
-        alt="logo"
-      />
+      <LogoImage src={`${process.env.PUBLIC_URL}/assets/img/new_logo_login.png`} alt="logo" />
       <Form.Item //
         name="login_id"
         rules={requiredRules}
@@ -86,12 +73,7 @@ const LoginForm = function () {
         </Form.Item>
       </FormItemContainer>
       <Form.Item>
-        <Button
-          block
-          type="primary"
-          htmlType="submit"
-          loading={loginQuery.isLoading}
-        >
+        <Button block type="primary" htmlType="submit" loading={loginQuery.isLoading}>
           {t("login")}
         </Button>
       </Form.Item>
@@ -101,8 +83,7 @@ const LoginForm = function () {
           {t("description.not member")} <Link to="/signup">{t("signup")}</Link>
         </Typography>
         <Typography>
-          {t("description.about membership")}{" "}
-          <Link to="#">{t("about membership")}</Link>
+          {t("description.about membership")} <Link to="#">{t("about membership")}</Link>
         </Typography>
       </BottomContainer>
     </Form>
@@ -110,9 +91,10 @@ const LoginForm = function () {
 };
 
 const LogoImage = styled.img`
+  height: 20px;
   display: block;
   margin: 0 auto;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 `;
 
 const FormItemContainer = styled.div`

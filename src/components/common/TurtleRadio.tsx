@@ -13,7 +13,7 @@ function TurtleRadio({ name, label, value, onChange }: Props) {
 
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
-      <Radio.Group onChange={onChange} value={value}>
+      <Radio.Group onChange={onChange} value={value} size="large">
         <Radio value="order">{t("order.type.order")}</Radio>
         <Radio value="reserved">{t("order.type.reserved")}</Radio>
         <Radio value="take_back">{t("order.type.take back")}</Radio>
