@@ -17,10 +17,10 @@ module.exports = {
               "@layout-body-background": "#F3F6F9",
               "@layout-sider-background": "#242934",
               // Menu
-              "@menu-bg": "#242934",
-              "@menu-popup-bg": "#242934",
+              "@menu-bg": "#2B3140",
+              "@menu-popup-bg": "#2B3140",
               "@menu-item-color": "#FFFFFF",
-              "@menu-inline-submenu-bg": "#242934",
+              "@menu-inline-submenu-bg": "#1A1E28",
               "@menu-highlight-color": "#FFFFFF",
               "@menu-item-active-bg": "@primary-color",
               "@border-radius-base": "4px",
