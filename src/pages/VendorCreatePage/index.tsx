@@ -2,7 +2,7 @@ import PageHeader from "components/PageHeader";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Filter from "./Filter";
+import Toolbar from "./Toolbar";
 import VendorCreateForm from "./VendorCreateForm";
 
 function VendorCreatePage() {
@@ -20,7 +20,7 @@ function VendorCreatePage() {
         breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.create")]}
         info={t("description.search vendor")}
       />
-      <Filter selectStore={setStoreId} />
+      <Toolbar selectStore={setStoreId} />
       <VendorCreateForm />
     </>
   );

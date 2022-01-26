@@ -31,8 +31,8 @@ function CustomStoreSelect({ selectStore }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setStoreId(data.data.data[0].id);
-        selectStore(data.data.data[0].id);
+        //setStoreId(data.data.data[0].id);
+        //selectStore(data.data.data[0].id);
       },
     },
   );

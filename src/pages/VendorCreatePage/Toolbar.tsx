@@ -7,7 +7,7 @@ interface Props {
   selectStore: (storeId: number) => void;
 }
 
-function Filter({ selectStore }: Props) {
+function Toolbar({ selectStore }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -29,4 +29,4 @@ function Filter({ selectStore }: Props) {
   );
 }
 
-export default Filter;
+export default Toolbar;

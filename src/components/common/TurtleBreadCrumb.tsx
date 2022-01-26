@@ -17,8 +17,13 @@ function TurtleBreadCrumb({ list }: Props) {
 
 const StyledBreadcrumb = styled(Breadcrumb)`
   background-color: ${({ theme }) => theme.breadcrumb};
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
   border-radius: 100px;
+  line-height: 1.4;
+
+  .ant-breadcrumb {
+    line-height: 1.4 !important;
+  }
 `;
 
 export default TurtleBreadCrumb;

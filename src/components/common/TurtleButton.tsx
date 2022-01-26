@@ -62,6 +62,7 @@ const StyledButton = styled(Button)`
     }};
   }
   font-size: 14px;
+  text-shadow: 0;
 `;
 
 export default TurtleButton;

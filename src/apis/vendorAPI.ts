@@ -1,5 +1,4 @@
 import { v2Axios } from "apis";
-import { StoreAccount } from "./bucketListAPI";
 
 // 거래처 계좌 타입
 export interface VendorAccount {
@@ -121,17 +120,20 @@ export interface RequestSearchVendor {
 
 // Response: 거래처 마스터 도매 조회
 export interface ResponseSearchVendor {
-  id: number;
-  name: string;
-  phone: string;
-  store_account: Array<VendorAccount>;
-  store_phone: Array<VendorPhone>;
-  company: Array<{ name: string; biz_num: string }>;
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
-  ext: string;
+  msg: string;
+  data: Array<{
+    id: number;
+    name: string;
+    phone: string;
+    store_account: Array<VendorAccount>;
+    store_phone: Array<VendorPhone>;
+    company: Array<{ name: string; biz_num: string }>;
+    building: string;
+    floor: string;
+    col: string;
+    loc: string;
+    ext: string;
+  }>;
 }
 
 // 거래처 마스터 도매 조회

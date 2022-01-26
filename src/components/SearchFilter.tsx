@@ -2,6 +2,7 @@ import { Space } from "antd";
 import Search from "antd/lib/input/Search";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
 
 interface Props {
