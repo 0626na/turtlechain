@@ -5,6 +5,8 @@ import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import Filter from "./Filter";
 import ClearingList from "./ClearingList";
+import { RequestGetClearingSheet } from "apis/clearingAPI";
+
 
 function ClearingListPage() {
   const { t } = useTranslation();
@@ -13,45 +15,36 @@ function ClearingListPage() {
   const [searchType, setSearchType] = useState("all");
   const [searchString, setSearchString] = useState("");
   const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
+  const [searchState, setSearchState] = useState<{
+    page: number;
+    status: string;
+  }>({
     page: 1,
-    type: "all",
-    search_query: "",
+    status: "",
+  });
+
+  const [searchQuery, setSearchQuery] = useState<RequestGetClearingSheet>({
     rt_store_id: "",
+    start_date: "", // format: YYYY-MM-DD
+    end_date: "", // format: YYYY-MM-DD
+    page: 1,
+    status: "",
   });
 
   // 쇼핑몰 선택
   const selectStore = (storeId: number | "") => {
-    setSearchType("all");
-    setSearchString("");
-    setPage(1);
-    setSearchQuery({
+    setSearchState({
       page: 1,
-      type: "all",
-      search_query: "",
+      status: "",
+    });
+    setSearchQuery({
       rt_store_id: storeId,
+      start_date: "",
+      end_date: "",
+      page: 1,
+      status: "",
     });
   };
-
-  // 거래처 리스트 검색
-  const searchVendors = () => {
-    setPage(1);
-    setSearchQuery({ ...searchQuery, page: 1, type: searchType, search_query: searchString });
-  };
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page: number) => {
-      setPage(page);
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [setPage, searchQuery],
-  );
-
-  // 거래처 검색 string 입력
-  const onChangeSearchString = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    setSearchString(e.currentTarget.value);
-  }, []);
 
   return (
     <>
@@ -64,7 +57,7 @@ function ClearingListPage() {
       <Filter //
         selectStore={selectStore}
       />
-      <ClearingList />
+      <ClearingList searchQuery={searchQuery} searchState={searchState}/>
     </>
   );
 }

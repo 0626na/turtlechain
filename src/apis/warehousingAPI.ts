@@ -3,7 +3,7 @@ import { v2Axios } from "apis";
 // 입고장 타입
 export interface Sheet {
   id: number;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   created_date: Date;
   created_time: Date;
@@ -20,7 +20,7 @@ export interface Sheet {
 export interface SheetItem {
   id: number;
   sheet_id: number;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   store_id: number;
   store_code: number;
@@ -40,7 +40,7 @@ export interface SheetItem {
 
 // 입고장 상세내역 추가 타입
 export interface CreateSheetItem {
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   store_id: number;
   store_code: number;
@@ -57,13 +57,14 @@ export interface CreateSheetItem {
 
 // 입고장 요청 타입
 export interface RequestGetSheet {
-  mall_id: number | "";
+  rt_store_id: number | "";
   is_confirmed: number | "";
   start_date: string;
   end_date: string;
   offset: number;
   last_id: number;
   switch_type: "next" | "prev";
+  did_settlement?: number;
 }
 
 export interface ResponseGetSheet {
@@ -102,7 +103,7 @@ export interface ResponseBulkUpdateSheetItem {
 // 입고장 추가하기 요청 타입
 export interface RequestCreateSheet {
   created_date: string;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
 }
 

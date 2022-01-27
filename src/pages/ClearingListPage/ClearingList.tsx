@@ -23,10 +23,17 @@ import { Vendor, RequestGetVendors } from "apis/vendorAPI";
 import { useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
+import { RequestGetClearingSheet } from "apis/clearingAPI";
 
-interface Props {}
+interface Props {
+  searchQuery: RequestGetClearingSheet;
+  searchState: {
+    page: number;
+    status: string;
+  };
+ }
 
-function ClearingList({}: Props) {
+function ClearingList({searchQuery, searchState}: Props) {
   const { t } = useTranslation();
 
   return (

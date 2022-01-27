@@ -95,12 +95,12 @@ interface ResponseClearingItem {
 
 // Request: 정산장 조회
 export interface RequestGetClearingSheet {
-  rt_store_id: number;
-  rt_store_name: string;
-  total_amount: number;
+  rt_store_id: number | "";
+  start_date: string; // format: YYYY-MM-DD
+  end_date: string; // format: YYYY-MM-DD
   page?: number;
   page_size?: number;
-  status?: "request" | "pending" | "complete";
+  status?: "request" | "pending" | "complete" | "";
 }
 
 // Response: 정산장 조회

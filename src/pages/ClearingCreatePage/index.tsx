@@ -1,12 +1,29 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Filter from "./Filter";
-import ClearingCreateForm from "./ClearingCreateForm";
+import Toolbar from "./Toolbar";
+import ClearingCreateAccordion from "./ClearingCreateAccordion";
+import { RequestCreateClearingSheet } from "apis/clearingAPI";
 
 function ClearingCreatePage() {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
+  const [searchState, setSearchState] = useState<{
+    page: number;
+    status: string;
+  }>({
+    page: 1,
+    status: "",
+  });
+
+  // 쇼핑몰 선택
+  const selectStore = (storeId: number | "") => {
+    setSearchState({
+      page: 1,
+      status: "",
+    });
+  };
 
   return (
     <>
@@ -16,8 +33,8 @@ function ClearingCreatePage() {
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
-      <Filter />
-      <ClearingCreateForm />
+      <Toolbar selectStore={selectStore} />
+      <ClearingCreateAccordion />
     </>
   );
 }
