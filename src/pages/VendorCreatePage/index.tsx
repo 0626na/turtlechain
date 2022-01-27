@@ -9,7 +9,7 @@ function VendorCreatePage() {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("vendor.create")}`;
 
-  const [storeId, setStoreId] = useState<number>();
+  const [storeId, setStoreId] = useState<number>(-1);
 
   return (
     <>
@@ -21,7 +21,7 @@ function VendorCreatePage() {
         info={t("description.search vendor")}
       />
       <Toolbar selectStore={setStoreId} />
-      <VendorCreateForm />
+      <VendorCreateForm storeId={storeId} />
     </>
   );
 }

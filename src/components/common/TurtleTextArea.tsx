@@ -1,16 +1,17 @@
 import { Form } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
   label: string;
   placeholder: string;
+  rows?: number;
+  required?: boolean;
 }
-function TurtleTextArea({ name, label, placeholder }: Props) {
+function TurtleTextArea({ name, label, placeholder, rows = 13, required = true }: Props) {
   return (
-    <Form.Item name={name} label={label} rules={[{ required: true }]}>
-      <TextArea placeholder={placeholder} allowClear rows={13} style={{ width: "96%" }} />
+    <Form.Item name={name} label={label} required={required}>
+      <TextArea placeholder={placeholder} allowClear rows={rows} style={{ width: "96%" }} />
     </Form.Item>
   );
 }

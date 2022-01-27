@@ -2,11 +2,12 @@ import { Form, Input } from "antd";
 
 interface Props {
   required?: boolean;
-  name: Array<string> | string;
+  name?: Array<string> | string;
   label: string;
   placeholder?: string;
   readOnly?: boolean;
   disabled?: boolean;
+  value?: string;
 }
 
 function TurtleInput({
@@ -16,6 +17,7 @@ function TurtleInput({
   placeholder,
   readOnly = false,
   disabled,
+  value,
 }: Props) {
   return (
     <Form.Item required={required} name={name} label={label} rules={[{ required: required }]}>
@@ -25,6 +27,7 @@ function TurtleInput({
         disabled={disabled}
         style={{ width: "96%" }}
         size="large"
+        value={value}
       />
     </Form.Item>
   );

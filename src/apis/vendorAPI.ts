@@ -15,6 +15,20 @@ export interface VendorPhone {
   send_alimtalk: boolean;
 }
 
+export interface WholeSaleStore {
+  id: number;
+  name: string;
+  phone: string;
+  store_account: Array<VendorAccount>;
+  store_phone: Array<VendorPhone>;
+  company: Array<{ name: string; biz_num: string }>;
+  building: string;
+  floor: string;
+  col: string;
+  loc: string;
+  ext: string;
+}
+
 // 거래처 타입
 export interface Vendor {
   id: number;
@@ -24,18 +38,7 @@ export interface Vendor {
   vendor_account: string;
   is_taxed: boolean;
   memo: string;
-  ws_store_info: {
-    id: number;
-    name: string;
-    phone: string;
-    store_account: Array<VendorAccount>;
-    store_phone: Array<VendorPhone>;
-    building: string;
-    floor: string;
-    col: string;
-    loc: string;
-    ext: string;
-  };
+  ws_store_info: WholeSaleStore;
   ws_store_id: number;
 }
 
@@ -83,7 +86,7 @@ const updateVendor = async function (data: RequestUpdateVendor) {
 // Request: 거래처 단건 등록
 export interface RequestCreateVendor {
   rt_store_id: number;
-  vendor_id: number;
+  vendor_id: string;
   vendor_account_bank: string;
   vendor_account_number: string;
   vendor_account_holder: string;
@@ -108,7 +111,7 @@ export interface ResponseCreateVendor {
 // 거래처 단건 등록
 const createVendor = async function (data: RequestCreateVendor) {
   const url = `provisioning/vendor`;
-  const response = await v2Axios.post<ResponseCreateVendor>(url, data);
+  const response = await v2Axios.post<ResponseCreateVendor>(url, [data]);
   return response.data;
 };
 
@@ -121,19 +124,7 @@ export interface RequestSearchVendor {
 // Response: 거래처 마스터 도매 조회
 export interface ResponseSearchVendor {
   msg: string;
-  data: Array<{
-    id: number;
-    name: string;
-    phone: string;
-    store_account: Array<VendorAccount>;
-    store_phone: Array<VendorPhone>;
-    company: Array<{ name: string; biz_num: string }>;
-    building: string;
-    floor: string;
-    col: string;
-    loc: string;
-    ext: string;
-  }>;
+  data: Array<WholeSaleStore>;
 }
 
 // 거래처 마스터 도매 조회

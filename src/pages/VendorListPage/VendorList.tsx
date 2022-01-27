@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
-import { Vendor, RequestGetVendors } from "apis/vendorAPI";
+import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
 import VendorUpdateModal from "./VendorUpdateModal";
@@ -33,19 +33,10 @@ interface Props {
     search_query: string;
   };
   searchVendors: () => void;
-  selectSearchType: (type: string) => void;
-  onChangeSearchString: (e: React.FormEvent<HTMLInputElement>) => void;
   selectPage: (page: number) => void;
 }
 
-function VendorList({
-  searchQuery,
-  searchState,
-  searchVendors,
-  selectSearchType,
-  onChangeSearchString,
-  selectPage,
-}: Props) {
+function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Props) {
   const { t } = useTranslation();
 
   const [editable, setEditable] = useState(false);
@@ -65,6 +56,7 @@ function VendorList({
       phone: "",
       store_account: [],
       store_phone: [],
+      company: [],
       building: "",
       floor: "",
       col: "",
@@ -115,16 +107,20 @@ function VendorList({
       <StyledDiv>
         <TurtleText>{t("vendor.lists")}</TurtleText>
         <SearchFilter
-          searchType={searchState.type}
-          onSelectSearchType={selectSearchType}
-          searchString={searchState.search_query}
-          onChangeSearchString={onChangeSearchString}
+          //searchType={searchState.type}
+          //onSelectSearchType={selectSearchType}
+          //searchString={searchState.search_query}
+          //onChangeSearchString={onChangeSearchString}
           onSearch={searchVendors}
         />
       </StyledDiv>
       <Table
         size="small"
         scroll={{ x: "auto" }}
+        loading={getVendorsQuery.isLoading}
+        dataSource={getVendorsQuery.data?.data.vendor_list}
+        rowKey={(record) => record.ws_store_id}
+        pagination={false}
         expandable={{
           expandedRowRender: (record) => {
             return editable ? (
@@ -177,10 +173,6 @@ function VendorList({
             );
           },
         }}
-        loading={getVendorsQuery.isLoading}
-        dataSource={getVendorsQuery.data?.data.vendor_list}
-        rowKey={(record) => record.ws_store_id}
-        pagination={false}
         columns={[
           {
             width: "9%",
@@ -247,12 +239,12 @@ function VendorList({
             title: t("vendor.account"),
             dataIndex: "",
             render: (_, { ws_store_info: { store_account } }) => {
-              const accounts: Array<any> = [];
-              store_account.forEach(({ bank, account_holder, account_number }) => {
-                accounts.push({ bank, account_holder, account_number });
+              const accounts: Array<VendorAccount> = [];
+              store_account.forEach(({ id, bank, account_holder, account_number }) => {
+                accounts.push({ id, bank, account_holder, account_number });
               });
 
-              const makeContent = ({ bank, account_holder, account_number }: any) => {
+              const makeContent = ({ bank, account_holder, account_number }: VendorAccount) => {
                 return `${bank} ${account_number} ${account_holder}`;
               };
 

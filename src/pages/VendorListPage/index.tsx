@@ -105,8 +105,6 @@ function VendorListPage() {
         searchQuery={searchQuery}
         searchState={searchState}
         searchVendors={searchVendors}
-        selectSearchType={selectSearchType}
-        onChangeSearchString={onChangeSearchString}
         selectPage={selectPage}
       />
     </>
