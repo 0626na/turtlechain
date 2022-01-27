@@ -106,13 +106,7 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
     <>
       <StyledDiv>
         <TurtleText>{t("vendor.lists")}</TurtleText>
-        <SearchFilter
-          //searchType={searchState.type}
-          //onSelectSearchType={selectSearchType}
-          //searchString={searchState.search_query}
-          //onChangeSearchString={onChangeSearchString}
-          onSearch={searchVendors}
-        />
+        <SearchFilter onSearch={searchVendors} />
       </StyledDiv>
       <Table
         size="small"
@@ -244,8 +238,8 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
                 accounts.push({ id, bank, account_holder, account_number });
               });
 
-              const makeContent = ({ bank, account_holder, account_number }: VendorAccount) => {
-                return `${bank} ${account_number} ${account_holder}`;
+              const makeContent = (account: VendorAccount) => {
+                return `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
               };
 
               const contents = accounts.map((account) => {

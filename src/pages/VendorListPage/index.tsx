@@ -56,17 +56,6 @@ function VendorListPage() {
     });
   };
 
-  // 검색 조건 선택
-  const selectSearchType = useCallback(
-    (type: string) => {
-      setSearchState({
-        ...searchState,
-        type: type,
-      });
-    },
-    [searchState],
-  );
-
   // 페이지 선택
   const selectPage = useCallback(
     (page: number) => {
@@ -77,17 +66,6 @@ function VendorListPage() {
       setSearchQuery({ ...searchQuery, page });
     },
     [searchState, searchQuery],
-  );
-
-  // 거래처 검색 string 입력
-  const onChangeSearchString = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      setSearchState({
-        ...searchState,
-        search_query: e.currentTarget.value,
-      });
-    },
-    [searchState],
   );
 
   return (
