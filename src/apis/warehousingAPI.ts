@@ -36,6 +36,7 @@ export interface SheetItem {
   created_by: number;
   created_time: Date;
   is_deleted: boolean;
+  is_vat_included: boolean;
 }
 
 // 입고장 상세내역 추가 타입

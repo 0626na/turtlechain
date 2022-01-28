@@ -1,4 +1,4 @@
-import { Form, Input, Select, Space, Collapse, Row, Table, message, Tooltip } from "antd";
+import { Form, Input, Select, Space, Collapse, Row, Table, message, Tooltip, Modal } from "antd";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleText from "components/common/TurtleText";
@@ -7,31 +7,60 @@ import TurtleButton from "components/common/TurtleButton";
 import { t } from "i18next";
 import StoreSelect from "components/StoreSelect";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
-import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { Sheet } from "apis/warehousingAPI";
+import { useState, useEffect, useRef } from "react";
+import { useQueryClient, useMutation, useQuery } from "react-query";
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
-import { idText } from "typescript";
-
+import WarehousingItemListModal from "./WarehousingItemListModal";
 const { Panel } = Collapse;
 
-function ClearingCreateAccordion() {
-  const [activePanelId, setActivePanelId] = useState<string | string[]>("1");
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
+interface Props {
+  selectedRtStoreId: number | "";
+}
 
-  const handleChange = (activeKey: string | string[]) => {
+function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
+  /**** State ****/
+  // Collapse, Panel 관련 State
+  // activePanelId = 열려있는 패널의 아이디
+  // isMounted = 컴포넌트 mount 시에는 useEffect 사용을 방지하기 위해 사용
+  const [activePanelId, setActivePanelId] = useState<string | string[]>("");
+  const isMounted = useRef<boolean>(false);
+
+  // 입고 결제 대기 관련 State
+  // selectedRowKeys = 정산에 포함될 입고장의 ID들
+  // openDetailModal = 입고 상세 내역 모달 노출 여부
+  // selectedWarehousingSheet = 선택 된 입고장의 Sheet data
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
+  const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
+  const [selectedWarehousingSheet, setSelectedWarehousingSheet] = useState<Sheet | null>(null);
+
+  /**** React function ****/
+  // 선택한 쇼핑몰이 변경되면 입고결제대기 창(첫번째 패널)이 열림
+  useEffect(() => {
+    if (isMounted.current) {
+      setActivePanelId("1");
+    } else {
+      isMounted.current = true;
+    }
+  }, [selectedRtStoreId]);
+
+  /**** Custom Function ****/
+  // Collapse 컴포넌트에서 열려있는 패널 아이디를 변경하는 함수
+  const handleActivePanelChange = (activeKey: string | string[]) => {
     setActivePanelId(activeKey);
   };
 
   const handleCheckBox = (id: number) => {
-    setSelectedRowKeys([...selectedRowKeys, id])
-  }
+    setSelectedRowKeys([...selectedRowKeys, id]);
+  };
 
+  // 입고 결제 대기에서 보여줄 입고장 리스트를 받아오는 함수
   const getWarehousingSheetQuery = useQuery(
-    ["getSheet"], //
+    ["getWarehousingSheet", selectedRtStoreId], //
     () =>
       warehousingAPI.getSheet({
-        rt_store_id: 8655,
+        rt_store_id: selectedRtStoreId,
         is_confirmed: 1,
         start_date: "",
         end_date: "",
@@ -41,6 +70,7 @@ function ClearingCreateAccordion() {
         did_settlement: 0,
       }),
     {
+      enabled: selectedRtStoreId !== "",
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -49,188 +79,51 @@ function ClearingCreateAccordion() {
 
   return (
     <>
-      <Collapse accordion activeKey={activePanelId} onChange={handleChange}>
+      <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
         <Panel header="1 입고 결제 대기" key="1">
           <Table
-            // onRow={() => {
-            // row 클릭 시 상세내역 나와야함.
-            // }}
-        size="small"
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (e) => {
+                  setOpenDetailModal(!openDetailModal);
+                  setSelectedWarehousingSheet(record);
+                },
+              };
+            }}
+            pagination={false}
+            style={{ maxHeight: "50vh", overflowY: "scroll" }}
+            size="small"
             rowSelection={{}}
+            loading={getWarehousingSheetQuery.isLoading}
             dataSource={getWarehousingSheetQuery.data?.data}
             rowKey={"id"}
             columns={[
+              {
+                ellipsis: true,
+                title: t("warehousing date"),
+                dataIndex: "id",
+                key: "id",
+              },
               Table.SELECTION_COLUMN,
               {
-                // width: "9%",
                 ellipsis: true,
                 title: t("warehousing date"),
                 dataIndex: "created_date",
-                key: "id"
-                // render: (id) => (
-                //   <Tooltip placement="topLeft" title={id} key={id}>
-                //     {id}
-                //   </Tooltip>
-                // ),
+                key: "id",
               },
               {
-                // width: "9%",
                 ellipsis: true,
                 title: "거래처 수",
                 dataIndex: "total_store_count",
-                key: "id"
-                // render: (id) => (
-                //   <Tooltip placement="topLeft" title={id} key={id}>
-                //     {id}
-                //   </Tooltip>
-                // ),
+                key: "id",
               },
-
               {
-                // width: "9%",
                 ellipsis: true,
                 title: "입고금액",
                 dataIndex: "total_price",
-                key: "id"
-                // render: (id) => (
-                //   <Tooltip placement="topLeft" title={id} key={id}>
-                //     {id}
-                //   </Tooltip>
-                // ),
+                key: "id",
               },
-              // {
-              //   ellipsis: true,
-              //   title: t("vendor.name"),
-              //   dataIndex: ["ws_store_info", "name"],
-              //   render: (name) => (
-              //     <Tooltip placement="topLeft" title={name}>
-              //       {name}
-              //     </Tooltip>
-              //   ),
-              // },
-              // {
-              //   width: "13%",
-              //   ellipsis: true,
-              //   title: t("vendor.address"),
-              //   dataIndex: "",
-              //   render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
-              //     const address = `${building} ${floor} ${col} ${loc} ${ext}`;
-              //     return (
-              //       <Tooltip placement="topLeft" title={address}>
-              //         {address}
-              //       </Tooltip>
-              //     );
-              //   },
-              // },
-              // {
-              //   width: "12%",
-              //   ellipsis: true,
-              //   title: t("vendor.store phone"),
-              //   dataIndex: "",
-              //   render: (_, { ws_store_info: { store_phone } }) => {
-              //     const phones: Array<string> = [];
-              //     store_phone.forEach(({ phone }) => {
-              //       phones.push(phone);
-              //     });
-
-              //     const contents = phones.map((phone) => {
-              //       return <p key={phone}>{phone}</p>;
-              //     });
-
-              //     return (
-              //       <TurtleBadge count={phones.length}>
-              //         <Tooltip placement="topLeft" title={contents}>
-              //           {phones[0]}
-              //         </Tooltip>
-              //       </TurtleBadge>
-              //     );
-              //   },
-              // },
-              // {
-              //   width: "20%",
-              //   ellipsis: true,
-              //   title: t("vendor.account"),
-              //   dataIndex: "",
-              //   render: (_, { ws_store_info: { store_account } }) => {
-              //     const accounts: Array<any> = [];
-              //     store_account.forEach(({ bank, account_holder, account_number }) => {
-              //       accounts.push({ bank, account_holder, account_number });
-              //     });
-
-              //     const makeContent = ({ bank, account_holder, account_number }: any) => {
-              //       return `${bank} ${account_number} ${account_holder}`;
-              //     };
-
-              //     const contents = accounts.map((account) => {
-              //       return <p key={account.account_number}>{makeContent(account)}</p>;
-              //     });
-
-              //     return (
-              //       <TurtleBadge count={contents.length}>
-              //         <Tooltip placement="topLeft" title={contents}>
-              //           {makeContent(accounts[0])}
-              //         </Tooltip>
-              //       </TurtleBadge>
-              //     );
-              //   },
-              // },
-              // {
-              //   align: "center",
-              //   width: "12%",
-              //   ellipsis: true,
-              //   title: t("vendor.include tax"),
-              //   dataIndex: "is_taxed",
-              //   render: (_, record) => {
-              //     return (
-              //       <Popconfirm
-              //         title={t("description.update tax included")}
-              //         okText={t("yes")}
-              //         cancelText={t("no")}
-              //         onConfirm={() => {
-              //           updateVendorQuery.mutate({
-              //             id: record.id,
-              //             is_taxed: record.is_taxed,
-              //             memo: record.memo,
-              //           });
-              //           getVendorsQuery.refetch();
-              //         }}
-              //       >
-              //         <Switch
-              //           checkedChildren={t("button.include")}
-              //           checked={record.is_taxed}
-              //           style={{ width: "52px" }}
-              //         />
-              //       </Popconfirm>
-              //     );
-              //   },
-              // },
-              // {
-              //   width: "15%",
-              //   ellipsis: true,
-              //   align: "center",
-              //   title: () => {
-              //     return (
-              //       <>
-              //         {t("common.request update")}
-              //         <TurtleQuestionTooltip content={t("tooltip.request update")} />
-              //       </>
-              //     );
-              //   },
-              //   dataIndex: "action",
-              //   render: (_, record) => {
-              //     return (
-              //       <TurtleButton //
-              //         size="small"
-              //         ghost
-              //         onClick={() => openModal(record)}
-              //       >
-              //         {t("button.request update")}
-              //       </TurtleButton>
-              //     );
-              //   },
-              // },
-            ]
-          }
+            ]}
           />
           <Row justify="center">
             <Space align="center">
@@ -250,7 +143,7 @@ function ClearingCreateAccordion() {
               <TurtleButton
                 children={"다음 단계로 이동"}
                 onClick={() => {
-                  setActivePanelId("2");
+                  setActivePanelId("3");
                 }}
               />
             </Space>
@@ -260,6 +153,11 @@ function ClearingCreateAccordion() {
           이것은 정산 금액 미리보기
         </Panel>
       </Collapse>
+      <WarehousingItemListModal
+        visible={openDetailModal}
+        selectedWarehousingSheet={selectedWarehousingSheet}
+        setOpenDetailModal={setOpenDetailModal}
+      />
     </>
   );
 }
