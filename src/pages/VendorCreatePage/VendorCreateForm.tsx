@@ -269,13 +269,24 @@ function VendorCreateForm({ storeId }: Props) {
         />
 
         <TurtleText>{t("vendor.biz info")}</TurtleText>
-        <TurtleText>
-          등록 하고 싶은 거래처가 없나요?{" "}
-          <span style={{ color: "#033A88", cursor: "pointer" }} onClick={openRequestModal}>
-            신규 등록 요청
-          </span>
-          을 해주세요.
-        </TurtleText>
+        <TurtleInput // 사업자 번호 Input
+          name="biz_num"
+          label={t("biz.num")}
+          placeholder={t("placeholder.biz num")}
+          required={false}
+        />
+        <TurtleInput // 상호명 Input
+          name="biz_name"
+          label={t("biz.name")}
+          placeholder={t("placeholder.biz name")}
+          required={false}
+        />
+        <TurtleInput // 대표자명 Input
+          name="biz_owner"
+          label={t("biz.owner")}
+          placeholder={t("placeholder.biz owner")}
+          required={false}
+        />
 
         <Row justify="center">
           <TurtleButton type="primary" onClick={onClickCreate}>
@@ -283,6 +294,15 @@ function VendorCreateForm({ storeId }: Props) {
           </TurtleButton>
         </Row>
       </Form>
+
+      <TurtleText>
+        등록 하고 싶은 거래처가 없나요?{" "}
+        <span style={{ color: "#033A88", cursor: "pointer" }} onClick={openRequestModal}>
+          신규 등록 요청
+        </span>
+        을 해주세요.
+      </TurtleText>
+
       <VendorSearchModal //
         visible={searchModalVisible}
         closeModal={closeSearchModal}

@@ -1,11 +1,17 @@
 import { Form, FormInstance, Input, message, Select } from "antd";
 import { basicDataAPI } from "apis";
+import { StoreAddress } from "apis/bucketListAPI";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
-function AddressSelect() {
+interface Props {
+  selectedAddress: StoreAddress;
+  selectAddress: Dispatch<SetStateAction<StoreAddress>>;
+}
+
+function AddressSelect({ selectedAddress, selectAddress }: Props) {
   const { t } = useTranslation();
 
   const getAddressQuery = useQuery("getAddress", basicDataAPI.getAddress, {
@@ -16,28 +22,12 @@ function AddressSelect() {
 
   const address = getAddressQuery.data?.data;
 
-  const [selectedAddress, selectAddress] = useState({
-    building: "",
-    floor: "",
-    col: "",
-    loc: "",
-  });
-
-  // AddressSelect 컴포넌트가 사라질때, 상태 초기화
-  useEffect(() => {
-    return selectAddress({ building: "", floor: "", col: "", loc: "" });
-  }, []);
-
-  useEffect(() => {
-    console.log(selectedAddress);
-  }, [selectedAddress]);
-
   return (
-    <Form.Item label={t("vendor.address")} required={false}>
+    <Form.Item label={t("vendor.address")} required={true}>
       <Input.Group compact>
         <Form.Item //
           noStyle
-          rules={[{ required: false, whitespace: true }]}
+          rules={[{ required: true, whitespace: true }]}
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
@@ -59,7 +49,7 @@ function AddressSelect() {
 
         <Form.Item //
           noStyle
-          rules={[{ required: false }]}
+          rules={[{ required: true }]}
         >
           <Select // 층 select
             size="large"
@@ -82,7 +72,7 @@ function AddressSelect() {
         </Form.Item>
         <Form.Item //
           noStyle
-          rules={[{ required: false }]}
+          rules={[{ required: true }]}
         >
           <Select // 열,호 select
             size="large"

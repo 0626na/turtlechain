@@ -4,9 +4,15 @@ import { DeleteFilled, PlusOutlined } from "@ant-design/icons";
 import { basicDataAPI } from "apis";
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { StoreAccount } from "apis/bucketListAPI";
 
-function BankSelect() {
+interface Props {
+  banks: Array<StoreAccount>;
+  setBanks: Dispatch<SetStateAction<StoreAccount[]>>;
+}
+
+function BankSelect({ banks, setBanks }: Props) {
   const [t] = useTranslation();
 
   const getBankQuery = useQuery("getBank", basicDataAPI.getBank, {
@@ -17,24 +23,12 @@ function BankSelect() {
 
   const bankName = getBankQuery.data?.data.code_set.code_list;
 
-  const [banks, setBanks] = useState<
-    Array<{
-      bank: string;
-      account_number: string;
-      account_holder: string;
-    }>
-  >([{ bank: "", account_number: "", account_holder: "" }]);
-
-  useEffect(() => {
-    console.log(banks);
-  }, [banks]);
-
   return (
     <>
       {banks.map((bank, index) => (
         <Form.Item
           label={index === 0 ? t("vendor.account") : ""}
-          required={false}
+          required={true}
           wrapperCol={{ span: 24, offset: 1 }}
           key={index}
         >

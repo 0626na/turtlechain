@@ -86,7 +86,9 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
           required={false}
         />
         <PhoneSelect />
+        {/*
         <AddressSelect />
+        */}
         <TurtleText>
           {t("vendor.account info")}
           <TurtleQuestionTooltip content={t("tooltip.main account info")} />
