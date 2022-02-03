@@ -18,7 +18,7 @@ import SearchFilter from "components/SearchFilter";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
-import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
+import { BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
 import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";

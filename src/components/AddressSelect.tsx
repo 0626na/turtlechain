@@ -1,20 +1,11 @@
-import { Col, Form, FormInstance, Input, message, Row, Select, Space } from "antd";
+import { Form, FormInstance, Input, message, Select } from "antd";
 import { basicDataAPI } from "apis";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
-interface Props {
-  form: FormInstance<{
-    building: string;
-    floor: string;
-    col_loc: string;
-    ext: string;
-  }>;
-}
-
-function AddressSelect({ form }: Props) {
+function AddressSelect() {
   const { t } = useTranslation();
 
   const getAddressQuery = useQuery("getAddress", basicDataAPI.getAddress, {
@@ -23,36 +14,42 @@ function AddressSelect({ form }: Props) {
     },
   });
 
-  // building 이 바뀔 때 마다, floor select 리랜더링
+  const address = getAddressQuery.data?.data;
+
+  const [selectedAddress, selectAddress] = useState({
+    building: "",
+    floor: "",
+    col: "",
+    loc: "",
+  });
+
+  // AddressSelect 컴포넌트가 사라질때, 상태 초기화
   useEffect(() => {
-    console.log("change building");
+    return selectAddress({ building: "", floor: "", col: "", loc: "" });
   }, []);
 
-  // floor 바뀔 때 마다, col_loc select 리랜더링
+  useEffect(() => {
+    console.log(selectedAddress);
+  }, [selectedAddress]);
 
   return (
-    <Form.Item label={t("vendor.address")} required={false} wrapperCol={{ span: 24, offset: 1 }}>
+    <Form.Item label={t("vendor.address")} required={false}>
       <Input.Group compact>
         <Form.Item //
-          name="building"
           noStyle
-          rules={[{ required: false }]}
+          rules={[{ required: false, whitespace: true }]}
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
-            style={{ width: "20%" }}
+            size="large"
+            style={{ width: "32.5%" }}
+            value={selectedAddress.building}
             onChange={(value: string) => {
-              form.setFieldsValue({
-                ...form.getFieldsValue(),
-                building: value,
-                floor: "",
-                col_loc: "",
-                ext: "",
-              });
+              selectAddress({ building: value, floor: "", col: "", loc: "" });
             }}
           >
-            {getAddressQuery.data &&
-              Object.keys(getAddressQuery.data.data).map((building) => (
+            {address &&
+              Object.keys(address).map((building) => (
                 <Select.Option key={building} value={building}>
                   {building}
                 </Select.Option>
@@ -61,76 +58,54 @@ function AddressSelect({ form }: Props) {
         </Form.Item>
 
         <Form.Item //
-          name="floor"
           noStyle
           rules={[{ required: false }]}
         >
           <Select // 층 select
+            size="large"
             placeholder={t("placeholder.floor")}
-            style={{ width: "15%" }}
+            style={{ width: "32%" }}
+            value={selectedAddress.floor}
             onChange={(value: string) => {
-              form.setFieldsValue({
-                ...form.getFieldsValue(),
-                floor: value,
-                col_loc: "",
-                ext: "",
-              });
+              selectAddress({ ...selectedAddress, floor: value, col: "", loc: "" });
             }}
           >
-            {getAddressQuery.data &&
-              form.getFieldValue("building") &&
-              Object.keys(getAddressQuery.data.data[form.getFieldValue("building")]).map(
-                (value) => {
-                  return (
-                    <Select.Option key={value} value={value}>
-                      {`${value}층`}
-                    </Select.Option>
-                  );
-                },
-              )}
-          </Select>
-        </Form.Item>
-        <Form.Item //
-          name="col_loc"
-          noStyle
-          rules={[{ required: false }]}
-        >
-          <Select // 열,호 select
-            placeholder={t("placeholder.col loc")}
-            style={{ width: "15%" }}
-            onChange={(value: string) => {
-              form.setFieldsValue({
-                ...form.getFieldsValue(),
-                col_loc: value,
-                ext: "",
-              });
-            }}
-          >
-            {getAddressQuery.data &&
-              form.getFieldValue("building") &&
-              Object.values(
-                getAddressQuery.data.data[form.getFieldValue("building")][
-                  form.getFieldValue("floor")
-                ],
-              ).map((value: any, index) => {
-                const [col, loc] = value.split(" ");
+            {selectedAddress?.building &&
+              Object.keys(address[selectedAddress.building]).map((value) => {
                 return (
-                  <Select.Option key={index} value={value}>
-                    {col ? `${col}열 ${loc}호` : `${loc}호`}
+                  <Select.Option key={value} value={value}>
+                    {`${value}층`}
                   </Select.Option>
                 );
               })}
           </Select>
         </Form.Item>
-        <Form.Item
-          name="ext"
+        <Form.Item //
           noStyle
-          rules={[{ required: false, message: "기타 주소 입력해주세요" }]}
+          rules={[{ required: false }]}
         >
-          <Input //
-            style={{ width: "20%" }}
-            placeholder={t("placeholder.ext")}
-          />
+          <Select // 열,호 select
+            size="large"
+            placeholder={t("placeholder.col loc")}
+            value={`${selectedAddress.col} ${selectedAddress.loc}`}
+            style={{ width: "32%" }}
+            onChange={(value: string) => {
+              const [col, loc] = value.split(" ");
+              selectAddress({ ...selectedAddress, col: col, loc: loc });
+            }}
+          >
+            {selectedAddress.floor &&
+              Object.values(address[selectedAddress.building][selectedAddress.floor]).map(
+                (value: any, index) => {
+                  const [col, loc] = value.split(" ");
+                  return (
+                    <Select.Option key={index} value={value}>
+                      {col ? `${col}열 ${loc}호` : `${loc}호`}
+                    </Select.Option>
+                  );
+                },
+              )}
+          </Select>
         </Form.Item>
       </Input.Group>
     </Form.Item>

@@ -10,6 +10,7 @@ import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import VendorCreateRequestModal from "./VendorCreateRequestModal";
 import VendorSearchModal from "./VendorSearchModal";
 
 interface Props {
@@ -28,7 +29,8 @@ function VendorCreateForm({ storeId }: Props) {
     company_name?: string;
     biz_num?: string;
   }>();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
+  const [requestModalVisible, setRequestModalVisible] = useState(false);
 
   const createVendorQuery = useMutation(["createVendor"], vendorAPI.createVendor, {
     onError: (error: AxiosError) => {
@@ -42,12 +44,20 @@ function VendorCreateForm({ storeId }: Props) {
     },
   });
 
-  const openModal = () => {
-    setModalVisible(true);
+  const openSearchModal = () => {
+    setSearchModalVisible(true);
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const closeSearchModal = () => {
+    setSearchModalVisible(false);
+  };
+
+  const openRequestModal = () => {
+    setRequestModalVisible(true);
+  };
+
+  const closeRequestModal = () => {
+    setRequestModalVisible(false);
   };
 
   // 거래처 선택
@@ -87,7 +97,7 @@ function VendorCreateForm({ storeId }: Props) {
       loc: loc,
       ext: ext,
     });
-    closeModal();
+    closeSearchModal();
   };
 
   // 쇼핑몰 선택 감지하여 form에 넣어줌
@@ -117,8 +127,17 @@ function VendorCreateForm({ storeId }: Props) {
   };
 
   const onClickCreate = () => {
-    createVendorQuery.mutate({ ...form.getFieldsValue() });
-    form.resetFields();
+    if (!form.getFieldValue("ws_store_id")) {
+      message.warning("거래처를 선택해 주세요");
+      return;
+    }
+    form.validateFields().then(() => {
+      createVendorQuery.mutate({ ...form.getFieldsValue() });
+      form.resetFields();
+      form.setFieldsValue({
+        rt_store_id: storeId,
+      });
+    });
   };
 
   return (
@@ -139,13 +158,14 @@ function VendorCreateForm({ storeId }: Props) {
           name="vendor_name"
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
-          onClick={openModal}
+          onClick={openSearchModal}
         />
 
         <TurtleInput // 거래처 매장번호 Input
           label={t("vendor.phone")}
           disabled={true}
           value={formState?.vendor_phone}
+          required={false}
         />
         <TurtleInput // 휴대번호 선택 Input
           label={t("vendor.store phone")}
@@ -176,9 +196,9 @@ function VendorCreateForm({ storeId }: Props) {
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={
-                  formState?.loc && `${formState?.loc}행` + formState?.col && `${formState?.col}열`
-                }
+                value={`${formState?.col ? formState.col + "열" : ""} ${
+                  formState?.loc ? formState.loc + "호" : ""
+                }`}
                 disabled={true}
                 size="large"
                 style={{ width: "32%" }}
@@ -190,6 +210,7 @@ function VendorCreateForm({ storeId }: Props) {
           value={formState?.ext}
           label={t("vendor.ext")}
           disabled={true}
+          required={false}
         />
 
         <TurtleText>{t("vendor.account info")}</TurtleText>
@@ -248,17 +269,28 @@ function VendorCreateForm({ storeId }: Props) {
         />
 
         <TurtleText>{t("vendor.biz info")}</TurtleText>
+        <TurtleText>
+          등록 하고 싶은 거래처가 없나요?{" "}
+          <span style={{ color: "#033A88", cursor: "pointer" }} onClick={openRequestModal}>
+            신규 등록 요청
+          </span>
+          을 해주세요.
+        </TurtleText>
 
         <Row justify="center">
-          <TurtleButton htmlType="submit" type="primary" onClick={onClickCreate}>
+          <TurtleButton type="primary" onClick={onClickCreate}>
             {t("vendor.create")}
           </TurtleButton>
         </Row>
       </Form>
       <VendorSearchModal //
-        visible={modalVisible}
-        closeModal={closeModal}
+        visible={searchModalVisible}
+        closeModal={closeSearchModal}
         selectRow={fillVendor}
+      />
+      <VendorCreateRequestModal //
+        visible={requestModalVisible}
+        closeModal={closeRequestModal}
       />
     </>
   );
