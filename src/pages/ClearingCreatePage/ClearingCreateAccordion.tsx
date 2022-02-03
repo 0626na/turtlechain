@@ -1,4 +1,4 @@
-import { Form, Input, Select, Space, Collapse, Row, Table, message, Tooltip, Modal } from "antd";
+import { Form, Input, Select, Space, Collapse, Row, Table, message, Popconfirm, Modal } from "antd";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleText from "components/common/TurtleText";
@@ -8,7 +8,7 @@ import { t } from "i18next";
 import StoreSelect from "components/StoreSelect";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
 import { Sheet } from "apis/warehousingAPI";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQueryClient, useMutation, useQuery } from "react-query";
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
@@ -28,10 +28,13 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   const isMounted = useRef<boolean>(false);
 
   // 입고 결제 대기 관련 State
-  // selectedRowKeys = 정산에 포함될 입고장의 ID들
+  // selectedWarehousingSheetRowKeys = 정산에 포함될 입고장의 ID 배열
+  // selectedAdjustmentRowKeys = 매입처리 할 아이템 ID 배열
   // openDetailModal = 입고 상세 내역 모달 노출 여부
   // selectedWarehousingSheet = 선택 된 입고장의 Sheet data
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
+  const [selectedWarehousingSheetRowKeys, setSelectedWarehousingSheetRowKeys] = useState<
+    Array<number>
+  >([]);
   const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
   const [selectedWarehousingSheet, setSelectedWarehousingSheet] = useState<Sheet | null>(null);
 
@@ -47,13 +50,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
 
   /**** Custom Function ****/
   // Collapse 컴포넌트에서 열려있는 패널 아이디를 변경하는 함수
-  const handleActivePanelChange = (activeKey: string | string[]) => {
-    setActivePanelId(activeKey);
-  };
-
-  const handleCheckBox = (id: number) => {
-    setSelectedRowKeys([...selectedRowKeys, id]);
-  };
+  const handleActivePanelChange = (activeKey: string | string[]) => setActivePanelId(activeKey);
 
   // 입고 결제 대기에서 보여줄 입고장 리스트를 받아오는 함수
   const getWarehousingSheetQuery = useQuery(
@@ -77,11 +74,31 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
     },
   );
 
+  // 입고 결제 대기 테이블 체크박스 선택 여부에 따라 데이터를 처리하는 함수
+  const onSelectRow = (record: Sheet, selected: boolean) => {
+    // 선택된 리스트 키값을 변경
+    if (selected) {
+      setOpenDetailModal(!openDetailModal);
+      setSelectedWarehousingSheet(record);
+    } else {
+      const answer = window.confirm("정말 제외하시겠습니까?");
+      if (answer) {
+        const idx = selectedWarehousingSheetRowKeys?.findIndex((i) => i === record.id);
+        const newSelectedRowKeys = selectedWarehousingSheetRowKeys && [
+          ...selectedWarehousingSheetRowKeys,
+        ];
+        newSelectedRowKeys?.splice(idx ? idx : 0, 1);
+        setSelectedWarehousingSheetRowKeys(newSelectedRowKeys);
+      }
+    }
+  };
+
   return (
     <>
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
-        <Panel header="1 입고 결제 대기" key="1">
+        <Panel header={`1 입고 결제 대기 ${0}`} key="1">
           <Table
+            sticky={true}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (e) => {
@@ -91,9 +108,14 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
               };
             }}
             pagination={false}
-            style={{ maxHeight: "50vh", overflowY: "scroll" }}
+            scroll={{ y: "40vh" }}
+            style={{ marginBottom: 12 }}
             size="small"
-            rowSelection={{}}
+            rowSelection={{
+              selectedRowKeys: selectedWarehousingSheetRowKeys,
+              onSelect: onSelectRow,
+              hideSelectAll: true,
+            }}
             loading={getWarehousingSheetQuery.isLoading}
             dataSource={getWarehousingSheetQuery.data?.data}
             rowKey={"id"}
@@ -157,6 +179,8 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
         visible={openDetailModal}
         selectedWarehousingSheet={selectedWarehousingSheet}
         setOpenDetailModal={setOpenDetailModal}
+        selectedWarehousingSheetRowKeys={selectedWarehousingSheetRowKeys}
+        setSelectedWarehousingSheetRowKeys={setSelectedWarehousingSheetRowKeys}
       />
     </>
   );

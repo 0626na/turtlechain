@@ -9,13 +9,10 @@ import { RequestCreateClearingSheet } from "apis/clearingAPI";
 function ClearingCreatePage() {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
-  const [selectedRtStoreId, setSelectedRtStoreId] = useState<number | "">("")
+  const [selectedRtStoreId, setSelectedRtStoreId] = useState<number | "">("");
 
   // 쇼핑몰 선택
-  const selectStore = (storeId: number | "") => {
-    setSelectedRtStoreId(storeId);
-  };
-
+  const selectStore = (storeId: number | "") => setSelectedRtStoreId(storeId);
   return (
     <>
       <Helmet title={title} />
@@ -24,8 +21,11 @@ function ClearingCreatePage() {
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
-      <Toolbar selectStore={selectStore} />
-      <ClearingCreateAccordion selectedRtStoreId={selectedRtStoreId}/>
+      <Toolbar
+        selectStore={selectStore}
+        warningPhrase={"쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 바꾸시겠습니까?"}
+      />
+      <ClearingCreateAccordion selectedRtStoreId={selectedRtStoreId} />
     </>
   );
 }
