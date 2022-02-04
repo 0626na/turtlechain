@@ -7,10 +7,10 @@ import { useCallback, useState } from "react";
 
 interface Props {
   selectStore: (storeId: number | "") => void;
-  warningPhrase?: string;
+  warningMessage?: string;
 }
 
-function CustomStoreSelect({ selectStore, warningPhrase }: Props) {
+function CustomStoreSelect({ selectStore, warningMessage }: Props) {
   const { t } = useTranslation();
 
   // 쇼핑몰 식별 번호
@@ -37,8 +37,8 @@ function CustomStoreSelect({ selectStore, warningPhrase }: Props) {
   // 쇼핑몰 선택
   const handleChange = useCallback((value: number | "") => {
     setStoreId((prevStoreId) => {
-      if (prevStoreId && warningPhrase) {
-        const answer = window.confirm(warningPhrase);
+      if (prevStoreId && warningMessage) {
+        const answer = window.confirm(warningMessage);
         if (!answer) {
           return prevStoreId;
         }

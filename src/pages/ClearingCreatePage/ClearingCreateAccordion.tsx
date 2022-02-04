@@ -6,13 +6,14 @@ import TurtleTextArea from "components/common/TurtleTextArea";
 import TurtleButton from "components/common/TurtleButton";
 import { t } from "i18next";
 import StoreSelect from "components/StoreSelect";
-import { RequestGetClearingSheet } from "apis/clearingAPI";
-import { Sheet } from "apis/warehousingAPI";
-import React, { useState, useEffect, useRef } from "react";
+import { RequestGetClearingSheet, warehousingItem, adjustmentItem } from "apis/clearingAPI";
+import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useQueryClient, useMutation, useQuery } from "react-query";
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
 import WarehousingItemListModal from "./WarehousingItemListModal";
+import { WarehousingSheetItem4Clearing } from "./index";
 const { Panel } = Collapse;
 
 interface Props {
@@ -27,16 +28,21 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   const [activePanelId, setActivePanelId] = useState<string | string[]>("");
   const isMounted = useRef<boolean>(false);
 
-  // 입고 결제 대기 관련 State
+  // 정산 관련 State
+  // clearingCart = 정산에 포함될 내역을 담은 배열
   // selectedWarehousingSheetRowKeys = 정산에 포함될 입고장의 ID 배열
   // selectedAdjustmentRowKeys = 매입처리 할 아이템 ID 배열
   // openDetailModal = 입고 상세 내역 모달 노출 여부
   // selectedWarehousingSheet = 선택 된 입고장의 Sheet data
+  const [clearingCart, setClearingCart] = useState<any>([]); // 정산아이템 | 입고아이템 으로 타입지정하면 배열의 기능들을 사용못해서 any로 지정..
   const [selectedWarehousingSheetRowKeys, setSelectedWarehousingSheetRowKeys] = useState<
     Array<number>
   >([]);
+  const [selectedAdjustmentRowKeys, setSelectedAdjustmentRowKeys] = useState<Array<number>>([]);
   const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
-  const [selectedWarehousingSheet, setSelectedWarehousingSheet] = useState<Sheet | null>(null);
+  const [selectedWarehousingSheet, setSelectedWarehousingSheet] = useState<WarehousingSheet | null>(
+    null,
+  );
 
   /**** React function ****/
   // 선택한 쇼핑몰이 변경되면 입고결제대기 창(첫번째 패널)이 열림
@@ -47,6 +53,28 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       isMounted.current = true;
     }
   }, [selectedRtStoreId]);
+
+  // 입고 총 금액
+  const warehousingTotal = useMemo(
+    () =>
+      clearingCart
+        .filter((item: any) => item.type === "warehousing")
+        .reduce((acc: any, cur: any) => {
+          return acc + cur.price * cur.count;
+        }, 0),
+    [clearingCart],
+  );
+
+  // 매입 총 금액
+  const adjustmentTotal = useMemo(
+    () =>
+      clearingCart
+        .filter((item: any) => item.type === "adjustment")
+        .reduce((acc: any, cur: any) => {
+          return acc + cur.price * cur.count;
+        }, 0),
+    [clearingCart],
+  );
 
   /**** Custom Function ****/
   // Collapse 컴포넌트에서 열려있는 패널 아이디를 변경하는 함수
@@ -75,28 +103,46 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   );
 
   // 입고 결제 대기 테이블 체크박스 선택 여부에 따라 데이터를 처리하는 함수
-  const onSelectRow = (record: Sheet, selected: boolean) => {
+  const onSelectRow = (record: WarehousingSheet, selected: boolean) => {
     // 선택된 리스트 키값을 변경
     if (selected) {
       setOpenDetailModal(!openDetailModal);
       setSelectedWarehousingSheet(record);
     } else {
-      const answer = window.confirm("정말 제외하시겠습니까?");
+      const answer = window.confirm(t("message.confirm exclude"));
       if (answer) {
+        // 선택 된 입고장 체크박스 해제
         const idx = selectedWarehousingSheetRowKeys?.findIndex((i) => i === record.id);
         const newSelectedRowKeys = selectedWarehousingSheetRowKeys && [
           ...selectedWarehousingSheetRowKeys,
         ];
         newSelectedRowKeys?.splice(idx ? idx : 0, 1);
         setSelectedWarehousingSheetRowKeys(newSelectedRowKeys);
+
+        // 해당 입고장 관련된 입고 아이템 제거
+        const newClearingCart = clearingCart.filter(
+          (cartItem: any) => cartItem.type !== "warehousing" || cartItem.sheet_id !== record.id,
+        );
+        setClearingCart(newClearingCart);
       }
     }
   };
 
+  const panelOneHeader = (
+    <>
+      1 입고 결제 대기 <strong>입고 총 금액 : {warehousingTotal.toLocaleString()}</strong>
+    </>
+  );
+  const panelTwoHeader = (
+    <>
+      2 매입 조정 대기 <strong>매입 총 금액 : {adjustmentTotal.toLocaleString()}</strong>
+    </>
+  );
+
   return (
     <>
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
-        <Panel header={`1 입고 결제 대기 ${0}`} key="1">
+        <Panel header={panelOneHeader} key="1">
           <Table
             sticky={true}
             onRow={(record, rowIndex) => {
@@ -122,14 +168,14 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             columns={[
               {
                 ellipsis: true,
-                title: t("warehousing date"),
+                title: "Temporary id remove this",
                 dataIndex: "id",
                 key: "id",
               },
               Table.SELECTION_COLUMN,
               {
                 ellipsis: true,
-                title: t("warehousing date"),
+                title: t("warehousing.date"),
                 dataIndex: "created_date",
                 key: "id",
               },
@@ -141,7 +187,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
               },
               {
                 ellipsis: true,
-                title: "입고금액",
+                title: t("warehousing.price"),
                 dataIndex: "total_price",
                 key: "id",
               },
@@ -150,7 +196,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
           <Row justify="center">
             <Space align="center">
               <TurtleButton
-                children={"다음 단계로 이동"}
+                children={t("button.next step")}
                 onClick={() => {
                   setActivePanelId("2");
                 }}
@@ -158,12 +204,12 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             </Space>
           </Row>
         </Panel>
-        <Panel header="2 매입 조정 대기" key="2">
+        <Panel header={panelTwoHeader} key="2">
           이것은 매입조정 대기
           <Row justify="center">
             <Space align="center">
               <TurtleButton
-                children={"다음 단계로 이동"}
+                children={t("button.next step")}
                 onClick={() => {
                   setActivePanelId("3");
                 }}
@@ -181,6 +227,8 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
         setOpenDetailModal={setOpenDetailModal}
         selectedWarehousingSheetRowKeys={selectedWarehousingSheetRowKeys}
         setSelectedWarehousingSheetRowKeys={setSelectedWarehousingSheetRowKeys}
+        clearingCart={clearingCart}
+        setClearingCart={setClearingCart}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import { v2Axios } from "apis";
 
 // 입고장 타입
-export interface Sheet {
+export interface WarehousingSheet {
   id: number;
   rt_store_id: number;
   mall_name: string;
@@ -17,7 +17,7 @@ export interface Sheet {
 }
 
 // 입고장 상세내역 타입
-export interface SheetItem {
+export interface WarehousingSheetItem {
   id: number;
   sheet_id: number;
   rt_store_id: number;
@@ -70,7 +70,7 @@ export interface RequestGetSheet {
 
 export interface ResponseGetSheet {
   data: {
-    data: Array<Sheet>;
+    data: Array<WarehousingSheet>;
     total_count: number;
   };
 }
@@ -79,22 +79,22 @@ export interface ResponseGetSheet {
 export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
-  data: Array<SheetItem>;
+  data: Array<WarehousingSheetItem>;
 }
 
 // 입고장 수정하기 요청 타입
-export interface RequestUpdateSheet extends Sheet {
+export interface RequestUpdateSheet extends WarehousingSheet {
   sheet_id: number;
 }
 
 export interface ResponseUpdateSheet {
-  data: Sheet;
+  data: WarehousingSheet;
 }
 
 // 입고장 상세내역 대량 수정하기 타입
 export interface RequestBulkUpdateSheetItem {
   sheet_id: number;
-  items: Array<SheetItem>;
+  items: Array<WarehousingSheetItem>;
 }
 
 export interface ResponseBulkUpdateSheetItem {

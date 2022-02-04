@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { SheetItem } from "apis/warehousingAPI";
+import warehousingAPI, { WarehousingSheetItem } from "apis/warehousingAPI";
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -64,7 +64,7 @@ const WarehousingSheetItemModal = function ({
     },
   ];
 
-  const [list, setList] = useState<Array<SheetItem>>([]);
+  const [list, setList] = useState<Array<WarehousingSheetItem>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 입고장 상세내역 리스트 요청
@@ -181,7 +181,7 @@ const WarehousingSheetItemModal = function ({
           onClose();
         }
       }}
-      title={`${mall_name} ${t("warehousing detail list")}`}
+      title={`${mall_name} ${t("warehousing.detail list")}`}
       footer={
         !is_confirmed && [
           <Popconfirm
@@ -207,13 +207,13 @@ const WarehousingSheetItemModal = function ({
         <StatisticContainer>
           <Card>
             <Statistic //
-              title={t("warehousing date")}
+              title={t("warehousing.date")}
               value={created_time}
             />
           </Card>
           <Card>
             <Statistic //
-              title={t("warehousing total count")}
+              title={t("warehousing.total count")}
               value={totalItemCount}
             />
           </Card>
@@ -279,7 +279,7 @@ const WarehousingSheetItemModal = function ({
             },
             {
               align: "right",
-              title: t("warehousing count"),
+              title: t("warehousing.count"),
               dataIndex: "count",
               render: (_, record) => (
                 <InputNumber //

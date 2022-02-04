@@ -133,7 +133,7 @@ const WarehousingPreviewList = function ({
           },
           {
             align: "right",
-            title: t("warehousing count"),
+            title: t("warehousing.count"),
             dataIndex: "count",
             render: (_, record) => (
               <InputNumber //
@@ -183,7 +183,7 @@ const WarehousingPreviewList = function ({
           <Footer>
             <TotalContainer>
               <b>
-                {`${t("warehousing total count")} : `}
+                {`${t("warehousing.total count")} : `}
                 {totalItemCount.toLocaleString()}
               </b>
               <b>

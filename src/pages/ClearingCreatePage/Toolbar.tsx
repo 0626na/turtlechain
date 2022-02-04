@@ -3,14 +3,14 @@ import StoreSelect from "components/StoreSelect";
 
 interface Props {
   selectStore: (storeId: number | "") => void;
-  warningPhrase?: string;
+  warningMessage?: string;
 }
 
-function Toolbar({selectStore, warningPhrase} : Props) {
+function Toolbar({selectStore, warningMessage} : Props) {
   return (
     <Row gutter={24} align={"middle"} justify="space-between">
       <Col>
-        <StoreSelect selectStore={selectStore} warningPhrase={warningPhrase} />
+        <StoreSelect selectStore={selectStore} warningMessage={warningMessage} />
       </Col>
     </Row>
   );

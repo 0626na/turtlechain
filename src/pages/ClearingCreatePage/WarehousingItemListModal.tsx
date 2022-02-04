@@ -1,18 +1,21 @@
-import { Space, Table, message, Modal, Descriptions } from "antd";
-import { t } from "i18next";
-import { SheetItem } from "apis/warehousingAPI";
-import { useState, SetStateAction, Dispatch } from "react";
+import { useState, SetStateAction, Dispatch, useEffect } from "react";
 import { useQuery } from "react-query";
-import { warehousingAPI } from "apis";
+import { Space, Table, message, Modal, Descriptions } from "antd";
 import { AxiosError } from "axios";
-import { Sheet } from "apis/warehousingAPI";
+import { t } from "i18next";
+import { warehousingAPI } from "apis";
+import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
+import { adjustmentItem } from "apis/clearingAPI";
+import { WarehousingSheetItem4Clearing } from "./index";
 
 interface Props {
   visible: boolean;
-  selectedWarehousingSheet: Sheet | null;
+  selectedWarehousingSheet: WarehousingSheet | null;
   setOpenDetailModal: Dispatch<SetStateAction<boolean>>;
   selectedWarehousingSheetRowKeys: Array<number>;
   setSelectedWarehousingSheetRowKeys: Dispatch<SetStateAction<Array<number>>>;
+  clearingCart: Array<WarehousingSheetItem4Clearing | adjustmentItem>;
+  setClearingCart: Dispatch<SetStateAction<Array<WarehousingSheetItem4Clearing | adjustmentItem>>>;
 }
 
 function WarehousingItemListModal({
@@ -21,21 +24,23 @@ function WarehousingItemListModal({
   setOpenDetailModal,
   selectedWarehousingSheetRowKeys,
   setSelectedWarehousingSheetRowKeys,
+  clearingCart,
+  setClearingCart,
 }: Props) {
   /**** State ****/
   // selectedRowKeys = 선택 된 행의 key (세액포함된 건)
   // warehousingItemList = 입고 아이템 리스트
   // totalVatPrice = 세액 총 합계 금액
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
-  const [warehousingItemList, setWarehousingItemList] = useState<Array<SheetItem>>([]);
+  const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingSheetItem>>([]);
   const [totalVatPrice, setTotalVatPrice] = useState<number>(0);
 
   /**** Custom Function ****/
   // 입고 아이템 리스트를 받아오는 함수
   const getWarehousingItemQuery = useQuery(
-    ["getWarehousingItem", selectedWarehousingSheet?.id], //
+    ["getWarehousingItem", selectedWarehousingSheet?.id, visible], //
     () => {
-      if (selectedWarehousingSheet) {
+      if (selectedWarehousingSheet && visible) {
         return warehousingAPI.getSheetItem(selectedWarehousingSheet.id);
       }
     },
@@ -55,7 +60,7 @@ function WarehousingItemListModal({
   );
 
   // 부가세 포함 된 행들의 부가세 합계를 구하는 함수
-  const calculateTotalVatPrice = (warehousingItemList: Array<SheetItem>) => {
+  const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingSheetItem>) => {
     const totalVat: number = warehousingItemList
       .filter((value) => value.is_vat_included)
       .map((value) => value.price * value.count)
@@ -67,7 +72,7 @@ function WarehousingItemListModal({
   };
 
   // 모달 내 체크박스 선택 여부에 따라 데이터를 처리하는 함수
-  const onSelectRow = (record: SheetItem, selected: boolean) => {
+  const onSelectRow = (record: WarehousingSheetItem, selected: boolean) => {
     // state 로 들어가 있는 리스트 아이템을 변경
     if (warehousingItemList) {
       const newWarehousingItemList = warehousingItemList.map((value) =>
@@ -89,13 +94,22 @@ function WarehousingItemListModal({
 
   // '추가하기' 버튼 선택시 데이터 처리
   const onOk = () => {
-    setOpenDetailModal(!visible);
+    // 정산에 맞는 입고 아이템 형식으로 변경
+    const refinedWarehousingItemList = warehousingItemList.map(
+      (item) =>
+        ({
+          ...item,
+          type: "warehousing",
+        } as WarehousingSheetItem4Clearing),
+    );
+    setClearingCart([...clearingCart, ...refinedWarehousingItemList]);
     if (selectedWarehousingSheet) {
       setSelectedWarehousingSheetRowKeys([
         ...selectedWarehousingSheetRowKeys,
         selectedWarehousingSheet.id,
       ]);
     }
+    setOpenDetailModal(!visible);
   };
 
   return (
@@ -104,8 +118,8 @@ function WarehousingItemListModal({
       centered={true}
       width={"90vw"}
       visible={visible}
-      okText={"금액 확정하기"}
-      cancelText={"취소"}
+      okText={t("button.price confirm")}
+      cancelText={t("button.cancel")}
       onOk={onOk}
       onCancel={() => setOpenDetailModal(!visible)}
       keyboard={true}
@@ -114,21 +128,21 @@ function WarehousingItemListModal({
       <Descriptions
         size="small"
         column={4}
-        title="입고 내역 상세 보기"
+        title={t("warehousing.detail list")}
         layout="vertical"
         bordered
         style={{ marginBottom: 12 }}
       >
-        <Descriptions.Item label="생성날짜">
+        <Descriptions.Item label={t("created date")}>
           {selectedWarehousingSheet?.created_date}
         </Descriptions.Item>
-        <Descriptions.Item label="입고 수량 합계">
+        <Descriptions.Item label={t("warehousing.total count")}>
           {selectedWarehousingSheet?.total_item_count}
         </Descriptions.Item>
-        <Descriptions.Item label="공급가 합계">
+        <Descriptions.Item label={t("total supply price")}>
           {selectedWarehousingSheet?.total_price}
         </Descriptions.Item>
-        <Descriptions.Item label="부가세 합계">{totalVatPrice}</Descriptions.Item>
+        <Descriptions.Item label={t("total vat price")}>{totalVatPrice}</Descriptions.Item>
       </Descriptions>
       <Table
         loading={getWarehousingItemQuery.isLoading}
@@ -144,7 +158,7 @@ function WarehousingItemListModal({
         columns={[
           {
             ellipsis: true,
-            title: t("vendor.name"),
+            title: "Temporary id remove this",
             dataIndex: "id",
             key: "id",
           },
@@ -168,7 +182,7 @@ function WarehousingItemListModal({
           },
           {
             ellipsis: true,
-            title: t("warehousing count"),
+            title: t("warehousing.count"),
             dataIndex: "count",
             key: "id",
           },

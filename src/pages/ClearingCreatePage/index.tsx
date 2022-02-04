@@ -1,13 +1,16 @@
-import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { t } from "i18next";
+import PageHeader from "components/PageHeader";
 import Toolbar from "./Toolbar";
 import ClearingCreateAccordion from "./ClearingCreateAccordion";
-import { RequestCreateClearingSheet } from "apis/clearingAPI";
+import { WarehousingSheetItem } from "apis/warehousingAPI";
+
+export interface WarehousingSheetItem4Clearing extends WarehousingSheetItem {
+  type: "warehousing";
+};
 
 function ClearingCreatePage() {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
   const [selectedRtStoreId, setSelectedRtStoreId] = useState<number | "">("");
 
@@ -23,7 +26,7 @@ function ClearingCreatePage() {
       />
       <Toolbar
         selectStore={selectStore}
-        warningPhrase={"쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 바꾸시겠습니까?"}
+        warningMessage={t('message.warning change mall')}
       />
       <ClearingCreateAccordion selectedRtStoreId={selectedRtStoreId} />
     </>

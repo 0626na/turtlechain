@@ -103,7 +103,7 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
         <ItemGroup>
           <Form.Item //
             name="count"
-            label={t("warehousing count")}
+            label={t("warehousing.count")}
             rules={[{ required: true }]}
           >
             <InputNumber style={{ width: 200 }} />
