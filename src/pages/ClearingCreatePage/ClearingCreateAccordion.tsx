@@ -1,4 +1,4 @@
-import { Form, Input, Select, Space, Collapse, Row, Table, message, Popconfirm, Modal } from "antd";
+import { Input, Select, Space, Collapse, Row, Table, message, Popconfirm, Modal } from "antd";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleText from "components/common/TurtleText";
@@ -11,7 +11,7 @@ import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useQueryClient, useMutation, useQuery } from "react-query";
 import { warehousingAPI } from "apis";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import WarehousingItemListModal from "./WarehousingItemListModal";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
@@ -139,6 +139,8 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             selectedRtStoreId={selectedRtStoreId}
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
+            selectedAdjustmentRowKeys={selectedAdjustmentRowKeys}
+            setSelectedAdjustmentRowKeys={setSelectedAdjustmentRowKeys}
           />
           <Row justify="center" align="middle">
             <TurtleButton
