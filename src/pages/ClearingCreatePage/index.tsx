@@ -8,7 +8,12 @@ import { WarehousingSheetItem } from "apis/warehousingAPI";
 
 export interface WarehousingSheetItem4Clearing extends WarehousingSheetItem {
   type: "warehousing";
-};
+}
+
+/*
+  Parent : None
+  Children : Toolbar, ClearingCreateAccordion
+*/
 
 function ClearingCreatePage() {
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
@@ -24,10 +29,7 @@ function ClearingCreatePage() {
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
-      <Toolbar
-        selectStore={selectStore}
-        warningMessage={t('message.warning change mall')}
-      />
+      <Toolbar selectStore={selectStore} warningMessage={t("message.warning change mall")} />
       <ClearingCreateAccordion selectedRtStoreId={selectedRtStoreId} />
     </>
   );

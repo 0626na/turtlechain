@@ -8,6 +8,22 @@ import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
 import { adjustmentItem } from "apis/clearingAPI";
 import { WarehousingSheetItem4Clearing } from "./index";
 
+/*
+  Parent : WarehousingWaitingTable
+  Children : None
+
+  * State
+    selectedRowKeys = 선택 된 행의 key (세액포함된 건)
+    warehousingItemList = 입고 아이템 리스트
+    totalVatPrice = 세액 총 합계 금액
+
+  * Custom Function
+    getWarehousingItemQuery = 입고 아이템 리스트를 받아오는 함수
+    calculateTotalVatPrice = 부가세 포함 된 행들의 부가세 합계를 구하는 함수
+    onSelectRow = 모달 내 체크박스 선택 여부에 따라 데이터를 처리하는 함수
+    onOk = '추가하기' 버튼 선택시 데이터 처리
+*/
+
 interface Props {
   visible: boolean;
   selectedWarehousingSheet: WarehousingSheet | null;
@@ -27,16 +43,10 @@ function WarehousingItemListModal({
   clearingCart,
   setClearingCart,
 }: Props) {
-  /**** State ****/
-  // selectedRowKeys = 선택 된 행의 key (세액포함된 건)
-  // warehousingItemList = 입고 아이템 리스트
-  // totalVatPrice = 세액 총 합계 금액
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
   const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingSheetItem>>([]);
   const [totalVatPrice, setTotalVatPrice] = useState<number>(0);
 
-  /**** Custom Function ****/
-  // 입고 아이템 리스트를 받아오는 함수
   const getWarehousingItemQuery = useQuery(
     ["getWarehousingItem", selectedWarehousingSheet?.id, visible], //
     () => {
@@ -59,7 +69,6 @@ function WarehousingItemListModal({
     },
   );
 
-  // 부가세 포함 된 행들의 부가세 합계를 구하는 함수
   const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingSheetItem>) => {
     const totalVat: number = warehousingItemList
       .filter((value) => value.is_vat_included)
@@ -71,9 +80,8 @@ function WarehousingItemListModal({
     setTotalVatPrice(totalVat);
   };
 
-  // 모달 내 체크박스 선택 여부에 따라 데이터를 처리하는 함수
   const onSelectRow = (record: WarehousingSheetItem, selected: boolean) => {
-    // state 로 들어가 있는 리스트 아이템을 변경
+    // state 로 들어가 있는 리스트 아이템(warehousingItemList)을 변경
     if (warehousingItemList) {
       const newWarehousingItemList = warehousingItemList.map((value) =>
         value.id === record.id ? { ...value, is_vat_included: !value.is_vat_included } : value,
@@ -81,7 +89,7 @@ function WarehousingItemListModal({
       setWarehousingItemList(newWarehousingItemList);
       calculateTotalVatPrice(newWarehousingItemList);
     }
-    // 선택된 리스트 키값을 변경
+    // 선택된 리스트 키 값(selectedRowKeys)을 변경
     if (selected) {
       setSelectedRowKeys(selectedRowKeys && [...selectedRowKeys, record.id]);
     } else {
@@ -92,7 +100,6 @@ function WarehousingItemListModal({
     }
   };
 
-  // '추가하기' 버튼 선택시 데이터 처리
   const onOk = () => {
     // 정산에 맞는 입고 아이템 형식으로 변경
     const refinedWarehousingItemList = warehousingItemList.map(
@@ -102,13 +109,16 @@ function WarehousingItemListModal({
           type: "warehousing",
         } as WarehousingSheetItem4Clearing),
     );
+    // 정산 장바구니에 정보를 넣는다
     setClearingCart([...clearingCart, ...refinedWarehousingItemList]);
+    // 입고장 체크박스 체크
     if (selectedWarehousingSheet) {
       setSelectedWarehousingSheetRowKeys([
         ...selectedWarehousingSheetRowKeys,
         selectedWarehousingSheet.id,
       ]);
     }
+    // 모달을 닫는다
     setOpenDetailModal(!visible);
   };
 
