@@ -99,8 +99,6 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
         <Row justify="center">
           <Form.Item>
             <TurtleButton
-              type="primary"
-              htmlType="submit"
               onClick={() => {
                 console.log(form.getFieldsValue());
               }}

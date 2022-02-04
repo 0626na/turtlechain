@@ -8,7 +8,7 @@ interface Props {
   rows?: number;
   required?: boolean;
 }
-function TurtleTextArea({ name, label, placeholder, rows = 13, required = true }: Props) {
+function TurtleTextArea({ name, label, placeholder, rows = 14, required = true }: Props) {
   return (
     <Form.Item name={name} label={label} required={required}>
       <TextArea placeholder={placeholder} allowClear rows={rows} style={{ width: "96%" }} />

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
-import VendorCreateForm from "./VendorCreateForm";
+import CreateVendorForm from "./CreateVendorForm";
 
 function VendorCreatePage() {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ function VendorCreatePage() {
         info={t("description.search vendor")}
       />
       <Toolbar selectStore={setStoreId} />
-      <VendorCreateForm storeId={storeId} />
+      <CreateVendorForm storeId={storeId} />
     </>
   );
 }

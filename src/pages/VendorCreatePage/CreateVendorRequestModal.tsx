@@ -17,7 +17,7 @@ interface Props {
   closeModal: () => void;
 }
 
-function VendorCreateRequestModal({ visible, closeModal }: Props) {
+function CreateVendorRequestModal({ visible, closeModal }: Props) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
@@ -134,9 +134,7 @@ function VendorCreateRequestModal({ visible, closeModal }: Props) {
         />
         <Row justify="center">
           <Form.Item>
-            <TurtleButton type="primary" htmlType="submit" onClick={onClickCreate}>
-              {t("button.request create")}
-            </TurtleButton>
+            <TurtleButton onClick={onClickCreate}>{t("button.request create")}</TurtleButton>
           </Form.Item>
         </Row>
       </Form>
@@ -144,4 +142,4 @@ function VendorCreateRequestModal({ visible, closeModal }: Props) {
   );
 }
 
-export default VendorCreateRequestModal;
+export default CreateVendorRequestModal;

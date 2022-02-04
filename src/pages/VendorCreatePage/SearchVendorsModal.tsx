@@ -16,6 +16,7 @@ import { RequestSearchVendor, VendorAccount, WholeSaleStore } from "apis/vendorA
 import { AxiosError } from "axios";
 import TurtleBadge from "components/common/TurtleBadge";
 import TurtleButton from "components/common/TurtleButton";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 import SearchFilter from "components/SearchFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -27,7 +28,7 @@ interface Props {
   selectRow: (wholeSaleStore: WholeSaleStore) => void;
 }
 
-function VendorSearchModal({ visible, closeModal, selectRow }: Props) {
+function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
   const { t } = useTranslation();
 
   const [list, setList] = useState<Array<WholeSaleStore>>([]);
@@ -45,7 +46,7 @@ function VendorSearchModal({ visible, closeModal, selectRow }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setList(data.data);
+        setList(data.data.vendor_list);
       },
     },
   );
@@ -240,13 +241,13 @@ function VendorSearchModal({ visible, closeModal, selectRow }: Props) {
             title: "",
             dataIndex: "action",
             render: (_, record) => (
-              <TurtleButton //
+              <TurtleButtonSub //
                 size="small"
-                type="primary"
+                color="green"
                 onClick={() => onClickSelect(record)}
               >
                 {t("button.select")}
-              </TurtleButton>
+              </TurtleButtonSub>
             ),
           },
         ]}
@@ -255,4 +256,4 @@ function VendorSearchModal({ visible, closeModal, selectRow }: Props) {
   );
 }
 
-export default VendorSearchModal;
+export default SearchVendorsModal;

@@ -83,7 +83,7 @@ const updateVendor = async function (data: RequestUpdateVendor) {
   return response.data;
 };
 
-// Request: 거래처 단건 등록
+// Request: 거래처 등록
 export interface RequestCreateVendor {
   rt_store_id: number;
   vendor_id: string;
@@ -98,7 +98,7 @@ export interface RequestCreateVendor {
   is_taxed: boolean;
 }
 
-// Response: 거래처 단건 등록
+// Response: 거래처 등록
 export interface ResponseCreateVendor {
   msg: string;
   data: {
@@ -108,7 +108,7 @@ export interface ResponseCreateVendor {
   };
 }
 
-// 거래처 단건 등록
+// 거래처 등록
 const createVendor = async function (data: RequestCreateVendor) {
   const url = `provisioning/vendor`;
   const response = await v2Axios.post<ResponseCreateVendor>(url, [data]);
@@ -124,7 +124,10 @@ export interface RequestSearchVendor {
 // Response: 거래처 마스터 도매 조회
 export interface ResponseSearchVendor {
   msg: string;
-  data: Array<WholeSaleStore>;
+  data: {
+    total_count: number;
+    vendor_list: Array<WholeSaleStore>;
+  };
 }
 
 // 거래처 마스터 도매 조회

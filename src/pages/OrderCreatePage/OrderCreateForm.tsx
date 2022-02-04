@@ -90,10 +90,8 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
             />
           </Col>
         </Row>
-        <Row justify="center">
-          <TurtleButton htmlType="submit" ghost>
-            {t("button.add")}
-          </TurtleButton>
+        <Row justify="end">
+          <TurtleButton type="default">{t("button.add")}</TurtleButton>
         </Row>
       </Form>
       <TurtleDivider />

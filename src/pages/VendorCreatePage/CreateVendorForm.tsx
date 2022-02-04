@@ -3,6 +3,7 @@ import { vendorAPI } from "apis";
 import { RequestCreateVendor, WholeSaleStore } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleText from "components/common/TurtleText";
@@ -10,14 +11,14 @@ import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import VendorCreateRequestModal from "./VendorCreateRequestModal";
-import VendorSearchModal from "./VendorSearchModal";
+import CreateVendorRequestModal from "./CreateVendorRequestModal";
+import SearchVendorsModal from "./SearchVendorsModal";
 
 interface Props {
   storeId: number;
 }
 
-function VendorCreateForm({ storeId }: Props) {
+function CreateVendorForm({ storeId }: Props) {
   const [form] = Form.useForm<RequestCreateVendor>();
   const [formState, setFormState] = useState<{
     vendor_phone: string;
@@ -243,9 +244,9 @@ function VendorCreateForm({ storeId }: Props) {
               <Input readOnly={true} size="large" />
             </Form.Item>
             <Form.Item>
-              <TurtleButton ghost onClick={makeVendorId}>
+              <TurtleButtonSub color="blue" onClick={makeVendorId}>
                 코드 만들기
-              </TurtleButton>
+              </TurtleButtonSub>
             </Form.Item>
           </Space>
         </Form.Item>
@@ -288,27 +289,28 @@ function VendorCreateForm({ storeId }: Props) {
           required={false}
         />
 
-        <Row justify="center">
+        <Row justify="space-between" style={{ padding: "1rem 0px" }}>
+          <TurtleText>
+            등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}
+            <span
+              style={{ color: "#033A88", cursor: "pointer", textDecoration: "underline" }}
+              onClick={openRequestModal}
+            >
+              신규 등록 요청하기 {">"}
+            </span>
+          </TurtleText>
           <TurtleButton type="primary" onClick={onClickCreate}>
             {t("vendor.create")}
           </TurtleButton>
         </Row>
       </Form>
 
-      <TurtleText>
-        등록 하고 싶은 거래처가 없나요?{" "}
-        <span style={{ color: "#033A88", cursor: "pointer" }} onClick={openRequestModal}>
-          신규 등록 요청
-        </span>
-        을 해주세요.
-      </TurtleText>
-
-      <VendorSearchModal //
+      <SearchVendorsModal //
         visible={searchModalVisible}
         closeModal={closeSearchModal}
         selectRow={fillVendor}
       />
-      <VendorCreateRequestModal //
+      <CreateVendorRequestModal //
         visible={requestModalVisible}
         closeModal={closeRequestModal}
       />
@@ -316,4 +318,4 @@ function VendorCreateForm({ storeId }: Props) {
   );
 }
 
-export default VendorCreateForm;
+export default CreateVendorForm;

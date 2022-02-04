@@ -3,7 +3,7 @@ import PageHeader from "components/PageHeader";
 import { useCallback, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Filter from "./Filter";
+import Toolbar from "./Toolbar";
 import VendorList from "./VendorList";
 
 function VendorListPage() {
@@ -76,7 +76,7 @@ function VendorListPage() {
         title={t("vendor.list")}
         breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.list")]}
       />
-      <Filter //
+      <Toolbar //
         selectStore={selectStore}
       />
       <VendorList //

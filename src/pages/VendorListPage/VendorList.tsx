@@ -24,6 +24,7 @@ import { useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
 import VendorUpdateModal from "./VendorUpdateModal";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 interface Props {
   searchQuery: RequestGetVendors;
@@ -169,7 +170,7 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
         }}
         columns={[
           {
-            width: "9%",
+            width: "5%",
             ellipsis: true,
             title: t("vendor.code"),
             dataIndex: "vendor_id",
@@ -180,6 +181,7 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
             ),
           },
           {
+            width: "5%",
             ellipsis: true,
             title: t("vendor.name"),
             dataIndex: ["ws_store_info", "name"],
@@ -190,7 +192,7 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
             ),
           },
           {
-            width: "13%",
+            width: "10%",
             ellipsis: true,
             title: t("vendor.address"),
             dataIndex: "",
@@ -204,7 +206,7 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
             },
           },
           {
-            width: "12%",
+            width: "13%",
             ellipsis: true,
             title: t("vendor.store phone"),
             dataIndex: "",
@@ -301,13 +303,13 @@ function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Pro
             dataIndex: "action",
             render: (_, record) => {
               return (
-                <TurtleButton //
+                <TurtleButtonSub //
                   size="small"
-                  ghost
+                  color="green"
                   onClick={() => openModal(record)}
                 >
                   {t("button.request update")}
-                </TurtleButton>
+                </TurtleButtonSub>
               );
             },
           },

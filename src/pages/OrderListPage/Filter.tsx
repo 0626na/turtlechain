@@ -1,8 +1,8 @@
 import { Col, Row, Space } from "antd";
-import TurtleButton from "components/common/TurtleButton";
 import { useTranslation } from "react-i18next";
 import TurtleDatePicker from "components/common/TurtleDatePicker";
 import StoreSelect from "components/StoreSelect";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 function Filter() {
   const { t } = useTranslation();
@@ -19,9 +19,7 @@ function Filter() {
       </Col>
       <Col>
         <Space>
-          <TurtleButton type="primary" color="grey">
-            {t("button.download order list")}
-          </TurtleButton>
+          <TurtleButtonSub icon="download">{t("button.download order list")}</TurtleButtonSub>
         </Space>
       </Col>
     </Row>
