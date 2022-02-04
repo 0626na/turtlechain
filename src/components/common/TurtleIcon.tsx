@@ -34,7 +34,7 @@ const WhiteImg = styled.img`
 const GreenImg = styled.img`
   width: 25px;
   height: 25px;
-  filter: invert(60%) sepia(13%) saturate(7428%) hue-rotate(128deg) brightness(96%) contrast(85%);
+  filter: invert(40%) sepia(20%) saturate(7428%) hue-rotate(128deg) brightness(96%) contrast(85%);
 `;
 
 export default TurtleIcon;

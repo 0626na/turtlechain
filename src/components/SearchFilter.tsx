@@ -1,29 +1,36 @@
 import { Space } from "antd";
 import Search from "antd/lib/input/Search";
-import React from "react";
+import { RequestSearchVendor } from "apis/vendorAPI";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import TurtleSelect from "./common/TurtleSelect";
 
 interface Props {
-  searchType: string;
-  onSelectSearchType: (value: string) => void;
-  searchString: string;
-  onChangeSearchString: (e: React.FormEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  onSearch: ({ type, search_query }: RequestSearchVendor) => void;
 }
 
-function SearchFilter({
-  searchType,
-  onSelectSearchType,
-  searchString,
-  onChangeSearchString,
-  onSearch,
-}: Props) {
+function SearchFilter({ onSearch }: Props) {
   const { t } = useTranslation();
+
+  const [searchState, setSearchState] = useState<{
+    type: string;
+    search_query: string;
+  }>({
+    type: "all",
+    search_query: "",
+  });
+
+  const onSelectSearchType = (value: string) => {
+    setSearchState({ ...searchState, type: value });
+  };
+
+  const onChangeSearchString = (e: React.FormEvent<HTMLInputElement>) => {
+    setSearchState({ ...searchState, search_query: e.currentTarget.value });
+  };
 
   // 엔터키 눌렀을 때 검색
   const onEnterPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") onSearch();
+    if (e.key === "Enter") onSearch(searchState);
   };
 
   const options: Array<{ name: string; value: string }> = [
@@ -52,15 +59,14 @@ function SearchFilter({
         width="short"
         placeholder={t("placeholder.all")}
         options={options}
-        value={searchType}
+        value={searchState.type}
         onSelect={onSelectSearchType}
       />
       <Search //
         placeholder={t("placeholder.search")}
         style={{ width: "20rem" }}
-        value={searchString}
+        value={searchState.search_query}
         onChange={onChangeSearchString}
-        onSearch={onSearch}
         onKeyPress={onEnterPress}
         size="large"
       />

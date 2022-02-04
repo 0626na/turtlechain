@@ -86,7 +86,9 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
           required={false}
         />
         <PhoneSelect />
-        <AddressSelect form={form} />
+        {/*
+        <AddressSelect />
+        */}
         <TurtleText>
           {t("vendor.account info")}
           <TurtleQuestionTooltip content={t("tooltip.main account info")} />
@@ -97,8 +99,6 @@ function VendorUpdateModal({ visible, closeModal, selectedRow }: Props) {
         <Row justify="center">
           <Form.Item>
             <TurtleButton
-              type="primary"
-              htmlType="submit"
               onClick={() => {
                 console.log(form.getFieldsValue());
               }}

@@ -3,7 +3,7 @@ import PageHeader from "components/PageHeader";
 import { useCallback, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Filter from "./Filter";
+import Toolbar from "./Toolbar";
 import VendorList from "./VendorList";
 
 function VendorListPage() {
@@ -24,11 +24,11 @@ function VendorListPage() {
     page: 1,
     type: "all",
     search_query: "",
-    rt_store_id: "",
+    rt_store_id: -1,
   });
 
   // 쇼핑몰 선택
-  const selectStore = (storeId: number | "") => {
+  const selectStore = (storeId: number) => {
     setSearchState({
       page: 1,
       type: "all",
@@ -56,17 +56,6 @@ function VendorListPage() {
     });
   };
 
-  // 검색 조건 선택
-  const selectSearchType = useCallback(
-    (type: string) => {
-      setSearchState({
-        ...searchState,
-        type: type,
-      });
-    },
-    [searchState],
-  );
-
   // 페이지 선택
   const selectPage = useCallback(
     (page: number) => {
@@ -79,34 +68,21 @@ function VendorListPage() {
     [searchState, searchQuery],
   );
 
-  // 거래처 검색 string 입력
-  const onChangeSearchString = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      setSearchState({
-        ...searchState,
-        search_query: e.currentTarget.value,
-      });
-    },
-    [searchState],
-  );
-
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="Vendor"
+        pageName="vendor"
         title={t("vendor.list")}
-        breadcrumbList={[t("vendor.management"), t("vendor.list")]}
+        breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.list")]}
       />
-      <Filter //
+      <Toolbar //
         selectStore={selectStore}
       />
       <VendorList //
         searchQuery={searchQuery}
         searchState={searchState}
         searchVendors={searchVendors}
-        selectSearchType={selectSearchType}
-        onChangeSearchString={onChangeSearchString}
         selectPage={selectPage}
       />
     </>

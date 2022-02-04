@@ -19,7 +19,7 @@ function Filter({ selectStore }: Props) {
       </Col>
       <Col>
         <Space>
-          <TurtleButton type="primary" color="grey">
+          <TurtleButton type="primary">
             {t("button.download vendor")}
           </TurtleButton>
         </Space>

@@ -18,12 +18,13 @@ import SearchFilter from "components/SearchFilter";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
-import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
-import { Vendor, RequestGetVendors } from "apis/vendorAPI";
+import { BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
+import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
 import VendorUpdateModal from "./VendorUpdateModal";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 interface Props {
   searchQuery: RequestGetVendors;
@@ -33,19 +34,10 @@ interface Props {
     search_query: string;
   };
   searchVendors: () => void;
-  selectSearchType: (type: string) => void;
-  onChangeSearchString: (e: React.FormEvent<HTMLInputElement>) => void;
   selectPage: (page: number) => void;
 }
 
-function VendorList({
-  searchQuery,
-  searchState,
-  searchVendors,
-  selectSearchType,
-  onChangeSearchString,
-  selectPage,
-}: Props) {
+function VendorList({ searchQuery, searchState, searchVendors, selectPage }: Props) {
   const { t } = useTranslation();
 
   const [editable, setEditable] = useState(false);
@@ -54,20 +46,25 @@ function VendorList({
   const [selectedRow, selectRow] = useState<Vendor>({
     id: -1,
     vendor_id: "",
-    ws_store_id: -1,
+    vendor_name: "",
+    vendor_phone: "",
+    vendor_account: "",
     is_taxed: false,
     memo: "",
     ws_store_info: {
-      store_account: [],
-      store_phone: [],
+      id: -1,
       name: "",
       phone: "",
+      store_account: [],
+      store_phone: [],
+      company: [],
       building: "",
       floor: "",
       col: "",
       loc: "",
       ext: "",
     },
+    ws_store_id: -1,
   });
 
   // 거래처 목록 불러오기 요청
@@ -110,17 +107,15 @@ function VendorList({
     <>
       <StyledDiv>
         <TurtleText>{t("vendor.lists")}</TurtleText>
-        <SearchFilter
-          searchType={searchState.type}
-          onSelectSearchType={selectSearchType}
-          searchString={searchState.search_query}
-          onChangeSearchString={onChangeSearchString}
-          onSearch={searchVendors}
-        />
+        <SearchFilter onSearch={searchVendors} />
       </StyledDiv>
       <Table
         size="small"
         scroll={{ x: "auto" }}
+        loading={getVendorsQuery.isLoading}
+        dataSource={getVendorsQuery.data?.data.vendor_list}
+        rowKey={(record) => record.ws_store_id}
+        pagination={false}
         expandable={{
           expandedRowRender: (record) => {
             return editable ? (
@@ -173,13 +168,9 @@ function VendorList({
             );
           },
         }}
-        loading={getVendorsQuery.isLoading}
-        dataSource={getVendorsQuery.data?.data.data}
-        rowKey={(record) => record.ws_store_id}
-        pagination={false}
         columns={[
           {
-            width: "9%",
+            width: "5%",
             ellipsis: true,
             title: t("vendor.code"),
             dataIndex: "vendor_id",
@@ -190,6 +181,7 @@ function VendorList({
             ),
           },
           {
+            width: "5%",
             ellipsis: true,
             title: t("vendor.name"),
             dataIndex: ["ws_store_info", "name"],
@@ -200,12 +192,12 @@ function VendorList({
             ),
           },
           {
-            width: "13%",
+            width: "10%",
             ellipsis: true,
             title: t("vendor.address"),
             dataIndex: "",
             render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
-              const address = `${building} ${floor} ${col} ${loc} ${ext}`;
+              const address = `${building} ${floor}층 ${col}${col ? "열" : ""} ${loc}호 ${ext}`;
               return (
                 <Tooltip placement="topLeft" title={address}>
                   {address}
@@ -214,7 +206,7 @@ function VendorList({
             },
           },
           {
-            width: "12%",
+            width: "13%",
             ellipsis: true,
             title: t("vendor.store phone"),
             dataIndex: "",
@@ -243,13 +235,13 @@ function VendorList({
             title: t("vendor.account"),
             dataIndex: "",
             render: (_, { ws_store_info: { store_account } }) => {
-              const accounts: Array<any> = [];
-              store_account.forEach(({ bank, account_holder, account_number }) => {
-                accounts.push({ bank, account_holder, account_number });
+              const accounts: Array<VendorAccount> = [];
+              store_account.forEach(({ id, bank, account_holder, account_number }) => {
+                accounts.push({ id, bank, account_holder, account_number });
               });
 
-              const makeContent = ({ bank, account_holder, account_number }: any) => {
-                return `${bank} ${account_number} ${account_holder}`;
+              const makeContent = (account: VendorAccount) => {
+                return `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
               };
 
               const contents = accounts.map((account) => {
@@ -281,7 +273,7 @@ function VendorList({
                   onConfirm={() => {
                     updateVendorQuery.mutate({
                       id: record.id,
-                      is_taxed: record.is_taxed,
+                      is_taxed: !record.is_taxed,
                       memo: record.memo,
                     });
                     getVendorsQuery.refetch();
@@ -311,13 +303,13 @@ function VendorList({
             dataIndex: "action",
             render: (_, record) => {
               return (
-                <TurtleButton //
+                <TurtleButtonSub //
                   size="small"
-                  ghost
+                  color="green"
                   onClick={() => openModal(record)}
                 >
                   {t("button.request update")}
-                </TurtleButton>
+                </TurtleButtonSub>
               );
             },
           },

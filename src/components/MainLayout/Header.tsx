@@ -6,6 +6,7 @@ import { MAIN_HEADER_HEIGHT } from "constant";
 // antd
 import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 interface Props {
   handleMenuVisible: () => void;
@@ -43,9 +44,13 @@ const Header = function ({ handleMenuVisible }: Props) {
           />
         </Col>
         <Col>
-          <Avatar src="https://joeschmoe.io/api/v1/random" />
+          <Avatar
+            icon={<UserOutlined style={{ color: "#141720" }} />}
+            style={{ background: "#AAE7DC" }}
+            size="small"
+          />
           <Dropdown overlay={menu} trigger={["click"]}>
-            <Button type="text" style={{ color: "#FFFFFF" }}>
+            <Button type="text" style={{ color: "#FFFFFF", paddingLeft: "12px" }}>
               {t("turtlechain")}
               <DownOutlined />
             </Button>

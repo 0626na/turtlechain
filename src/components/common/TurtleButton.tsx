@@ -1,67 +1,27 @@
 import { Button } from "antd";
 import { TFunctionResult } from "i18next";
-import styled from "styled-components";
 
 interface Props {
   children: TFunctionResult;
-  type?: "primary" | "default" | "ghost";
-  color?: "grey" | "mint";
-  htmlType?: "submit";
-  size?: "small" | "large";
-  ghost?: boolean;
+  type?: "primary" | "secondary" | "default";
   onClick?: () => void;
 }
 
-function TurtleButton({
-  children,
-  type = "primary",
-  color,
-  size = "large",
-  htmlType,
-  ghost,
-  onClick,
-}: Props) {
+function TurtleButton({ children, type = "primary", onClick }: Props) {
   return (
-    <StyledButton
-      type={type}
-      color={color}
-      htmlType={htmlType}
-      size={size}
-      ghost={ghost}
+    <Button
+      type={type === "default" ? "default" : "primary"}
+      size="large"
       onClick={onClick}
+      style={{
+        width: "160px",
+        backgroundColor: type === "secondary" ? "#13BC9E" : "",
+        borderColor: type === "secondary" ? "#13BC9E" : "",
+      }}
     >
       {children}
-    </StyledButton>
+    </Button>
   );
 }
-
-const StyledButton = styled(Button)`
-  border-radius: 4px;
-  background-color: ${({ theme, color }) => {
-    return color && theme[color + "Button"];
-  }};
-  border: ${({ theme, color }) => {
-    return color && theme[color + "Button"];
-  }};
-  &:hover {
-    background-color: ${({ theme, color }) => {
-      if (color === "grey") return theme.skyBlueButton;
-      return color && theme[color + "Button"];
-    }};
-    opacity: ${({ color }) => {
-      if (color !== "grey") return "0.8";
-    }};
-  }
-  &:focus {
-    background-color: ${({ theme, color }) => {
-      if (color === "grey") return theme.skyBlueButton;
-      return color && theme[color + "Button"];
-    }};
-    opacity: ${({ color }) => {
-      if (color !== "grey") return "0.8";
-    }};
-  }
-  font-size: 14px;
-`;
 
 export default TurtleButton;

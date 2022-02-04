@@ -9,6 +9,10 @@ module.exports = {
           lessOptions: {
             modifyVars: {
               "@primary-color": "#13BC9E",
+
+              // Input
+              "@input-placeholder-color": "#CBCCD1",
+
               // Layout
               "@layout-header-background": "#141720",
               "@layout-header-height": "60px",
@@ -16,15 +20,32 @@ module.exports = {
               "@layout-header-color": "#FFFFFF",
               "@layout-body-background": "#F3F6F9",
               "@layout-sider-background": "#242934",
+
               // Menu
-              "@menu-bg": "#242934",
-              "@menu-popup-bg": "#242934",
+              "@menu-bg": "#2B3140",
+              "@menu-popup-bg": "#2B3140",
               "@menu-item-color": "#FFFFFF",
-              "@menu-inline-submenu-bg": "#242934",
+              "@menu-inline-submenu-bg": "#1A1E28",
               "@menu-highlight-color": "#FFFFFF",
               "@menu-item-active-bg": "@primary-color",
               "@border-radius-base": "4px",
-              "@btn-default-color": "@primary-color",
+
+              // Buttons
+              "@btn-font-weight": "400",
+              "@btn-border-radius-base": "8px",
+              "@btn-border-radius-sm": "4px",
+              "@btn-shadow": "0",
+              "@btn-primary-shadow": "0",
+              "@btn-text-shadow": "0",
+              "@btn-primary-bg": "#2174F1",
+
+              "@btn-default-color": "#2174F1",
+              "@btn-default-border": "#2174F1",
+
+              "@btn-font-size-lg": "14px",
+              "@btn-font-size-sm": "12px",
+
+              // Radio
               "@radio-dot-color": "#00BB88",
             },
             javascriptEnabled: true,

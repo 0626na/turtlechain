@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { retailerStoreAPI } from "apis";
 import { AxiosError } from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Props {
-  selectStore: (storeId: number | "") => void;
+  selectStore: (storeId: number) => void;
   warningMessage?: string;
 }
 
@@ -31,6 +31,10 @@ function CustomStoreSelect({ selectStore, warningMessage }: Props) {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+      onSuccess: (data) => {
+        //setStoreId(data.data.data[0].id);
+        //selectStore(data.data.data[0].id);
+      },
     },
   );
 
@@ -43,7 +47,7 @@ function CustomStoreSelect({ selectStore, warningMessage }: Props) {
           return prevStoreId;
         }
       }
-      selectStore(value);
+      selectStore(parseInt(value.toString()));
       return value;
     });
   }, []);

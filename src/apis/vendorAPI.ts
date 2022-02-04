@@ -1,4 +1,4 @@
-import { mockAxios } from "./index";
+import { v2Axios } from "apis";
 
 // 거래처 계좌 타입
 export interface VendorAccount {
@@ -6,37 +6,40 @@ export interface VendorAccount {
   account_number: string;
   account_holder: string;
   bank: string;
-  is_proxy: boolean;
-  is_deleted: boolean;
 }
 
 // 거래처 휴대번호 타입
 export interface VendorPhone {
   id: number;
-  is_deleted: boolean;
   phone: string;
   send_alimtalk: boolean;
-  tag: string;
+}
+
+export interface WholeSaleStore {
+  id: number;
+  name: string;
+  phone: string;
+  store_account: Array<VendorAccount>;
+  store_phone: Array<VendorPhone>;
+  company: Array<{ name: string; biz_num: string }>;
+  building: string;
+  floor: string;
+  col: string;
+  loc: string;
+  ext: string;
 }
 
 // 거래처 타입
 export interface Vendor {
   id: number;
   vendor_id: string;
-  ws_store_id: number;
+  vendor_name: string;
+  vendor_phone: string;
+  vendor_account: string;
   is_taxed: boolean;
   memo: string;
-  ws_store_info: {
-    store_account: Array<VendorAccount>;
-    store_phone: Array<VendorPhone>;
-    name: string;
-    phone: string;
-    building: string;
-    floor: string;
-    col: string;
-    loc: string;
-    ext: string;
-  };
+  ws_store_info: WholeSaleStore;
+  ws_store_id: number;
 }
 
 // Request: 거래처 리스트
@@ -44,21 +47,21 @@ export interface RequestGetVendors {
   page: number;
   type: string;
   search_query: string;
-  rt_store_id: number | "";
+  rt_store_id: number;
 }
 
 // Response: 거래처 리스트
 export interface ResponseGetVendors {
   msg: string;
-  data: { data: Array<Vendor>; total_count: number };
+  data: { vendor_list: Array<Vendor>; total_count: number };
 }
 
 const getVendors = async function (query: RequestGetVendors) {
-  let url = "/v2/vendor?";
+  let url = "provisioning/vendor?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await mockAxios.get<ResponseGetVendors>(url);
+  const response = await v2Axios.get<ResponseGetVendors>(url);
   return response.data;
 };
 
@@ -75,14 +78,73 @@ export interface ResponseUpdateVendor {
 }
 
 const updateVendor = async function (data: RequestUpdateVendor) {
-  const url = `v2/vendor/${data.id}`;
-  const response = await mockAxios.put<ResponseUpdateVendor>(url, data);
+  const url = `provisioning/vendor/${data.id}`;
+  const response = await v2Axios.put<ResponseUpdateVendor>(url, data);
+  return response.data;
+};
+
+// Request: 거래처 등록
+export interface RequestCreateVendor {
+  rt_store_id: number;
+  vendor_id: string;
+  vendor_account_bank: string;
+  vendor_account_number: string;
+  vendor_account_holder: string;
+  vendor_phone: string;
+  ws_store_id: number;
+  vendor_building: string;
+  vendor_name: string;
+  memo: string;
+  is_taxed: boolean;
+}
+
+// Response: 거래처 등록
+export interface ResponseCreateVendor {
+  msg: string;
+  data: {
+    cannot_find_store: number;
+    already_exist_vendor: number;
+    already_exist_id: number;
+  };
+}
+
+// 거래처 등록
+const createVendor = async function (data: RequestCreateVendor) {
+  const url = `provisioning/vendor`;
+  const response = await v2Axios.post<ResponseCreateVendor>(url, [data]);
+  return response.data;
+};
+
+// Request: 거래처 마스터 도매 조회
+export interface RequestSearchVendor {
+  type: string;
+  search_query: string;
+}
+
+// Response: 거래처 마스터 도매 조회
+export interface ResponseSearchVendor {
+  msg: string;
+  data: {
+    total_count: number;
+    vendor_list: Array<WholeSaleStore>;
+  };
+}
+
+// 거래처 마스터 도매 조회
+const searchVendor = async function (query: RequestSearchVendor) {
+  let url = `provisioning/search_vendor?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseSearchVendor>(url);
   return response.data;
 };
 
 const vendorAPI = {
   getVendors,
   updateVendor,
+  createVendor,
+  searchVendor,
 };
 
 export default vendorAPI;

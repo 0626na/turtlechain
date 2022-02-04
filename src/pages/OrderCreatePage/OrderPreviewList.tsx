@@ -3,6 +3,8 @@ import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
 import { Button, Row, Table } from "antd";
 import { CreateOrderItem } from "apis/orderAPI";
 import TurtleText from "components/common/TurtleText";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
+import TurtleButton from "components/common/TurtleButton";
 
 interface Props {
   list: Array<CreateOrderItem>;
@@ -68,32 +70,27 @@ const OrderPreviewList = function ({ list, setList }: Props) {
             title: "",
             dataIndex: "action",
             render: (_, record) => (
-              <Button //
-                danger
+              <TurtleButtonSub //
                 size="small"
-                shape="round"
-                type="primary"
-                icon={<DeleteFilled />}
+                color="red"
                 onClick={() => {
                   const newList = list.filter((item) => item.product_code !== record.product_code);
                   setList(newList);
                 }}
               >
                 {t("button.delete")}
-              </Button>
+              </TurtleButtonSub>
             ),
           },
         ]}
         footer={() => (
           <Row justify="end">
-            <Button //
-              icon={<UploadOutlined />}
-              disabled={!list.length /* || isLoading */}
-              //loading={isLoading}
-              type="primary"
+            <TurtleButton
+            //disabled={!list.length /* || isLoading */}
+            //loading={isLoading}
             >
               {t("order.create")}
-            </Button>
+            </TurtleButton>
           </Row>
         )}
       />
