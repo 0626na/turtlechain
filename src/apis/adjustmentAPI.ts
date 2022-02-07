@@ -1,5 +1,8 @@
+import { adjustmentItem } from "./clearingAPI";
+import { v2Axios } from "./index";
+
 // 입고아이템 타입
-export interface AdjustmentSheetItem {
+export interface AdjustmentItem {
   id: number;
   created_by: number;
   created_time: Date;
@@ -26,3 +29,47 @@ export interface AdjustmentSheetItem {
   account_holder: string;
   type: "reserve" | "takeback" | "exchange" | "refund";
 }
+
+// Request: 정산아이템 조회
+export interface RequestGetAdjustment {
+  rt_store_id: number | "";
+  last_id: number;
+  offset: number;
+  switch_type: "next" | "prev";
+  start_date?: string;
+  end_date?: string;
+  is_cleared?: number;
+}
+
+// Response: 정산장 조회
+export interface ResponseGetAdjustment {
+  msg: string;
+  data: {
+    data: Array<adjustmentItem>;
+    statistics: {
+      cleared: {
+        count: number;
+        price: number;
+      },
+      not_cleared: {
+        count: number;
+        price: number;
+      }
+    };
+  };
+}
+
+const getAdjustment = async function (query: RequestGetAdjustment) {
+  let url = "adjustment/item?";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetAdjustment>(url);
+  return response.data;
+};
+
+const adjustmentAPI = {
+  getAdjustment,
+};
+
+export default adjustmentAPI;

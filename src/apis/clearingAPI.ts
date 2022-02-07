@@ -110,7 +110,7 @@ export interface ResponseGetClearingSheet {
 }
 
 const getClearingSheet = async function (query: RequestGetClearingSheet) {
-  let url = "/v2/clearing/sheet?";
+  let url = "clearing/sheet?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -132,7 +132,7 @@ export interface ResponseCreateClearingSheet {
 }
 
 const createClearingSheet = async function (data: RequestCreateClearingSheet) {
-  let url = "/v2/clearing/sheet";
+  let url = "clearing/sheet";
   const response = await v2Axios.post<ResponseCreateClearingItem>(url, data);
   return response.data;
 };
@@ -147,7 +147,7 @@ export interface ResponseUpdateClearingSheet {
 }
 
 const updateClearingSheet = async function (data: RequestUpdateClearingSheet) {
-  let url = `/v2/clearing/sheet/${data.id}`;
+  let url = `clearing/sheet/${data.id}`;
   const response = await v2Axios.post<ResponseUpdateClearingSheet>(url, data);
   return response.data;
 };
@@ -166,7 +166,7 @@ export interface ResponseGetClearingItem {
 }
 
 const getClearingItem = async function (query: RequestGetClearingItem) {
-  let url = "/v2/clearing/item?";
+  let url = "clearing/item?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -212,7 +212,7 @@ export interface ResponseCreateClearingItem {
 }
 
 const createClearingItem = async function (data: RequestCreateClearingItem) {
-  let url = "/v2/clearing/item";
+  let url = "clearing/item";
   const response = await v2Axios.post<ResponseCreateClearingItem>(url, data);
   return response.data;
 };

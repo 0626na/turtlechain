@@ -138,7 +138,13 @@
     "": "매입조정",
     "management": "매입조정 관리",
     "create": "매입조정 등록",
-    "list": "매입조정 내역"
+    "list": "매입조정 내역",
+    "date": "매입조정 등록날짜",
+    "type": "매입조정 종류",
+    "process_type": "매입조정 처리",
+    "process_count": "처리 수량",
+    "price": "공급가", 
+    "is_vat_included": "세액 포함 여부"
   },
   "clearing": {
     "": "정산",

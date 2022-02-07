@@ -9,6 +9,8 @@ import vendorAPI from "./vendorAPI";
 import basicDataAPI from "./basicDataAPI";
 import bucketListAPI from "./bucketListAPI";
 import clearingAPI from "./clearingAPI";
+import adjustmentAPI from "./adjustmentAPI";
+
 
 export const v1Axios = axios.create({
   baseURL:
@@ -21,8 +23,8 @@ export const v1Axios = axios.create({
 export const v2Axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://alpha.turtleship.io/v2"
-      : "https://alpha.turtleship.io/v2",
+      ? "http://localhost:8000/v2"
+      : "http://localhost:8000/v2",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -42,4 +44,5 @@ export {
   basicDataAPI,
   bucketListAPI,
   clearingAPI,
+  adjustmentAPI,
 };
