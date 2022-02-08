@@ -31,6 +31,7 @@ function BankSelect({ banks, setBanks }: Props) {
           required={true}
           wrapperCol={{ span: 24, offset: 1 }}
           key={index}
+          style={{ marginBottom: "0" }}
         >
           <Input.Group compact>
             <Form.Item
@@ -45,7 +46,6 @@ function BankSelect({ banks, setBanks }: Props) {
             >
               <Select
                 value={banks[index].bank}
-                size="large"
                 placeholder="은행명"
                 style={{ width: "15%" }}
                 onChange={(value) => {
@@ -75,7 +75,6 @@ function BankSelect({ banks, setBanks }: Props) {
             >
               <Input
                 value={banks[index].account_number}
-                size="large"
                 placeholder="계좌번호"
                 style={{ width: "20%" }}
                 onChange={(value) => {
@@ -99,7 +98,6 @@ function BankSelect({ banks, setBanks }: Props) {
             >
               <Input
                 value={banks[index].account_holder}
-                size="large"
                 placeholder="예금주명"
                 style={{ width: "20%" }}
                 onChange={(value) => {

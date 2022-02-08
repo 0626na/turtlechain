@@ -3,6 +3,7 @@ import Search from "antd/lib/input/Search";
 import { RequestSearchVendor } from "apis/vendorAPI";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
 
 interface Props {
@@ -47,7 +48,7 @@ function SearchFilter({ onSearch }: Props) {
       value: "account",
     },
     {
-      name: t("vendor.phone"),
+      name: t("vendor.store phone"),
       value: "phone",
     },
   ];
@@ -62,16 +63,28 @@ function SearchFilter({ onSearch }: Props) {
         value={searchState.type}
         onSelect={onSelectSearchType}
       />
-      <Search //
+      <StyledSearch //
         placeholder={t("placeholder.search")}
         style={{ width: "20rem" }}
         value={searchState.search_query}
         onChange={onChangeSearchString}
         onKeyPress={onEnterPress}
-        size="large"
+        onSearch={() => {
+          onSearch(searchState);
+        }}
       />
     </Space>
   );
 }
+
+const StyledSearch = styled(Search)`
+  .ant-input-search-button {
+    border: 1px solid #d9d9d9;
+    border-left: none;
+  }
+  svg {
+    color: #5b5d63;
+  }
+`;
 
 export default SearchFilter;

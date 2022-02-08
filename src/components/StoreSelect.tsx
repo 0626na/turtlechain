@@ -52,7 +52,6 @@ function CustomStoreSelect({ selectStore }: Props) {
         style={{ width: "20rem" }}
         onChange={handleChange}
         value={storeId}
-        size="large"
       >
         {getStoresQuery.data?.data.data.map(({ name, id }) => {
           return (

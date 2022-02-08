@@ -1,16 +1,4 @@
-import {
-  Badge,
-  Button,
-  Form,
-  message,
-  Modal,
-  Popover,
-  Radio,
-  Row,
-  Space,
-  Table,
-  Tooltip,
-} from "antd";
+import { message, Modal, Popover, Radio, Row, Space, Table, Tooltip } from "antd";
 import { vendorAPI } from "apis";
 import { RequestSearchVendor, VendorAccount, WholeSaleStore } from "apis/vendorAPI";
 import { AxiosError } from "axios";

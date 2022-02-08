@@ -8,6 +8,7 @@ import orderAPI from "./orderAPI";
 import vendorAPI from "./vendorAPI";
 import basicDataAPI from "./basicDataAPI";
 import bucketListAPI from "./bucketListAPI";
+import excelAPI from "./excelAPI";
 
 export const v1Axios = axios.create({
   baseURL:
@@ -40,4 +41,5 @@ export {
   vendorAPI,
   basicDataAPI,
   bucketListAPI,
+  excelAPI,
 };

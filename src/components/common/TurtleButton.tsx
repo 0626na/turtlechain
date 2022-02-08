@@ -4,14 +4,18 @@ import { TFunctionResult } from "i18next";
 interface Props {
   children: TFunctionResult;
   type?: "primary" | "secondary" | "default";
+  disabled?: boolean;
+  loading?: boolean;
   onClick?: () => void;
 }
 
-function TurtleButton({ children, type = "primary", onClick }: Props) {
+function TurtleButton({ children, type = "primary", disabled, loading, onClick }: Props) {
   return (
     <Button
       type={type === "default" ? "default" : "primary"}
       size="large"
+      disabled={disabled}
+      loading={loading}
       onClick={onClick}
       style={{
         width: "160px",

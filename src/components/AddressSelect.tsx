@@ -31,7 +31,6 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
-            size="large"
             style={{ width: "32.5%" }}
             value={selectedAddress.building}
             onChange={(value: string) => {
@@ -52,7 +51,6 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
           rules={[{ required: true }]}
         >
           <Select // 층 select
-            size="large"
             placeholder={t("placeholder.floor")}
             style={{ width: "32%" }}
             value={selectedAddress.floor}
@@ -75,7 +73,6 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
           rules={[{ required: true }]}
         >
           <Select // 열,호 select
-            size="large"
             placeholder={t("placeholder.col loc")}
             value={`${selectedAddress.col} ${selectedAddress.loc}`}
             style={{ width: "32%" }}

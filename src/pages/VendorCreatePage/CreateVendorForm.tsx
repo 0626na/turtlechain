@@ -159,7 +159,7 @@ function CreateVendorForm({ storeId }: Props) {
           name="vendor_name"
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
-          onClick={openSearchModal}
+          onSearch={openSearchModal}
         />
 
         <TurtleInput // 거래처 매장번호 Input
@@ -180,18 +180,12 @@ function CreateVendorForm({ storeId }: Props) {
         >
           <Input.Group compact>
             <Form.Item noStyle rules={[{ required: true }]}>
-              <Input
-                value={formState?.building}
-                disabled={true}
-                size="large"
-                style={{ width: "32.5%" }}
-              />
+              <Input value={formState?.building} disabled={true} style={{ width: "32.5%" }} />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={formState?.floor && `${formState?.floor}층`}
                 disabled={true}
-                size="large"
                 style={{ width: "32%" }}
               />
             </Form.Item>
@@ -201,7 +195,6 @@ function CreateVendorForm({ storeId }: Props) {
                   formState?.loc ? formState.loc + "호" : ""
                 }`}
                 disabled={true}
-                size="large"
                 style={{ width: "32%" }}
               />
             </Form.Item>
@@ -236,12 +229,12 @@ function CreateVendorForm({ storeId }: Props) {
         <Form.Item // 거래처 코드 Input
           label={t("vendor.code")}
           required={true}
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
           style={{ marginBottom: 0 }}
         >
           <Space>
             <Form.Item name="vendor_id" rules={[{ required: true }]}>
-              <Input readOnly={true} size="large" />
+              <Input readOnly={true} />
             </Form.Item>
             <Form.Item>
               <TurtleButtonSub color="blue" onClick={makeVendorId}>
@@ -299,7 +292,12 @@ function CreateVendorForm({ storeId }: Props) {
               신규 등록 요청하기 {">"}
             </span>
           </TurtleText>
-          <TurtleButton type="primary" onClick={onClickCreate}>
+          <TurtleButton
+            type="primary"
+            disabled={!form.getFieldValue("ws_store_id")}
+            loading={createVendorQuery.isLoading}
+            onClick={onClickCreate}
+          >
             {t("vendor.create")}
           </TurtleButton>
         </Row>

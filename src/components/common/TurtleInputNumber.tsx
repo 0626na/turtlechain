@@ -8,7 +8,7 @@ interface Props {
 function TurtleInputNumber({ name, label }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
-      <InputNumber style={{ width: "96%" }} min={1} size="large" />
+      <InputNumber style={{ width: "96%" }} min={1} />
     </Form.Item>
   );
 }

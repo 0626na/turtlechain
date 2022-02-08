@@ -28,7 +28,6 @@ function TurtleSelect({
         style={{ width: width === "long" ? "12rem" : "8rem" }}
         value={value}
         onSelect={onSelect}
-        size="large"
       >
         {options?.map(({ name, value }) => {
           return (

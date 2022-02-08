@@ -7,17 +7,17 @@ interface Props {
   name: string;
   label?: string;
   placeholder?: string;
-  onClick?: () => void;
+  onSearch?: () => void;
 }
 
-function TurtleSearchInput({ name, label, placeholder, onClick }: Props) {
+function TurtleSearchInput({ name, label, placeholder, onSearch }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]}>
       <StyledSearch
         placeholder={placeholder}
-        onClick={onClick}
+        onClick={onSearch}
+        onSearch={onSearch}
         style={{ width: "96%" }}
-        size="large"
         readOnly={true}
       />
     </Form.Item>
@@ -26,8 +26,8 @@ function TurtleSearchInput({ name, label, placeholder, onClick }: Props) {
 
 const StyledSearch = styled(Search)`
   .ant-input-search-button {
+    border: 1px solid #d9d9d9;
     border-left: none;
-    height: 40.14px;
   }
   svg {
     color: #5b5d63;
