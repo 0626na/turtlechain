@@ -6,10 +6,6 @@ import Toolbar from "./Toolbar";
 import ClearingCreateAccordion from "./ClearingCreateAccordion";
 import { WarehousingSheetItem } from "apis/warehousingAPI";
 
-export interface WarehousingSheetItem4Clearing extends WarehousingSheetItem {
-  type: "warehousing";
-}
-
 /*
   Parent : None
   Children : Toolbar, ClearingCreateAccordion

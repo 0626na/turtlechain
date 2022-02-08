@@ -68,45 +68,33 @@ function WarehousingWaitingTable({
   };
 
   const deleteWarehousingData = (record: WarehousingSheet) => {
-    const answer = window.confirm(t("message.confirm exclude"));
-    if (answer) {
-      // 선택 된 입고장 체크박스 해제
-      const idx = selectedWarehousingSheetRowKeys?.findIndex((i) => i === record.id);
-      const newSelectedRowKeys = selectedWarehousingSheetRowKeys && [
-        ...selectedWarehousingSheetRowKeys,
-      ];
-      newSelectedRowKeys?.splice(idx ? idx : 0, 1);
-      setSelectedWarehousingSheetRowKeys(newSelectedRowKeys);
+    // 선택 된 입고장 체크박스 해제
+    const idx = selectedWarehousingSheetRowKeys?.findIndex((i) => i === record.id);
+    const newSelectedRowKeys = selectedWarehousingSheetRowKeys && [
+      ...selectedWarehousingSheetRowKeys,
+    ];
+    newSelectedRowKeys?.splice(idx ? idx : 0, 1);
+    setSelectedWarehousingSheetRowKeys(newSelectedRowKeys);
 
-      // 해당 입고장 관련된 입고 아이템 제거
-      const newClearingCart = clearingCart.filter(
-        (cartItem: any) => cartItem.type !== "warehousing" || cartItem.sheet_id !== record.id,
-      );
-      setClearingCart(newClearingCart);
-    }
+    // 해당 입고장 관련된 입고 아이템 제거
+    const newClearingCart = clearingCart.filter(
+      (cartItem: any) => cartItem.type !== "warehousing" || cartItem.sheet_id !== record.id,
+    );
+    setClearingCart(newClearingCart);
   };
 
-  const onSelectRow = (record: WarehousingSheet, selected: boolean) => {
-    // 선택된 리스트 키값을 변경
-    if (selected) {
-      openWarehousingDetailModal(record);
-    } else {
-      deleteWarehousingData(record);
-    }
+  const onSelectRow = async (record: WarehousingSheet) => {
+    openWarehousingDetailModal(record);
   };
 
   return (
     <>
       <Table
         sticky={true}
-        onRow={(record, rowIndex) => {
+        onRow={(record) => {
           return {
-            onClick: (e) => {
-              if (selectedWarehousingSheetRowKeys.includes(record.id)) {
-                deleteWarehousingData(record);
-              } else {
-                openWarehousingDetailModal(record);
-              }
+            onClick: () => {
+              openWarehousingDetailModal(record);
             },
           };
         }}
@@ -158,6 +146,7 @@ function WarehousingWaitingTable({
         setSelectedWarehousingSheetRowKeys={setSelectedWarehousingSheetRowKeys}
         clearingCart={clearingCart}
         setClearingCart={setClearingCart}
+        deleteWarehousingData={deleteWarehousingData}
       />
     </>
   );

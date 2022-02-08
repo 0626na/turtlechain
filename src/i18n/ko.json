@@ -59,7 +59,9 @@
     "ext": "기타 주소를 정확히 입력하세요",
     "biz num": "사업자 번호를 입력하세요",
     "biz name": "상호명을 입력하세요",
-    "biz owner": "대표자명을 입력하세요"
+    "biz owner": "대표자명을 입력하세요",
+    "process_count":"처리수량",
+    "process_type": "처리방식"
   },
   "button": {
     "add": "추가하기",
@@ -80,6 +82,7 @@
     "add phone": "휴대번호 추가하기",
     "add account": "게좌정보 추가하기",
     "price confirm": "금액 확정하기",
+    "remove": "제외하기",
     "cancel": "취소",
     "next step": "다음 단계로 이동",
     "select": "선택하기"
@@ -140,11 +143,21 @@
     "create": "매입조정 등록",
     "list": "매입조정 내역",
     "date": "매입조정 등록날짜",
-    "type": "매입조정 종류",
-    "process_type": "매입조정 처리",
     "process_count": "처리 수량",
-    "price": "공급가", 
-    "is_vat_included": "세액 포함 여부"
+    "price": "공급가",
+    "is_vat_included": "세액 포함 여부",
+    "process_type": {
+      "default": "매입조정 처리",
+      "subtract": "차감",
+      "refund": "환불"
+    },
+    "type": {
+      "default": "매입조정 종류",
+      "reserve": "미송",
+      "refund": "환불",
+      "exchange": "교환",
+      "takeback": "반품"
+    }
   },
   "clearing": {
     "": "정산",

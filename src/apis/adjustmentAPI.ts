@@ -1,4 +1,3 @@
-import { adjustmentItem } from "./clearingAPI";
 import { v2Axios } from "./index";
 
 // 입고아이템 타입
@@ -45,7 +44,7 @@ export interface RequestGetAdjustment {
 export interface ResponseGetAdjustment {
   msg: string;
   data: {
-    data: Array<adjustmentItem>;
+    data: Array<AdjustmentItem>;
     statistics: {
       cleared: {
         count: number;

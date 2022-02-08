@@ -1,26 +1,28 @@
-import { useState, SetStateAction, Dispatch, useEffect } from "react";
+import { useState, SetStateAction, Dispatch } from "react";
 import { useQuery } from "react-query";
-import { Space, Table, message, Modal, Descriptions } from "antd";
+import { Table, message, Modal, Descriptions, Switch } from "antd";
 import { AxiosError } from "axios";
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
 import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
-import { adjustmentItem } from "apis/clearingAPI";
-import { WarehousingSheetItem4Clearing } from "./index";
+
+export interface WarehousingSheetItem4Clearing extends WarehousingSheetItem {
+  type: "warehousing";
+}
 
 /*
   Parent : WarehousingWaitingTable
   Children : None
 
   * State
-    selectedRowKeys = 선택 된 행의 key (세액포함된 건)
     warehousingItemList = 입고 아이템 리스트
     totalVatPrice = 세액 총 합계 금액
+    dataPreexist = 입고 상세데이터가 존재하던 것인지 여부 (이미 추가된 입고장 인지 여부)
 
   * Custom Function
     getWarehousingItemQuery = 입고 아이템 리스트를 받아오는 함수
     calculateTotalVatPrice = 부가세 포함 된 행들의 부가세 합계를 구하는 함수
-    onSelectRow = 모달 내 체크박스 선택 여부에 따라 데이터를 처리하는 함수
+    onChangeIsVatIncluded = 부가세 포함 여부 변경
     onOk = '추가하기' 버튼 선택시 데이터 처리
 */
 
@@ -30,8 +32,9 @@ interface Props {
   setOpenDetailModal: Dispatch<SetStateAction<boolean>>;
   selectedWarehousingSheetRowKeys: Array<number>;
   setSelectedWarehousingSheetRowKeys: Dispatch<SetStateAction<Array<number>>>;
-  clearingCart: Array<WarehousingSheetItem4Clearing | adjustmentItem>;
-  setClearingCart: Dispatch<SetStateAction<Array<WarehousingSheetItem4Clearing | adjustmentItem>>>;
+  clearingCart: any;
+  setClearingCart: Dispatch<SetStateAction<Array<any>>>;
+  deleteWarehousingData: (record: WarehousingSheet) => void;
 }
 
 function WarehousingItemListModal({
@@ -42,10 +45,11 @@ function WarehousingItemListModal({
   setSelectedWarehousingSheetRowKeys,
   clearingCart,
   setClearingCart,
+  deleteWarehousingData,
 }: Props) {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([]);
   const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingSheetItem>>([]);
   const [totalVatPrice, setTotalVatPrice] = useState<number>(0);
+  const [dataPreexist, setdataPreexist] = useState<boolean>(false);
 
   const getWarehousingItemQuery = useQuery(
     ["getWarehousingItem", selectedWarehousingSheet?.id, visible], //
@@ -56,12 +60,22 @@ function WarehousingItemListModal({
     },
     {
       // 데이터가 새로 받아와지면 세액 포함이 된 행을 선택처리
+      // 기존 데이터가 있다면 기존 데이터대로 표시
       onSuccess: (data) => {
-        const responseData = data ? data.data : [];
-        const list: number[] = responseData.filter((i) => i.is_vat_included).map((i) => i.id);
-        setSelectedRowKeys(list);
-        setWarehousingItemList(responseData);
-        calculateTotalVatPrice(responseData);
+        const existingData = clearingCart.filter(
+          (value: any) =>
+            value.type === "warehousing" && value.sheet_id === selectedWarehousingSheet?.id,
+        );
+        if (existingData.length > 0) {
+          setWarehousingItemList(existingData);
+          calculateTotalVatPrice(existingData);
+          setdataPreexist(true);
+        } else {
+          const responseData = data ? data.data : [];
+          setWarehousingItemList(responseData);
+          calculateTotalVatPrice(responseData);
+          setdataPreexist(false);
+        }
       },
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -80,7 +94,7 @@ function WarehousingItemListModal({
     setTotalVatPrice(totalVat);
   };
 
-  const onSelectRow = (record: WarehousingSheetItem, selected: boolean) => {
+  const onChangeIsVatIncluded = (record: WarehousingSheetItem) => {
     // state 로 들어가 있는 리스트 아이템(warehousingItemList)을 변경
     if (warehousingItemList) {
       const newWarehousingItemList = warehousingItemList.map((value) =>
@@ -89,34 +103,29 @@ function WarehousingItemListModal({
       setWarehousingItemList(newWarehousingItemList);
       calculateTotalVatPrice(newWarehousingItemList);
     }
-    // 선택된 리스트 키 값(selectedRowKeys)을 변경
-    if (selected) {
-      setSelectedRowKeys(selectedRowKeys && [...selectedRowKeys, record.id]);
-    } else {
-      const idx = selectedRowKeys?.findIndex((i) => i === record.id);
-      const newSelectedRowKeys = selectedRowKeys && [...selectedRowKeys];
-      newSelectedRowKeys?.splice(idx ? idx : 0, 1);
-      setSelectedRowKeys(newSelectedRowKeys);
-    }
   };
 
   const onOk = () => {
-    // 정산에 맞는 입고 아이템 형식으로 변경
-    const refinedWarehousingItemList = warehousingItemList.map(
-      (item) =>
-        ({
-          ...item,
-          type: "warehousing",
-        } as WarehousingSheetItem4Clearing),
-    );
-    // 정산 장바구니에 정보를 넣는다
-    setClearingCart([...clearingCart, ...refinedWarehousingItemList]);
-    // 입고장 체크박스 체크
-    if (selectedWarehousingSheet) {
-      setSelectedWarehousingSheetRowKeys([
-        ...selectedWarehousingSheetRowKeys,
-        selectedWarehousingSheet.id,
-      ]);
+    if (dataPreexist) {
+      if (selectedWarehousingSheet) deleteWarehousingData(selectedWarehousingSheet);
+    } else {
+      // 정산에 맞는 입고 아이템 형식으로 변경
+      const refinedWarehousingItemList = warehousingItemList.map(
+        (item) =>
+          ({
+            ...item,
+            type: "warehousing",
+          } as WarehousingSheetItem4Clearing),
+      );
+      // 정산 장바구니에 정보를 넣는다
+      setClearingCart([...clearingCart, ...refinedWarehousingItemList]);
+      // 입고장 체크박스 체크
+      if (selectedWarehousingSheet) {
+        setSelectedWarehousingSheetRowKeys([
+          ...selectedWarehousingSheetRowKeys,
+          selectedWarehousingSheet.id,
+        ]);
+      }
     }
     // 모달을 닫는다
     setOpenDetailModal(!visible);
@@ -128,7 +137,7 @@ function WarehousingItemListModal({
       centered={true}
       width={"90vw"}
       visible={visible}
-      okText={t("button.price confirm")}
+      okText={dataPreexist ? t("button.remove") : t("button.price confirm")}
       cancelText={t("button.cancel")}
       onOk={onOk}
       onCancel={() => setOpenDetailModal(!visible)}
@@ -160,11 +169,6 @@ function WarehousingItemListModal({
         dataSource={warehousingItemList}
         rowKey={"id"}
         pagination={false}
-        rowSelection={{
-          selectedRowKeys: selectedRowKeys,
-          onSelect: onSelectRow,
-          hideSelectAll: true,
-        }}
         columns={[
           {
             ellipsis: true,
@@ -202,13 +206,19 @@ function WarehousingItemListModal({
             dataIndex: "price",
             key: "id",
           },
-          Table.SELECTION_COLUMN,
           {
             ellipsis: true,
             title: t("vendor.is_vat_included"),
             dataIndex: "is_vat_included",
             key: "id",
-            render: (_, item) => <Space>{item.is_vat_included ? "O" : ""}</Space>,
+            render: (_, item) => (
+              <Switch
+                checkedChildren="O"
+                defaultChecked
+                checked={!!item.is_vat_included}
+                onClick={() => onChangeIsVatIncluded(item)}
+              />
+            ),
           },
         ]}
       />

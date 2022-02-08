@@ -15,7 +15,6 @@ import axios, { AxiosError } from "axios";
 import WarehousingItemListModal from "./WarehousingItemListModal";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
-import { WarehousingSheetItem4Clearing } from "./index";
 const { Panel } = Collapse;
 
 /*
@@ -29,7 +28,6 @@ const { Panel } = Collapse;
   * 정산 관련 State
     clearingCart = 정산에 포함될 내역을 담은 배열
     selectedWarehousingSheetRowKeys = 정산에 포함될 입고장의 ID 배열
-    selectedAdjustmentRowKeys = 매입처리 할 아이템 ID 배열
     openDetailModal = 입고 상세 내역 모달 노출 여부
     selectedWarehousingSheet = 선택 된 입고장의 Sheet data
 
@@ -59,7 +57,6 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   const [selectedWarehousingSheetRowKeys, setSelectedWarehousingSheetRowKeys] = useState<
     Array<number>
   >([]);
-  const [selectedAdjustmentRowKeys, setSelectedAdjustmentRowKeys] = useState<Array<number>>([]);
   const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
   const [selectedWarehousingSheet, setSelectedWarehousingSheet] = useState<WarehousingSheet | null>(
     null,
@@ -91,7 +88,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       clearingCart
         .filter((item: any) => item.type === "adjustment")
         .reduce((acc: any, cur: any) => {
-          return acc + cur.price * cur.count;
+          return acc + cur.price * cur.process_count;
         }, 0),
     [clearingCart],
   );
@@ -139,8 +136,6 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             selectedRtStoreId={selectedRtStoreId}
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
-            selectedAdjustmentRowKeys={selectedAdjustmentRowKeys}
-            setSelectedAdjustmentRowKeys={setSelectedAdjustmentRowKeys}
           />
           <Row justify="center" align="middle">
             <TurtleButton
@@ -152,7 +147,10 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
           </Row>
         </Panel>
         <Panel header={panelThreeHeader} key="3">
-          이것은 정산 금액 미리보기
+          <Row>입고 : {warehousingTotal}</Row>
+          <Row>매입차감 : {adjustmentTotal}</Row>
+          <Row>당일미송 : 얼마..</Row>
+          <Row>합계 : {`123456789`.toLocaleString()} (입고총금액 - 매입차감 + 당일미송</Row>
         </Panel>
       </Collapse>
     </>

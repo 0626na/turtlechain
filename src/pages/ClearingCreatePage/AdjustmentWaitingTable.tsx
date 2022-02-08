@@ -1,47 +1,38 @@
-import { Form, Input, Select, Space, Collapse, Row, Table, message, Switch, Modal } from "antd";
-import TurtleInput from "components/common/TurtleInput";
-import TurtleSearchInput from "components/common/TurtleSearchInput";
-import TurtleText from "components/common/TurtleText";
-import TurtleTextArea from "components/common/TurtleTextArea";
-import TurtleButton from "components/common/TurtleButton";
-import { t } from "i18next";
-import StoreSelect from "components/StoreSelect";
-import { RequestGetClearingSheet, warehousingItem, adjustmentItem } from "apis/clearingAPI";
-import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
-import { AdjustmentItem } from "apis/adjustmentAPI";
-import React, { useState, useEffect, useRef, useMemo, Dispatch, SetStateAction } from "react";
-import { useQueryClient, useMutation, useQuery } from "react-query";
-import { warehousingAPI, adjustmentAPI } from "apis";
+import { useState, Dispatch, SetStateAction } from "react";
+import { useQuery } from "react-query";
 import { AxiosError } from "axios";
-import WarehousingItemListModal from "./WarehousingItemListModal";
-import { WarehousingSheetItem4Clearing } from "./index";
+import { Select, Space, Table, message, Switch } from "antd";
+import { t } from "i18next";
+import { AdjustmentItem } from "apis/adjustmentAPI";
+import { adjustmentAPI } from "apis";
+
 /*
   Parent : ClearingCreateAccordion
   Children : None
 
+  * State
+    adjustmentList = 매입 리스트 (미처리 된 건들만)
+    
   * Custom Function
+    getAdjustmentQuery = 매입 리스트를 받아오는 함수
+    onSelectRow = 정산 행 선택에 따른 데이터처리 함수
+    deleteAdjustmentData = 부가세 포함 된 행들의 부가세 합계를 구하는 함수
+    replaceRowData = '처리방식' 혹은 '처리수량' 변경에 따른 데이터처리 함수
 */
 
 interface AdjustmentItemExtended extends AdjustmentItem {
-  process_type: string;
-  process_count: number;
+  process_type?: string;
+  process_count?: number;
+  checked: boolean;
 }
 
 interface Props {
   selectedRtStoreId: number | "";
   clearingCart: any;
   setClearingCart: Dispatch<SetStateAction<any>>;
-  selectedAdjustmentRowKeys: Array<number>;
-  setSelectedAdjustmentRowKeys: Dispatch<SetStateAction<Array<number>>>;
 }
 
-function AdjustmentWaitingTable({
-  selectedRtStoreId,
-  clearingCart,
-  setClearingCart,
-  selectedAdjustmentRowKeys,
-  setSelectedAdjustmentRowKeys,
-}: Props) {
+function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCart }: Props) {
   const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentItemExtended>>([]);
   const getAdjustmentQuery = useQuery(
     ["getAdjustment", selectedRtStoreId], //
@@ -62,9 +53,10 @@ function AdjustmentWaitingTable({
             (value) =>
               ({
                 ...value,
-                process_type: "",
-                process_count: 0,
-              } as unknown as AdjustmentItemExtended),
+                checked: false,
+                process_type: undefined,
+                process_count: undefined,
+              } as AdjustmentItemExtended),
           ),
         );
       },
@@ -77,18 +69,14 @@ function AdjustmentWaitingTable({
   const deleteAdjustmentData = (record: AdjustmentItemExtended) => {
     const answer = window.confirm(t("message.confirm exclude"));
     if (answer) {
-      // 선택 된 매입 체크박스 해제
-      const idx = selectedAdjustmentRowKeys?.findIndex((i) => i === record.id);
-      const newSelectedRowKeys = selectedAdjustmentRowKeys && [...selectedAdjustmentRowKeys];
-      newSelectedRowKeys?.splice(idx ? idx : 0, 1);
-      setSelectedAdjustmentRowKeys(newSelectedRowKeys);
       // 매입 데이터 변경
       let newAdjustmentList = [...adjustmentList];
       const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
       newAdjustmentList[rowDataIndex] = {
         ...newAdjustmentList[rowDataIndex],
-        process_count: 0,
-        process_type: "",
+        checked: false,
+        process_count: undefined,
+        process_type: undefined,
       };
       setAdjustmentList(newAdjustmentList);
       // 해당 매입 장바구니에서 제거
@@ -113,50 +101,69 @@ function AdjustmentWaitingTable({
         account_number: record.account_number,
         account_holder: record.account_holder,
         is_vat_included: record.is_vat_included,
-        adjustment_process_type: "subtract",
-        process_count: record.process_count,
+        adjustment_process_type: record.process_type ? record.process_type : "subtract",
+        process_count: record.process_count ? record.process_count : record.count_left,
         price: record.price,
       };
+      // 정산 장바구니에 정보를 넣는다
+      setClearingCart([...clearingCart, refinedAdjustmentItem]);
       // 매입 데이터 변경
       let newAdjustmentList = [...adjustmentList];
       const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
       newAdjustmentList[rowDataIndex] = {
         ...newAdjustmentList[rowDataIndex],
-        process_count: record.count_left,
-        process_type: "subtract",
+        checked: true,
+        process_count: record.process_count ? record.process_count : record.count_left,
+        process_type: record.process_type ? record.process_type : "subtract",
       };
       setAdjustmentList(newAdjustmentList);
-      // 정산 장바구니에 정보를 넣는다
-      setClearingCart([...clearingCart, refinedAdjustmentItem]);
-      // 해당 정산 체크표시
-      setSelectedAdjustmentRowKeys([...selectedAdjustmentRowKeys, record.id]);
     } else {
       deleteAdjustmentData(record);
     }
   };
 
-  const replaceRowData = (index: number, replaceData: { [key: string]: any }) => {
-    // 화면에 보이는 리스트 변경
+  const replaceRowData = (record: AdjustmentItemExtended, replaceData: { [key: string]: any }) => {
+    // 정보가 바뀔 행 선택
     let newAdjustmentList = [...adjustmentList];
-    const rowDataIndex = adjustmentList.findIndex((value) => value.id === index);
-    newAdjustmentList[rowDataIndex] = { ...newAdjustmentList[rowDataIndex], ...replaceData };
+    const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
+    let replacingRow = newAdjustmentList[rowDataIndex];
+    replacingRow = { ...replacingRow, ...replaceData };
+    // 매입처리와 수량이 다 선택되었다면 자동 체크
+    if (replacingRow.process_type && replacingRow.process_count) {
+      replacingRow.checked = true;
+    }
+    // 화면에 보이는 리스트 변경
+    newAdjustmentList[rowDataIndex] = replacingRow;
     setAdjustmentList(newAdjustmentList);
 
-    // 정산 장바구니 변경
-    // let newClearingCart = [...clearingCart];
-    // // const rowDataIndex = adjustmentList.findIndex(value => value.id === index);
-    // newAdjustmentList[rowDataIndex] = { ...newAdjustmentList[rowDataIndex], ...replaceData };
-    // setAdjustmentList(newAdjustmentList);
+    let newClearingCart = [...clearingCart].filter((value) => value.type !== "adjustment");
+    let newAdjustmentForCart = newAdjustmentList
+      .filter((value) => value.checked)
+      .map((value) => ({
+        type: "adjustment",
+        original_id: value.id,
+        ws_store_id: value.ws_store_id,
+        vendor_id: value.vendor_id,
+        vendor_name: value.vendor_name,
+        bank: value.bank,
+        account_number: value.account_number,
+        account_holder: value.account_holder,
+        is_vat_included: value.is_vat_included,
+        adjustment_process_type: value.process_type,
+        process_count: value.process_count,
+        price: value.price,
+      }));
+    setClearingCart([...newClearingCart, ...newAdjustmentForCart]);
   };
 
   return (
     <>
       <Table
         sticky={true}
-        onRow={(record, rowIndex) => {
+        onRow={(record) => {
           return {
-            onClick: (e) => {
-              if (selectedAdjustmentRowKeys.includes(record.id)) {
+            onClick: () => {
+              if (record.checked) {
                 deleteAdjustmentData(record);
               } else {
                 onSelectRow(record, true);
@@ -169,7 +176,7 @@ function AdjustmentWaitingTable({
         style={{ marginBottom: 12 }}
         size="small"
         rowSelection={{
-          selectedRowKeys: selectedAdjustmentRowKeys,
+          selectedRowKeys: adjustmentList.filter((value) => value.checked).map((value) => value.id),
           onSelect: onSelectRow,
           hideSelectAll: true,
         }}
@@ -190,37 +197,37 @@ function AdjustmentWaitingTable({
           },
           {
             ellipsis: true,
-            title: t("adjustment.type"),
+            title: t("adjustment.type.default"),
             dataIndex: "type",
             render: (value) => {
               const adjustmentType: any = {
-                reserve: "미송",
-                refund: "환불",
-                exchange: "교환",
-                takeback: "반품",
+                reserve: t("adjustment.type.reserve"),
+                refund: t("adjustment.type.refund"),
+                exchange: t("adjustment.type.exchange"),
+                takeback: t("adjustment.type.takeback"),
               };
               return <Space>{adjustmentType[value]}</Space>;
             },
           },
           {
             ellipsis: true,
-            title: t("adjustment.process_type"),
-            render: (_value, record, index) => (
+            title: t("adjustment.process_type.default"),
+            render: (_value, record) => (
               <Select
-                placeholder={"처리방식"}
+                placeholder={t("placeholder.process_type")}
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
                 onChange={(value) => {
-                  replaceRowData(index, { process_type: value });
+                  replaceRowData(record, { process_type: value });
                 }}
-                value={record.process_type ? record.process_type : undefined}
+                value={record.process_type}
               >
                 <Select.Option key={"subtract"} value={"subtract"}>
-                  차감
+                  {t("adjustment.process_type.subtract")}
                 </Select.Option>
                 <Select.Option key={"refund"} value={"refund"}>
-                  환불
+                  {t("adjustment.process_type.refund")}
                 </Select.Option>
               </Select>
             ),
@@ -228,7 +235,7 @@ function AdjustmentWaitingTable({
           {
             ellipsis: true,
             title: t("adjustment.process_count"),
-            render: (_value, record, index) => {
+            render: (_value, record) => {
               const options = [];
               for (var i = record.count_left; i > 0; i--) {
                 options.push(
@@ -239,14 +246,14 @@ function AdjustmentWaitingTable({
               }
               return (
                 <Select
-                  placeholder={"처리수량"}
+                  placeholder={t("placeholder.process_count")}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
                   onChange={(value) => {
-                    replaceRowData(index, { process_count: value });
+                    replaceRowData(record, { process_count: value });
                   }}
-                  value={record.process_count ? record.process_count : undefined}
+                  value={record.process_count}
                 >
                   {options}
                 </Select>
@@ -262,7 +269,9 @@ function AdjustmentWaitingTable({
             ellipsis: true,
             title: t("adjustment.is_vat_included"),
             dataIndex: "is_vat_included",
-            render: (value) => <Space>{value ? "O" : ""}</Space>,
+            render: (value) => (
+              <Switch checkedChildren="O" defaultChecked checked={!!value} disabled />
+            ),
           },
         ]}
       />
