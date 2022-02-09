@@ -7,16 +7,14 @@ import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
 
 interface Props {
-  onSearch: ({ type, search_query }: RequestSearchVendor) => void;
+  onSearch: ({ page, type, search_query }: RequestSearchVendor) => void;
 }
 
 function SearchFilter({ onSearch }: Props) {
   const { t } = useTranslation();
 
-  const [searchState, setSearchState] = useState<{
-    type: string;
-    search_query: string;
-  }>({
+  const [searchState, setSearchState] = useState<RequestSearchVendor>({
+    page: 1,
     type: "all",
     search_query: "",
   });
@@ -31,7 +29,7 @@ function SearchFilter({ onSearch }: Props) {
 
   // 엔터키 눌렀을 때 검색
   const onEnterPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") onSearch(searchState);
+    if (e.key === "Enter") onSearch({ ...searchState, page: 1 });
   };
 
   const options: Array<{ name: string; value: string }> = [

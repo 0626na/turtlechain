@@ -80,11 +80,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         <Upload //
           multiple={false}
           accept=".csv, .xls, .xlxs"
-          beforeUpload={(file: any) => {
-            // console.log(file);
-            // form.append("files", file);
-            // parseVendorsQuery.mutate(form);
-          }}
           customRequest={({ file, onSuccess }) => {
             form.append("files", file);
             parseVendorsQuery.mutate(form);

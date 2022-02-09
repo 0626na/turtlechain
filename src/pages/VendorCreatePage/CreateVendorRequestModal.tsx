@@ -45,21 +45,23 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
   });
 
   const onClickCreate = () => {
-    createBucketList.mutate({
-      ...form.getFieldsValue(),
-      type: "create",
-      ws_store_id: 0,
-      store_phone: [form.getFieldValue("store_phone")],
-      building: selectedAddress.building,
-      floor: selectedAddress.floor,
-      col: selectedAddress.col,
-      loc: selectedAddress.loc,
-      banks: banks,
+    form.validateFields().then(() => {
+      createBucketList.mutate({
+        ...form.getFieldsValue(),
+        type: "create",
+        ws_store_id: 0,
+        store_phone: [form.getFieldValue("store_phone")],
+        building: selectedAddress.building,
+        floor: selectedAddress.floor,
+        col: selectedAddress.col,
+        loc: selectedAddress.loc,
+        banks: banks,
+      });
+      setBanks([{ bank: "", account_number: "", account_holder: "" }]);
+      selectAddress({ building: "", floor: "", col: "", loc: "" });
+      form.resetFields();
+      closeModal();
     });
-    setBanks([{ bank: "", account_number: "", account_holder: "" }]);
-    selectAddress({ building: "", floor: "", col: "", loc: "" });
-    form.resetFields();
-    closeModal();
   };
 
   return (
