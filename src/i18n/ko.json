@@ -60,8 +60,10 @@
     "biz num": "사업자 번호를 입력하세요",
     "biz name": "상호명을 입력하세요",
     "biz owner": "대표자명을 입력하세요",
-    "process_count":"처리수량",
-    "process_type": "처리방식"
+    "process_count": "처리수량",
+    "process_type": "처리방식",
+    "clearing_status": "결제 상태",
+    "clearing_date": "일자 검색"
   },
   "button": {
     "add": "추가하기",
@@ -163,7 +165,29 @@
     "": "정산",
     "management": "정산 관리",
     "create": "정산 등록",
-    "list": "정산 내역"
+    "list": "정산 내역",
+    "request_date": "결제 요청 일자",
+    "complete_date": "결제 완료 일자",
+    "total_price": "총 결제 금액",
+    "delete": "삭제",
+    "account": "계좌정보",
+    "price": "결제금액",
+    "supply_price": "공급가액",
+    "vat_price": "부가세",
+    "is_vat_included": "부가세 포함 여부",
+    "vendor": {
+      "code":"거래처 코드",
+      "name": "거래처명",
+      "address": "거래처 주소"
+    },
+    "status": {
+      "default": "결제 상태",
+      "all": "전체",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
+    },
+    "detail": { "default": "상세보기" }
   },
   "product": {
     "": "상품",

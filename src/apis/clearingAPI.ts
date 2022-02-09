@@ -96,8 +96,8 @@ interface ResponseClearingItem {
 // Request: 정산장 조회
 export interface RequestGetClearingSheet {
   rt_store_id: number | "";
-  start_date: string; // format: YYYY-MM-DD
-  end_date: string; // format: YYYY-MM-DD
+  start_date?: string; // format: YYYY-MM-DD
+  end_date?: string; // format: YYYY-MM-DD
   page?: number;
   page_size?: number;
   status?: "request" | "pending" | "complete" | "";
@@ -106,7 +106,7 @@ export interface RequestGetClearingSheet {
 // Response: 정산장 조회
 export interface ResponseGetClearingSheet {
   msg: string;
-  data: ClearingSheet;
+  data: Array<ClearingSheet>;
 }
 
 const getClearingSheet = async function (query: RequestGetClearingSheet) {

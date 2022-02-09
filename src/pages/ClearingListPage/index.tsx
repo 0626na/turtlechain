@@ -3,24 +3,22 @@ import PageHeader from "components/PageHeader";
 import { useCallback, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import Filter from "./Filter";
-import ClearingList from "./ClearingList";
+import Toolbar from "./Toolbar";
+import ClearingSheetList from "./ClearingSheetList";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
-
 
 function ClearingListPage() {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("clearing.list")}`;
 
-  const [searchType, setSearchType] = useState("all");
-  const [searchString, setSearchString] = useState("");
-  const [page, setPage] = useState(1);
   const [searchState, setSearchState] = useState<{
     page: number;
-    status: string;
+    clearing_status: "all" | "request" | "pending" | "complete";
+    clearing_date: undefined | "request_date" | "complete_date";
   }>({
     page: 1,
-    status: "",
+    clearing_status: "all",
+    clearing_date: undefined
   });
 
   const [searchQuery, setSearchQuery] = useState<RequestGetClearingSheet>({
@@ -35,7 +33,8 @@ function ClearingListPage() {
   const selectStore = (storeId: number | "") => {
     setSearchState({
       page: 1,
-      status: "",
+      clearing_status: "all",
+      clearing_date: undefined
     });
     setSearchQuery({
       rt_store_id: storeId,
@@ -54,10 +53,12 @@ function ClearingListPage() {
         title={t("clearing.list")}
         breadcrumbList={[t("clearing.management"), t("clearing.list")]}
       />
-      <Filter //
+      <Toolbar
         selectStore={selectStore}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
-      <ClearingList searchQuery={searchQuery} searchState={searchState}/>
+      <ClearingSheetList searchQuery={searchQuery} searchState={searchState} />
     </>
   );
 }
