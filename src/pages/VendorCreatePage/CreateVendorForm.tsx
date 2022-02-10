@@ -96,7 +96,7 @@ function CreateVendorForm({ storeId }: Props) {
       return;
     }
     form.validateFields().then(() => {
-      createVendorQuery.mutate({ ...form.getFieldsValue() });
+      createVendorQuery.mutate([{ ...form.getFieldsValue() }]);
       form.resetFields();
       form.setFieldsValue({
         rt_store_id: storeId,

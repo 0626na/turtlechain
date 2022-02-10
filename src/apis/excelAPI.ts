@@ -23,6 +23,12 @@ export interface Vendor {
   match_type: string;
 }
 
+export interface ParseCount {
+  success_count: number;
+  suggest_count: number;
+  fail_count: number;
+}
+
 export interface RequestParseVendors {
   files: any;
 }
@@ -31,23 +37,15 @@ export interface ResponseParseVendors {
   msg: string;
   data: {
     success: Array<Vendor>;
-    need_select_vendor: Array<Vendor>;
-    need_select_account: Array<Vendor>;
-    need_select: Array<Vendor>;
+    suggest: Array<Vendor>;
     fail: Array<Vendor>;
-    count: {
-      success_count: number;
-      select_vendor_count: number;
-      select_account_count: number;
-      select_count: number;
-      fail_count: number;
-    };
+    count: ParseCount;
   };
 }
 
 const parseVendors = async function (data: FormData) {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseVendors>(url, data, {      
+  const response = await v2Axios.post<ResponseParseVendors>(url, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

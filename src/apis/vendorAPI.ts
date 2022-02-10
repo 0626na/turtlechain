@@ -81,14 +81,14 @@ export interface RequestCreateVendor {
   vendor_id: string;
   vendor_account_id: number;
   vendor_phone_id: number;
-  ws_store_id: number;
-  vendor_building: string;
-  vendor_name: string;
-  memo: string;
-  is_taxed: boolean;
-  owner: string;
-  biz_num: string;
-  biz_name: string;
+  ws_store_id?: number;
+  vendor_building?: string;
+  vendor_name?: string;
+  memo?: string;
+  is_taxed?: boolean;
+  owner?: string;
+  biz_num?: string;
+  biz_name?: string;
 }
 
 // Response: 거래처 등록
@@ -102,9 +102,9 @@ export interface ResponseCreateVendor {
 }
 
 // 거래처 등록
-const createVendor = async function (data: RequestCreateVendor) {
+const createVendor = async function (data: Array<RequestCreateVendor>) {
   const url = `provisioning/vendor`;
-  const response = await v2Axios.post<ResponseCreateVendor>(url, [data]);
+  const response = await v2Axios.post<ResponseCreateVendor>(url, data);
   return response.data;
 };
 

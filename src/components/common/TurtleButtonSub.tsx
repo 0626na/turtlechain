@@ -7,6 +7,7 @@ interface Props {
   icon?: "download" | "file";
   size?: "small" | "middle";
   color?: "skyblue" | "blue" | "red" | "green" | "grey";
+  disabled?: boolean;
   onClick?: () => void;
 }
 
