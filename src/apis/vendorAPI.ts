@@ -113,7 +113,7 @@ export interface RequestGetVendors {
   page: number;
   type: string;
   search_query: string;
-  rt_store_id: number;
+  rt_store_id: number | null;
 }
 
 // Response: 거래처 리스트

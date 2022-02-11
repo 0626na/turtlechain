@@ -74,8 +74,8 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
     >
       <Row>
         <SearchFilter
-          onSearch={({ page, type, search_query }: RequestSearchVendor) => {
-            setSearchQuery({ page, type, search_query });
+          onSearch={({ type, search_query }) => {
+            setSearchQuery({ page: 1, type, search_query });
           }}
         />
       </Row>

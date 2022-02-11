@@ -185,7 +185,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                                   ? {
                                       ...vendor,
                                       memo: record.memo_value,
-                                      memo_value: "",
                                       memo_active: false,
                                     }
                                   : vendor,

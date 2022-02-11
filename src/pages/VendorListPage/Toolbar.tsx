@@ -5,7 +5,7 @@ import StoreSelect from "components/StoreSelect";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 interface Props {
-  selectStore: (storeId: number) => void;
+  selectStore?: () => void;
 }
 
 function Toolbar({ selectStore }: Props) {
@@ -24,7 +24,7 @@ function Toolbar({ selectStore }: Props) {
     >
       <Col>
         <Space size="large">
-          <StoreSelect selectStore={selectStore} />
+          <StoreSelect />
         </Space>
       </Col>
       <Col>

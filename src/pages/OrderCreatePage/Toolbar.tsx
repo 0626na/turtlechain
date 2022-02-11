@@ -18,7 +18,7 @@ function Toolbar() {
       }}
     >
       <Col>
-        <StoreSelect selectStore={() => {}} />
+        <StoreSelect />
       </Col>
       <Col>
         <Space>

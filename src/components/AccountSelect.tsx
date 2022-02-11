@@ -1,31 +1,85 @@
 import { Button, Form, Input, message, Select, Switch } from "antd";
-import { useTranslation } from "react-i18next";
 import { DeleteFilled, PlusOutlined } from "@ant-design/icons";
 import { basicDataAPI } from "apis";
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { StoreAccount } from "apis/bucketListAPI";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import { StoreAccount, StoreAccountView } from "apis/bucketListAPI";
+import { t } from "i18next";
 
 interface Props {
-  banks: Array<StoreAccount>;
-  setBanks: Dispatch<SetStateAction<StoreAccount[]>>;
+  accountList: Array<StoreAccountView>;
+  setAccountList: Dispatch<SetStateAction<StoreAccountView[]>>;
 }
 
-function BankSelect({ banks, setBanks }: Props) {
-  const [t] = useTranslation();
-
+function AccountSelect({ accountList, setAccountList }: Props) {
   const getBankQuery = useQuery("getBank", basicDataAPI.getBank, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
   });
 
-  const bankName = getBankQuery.data?.data.code_set.code_list;
+  const bankList = getBankQuery.data?.data.code_set.code_list;
+
+  const setBank = useCallback(
+    (value: string, index: number) => {
+      setAccountList(
+        accountList.map((account, i) => (i === index ? { ...account, bank: value } : account)),
+      );
+    },
+    [accountList],
+  );
+
+  const setAccountNumber = useCallback(
+    (value: React.ChangeEvent<HTMLInputElement>, index: number) => {
+      setAccountList(
+        accountList.map((account, i) =>
+          i === index ? { ...account, account_number: value.currentTarget.value } : account,
+        ),
+      );
+    },
+    [accountList],
+  );
+
+  const setAccountHolder = useCallback(
+    (value: React.ChangeEvent<HTMLInputElement>, index: number) => {
+      setAccountList(
+        accountList.map((account, i) =>
+          i === index ? { ...account, account_holder: value.currentTarget.value } : account,
+        ),
+      );
+    },
+    [accountList],
+  );
+
+  const setMainAccount = useCallback(
+    (index: number) => {
+      setAccountList(
+        accountList.map((account, i) =>
+          i === index ? { ...account, is_main: true } : { ...account, is_main: false },
+        ),
+      );
+    },
+    [accountList],
+  );
+
+  const addAccount = useCallback(() => {
+    setAccountList([
+      ...accountList,
+      { bank: "", account_number: "", account_holder: "", is_main: false },
+    ]);
+  }, [accountList]);
+
+  const deleteAccount = useCallback(
+    (index) => {
+      setAccountList(accountList.filter((_, i) => i !== index));
+    },
+    [accountList],
+  );
 
   return (
     <>
-      {banks.map((bank, index) => (
+      {accountList.map((account, index) => (
         <Form.Item
           label={index === 0 ? t("vendor.account") : ""}
           required={true}
@@ -45,18 +99,15 @@ function BankSelect({ banks, setBanks }: Props) {
               noStyle
             >
               <Select
-                value={banks[index].bank}
+                value={account.bank}
                 placeholder="은행명"
                 style={{ width: "15%" }}
                 onChange={(value) => {
-                  const newBanks = banks.map((bank, i) =>
-                    i === index ? { ...bank, bank: value } : bank,
-                  );
-                  setBanks(newBanks);
+                  setBank(value, index);
                 }}
               >
-                {bankName &&
-                  Object.values(bankName).map((bank: any) => (
+                {bankList &&
+                  Object.values(bankList).map((bank: any) => (
                     <Select.Option key={bank} value={bank}>
                       {bank}
                     </Select.Option>
@@ -74,14 +125,11 @@ function BankSelect({ banks, setBanks }: Props) {
               noStyle
             >
               <Input
-                value={banks[index].account_number}
+                value={account.account_number}
                 placeholder="계좌번호"
                 style={{ width: "20%" }}
                 onChange={(value) => {
-                  const newBanks = banks.map((bank, i) =>
-                    i === index ? { ...bank, account_number: value.currentTarget.value } : bank,
-                  );
-                  setBanks(newBanks);
+                  setAccountNumber(value, index);
                 }}
               />
             </Form.Item>
@@ -97,14 +145,11 @@ function BankSelect({ banks, setBanks }: Props) {
               noStyle
             >
               <Input
-                value={banks[index].account_holder}
+                value={account.account_holder}
                 placeholder="예금주명"
                 style={{ width: "20%" }}
                 onChange={(value) => {
-                  const newBanks = banks.map((bank, i) =>
-                    i === index ? { ...bank, account_holder: value.currentTarget.value } : bank,
-                  );
-                  setBanks(newBanks);
+                  setAccountHolder(value, index);
                 }}
               />
             </Form.Item>
@@ -112,34 +157,26 @@ function BankSelect({ banks, setBanks }: Props) {
               <Switch //
                 checkedChildren="주계좌"
                 style={{ width: "64px" }}
-                checked={index === 0}
+                checked={account.is_main}
                 onClick={() => {
-                  const newBanks = banks.filter((_, i) => i !== index);
-                  newBanks.unshift(bank);
-                  setBanks(newBanks);
+                  setMainAccount(index);
                 }}
               />
-              <DeleteFilled
-                style={{ color: "red", cursor: "pointer", padding: "10px" }}
-                onClick={() => {
-                  const newBanks = banks.filter((_, i) => i !== index);
-                  setBanks(newBanks);
-                }}
-              />
+              {!account.is_main && (
+                <DeleteFilled
+                  style={{ color: "red", cursor: "pointer", padding: "10px" }}
+                  onClick={() => {
+                    deleteAccount(index);
+                  }}
+                />
+              )}
             </Form.Item>
           </Input.Group>
         </Form.Item>
       ))}
 
       <Form.Item wrapperCol={{ span: 14, offset: 1 }}>
-        <Button
-          type="dashed"
-          onClick={() => {
-            setBanks([...banks, { bank: "", account_number: "", account_holder: "" }]);
-          }}
-          style={{ width: "90%" }}
-          icon={<PlusOutlined />}
-        >
+        <Button type="dashed" onClick={addAccount} style={{ width: "90%" }} icon={<PlusOutlined />}>
           {t("button.add account")}
         </Button>
       </Form.Item>
@@ -147,4 +184,4 @@ function BankSelect({ banks, setBanks }: Props) {
   );
 }
 
-export default BankSelect;
+export default AccountSelect;

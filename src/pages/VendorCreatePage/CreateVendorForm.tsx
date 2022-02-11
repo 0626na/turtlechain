@@ -12,14 +12,14 @@ import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
 import SearchVendorsModal from "./SearchVendorsModal";
 
-interface Props {
-  storeId: number;
-}
-
-function CreateVendorForm({ storeId }: Props) {
+function CreateVendorForm() {
+  // 쇼핑몰 id
+  const storeId = useRecoilValue(storeIdState);
   // 선택된 거래처
   const [selectedVendor, selectVendor] = useState<WholeSaleStore>();
   // createVendor 요청 data 담을 객체
@@ -69,26 +69,7 @@ function CreateVendorForm({ storeId }: Props) {
       ...form.getFieldsValue(),
       rt_store_id: storeId,
     });
-    console.log(form.getFieldsValue());
   }, [storeId, form]);
-
-  // 거래처 코드 생성
-  const makeVendorId = () => {
-    if (storeId === -1) {
-      message.warning("쇼핑몰을 선택해 주세요");
-      return;
-    }
-    if (!form.getFieldValue("ws_store_id")) {
-      message.warning("거래처를 선택해 주세요");
-      return;
-    }
-
-    const code = storeId.toString() + form.getFieldValue("ws_store_id")?.toString();
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      vendor_id: code,
-    });
-  };
 
   const onClickCreate = () => {
     if (!form.getFieldValue("ws_store_id")) {
@@ -98,6 +79,19 @@ function CreateVendorForm({ storeId }: Props) {
     form.validateFields().then(() => {
       createVendorQuery.mutate([{ ...form.getFieldsValue() }]);
       form.resetFields();
+      selectVendor({
+        id: -1,
+        name: "",
+        phone: "",
+        store_account: [],
+        store_phone: [],
+        company: [],
+        building: "",
+        floor: "",
+        col: "",
+        loc: "",
+        ext: "",
+      });
       form.setFieldsValue({
         rt_store_id: storeId,
       });
@@ -143,7 +137,7 @@ function CreateVendorForm({ storeId }: Props) {
           required={false}
         />
         <TurtleInput // 휴대번호 선택 Input
-          value={selectedVendor?.store_phone[0].phone}
+          value={selectedVendor?.store_phone[0]?.phone}
           label={t("vendor.store phone")}
           disabled={true}
         />
@@ -183,17 +177,17 @@ function CreateVendorForm({ storeId }: Props) {
 
         <TurtleText>{t("vendor.account info")}</TurtleText>
         <TurtleInput // 은행명 Input
-          value={selectedVendor?.store_account[0].bank}
+          value={selectedVendor?.store_account[0]?.bank}
           label={t("vendor.account bank")}
           disabled={true}
         />
         <TurtleInput // 계좌번호 Input
-          value={selectedVendor?.store_account[0].account_number}
+          value={selectedVendor?.store_account[0]?.account_number}
           label={t("vendor.account number")}
           disabled={true}
         />
         <TurtleInput // 예금주명 Input
-          value={selectedVendor?.store_account[0].account_holder}
+          value={selectedVendor?.store_account[0]?.account_holder}
           label={t("vendor.account holder")}
           disabled={true}
           required={false}
@@ -211,7 +205,7 @@ function CreateVendorForm({ storeId }: Props) {
               <Input readOnly={true} />
             </Form.Item>
             <Form.Item>
-              <TurtleButtonSub color="blue" onClick={makeVendorId}>
+              <TurtleButtonSub color="blue" onClick={() => {}}>
                 코드 만들기
               </TurtleButtonSub>
             </Form.Item>
@@ -270,7 +264,7 @@ function CreateVendorForm({ storeId }: Props) {
           </TurtleText>
           <TurtleButton
             type="primary"
-            disabled={form.getFieldValue("rt_store_id") !== -1}
+            disabled={form.getFieldValue("rt_store_id") === -1}
             loading={createVendorQuery.isLoading}
             onClick={onClickCreate}
           >

@@ -5,12 +5,12 @@ import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 import TurtleText from "components/common/TurtleText";
 import { useTranslation } from "react-i18next";
 import TurtleButton from "components/common/TurtleButton";
-import BankSelect from "components/BankSelect";
 import { bucketListAPI } from "apis";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import { StoreAccount, StoreAddress } from "apis/bucketListAPI";
+import { StoreAccount, StoreAccountView, StoreAddress } from "apis/bucketListAPI";
+import AccountSelect from "components/AccountSelect";
 
 interface Props {
   visible: boolean;
@@ -28,8 +28,8 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
     loc: "",
   });
 
-  const [banks, setBanks] = useState<Array<StoreAccount>>([
-    { bank: "", account_number: "", account_holder: "" },
+  const [accountList, setAccountList] = useState<Array<StoreAccountView>>([
+    { bank: "", account_number: "", account_holder: "", is_main: true },
   ]);
 
   const createBucketList = useMutation("createBucketList", bucketListAPI.createBucketList, {
@@ -45,6 +45,16 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
   });
 
   const onClickCreate = () => {
+    if (accountList.length !== 1) {
+      const filteredAccountList: Array<StoreAccountView> = accountList;
+      const mainAccount: StoreAccountView | undefined = accountList.find(
+        (account) => account.is_main,
+      );
+      filteredAccountList.filter((account) => !account.is_main);
+      mainAccount && filteredAccountList.unshift(mainAccount);
+      setAccountList(filteredAccountList);
+    }
+
     form.validateFields().then(() => {
       createBucketList.mutate({
         ...form.getFieldsValue(),
@@ -55,9 +65,9 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
         floor: selectedAddress.floor,
         col: selectedAddress.col,
         loc: selectedAddress.loc,
-        banks: banks,
+        accounts: accountList,
       });
-      setBanks([{ bank: "", account_number: "", account_holder: "" }]);
+      setAccountList([{ bank: "", account_number: "", account_holder: "", is_main: true }]);
       selectAddress({ building: "", floor: "", col: "", loc: "" });
       form.resetFields();
       closeModal();
@@ -114,7 +124,7 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
           {t("vendor.account info")}
           <TurtleQuestionTooltip content={t("tooltip.main account info")} />
         </TurtleText>
-        <BankSelect banks={banks} setBanks={setBanks} />
+        <AccountSelect accountList={accountList} setAccountList={setAccountList} />
         <TurtleText>{t("vendor.biz info")}</TurtleText>
         <TurtleInput // 사업자 번호 Input
           name="biz_num"

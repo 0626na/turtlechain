@@ -6,14 +6,9 @@ import { useTranslation } from "react-i18next";
 import CreateVendorsModal from "./CreateVendorsModal";
 import { DownloadOutlined, FileOutlined } from "@ant-design/icons";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
+import { t } from "i18next";
 
-interface Props {
-  selectStore: (storeId: number) => void;
-}
-
-function Toolbar({ selectStore }: Props) {
-  const { t } = useTranslation();
-
+function Toolbar() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   return (
@@ -29,7 +24,7 @@ function Toolbar({ selectStore }: Props) {
         }}
       >
         <Col>
-          <StoreSelect selectStore={selectStore} />
+          <StoreSelect />
         </Col>
         <Col>
           <Space>

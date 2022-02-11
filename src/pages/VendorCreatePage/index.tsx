@@ -1,15 +1,12 @@
 import PageHeader from "components/PageHeader";
-import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import CreateVendorForm from "./CreateVendorForm";
+import { t } from "i18next";
 
 function VendorCreatePage() {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("vendor.create")}`;
-
-  const [storeId, setStoreId] = useState<number>(-1);
 
   return (
     <>
@@ -20,8 +17,8 @@ function VendorCreatePage() {
         breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.create")]}
         info={t("description.search vendor")}
       />
-      <Toolbar selectStore={setStoreId} />
-      <CreateVendorForm storeId={storeId} />
+      <Toolbar />
+      <CreateVendorForm />
     </>
   );
 }

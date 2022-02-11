@@ -1,19 +1,14 @@
 import { message, Select, Space, Typography } from "antd";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { retailerStoreAPI } from "apis";
 import { AxiosError } from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { storeIdState } from "store/storeIdState";
+import { t } from "i18next";
 
-interface Props {
-  selectStore: (storeId: number) => void;
-}
-
-function CustomStoreSelect({ selectStore }: Props) {
-  const { t } = useTranslation();
-
+function CustomStoreSelect() {
   // 쇼핑몰 식별 번호
-  const [storeId, setStoreId] = useState<number>();
+  const [storeId, setStoreId] = useRecoilState(storeIdState);
 
   // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(
@@ -31,17 +26,10 @@ function CustomStoreSelect({ selectStore }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        //setStoreId(data.data.data[0].id);
-        //selectStore(data.data.data[0].id);
+        // TODO: 쇼핑몰이 1개일때는 해당 쇼핑몰 선택, 다중일때는 선택 안함 추가
       },
     },
   );
-
-  // 쇼핑몰 선택
-  const handleChange = useCallback((value: number) => {
-    setStoreId(value);
-    selectStore(value);
-  }, []);
 
   return (
     <Space size="large">
@@ -50,7 +38,7 @@ function CustomStoreSelect({ selectStore }: Props) {
         placeholder={t("description.select mall")}
         loading={getStoresQuery.isLoading}
         style={{ width: "20rem" }}
-        onChange={handleChange}
+        onChange={setStoreId}
         value={storeId}
       >
         {getStoresQuery.data?.data.data.map(({ name, id }) => {
