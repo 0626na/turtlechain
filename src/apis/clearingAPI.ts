@@ -65,7 +65,7 @@ interface ws_store {
   store_phone: Array<ws_store_phone>;
 }
 
-interface ResponseClearingItem {
+export interface ResponseClearingItem {
   id: number;
   ws_store_id: ws_store;
   created_by: number;

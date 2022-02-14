@@ -165,7 +165,7 @@ function WarehousingItemListModal({
       </Descriptions>
       <Table
         loading={getWarehousingItemQuery.isLoading}
-        style={{ height: "65vh", overflowY: "scroll" }}
+        scroll={{ y: "65vh" }}
         dataSource={warehousingItemList}
         rowKey={"id"}
         pagination={false}
@@ -213,8 +213,8 @@ function WarehousingItemListModal({
             key: "id",
             render: (_, item) => (
               <Switch
-                checkedChildren="O"
-                defaultChecked
+                style={{ color: "#2174F1" }}
+                checkedChildren={t("button.include")}
                 checked={!!item.is_vat_included}
                 onClick={() => onChangeIsVatIncluded(item)}
               />

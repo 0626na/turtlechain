@@ -1,18 +1,9 @@
-import { Input, Select, Space, Collapse, Row, Table, message, Popconfirm, Modal } from "antd";
-import TurtleInput from "components/common/TurtleInput";
-import TurtleSearchInput from "components/common/TurtleSearchInput";
-import TurtleText from "components/common/TurtleText";
-import TurtleTextArea from "components/common/TurtleTextArea";
-import TurtleButton from "components/common/TurtleButton";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Space, Collapse, Row, Badge, Divider } from "antd";
+import styled from "styled-components";
 import { t } from "i18next";
-import StoreSelect from "components/StoreSelect";
-import { RequestGetClearingSheet, warehousingItem, adjustmentItem } from "apis/clearingAPI";
-import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { useQueryClient, useMutation, useQuery } from "react-query";
-import { warehousingAPI } from "apis";
-import axios, { AxiosError } from "axios";
-import WarehousingItemListModal from "./WarehousingItemListModal";
+import { WarehousingSheet } from "apis/warehousingAPI";
+import TurtleButton from "components/common/TurtleButton";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
 const { Panel } = Collapse;
@@ -96,19 +87,43 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   const handleActivePanelChange = (activeKey: string | string[]) => setActivePanelId(activeKey);
 
   const panelOneHeader = (
-    <Space>
-      1 입고 결제 대기 <strong>입고 총 금액 : {warehousingTotal.toLocaleString()}</strong>
+    <Space size={5}>
+      <Badge
+        count={1}
+        style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
+      />
+      <span style={{ fontSize: 16, color: "#242934" }}>입고 결제 대기</span>
+      <Divider type="vertical" />
+      <span style={{ fontSize: 16, color: "#5B5D63" }}>
+        입고 총 금액 : {warehousingTotal.toLocaleString()}
+      </span>
     </Space>
   );
   const panelTwoHeader = (
-    <Space>
-      2 매입 조정 대기<strong>매입 총 금액 : {adjustmentTotal.toLocaleString()}</strong>
+    <Space size={5}>
+      <Badge
+        count={2}
+        style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
+      />
+      <span style={{ fontSize: 16, color: "#242934" }}>매입 조정 대기</span>
+      <Divider type="vertical" />
+      <span style={{ fontSize: 16, color: "#5B5D63" }}>
+        입고 총 금액 : {adjustmentTotal.toLocaleString()}
+      </span>
     </Space>
   );
-  const panelThreeHeader = <Space>3 정산 금액 미리보기</Space>;
+  const panelThreeHeader = (
+    <Space size={5}>
+      <Badge
+        count={3}
+        style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
+      />
+      <span style={{ fontSize: 16, color: "#242934" }}>정산 금액 미리보기</span>
+    </Space>
+  );
 
   return (
-    <>
+    <FormTitleContainer>
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
         <Panel header={panelOneHeader} key="1">
           <WarehousingWaitingTable
@@ -122,7 +137,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             selectedWarehousingSheetRowKeys={selectedWarehousingSheetRowKeys}
             setSelectedWarehousingSheetRowKeys={setSelectedWarehousingSheetRowKeys}
           />
-          <Row justify="center" align="middle">
+          <Row justify="end" align="middle">
             <TurtleButton
               children={t("button.next step")}
               onClick={() => {
@@ -137,7 +152,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
           />
-          <Row justify="center" align="middle">
+          <Row justify="end" align="middle">
             <TurtleButton
               children={t("button.next step")}
               onClick={() => {
@@ -151,10 +166,25 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
           <Row>매입차감 : {adjustmentTotal}</Row>
           <Row>당일미송 : 얼마..</Row>
           <Row>합계 : {`123456789`.toLocaleString()} (입고총금액 - 매입차감 + 당일미송</Row>
+          <Row justify="end" align="middle">
+            <TurtleButton
+              children={t("button.request clearing")}
+              onClick={() => {
+                // 대충 정산등록 API 날림
+              }}
+            />
+          </Row>
         </Panel>
       </Collapse>
-    </>
+    </FormTitleContainer>
   );
 }
+
+const FormTitleContainer = styled.div`
+  .ant-collapse-content-box {
+    background-color: #f8f9fb;
+    padding-top: 0;
+  }
+`;
 
 export default ClearingCreateAccordion;

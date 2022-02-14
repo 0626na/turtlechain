@@ -5,16 +5,18 @@ import StoreSelect from "components/StoreSelect";
 import moment from "moment";
 import { Dispatch, SetStateAction } from "react";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
+import { t } from "i18next";
+import { searchStateProps } from "./index";
 
 interface Props {
   selectStore: (storeId: number | "") => void;
   searchQuery: RequestGetClearingSheet;
   setSearchQuery: Dispatch<SetStateAction<RequestGetClearingSheet>>;
+  searchState: searchStateProps;
+  setSearchState: Dispatch<SetStateAction<searchStateProps>>;
 }
 
-function Toolbar({ selectStore, searchQuery, setSearchQuery }: Props) {
-  const { t } = useTranslation();
-
+function Toolbar({ selectStore, searchQuery, setSearchQuery, searchState, setSearchState }: Props) {
   return (
     <>
       <Row gutter={24} align="middle" justify="space-between">
@@ -25,7 +27,7 @@ function Toolbar({ selectStore, searchQuery, setSearchQuery }: Props) {
         </Col>
         <Col>
           <Space>
-            <TurtleButton type="primary">{t("button.download vendor")}</TurtleButton>
+            <TurtleButton type="primary">{t("button.download list")}</TurtleButton>
           </Space>
         </Col>
       </Row>
@@ -33,32 +35,51 @@ function Toolbar({ selectStore, searchQuery, setSearchQuery }: Props) {
         <Col>
           <Space size="large">
             <Typography.Text style={{ fontSize: "16px" }}>{"검색"}</Typography.Text>
-            <Select placeholder={t("placeholder.clearing_status")} style={{ width: 100 }}>
-              <Select.Option value={t("clearing.status.all")} key={0}>
+            <Select
+              placeholder={t("placeholder.clearing_status")}
+              style={{ width: 100 }}
+              value={searchState.clearing_status}
+              onChange={(value) => {
+                setSearchState({
+                  ...searchState,
+                  clearing_status: value,
+                });
+              }}
+            >
+              <Select.Option value={"all"} key={0}>
                 {t("clearing.status.all")}
               </Select.Option>
-              <Select.Option value={t("clearing.status.request")} key={1}>
+              <Select.Option value={"request"} key={1}>
                 {t("clearing.status.request")}
               </Select.Option>
-              <Select.Option value={t("clearing.status.pending")} key={2}>
+              <Select.Option value={"pending"} key={2}>
                 {t("clearing.status.pending")}
               </Select.Option>
-              <Select.Option value={t("clearing.status.complete")} key={3}>
+              <Select.Option value={"complete"} key={3}>
                 {t("clearing.status.complete")}
               </Select.Option>
             </Select>
-            <Select placeholder={t("placeholder.clearing_date")} style={{ width: 128 }}>
-              <Select.Option value={undefined} key={undefined}>
-                {undefined}
-              </Select.Option>
+            <Select
+              placeholder={t("placeholder.clearing_date")}
+              value={searchState.clearing_date}
+              style={{ width: 128 }}
+              onChange={(value) => {
+                setSearchState({
+                  ...searchState,
+                  clearing_date: value,
+                });
+              }}
+              allowClear={true}
+            >
               <Select.Option value={2} key={2}>
-                일자1
+                {t("clearing.date.request")}
               </Select.Option>
               <Select.Option value={3} key={3}>
-                일자2
+                {t("clearing.date.complete")}
               </Select.Option>
             </Select>
             <DatePicker.RangePicker
+              disabled={searchState.clearing_date === undefined}
               allowClear={false}
               value={[
                 searchQuery.start_date ? moment(searchQuery.start_date) : null,

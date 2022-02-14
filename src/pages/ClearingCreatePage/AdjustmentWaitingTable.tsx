@@ -269,9 +269,7 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
             ellipsis: true,
             title: t("adjustment.is_vat_included"),
             dataIndex: "is_vat_included",
-            render: (value) => (
-              <Switch checkedChildren="O" defaultChecked checked={!!value} disabled />
-            ),
+            render: (value) => <Space>{!!value ? "O" : ""}</Space>,
           },
         ]}
       />

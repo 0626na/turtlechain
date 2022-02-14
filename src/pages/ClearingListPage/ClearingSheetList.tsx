@@ -10,6 +10,7 @@ import {
   Table,
   Button,
   Tooltip,
+  Space,
 } from "antd";
 import { vendorAPI } from "apis";
 import { AxiosError } from "axios";
@@ -17,18 +18,13 @@ import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
-import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
 import { t } from "i18next";
 
-import styled from "styled-components";
-import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
-import { Vendor, RequestGetVendors } from "apis/vendorAPI";
 import { useState } from "react";
-import TurtleBadge from "components/common/TurtleBadge";
-import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
-import { RequestGetClearingSheet } from "apis/clearingAPI";
+import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
 import { clearingAPI } from "apis";
+import ClearingDetailModal from "./ClearingDetailModal";
 
 interface Props {
   searchQuery: RequestGetClearingSheet;
@@ -40,6 +36,9 @@ interface Props {
 }
 
 function ClearingSheetList({ searchQuery, searchState }: Props) {
+  const [detailModalVisible, setDetailModalVisible] = useState<boolean>(false);
+  const [selectedClearingSheet, setSelectedClearingSheet] = useState<ClearingSheet>();
+
   const getClearingSheetQuery = useQuery(
     [
       "getWarehousingSheet",
@@ -58,52 +57,77 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
     },
   );
   return (
-    <Table
-      rowKey={"id"}
-      loading={getClearingSheetQuery.isLoading}
-      dataSource={getClearingSheetQuery.data?.data}
-      columns={[
-        {
-          ellipsis: true,
-          title: "Temporary id remove this",
-          dataIndex: "id",
-          key: "id",
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.request_date"),
-          dataIndex: "request_date",
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.complete_date"),
-          dataIndex: "complete_date",
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.total_price"),
-          dataIndex: "total_price",
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.status.default"),
-          dataIndex: "status",
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.detail"),
-          render: () => <TurtleButtonSub children={t("button.details")} onClick={() => {}} />,
-        },
-        {
-          ellipsis: true,
-          title: t("clearing.delete"),
-          render: (record) => {
-            if (record.status === "request")
-              return <TurtleButtonSub children={t("button.delete")} onClick={() => {}} />;
+    <>
+      <Table
+        rowKey={"id"}
+        onRow={(record) => ({
+          onClick: () => {
+            setSelectedClearingSheet(record);
           },
-        },
-      ]}
-    />
+        })}
+        loading={getClearingSheetQuery.isLoading}
+        dataSource={getClearingSheetQuery.data?.data}
+        columns={[
+          {
+            ellipsis: true,
+            title: "Temporary id remove this",
+            dataIndex: "id",
+            key: "id",
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.request_date"),
+            dataIndex: "request_date",
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.complete_date"),
+            dataIndex: "complete_date",
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.total_price"),
+            dataIndex: "total_price",
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.status.default"),
+            dataIndex: "status",
+            render: (value) => {
+              return <Space>{t("clearing.status." + value)}</Space>;
+            },
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.detail.default"),
+            render: () => (
+              <TurtleButtonSub
+                color="gray"
+                children={t("button.details")}
+                onClick={() => {
+                  setDetailModalVisible(!detailModalVisible);
+                }}
+              />
+            ),
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.delete"),
+            render: (record) => {
+              if (record.status === "request")
+                return (
+                  <TurtleButtonSub color="red" children={t("button.delete")} onClick={() => {}} />
+                );
+            },
+          },
+        ]}
+      />
+      <ClearingDetailModal
+        detailModalVisible={detailModalVisible}
+        setDetailModalVisible={setDetailModalVisible}
+        selectedClearingSheet={selectedClearingSheet}
+      />
+    </>
   );
 }
 

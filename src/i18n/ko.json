@@ -76,6 +76,7 @@
     "upload order sheet": "주문서 업로드",
     "load adjustment": "매입조정 불러오기",
     "download order list": "주문 내역 다운로드",
+    "download list": "내역 다운로드",
     "create bulk vendor": "거래처 대량 등록",
     "load vendor": "거래처 불러오기",
     "download vendor": "거래처 다운로드",
@@ -86,8 +87,9 @@
     "price confirm": "금액 확정하기",
     "remove": "제외하기",
     "cancel": "취소",
-    "next step": "다음 단계로 이동",
-    "select": "선택하기"
+    "next step": "다음 단계",
+    "select": "선택하기",
+    "request clearing": "결제 요청 등록"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
@@ -175,6 +177,10 @@
     "supply_price": "공급가액",
     "vat_price": "부가세",
     "is_vat_included": "부가세 포함 여부",
+    "date": {
+      "request": "결제 요청 일자",
+      "complete": "결제 완료 일자"
+    },
     "vendor": {
       "code":"거래처 코드",
       "name": "거래처명",

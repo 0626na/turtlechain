@@ -6,7 +6,7 @@ interface Props {
   children: TFunctionResult;
   icon?: "download" | "file";
   size?: "small" | "middle";
-  color?: "skyblue" | "blue" | "red" | "green";
+  color?: "skyblue" | "blue" | "red" | "green" | "gray";
   onClick?: () => void;
 }
 
@@ -23,6 +23,9 @@ function TurtleButton({ children, icon, size = "middle", color = "skyblue", onCl
     }
     if (color === "green") {
       return "#00B594";
+    }
+    if (color === "gray") {
+      return "#A1A2A6";
     }
     return "";
   };

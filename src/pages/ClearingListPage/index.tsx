@@ -6,19 +6,21 @@ import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import ClearingSheetList from "./ClearingSheetList";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
+import { t } from "i18next";
+
+export interface searchStateProps {
+  page: number;
+  clearing_status: "all" | "request" | "pending" | "complete";
+  clearing_date: undefined | "request_date" | "complete_date";
+}
 
 function ClearingListPage() {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("clearing.list")}`;
 
-  const [searchState, setSearchState] = useState<{
-    page: number;
-    clearing_status: "all" | "request" | "pending" | "complete";
-    clearing_date: undefined | "request_date" | "complete_date";
-  }>({
+  const [searchState, setSearchState] = useState<searchStateProps>({
     page: 1,
     clearing_status: "all",
-    clearing_date: undefined
+    clearing_date: undefined,
   });
 
   const [searchQuery, setSearchQuery] = useState<RequestGetClearingSheet>({
@@ -34,7 +36,7 @@ function ClearingListPage() {
     setSearchState({
       page: 1,
       clearing_status: "all",
-      clearing_date: undefined
+      clearing_date: undefined,
     });
     setSearchQuery({
       rt_store_id: storeId,
@@ -57,6 +59,8 @@ function ClearingListPage() {
         selectStore={selectStore}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        searchState={searchState}
+        setSearchState={setSearchState}
       />
       <ClearingSheetList searchQuery={searchQuery} searchState={searchState} />
     </>
