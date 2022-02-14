@@ -92,7 +92,7 @@ function VendorList() {
     (e: React.ChangeEvent<HTMLInputElement>, record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
-          vendor.vendor_id === record.vendor_id
+          vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
                 memo_value: e.currentTarget.value,
@@ -109,7 +109,7 @@ function VendorList() {
       if (record.memo_value === record.memo) return;
       setVendorList(
         vendorList?.map((vendor) =>
-          vendor.vendor_id === record.vendor_id
+          vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
                 memo: record.memo_value,
@@ -131,7 +131,7 @@ function VendorList() {
     (record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
-          vendor.vendor_id === record.vendor_id
+          vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
                 memo_active: !record.memo_active,
@@ -147,7 +147,7 @@ function VendorList() {
     (record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
-          vendor.vendor_id === record.vendor_id
+          vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
                 is_taxed: !record.is_taxed,
@@ -205,7 +205,7 @@ function VendorList() {
         size="small"
         loading={getVendorsQuery.isLoading}
         dataSource={vendorList}
-        rowKey={(record) => record.vendor_id}
+        rowKey={(record) => record.vendor_code}
         pagination={false}
         expandable={{
           expandedRowRender: (record) => (
@@ -271,8 +271,8 @@ function VendorList() {
             width: "10%",
             title: t("vendor.code"),
             render: (_, record) => (
-              <Tooltip placement="topLeft" title={record.vendor_id}>
-                {record.vendor_id}
+              <Tooltip placement="topLeft" title={record.vendor_code}>
+                {record.vendor_code}
               </Tooltip>
             ),
           },

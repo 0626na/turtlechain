@@ -39,7 +39,7 @@ export interface WholeSaleStore {
 // 거래처 타입
 export interface Vendor {
   id: number;
-  vendor_id: string;
+  vendor_code: string;
   vendor_name: string;
   vendor_address: string;
   is_taxed: boolean;
@@ -78,11 +78,11 @@ const searchVendor = async function (query: RequestSearchVendor) {
 // Request: 거래처 등록
 export interface RequestCreateVendor {
   rt_store_id: number;
-  vendor_id: string;
+  vendor_code: string;
   vendor_account_id: number;
   vendor_phone_id: number;
   ws_store_id?: number;
-  vendor_building?: string;
+  vendor_address?: string;
   vendor_name?: string;
   memo?: string;
   is_taxed?: boolean;
@@ -95,9 +95,8 @@ export interface RequestCreateVendor {
 export interface ResponseCreateVendor {
   msg: string;
   data: {
-    cannot_find_store: number;
-    already_exist_vendor: number;
-    already_exist_id: number;
+    fail_count: number;
+    success_count: number;
   };
 }
 

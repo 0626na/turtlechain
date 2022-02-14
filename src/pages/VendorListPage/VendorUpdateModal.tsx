@@ -14,6 +14,7 @@ import {
   StoreAddress,
 } from "apis/bucketListAPI";
 import { t } from "i18next";
+import PhoneSelect from "components/PhoneSelect";
 
 interface Props {
   visible: boolean;
@@ -34,6 +35,9 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
   const [accountList, setAccountList] = useState<Array<StoreAccountView>>([
     { bank: "", account_number: "", account_holder: "", is_main: true },
   ]);
+
+  const [storePhoneList, setStorePhoneList] = useState<Array<string>>([""]);
+
   // 렌더링 시 form객체 selectedRow로 채운다.
   // useEffect(() => {
   //   const storePhones: Array<string> = [];
@@ -105,9 +109,7 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
           placeholder={t("placeholder.phone")}
           required={false}
         />
-        {/*
-        <PhoneSelect />
-        */}
+        <PhoneSelect phoneList={storePhoneList} setPhoneList={setStorePhoneList} />
         <AddressSelect selectedAddress={selectedAddress} selectAddress={selectAddress} />
         <TurtleInput // 기타 주소 Input
           name="ext"
@@ -133,6 +135,7 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
               onClick={() => {
                 console.log(form.getFieldsValue());
               }}
+              disabled={true}
             >
               {t("button.request update")}
             </TurtleButton>

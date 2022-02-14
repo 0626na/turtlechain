@@ -5,7 +5,6 @@ import {
   message,
   Modal,
   notification,
-  Popconfirm,
   Popover,
   Radio,
   Row,
@@ -13,42 +12,34 @@ import {
   Switch,
   Table,
   Tabs,
-  Tooltip,
   Typography,
   Upload,
 } from "antd";
-import { useTranslation } from "react-i18next";
 import { UploadOutlined } from "@ant-design/icons";
 import TurtleInfo from "components/common/TurtleInfo";
 import { useMutation } from "react-query";
 import { excelAPI, vendorAPI } from "apis";
 import { AxiosError } from "axios";
-import { useState } from "react";
-import { ParseCount, Vendor } from "apis/excelAPI";
+import { memo, useCallback, useMemo, useState } from "react";
+import { MasterVendor, ParseCount, Vendor, VendorShow } from "apis/excelAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleBadge from "components/common/TurtleBadge";
 import { FileTextOutlined } from "@ant-design/icons";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
-import { RequestCreateVendor, RequestGetVendors } from "apis/vendorAPI";
+import { RequestCreateVendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { t } from "i18next";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
 }
 
-interface VendorShow extends Vendor {
-  memo?: string;
-  memo_active?: boolean;
-  memo_value?: string;
-  is_taxed?: boolean;
-  vendor_name?: string;
-}
-
 function CreateVendorsModal({ visible, closeModal }: Props) {
-  const { t } = useTranslation();
-
+  const storeId = useRecoilValue(storeIdState);
   const form = new FormData();
 
   const parseVendorsQuery = useMutation("parseVendors", excelAPI.parseVendors, {
@@ -59,17 +50,27 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       setSuccessList(
         data.data.success.map((vendor) => ({
           ...vendor,
+          memo: "",
           memo_value: "",
           memo_active: true,
-          vendor_name: vendor.name,
+          is_taxed: false,
+          use_vendor_name: vendor.name,
         })),
       );
       setSuggestList(
         data.data.suggest.map((vendor) => ({
           ...vendor,
+          memo: "",
           memo_value: "",
           memo_active: true,
-          vendor_name: vendor.name,
+          is_taxed: false,
+          use_vendor_name: vendor.name,
+          use_vendor: vendor.ws_store_info.length === 1 ? vendor.ws_store_info[0] : undefined,
+          use_account:
+            vendor.ws_store_info.length === 1 && vendor.ws_store_info[0].store_account.length === 1
+              ? vendor.ws_store_info[0].store_account[0]
+              : undefined,
+          check_account: false,
         })),
       );
       setFailList(data.data.fail);
@@ -80,27 +81,264 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const [count, setCount] = useState<ParseCount>();
   const [successList, setSuccessList] = useState<Array<VendorShow>>();
   const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
-  const [failList, setFailList] = useState<Array<VendorShow>>();
-  const [resultList, setResultList] = useState<Array<RequestCreateVendor>>([]);
+  const [failList, setFailList] = useState<Array<Vendor>>();
 
-  const createVendorsQuery = useMutation([
-    "createVendors",
+  const createVendorsQuery = useMutation(
+    ["createVendors"], //
     vendorAPI.createVendor,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: () => {
+      onSuccess: (data) => {
         notification.open({
           type: "success",
-          message: "성공적으로 등록하였습니다.",
+          message: `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         });
+        closeModal();
       },
     },
-  ]);
+  );
+
+  const setSuccessMemoValue = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, record: VendorShow) => {
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_value: e.currentTarget.value,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  const setSuccessMemo = useCallback(
+    (record) => {
+      if (record.memo_value === "") return;
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo: record.memo_value,
+                memo_active: false,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  const setSuccessMemoActive = useCallback(
+    (record) => {
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_active: true,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  const setSuccessIsTaxed = useCallback(
+    (record) => {
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                is_taxed: !record.is_taxed,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  const setSuccessUseVendorName = useCallback(
+    (e, record) => {
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                use_vendor_name: e.currentTarget.value,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  const setSuggestMemoActive = useCallback(
+    (record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_active: true,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const setSuggestMemoValue = useCallback(
+    (e, record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_value: e.currentTarget.value,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const setSuggestMemo = useCallback(
+    (record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo: record.memo_value,
+                memo_active: false,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const setSuggestIsTaxed = useCallback(
+    (record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                is_taxed: !record.is_taxed,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const setSuggestVendor = useCallback(
+    (record, accountId) => {
+      const newSuggestList = suggestList?.map((vendor) =>
+        record.vendor_code === vendor.vendor_code
+          ? {
+              ...vendor,
+              use_vendor: record.ws_store_info.filter(
+                (info: MasterVendor) => info.id === accountId,
+              )[0],
+              use_account: undefined,
+              check_account: false,
+            }
+          : vendor,
+      );
+      setSuggestList(newSuggestList);
+    },
+    [suggestList],
+  );
+
+  const setSuggestAccount = useCallback(
+    (record, accountId) => {
+      const filteredSuggestList = suggestList?.map((vendor) =>
+        record.vendor_code === vendor.vendor_code
+          ? {
+              ...vendor,
+              use_account: record.use_vendor?.store_account.filter(
+                (account: VendorAccount) => account.id === accountId,
+              )[0],
+              check_account: true,
+            }
+          : vendor,
+      );
+      setSuggestList(filteredSuggestList);
+    },
+    [suggestList],
+  );
+
+  const setSuggestUseVendorName = useCallback(
+    (e, record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                use_vendor_name: e.currentTarget.value,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const getSuggestCount = useMemo((): number => {
+    let count = 0;
+    suggestList?.forEach((vendor: VendorShow) => {
+      if (!(vendor.use_vendor && vendor.check_account)) count++;
+    });
+    return count;
+  }, [suggestList]);
 
   const onClickCreate = () => {
-    createVendorsQuery.mutate();
+    const resultList: Array<RequestCreateVendor> = [];
+    successList?.forEach((vendor) => {
+      resultList.push({
+        rt_store_id: storeId ?? -1,
+        vendor_code: vendor.vendor_code,
+        vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
+        vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
+        ws_store_id: vendor.ws_store_info[0].id,
+        vendor_address: vendor.ws_store_info[0].address,
+        vendor_name: vendor.use_vendor_name,
+        memo: vendor.memo,
+        is_taxed: vendor.is_taxed,
+      });
+    });
+    suggestList?.forEach((vendor) => {
+      if (vendor.use_vendor && vendor.use_account && vendor.check_account) {
+        resultList.push({
+          rt_store_id: storeId ?? -1,
+          vendor_code: vendor.vendor_code,
+          vendor_account_id: vendor.use_account?.id,
+          vendor_phone_id: vendor.use_vendor.store_phone[0].id,
+          ws_store_id: vendor.use_vendor.id,
+          vendor_address: vendor.use_vendor.address,
+          vendor_name: vendor.use_vendor_name,
+          memo: vendor.memo,
+          is_taxed: vendor.is_taxed,
+        });
+      }
+    });
+    createVendorsQuery.mutate(resultList);
   };
 
   return (
@@ -126,6 +364,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           accept=".csv, .xls, .xlxs"
           customRequest={({ file, onSuccess }) => {
             form.append("files", file);
+            form.append("rt_store_id", storeId?.toString() ?? "");
             parseVendorsQuery.mutate(form);
           }}
         >
@@ -137,18 +376,22 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          *
          *
-         * 정상 탭
+         * 매칭 탭
          *
          *
          *
          */}
-        <Tabs.TabPane tab="정상" key="1">
-          거래처 대량 등록 미리보기 {count?.success_count}건
+        <Tabs.TabPane tab="매칭" key="1">
+          거래처 대량 등록 미리보기{" "}
+          <span style={{ color: "#00BB88", textDecoration: "underline" }}>
+            {count?.success_count}
+          </span>
+          건
           <Table
             size="small"
             loading={parseVendorsQuery.isLoading}
             dataSource={successList}
-            rowKey={(record) => record.vendor_id}
+            rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
             expandable={{
               expandedRowRender: (record) => (
@@ -158,15 +401,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                       <Input
                         value={record.memo_value === "" ? record.memo : record.memo_value}
                         onChange={(e) => {
-                          const newSuccessList = successList?.map((vendor) =>
-                            vendor.vendor_id === record.vendor_id
-                              ? {
-                                  ...vendor,
-                                  memo_value: e.currentTarget.value,
-                                }
-                              : vendor,
-                          );
-                          setSuccessList(newSuccessList);
+                          setSuccessMemoValue(e, record);
                         }}
                       />
                       <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
@@ -179,17 +414,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                           <TurtleButtonSub
                             size="small"
                             onClick={() => {
-                              if (record.memo_value === "") return;
-                              const newSuccessList = successList?.map((vendor) =>
-                                vendor.vendor_id === record.vendor_id
-                                  ? {
-                                      ...vendor,
-                                      memo: record.memo_value,
-                                      memo_active: false,
-                                    }
-                                  : vendor,
-                              );
-                              setSuccessList(newSuccessList);
+                              setSuccessMemo(record);
                             }}
                           >
                             확인
@@ -205,15 +430,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                           <TurtleButtonSub
                             size="small"
                             onClick={() => {
-                              const newSuccessList = successList?.map((vendor) =>
-                                vendor.vendor_id === record.vendor_id
-                                  ? {
-                                      ...vendor,
-                                      memo_active: true,
-                                    }
-                                  : vendor,
-                              );
-                              setSuccessList(newSuccessList);
+                              setSuccessMemoActive(record);
                             }}
                           >
                             수정
@@ -283,27 +500,20 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               Table.EXPAND_COLUMN,
               {
+                ellipsis: true,
                 title: "메모",
                 width: "5%",
               },
               {
-                title: "부가세 포함 여부",
                 ellipsis: true,
+                title: "부가세 포함 여부",
                 render: (_, record) => {
                   return (
                     <Switch
                       checkedChildren={t("button.include")}
                       checked={record.is_taxed}
                       onClick={() => {
-                        const newSuccessList = successList?.map((vendor) =>
-                          vendor.vendor_id === record.vendor_id
-                            ? {
-                                ...vendor,
-                                is_taxed: !record.is_taxed,
-                              }
-                            : vendor,
-                        );
-                        setSuccessList(newSuccessList);
+                        setSuccessIsTaxed(record);
                       }}
                       style={{ width: "52px" }}
                     />
@@ -311,21 +521,38 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 },
               },
               {
+                ellipsis: true,
+                align: "center",
+                width: "6%",
+                title: "(체크)",
+                render: (_, record) => {
+                  if (
+                    record.ws_store_info.length === 1 &&
+                    record.ws_store_info[0]?.store_account.length === 1
+                  ) {
+                    // resultList에 넣기 - 거래처 등록 버튼클릭시에 넣어야할듯
+                    // resultList?.push({
+                    //   rt_store_id: -1,
+                    //   vendor_code: record.vendor_code,
+                    //   vendor_account_id: record.ws_store_info[0]?.store_account[0].id,
+                    //   vendor_phone_id: record.ws_store_info[0]?.store_phone[0].id,
+                    //   memo: record.memo,
+                    //   is_taxed: record.is_taxed,
+                    // });
+                    return <CheckOutlined style={{ color: "green" }} />;
+                  }
+                  return <CloseOutlined style={{ color: "red" }} />;
+                },
+              },
+              {
+                ellipsis: true,
                 title: "사용할 거래처명",
                 render: (_, record) => (
                   <Input
                     size="small"
-                    value={record.vendor_name}
+                    value={record.use_vendor_name}
                     onChange={(e) => {
-                      const newSuccessList = successList?.map((vendor) =>
-                        vendor.vendor_id === record.vendor_id
-                          ? {
-                              ...vendor,
-                              vendor_name: e.currentTarget.value,
-                            }
-                          : vendor,
-                      );
-                      setSuccessList(newSuccessList);
+                      setSuccessUseVendorName(e, record);
                     }}
                   />
                 ),
@@ -343,54 +570,23 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          */}
         <Tabs.TabPane tab="추천" key="2">
-          거래처 대량 등록 미리보기 {count?.suggest_count}건
+          거래처 대량 등록 미리보기{" "}
+          <span style={{ color: "red", textDecoration: "underline" }}>{getSuggestCount}</span>건
           <Table
             size="small"
             loading={parseVendorsQuery.isLoading}
             dataSource={suggestList}
-            rowKey={(record) => record.vendor_id}
+            rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
                   {record.memo_active ? (
                     <>
-                      <div>{record.memo} </div>
-                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
-                        <Col>
-                          <TurtleButtonSub
-                            size="small"
-                            onClick={() => {
-                              const newSuggestList = suggestList?.map((vendor) =>
-                                vendor.vendor_id === record.vendor_id
-                                  ? {
-                                      ...vendor,
-                                      memo_active: true,
-                                    }
-                                  : vendor,
-                              );
-                              setSuggestList(newSuggestList);
-                            }}
-                          >
-                            수정
-                          </TurtleButtonSub>
-                        </Col>
-                      </Row>
-                    </>
-                  ) : (
-                    <>
                       <Input
                         value={record.memo_value === "" ? record.memo : record.memo_value}
                         onChange={(e) => {
-                          const newSuggestList = suggestList?.map((vendor) =>
-                            vendor.vendor_id === record.vendor_id
-                              ? {
-                                  ...vendor,
-                                  memo_value: e.currentTarget.value,
-                                }
-                              : vendor,
-                          );
-                          setSuggestList(newSuggestList);
+                          setSuggestMemoValue(e, record);
                         }}
                       />
                       <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
@@ -403,20 +599,26 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                           <TurtleButtonSub
                             size="small"
                             onClick={() => {
-                              const newSuggestList = suggestList?.map((vendor) =>
-                                vendor.vendor_id === record.vendor_id
-                                  ? {
-                                      ...vendor,
-                                      memo: record.memo_value,
-                                      memo_value: "",
-                                      memo_active: false,
-                                    }
-                                  : vendor,
-                              );
-                              setSuggestList(newSuggestList);
+                              setSuggestMemo(record);
                             }}
                           >
                             확인
+                          </TurtleButtonSub>
+                        </Col>
+                      </Row>
+                    </>
+                  ) : (
+                    <>
+                      <div>{record.memo} </div>
+                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                        <Col>
+                          <TurtleButtonSub
+                            size="small"
+                            onClick={() => {
+                              setSuggestMemoActive(record);
+                            }}
+                          >
+                            수정
                           </TurtleButtonSub>
                         </Col>
                       </Row>
@@ -427,7 +629,10 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               columnWidth: 25,
               expandIcon: ({ expanded, onExpand, record }) => {
                 return (
-                  <FileTextOutlined style={{ opacity: 0.4 }} onClick={(e) => onExpand(record, e)} />
+                  <FileTextOutlined
+                    style={record.memo ? {} : { opacity: "0.4" }}
+                    onClick={(e) => onExpand(record, e)}
+                  />
                 );
               },
             }}
@@ -435,46 +640,34 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 title: "거래처 코드",
-                render: (_, record) => record.vendor_id,
+                render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
-                width: "20%",
+                width: "12%",
                 title: "쇼핑몰 입력 값",
                 render: (_, record) => {
-                  return `${record.name} ${record.address}`;
+                  return `${record.name} | ${record.address}`;
                 },
               },
               {
                 ellipsis: true,
                 title: "거래처명",
                 render: (_, record) => {
-                  if (record.ws_store_info.length === 1) return record.ws_store_info[0]?.name;
-
                   return (
                     <TurtleBadge count={record.ws_store_info.length} color="red">
                       <Popover
                         content={
                           <>
                             <p>이미 등록된 거래처명</p>
-                            <Radio.Group>
+                            <Radio.Group value={record.use_vendor?.id}>
                               <Space direction="vertical">
                                 {record.ws_store_info.map(({ name, address, id }) => (
                                   <Radio
-                                    value={id}
                                     key={id}
+                                    value={id}
                                     onClick={() => {
-                                      const filteredSuggestList = suggestList?.map((vendor) =>
-                                        record.vendor_id === vendor.vendor_id
-                                          ? {
-                                              ...vendor,
-                                              ws_store_info: record.ws_store_info.filter(
-                                                (info) => info.id === id,
-                                              ),
-                                            }
-                                          : vendor,
-                                      );
-                                      setSuggestList(filteredSuggestList);
+                                      setSuggestVendor(record, id);
                                     }}
                                   >
                                     {name} | {address}
@@ -485,7 +678,11 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                           </>
                         }
                       >
-                        <div style={{ color: "red" }}>{record.ws_store_info[0]?.name}</div>
+                        <div style={{ color: record.use_vendor ? "" : "red" }}>
+                          {record.use_vendor
+                            ? record.use_vendor.name
+                            : record.ws_store_info[0]?.name}
+                        </div>
                       </Popover>
                     </TurtleBadge>
                   );
@@ -494,91 +691,36 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 title: "거래처 주소",
-                render: (_, record) => {
-                  //if (record.ws_store_info.length === 1)
-                  return record.ws_store_info[0]?.address;
-                  // return (
-                  //   <TurtleBadge count={record.ws_store_info.length}>
-                  //     <Popover
-                  //       content={
-                  //         <>
-                  //           <p>이미 등록된 주소</p>
-                  //           <Radio.Group>
-                  //             <Space direction="vertical">
-                  //               {record.ws_store_info.map(({ address }) => (
-                  //                 <Radio value={address} key={address}>
-                  //                   {address}
-                  //                 </Radio>
-                  //               ))}
-                  //             </Space>
-                  //           </Radio.Group>
-                  //         </>
-                  //       }
-                  //     >
-                  //       다중주소
-                  //     </Popover>
-                  //   </TurtleBadge>
-                  // );
-                },
+                render: (_, record) =>
+                  record.use_vendor ? record.use_vendor.address : record.ws_store_info[0]?.address,
               },
               {
                 ellipsis: true,
                 title: "휴대번호",
-                render: (_, record) => record.ws_store_info[0]?.store_phone[0]?.phone,
+                render: (_, record) => record.use_vendor?.store_phone[0]?.phone,
               },
               {
                 ellipsis: true,
                 title: "계좌정보",
+                width: "20%",
                 render: (_, record) => {
-                  if (record.ws_store_info.length !== 1) {
-                    return;
-                  }
-                  if (record.ws_store_info[0]?.store_account.length === 1) {
-                    const {
-                      bank = "",
-                      account_number = "",
-                      account_holder = "",
-                    } = record.ws_store_info[0]?.store_account[0] || {};
-                    return `${bank} ${account_number} ${account_holder}`;
-                  }
-
-                  const {
-                    bank = "",
-                    account_number = "",
-                    account_holder = "",
-                  } = record.ws_store_info[0]?.store_account[0] || {};
+                  if (!record.use_vendor) return;
 
                   return (
-                    <TurtleBadge count={record.ws_store_info[0]?.store_account.length} color="red">
+                    <TurtleBadge count={record.use_vendor?.store_account.length} color="red">
                       <Popover
                         content={
                           <>
                             <p>이미 등록된 계좌정보</p>
-                            <Radio.Group>
+                            <Radio.Group value={record.use_account?.id}>
                               <Space direction="vertical">
-                                {record.ws_store_info[0]?.store_account.map(
+                                {record.use_vendor?.store_account.map(
                                   ({ id, bank, account_number, account_holder }) => (
                                     <Radio
                                       value={id}
                                       key={id}
                                       onClick={() => {
-                                        const filteredSuggestList = suggestList?.map((vendor) =>
-                                          record.vendor_id === vendor.vendor_id
-                                            ? {
-                                                ...vendor,
-                                                ws_store_info: [
-                                                  {
-                                                    ...record.ws_store_info[0],
-                                                    store_account:
-                                                      record.ws_store_info[0]?.store_account.filter(
-                                                        (account) => account.id === id,
-                                                      ),
-                                                  },
-                                                ],
-                                              }
-                                            : vendor,
-                                        );
-                                        setSuggestList(filteredSuggestList);
+                                        setSuggestAccount(record, id);
                                       }}
                                     >
                                       {bank} {account_number} {account_holder}
@@ -590,24 +732,16 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                           </>
                         }
                       >
-                        <div style={{ color: "red" }}>
-                          {bank} {account_number} {account_holder}
+                        <div style={{ color: record.check_account ? "" : "red" }}>
+                          {record.use_account?.bank ?? record.use_vendor.store_account[0]?.bank}{" "}
+                          {record.use_account?.account_number ??
+                            record.use_vendor.store_account[0]?.account_number}{" "}
+                          {record.use_account?.account_holder ??
+                            record.use_vendor.store_account[0]?.account_holder}
                         </div>
                       </Popover>
                     </TurtleBadge>
                   );
-
-                  /*
-                  if (record.ws_store_info.length === 1) {
-                    const {
-                      bank = "",
-                      account_number = "",
-                      account_holder = "",
-                    } = record.ws_store_info[0]?.store_account[0] || {};
-
-                    return `${bank} ${account_number} ${account_holder}`;
-                  }
-                  */
                 },
               },
               Table.EXPAND_COLUMN,
@@ -624,15 +758,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                       checkedChildren={t("button.include")}
                       checked={record.is_taxed}
                       onClick={() => {
-                        const newSuggestList = suggestList?.map((vendor) =>
-                          vendor.vendor_id === record.vendor_id
-                            ? {
-                                ...vendor,
-                                is_taxed: !record.is_taxed,
-                              }
-                            : vendor,
-                        );
-                        setSuggestList(newSuggestList);
+                        setSuggestIsTaxed(record);
                       }}
                       style={{ width: "52px" }}
                     />
@@ -642,19 +768,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               {
                 align: "center",
                 render: (_, record) => {
-                  if (
-                    record.ws_store_info.length === 1 &&
-                    record.ws_store_info[0]?.store_account.length === 1
-                  ) {
-                    // resultList에 넣기
-                    resultList?.push({
-                      rt_store_id: -1,
-                      vendor_id: record.vendor_id,
-                      vendor_account_id: record.ws_store_info[0]?.store_account[0].id,
-                      vendor_phone_id: record.ws_store_info[0]?.store_phone[0].id,
-                      memo: record.memo,
-                      is_taxed: record.is_taxed,
-                    });
+                  if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -662,9 +776,15 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 title: "사용할 거래처명",
-                render: (_, record) => {
-                  return <Input size="small" />;
-                },
+                render: (_, record) => (
+                  <Input
+                    size="small"
+                    value={record.use_vendor_name}
+                    onChange={(e) => {
+                      setSuggestUseVendorName(e, record);
+                    }}
+                  />
+                ),
               },
             ]}
           />
@@ -679,7 +799,51 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          */}
         <Tabs.TabPane tab="미매칭" key="3">
-          미매칭
+          거래처 대량 등록 미리보기{" "}
+          <span style={{ color: "red", textDecoration: "underline" }}>{count?.fail_count}</span>건
+          <Table
+            size="small"
+            loading={parseVendorsQuery.isLoading}
+            dataSource={failList}
+            rowKey={(record) => record.vendor_code}
+            pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            columns={[
+              {
+                ellipsis: true,
+                title: "거래처 코드",
+                render: (_, record) => record.vendor_code,
+              },
+              {
+                ellipsis: true,
+                width: "12%",
+                title: "쇼핑몰 입력 값",
+                render: (_, record) => {
+                  return `${record.name} | ${record.address}`;
+                },
+              },
+              {
+                ellipsis: true,
+                title: "거래처명",
+                render: (_, record) => <>(정보없음)</>,
+              },
+              {
+                ellipsis: true,
+                title: "거래처 주소",
+                render: (_, record) => <>(정보없음)</>,
+              },
+              {
+                ellipsis: true,
+                title: "휴대번호",
+                render: (_, record) => <>(정보없음)</>,
+              },
+              {
+                ellipsis: true,
+                title: "계좌정보",
+                width: "20%",
+                render: (_, record) => <>(정보없음)</>,
+              },
+            ]}
+          />
         </Tabs.TabPane>
       </Tabs>
 
@@ -699,7 +863,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           type="primary"
           //disabled={form.getFieldValue("rt_store_id") !== -1}
           //loading={createVendorQuery.isLoading}
-          //onClick={onClickCreate}
+          onClick={onClickCreate}
         >
           {t("vendor.create")}
         </TurtleButton>
