@@ -526,7 +526,10 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
                 width: "6%",
                 title: "(체크)",
                 render: (_, record) => {
-                  if (record.use_vendor && record.check_account) {
+                  if (
+                    record.ws_store_info.length === 1 &&
+                    record.ws_store_info[0]?.store_account.length === 1
+                  ) {
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -755,6 +758,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
               },
               {
                 align: "center",
+                title: "(체크)",
                 render: (_, record) => {
                   if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
