@@ -32,6 +32,11 @@ function CustomStoreSelect() {
     },
   );
 
+  // 페이지 바뀔때 마다 storeId 초기화
+  useEffect(() => {
+    setStoreId(undefined);
+  }, []);
+
   return (
     <Space size="large">
       <Typography.Text style={{ fontSize: "16px" }}>{t("store.name")}</Typography.Text>

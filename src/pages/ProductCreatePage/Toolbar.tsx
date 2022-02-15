@@ -3,9 +3,12 @@ import TurtleButtonSub from "components/common/TurtleButtonSub";
 import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 import CreateBulkProductModal from "./CreateBulkProductModal";
 
 function Toolbar() {
+  const storeId = useRecoilValue(storeIdState);
   const [createModalvisible, setCreateModalVisible] = useState(false);
 
   return (
@@ -30,14 +33,15 @@ function Toolbar() {
               onClick={() => {
                 setCreateModalVisible(true);
               }}
+              disabled={!storeId}
             >
               {t("button.create bulk product")}
             </TurtleButtonSub>
-            <TurtleButtonSub // 상품 목록 불러오기 Button
+            {/* <TurtleButtonSub // 상품 목록 불러오기 Button
               icon="download"
             >
               {t("button.load product")}
-            </TurtleButtonSub>
+            </TurtleButtonSub> */}
           </Space>
         </Col>
       </Row>

@@ -9,7 +9,7 @@ interface Props {
   onClick?: () => void;
 }
 
-function TurtleButton({ children, type = "primary", disabled, loading, onClick }: Props) {
+function TurtleButton({ children, type = "primary", disabled = false, loading, onClick }: Props) {
   return (
     <Button
       type={type === "default" ? "default" : "primary"}

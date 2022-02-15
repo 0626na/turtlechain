@@ -56,7 +56,11 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
   );
 
   const onClickCreate = useCallback(() => {
-    if (!storeId) return;
+    if (!storeId) {
+      message.warning("거래처를 먼저 선택해 주세요");
+      return;
+    }
+
     const resultList: Array<RequestCreateProduct> = [];
     successList?.forEach((product) => {
       resultList.push({
@@ -87,11 +91,12 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
       <Space>
         <Typography.Text>상품 목록 업로드 | </Typography.Text>
         <Upload //
-          multiple={false}
+          maxCount={1}
           accept=".csv, .xls, .xlsx"
-          customRequest={({ file, onSuccess }) => {
+          customRequest={({ file, onSuccess, onProgress, onError }) => {
+            if (!storeId) return;
             form.append("files", file);
-            form.append("rt_store_id", storeId?.toString() ?? "");
+            form.append("rt_store_id", storeId?.toString());
             parseProductQuery.mutate(form);
           }}
         >
@@ -285,8 +290,8 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
       <Row justify="end" style={{ padding: "1rem 0px" }}>
         <TurtleButton
           type="primary"
-          //disabled={form.getFieldValue("rt_store_id") !== -1}
-          //loading={createVendorQuery.isLoading}
+          //disabled={}
+          loading={createProductQuery.isLoading}
           onClick={onClickCreate}
         >
           {t("product.create")}

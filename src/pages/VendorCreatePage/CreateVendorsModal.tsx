@@ -83,7 +83,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
   const [failList, setFailList] = useState<Array<Vendor>>();
 
-  const createVendorsQuery = useMutation(
+  const createVendorQuery = useMutation(
     ["createVendors"], //
     vendorAPI.createVendor,
     {
@@ -338,7 +338,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         });
       }
     });
-    createVendorsQuery.mutate(resultList);
+    createVendorQuery.mutate(resultList);
   };
 
   return (
@@ -360,11 +360,12 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       <Space>
         <Typography.Text>거래처 업로드 | </Typography.Text>
         <Upload //
-          multiple={false}
+          maxCount={1}
           accept=".csv, .xls, .xlsx"
           customRequest={({ file, onSuccess }) => {
+            if (!storeId) return;
             form.append("files", file);
-            form.append("rt_store_id", storeId?.toString() ?? "");
+            form.append("rt_store_id", storeId?.toString());
             parseVendorQuery.mutate(form);
           }}
         >
@@ -862,7 +863,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         <TurtleButton
           type="primary"
           //disabled={form.getFieldValue("rt_store_id") !== -1}
-          //loading={createVendorQuery.isLoading}
+          loading={createVendorQuery.isLoading}
           onClick={onClickCreate}
         >
           {t("vendor.create")}
