@@ -53,7 +53,7 @@ export interface Vendor {
 export interface RequestSearchVendor {
   page: number;
   type: string;
-  search_query: string;
+  search_string: string;
 }
 
 // Response: 거래처 마스터 도매 조회
@@ -111,8 +111,8 @@ const createVendor = async function (data: Array<RequestCreateVendor>) {
 export interface RequestGetVendors {
   page: number;
   type: string;
-  search_query: string;
-  rt_store_id: number | null;
+  search_string: string;
+  rt_store_id?: number;
 }
 
 // Response: 거래처 리스트

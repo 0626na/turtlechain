@@ -23,7 +23,7 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
   const [searchQuery, setSearchQuery] = useState<RequestSearchVendor>({
     page: 1,
     type: "all",
-    search_query: "",
+    search_string: "",
   });
 
   const searchVendorQuery = useQuery(
@@ -52,7 +52,7 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
     setSearchQuery({
       page: 1,
       type: "all",
-      search_query: "",
+      search_string: "",
     });
   };
 
@@ -74,8 +74,9 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
     >
       <Row>
         <SearchFilter
-          onSearch={({ type, search_query }) => {
-            setSearchQuery({ page: 1, type, search_query });
+          type="vendor"
+          onSearch={({ type, search_string }) => {
+            setSearchQuery({ page: 1, type, search_string });
           }}
         />
       </Row>

@@ -42,7 +42,7 @@ function VendorList() {
   const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
     page: 1,
     type: "all",
-    search_query: "",
+    search_string: "",
     rt_store_id: -1,
   });
 
@@ -83,7 +83,7 @@ function VendorList() {
     },
   );
 
-  // 거래처 바뀔 때 리스트 검색
+  // 쇼핑몰 바뀔 때 거래처 리스트 재검색
   useEffect(() => {
     setSearchQuery({ ...searchQuery, rt_store_id: storeId });
   }, [storeId]);
@@ -166,12 +166,12 @@ function VendorList() {
 
   // 검색 버튼 클릭
   const searchVendors = useCallback(
-    ({ type, search_query }) => {
+    ({ type, search_string }) => {
       setSearchQuery({
         ...searchQuery,
         page: 1,
         type,
-        search_query,
+        search_string,
       });
       //getVendorsQuery.refetch();
     },
@@ -199,7 +199,7 @@ function VendorList() {
     <>
       <div>
         <TurtleText>{t("vendor.lists")}</TurtleText>
-        <SearchFilter onSearch={searchVendors} />
+        <SearchFilter type="vendor" onSearch={searchVendors} />
       </div>
       <Table
         size="small"

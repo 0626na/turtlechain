@@ -1,4 +1,3 @@
-import { RcFile, UploadChangeParam } from "antd/lib/upload";
 import { v2Axios } from "./index";
 import { VendorAccount, VendorPhone } from "./vendorAPI";
 

@@ -1,26 +1,24 @@
 import { Space } from "antd";
 import Search from "antd/lib/input/Search";
-import { RequestSearchVendor } from "apis/vendorAPI";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
+import { t } from "i18next";
 
 interface Props {
+  type: "vendor" | "product";
   onSearch: (searchState: SearchState) => void;
 }
 
 interface SearchState {
   type: string;
-  search_query: string;
+  search_string: string;
 }
 
-function SearchFilter({ onSearch }: Props) {
-  const { t } = useTranslation();
-
+function SearchFilter({ type, onSearch }: Props) {
   const [searchState, setSearchState] = useState<SearchState>({
     type: "all",
-    search_query: "",
+    search_string: "",
   });
 
   const onSelectSearchType = (value: string) => {
@@ -28,7 +26,7 @@ function SearchFilter({ onSearch }: Props) {
   };
 
   const onChangeSearchString = (e: React.FormEvent<HTMLInputElement>) => {
-    setSearchState({ ...searchState, search_query: e.currentTarget.value });
+    setSearchState({ ...searchState, search_string: e.currentTarget.value });
   };
 
   // 엔터키 눌렀을 때 검색
@@ -36,7 +34,7 @@ function SearchFilter({ onSearch }: Props) {
     if (e.key === "Enter") onSearch({ ...searchState });
   };
 
-  const options: Array<{ name: string; value: string }> = [
+  const vendorOptions: Array<{ name: string; value: string }> = [
     {
       name: t("common.all"),
       value: "all",
@@ -55,20 +53,39 @@ function SearchFilter({ onSearch }: Props) {
     },
   ];
 
+  const productOptions: Array<{ name: string; value: string }> = [
+    {
+      name: t("common.all"),
+      value: "all",
+    },
+    {
+      name: t("product.name"), //
+      value: "name",
+    },
+    {
+      name: t("product.vendor name"),
+      value: "vendor_product_name",
+    },
+    {
+      name: t("vendor.name"),
+      value: "vendor_name",
+    },
+  ];
+
   return (
     <Space>
       <TurtleSelect //
         label={t("common.search")}
         width="short"
         placeholder={t("placeholder.all")}
-        options={options}
+        options={type === "vendor" ? vendorOptions : productOptions}
         value={searchState.type}
         onSelect={onSelectSearchType}
       />
       <StyledSearch //
         placeholder={t("placeholder.search")}
         style={{ width: "20rem" }}
-        value={searchState.search_query}
+        value={searchState.search_string}
         onChange={onChangeSearchString}
         onKeyPress={onEnterPress}
         onSearch={() => {

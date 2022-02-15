@@ -1,6 +1,5 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import CreateVendorForm from "./CreateVendorForm";
 import { t } from "i18next";
