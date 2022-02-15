@@ -40,7 +40,7 @@ const Header = function ({ handleMenuVisible }: Props) {
           <LogoImage
             src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
-            onClick={() => history.push("/home")}
+            //onClick={() => history.push("/home")}
           />
         </Col>
         <Col>

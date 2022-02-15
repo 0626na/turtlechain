@@ -9,6 +9,7 @@ import vendorAPI from "./vendorAPI";
 import basicDataAPI from "./basicDataAPI";
 import bucketListAPI from "./bucketListAPI";
 import excelAPI from "./excelAPI";
+import productAPI from "./productAPI";
 
 export const v1Axios = axios.create({
   baseURL:
@@ -38,6 +39,7 @@ export {
   retailerStoreAPI,
   warehousingAPI,
   orderAPI,
+  productAPI,
   vendorAPI,
   basicDataAPI,
   bucketListAPI,

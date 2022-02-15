@@ -73,6 +73,7 @@
     "create bulk vendor": "거래처 대량 등록",
     "load vendor": "거래처 불러오기",
     "download vendor": "거래처 다운로드",
+    "download product": "상품 다운로드",
     "include": "포함 ",
     "exclude": "미포함",
     "add phone": "휴대번호 추가하기",
@@ -138,13 +139,17 @@
   },
   "product": {
     "": "상품",
+    "create": "상품 등록",
+    "list": "상품 목록",
+    "lists": "상품 리스트",
     "search": "상품 조회하기",
     "management": "상품 관리",
     "code": "상품 바코드",
     "name": "상품명",
     "option": "옵션",
     "price": "공급가",
-    "count": "발주수량"
+    "count": "발주수량",
+    "vendor name": "거래처 상품명"
   },
   "vendor": {
     "": "거래처",
