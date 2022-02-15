@@ -6,11 +6,12 @@ interface Props {
   children: TFunctionResult;
   icon?: "download" | "file";
   size?: "small" | "middle";
-  color?: "skyblue" | "blue" | "red" | "green" | "gray";
+  color?: "skyblue" | "blue" | "red" | "green" | "grey" | "gray";
+  disabled?: boolean;
   onClick?: () => void;
 }
 
-function TurtleButton({ children, icon, size = "middle", color = "skyblue", onClick }: Props) {
+function TurtleButtonSub({ children, icon, size = "middle", color = "skyblue", onClick }: Props) {
   const makeColor = () => {
     if (color === "skyblue") {
       return "#32ACDD";
@@ -27,6 +28,9 @@ function TurtleButton({ children, icon, size = "middle", color = "skyblue", onCl
     if (color === "gray") {
       return "#A1A2A6";
     }
+    if (color === "grey") {
+      return "#88898C";
+    }
     return "";
   };
 
@@ -36,15 +40,17 @@ function TurtleButton({ children, icon, size = "middle", color = "skyblue", onCl
       onClick={onClick}
       icon={icon === "download" ? <DownloadOutlined /> : icon === "file" ? <FileOutlined /> : ""}
       style={{
-        borderRadius: size === "small" ? "4px" : "",
+        borderRadius: 4,
         paddingTop: size === "small" ? "2.8px" : "",
+        padding: "4px 10px",
         color: makeColor(),
         borderColor: makeColor(),
       }}
+      ghost
     >
       {children}
     </Button>
   );
 }
 
-export default TurtleButton;
+export default TurtleButtonSub;

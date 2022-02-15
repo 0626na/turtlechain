@@ -10,12 +10,13 @@ import basicDataAPI from "./basicDataAPI";
 import bucketListAPI from "./bucketListAPI";
 import clearingAPI from "./clearingAPI";
 import adjustmentAPI from "./adjustmentAPI";
-
+import excelAPI from "./excelAPI";
+import productAPI from "./productAPI";
 
 export const v1Axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://api.turtleship.io/api/v1"
+      ? "https://dev.turtleship.io/api/v1"
       : "https://dev.turtleship.io/api/v1",
   headers: { "Content-Type": "application/json" },
 });
@@ -40,9 +41,11 @@ export {
   retailerStoreAPI,
   warehousingAPI,
   orderAPI,
+  productAPI,
   vendorAPI,
   basicDataAPI,
   bucketListAPI,
   clearingAPI,
   adjustmentAPI,
+  excelAPI,
 };

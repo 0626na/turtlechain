@@ -41,7 +41,7 @@ const Sider = function ({ collapsed }: Props) {
   const menu: MenuType = [
     {
       title: "HOME",
-      pathname: "/home",
+      //pathname: "/warehousing/create",
       icon: (
         <div>
           <TurtleIcon //
@@ -148,13 +148,19 @@ const Sider = function ({ collapsed }: Props) {
       title: t("product.management"),
       icon: (
         <div>
-          <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="product"
-          />
+          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/product.svg`} alt="product" />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("product.create"),
+          pathname: "/product/create",
+        },
+        {
+          title: t("product.list"),
+          pathname: "/product/list",
+        },
+      ],
     },
     {
       title: t("vendor.management"),
@@ -225,7 +231,7 @@ const Sider = function ({ collapsed }: Props) {
             );
           } else {
             return (
-              <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)} icon={icon}>
+              <Menu.Item key={title} onClick={() => handleMenuClick(pathname)} icon={icon}>
                 {title}
               </Menu.Item>
             );

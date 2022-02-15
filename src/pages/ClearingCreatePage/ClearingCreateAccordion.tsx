@@ -9,6 +9,8 @@ import { adjustmentAPI, clearingAPI } from "apis";
 import TurtleButton from "components/common/TurtleButton";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 const { Panel } = Collapse;
 
 /*
@@ -40,11 +42,8 @@ const { Panel } = Collapse;
     panelThreeHeader
 */
 
-interface Props {
-  selectedRtStoreId: number | "";
-}
-
-function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
+function ClearingCreateAccordion() {
+  const storeId = useRecoilValue(storeIdState);
   const qc = useQueryClient();
   const isMounted = useRef<boolean>(false);
   const [activePanelId, setActivePanelId] = useState<string | string[]>("");
@@ -68,7 +67,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
     } else {
       isMounted.current = true;
     }
-  }, [selectedRtStoreId]);
+  }, [storeId]);
 
   useEffect(() => {
     if (clearingCart.length > 0) {
@@ -125,7 +124,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       adjustmentItems.length > 0 &&
       (activePanelId === "2" || activePanelId === "3") &&
       activeKey === "1" &&
-      !!selectedRtStoreId
+      !!storeId
     ) {
       const answer = window.confirm(t("message.warning previous clearing"));
       if (answer) {
@@ -138,7 +137,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   };
 
   const getTodayReserved = useQuery(
-    ["getTodayReserved", [selectedRtStoreId]],
+    ["getTodayReserved", [storeId]],
     () => {
       var today = new Date();
       var todayString =
@@ -148,7 +147,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
         "-" +
         today.getDate().toString().padStart(2, "0");
       return adjustmentAPI.getAdjustment({
-        rt_store_id: selectedRtStoreId,
+        rt_store_id: storeId,
         is_cleared: 0,
         offset: 1000,
         last_id: -1,
@@ -159,7 +158,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       });
     },
     {
-      enabled: selectedRtStoreId !== "",
+      enabled: storeId !== undefined,
     },
   );
 
@@ -184,17 +183,17 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
   );
 
   const useCreateClearing = async () => {
-    if (selectedRtStoreId > 0 && selectedRtStoreId) {
+    if (storeId && storeId > 0) {
       await mutateCreateClearingSheet
         .mutateAsync({
-          rt_store_id: selectedRtStoreId,
+          rt_store_id: storeId,
           rt_store_name: "test123",
           total_price: 10000,
         })
         .then((data) => {
           mutateCreateClearingItem.mutate({
             sheet_id: data.data as number,
-            rt_store_id: selectedRtStoreId,
+            rt_store_id: storeId,
             rt_store_name: "test123",
             item_list: clearingCart,
           });
@@ -248,7 +247,6 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
         <Panel header={panelOneHeader} key="1">
           <WarehousingWaitingTable
-            selectedRtStoreId={selectedRtStoreId}
             selectedWarehousingSheet={selectedWarehousingSheet}
             setSelectedWarehousingSheet={setSelectedWarehousingSheet}
             openDetailModal={openDetailModal}
@@ -269,7 +267,6 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
         </Panel>
         <Panel header={panelTwoHeader} key="2">
           <AdjustmentWaitingTable
-            selectedRtStoreId={selectedRtStoreId}
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
             adjustablePrice={adjustablePrice}
@@ -288,7 +285,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
           <Row>매입차감 : {adjustmentTotal.toLocaleString()}</Row>
           <Row>
             당일미송 :{" "}
-            {!!selectedRtStoreId
+            {!!storeId
               ? getTodayReserved.data?.data.statistics.not_cleared.price.toLocaleString()
               : 0}
           </Row>
@@ -297,7 +294,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             {(
               warehousingTotal +
               adjustmentTotal +
-              (!!selectedRtStoreId ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
+              (!!storeId ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
             ).toLocaleString()}{" "}
             (입고총금액 - 매입차감 + 당일미송)
           </Row>

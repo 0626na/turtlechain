@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 interface Props {
   required?: boolean;
   name?: Array<string> | string;
-  label: string;
+  label?: string;
   placeholder?: string;
   readOnly?: boolean;
   disabled?: boolean;
@@ -26,7 +26,6 @@ function TurtleInput({
         readOnly={readOnly}
         disabled={disabled}
         style={{ width: "96%" }}
-        size="large"
         value={value}
       />
     </Form.Item>

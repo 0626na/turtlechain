@@ -31,7 +31,7 @@ export interface AdjustmentItem {
 
 // Request: 정산아이템 조회
 export interface RequestGetAdjustment {
-  rt_store_id: number | "";
+  rt_store_id: number | undefined;
   last_id: number;
   offset: number;
   switch_type: "next" | "prev";

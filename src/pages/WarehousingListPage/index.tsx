@@ -25,7 +25,7 @@ const WarehousingListPage = function () {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
-    rt_store_id: "",
+    rt_store_id: undefined,
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),

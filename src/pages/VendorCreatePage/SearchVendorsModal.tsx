@@ -1,21 +1,8 @@
-import {
-  Badge,
-  Button,
-  Form,
-  message,
-  Modal,
-  Popover,
-  Radio,
-  Row,
-  Space,
-  Table,
-  Tooltip,
-} from "antd";
+import { message, Modal, Pagination, Popover, Radio, Row, Space, Table, Tooltip } from "antd";
 import { vendorAPI } from "apis";
 import { RequestSearchVendor, VendorAccount, WholeSaleStore } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleBadge from "components/common/TurtleBadge";
-import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import SearchFilter from "components/SearchFilter";
 import { useState } from "react";
@@ -34,8 +21,9 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
   const [list, setList] = useState<Array<WholeSaleStore>>([]);
 
   const [searchQuery, setSearchQuery] = useState<RequestSearchVendor>({
+    page: 1,
     type: "all",
-    search_query: "",
+    search_string: "",
   });
 
   const searchVendorQuery = useQuery(
@@ -52,7 +40,24 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
   );
 
   const onClickSelect = (record: WholeSaleStore) => {
+    if (record.store_phone.length !== 1) {
+      message.warning("휴대번호를 선택해주세요");
+      return;
+    }
+    if (record.store_account.length !== 1) {
+      message.warning("계좌번호를 선택해주세요");
+      return;
+    }
     selectRow(record);
+    setSearchQuery({
+      page: 1,
+      type: "all",
+      search_string: "",
+    });
+  };
+
+  const selectPage = (page: number) => {
+    setSearchQuery({ ...searchQuery, page });
   };
 
   return (
@@ -65,20 +70,19 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
       onCancel={closeModal}
       footer={false}
       getContainer={false}
-      bodyStyle={{ height: "600px", overflowY: "auto" }}
-      forceRender
+      bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
         <SearchFilter
-          onSearch={({ type, search_query }: RequestSearchVendor) => {
-            setSearchQuery({ ...searchQuery, type, search_query });
+          type="vendor"
+          onSearch={({ type, search_string }) => {
+            setSearchQuery({ page: 1, type, search_string });
           }}
         />
       </Row>
 
       <Table
         size="small"
-        scroll={{ x: "auto" }}
         style={{ padding: "24px 0px" }}
         loading={searchVendorQuery.isLoading}
         dataSource={list}
@@ -86,22 +90,20 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
         pagination={false}
         columns={[
           {
-            width: "10%",
+            width: "20%",
             ellipsis: true,
             title: t("vendor.name"),
-            dataIndex: "name",
-            render: (name) => (
-              <Tooltip placement="topLeft" title={name}>
-                {name}
+            render: (_, record) => (
+              <Tooltip placement="topLeft" title={record.name}>
+                {record.name}
               </Tooltip>
             ),
           },
           {
-            width: "20%",
+            width: "18%",
             ellipsis: true,
             title: t("vendor.address"),
-            dataIndex: "",
-            render: ({ building, floor, col, loc, ext }) => {
+            render: (_, { building, floor, col, loc, ext }) => {
               const address = `${building} ${floor}${floor ? "층" : ""} ${col}${
                 col ? "열" : ""
               } ${loc}${floor ? "호" : ""} ${ext}`;
@@ -113,32 +115,30 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
             },
           },
           {
-            width: "15%",
+            width: "16%",
             ellipsis: true,
             title: t("vendor.store phone"),
-            dataIndex: "",
             render: (_, record) => {
-              const phones: Array<string> = [];
-              record.store_phone.forEach(({ phone }) => {
-                phones.push(phone);
-              });
-
               if (record.store_phone.length === 1) {
-                return record.store_phone[0].phone;
+                return (
+                  <Tooltip placement="topLeft" title={record.store_phone[0].phone}>
+                    {record.store_phone[0].phone}
+                  </Tooltip>
+                );
               }
 
               return (
-                <TurtleBadge count={phones.length}>
+                <TurtleBadge count={record.store_phone.length}>
                   <Popover
                     content={
                       <>
                         <p>이미 등록된 휴대번호</p>
                         <Radio.Group>
                           <Space direction="vertical">
-                            {phones.map((phone) => (
+                            {record.store_phone.map(({ id, phone }) => (
                               <Radio
                                 value={phone}
-                                key={phone}
+                                key={id}
                                 onClick={() => {
                                   const newList = list.map((vendor) =>
                                     vendor.id === record.id
@@ -146,8 +146,8 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
                                           ...vendor,
                                           store_phone: [
                                             {
-                                              id: 0,
-                                              phone: phone,
+                                              id,
+                                              phone,
                                               send_alimtalk: true,
                                             },
                                           ],
@@ -165,42 +165,44 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
                       </>
                     }
                   >
-                    {phones[0]}
+                    {record.store_phone[0]?.phone}
                   </Popover>
                 </TurtleBadge>
               );
             },
           },
           {
-            width: "15%",
             ellipsis: true,
             title: t("vendor.account"),
-            dataIndex: "",
             render: (_, record) => {
-              const accounts: Array<VendorAccount> = [];
-              record.store_account.forEach(({ id, bank, account_holder, account_number }) => {
-                accounts.push({ id, bank, account_holder, account_number });
-              });
-
-              const makeContent = (store_account?: VendorAccount) => {
-                return `${store_account?.bank} ${store_account?.account_number} ${store_account?.account_holder}`;
+              const makeAddress = ({ bank, account_number, account_holder }: VendorAccount) => {
+                return `${bank} ${account_number} ${account_holder}`;
               };
 
-              if (accounts.length === 1) {
-                return makeContent(accounts[0]);
-              } else {
+              if (record.store_account.length === 0) {
+                return;
+              }
+              if (record.store_account.length === 1) {
                 return (
-                  <TurtleBadge count={accounts.length}>
-                    <Popover
-                      content={
-                        <div>
-                          <p>이미 등록된 계좌번호</p>
-                          <Radio.Group>
-                            <Space direction="vertical">
-                              {accounts.map((account) => (
+                  <Tooltip placement="topLeft" title={makeAddress(record.store_account[0])}>
+                    {makeAddress(record.store_account[0])}
+                  </Tooltip>
+                );
+              }
+
+              return (
+                <TurtleBadge count={record.store_account.length}>
+                  <Popover
+                    content={
+                      <>
+                        <p>이미 등록된 계좌번호</p>
+                        <Radio.Group>
+                          <Space direction="vertical">
+                            {record.store_account.map(
+                              ({ id, bank, account_number, account_holder }) => (
                                 <Radio
-                                  key={account.id}
-                                  value={account.account_number}
+                                  key={id}
+                                  value={account_number}
                                   onClick={() => {
                                     const newList = list.map((vendor) =>
                                       vendor.id === record.id
@@ -208,10 +210,10 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
                                             ...vendor,
                                             store_account: [
                                               {
-                                                id: account.id,
-                                                account_number: account.account_number,
-                                                account_holder: account.account_holder,
-                                                bank: account.bank,
+                                                id,
+                                                account_number,
+                                                account_holder,
+                                                bank,
                                               },
                                             ],
                                           }
@@ -220,26 +222,25 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
                                     setList(newList);
                                   }}
                                 >
-                                  {makeContent(account)}
+                                  {makeAddress({ id, bank, account_number, account_holder })}
                                 </Radio>
-                              ))}
-                            </Space>
-                          </Radio.Group>
-                        </div>
-                      }
-                    >
-                      {makeContent(accounts[0])}
-                    </Popover>
-                  </TurtleBadge>
-                );
-              }
+                              ),
+                            )}
+                          </Space>
+                        </Radio.Group>
+                      </>
+                    }
+                  >
+                    {makeAddress(record.store_account[0])}
+                  </Popover>
+                </TurtleBadge>
+              );
             },
           },
           {
-            width: "10%",
+            width: "13%",
             align: "center",
             title: "",
-            dataIndex: "action",
             render: (_, record) => (
               <TurtleButtonSub //
                 size="small"
@@ -251,6 +252,17 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
             ),
           },
         ]}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={searchVendorQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
       />
     </Modal>
   );

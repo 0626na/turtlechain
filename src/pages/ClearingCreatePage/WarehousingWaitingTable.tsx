@@ -6,6 +6,8 @@ import { t } from "i18next";
 import { warehousingAPI } from "apis";
 import { WarehousingSheet } from "apis/warehousingAPI";
 import WarehousingItemListModal from "./WarehousingItemListModal";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 
 /*
   Parent : ClearingCreateAccordion
@@ -19,7 +21,6 @@ import WarehousingItemListModal from "./WarehousingItemListModal";
 */
 
 interface Props {
-  selectedRtStoreId: number | "";
   selectedWarehousingSheet: WarehousingSheet | null;
   setSelectedWarehousingSheet: Dispatch<SetStateAction<WarehousingSheet | null>>;
   openDetailModal: boolean;
@@ -31,7 +32,6 @@ interface Props {
 }
 
 function WarehousingWaitingTable({
-  selectedRtStoreId,
   selectedWarehousingSheet,
   setSelectedWarehousingSheet,
   openDetailModal,
@@ -41,11 +41,12 @@ function WarehousingWaitingTable({
   selectedWarehousingSheetRowKeys,
   setSelectedWarehousingSheetRowKeys,
 }: Props) {
+  const storeId = useRecoilValue(storeIdState)
   const getWarehousingSheetQuery = useQuery(
-    ["getWarehousingSheet", selectedRtStoreId], //
+    ["getWarehousingSheet", storeId], //
     () =>
       warehousingAPI.getSheet({
-        rt_store_id: selectedRtStoreId,
+        rt_store_id: storeId,
         is_confirmed: 1,
         start_date: "",
         end_date: "",
@@ -55,7 +56,7 @@ function WarehousingWaitingTable({
         did_settlement: 0,
       }),
     {
-      enabled: selectedRtStoreId !== "",
+      enabled: storeId !== undefined,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },

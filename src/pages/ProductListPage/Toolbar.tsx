@@ -1,15 +1,13 @@
 import { Col, Row, Space } from "antd";
-import TurtleButtonSub from "components/common/TurtleButtonSub";
 import StoreSelect from "components/StoreSelect";
-import { useTranslation } from "react-i18next";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
+import { t } from "i18next";
 
 function Toolbar() {
-  const { t } = useTranslation();
-
   return (
     <Row
       gutter={24}
-      align={"middle"}
+      align="middle"
       justify="space-between"
       style={{
         margin: "0",
@@ -18,12 +16,13 @@ function Toolbar() {
       }}
     >
       <Col>
-        <StoreSelect />
+        <Space size="large">
+          <StoreSelect />
+        </Space>
       </Col>
       <Col>
         <Space>
-          <TurtleButtonSub icon="file">{t("button.upload order sheet")}</TurtleButtonSub>
-          <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub>
+          <TurtleButtonSub icon="download">{t("button.download product")}</TurtleButtonSub>
         </Space>
       </Col>
     </Row>

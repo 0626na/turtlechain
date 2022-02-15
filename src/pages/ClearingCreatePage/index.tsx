@@ -12,10 +12,10 @@ import ClearingCreateAccordion from "./ClearingCreateAccordion";
 
 function ClearingCreatePage() {
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
-  const [selectedRtStoreId, setSelectedRtStoreId] = useState<number | "">("");
+  
 
-  // 쇼핑몰 선택
-  const selectStore = (storeId: number | "") => setSelectedRtStoreId(storeId);
+  
+  
   return (
     <>
       <Helmet title={title} />
@@ -24,8 +24,8 @@ function ClearingCreatePage() {
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
-      <Toolbar selectStore={selectStore} warningMessage={t("message.warning change mall")} />
-      <ClearingCreateAccordion selectedRtStoreId={selectedRtStoreId} />
+      <Toolbar warningMessage={t("message.warning change mall")} />
+      <ClearingCreateAccordion />
     </>
   );
 }

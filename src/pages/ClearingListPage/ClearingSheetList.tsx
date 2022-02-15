@@ -8,6 +8,8 @@ import { useState } from "react";
 import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
 import { clearingAPI } from "apis";
 import ClearingDetailModal from "./ClearingDetailModal";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 
 /*
   Parent : index
@@ -27,6 +29,8 @@ interface Props {
 }
 
 function ClearingSheetList({ searchQuery, searchState }: Props) {
+  const storeId = useRecoilValue(storeIdState);
+
   const [detailModalVisible, setDetailModalVisible] = useState<boolean>(false);
   const [selectedClearingSheet, setSelectedClearingSheet] = useState<ClearingSheet>();
 
@@ -41,7 +45,7 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
         page: searchState.page,
       }),
     {
-      enabled: searchQuery.rt_store_id !== "",
+      enabled: searchQuery.rt_store_id !== undefined,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },

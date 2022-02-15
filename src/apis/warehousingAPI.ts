@@ -58,7 +58,7 @@ export interface CreateSheetItem {
 
 // 입고장 요청 타입
 export interface RequestGetSheet {
-  rt_store_id: number | "";
+  rt_store_id: number | undefined;
   is_confirmed: number | "";
   start_date: string;
   end_date: string;

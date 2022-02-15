@@ -1,16 +1,9 @@
 import { Col, Row, Space } from "antd";
-import TurtleButton from "components/common/TurtleButton";
-import { useTranslation } from "react-i18next";
 import StoreSelect from "components/StoreSelect";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
+import { t } from "i18next";
 
-interface Props {
-  selectStore: (storeId: number) => void;
-}
-
-function Toolbar({ selectStore }: Props) {
-  const { t } = useTranslation();
-
+function Toolbar() {
   return (
     <Row
       gutter={24}
@@ -24,7 +17,7 @@ function Toolbar({ selectStore }: Props) {
     >
       <Col>
         <Space size="large">
-          <StoreSelect selectStore={selectStore} />
+          <StoreSelect />
         </Space>
       </Col>
       <Col>

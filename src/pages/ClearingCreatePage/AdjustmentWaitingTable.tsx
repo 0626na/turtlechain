@@ -7,6 +7,8 @@ import { t } from "i18next";
 import { AdjustmentItem } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 /*
   Parent : ClearingCreateAccordion
   Children : None
@@ -36,31 +38,32 @@ interface AdjustmentItemExtended extends AdjustmentItem {
 }
 
 interface Props {
-  selectedRtStoreId: number | "";
   clearingCart: any;
   setClearingCart: Dispatch<SetStateAction<any>>;
   adjustablePrice: { [key: number]: number };
 }
 
 function AdjustmentWaitingTable({
-  selectedRtStoreId,
+  
   clearingCart,
   setClearingCart,
   adjustablePrice,
 }: Props) {
+  const storeId = useRecoilValue(storeIdState)
+
   const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentItemExtended>>([]);
   const getAdjustmentQuery = useQuery(
-    ["getAdjustment", selectedRtStoreId], //
+    ["getAdjustment", storeId], //
     () =>
       adjustmentAPI.getAdjustment({
-        rt_store_id: selectedRtStoreId,
+        rt_store_id: storeId,
         is_cleared: 0,
         offset: 1000,
         last_id: -1,
         switch_type: "next",
       }),
     {
-      enabled: selectedRtStoreId !== "",
+      enabled: storeId !== undefined,
       onSuccess: (data) => {
         const responseData = data ? data.data.data : [];
         setAdjustmentList(

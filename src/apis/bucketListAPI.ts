@@ -6,6 +6,10 @@ export interface StoreAccount {
   account_holder: string;
 }
 
+export interface StoreAccountView extends StoreAccount {
+  is_main: boolean;
+}
+
 export interface StoreAddress {
   building: string;
   floor: string;
@@ -18,11 +22,11 @@ export interface RequestCreateBucketList {
   name: string;
   phone: string;
   store_phone: Array<string>;
-  store_account: Array<StoreAccount>;
+  banks: Array<StoreAccount>;
   building: string;
   floor: string;
   col: string;
-  row: string;
+  loc: string;
   ext: string;
   type: "update" | "create";
   ws_store_id: number;

@@ -1,12 +1,14 @@
 import { RequestGetVendors } from "apis/vendorAPI";
 import PageHeader from "components/PageHeader";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import ClearingSheetList from "./ClearingSheetList";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
 import { t } from "i18next";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
 
 export interface searchStateProps {
   page: number;
@@ -15,6 +17,8 @@ export interface searchStateProps {
 }
 
 function ClearingListPage() {
+  const storeId = useRecoilValue(storeIdState);
+
   const title = `${t("turtlechain")} - ${t("clearing.list")}`;
 
   const [searchState, setSearchState] = useState<searchStateProps>({
@@ -24,15 +28,14 @@ function ClearingListPage() {
   });
 
   const [searchQuery, setSearchQuery] = useState<RequestGetClearingSheet>({
-    rt_store_id: "",
+    rt_store_id: undefined,
     start_date: "", // format: YYYY-MM-DD
     end_date: "", // format: YYYY-MM-DD
     page: 1,
     status: "",
   });
 
-  // 쇼핑몰 선택
-  const selectStore = (storeId: number | "") => {
+  useEffect(() => {
     setSearchState({
       page: 1,
       clearing_status: "all",
@@ -45,7 +48,7 @@ function ClearingListPage() {
       page: 1,
       status: "",
     });
-  };
+  }, [storeId])
 
   return (
     <>
@@ -56,7 +59,6 @@ function ClearingListPage() {
         breadcrumbList={[t("clearing.management"), t("clearing.list")]}
       />
       <Toolbar
-        selectStore={selectStore}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         searchState={searchState}

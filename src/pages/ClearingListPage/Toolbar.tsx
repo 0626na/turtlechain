@@ -9,20 +9,19 @@ import { t } from "i18next";
 import { searchStateProps } from "./index";
 
 interface Props {
-  selectStore: (storeId: number | "") => void;
   searchQuery: RequestGetClearingSheet;
   setSearchQuery: Dispatch<SetStateAction<RequestGetClearingSheet>>;
   searchState: searchStateProps;
   setSearchState: Dispatch<SetStateAction<searchStateProps>>;
 }
 
-function Toolbar({ selectStore, searchQuery, setSearchQuery, searchState, setSearchState }: Props) {
+function Toolbar({ searchQuery, setSearchQuery, searchState, setSearchState }: Props) {
   return (
     <>
       <Row gutter={24} align="middle" justify="space-between">
         <Col>
           <Space size="large">
-            <StoreSelect selectStore={selectStore} />
+            <StoreSelect />
           </Space>
         </Col>
         <Col>
