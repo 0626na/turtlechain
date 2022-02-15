@@ -1,12 +1,12 @@
-import { Button, Col, Row, Space } from "antd";
-import StoreSelect from "components/StoreSelect";
-import { useState } from "react";
-import CreateVendorsModal from "./CreateVendorsModal";
+import { Col, Row, Space } from "antd";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
+import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
+import { useState } from "react";
+import CreateBulkProductModal from "./CreateBulkProductModal";
 
 function Toolbar() {
-  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [createModalvisible, setCreateModalVisible] = useState(false);
 
   return (
     <>
@@ -25,24 +25,24 @@ function Toolbar() {
         </Col>
         <Col>
           <Space>
-            <TurtleButtonSub // 거래처 대량 등록 Button
+            <TurtleButtonSub // 상품 대량 등록 Button
               icon="file"
               onClick={() => {
                 setCreateModalVisible(true);
               }}
             >
-              {t("button.create bulk vendor")}
+              {t("button.create bulk product")}
             </TurtleButtonSub>
-            <TurtleButtonSub // 거래처 불러오기 Button
+            <TurtleButtonSub // 상품 목록 불러오기 Button
               icon="download"
             >
-              {t("button.load vendor")}
+              {t("button.load product")}
             </TurtleButtonSub>
           </Space>
         </Col>
       </Row>
-      <CreateVendorsModal
-        visible={createModalVisible}
+      <CreateBulkProductModal
+        visible={createModalvisible}
         closeModal={() => {
           setCreateModalVisible(false);
         }}

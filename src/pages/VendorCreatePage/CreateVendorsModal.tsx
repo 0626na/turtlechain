@@ -42,7 +42,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const storeId = useRecoilValue(storeIdState);
   const form = new FormData();
 
-  const parseVendorsQuery = useMutation("parseVendors", excelAPI.parseVendors, {
+  const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -349,7 +349,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLXS만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
@@ -358,14 +358,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       bodyStyle={{ height: "800px", overflowY: "auto" }}
     >
       <Space>
-        <Typography.Text>거래처 업로드</Typography.Text>
+        <Typography.Text>거래처 업로드 | </Typography.Text>
         <Upload //
           multiple={false}
-          accept=".csv, .xls, .xlxs"
+          accept=".csv, .xls, .xlsx"
           customRequest={({ file, onSuccess }) => {
             form.append("files", file);
             form.append("rt_store_id", storeId?.toString() ?? "");
-            parseVendorsQuery.mutate(form);
+            parseVendorQuery.mutate(form);
           }}
         >
           <Button icon={<UploadOutlined />}>파일 선택하기</Button>
@@ -389,7 +389,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -574,7 +574,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{getSuggestCount}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -803,7 +803,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{count?.fail_count}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}

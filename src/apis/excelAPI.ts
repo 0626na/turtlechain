@@ -41,12 +41,12 @@ export interface ParseCount {
   fail_count: number;
 }
 
-export interface RequestParseVendors {
+export interface RequestParseVendor {
   files: FormData;
   rt_store_id: number;
 }
 
-export interface ResponseParseVendors {
+export interface ResponseParseVendor {
   msg: string;
   data: {
     success: Array<Vendor>;
@@ -56,9 +56,46 @@ export interface ResponseParseVendors {
   };
 }
 
-const parseVendors = async function (data: FormData) {
+const parseVendor = async function (data: FormData) {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseVendors>(url, data, {
+  const response = await v2Axios.post<ResponseParseVendor>(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export interface Product {
+  vendor_id: string;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  product_code: string;
+  name: string;
+  vendor_product_name: string;
+  price: string;
+  option: string;
+  image_url: string;
+  memo: string;
+}
+
+export interface ProductShow extends Product {
+  memo_value: string;
+  memo_active: boolean;
+}
+
+export interface ResponseParseProduct {
+  msg: string;
+  data: {
+    success: Array<Product>;
+    fail: Array<Product>;
+  };
+}
+
+const parseProduct = async function (data: FormData) {
+  const url = `excel/product`;
+  const response = await v2Axios.post<ResponseParseProduct>(url, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -67,7 +104,8 @@ const parseVendors = async function (data: FormData) {
 };
 
 const excelAPI = {
-  parseVendors,
+  parseVendor,
+  parseProduct,
 };
 
 export default excelAPI;

@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { storeIdState } from "store/storeIdState";
 import { t } from "i18next";
+import { useEffect } from "react";
 
 function CustomStoreSelect() {
   // 쇼핑몰 식별 번호
