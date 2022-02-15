@@ -1,10 +1,7 @@
-import { Button, Col, Row, Space } from "antd";
-import TurtleButton from "components/common/TurtleButton";
+import { Col, Row, Space } from "antd";
 import StoreSelect from "components/StoreSelect";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import CreateVendorsModal from "./CreateVendorsModal";
-import { DownloadOutlined, FileOutlined } from "@ant-design/icons";
+import CreateBulkVendorModal from "./CreateBulkVendorModal";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { t } from "i18next";
 
@@ -44,7 +41,7 @@ function Toolbar() {
           </Space>
         </Col>
       </Row>
-      <CreateVendorsModal
+      <CreateBulkVendorModal
         visible={createModalVisible}
         closeModal={() => {
           setCreateModalVisible(false);

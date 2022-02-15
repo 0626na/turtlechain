@@ -20,14 +20,14 @@ import TurtleInfo from "components/common/TurtleInfo";
 import { useMutation } from "react-query";
 import { excelAPI, vendorAPI } from "apis";
 import { AxiosError } from "axios";
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { MasterVendor, ParseCount, Vendor, VendorShow } from "apis/excelAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleBadge from "components/common/TurtleBadge";
 import { FileTextOutlined } from "@ant-design/icons";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
-import { RequestCreateVendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
+import { RequestCreateVendor, VendorAccount } from "apis/vendorAPI";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
@@ -38,11 +38,15 @@ interface Props {
   closeModal: () => void;
 }
 
-function CreateVendorsModal({ visible, closeModal }: Props) {
+function CreateBulkVendorModal({ visible, closeModal }: Props) {
   const storeId = useRecoilValue(storeIdState);
   const form = new FormData();
+  const [successList, setSuccessList] = useState<Array<VendorShow>>();
+  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
+  const [failList, setFailList] = useState<Array<Vendor>>();
+  const [count, setCount] = useState<ParseCount>();
 
-  const parseVendorsQuery = useMutation("parseVendors", excelAPI.parseVendors, {
+  const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -77,11 +81,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       setCount(data.data.count);
     },
   });
-
-  const [count, setCount] = useState<ParseCount>();
-  const [successList, setSuccessList] = useState<Array<VendorShow>>();
-  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
-  const [failList, setFailList] = useState<Array<Vendor>>();
 
   const createVendorsQuery = useMutation(
     ["createVendors"], //
@@ -365,7 +364,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           customRequest={({ file, onSuccess }) => {
             form.append("files", file);
             form.append("rt_store_id", storeId?.toString() ?? "");
-            parseVendorsQuery.mutate(form);
+            parseVendorQuery.mutate(form);
           }}
         >
           <Button icon={<UploadOutlined />}>파일 선택하기</Button>
@@ -389,7 +388,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -526,19 +525,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 width: "6%",
                 title: "(체크)",
                 render: (_, record) => {
-                  if (
-                    record.ws_store_info.length === 1 &&
-                    record.ws_store_info[0]?.store_account.length === 1
-                  ) {
-                    // resultList에 넣기 - 거래처 등록 버튼클릭시에 넣어야할듯
-                    // resultList?.push({
-                    //   rt_store_id: -1,
-                    //   vendor_code: record.vendor_code,
-                    //   vendor_account_id: record.ws_store_info[0]?.store_account[0].id,
-                    //   vendor_phone_id: record.ws_store_info[0]?.store_phone[0].id,
-                    //   memo: record.memo,
-                    //   is_taxed: record.is_taxed,
-                    // });
+                  if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -574,7 +561,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{getSuggestCount}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -803,7 +790,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{count?.fail_count}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -872,4 +859,4 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   );
 }
 
-export default CreateVendorsModal;
+export default CreateBulkVendorModal;

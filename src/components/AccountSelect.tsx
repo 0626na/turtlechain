@@ -4,7 +4,7 @@ import { basicDataAPI } from "apis";
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
-import { StoreAccount, StoreAccountView } from "apis/bucketListAPI";
+import { StoreAccountView } from "apis/bucketListAPI";
 import { t } from "i18next";
 
 interface Props {

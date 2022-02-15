@@ -41,12 +41,12 @@ export interface ParseCount {
   fail_count: number;
 }
 
-export interface RequestParseVendors {
+export interface RequestParseVendor {
   files: FormData;
   rt_store_id: number;
 }
 
-export interface ResponseParseVendors {
+export interface ResponseParseVendor {
   msg: string;
   data: {
     success: Array<Vendor>;
@@ -56,9 +56,9 @@ export interface ResponseParseVendors {
   };
 }
 
-const parseVendors = async function (data: FormData) {
+const parseVendor = async function (data: FormData) {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseVendors>(url, data, {
+  const response = await v2Axios.post<ResponseParseVendor>(url, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -67,7 +67,7 @@ const parseVendors = async function (data: FormData) {
 };
 
 const excelAPI = {
-  parseVendors,
+  parseVendor,
 };
 
 export default excelAPI;

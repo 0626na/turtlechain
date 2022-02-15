@@ -5,14 +5,9 @@ import TurtleInput from "components/common/TurtleInput";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 import TurtleText from "components/common/TurtleText";
 import { Vendor } from "apis/vendorAPI";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TurtleButton from "components/common/TurtleButton";
-import {
-  RequestCreateBucketList,
-  StoreAccount,
-  StoreAccountView,
-  StoreAddress,
-} from "apis/bucketListAPI";
+import { StoreAccountView, StoreAddress } from "apis/bucketListAPI";
 import { t } from "i18next";
 import PhoneSelect from "components/PhoneSelect";
 
@@ -37,37 +32,6 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
   ]);
 
   const [storePhoneList, setStorePhoneList] = useState<Array<string>>([""]);
-
-  // 렌더링 시 form객체 selectedRow로 채운다.
-  // useEffect(() => {
-  //   const storePhones: Array<string> = [];
-  //   selectedRow.ws_store_info.store_phone.forEach((store_phone) => {
-  //     storePhones.push(store_phone.phone);
-  //   });
-
-  //   const storeAccounts: Array<StoreAccount> = [];
-  //   selectedRow.ws_store_info.store_account.forEach(({ bank, account_number, account_holder }) => {
-  //     storeAccounts.push({ bank, account_number, account_holder });
-  //   });
-
-  //   form.setFieldsValue({
-  //     name: selectedRow.ws_store_info.name,
-  //     phone: selectedRow.ws_store_info.phone,
-  //     store_phone: storePhones,
-  //     store_account: storeAccounts,
-  //     building: selectedRow.ws_store_info.building,
-  //     floor: selectedRow.ws_store_info.floor,
-  //     col_loc: `${selectedRow.ws_store_info.col ? selectedRow.ws_store_info.col : ""} ${
-  //       selectedRow.ws_store_info.loc
-  //     }`,
-  //     ext: selectedRow.ws_store_info.ext,
-  //     type: "update",
-  //     //ws_store_id: selectedRow.ws_store_id,
-  //     memo: selectedRow.memo,
-  //     //biz_name:
-  //     //biz_num:
-  //   });
-  // }, [selectedRow]);
 
   return (
     <Modal

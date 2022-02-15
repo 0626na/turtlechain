@@ -15,7 +15,7 @@ import { vendorAPI } from "apis";
 import { AxiosError } from "axios";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { useCallback, useEffect, useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
@@ -36,7 +36,7 @@ function VendorList() {
   const storeId = useRecoilValue(storeIdState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
-  const [selectedVendor, selectVendor] = useState<VendorShow>();
+  //const [selectedVendor, selectVendor] = useState<VendorShow>();
 
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
@@ -411,14 +411,13 @@ function VendorList() {
             />
           </Row>
         )}
-
         // end of Table
       />
-      <VendorUpdateModal //
+      {/* <VendorUpdateModal //
         visible={visibleUpdateModal}
         closeModal={closeUpdateModal}
-        //selectedRow={selectedRow}
-      />
+        selectedRow={selectedRow}
+      /> */}
     </>
   );
 }
