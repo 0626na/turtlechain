@@ -9,7 +9,7 @@ import { bucketListAPI } from "apis";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import { StoreAccount, StoreAccountView, StoreAddress } from "apis/bucketListAPI";
+import { StoreAccountView, StoreAddress } from "apis/bucketListAPI";
 import AccountSelect from "components/AccountSelect";
 
 interface Props {

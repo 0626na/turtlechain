@@ -20,14 +20,14 @@ import TurtleInfo from "components/common/TurtleInfo";
 import { useMutation } from "react-query";
 import { excelAPI, vendorAPI } from "apis";
 import { AxiosError } from "axios";
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { MasterVendor, ParseCount, Vendor, VendorShow } from "apis/excelAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleBadge from "components/common/TurtleBadge";
 import { FileTextOutlined } from "@ant-design/icons";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
-import { RequestCreateVendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
+import { RequestCreateVendor, VendorAccount } from "apis/vendorAPI";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
@@ -38,9 +38,13 @@ interface Props {
   closeModal: () => void;
 }
 
-function CreateVendorsModal({ visible, closeModal }: Props) {
+function CreateBulkVendorModal({ visible, closeModal }: Props) {
   const storeId = useRecoilValue(storeIdState);
   const form = new FormData();
+  const [successList, setSuccessList] = useState<Array<VendorShow>>();
+  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
+  const [failList, setFailList] = useState<Array<Vendor>>();
+  const [count, setCount] = useState<ParseCount>();
 
   const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
@@ -78,13 +82,8 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     },
   });
 
-  const [count, setCount] = useState<ParseCount>();
-  const [successList, setSuccessList] = useState<Array<VendorShow>>();
-  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
-  const [failList, setFailList] = useState<Array<Vendor>>();
-
   const createVendorQuery = useMutation(
-    ["createVendors"], //
+    ["createVendor"], //
     vendorAPI.createVendor,
     {
       onError: (error: AxiosError) => {
@@ -527,19 +526,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 width: "6%",
                 title: "(체크)",
                 render: (_, record) => {
-                  if (
-                    record.ws_store_info.length === 1 &&
-                    record.ws_store_info[0]?.store_account.length === 1
-                  ) {
-                    // resultList에 넣기 - 거래처 등록 버튼클릭시에 넣어야할듯
-                    // resultList?.push({
-                    //   rt_store_id: -1,
-                    //   vendor_code: record.vendor_code,
-                    //   vendor_account_id: record.ws_store_info[0]?.store_account[0].id,
-                    //   vendor_phone_id: record.ws_store_info[0]?.store_phone[0].id,
-                    //   memo: record.memo,
-                    //   is_taxed: record.is_taxed,
-                    // });
+                  if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -873,4 +860,4 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   );
 }
 
-export default CreateVendorsModal;
+export default CreateBulkVendorModal;

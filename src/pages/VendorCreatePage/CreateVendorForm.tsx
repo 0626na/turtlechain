@@ -1,7 +1,7 @@
 import { Form, Input, message, notification, Row, Space, Switch } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { vendorAPI } from "apis";
-import { RequestCreateVendor, WholeSaleStore } from "apis/vendorAPI";
+import { WholeSaleStore } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
@@ -11,7 +11,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeIdState } from "store/storeIdState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
