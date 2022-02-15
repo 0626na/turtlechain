@@ -11,7 +11,14 @@ interface Props {
   onClick?: () => void;
 }
 
-function TurtleButtonSub({ children, icon, size = "middle", color = "skyblue", onClick }: Props) {
+function TurtleButtonSub({
+  children,
+  icon,
+  size = "middle",
+  disabled = false,
+  color = "skyblue",
+  onClick,
+}: Props) {
   const makeColor = () => {
     if (color === "skyblue") {
       return "#32ACDD";
@@ -43,6 +50,7 @@ function TurtleButtonSub({ children, icon, size = "middle", color = "skyblue", o
         color: makeColor(),
         borderColor: makeColor(),
       }}
+      disabled={disabled}
       ghost
     >
       {children}

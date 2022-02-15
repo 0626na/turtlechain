@@ -205,7 +205,7 @@ function CreateVendorForm() {
               <Input readOnly={true} />
             </Form.Item>
             <Form.Item>
-              <TurtleButtonSub color="blue" onClick={() => {}}>
+              <TurtleButtonSub color="blue" onClick={() => {}} disabled={true}>
                 코드 만들기
               </TurtleButtonSub>
             </Form.Item>
@@ -264,7 +264,7 @@ function CreateVendorForm() {
           </TurtleText>
           <TurtleButton
             type="primary"
-            disabled={form.getFieldValue("rt_store_id") === -1}
+            disabled={!storeId}
             loading={createVendorQuery.isLoading}
             onClick={onClickCreate}
           >

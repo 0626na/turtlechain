@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { storeIdState } from "store/storeIdState";
 import { t } from "i18next";
+import { useEffect } from "react";
 
 function CustomStoreSelect() {
   // 쇼핑몰 식별 번호
@@ -30,6 +31,11 @@ function CustomStoreSelect() {
       },
     },
   );
+
+  // 페이지 바뀔때 마다 storeId 초기화
+  useEffect(() => {
+    setStoreId(undefined);
+  }, []);
 
   return (
     <Space size="large">

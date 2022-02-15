@@ -82,8 +82,8 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
     },
   });
 
-  const createVendorsQuery = useMutation(
-    ["createVendors"], //
+  const createVendorQuery = useMutation(
+    ["createVendor"], //
     vendorAPI.createVendor,
     {
       onError: (error: AxiosError) => {
@@ -337,7 +337,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
         });
       }
     });
-    createVendorsQuery.mutate(resultList);
+    createVendorQuery.mutate(resultList);
   };
 
   return (
@@ -348,7 +348,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLXS만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
@@ -357,13 +357,14 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
       bodyStyle={{ height: "800px", overflowY: "auto" }}
     >
       <Space>
-        <Typography.Text>거래처 업로드</Typography.Text>
+        <Typography.Text>거래처 업로드 | </Typography.Text>
         <Upload //
-          multiple={false}
-          accept=".csv, .xls, .xlxs"
+          maxCount={1}
+          accept=".csv, .xls, .xlsx"
           customRequest={({ file, onSuccess }) => {
+            if (!storeId) return;
             form.append("files", file);
-            form.append("rt_store_id", storeId?.toString() ?? "");
+            form.append("rt_store_id", storeId?.toString());
             parseVendorQuery.mutate(form);
           }}
         >
@@ -525,7 +526,10 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
                 width: "6%",
                 title: "(체크)",
                 render: (_, record) => {
-                  if (record.use_vendor && record.check_account) {
+                  if (
+                    record.ws_store_info.length === 1 &&
+                    record.ws_store_info[0]?.store_account.length === 1
+                  ) {
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -754,6 +758,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
               },
               {
                 align: "center",
+                title: "(체크)",
                 render: (_, record) => {
                   if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
@@ -849,7 +854,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
         <TurtleButton
           type="primary"
           //disabled={form.getFieldValue("rt_store_id") !== -1}
-          //loading={createVendorQuery.isLoading}
+          loading={createVendorQuery.isLoading}
           onClick={onClickCreate}
         >
           {t("vendor.create")}
