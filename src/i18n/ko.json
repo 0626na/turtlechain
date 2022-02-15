@@ -38,6 +38,7 @@
     "expired auth time": "인증시간이 만료되었습니다.",
     "expired token": "인증정보가 만료되었습니다. 다시 로그인하세요.",
     "warning change mall": "쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 변경하시겠습니까?",
+    "warning previous clearing": "매입 조정 정보가 모두 사라집니다. 진행하시겠습니까?",
     "confirm exclude": "정말 제외하시겠습니까?"
   },
   "status": {
@@ -150,6 +151,8 @@
     "process_count": "처리 수량",
     "price": "공급가",
     "is_vat_included": "세액 포함 여부",
+    "vendor_info": "거래처 정보",
+    "memo": "메모",
     "process_type": {
       "default": "매입조정 처리",
       "subtract": "차감",
@@ -171,6 +174,7 @@
     "request_date": "결제 요청 일자",
     "complete_date": "결제 완료 일자",
     "total_price": "총 결제 금액",
+    "total_vendor_count": "총 거래처 수",
     "delete": "삭제",
     "account": "계좌정보",
     "price": "결제금액",

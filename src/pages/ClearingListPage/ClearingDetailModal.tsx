@@ -1,33 +1,21 @@
-import {
-  Descriptions,
-  Modal,
-  message,
-  notification,
-  Pagination,
-  Popconfirm,
-  Row,
-  Switch,
-  Table,
-  Button,
-  Tooltip,
-} from "antd";
-import { vendorAPI } from "apis";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { Descriptions, Modal, message, Table } from "antd";
+import { useQuery } from "react-query";
 import { AxiosError } from "axios";
-import TurtleButton from "components/common/TurtleButton";
-import TurtleButtonSub from "components/common/TurtleButtonSub";
-import TurtleText from "components/common/TurtleText";
-import SearchFilter from "components/SearchFilter";
-import { useTranslation } from "react-i18next";
-import { useMutation, useQuery } from "react-query";
-import styled from "styled-components";
-import { QuestionCircleOutlined, BookOutlined, BookFilled, EditFilled } from "@ant-design/icons";
-import { Vendor, RequestGetVendors } from "apis/vendorAPI";
-import { Dispatch, SetStateAction, useState } from "react";
-import TurtleBadge from "components/common/TurtleBadge";
-import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
-import { ClearingSheet, ResponseClearingItem, ResponseGetClearingItem } from "apis/clearingAPI";
-import { clearingAPI } from "apis";
 import { t } from "i18next";
+import { clearingAPI } from "apis";
+import { ClearingSheet } from "apis/clearingAPI";
+
+/*
+  Parent : ClearingSheetList
+  Children : None
+
+  * React Function
+    vendorCountTotal = 거래처 수 합계
+
+  * Custom Function
+    getClearingItemQuery = 정산 아이템 리스트 얻어오는 API
+*/
 
 interface Props {
   detailModalVisible: boolean;
@@ -40,7 +28,6 @@ function ClearingDetailModal({
   setDetailModalVisible,
   selectedClearingSheet,
 }: Props) {
-  const [list, setList] = useState<Array<ResponseClearingItem>>([]);
   const getClearingItemQuery = useQuery(
     ["getClearingItem", selectedClearingSheet?.id], //
     () =>
@@ -49,13 +36,20 @@ function ClearingDetailModal({
       }),
     {
       enabled: selectedClearingSheet?.id !== 0 && !!selectedClearingSheet?.id,
-      onSuccess: (data: ResponseGetClearingItem) => {
-        console.log(data);
-      },
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
     },
+  );
+
+  const vendorCountTotal = useMemo(
+    () =>
+      new Set(
+        getClearingItemQuery.data?.data.map((value: any) => {
+          return value.vendor_id;
+        }),
+      ).size,
+    [getClearingItemQuery.data?.data],
   );
 
   return (
@@ -78,17 +72,17 @@ function ClearingDetailModal({
         bordered
         style={{ marginBottom: 12 }}
       >
-        <Descriptions.Item label={t("created date")}>
+        <Descriptions.Item label={t("clearing.request_date")}>
           {selectedClearingSheet?.request_date}
         </Descriptions.Item>
-        <Descriptions.Item label={t("warehousing.total count")}>
-          {/* {selectedClearingSheet?.total_item_count} */}0
+        <Descriptions.Item label={t("clearing.total_vendor_count")}>
+          {vendorCountTotal}
         </Descriptions.Item>
-        <Descriptions.Item label={t("total supply price")}>
-          {selectedClearingSheet?.total_price}
+        <Descriptions.Item label={t("clearing.total_price")}>
+          {selectedClearingSheet?.total_price.toLocaleString()}
         </Descriptions.Item>
-        <Descriptions.Item label={t("total vat price")}>
-          {selectedClearingSheet?.status}
+        <Descriptions.Item label={t("clearing.status.default")}>
+          {t("clearing.status." + selectedClearingSheet?.status)}
         </Descriptions.Item>
       </Descriptions>
       <Table
@@ -143,6 +137,7 @@ function ClearingDetailModal({
             ellipsis: true,
             title: t("clearing.is_vat_included"),
             dataIndex: "is_vat_included",
+            render: (value) => <>{!!value ? "O" : ""}</>,
           },
         ]}
       />

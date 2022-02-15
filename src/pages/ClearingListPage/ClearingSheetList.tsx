@@ -1,30 +1,21 @@
-import {
-  Col,
-  Input,
-  message,
-  notification,
-  Pagination,
-  Popconfirm,
-  Row,
-  Switch,
-  Table,
-  Button,
-  Tooltip,
-  Space,
-} from "antd";
-import { vendorAPI } from "apis";
+import { message, Table, Space } from "antd";
 import { AxiosError } from "axios";
-import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
-import TurtleText from "components/common/TurtleText";
-import SearchFilter from "components/SearchFilter";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { t } from "i18next";
 
 import { useState } from "react";
 import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
 import { clearingAPI } from "apis";
 import ClearingDetailModal from "./ClearingDetailModal";
+
+/*
+  Parent : index
+  Children : ClearingDetailModal
+
+  * Custom Function
+    getClearingSheetQuery = 정산 아이템 리스트 얻어오는 API
+*/
 
 interface Props {
   searchQuery: RequestGetClearingSheet;

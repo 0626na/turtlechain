@@ -122,7 +122,7 @@ const getClearingSheet = async function (query: RequestGetClearingSheet) {
 export interface RequestCreateClearingSheet {
   rt_store_id: number;
   rt_store_name: string;
-  total_amount: number;
+  total_price: number;
 }
 
 // Response: 정산장 생성
@@ -202,7 +202,7 @@ export interface RequestCreateClearingItem {
   sheet_id: number;
   rt_store_id: number;
   rt_store_name: string;
-  data: Array<warehousingItem | adjustmentItem>;  
+  item_list: Array<warehousingItem | adjustmentItem>;  
 }
 
 // Response: 거래처 리스트

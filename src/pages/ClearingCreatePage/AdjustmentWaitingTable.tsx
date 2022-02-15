@@ -1,7 +1,8 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useRef } from "react";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
-import { Select, Space, Table, message, Switch } from "antd";
+import { Select, Space, Table, message, Tooltip } from "antd";
+import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { AdjustmentItem } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
@@ -9,6 +10,11 @@ import { adjustmentAPI } from "apis";
 /*
   Parent : ClearingCreateAccordion
   Children : None
+
+  ** 매입 행 선택 시
+  선택한 행의 도매에 차감 금액이 존재한다면 차감 최대 금액 전까지만 차감 가능
+  (e.g. 도매 차감금액이 10000원이고 매입건이 3000원이라면 3개까지만 차감 가능)
+  차감 금액이 존재하지 않는다면 환불 / 매입처리 최대갯수로 설정
 
   * State
     adjustmentList = 매입 리스트 (미처리 된 건들만)
@@ -18,6 +24,9 @@ import { adjustmentAPI } from "apis";
     onSelectRow = 정산 행 선택에 따른 데이터처리 함수
     deleteAdjustmentData = 부가세 포함 된 행들의 부가세 합계를 구하는 함수
     replaceRowData = '처리방식' 혹은 '처리수량' 변경에 따른 데이터처리 함수
+
+  * Custom Component
+    CustomRow = adjustablePrice에 있는 도매라면 마우스 hover시에 차감가능 금액이 뜨게하는 component
 */
 
 interface AdjustmentItemExtended extends AdjustmentItem {
@@ -30,9 +39,15 @@ interface Props {
   selectedRtStoreId: number | "";
   clearingCart: any;
   setClearingCart: Dispatch<SetStateAction<any>>;
+  adjustablePrice: { [key: number]: number };
 }
 
-function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCart }: Props) {
+function AdjustmentWaitingTable({
+  selectedRtStoreId,
+  clearingCart,
+  setClearingCart,
+  adjustablePrice,
+}: Props) {
   const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentItemExtended>>([]);
   const getAdjustmentQuery = useQuery(
     ["getAdjustment", selectedRtStoreId], //
@@ -90,40 +105,113 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
   const onSelectRow = (record: AdjustmentItemExtended, selected: boolean) => {
     // 선택된 리스트 키값을 변경
     if (selected) {
-      // 정산에 맞는 입고 아이템 형식으로 변경
-      const refinedAdjustmentItem = {
-        type: "adjustment",
-        original_id: record.id,
-        ws_store_id: record.ws_store_id,
-        vendor_id: record.vendor_id,
-        vendor_name: record.vendor_name,
-        bank: record.bank,
-        account_number: record.account_number,
-        account_holder: record.account_holder,
-        is_vat_included: record.is_vat_included,
-        adjustment_process_type: record.process_type ? record.process_type : "subtract",
-        process_count: record.process_count ? record.process_count : record.count_left,
-        price: record.price,
-      };
-      // 정산 장바구니에 정보를 넣는다
-      setClearingCart([...clearingCart, refinedAdjustmentItem]);
-      // 매입 데이터 변경
-      let newAdjustmentList = [...adjustmentList];
-      const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
-      newAdjustmentList[rowDataIndex] = {
-        ...newAdjustmentList[rowDataIndex],
-        checked: true,
-        process_count: record.process_count ? record.process_count : record.count_left,
-        process_type: record.process_type ? record.process_type : "subtract",
-      };
-      setAdjustmentList(newAdjustmentList);
+      // 입고 금액이 있는지 확인
+      if (adjustablePrice[record.ws_store_id]) {
+        // 해당 거래처에서 차감할 수 있는 최대 갯수
+        const max_adjustable_count = parseInt(
+          (adjustablePrice[record.ws_store_id] / record.price).toString(),
+        );
+        // 거래처에서 차감할 수 있는 최대 갯수를 넘어서면 알림처리
+        if (max_adjustable_count === 0) {
+          return alert(
+            `입고 금액보다 차감금액이 커서 차감이 불가능합니다.\n해당 도매 입고금액: ${adjustablePrice[
+              record.ws_store_id
+            ].toLocaleString()}원`,
+          );
+        }
+        // 정산에 맞는 입고 아이템 형식으로 변경
+        const refinedAdjustmentItem = {
+          type: "adjustment",
+          original_id: record.id,
+          ws_store_id: record.ws_store_id,
+          vendor_id: record.vendor_id,
+          vendor_name: record.vendor_name,
+          bank: record.bank,
+          account_number: record.account_number,
+          account_holder: record.account_holder,
+          is_vat_included: record.is_vat_included,
+          adjustment_process_type: record.process_type ? record.process_type : "subtract",
+          // 처리가 차감이거나 선택되어있지 않다면 갯수를 차감최대갯수로 변경
+          process_count:
+            record.process_type === "subtract" || record.process_type === undefined
+              ? max_adjustable_count
+              : record.count_left,
+          price: record.price,
+        };
+        // 정산 장바구니에 정보를 넣는다
+        setClearingCart([...clearingCart, refinedAdjustmentItem]);
+        // 매입 데이터 변경
+        let newAdjustmentList = [...adjustmentList];
+        const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
+        newAdjustmentList[rowDataIndex] = {
+          ...newAdjustmentList[rowDataIndex],
+          checked: true,
+          process_count:
+            record.process_type === "subtract" || record.process_type === undefined
+              ? max_adjustable_count
+              : record.count_left,
+          process_type: record.process_type ? record.process_type : "subtract",
+        };
+        setAdjustmentList(newAdjustmentList);
+      } else {
+        // 정산에 맞는 입고 아이템 형식으로 변경
+        const refinedAdjustmentItem = {
+          type: "adjustment",
+          original_id: record.id,
+          ws_store_id: record.ws_store_id,
+          vendor_id: record.vendor_id,
+          vendor_name: record.vendor_name,
+          bank: record.bank,
+          account_number: record.account_number,
+          account_holder: record.account_holder,
+          is_vat_included: record.is_vat_included,
+          adjustment_process_type: "refund",
+          process_count: record.process_count ? record.process_count : record.count_left,
+          price: record.price,
+        };
+        // 정산 장바구니에 정보를 넣는다
+        setClearingCart([...clearingCart, refinedAdjustmentItem]);
+        // 매입 데이터 변경
+        let newAdjustmentList = [...adjustmentList];
+        const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
+        newAdjustmentList[rowDataIndex] = {
+          ...newAdjustmentList[rowDataIndex],
+          checked: true,
+          process_type: "refund",
+          process_count: record.process_count ? record.process_count : record.count_left,
+        };
+        setAdjustmentList(newAdjustmentList);
+      }
     } else {
       deleteAdjustmentData(record);
     }
   };
 
   const replaceRowData = (record: AdjustmentItemExtended, replaceData: { [key: string]: any }) => {
-    // 정보가 바뀔 행 선택
+    // 해당 거래처에서 차감할 수 있는 최대 갯수
+    const max_adjustable_count = parseInt(
+      (adjustablePrice[record.ws_store_id] / record.price).toString(),
+    );
+
+    // 초기 예외처리
+    // 처리가 "차감"일 때 처리 수량이 차감 최대 갯수를 넘으면 오류
+    if (
+      (record.process_type === "subtract" && replaceData["process_count"] > max_adjustable_count) ||
+      (record.process_count &&
+        record.process_count > max_adjustable_count &&
+        replaceData["process_type"] === "subtract")
+    ) {
+      alert(`최대 차감 가능 갯수는 ${max_adjustable_count}개 입니다.`);
+      let newAdjustmentList = [...adjustmentList];
+      const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
+      let replacingRow = newAdjustmentList[rowDataIndex];
+      replacingRow = { ...replacingRow, ...replaceData, process_count: max_adjustable_count };
+      newAdjustmentList[rowDataIndex] = replacingRow;
+      setAdjustmentList(newAdjustmentList);
+      return;
+    }
+
+    // 정보가 바뀔 행 찾기
     let newAdjustmentList = [...adjustmentList];
     const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
     let replacingRow = newAdjustmentList[rowDataIndex];
@@ -156,6 +244,23 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
     setClearingCart([...newClearingCart, ...newAdjustmentForCart]);
   };
 
+  function CustomRow(props: any) {
+    if (props.className.includes("ant-table-row")) {
+      if (adjustablePrice[props.children[0].props.record.ws_store_id]) {
+        return (
+          <Tooltip
+            title={`해당 도매 차감 가능 금액: ${
+              adjustablePrice[props.children[0].props.record.ws_store_id]
+            }`}
+          >
+            <tr {...props} />
+          </Tooltip>
+        );
+      }
+    }
+    return <tr {...props} />;
+  }
+
   return (
     <>
       <Table
@@ -170,6 +275,11 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
               }
             },
           };
+        }}
+        components={{
+          body: {
+            row: CustomRow,
+          },
         }}
         pagination={false}
         scroll={{ y: "40vh" }}
@@ -197,16 +307,23 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
           },
           {
             ellipsis: true,
+            title: t("adjustment.vendor_info"),
+            dataIndex: ["vendor_name", "address"],
+            render: (text, row) => {
+              return (
+                <Space>
+                  {row["vendor_name"]}
+                  {row["address"]}
+                </Space>
+              );
+            },
+          },
+          {
+            ellipsis: true,
             title: t("adjustment.type.default"),
             dataIndex: "type",
             render: (value) => {
-              const adjustmentType: any = {
-                reserve: t("adjustment.type.reserve"),
-                refund: t("adjustment.type.refund"),
-                exchange: t("adjustment.type.exchange"),
-                takeback: t("adjustment.type.takeback"),
-              };
-              return <Space>{adjustmentType[value]}</Space>;
+              return <Space>{t("adjustment.type." + value)}</Space>;
             },
           },
           {
@@ -264,12 +381,29 @@ function AdjustmentWaitingTable({ selectedRtStoreId, clearingCart, setClearingCa
             ellipsis: true,
             title: t("adjustment.price"),
             dataIndex: "price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,
             title: t("adjustment.is_vat_included"),
             dataIndex: "is_vat_included",
             render: (value) => <Space>{!!value ? "O" : ""}</Space>,
+          },
+          {
+            ellipsis: true,
+            title: t("adjustment.memo"),
+            dataIndex: "memo",
+            render: (value) => (
+              <span>
+                {!!value ? (
+                  <Tooltip title={value}>
+                    <FileTextOutlined />
+                  </Tooltip>
+                ) : (
+                  <FileTextOutlined style={{ opacity: 0.4 }} />
+                )}
+              </span>
+            ),
           },
         ]}
       />

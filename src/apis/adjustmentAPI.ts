@@ -37,6 +37,7 @@ export interface RequestGetAdjustment {
   switch_type: "next" | "prev";
   start_date?: string;
   end_date?: string;
+  type?: "reserve" | "takeback" | "exchange" | "refund";
   is_cleared?: number;
 }
 
@@ -49,11 +50,11 @@ export interface ResponseGetAdjustment {
       cleared: {
         count: number;
         price: number;
-      },
+      };
       not_cleared: {
         count: number;
         price: number;
-      }
+      };
     };
   };
 }

@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Space, Collapse, Row, Badge, Divider } from "antd";
+import { Space, Collapse, Row, Badge, Divider, message } from "antd";
 import styled from "styled-components";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { AxiosError } from "axios";
 import { t } from "i18next";
 import { WarehousingSheet } from "apis/warehousingAPI";
+import { adjustmentAPI, clearingAPI } from "apis";
 import TurtleButton from "components/common/TurtleButton";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
@@ -18,6 +21,7 @@ const { Panel } = Collapse;
   
   * 정산 관련 State
     clearingCart = 정산에 포함될 내역을 담은 배열
+    adjustablePrice = clearingCart에 담긴 입고 내역에 따라 도매별로 매입차감 가능한 금액을 담아놓은 object
     selectedWarehousingSheetRowKeys = 정산에 포함될 입고장의 ID 배열
     openDetailModal = 입고 상세 내역 모달 노출 여부
     selectedWarehousingSheet = 선택 된 입고장의 Sheet data
@@ -41,10 +45,12 @@ interface Props {
 }
 
 function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
+  const qc = useQueryClient();
   const isMounted = useRef<boolean>(false);
   const [activePanelId, setActivePanelId] = useState<string | string[]>("");
   // 정산아이템 | 입고아이템 으로 타입지정하면 배열의 기능들을 사용못해서 any로 지정..
   const [clearingCart, setClearingCart] = useState<any>([]);
+  const [adjustablePrice, setAdjustablePrice] = useState<{ [key: number]: number }>({});
   const [selectedWarehousingSheetRowKeys, setSelectedWarehousingSheetRowKeys] = useState<
     Array<number>
   >([]);
@@ -64,6 +70,28 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
     }
   }, [selectedRtStoreId]);
 
+  useEffect(() => {
+    if (clearingCart.length > 0) {
+      var groupBy = function (xs: any, key: any) {
+        return xs.reduce(function (rv: any, x: any) {
+          (rv[x[key]] = rv[x[key]] || []).push(x.price * x.count);
+          return rv;
+        }, {});
+      };
+      const warehousingItems = clearingCart.filter((value: any) => value.type === "warehousing");
+      const groupByWsStoreId = groupBy(warehousingItems, "ws_store_id");
+      const entries: Array<[string, Array<number>]> = Object.entries(groupByWsStoreId);
+      for (let [key, value] of entries) {
+        groupByWsStoreId[key] = value.reduce((acc, cur) => {
+          return acc + cur;
+        }, 0);
+      }
+      setAdjustablePrice(groupByWsStoreId);
+    } else {
+      setAdjustablePrice({});
+    }
+  }, [clearingCart]);
+
   const warehousingTotal = useMemo(
     () =>
       clearingCart
@@ -79,12 +107,100 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       clearingCart
         .filter((item: any) => item.type === "adjustment")
         .reduce((acc: any, cur: any) => {
-          return acc + cur.price * cur.process_count;
+          if (cur.adjustment_process_type === "subtract") {
+            return acc + -(cur.price * cur.process_count);
+          } else {
+            return acc + 0;
+          }
         }, 0),
     [clearingCart],
   );
 
-  const handleActivePanelChange = (activeKey: string | string[]) => setActivePanelId(activeKey);
+  console.log(clearingCart);
+
+  const handleActivePanelChange = (activeKey: string | string[]) => {
+    // 선택된 쇼핑몰이 있고 매입이 선택 된 상태로 입고 결제대기로 돌아가려 할 때 warning
+    const adjustmentItems = clearingCart.filter((value: any) => value.type === "adjustment");
+    if (
+      adjustmentItems.length > 0 &&
+      (activePanelId === "2" || activePanelId === "3") &&
+      activeKey === "1" &&
+      !!selectedRtStoreId
+    ) {
+      const answer = window.confirm(t("message.warning previous clearing"));
+      if (answer) {
+        setClearingCart(clearingCart.filter((value: any) => value.type === "warehousing"));
+        qc.refetchQueries("getAdjustment");
+        return setActivePanelId(activeKey);
+      }
+    }
+    return setActivePanelId(activeKey);
+  };
+
+  const getTodayReserved = useQuery(
+    ["getTodayReserved", [selectedRtStoreId]],
+    () => {
+      var today = new Date();
+      var todayString =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1).toString().padStart(2, "0") +
+        "-" +
+        today.getDate().toString().padStart(2, "0");
+      return adjustmentAPI.getAdjustment({
+        rt_store_id: selectedRtStoreId,
+        is_cleared: 0,
+        offset: 1000,
+        last_id: -1,
+        switch_type: "next",
+        start_date: todayString,
+        end_date: todayString,
+        type: "reserve",
+      });
+    },
+    {
+      enabled: selectedRtStoreId !== "",
+    },
+  );
+
+  const mutateCreateClearingSheet = useMutation(
+    ["createClearingSheet"],
+    clearingAPI.createClearingSheet,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+    },
+  );
+
+  const mutateCreateClearingItem = useMutation(
+    ["createClearingItem"],
+    clearingAPI.createClearingItem,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+    },
+  );
+
+  const useCreateClearing = async () => {
+    if (selectedRtStoreId > 0 && selectedRtStoreId) {
+      await mutateCreateClearingSheet
+        .mutateAsync({
+          rt_store_id: selectedRtStoreId,
+          rt_store_name: "test123",
+          total_price: 10000,
+        })
+        .then((data) => {
+          mutateCreateClearingItem.mutate({
+            sheet_id: data.data as number,
+            rt_store_id: selectedRtStoreId,
+            rt_store_name: "test123",
+            item_list: clearingCart,
+          });
+        });
+    }
+  };
 
   const panelOneHeader = (
     <Space size={5}>
@@ -108,7 +224,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
       <span style={{ fontSize: 16, color: "#242934" }}>매입 조정 대기</span>
       <Divider type="vertical" />
       <span style={{ fontSize: 16, color: "#5B5D63" }}>
-        입고 총 금액 : {adjustmentTotal.toLocaleString()}
+        매입 총 금액 : {adjustmentTotal.toLocaleString()}
       </span>
     </Space>
   );
@@ -122,6 +238,11 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
     </Space>
   );
 
+  console.log(
+    warehousingTotal,
+    adjustmentTotal,
+    getTodayReserved.data?.data.statistics.not_cleared.price,
+  );
   return (
     <FormTitleContainer>
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
@@ -151,6 +272,7 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
             selectedRtStoreId={selectedRtStoreId}
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
+            adjustablePrice={adjustablePrice}
           />
           <Row justify="end" align="middle">
             <TurtleButton
@@ -162,17 +284,25 @@ function ClearingCreateAccordion({ selectedRtStoreId }: Props) {
           </Row>
         </Panel>
         <Panel header={panelThreeHeader} key="3">
-          <Row>입고 : {warehousingTotal}</Row>
-          <Row>매입차감 : {adjustmentTotal}</Row>
-          <Row>당일미송 : 얼마..</Row>
-          <Row>합계 : {`123456789`.toLocaleString()} (입고총금액 - 매입차감 + 당일미송</Row>
+          <Row>입고 : {warehousingTotal.toLocaleString()}</Row>
+          <Row>매입차감 : {adjustmentTotal.toLocaleString()}</Row>
+          <Row>
+            당일미송 :{" "}
+            {!!selectedRtStoreId
+              ? getTodayReserved.data?.data.statistics.not_cleared.price.toLocaleString()
+              : 0}
+          </Row>
+          <Row>
+            합계 :{" "}
+            {(
+              warehousingTotal +
+              adjustmentTotal +
+              (!!selectedRtStoreId ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
+            ).toLocaleString()}{" "}
+            (입고총금액 - 매입차감 + 당일미송)
+          </Row>
           <Row justify="end" align="middle">
-            <TurtleButton
-              children={t("button.request clearing")}
-              onClick={() => {
-                // 대충 정산등록 API 날림
-              }}
-            />
+            <TurtleButton children={t("button.request clearing")} onClick={useCreateClearing} />
           </Row>
         </Panel>
       </Collapse>
