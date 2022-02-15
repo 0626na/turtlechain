@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
-import { Form, Col, Row, FormInstance } from "antd";
+import { Form, Col, Row, FormInstance, Input } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
@@ -90,10 +90,8 @@ const OrderCreateForm = function ({ form, onCreate }: Props) {
             />
           </Col>
         </Row>
-        <Row justify="center">
-          <TurtleButton htmlType="submit" ghost>
-            {t("button.add")}
-          </TurtleButton>
+        <Row justify="end">
+          <TurtleButton type="default">{t("button.add")}</TurtleButton>
         </Row>
       </Form>
       <TurtleDivider />

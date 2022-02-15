@@ -12,7 +12,7 @@ function TurtleText({ children }: Props) {
 
 const StyledText = styled(Typography.Text)`
   display: block;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 18px;
 `;
 

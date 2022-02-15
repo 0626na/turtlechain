@@ -16,11 +16,32 @@ const queryClient = new QueryClient({
 });
 
 const GlobalStyle = createGlobalStyle`
+@font-face {
+    font-family: "Spoqa Han Sans";
+    font-weight: 300;
+    src : url("public/assets/font/SpoqaHanSansNeo-Light.ttf")
+  }
+  @font-face {
+    font-family: "Spoqa Han Sans";
+    font-style: normal;
+    font-weight: 400;
+    src : url("public/assets/font/SpoqaHanSansNeo-Regular.ttf")
+  }
+  @font-face {
+    font-family: "Spoqa Han Sans";
+    font-weight: 450;
+    src : url("public/assets/font/SpoqaHanSansNeo-Medium.ttf")
+  }
+@font-face {
+    font-family: "Spoqa Han Sans";
+    font-weight: 500;
+    src : url("public/assets/font/SpoqaHanSansNeo-Bold.ttf")
+  }
   body {
         padding: 0;
         margin: 0;
-        font-family: 'Noto Sans KR', sans-serif;
-    };
+        font-family: "Spoqa Han Sans";
+  };
 `;
 
 ReactDOM.render(

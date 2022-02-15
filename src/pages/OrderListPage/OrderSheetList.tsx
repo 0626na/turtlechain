@@ -6,6 +6,7 @@ import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
 import { OrderSheet } from "apis/orderAPI";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 interface Props {
   openOrderDetail: () => void;
@@ -94,9 +95,9 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
                     e.stopPropagation();
                   }}
                 >
-                  <TurtleButton size="small" color="mint" onClick={openOrderDetail}>
+                  <TurtleButtonSub size="small" color="green" onClick={openOrderDetail}>
                     {t("button.details")}
-                  </TurtleButton>
+                  </TurtleButtonSub>
                 </ActionContainer>
               );
             },

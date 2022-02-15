@@ -1,4 +1,4 @@
-import { mockAxios } from "./index";
+import { v2Axios } from "./index";
 
 export interface StoreAccount {
   bank: string;
@@ -6,22 +6,34 @@ export interface StoreAccount {
   account_holder: string;
 }
 
+export interface StoreAccountView extends StoreAccount {
+  is_main: boolean;
+}
+
+export interface StoreAddress {
+  building: string;
+  floor: string;
+  col: string;
+  loc: string;
+}
+
 // Request: 거래처 버킷 리스트 생성
 export interface RequestCreateBucketList {
   name: string;
   phone: string;
   store_phone: Array<string>;
-  store_account: Array<StoreAccount>;
+  banks: Array<StoreAccount>;
   building: string;
   floor: string;
   col: string;
-  row: string;
+  loc: string;
   ext: string;
   type: "update" | "create";
   ws_store_id: number;
   memo: string;
   biz_name: string;
   biz_num: number;
+  biz_owner: string;
 }
 
 // Response: 거래처 버킷 리스트 생성
@@ -32,8 +44,8 @@ export interface ResponseCreateBucketList {
 
 // 거래처 버킷 리스트 생성
 const createBucketList = async function (data: RequestCreateBucketList) {
-  const url = `v2/store_bucketlist`;
-  const response = await mockAxios.post<ResponseCreateBucketList>(url, data);
+  const url = `provisioning/store_bucketlist`;
+  const response = await v2Axios.post<ResponseCreateBucketList>(url, data);
   return response.data;
 };
 

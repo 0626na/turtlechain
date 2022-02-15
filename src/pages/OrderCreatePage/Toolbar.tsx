@@ -1,9 +1,9 @@
 import { Col, Row, Space } from "antd";
-import TurtleButton from "components/common/TurtleButton";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 import StoreSelect from "components/StoreSelect";
 import { useTranslation } from "react-i18next";
 
-function Filter() {
+function Toolbar() {
   const { t } = useTranslation();
 
   return (
@@ -18,20 +18,16 @@ function Filter() {
       }}
     >
       <Col>
-        <StoreSelect selectStore={() => {}} />
+        <StoreSelect />
       </Col>
       <Col>
         <Space>
-          <TurtleButton type="primary" color="grey">
-            {t("button.upload order sheet")}
-          </TurtleButton>
-          <TurtleButton type="primary" color="grey">
-            {t("button.load adjustment")}
-          </TurtleButton>
+          <TurtleButtonSub icon="file">{t("button.upload order sheet")}</TurtleButtonSub>
+          <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub>
         </Space>
       </Col>
     </Row>
   );
 }
 
-export default Filter;
+export default Toolbar;

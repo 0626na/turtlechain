@@ -6,7 +6,7 @@ import OrderCreateForm from "./OrderCreateForm";
 import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
-import Filter from "./Filter";
+import Toolbar from "./Toolbar";
 
 const OrderCreatePage = function () {
   const { t } = useTranslation();
@@ -58,7 +58,7 @@ const OrderCreatePage = function () {
         title={t("order.create")}
         breadcrumbList={[t("common.home"), t("order.management"), t("order.create")]}
       />
-      <Filter />
+      <Toolbar />
       <OrderCreateForm form={form} onCreate={onCreate} />
       <OrderPreviewList list={list} setList={setList} />
     </>
