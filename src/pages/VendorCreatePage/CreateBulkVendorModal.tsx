@@ -57,7 +57,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
           memo: "",
           memo_value: "",
           memo_active: true,
-          is_taxed: false,
+          is_vat_included: false,
           use_vendor_name: vendor.name,
         })),
       );
@@ -67,7 +67,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
           memo: "",
           memo_value: "",
           memo_active: true,
-          is_taxed: false,
+          is_vat_included: false,
           use_vendor_name: vendor.name,
           use_vendor: vendor.ws_store_info.length === 1 ? vendor.ws_store_info[0] : undefined,
           use_account:
@@ -156,7 +156,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -237,7 +237,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -319,7 +319,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
         vendor_address: vendor.ws_store_info[0].address,
         vendor_name: vendor.use_vendor_name,
         memo: vendor.memo,
-        is_taxed: vendor.is_taxed,
+        is_vat_included: vendor.is_vat_included,
       });
     });
     suggestList?.forEach((vendor) => {
@@ -333,7 +333,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
           vendor_address: vendor.use_vendor.address,
           vendor_name: vendor.use_vendor_name,
           memo: vendor.memo,
-          is_taxed: vendor.is_taxed,
+          is_vat_included: vendor.is_vat_included,
         });
       }
     });
@@ -511,7 +511,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
                   return (
                     <Switch
                       checkedChildren={t("button.include")}
-                      checked={record.is_taxed}
+                      checked={record.is_vat_included}
                       onClick={() => {
                         setSuccessIsTaxed(record);
                       }}
@@ -747,7 +747,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
                   return (
                     <Switch
                       checkedChildren={t("button.include")}
-                      checked={record.is_taxed}
+                      checked={record.is_vat_included}
                       onClick={() => {
                         setSuggestIsTaxed(record);
                       }}
@@ -767,6 +767,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
                 },
               },
               {
+                ellipsis: true,
                 title: "사용할 거래처명",
                 render: (_, record) => (
                   <Input
@@ -792,7 +793,7 @@ function CreateBulkVendorModal({ visible, closeModal }: Props) {
          */}
         <Tabs.TabPane tab="미매칭" key="3">
           거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>{count?.fail_count}</span>건
+          <span style={{ color: "red", textDecoration: "underline" }}>{failList?.length}</span>건
           <Table
             size="small"
             loading={parseVendorQuery.isLoading}

@@ -121,7 +121,7 @@ function VendorList() {
       updateVendorQuery.mutate({
         id: record.id,
         memo: record.memo_value,
-        is_taxed: record.is_taxed,
+        is_vat_included: record.is_vat_included,
       });
     },
     [vendorList, updateVendorQuery],
@@ -150,7 +150,7 @@ function VendorList() {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -158,7 +158,7 @@ function VendorList() {
       updateVendorQuery.mutate({
         id: record.id,
         memo: record.memo,
-        is_taxed: !record.is_taxed,
+        is_vat_included: !record.is_vat_included,
       });
     },
     [vendorList, updateVendorQuery],
@@ -367,7 +367,7 @@ function VendorList() {
                 >
                   <Switch
                     checkedChildren={t("button.include")}
-                    checked={record.is_taxed}
+                    checked={record.is_vat_included}
                     style={{ width: "52px" }}
                   />
                 </Popconfirm>

@@ -42,7 +42,7 @@ export interface Vendor {
   vendor_code: string;
   vendor_name: string;
   vendor_address: string;
-  is_taxed: boolean;
+  is_vat_included: boolean;
   memo: string;
   vendor_phone: VendorPhone;
   vendor_account: VendorAccount;
@@ -85,7 +85,7 @@ export interface RequestCreateVendor {
   vendor_address?: string;
   vendor_name?: string;
   memo?: string;
-  is_taxed?: boolean;
+  is_vat_included?: boolean;
   owner?: string;
   biz_num?: string;
   biz_name?: string;
@@ -134,7 +134,7 @@ const getVendors = async function (query: RequestGetVendors) {
 export interface RequestUpdateVendor {
   id: number;
   memo: string;
-  is_taxed: boolean;
+  is_vat_included: boolean;
 }
 
 // Response: 거래처 수정

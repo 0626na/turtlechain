@@ -55,7 +55,7 @@ function CreateVendorForm() {
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
       memo: "",
-      is_taxed: false,
+      is_vat_included: false,
       owner: vendor.company[0]?.owner,
       biz_num: vendor.company[0]?.biz_num,
       biz_name: vendor.company[0]?.name,
@@ -212,7 +212,7 @@ function CreateVendorForm() {
           </Space>
         </Form.Item>
         <Form.Item
-          name="is_taxed"
+          name="is_vat_included"
           label="부가세 포함 여부"
           valuePropName="checked"
           required={false}

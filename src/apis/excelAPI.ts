@@ -28,7 +28,7 @@ export interface VendorShow extends Vendor {
   memo: string;
   memo_active: boolean;
   memo_value: string;
-  is_taxed: boolean;
+  is_vat_included: boolean;
   use_vendor_name: string;
   use_vendor?: MasterVendor;
   use_account?: VendorAccount;

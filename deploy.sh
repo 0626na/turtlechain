@@ -1,5 +1,5 @@
 # git
-DEV_GIT_BRANCH='dev'
+DEV_GIT_BRANCH='devel'
 TEST_GIT_BRANCH='test'
 PROD_GIT_BRANCH='prod'
 

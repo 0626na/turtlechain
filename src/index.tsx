@@ -19,23 +19,23 @@ const GlobalStyle = createGlobalStyle`
 @font-face {
     font-family: "Spoqa Han Sans";
     font-weight: 300;
-    src : url("public/assets/font/SpoqaHanSansNeo-Light.ttf")
+    src : url('${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Light.ttf')
   }
   @font-face {
     font-family: "Spoqa Han Sans";
     font-style: normal;
     font-weight: 400;
-    src : url("public/assets/font/SpoqaHanSansNeo-Regular.ttf")
+    src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Regular.ttf")
   }
   @font-face {
     font-family: "Spoqa Han Sans";
     font-weight: 450;
-    src : url("public/assets/font/SpoqaHanSansNeo-Medium.ttf")
+    src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Medium.ttf")
   }
 @font-face {
     font-family: "Spoqa Han Sans";
     font-weight: 500;
-    src : url("public/assets/font/SpoqaHanSansNeo-Bold.ttf")
+    src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Bold.ttf")
   }
   body {
         padding: 0;
