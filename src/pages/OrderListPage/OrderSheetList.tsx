@@ -6,13 +6,13 @@ import orderAPI, { RequestGetOrderList } from "apis/orderAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 
 const OrderSheetList = function () {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetOrderList>({
     rt_store_id: 0,
@@ -22,7 +22,7 @@ const OrderSheetList = function () {
 
   const getOrderListQuery = useQuery(
     ["getOrderList", searchQuery],
-    () => orderAPI.getOrderList({ ...searchQuery, rt_store_id: storeId ?? 0 }),
+    () => orderAPI.getOrderList({ ...searchQuery, rt_store_id: store.id ?? 0 }),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);

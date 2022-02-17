@@ -1,4 +1,4 @@
-import { Col, Row, Space } from "antd";
+import { Col, message, Row, Space, Tooltip } from "antd";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
@@ -31,9 +31,12 @@ function Toolbar() {
             <TurtleButtonSub // 상품 대량 등록 Button
               icon="file"
               onClick={() => {
+                if (!store.id) {
+                  message.warn("쇼핑몰을 선택해주세요");
+                  return;
+                }
                 setCreateModalVisible(true);
               }}
-              disabled={!store.id}
             >
               {t("button.create bulk product")}
             </TurtleButtonSub>
