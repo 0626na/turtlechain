@@ -1,9 +1,9 @@
 import { v2Axios } from "apis";
 
 // 입고장 타입
-export interface Sheet {
+export interface WarehousingSheet {
   id: number;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   created_date: Date;
   created_time: Date;
@@ -17,10 +17,10 @@ export interface Sheet {
 }
 
 // 입고장 상세내역 타입
-export interface SheetItem {
+export interface WarehousingSheetItem {
   id: number;
   sheet_id: number;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   store_id: number;
   store_code: number;
@@ -36,11 +36,12 @@ export interface SheetItem {
   created_by: number;
   created_time: Date;
   is_deleted: boolean;
+  is_vat_included: boolean;
 }
 
 // 입고장 상세내역 추가 타입
 export interface CreateSheetItem {
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
   store_id: number;
   store_code: number;
@@ -57,18 +58,16 @@ export interface CreateSheetItem {
 
 // 입고장 요청 타입
 export interface RequestGetSheet {
-  mall_id: number | "";
+  rt_store_id: number | undefined;
   is_confirmed: number | "";
   start_date: string;
   end_date: string;
-  offset: number;
-  last_id: number;
-  switch_type: "next" | "prev";
+  did_settlement?: number;
 }
 
 export interface ResponseGetSheet {
   data: {
-    data: Array<Sheet>;
+    sheet_list: Array<WarehousingSheet>;
     total_count: number;
   };
 }
@@ -77,22 +76,25 @@ export interface ResponseGetSheet {
 export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
-  data: Array<SheetItem>;
+  data: {
+    item_list: Array<WarehousingItem2>;
+    total_count: number;
+  };
 }
 
 // 입고장 수정하기 요청 타입
-export interface RequestUpdateSheet extends Sheet {
+export interface RequestUpdateSheet extends WarehousingSheet {
   sheet_id: number;
 }
 
 export interface ResponseUpdateSheet {
-  data: Sheet;
+  data: WarehousingSheet;
 }
 
 // 입고장 상세내역 대량 수정하기 타입
 export interface RequestBulkUpdateSheetItem {
   sheet_id: number;
-  items: Array<SheetItem>;
+  items: Array<WarehousingSheetItem>;
 }
 
 export interface ResponseBulkUpdateSheetItem {
@@ -102,7 +104,7 @@ export interface ResponseBulkUpdateSheetItem {
 // 입고장 추가하기 요청 타입
 export interface RequestCreateSheet {
   created_date: string;
-  mall_id: number;
+  rt_store_id: number;
   mall_name: string;
 }
 
@@ -176,3 +178,40 @@ const warehousingAPI = {
 };
 
 export default warehousingAPI;
+
+export interface VendorAccount {
+  id: number;
+  account_number: string;
+  account_holder: string;
+  bank: string;
+}
+
+export interface VendorInfo {
+  id: number;
+  ws_store_id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  vendor_account: VendorAccount
+}
+
+export interface ProductInfo {
+  id: number;
+  product_code: string;
+  name: string;
+  vendor_product_name: string;
+  price: number;
+  option: string;
+}
+
+export interface WarehousingItem2 {
+  id: number;
+  sheet_id: number;
+  rt_store_id: number;
+  vendor_info: VendorInfo;
+  product_info: ProductInfo;
+  count: number;
+  price: number;
+  is_vat_included: boolean;
+  memo: string | null;
+}

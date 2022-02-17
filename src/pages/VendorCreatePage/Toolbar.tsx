@@ -5,10 +5,10 @@ import CreateBulkVendorModal from "./CreateBulkVendorModal";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 
 function Toolbar() {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   return (
@@ -33,7 +33,7 @@ function Toolbar() {
               onClick={() => {
                 setCreateModalVisible(true);
               }}
-              disabled={!storeId}
+              disabled={!store.id}
             >
               {t("button.create bulk vendor")}
             </TurtleButtonSub>

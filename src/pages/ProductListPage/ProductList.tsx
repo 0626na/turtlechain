@@ -8,11 +8,11 @@ import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
 
 function ProductList() {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetProductList>({
     rt_store_id: -1,
@@ -23,7 +23,7 @@ function ProductList() {
 
   const getProductListQuery = useQuery(
     ["getProductList", searchQuery], //
-    () => productAPI.getProductList({ ...searchQuery, rt_store_id: storeId ?? -1 }),
+    () => productAPI.getProductList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -34,8 +34,8 @@ function ProductList() {
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: storeId });
-  }, [storeId]);
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
+  }, [store.id]);
 
   // 검색 버튼 클릭
   const searchProductList = useCallback(

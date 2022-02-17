@@ -18,7 +18,7 @@ const WarehousingSearchFilter = function ({ searchQuery, setSearchQuery }: Props
         <StoreSelect />
         */}
       </Form.Item>
-      <Form.Item label={t("warehousing date")}>
+      <Form.Item label={t("warehousing.date")}>
         <DatePicker.RangePicker
           allowClear={false}
           value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}

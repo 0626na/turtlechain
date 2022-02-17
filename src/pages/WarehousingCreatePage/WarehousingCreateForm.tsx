@@ -30,7 +30,7 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
   const onFinish = () => {
     onCreate({
       ...form.getFieldsValue(),
-      mall_id: -1,
+      rt_store_id: -1,
       mall_name: "",
       store_id: -1,
       store_code: -1,
@@ -103,7 +103,7 @@ const WarehousingCreateForm = function ({ onCreate }: Props) {
         <ItemGroup>
           <Form.Item //
             name="count"
-            label={t("warehousing count")}
+            label={t("warehousing.count")}
             rules={[{ required: true }]}
           >
             <InputNumber style={{ width: 200 }} />

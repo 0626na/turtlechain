@@ -11,7 +11,7 @@ import { t } from "i18next";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 
 interface Props {
   visible: boolean;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 function CreateBulkProductModal({ visible, closeModal }: Props) {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   const form = new FormData();
   const [successList, setSuccessList] = useState<Array<ProductShow>>();
 
@@ -56,7 +56,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
   );
 
   const onClickCreate = useCallback(() => {
-    if (!storeId) {
+    if (!store.id) {
       message.warning("거래처를 먼저 선택해 주세요");
       return;
     }
@@ -65,13 +65,13 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
     successList?.forEach((product) => {
       resultList.push({
         ...product,
-        rt_store_id: storeId,
+        rt_store_id: store.id ?? -1,
         vendor_id: parseInt(product.vendor_id),
         price: parseInt(product.price),
       });
     });
     createProductQuery.mutate(resultList);
-  }, [successList, storeId]);
+  }, [successList, store.id]);
 
   return (
     <Modal
@@ -94,9 +94,9 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
           maxCount={1}
           accept=".csv, .xls, .xlsx"
           customRequest={({ file, onSuccess, onProgress, onError }) => {
-            if (!storeId) return;
+            if (!store.id) return;
             form.append("files", file);
-            form.append("rt_store_id", storeId?.toString());
+            form.append("rt_store_id", store.id?.toString());
             parseProductQuery.mutate(form);
           }}
         >

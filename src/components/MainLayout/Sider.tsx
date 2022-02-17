@@ -127,16 +127,22 @@ const Sider = function ({ collapsed }: Props) {
       ],
     },
     {
-      title: t("settlement.management"),
+      title: t("clearing.management"),
       icon: (
         <div>
-          <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/settlement.svg`}
-            alt="settlement"
-          />
+          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/clearing.svg`} alt="clearing" />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("clearing.create"),
+          pathname: "/clearing/create",
+        },
+        {
+          title: t("clearing.list"),
+          pathname: "/clearing/list",
+        },
+      ],
     },
     {
       title: t("product.management"),
@@ -245,6 +251,18 @@ const StyledSider = styled(Layout.Sider)`
   box-shadow: 10px 10px 10px #e5e5e5;
   min-width: 240px !important;
   */
+
+  .ant-menu-submenu .ant-menu-submenu-title {
+    height: 54px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .ant-menu-submenu .ant-menu-item {
+    height: 54px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 `;
 
 export default Sider;

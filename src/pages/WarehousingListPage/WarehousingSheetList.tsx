@@ -1,22 +1,22 @@
 import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
-import { Sheet } from "apis/warehousingAPI";
+import { WarehousingSheet } from "apis/warehousingAPI";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
 
 interface Props {
   isLoading: boolean;
-  list: Array<Sheet>;
+  list: Array<WarehousingSheet>;
   totalCount: number;
   currentPage: number;
   pageSize: number;
   onPrev: () => void;
   onNext: () => void;
-  onSelectRow: (row: Sheet) => void;
-  onDelete: (row: Sheet) => void;
-  onConfirm: (row: Sheet) => void;
+  onSelectRow: (row: WarehousingSheet) => void;
+  onDelete: (row: WarehousingSheet) => void;
+  onConfirm: (row: WarehousingSheet) => void;
 }
 
 const WarehousingSheetList = function ({
@@ -68,14 +68,14 @@ const WarehousingSheetList = function ({
         {
           width: 120,
           align: "center",
-          title: t("warehousing date"),
+          title: t("warehousing.date"),
           dataIndex: "created_time",
           render: (_, record) =>
             moment(record.created_time).format("YYYY-MM-DD"),
         },
         {
           align: "right",
-          title: t("warehousing total count"),
+          title: t("warehousing.total count"),
           dataIndex: "total_item_count",
           render: (_, record) => record.total_item_count.toLocaleString(),
         },
