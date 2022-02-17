@@ -1,40 +1,10 @@
-import styled from "styled-components";
-
 interface Props {
-  filled?: boolean;
-  src: string;
-  alt: string;
-  color?: "green";
+  type: "menu" | "pageHeader";
+  name: string;
 }
 
-function TurtleIcon({ color, src, alt }: Props) {
-  if (color === "green") {
-    return <GreenImg src={src} alt={alt} />;
-  } else {
-    return <WhiteImg src={src} alt={alt} />;
-  }
+function TurtleIcon({ type, name }: Props) {
+  return <img src={`${process.env.PUBLIC_URL}/assets/svg/${name}.svg`} alt={name} />;
 }
-
-const FilledDiv = styled.div`
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  background-color: #242934;
-  border-radius: 50%;
-`;
-
-const WhiteImg = styled.img`
-  width: 20px;
-  height: 20px;
-`;
-
-const GreenImg = styled.img`
-  width: 25px;
-  height: 25px;
-  filter: invert(40%) sepia(20%) saturate(7428%) hue-rotate(128deg) brightness(96%) contrast(85%);
-`;
 
 export default TurtleIcon;

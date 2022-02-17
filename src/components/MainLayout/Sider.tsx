@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { Layout, Menu } from "antd";
 import TurtleIcon from "components/common/TurtleIcon";
+import { t } from "i18next";
 
 type MenuType = Array<{
   title: string;
@@ -20,7 +20,6 @@ type Props = {
 };
 
 const Sider = function ({ collapsed }: Props) {
-  const { t } = useTranslation();
   const history = useHistory();
   const { pathname } = useLocation();
   const [selectedKeys, setSelectedKeys] = useState(pathname);
@@ -38,13 +37,13 @@ const Sider = function ({ collapsed }: Props) {
 
   const menu: MenuType = [
     {
-      title: "HOME",
+      title: t("common.home"),
       pathname: "/home",
       icon: (
         <div>
           <TurtleIcon //
-            src={`${process.env.PUBLIC_URL}/assets/svg/home.svg`}
-            alt="home"
+            type="menu"
+            name="home"
           />
         </div>
       ),
@@ -54,8 +53,8 @@ const Sider = function ({ collapsed }: Props) {
       icon: (
         <div>
           <TurtleIcon //
-            src={`${process.env.PUBLIC_URL}/assets/svg/order.svg`}
-            alt="order"
+            type="menu"
+            name="order"
           />
         </div>
       ),
@@ -74,10 +73,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("sample return.management"),
       icon: (
         <div>
-          <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/sample-return.svg`}
-            alt="sample return"
-          />
+          <TurtleIcon type="menu" name="sample_return" />
         </div>
       ),
       submenu: [],
@@ -86,10 +82,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("warehousing.management"),
       icon: (
         <div>
-          <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/warehousing.svg`}
-            alt="warehousing"
-          />
+          <TurtleIcon type="menu" name="warehousing" />
         </div>
       ),
       submenu: [
@@ -107,10 +100,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("adjustment.management"),
       icon: (
         <div>
-          <TurtleIcon
-            src={`${process.env.PUBLIC_URL}/assets/svg/adjustment.svg`}
-            alt="adjustment"
-          />
+          <TurtleIcon type="menu" name="adjustment" />
         </div>
       ),
       submenu: [
@@ -128,7 +118,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("clearing.management"),
       icon: (
         <div>
-          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/clearing.svg`} alt="clearing" />
+          <TurtleIcon type="menu" name="clearing" />
         </div>
       ),
       submenu: [
@@ -146,7 +136,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("product.management"),
       icon: (
         <div>
-          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/product.svg`} alt="product" />
+          <TurtleIcon type="menu" name="product" />
         </div>
       ),
       submenu: [
@@ -164,7 +154,7 @@ const Sider = function ({ collapsed }: Props) {
       title: t("vendor.management"),
       icon: (
         <div>
-          <TurtleIcon src={`${process.env.PUBLIC_URL}/assets/svg/vendor.svg`} alt="vendor" />
+          <TurtleIcon type="menu" name="vendor" />
         </div>
       ),
       submenu: [
@@ -183,8 +173,8 @@ const Sider = function ({ collapsed }: Props) {
       icon: (
         <div>
           <TurtleIcon //
-            src={`${process.env.PUBLIC_URL}/assets/svg/setting.svg`}
-            alt="setting"
+            type="menu"
+            name="setting"
           />
         </div>
       ),
@@ -229,7 +219,7 @@ const Sider = function ({ collapsed }: Props) {
             );
           } else {
             return (
-              <Menu.Item key={title} onClick={() => handleMenuClick(pathname)} icon={icon}>
+              <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)} icon={icon}>
                 {title}
               </Menu.Item>
             );
@@ -244,20 +234,9 @@ const StyledSider = styled(Layout.Sider)`
   position: fixed;
   top: 60px;
   overflow: auto;
-  /*
-  background: ${({ theme }) => theme.background};
-  box-shadow: 10px 10px 10px #e5e5e5;
-  min-width: 240px !important;
-  */
 
   .ant-menu-submenu .ant-menu-submenu-title {
-    height: 54px;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  .ant-menu-submenu .ant-menu-item {
-    height: 54px;
+    height: 50px;
     margin-top: 0;
     margin-bottom: 0;
   }

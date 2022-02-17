@@ -148,13 +148,13 @@ function CreateVendorForm() {
         >
           <Input.Group compact>
             <Form.Item noStyle rules={[{ required: true }]}>
-              <Input value={selectedVendor?.building} disabled={true} style={{ width: "32.5%" }} />
+              <Input value={selectedVendor?.building} disabled={true} style={{ width: "34%" }} />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedVendor?.floor && `${selectedVendor?.floor}층`}
                 disabled={true}
-                style={{ width: "32%" }}
+                style={{ width: "33%" }}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
@@ -163,7 +163,7 @@ function CreateVendorForm() {
                   selectedVendor?.loc ? selectedVendor.loc + "호" : ""
                 }`}
                 disabled={true}
-                style={{ width: "32%" }}
+                style={{ width: "33%" }}
               />
             </Form.Item>
           </Input.Group>

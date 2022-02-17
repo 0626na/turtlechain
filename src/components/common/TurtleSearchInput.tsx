@@ -18,7 +18,6 @@ function TurtleSearchInput({ name, value, label, placeholder, onSearch }: Props)
         value={value}
         onClick={onSearch}
         onSearch={onSearch}
-        style={{ width: "96%" }}
         readOnly={true}
       />
     </Form.Item>

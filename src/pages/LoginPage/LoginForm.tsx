@@ -73,7 +73,17 @@ const LoginForm = function () {
         </Form.Item>
       </FormItemContainer>
       <Form.Item>
-        <Button block type="primary" htmlType="submit" loading={loginQuery.isLoading}>
+        <Button
+          block
+          type="primary"
+          htmlType="submit"
+          loading={loginQuery.isLoading}
+          size="large"
+          style={{
+            background: "linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)",
+            border: "none",
+          }}
+        >
           {t("login")}
         </Button>
       </Form.Item>

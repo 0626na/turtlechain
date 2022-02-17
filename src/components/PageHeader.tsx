@@ -18,11 +18,7 @@ const PageHeader = function ({ pageName, title, breadcrumbList, info }: Props) {
       <Row align="middle" justify="space-between">
         <Col>
           <Space>
-            <TurtleIcon
-              src={`${process.env.PUBLIC_URL}/assets/svg/${pageName}.svg`}
-              alt={pageName}
-              color="green"
-            />
+            <TurtleIcon type="pageHeader" name={`${pageName}_gr`} />
             <StyledTitle level={3}>{title}</StyledTitle>
           </Space>
         </Col>
@@ -41,12 +37,12 @@ const PageHeader = function ({ pageName, title, breadcrumbList, info }: Props) {
 };
 
 const StyledTitle = styled(Typography.Title)`
-  margin: 0.4rem 0 0 0.7rem;
+  margin: 4px 0 0 1px;
   margin-bottom: 0 !important;
 `;
 
 const StyledRow = styled(Row)`
-  padding-top: 0 !important;
+  padding-top: 0;
 `;
 
 export default PageHeader;

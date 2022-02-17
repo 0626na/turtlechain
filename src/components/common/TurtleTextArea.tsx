@@ -11,7 +11,7 @@ interface Props {
 function TurtleTextArea({ name, label, placeholder, rows = 14, required = true }: Props) {
   return (
     <Form.Item name={name} label={label} required={required}>
-      <TextArea placeholder={placeholder} allowClear rows={rows} style={{ width: "96%" }} />
+      <TextArea placeholder={placeholder} allowClear rows={rows} />
     </Form.Item>
   );
 }

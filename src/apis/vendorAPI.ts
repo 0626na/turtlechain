@@ -76,8 +76,6 @@ const searchWholesale = async function (query: RequestSearchWholesale) {
   return response.data;
 };
 
-const createVendorCode = async function () {};
-
 // Request: 거래처 등록
 export interface RequestCreateVendor {
   rt_store_id: number;
