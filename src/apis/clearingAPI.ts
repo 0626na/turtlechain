@@ -123,6 +123,7 @@ export interface RequestCreateClearingSheet {
   rt_store_id: number;
   rt_store_name: string;
   total_price: number;
+  total_vat_price: number;
 }
 
 // Response: 정산장 생성
@@ -194,7 +195,8 @@ export interface warehousingItem {
 // 정산아이템 생성 매입 데이터
 export interface adjustmentItem extends warehousingItem {
   adjustment_type: "reserve" | "takeback" | "exchange" | "refund";
-  adjustment_process_type: "subtract" | "refund";
+  adjustment_process_type: "subtract" | "refund" | null;
+  process_count: number;
 }
 
 // Request: 정산아이템 생성

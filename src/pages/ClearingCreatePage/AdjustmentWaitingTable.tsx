@@ -138,7 +138,9 @@ function AdjustmentWaitingTable({
           // 처리가 차감이거나 선택되어있지 않다면 갯수를 차감최대갯수로 변경
           process_count:
             record.process_type === "subtract" || record.process_type === undefined
-              ? max_adjustable_count
+              ? max_adjustable_count > record.count_left
+                ? record.count_left
+                : max_adjustable_count
               : record.count_left,
           price: record.price,
         };
@@ -152,7 +154,9 @@ function AdjustmentWaitingTable({
           checked: true,
           process_count:
             record.process_type === "subtract" || record.process_type === undefined
-              ? max_adjustable_count
+              ? max_adjustable_count > record.count_left
+                ? record.count_left
+                : max_adjustable_count
               : record.count_left,
           process_type: record.process_type ? record.process_type : "subtract",
         };

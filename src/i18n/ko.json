@@ -40,7 +40,9 @@
     "warning change mall": "쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "warning previous clearing": "매입 조정 정보가 모두 사라집니다. 진행하시겠습니까?",
     "confirm exclude": "정말 제외하시겠습니까?",
-    "confirm delete": "정말 삭제하시겠습니까?"
+    "confirm delete": "정말 삭제하시겠습니까?",
+    "success create clearing": "정산내역을 등록하였습니다.",
+    "success delete clearing": "정산내역을 삭제하였습니다."
   },
   "status": {
     "open": "영업",
@@ -200,6 +202,21 @@
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
+    },
+    "panel": {
+      "warehousing": "입고 결제 대기",
+      "adjustment": "매입 결제 대기",
+      "clearing preview": "정산 금액 미리보기",
+      "vat": "부가세",
+      "included": "원 포함",
+      "warehousing total": "입고 총 금액",
+      "adjustment total": "매입 총 금액"
+    },
+    "preview": {
+      "warehousing": "입고",
+      "adjustment subtract": "매입차감",
+      "today reserved": "당일미송",
+      "total": "합계"
     },
     "detail": { "default": "상세보기" }
   },

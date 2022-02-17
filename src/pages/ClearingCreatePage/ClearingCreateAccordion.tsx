@@ -11,6 +11,7 @@ import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { adjustmentItem } from "apis/clearingAPI";
 const { Panel } = Collapse;
 
 /*
@@ -31,7 +32,9 @@ const { Panel } = Collapse;
   * React Function
     useEffect = 선택한 쇼핑몰이 변경되면 입고결제대기 창(첫번째 패널)이 열림
     warehousingTotal = 입고 총 금액 계산
+    warehousingVatTotal = 입고 세액 총 금액 계산
     adjustmentTotal = 매입 총 금액 계산
+    adjustmentVatTotal = 매입 세액 총 금액 계산
 
   * Custom Function
     handleActivePanelChange = Collapse 컴포넌트에서 열려있는 패널 아이디를 변경하는 함수
@@ -135,16 +138,43 @@ function ClearingCreateAccordion() {
     [clearingCart],
   );
 
-  const adjustmentTotal = useMemo(
+  const warehousingVatTotal = useMemo(
     () =>
       clearingCart
-        .filter((item: any) => item.type === "adjustment")
+        .filter((item: any) => item.type === "warehousing")
         .reduce((acc: any, cur: any) => {
-          if (cur.adjustment_process_type === "subtract") {
-            return acc + -(cur.price * cur.process_count);
+          if (cur.is_vat_included) {
+            return acc + cur.price * cur.count * 0.1;
           } else {
             return acc + 0;
           }
+        }, 0),
+    [clearingCart],
+  );
+
+  const adjustmentTotal = useMemo(
+    () =>
+      clearingCart
+        .filter(
+          (item: any) => item.type === "adjustment" && item.adjustment_process_type === "subtract",
+        )
+        .reduce((acc: any, cur: any) => {
+          return acc + -(cur.price * cur.process_count);
+        }, 0),
+    [clearingCart],
+  );
+
+  const adjustmentVatTotal = useMemo(
+    () =>
+      clearingCart
+        .filter(
+          (item: any) =>
+            item.type === "adjustment" &&
+            item.adjustment_process_type === "subtract" &&
+            item.is_vat_included,
+        )
+        .reduce((acc: any, cur: any) => {
+          return acc + -(cur.price * cur.process_count * 0.1);
         }, 0),
     [clearingCart],
   );
@@ -163,6 +193,8 @@ function ClearingCreateAccordion() {
         setClearingCart(clearingCart.filter((value: any) => value.type === "warehousing"));
         qc.refetchQueries("getAdjustment");
         return setActivePanelId(activeKey);
+      } else {
+        return;
       }
     }
     return setActivePanelId(activeKey);
@@ -208,27 +240,97 @@ function ClearingCreateAccordion() {
     ["createClearingItem"],
     clearingAPI.createClearingItem,
     {
+      onSuccess: () => {
+        message.success(t("message.success create clearing"));
+      },
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
     },
   );
 
-  const useCreateClearing = async () => {
+  const onClickCreateClearing = async () => {
     if (store.id && store.id > 0) {
       await mutateCreateClearingSheet
         .mutateAsync({
           rt_store_id: store.id,
-          rt_store_name: "test123",
-          total_price: 10000,
+          rt_store_name: store.name,
+          total_price:
+            warehousingTotal +
+            warehousingVatTotal +
+            adjustmentTotal +
+            adjustmentVatTotal +
+            (!!store.id ? getTodayReserved.data?.data.statistics.not_cleared.price : 0),
+          total_vat_price: warehousingVatTotal + adjustmentVatTotal,
         })
         .then((data) => {
+          // 최종으로 정산 생성을 위해 데이터 모양을 맞춤.
+          const createClearingItemList = [
+            // 입고
+            ...clearingCart
+              .filter((value: any) => value.type === "warehousing")
+              .map((value: any) => {
+                return {
+                  type: value.type,
+                  original_id: value.id,
+                  ws_store_id: value.vendor_info.ws_store_id,
+                  vendor_id: value.vendor_info.id,
+                  vendor_name: value.vendor_info.vendor_name,
+                  bank: value.vendor_info.vendor_account.bank,
+                  account_number: value.vendor_info.vendor_account.account_number,
+                  account_holder: value.vendor_info.vendor_account.account_holder,
+                  is_vat_included: value.is_vat_included,
+                  total_price: Math.floor(value.price * value.count * 1.1),
+                  deposit_price: value.is_vat_included
+                    ? Math.floor(value.price * value.count * 1.1)
+                    : value.price * value.count,
+                  supply_price: value.price * value.count,
+                  vat_price: Math.floor(value.price * value.count * 0.1),
+                };
+              }),
+            // 매입
+            ...clearingCart
+              .filter((value: any) => value.type === "adjustment")
+              .map((value: any) => ({
+                ...value,
+                total_price: Math.floor(value.price * value.process_count * 1.1),
+                deposit_price: value.is_vat_included
+                  ? Math.floor(value.price * value.process_count * 1.1)
+                  : value.price * value.process_count,
+                supply_price: value.price * value.process_count,
+                vat_price: Math.floor(value.price * value.process_count * 0.1),
+              })),
+            // 당일 미송
+          ];
+          const todayReserved = getTodayReserved.data?.data.data.map((value: any) => ({
+            type: "adjustment",
+            original_id: value.id,
+            ws_store_id: value.ws_store_id,
+            vendor_id: value.vendor_id,
+            vendor_name: value.vendor_name,
+            bank: value.bank,
+            account_number: value.account_number,
+            account_holder: value.account_holder,
+            is_vat_included: value.is_vat_included,
+            adjustment_process_type: null,
+            process_count: 0,
+            total_price: Math.floor(value.price * value.count * 1.1),
+            deposit_price: value.is_vat_included
+              ? Math.floor(value.price * value.count * 1.1)
+              : value.price * value.count,
+            supply_price: value.price * value.count,
+            vat_price: Math.floor(value.price * value.count * 0.1),
+          }));
+          if (todayReserved && todayReserved?.length > 0) {
+            createClearingItemList.push(...todayReserved);
+          }
+
           if (store.id)
             mutateCreateClearingItem.mutate({
               sheet_id: data.data as number,
               rt_store_id: store.id,
-              rt_store_name: "test123",
-              item_list: clearingCart,
+              rt_store_name: store.name,
+              item_list: createClearingItemList,
             });
         });
     }
@@ -240,10 +342,17 @@ function ClearingCreateAccordion() {
         count={1}
         style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
       />
-      <span style={{ fontSize: 16, color: "#242934" }}>입고 결제 대기</span>
+      <span style={{ fontSize: 16, color: "#242934" }}>{t("clearing.panel.warehousing")}</span>
       <Divider type="vertical" />
       <span style={{ fontSize: 16, color: "#5B5D63" }}>
-        입고 총 금액 : {warehousingTotal.toLocaleString()}
+        {t("clearing.panel.warehousing total")} :{" "}
+        {`${(warehousingTotal + warehousingVatTotal).toLocaleString()} ${
+          warehousingVatTotal > 0
+            ? `(${t("clearing.panel.vat")} ${warehousingVatTotal.toLocaleString()}${t(
+                "clearing.panel.included",
+              )})`
+            : ""
+        }`}
       </span>
     </Space>
   );
@@ -253,10 +362,17 @@ function ClearingCreateAccordion() {
         count={2}
         style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
       />
-      <span style={{ fontSize: 16, color: "#242934" }}>매입 조정 대기</span>
+      <span style={{ fontSize: 16, color: "#242934" }}>{t("clearing.panel.adjustment")}</span>
       <Divider type="vertical" />
       <span style={{ fontSize: 16, color: "#5B5D63" }}>
-        매입 총 금액 : {adjustmentTotal.toLocaleString()}
+        {t("clearing.panel.adjustment total")} :{" "}
+        {`${(adjustmentTotal + adjustmentVatTotal).toLocaleString()} ${
+          adjustmentVatTotal < 0
+            ? `(${t("clearing.panel.vat")} ${(-adjustmentVatTotal).toLocaleString()}${t(
+                "clearing.panel.included",
+              )})`
+            : ""
+        }`}
       </span>
     </Space>
   );
@@ -266,7 +382,7 @@ function ClearingCreateAccordion() {
         count={3}
         style={{ backgroundColor: "#CBE0FF", color: "#2174F1", fontSize: 12, fontWeight: 700 }}
       />
-      <span style={{ fontSize: 16, color: "#242934" }}>정산 금액 미리보기</span>
+      <span style={{ fontSize: 16, color: "#242934" }}>{t("clearing.panel.clearing preview")}</span>
     </Space>
   );
 
@@ -310,25 +426,49 @@ function ClearingCreateAccordion() {
           </Row>
         </Panel>
         <Panel header={panelThreeHeader} key="3">
-          <Row>입고 : {warehousingTotal.toLocaleString()}</Row>
-          <Row>매입차감 : {adjustmentTotal.toLocaleString()}</Row>
           <Row>
-            당일미송 :{" "}
+            {t("clearing.preview.warehousing")} :{" "}
+            {`${(warehousingTotal + warehousingVatTotal).toLocaleString()} ${
+              warehousingVatTotal > 0
+                ? `(${t("clearing.panel.vat")} ${warehousingVatTotal.toLocaleString()}${t(
+                    "clearing.panel.included",
+                  )})`
+                : ""
+            }`}
+          </Row>
+          <Row>
+            {t("clearing.preview.adjustment subtract")} :{" "}
+            {`${(adjustmentTotal + adjustmentVatTotal).toLocaleString()} ${
+              adjustmentVatTotal < 0
+                ? `(${t("clearing.panel.vat")} ${(-adjustmentVatTotal).toLocaleString()}${t(
+                    "clearing.panel.included",
+                  )})`
+                : ""
+            }`}
+          </Row>
+          <Row>
+            {t("clearing.preview.today reserved")} :{" "}
             {!!store.id
               ? getTodayReserved.data?.data.statistics.not_cleared.price.toLocaleString()
               : 0}
           </Row>
           <Row>
-            합계 :{" "}
+            {t("clearing.preview.total")} :{" "}
             {(
               warehousingTotal +
+              warehousingVatTotal +
               adjustmentTotal +
+              adjustmentVatTotal +
               (!!store.id ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
             ).toLocaleString()}{" "}
             (입고총금액 - 매입차감 + 당일미송)
           </Row>
           <Row justify="end" align="middle">
-            <TurtleButton children={t("button.request clearing")} onClick={useCreateClearing} />
+            <TurtleButton
+              children={t("button.request clearing")}
+              onClick={onClickCreateClearing}
+              loading={mutateCreateClearingSheet.isLoading && mutateCreateClearingItem.isLoading}
+            />
           </Row>
         </Panel>
       </Collapse>

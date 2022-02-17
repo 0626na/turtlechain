@@ -8,6 +8,7 @@ interface Props {
   size?: "small" | "middle";
   color?: "skyblue" | "blue" | "red" | "green" | "grey" | "gray";
   disabled?: boolean;
+  loading?: boolean;
   onClick?: () => void;
 }
 
@@ -16,6 +17,7 @@ function TurtleButtonSub({
   icon,
   size = "middle",
   disabled = false,
+  loading,
   color = "skyblue",
   onClick,
 }: Props) {
@@ -54,6 +56,7 @@ function TurtleButtonSub({
         borderColor: makeColor(),
       }}
       disabled={disabled}
+      loading={loading}
       ghost
     >
       {children}

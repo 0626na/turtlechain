@@ -50,10 +50,10 @@ function WarehousingWaitingTable({
         is_confirmed: 1,
         start_date: "2017-01-01",
         end_date: "9999-12-31",
-        // did_settlement: 0,
+        did_settlement: 0,
       }),
     {
-      enabled: store !== undefined,
+      enabled: store.id !== undefined,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
