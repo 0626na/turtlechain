@@ -7,9 +7,9 @@ import OrderPreviewList from "./OrderPreviewList";
 import { useEffect, useState } from "react";
 import { CreateOrderItem } from "apis/orderAPI";
 import Toolbar from "./Toolbar";
+import { t } from "i18next";
 
 const OrderCreatePage = function () {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order.create")}`;
 
   const [storeId, setStoreId] = useState();

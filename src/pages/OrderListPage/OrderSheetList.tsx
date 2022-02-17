@@ -1,73 +1,69 @@
-import styled from "styled-components";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
-import { Table, Tag, Button, Popconfirm, Row } from "antd";
+import { Table, Button, Popconfirm, Row, message } from "antd";
 import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
-import TurtleButton from "components/common/TurtleButton";
-import { OrderSheet } from "apis/orderAPI";
+import orderAPI, { RequestGetOrderList } from "apis/orderAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
+import { t } from "i18next";
+import { useRecoilValue } from "recoil";
+import { storeIdState } from "store/storeIdState";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { AxiosError } from "axios";
 
-interface Props {
-  openOrderDetail: () => void;
-}
+const OrderSheetList = function () {
+  const storeId = useRecoilValue(storeIdState);
 
-const OrderSheetList = function ({ openOrderDetail }: Props) {
-  const { t } = useTranslation();
+  const [searchQuery, setSearchQuery] = useState<RequestGetOrderList>({
+    rt_store_id: 0,
+    start_date: moment(new Date(2022, 0, 1)).format("YYYY-MM-DD"),
+    end_date: moment(new Date(2022, 2, 15)).format("YYYY-MM-DD"),
+  });
 
-  let fakeKey = 1;
-  const testOrderSheet: OrderSheet = {
-    order_status: "최초",
-    order_time: new Date(),
-    order_content: "주문00 / 미송0 / 반품0 / 교환0 / 샘플0 / 픽업0 / 기타0",
-    order_sheet_status: "알림톡 1 / sms 1 / 실패 0",
-  };
-
-  const list: Array<OrderSheet> = [];
-  for (let i = 0; i < 7; i++) {
-    list.push(testOrderSheet);
-  }
+  const getOrderListQuery = useQuery(
+    ["getOrderList", searchQuery],
+    () => orderAPI.getOrderList({ ...searchQuery, rt_store_id: storeId ?? 0 }),
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: () => {},
+    },
+  );
 
   return (
     <Row>
       <TurtleText>{t("order.sheet.list")}</TurtleText>
       <Table
         size="small"
-        scroll={{ x: "auto", y: 500 }}
         pagination={false}
         //loading={isLoading}
-        dataSource={list}
-        rowKey={(record) => fakeKey++}
+        //dataSource={list}
+        //rowKey={(record) => fakeKey++}
         columns={[
           {
-            width: 100,
-            align: "center",
+            ellipsis: true,
             title: t("order.status"),
             dataIndex: "order_status",
           },
           {
-            width: 100,
-            align: "center",
+            ellipsis: true,
             title: t("order.time"),
-            dataIndex: "order_time",
             render: (_, record) => moment(record.order_time).format("YYYY.MM.DD"),
           },
           {
-            align: "center",
+            ellipsis: true,
             title: t("order.content"),
             dataIndex: "order_content",
           },
           {
-            width: 200,
-            align: "center",
+            ellipsis: true,
             title: t("order.sheet.status"),
             dataIndex: "order_sheet_status",
           },
           {
-            width: 150,
-            align: "center",
+            ellipsis: true,
             title: t("order.sheet.resend"),
-            dataIndex: "order_sheet_resend",
             render: (_, record) => {
               return (
                 <Popconfirm
@@ -76,31 +72,20 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
                   cancelText={t("no")}
                   onConfirm={() => {}}
                 >
-                  <Button danger type="primary" size="small" shape="round">
-                    {t("button.resend")}
-                  </Button>
+                  <TurtleButtonSub size="small">{t("button.resend")}</TurtleButtonSub>
                 </Popconfirm>
               );
             },
           },
           {
-            width: 150,
-            align: "center",
+            ellipsis: true,
             title: t("view details"),
             dataIndex: "action",
-            render: (_, record) => {
-              return (
-                <ActionContainer
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <TurtleButtonSub size="small" color="green" onClick={openOrderDetail}>
-                    {t("button.details")}
-                  </TurtleButtonSub>
-                </ActionContainer>
-              );
-            },
+            render: (_, record) => (
+              <TurtleButtonSub size="small" color="green">
+                {t("button.details")}
+              </TurtleButtonSub>
+            ),
           },
         ]}
         footer={() => (
@@ -112,11 +97,5 @@ const OrderSheetList = function ({ openOrderDetail }: Props) {
     </Row>
   );
 };
-
-const ActionContainer = styled.div`
-  & > * + * {
-    margin-left: 10px;
-  }
-`;
 
 export default OrderSheetList;

@@ -19,9 +19,7 @@ import {
 const MainRouter = function () {
   return (
     <Switch>
-      {/*
       <Route exact path="/home" component={HomePage} />
-       */}
       <Route exact path="/order/create" component={OrderCreatePage} />
       <Route exact path="/order/list" component={OrderListPage} />
       <Route exact path="/warehousing/create" component={WarehousingCreatePage} />

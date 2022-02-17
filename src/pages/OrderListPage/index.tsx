@@ -1,24 +1,11 @@
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
 import PageHeader from "components/PageHeader";
 import OrderSheetList from "./OrderSheetList";
-import { useState } from "react";
-import Filter from "./Filter";
-import OrderSheetItemModal from "./OrderSheetItemModal";
+import Toolbar from "./Toolbar";
+import { t } from "i18next";
 
 const OrderListPage = function () {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("order.list")}`;
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <>
@@ -26,11 +13,10 @@ const OrderListPage = function () {
       <PageHeader
         pageName="order"
         title={t("order.list")}
-        breadcrumbList={[t("order.management"), t("order.list")]}
+        breadcrumbList={[t("common.home"), t("order.management"), t("order.list")]}
       />
-      <Filter />
-      <OrderSheetList openOrderDetail={openModal} />
-      <OrderSheetItemModal visible={modalVisible} openModal={openModal} closeModal={closeModal} />
+      <Toolbar />
+      <OrderSheetList />
     </>
   );
 };

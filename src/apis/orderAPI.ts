@@ -22,14 +22,25 @@ export interface OrderSheet {
   order_sheet_status: string;
 }
 
-// 상품 검색 response 타입
-export interface responseGetProduct {
-  product_code: number;
-  product_name: string;
-  product_option: string;
-  product_price: number;
+export interface RequestGetOrderList {
+  rt_store_id: number;
+  start_date: string;
+  end_date: string;
 }
 
-const orderAPI = {};
+export interface ResponseGetOrderList {}
+
+const getOrderList = async function (query: RequestGetOrderList) {
+  let url = `order/sheet?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get(url);
+  return response.data;
+};
+
+const orderAPI = {
+  getOrderList,
+};
 
 export default orderAPI;

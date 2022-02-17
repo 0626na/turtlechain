@@ -8,7 +8,7 @@ import { InfoCircleOutlined as InfoIcon } from "@ant-design/icons";
 interface Props {
   pageName: string;
   title: string;
-  breadcrumbList: Array<string>;
+  breadcrumbList?: Array<string>;
   info?: string;
 }
 

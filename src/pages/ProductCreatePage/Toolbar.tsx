@@ -9,7 +9,7 @@ import CreateBulkProductModal from "./CreateBulkProductModal";
 
 function Toolbar() {
   const storeId = useRecoilValue(storeIdState);
-  const [createModalvisible, setCreateModalVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
 
   return (
     <>
@@ -46,7 +46,7 @@ function Toolbar() {
         </Col>
       </Row>
       <CreateBulkProductModal
-        visible={createModalvisible}
+        visible={createModalVisible}
         closeModal={() => {
           setCreateModalVisible(false);
         }}

@@ -2,9 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
 import { Layout, Menu } from "antd";
-import SvgIcon from "components/SvgIcon";
 import TurtleIcon from "components/common/TurtleIcon";
 
 type MenuType = Array<{
@@ -41,7 +39,7 @@ const Sider = function ({ collapsed }: Props) {
   const menu: MenuType = [
     {
       title: "HOME",
-      //pathname: "/warehousing/create",
+      pathname: "/home",
       icon: (
         <div>
           <TurtleIcon //
