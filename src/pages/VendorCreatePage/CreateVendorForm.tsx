@@ -11,7 +11,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
@@ -29,11 +29,36 @@ function CreateVendorForm() {
   // 거래처 신규 등록 요청 모달
   const [requestModalVisible, setRequestModalVisible] = useState(false);
 
+  const createVendorCode = useQuery(
+    "createVendorCode",
+    () =>
+      vendorAPI.createVendorCode({
+        rt_store_id: store.id ?? -1,
+        ws_store_id: selectedVendor?.id ?? -1,
+      }),
+    {
+      enabled: false,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        form.setFieldsValue({ ...form.getFieldsValue(), vendor_code: data.data });
+      },
+    },
+  );
+
   const createVendorQuery = useMutation(["createVendor"], vendorAPI.createVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.data.fail_count > 0) {
+        notification.open({
+          type: "error",
+          message: "이미 등록된 거래처입니다.",
+        });
+        return;
+      }
       notification.open({
         type: "success",
         message: "성공적으로 등록하였습니다.",
@@ -45,12 +70,24 @@ function CreateVendorForm() {
     setSearchModalVisible(false);
   };
 
+  const clickCreateVendorCode = () => {
+    if (!store.id) {
+      message.warn("쇼핑몰을 선택해 주세요");
+      return;
+    }
+    if (!selectedVendor || selectedVendor.id === -1) {
+      message.warn("거래처를 선택해 주세요");
+      return;
+    }
+    createVendorCode.refetch();
+  };
+
   // 거래처 선택후 폼에 채워넣기
   const fillVendor = (vendor: Wholesale) => {
     selectVendor(vendor);
     form.setFieldsValue({
       ...form.getFieldsValue(),
-      //vendor_id:, - 거래처 식별 코드
+      vendor_code: undefined,
       vendor_account_id: vendor.store_account[0].id,
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
@@ -68,6 +105,7 @@ function CreateVendorForm() {
     form.setFieldsValue({
       ...form.getFieldsValue(),
       rt_store_id: store.id,
+      vendor_code: undefined,
     });
   }, [store.id, form]);
 
@@ -201,11 +239,11 @@ function CreateVendorForm() {
           style={{ marginBottom: 0 }}
         >
           <Space>
-            <Form.Item name="vendor_id" rules={[{ required: true }]}>
-              <Input readOnly={true} />
+            <Form.Item name="vendor_code" rules={[{ required: true }]}>
+              <Input />
             </Form.Item>
             <Form.Item>
-              <TurtleButtonSub color="blue" onClick={() => {}} disabled={true}>
+              <TurtleButtonSub color="blue" onClick={clickCreateVendorCode}>
                 코드 만들기
               </TurtleButtonSub>
             </Form.Item>
@@ -219,7 +257,7 @@ function CreateVendorForm() {
         >
           <Switch //
             checkedChildren={t("button.include")}
-            style={{ width: "53px" }}
+            style={{ width: "55px" }}
           />
         </Form.Item>
         <TurtleTextArea // 주문 메모 TextArea

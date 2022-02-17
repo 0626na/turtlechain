@@ -1,7 +1,6 @@
 import PageHeader from "components/PageHeader";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import ClearingSheetList from "./ClearingSheetList";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
@@ -53,7 +52,7 @@ function ClearingListPage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="Clearing"
+        pageName="clearing"
         title={t("clearing.list")}
         breadcrumbList={[t("clearing.management"), t("clearing.list")]}
       />

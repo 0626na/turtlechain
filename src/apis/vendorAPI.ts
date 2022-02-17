@@ -76,6 +76,25 @@ const searchWholesale = async function (query: RequestSearchWholesale) {
   return response.data;
 };
 
+export interface RequestCreateVendorCode {
+  rt_store_id: number;
+  ws_store_id: number;
+}
+
+export interface ResponseCreateVendorCode {
+  msg: string;
+  data: string;
+}
+
+const createVendorCode = async function (query: RequestCreateVendorCode) {
+  let url = `provisioning/create_vendor_code?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseCreateVendorCode>(url);
+  return response.data;
+};
+
 // Request: 거래처 등록
 export interface RequestCreateVendor {
   rt_store_id: number;
@@ -153,8 +172,9 @@ const updateVendor = async function (data: RequestUpdateVendor) {
 
 const vendorAPI = {
   getVendorList,
-  updateVendor,
+  createVendorCode,
   createVendor,
+  updateVendor,
   searchWholesale,
 };
 
