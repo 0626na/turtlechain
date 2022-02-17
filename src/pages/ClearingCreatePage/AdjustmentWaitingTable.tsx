@@ -8,7 +8,7 @@ import { AdjustmentItem } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 /*
   Parent : ClearingCreateAccordion
   Children : None
@@ -41,29 +41,30 @@ interface Props {
   clearingCart: any;
   setClearingCart: Dispatch<SetStateAction<any>>;
   adjustablePrice: { [key: number]: number };
+  setAdjustablePrice: Dispatch<SetStateAction<{ [key: number]: number }>>;
 }
 
 function AdjustmentWaitingTable({
-  
   clearingCart,
   setClearingCart,
   adjustablePrice,
+  setAdjustablePrice,
 }: Props) {
-  const storeId = useRecoilValue(storeIdState)
+  const store = useRecoilValue(storeState);
 
   const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentItemExtended>>([]);
   const getAdjustmentQuery = useQuery(
-    ["getAdjustment", storeId], //
+    ["getAdjustment", store.id], //
     () =>
       adjustmentAPI.getAdjustment({
-        rt_store_id: storeId,
+        rt_store_id: store.id,
         is_cleared: 0,
         offset: 1000,
         last_id: -1,
         switch_type: "next",
       }),
     {
-      enabled: storeId !== undefined,
+      enabled: store.id !== undefined,
       onSuccess: (data) => {
         const responseData = data ? data.data.data : [];
         setAdjustmentList(
@@ -156,6 +157,11 @@ function AdjustmentWaitingTable({
           process_type: record.process_type ? record.process_type : "subtract",
         };
         setAdjustmentList(newAdjustmentList);
+
+        setAdjustablePrice({
+          ...adjustablePrice,
+          [record.ws_store_id]: adjustablePrice[record.ws_store_id],
+        });
       } else {
         // 정산에 맞는 입고 아이템 형식으로 변경
         const refinedAdjustmentItem = {
@@ -297,11 +303,6 @@ function AdjustmentWaitingTable({
         dataSource={adjustmentList}
         rowKey={"id"}
         columns={[
-          {
-            ellipsis: true,
-            title: "Temporary id remove this",
-            dataIndex: "id",
-          },
           Table.SELECTION_COLUMN,
           {
             ellipsis: true,

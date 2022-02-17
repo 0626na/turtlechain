@@ -12,10 +12,6 @@ import ClearingCreateAccordion from "./ClearingCreateAccordion";
 
 function ClearingCreatePage() {
   const title = `${t("turtlechain")} - ${t("clearing.create")}`;
-  
-
-  
-  
   return (
     <>
       <Helmet title={title} />

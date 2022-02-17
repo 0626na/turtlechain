@@ -8,7 +8,7 @@ import ClearingSheetList from "./ClearingSheetList";
 import { RequestGetClearingSheet } from "apis/clearingAPI";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 
 export interface searchStateProps {
   page: number;
@@ -17,7 +17,7 @@ export interface searchStateProps {
 }
 
 function ClearingListPage() {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
 
   const title = `${t("turtlechain")} - ${t("clearing.list")}`;
 
@@ -42,13 +42,13 @@ function ClearingListPage() {
       clearing_date: undefined,
     });
     setSearchQuery({
-      rt_store_id: storeId,
+      rt_store_id: store.id,
       start_date: "",
       end_date: "",
       page: 1,
       status: "",
     });
-  }, [storeId])
+  }, [store.id])
 
   return (
     <>

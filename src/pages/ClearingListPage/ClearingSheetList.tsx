@@ -1,22 +1,21 @@
-import { message, Table, Space } from "antd";
-import { AxiosError } from "axios";
-import TurtleButtonSub from "components/common/TurtleButtonSub";
-import { useQuery } from "react-query";
-import { t } from "i18next";
-
 import { useState } from "react";
-import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
+import { message, Table, Space, Popconfirm } from "antd";
+import { AxiosError } from "axios";
+import { useQuery, useMutation } from "react-query";
+import { t } from "i18next";
 import { clearingAPI } from "apis";
+import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
 import ClearingDetailModal from "./ClearingDetailModal";
-import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
 
 /*
   Parent : index
   Children : ClearingDetailModal
 
   * Custom Function
-    getClearingSheetQuery = 정산 아이템 리스트 얻어오는 API
+    getClearingSheetQuery = 정산장 리스트 얻어오는 API
+    mutateUpdateClearingSheet = 정산장 수정 API (삭제처리)
+    onClickDelete = 삭제버튼 눌렀을 때 
 */
 
 interface Props {
@@ -29,14 +28,12 @@ interface Props {
 }
 
 function ClearingSheetList({ searchQuery, searchState }: Props) {
-  const storeId = useRecoilValue(storeIdState);
-
   const [detailModalVisible, setDetailModalVisible] = useState<boolean>(false);
   const [selectedClearingSheet, setSelectedClearingSheet] = useState<ClearingSheet>();
 
   const getClearingSheetQuery = useQuery(
     [
-      "getWarehousingSheet",
+      "getClearingSheet",
       [searchQuery.rt_store_id, searchState.clearing_status, searchState.clearing_date],
     ], //
     () =>
@@ -51,6 +48,25 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
       },
     },
   );
+
+  const mutateUpdateClearingSheet = useMutation(
+    ["updateClearingSheet"],
+    clearingAPI.updateClearingSheet,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+    },
+  );
+
+  const onClickDelete = (record: ClearingSheet) => {
+    console.log("deeleleleltleltletl");
+    // mutateUpdateClearingSheet.mutate({
+    //   ...record,
+    //   is_inactive: true,
+    // });
+  };
+
   return (
     <>
       <Table
@@ -63,12 +79,6 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
         loading={getClearingSheetQuery.isLoading}
         dataSource={getClearingSheetQuery.data?.data}
         columns={[
-          {
-            ellipsis: true,
-            title: "Temporary id remove this",
-            dataIndex: "id",
-            key: "id",
-          },
           {
             ellipsis: true,
             title: t("clearing.request_date"),
@@ -111,7 +121,9 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
             render: (record) => {
               if (record.status === "request")
                 return (
-                  <TurtleButtonSub color="red" children={t("button.delete")} onClick={() => {}} />
+                  <Popconfirm title={t("message.confirm delete")} onConfirm={() => onClickDelete(record)}>
+                    <TurtleButtonSub color="red" children={t("button.delete")} />
+                  </Popconfirm>
                 );
             },
           },

@@ -148,7 +148,7 @@ export interface ResponseUpdateClearingSheet {
 
 const updateClearingSheet = async function (data: RequestUpdateClearingSheet) {
   let url = `clearing/sheet/${data.id}`;
-  const response = await v2Axios.post<ResponseUpdateClearingSheet>(url, data);
+  const response = await v2Axios.put<ResponseUpdateClearingSheet>(url, data);
   return response.data;
 };
 

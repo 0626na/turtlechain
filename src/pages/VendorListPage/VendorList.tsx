@@ -24,7 +24,7 @@ import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 import VendorUpdateModal from "./VendorUpdateModal";
 
 interface VendorShow extends Vendor {
@@ -33,7 +33,7 @@ interface VendorShow extends Vendor {
 }
 
 function VendorList() {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
   const [selectedVendor, selectVendor] = useState<VendorShow>();
@@ -49,7 +49,7 @@ function VendorList() {
   // 거래처 목록 불러오기 요청
   const getVendorsQuery = useQuery(
     ["getVendors", searchQuery], //
-    () => vendorAPI.getVendors({ ...searchQuery, rt_store_id: storeId ?? -1 }),
+    () => vendorAPI.getVendors({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -85,8 +85,8 @@ function VendorList() {
 
   // 쇼핑몰 바뀔 때 거래처 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: storeId });
-  }, [storeId]);
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
+  }, [store.id]);
 
   const changeMemoValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, record: VendorShow) => {

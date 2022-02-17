@@ -7,7 +7,7 @@ import { warehousingAPI } from "apis";
 import { WarehousingSheet } from "apis/warehousingAPI";
 import WarehousingItemListModal from "./WarehousingItemListModal";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 
 /*
   Parent : ClearingCreateAccordion
@@ -41,22 +41,19 @@ function WarehousingWaitingTable({
   selectedWarehousingSheetRowKeys,
   setSelectedWarehousingSheetRowKeys,
 }: Props) {
-  const storeId = useRecoilValue(storeIdState)
+  const store = useRecoilValue(storeState)
   const getWarehousingSheetQuery = useQuery(
-    ["getWarehousingSheet", storeId], //
+    ["getWarehousingSheet", store.id], //
     () =>
       warehousingAPI.getSheet({
-        rt_store_id: storeId,
+        rt_store_id: store.id,
         is_confirmed: 1,
-        start_date: "",
-        end_date: "",
-        offset: 100,
-        last_id: -1,
-        switch_type: "next",
-        did_settlement: 0,
+        start_date: "2017-01-01",
+        end_date: "9999-12-31",
+        // did_settlement: 0,
       }),
     {
-      enabled: storeId !== undefined,
+      enabled: store !== undefined,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -109,33 +106,24 @@ function WarehousingWaitingTable({
           hideSelectAll: true,
         }}
         loading={getWarehousingSheetQuery.isLoading}
-        dataSource={getWarehousingSheetQuery.data?.data}
+        dataSource={getWarehousingSheetQuery.data?.sheet_list}
         rowKey={"id"}
         columns={[
-          {
-            ellipsis: true,
-            title: "Temporary id remove this",
-            dataIndex: "id",
-            key: "id",
-          },
           Table.SELECTION_COLUMN,
           {
             ellipsis: true,
             title: t("warehousing.date"),
             dataIndex: "created_date",
-            key: "id",
           },
           {
             ellipsis: true,
             title: "거래처 수",
             dataIndex: "total_store_count",
-            key: "id",
           },
           {
             ellipsis: true,
             title: t("warehousing.price"),
             dataIndex: "total_price",
-            key: "id",
           },
         ]}
       />

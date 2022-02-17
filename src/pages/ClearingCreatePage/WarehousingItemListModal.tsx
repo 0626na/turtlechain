@@ -4,9 +4,9 @@ import { Table, message, Modal, Descriptions, Switch } from "antd";
 import { AxiosError } from "axios";
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
-import { WarehousingSheet, WarehousingSheetItem } from "apis/warehousingAPI";
+import { WarehousingSheet, WarehousingSheetItem, WarehousingItem2 } from "apis/warehousingAPI";
 
-export interface WarehousingSheetItem4Clearing extends WarehousingSheetItem {
+export interface WarehousingSheetItem4Clearing extends WarehousingItem2 {
   type: "warehousing";
 }
 
@@ -47,7 +47,7 @@ function WarehousingItemListModal({
   setClearingCart,
   deleteWarehousingData,
 }: Props) {
-  const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingSheetItem>>([]);
+  const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingItem2>>([]);
   const [totalVatPrice, setTotalVatPrice] = useState<number>(0);
   const [dataPreexist, setdataPreexist] = useState<boolean>(false);
 
@@ -71,7 +71,7 @@ function WarehousingItemListModal({
           calculateTotalVatPrice(existingData);
           setdataPreexist(true);
         } else {
-          const responseData = data ? data.data : [];
+          const responseData = data ? data.data.item_list : [];
           setWarehousingItemList(responseData);
           calculateTotalVatPrice(responseData);
           setdataPreexist(false);
@@ -83,7 +83,7 @@ function WarehousingItemListModal({
     },
   );
 
-  const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingSheetItem>) => {
+  const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingItem2>) => {
     const totalVat: number = warehousingItemList
       .filter((value) => value.is_vat_included)
       .map((value) => value.price * value.count)
@@ -94,7 +94,7 @@ function WarehousingItemListModal({
     setTotalVatPrice(totalVat);
   };
 
-  const onChangeIsVatIncluded = (record: WarehousingSheetItem) => {
+  const onChangeIsVatIncluded = (record: WarehousingItem2) => {
     // state 로 들어가 있는 리스트 아이템(warehousingItemList)을 변경
     if (warehousingItemList) {
       const newWarehousingItemList = warehousingItemList.map((value) =>
@@ -172,39 +172,29 @@ function WarehousingItemListModal({
         columns={[
           {
             ellipsis: true,
-            title: "Temporary id remove this",
-            dataIndex: "id",
-            key: "id",
-          },
-          {
-            ellipsis: true,
             title: t("vendor.name"),
-            dataIndex: "vendor_name",
-            key: "id",
+            dataIndex: ["vendor_info", "vendor_name"],
           },
           {
             ellipsis: true,
             title: t("vendor.address"),
-            dataIndex: "address",
-            key: "id",
+            dataIndex: ["vendor_info", "vendor_address"],
           },
           {
             ellipsis: true,
             title: t("product.name"),
-            dataIndex: "product_name",
-            key: "option",
+            dataIndex: ["product_info","name"],
+            // render: () => {}
           },
           {
             ellipsis: true,
             title: t("warehousing.count"),
             dataIndex: "count",
-            key: "id",
           },
           {
             ellipsis: true,
             title: t("supply price"),
             dataIndex: "price",
-            key: "id",
           },
           {
             ellipsis: true,

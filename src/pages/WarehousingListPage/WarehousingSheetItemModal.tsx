@@ -77,29 +77,26 @@ const WarehousingSheetItemModal = function ({
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setList(data.data);
+        setList([]);
+        // setList(data.data);
       },
     },
   );
 
   // 입고장 상세내역 수정 요청
-  const updateSheetQuery = useMutation(
-    ["updateSheet"],
-    warehousingAPI.bulkUpdateSheetItem,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        notification.open({
-          type: "success",
-          message: t("message.success update warehousing detail list"),
-        });
-        onClose();
-        onUpdated();
-      },
+  const updateSheetQuery = useMutation(["updateSheet"], warehousingAPI.bulkUpdateSheetItem, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-  );
+    onSuccess: () => {
+      notification.open({
+        type: "success",
+        message: t("message.success update warehousing detail list"),
+      });
+      onClose();
+      onUpdated();
+    },
+  });
 
   // 입고 수량 합계
   const totalItemCount = useMemo(
@@ -131,10 +128,7 @@ const WarehousingSheetItemModal = function ({
   const filteredList = useMemo(
     () =>
       list.filter((item) =>
-        item[searchType].toString().indexOf(searchText) !== -1 &&
-        !item.is_deleted
-          ? true
-          : false,
+        item[searchType].toString().indexOf(searchText) !== -1 && !item.is_deleted ? true : false,
       ),
     [list, searchType, searchText],
   );
@@ -192,11 +186,7 @@ const WarehousingSheetItemModal = function ({
               updateSheetQuery.mutate({ sheet_id, items: list });
             }}
           >
-            <Button
-              type="primary"
-              icon={<SyncOutlined />}
-              loading={updateSheetQuery.isLoading}
-            >
+            <Button type="primary" icon={<SyncOutlined />} loading={updateSheetQuery.isLoading}>
               {t("reflect update")}
             </Button>
           </Popconfirm>,
@@ -287,9 +277,7 @@ const WarehousingSheetItemModal = function ({
                   defaultValue={record.count}
                   onChange={(value) => {
                     const newList = list.map((item) =>
-                      item.product_code === record.product_code
-                        ? { ...item, count: value }
-                        : item,
+                      item.product_code === record.product_code ? { ...item, count: value } : item,
                     );
                     setList(newList);
                     setIsUpdated(true);

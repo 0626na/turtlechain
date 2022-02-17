@@ -3,10 +3,10 @@ import { useQuery } from "react-query";
 import { retailerStoreAPI } from "apis";
 import { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 import { t } from "i18next";
-import { useCallback } from "react";
-import { StoreId } from "../store/storeIdState"
+import { useCallback, useState } from "react";
+import { Store } from "../store/storeState";
 
 interface Props {
   warningMessage?: string;
@@ -14,7 +14,8 @@ interface Props {
 
 function CustomStoreSelect({ warningMessage }: Props) {
   // 쇼핑몰 식별 번호
-  const [storeId, setStoreId] = useRecoilState(storeIdState);
+  const [store, setStore] = useRecoilState(storeState);
+  const [storeList, setStoreList] = useState<Array<Store>>([]);
 
   // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(
@@ -32,21 +33,31 @@ function CustomStoreSelect({ warningMessage }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
+        setStoreList(
+          data?.data.data.map((store) => ({
+            id: store.id,
+            name: store.name,
+          })),
+        );
         // TODO: 쇼핑몰이 1개일때는 해당 쇼핑몰 선택, 다중일때는 선택 안함 추가
       },
     },
   );
 
   // 쇼핑몰 선택
-  const handleChange = useCallback((value: StoreId) => {
-    setStoreId((prevStoreId) => {
-      if (prevStoreId && warningMessage) {
+  const handleChange = useCallback((value: number) => {
+    setStore((prevStore: Store) => {
+      if (prevStore.id && warningMessage) {
         const answer = window.confirm(warningMessage);
         if (!answer) {
-          return prevStoreId;
+          return prevStore;
         }
       }
-      return value;
+
+      return {
+        id: value,
+        name: storeList.find((item) => item.id === value)?.name,
+      } as Store;
     });
   }, []);
 
@@ -58,12 +69,12 @@ function CustomStoreSelect({ warningMessage }: Props) {
         loading={getStoresQuery.isLoading}
         style={{ width: "20rem" }}
         onChange={handleChange}
-        value={storeId}
+        value={store.id}
       >
-        {getStoresQuery.data?.data.data.map(({ name, id }) => {
+        {storeList.map((store) => {
           return (
-            <Select.Option key={id} value={id}>
-              {name}
+            <Select.Option key={store.id} value={store.id}>
+              {store.name}
             </Select.Option>
           );
         })}

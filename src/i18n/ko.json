@@ -39,7 +39,8 @@
     "expired token": "인증정보가 만료되었습니다. 다시 로그인하세요.",
     "warning change mall": "쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "warning previous clearing": "매입 조정 정보가 모두 사라집니다. 진행하시겠습니까?",
-    "confirm exclude": "정말 제외하시겠습니까?"
+    "confirm exclude": "정말 제외하시겠습니까?",
+    "confirm delete": "정말 삭제하시겠습니까?"
   },
   "status": {
     "open": "영업",
@@ -141,7 +142,7 @@
     "count": "입고 수량",
     "date": "입고 날짜",
     "total count": "입고 수량 합계",
-    "price": "입고 금액"
+    "price": "입고 금액 (공급가)"
   },
   "adjustment": {
     "": "매입조정",

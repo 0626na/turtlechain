@@ -62,15 +62,12 @@ export interface RequestGetSheet {
   is_confirmed: number | "";
   start_date: string;
   end_date: string;
-  offset: number;
-  last_id: number;
-  switch_type: "next" | "prev";
   did_settlement?: number;
 }
 
 export interface ResponseGetSheet {
   data: {
-    data: Array<WarehousingSheet>;
+    sheet_list: Array<WarehousingSheet>;
     total_count: number;
   };
 }
@@ -79,7 +76,10 @@ export interface ResponseGetSheet {
 export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
-  data: Array<WarehousingSheetItem>;
+  data: {
+    item_list: Array<WarehousingItem2>;
+    total_count: number;
+  };
 }
 
 // 입고장 수정하기 요청 타입
@@ -178,3 +178,40 @@ const warehousingAPI = {
 };
 
 export default warehousingAPI;
+
+export interface VendorAccount {
+  id: number;
+  account_number: string;
+  account_holder: string;
+  bank: string;
+}
+
+export interface VendorInfo {
+  id: number;
+  ws_store_id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  vendor_account: VendorAccount
+}
+
+export interface ProductInfo {
+  id: number;
+  product_code: string;
+  name: string;
+  vendor_product_name: string;
+  price: number;
+  option: string;
+}
+
+export interface WarehousingItem2 {
+  id: number;
+  sheet_id: number;
+  rt_store_id: number;
+  vendor_info: VendorInfo;
+  product_info: ProductInfo;
+  count: number;
+  price: number;
+  is_vat_included: boolean;
+  memo: string | null;
+}

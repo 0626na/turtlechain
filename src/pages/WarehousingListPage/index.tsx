@@ -29,9 +29,6 @@ const WarehousingListPage = function () {
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
-    offset: 100,
-    last_id: -1,
-    switch_type: "next",
   });
 
   // 입고장 리스트 요청
@@ -55,7 +52,7 @@ const WarehousingListPage = function () {
         getSheetQuery.refetch();
       } else {
         setCurrentPage(1);
-        setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+        setSearchQuery({ ...searchQuery });
       }
 
       notification.open({
@@ -81,7 +78,7 @@ const WarehousingListPage = function () {
 
   // 입고장 리스트
   const list = useMemo(
-    () => (getSheetQuery.data ? getSheetQuery.data.data : []),
+    () => (getSheetQuery.data ? getSheetQuery.data.sheet_list : []),
     [getSheetQuery.data],
   );
 
@@ -117,19 +114,19 @@ const WarehousingListPage = function () {
         list={list}
         totalCount={totalCount}
         currentPage={currentPage}
-        pageSize={searchQuery.offset}
+        pageSize={100}
         // 이전 페이지
         onPrev={() => {
           const switch_type = "prev";
           const last_id = list[0].id;
-          setSearchQuery({ ...searchQuery, switch_type, last_id });
+          setSearchQuery({ ...searchQuery});
           setCurrentPage(currentPage - 1);
         }}
         // 다음 페이지
         onNext={() => {
           const switch_type = "next";
           const last_id = list[list.length - 1].id;
-          setSearchQuery({ ...searchQuery, switch_type, last_id });
+          setSearchQuery({ ...searchQuery });
           setCurrentPage(currentPage + 1);
         }}
         // 행 선택

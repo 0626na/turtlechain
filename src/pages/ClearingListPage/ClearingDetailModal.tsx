@@ -94,17 +94,6 @@ function ClearingDetailModal({
         columns={[
           {
             ellipsis: true,
-            title: "Temporary id remove this",
-            dataIndex: "id",
-            key: "id",
-          },
-          {
-            ellipsis: true,
-            title: t("clearing.vendor.code"),
-            dataIndex: "vendor_id",
-          },
-          {
-            ellipsis: true,
             title: t("clearing.vendor.name"),
             dataIndex: "vendor_name",
           },

@@ -10,7 +10,7 @@ import TurtleButton from "components/common/TurtleButton";
 import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 const { Panel } = Collapse;
 
 /*
@@ -43,7 +43,7 @@ const { Panel } = Collapse;
 */
 
 function ClearingCreateAccordion() {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   const qc = useQueryClient();
   const isMounted = useRef<boolean>(false);
   const [activePanelId, setActivePanelId] = useState<string | string[]>("");
@@ -67,25 +67,59 @@ function ClearingCreateAccordion() {
     } else {
       isMounted.current = true;
     }
-  }, [storeId]);
+  }, [store.id]);
 
   useEffect(() => {
     if (clearingCart.length > 0) {
+      // list에서 같은 key를 가진 것끼리 합계를 내는 함수
       var groupBy = function (xs: any, key: any) {
         return xs.reduce(function (rv: any, x: any) {
-          (rv[x[key]] = rv[x[key]] || []).push(x.price * x.count);
+          if (x.type === "warehousing") {
+            (rv[x["vendor_info"][key]] = rv[x["vendor_info"][key]] || []).push(x.price * x.count);
+          } else if (x.type === "adjustment") {
+            (rv[x[key]] = rv[x[key]] || []).push(-(x.price * x.process_count));
+          }
           return rv;
         }, {});
       };
+
+      // 오브젝트간 같은 key를 가진 entry 끼리 합을 내는 함수
+      var sumObjectsByKey = function (...objs: any[]) {
+        return objs.reduce((a, b) => {
+          for (let k in b) {
+            if (b.hasOwnProperty(k)) a[k] = parseInt(a[k] || 0) + parseInt(b[k]);
+          }
+          return a;
+        }, {});
+      };
+
+      // 입고와 매입 아이템을 구함
       const warehousingItems = clearingCart.filter((value: any) => value.type === "warehousing");
-      const groupByWsStoreId = groupBy(warehousingItems, "ws_store_id");
-      const entries: Array<[string, Array<number>]> = Object.entries(groupByWsStoreId);
-      for (let [key, value] of entries) {
-        groupByWsStoreId[key] = value.reduce((acc, cur) => {
+      const adjustmentItems = clearingCart.filter(
+        (value: any) => value.type === "adjustment" && value.adjustment_process_type === "subtract",
+      );
+      // 같은 ws_store_id 끼리 금액을 묶음
+      const warehousingGroupByWsStoreId = groupBy(warehousingItems, "ws_store_id");
+      const adjustmentGroupByWsStoreId = groupBy(adjustmentItems, "ws_store_id");
+      // object의 value 가 Array 에 넣어진 것을 꺼냄
+      const warehousingEntries: Array<[string, Array<number>]> = Object.entries(
+        warehousingGroupByWsStoreId,
+      );
+      for (let [key, value] of warehousingEntries) {
+        warehousingGroupByWsStoreId[key] = value.reduce((acc, cur) => {
           return acc + cur;
         }, 0);
       }
-      setAdjustablePrice(groupByWsStoreId);
+      const adjustmentEntries: Array<[string, Array<number>]> = Object.entries(
+        adjustmentGroupByWsStoreId,
+      );
+      for (let [key, value] of adjustmentEntries) {
+        adjustmentGroupByWsStoreId[key] = value.reduce((acc, cur) => {
+          return acc + cur;
+        }, 0);
+      }
+      // 차감 가능 금액을 최종적으로 결정
+      setAdjustablePrice(sumObjectsByKey(warehousingGroupByWsStoreId, adjustmentGroupByWsStoreId));
     } else {
       setAdjustablePrice({});
     }
@@ -115,8 +149,6 @@ function ClearingCreateAccordion() {
     [clearingCart],
   );
 
-  console.log(clearingCart);
-
   const handleActivePanelChange = (activeKey: string | string[]) => {
     // 선택된 쇼핑몰이 있고 매입이 선택 된 상태로 입고 결제대기로 돌아가려 할 때 warning
     const adjustmentItems = clearingCart.filter((value: any) => value.type === "adjustment");
@@ -124,7 +156,7 @@ function ClearingCreateAccordion() {
       adjustmentItems.length > 0 &&
       (activePanelId === "2" || activePanelId === "3") &&
       activeKey === "1" &&
-      !!storeId
+      !!store.id
     ) {
       const answer = window.confirm(t("message.warning previous clearing"));
       if (answer) {
@@ -137,7 +169,7 @@ function ClearingCreateAccordion() {
   };
 
   const getTodayReserved = useQuery(
-    ["getTodayReserved", [storeId]],
+    ["getTodayReserved", [store.id]],
     () => {
       var today = new Date();
       var todayString =
@@ -147,7 +179,7 @@ function ClearingCreateAccordion() {
         "-" +
         today.getDate().toString().padStart(2, "0");
       return adjustmentAPI.getAdjustment({
-        rt_store_id: storeId,
+        rt_store_id: store.id,
         is_cleared: 0,
         offset: 1000,
         last_id: -1,
@@ -158,7 +190,7 @@ function ClearingCreateAccordion() {
       });
     },
     {
-      enabled: storeId !== undefined,
+      enabled: store.id !== undefined,
     },
   );
 
@@ -183,20 +215,21 @@ function ClearingCreateAccordion() {
   );
 
   const useCreateClearing = async () => {
-    if (storeId && storeId > 0) {
+    if (store.id && store.id > 0) {
       await mutateCreateClearingSheet
         .mutateAsync({
-          rt_store_id: storeId,
+          rt_store_id: store.id,
           rt_store_name: "test123",
           total_price: 10000,
         })
         .then((data) => {
-          mutateCreateClearingItem.mutate({
-            sheet_id: data.data as number,
-            rt_store_id: storeId,
-            rt_store_name: "test123",
-            item_list: clearingCart,
-          });
+          if (store.id)
+            mutateCreateClearingItem.mutate({
+              sheet_id: data.data as number,
+              rt_store_id: store.id,
+              rt_store_name: "test123",
+              item_list: clearingCart,
+            });
         });
     }
   };
@@ -237,11 +270,6 @@ function ClearingCreateAccordion() {
     </Space>
   );
 
-  console.log(
-    warehousingTotal,
-    adjustmentTotal,
-    getTodayReserved.data?.data.statistics.not_cleared.price,
-  );
   return (
     <FormTitleContainer>
       <Collapse accordion activeKey={activePanelId} onChange={handleActivePanelChange}>
@@ -270,6 +298,7 @@ function ClearingCreateAccordion() {
             clearingCart={clearingCart}
             setClearingCart={setClearingCart}
             adjustablePrice={adjustablePrice}
+            setAdjustablePrice={setAdjustablePrice}
           />
           <Row justify="end" align="middle">
             <TurtleButton
@@ -285,7 +314,7 @@ function ClearingCreateAccordion() {
           <Row>매입차감 : {adjustmentTotal.toLocaleString()}</Row>
           <Row>
             당일미송 :{" "}
-            {!!storeId
+            {!!store.id
               ? getTodayReserved.data?.data.statistics.not_cleared.price.toLocaleString()
               : 0}
           </Row>
@@ -294,7 +323,7 @@ function ClearingCreateAccordion() {
             {(
               warehousingTotal +
               adjustmentTotal +
-              (!!storeId ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
+              (!!store.id ? getTodayReserved.data?.data.statistics.not_cleared.price : 0)
             ).toLocaleString()}{" "}
             (입고총금액 - 매입차감 + 당일미송)
           </Row>

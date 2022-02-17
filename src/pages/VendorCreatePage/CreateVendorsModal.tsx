@@ -31,7 +31,7 @@ import { RequestCreateVendor, RequestGetVendors, VendorAccount } from "apis/vend
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 
 interface Props {
   visible: boolean;
@@ -39,7 +39,7 @@ interface Props {
 }
 
 function CreateVendorsModal({ visible, closeModal }: Props) {
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   const form = new FormData();
 
   const parseVendorsQuery = useMutation("parseVendors", excelAPI.parseVendors, {
@@ -312,7 +312,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     const resultList: Array<RequestCreateVendor> = [];
     successList?.forEach((vendor) => {
       resultList.push({
-        rt_store_id: storeId ?? -1,
+        rt_store_id: store.id ?? -1,
         vendor_code: vendor.vendor_code,
         vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
         vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
@@ -326,7 +326,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     suggestList?.forEach((vendor) => {
       if (vendor.use_vendor && vendor.use_account && vendor.check_account) {
         resultList.push({
-          rt_store_id: storeId ?? -1,
+          rt_store_id: store.id ?? -1,
           vendor_code: vendor.vendor_code,
           vendor_account_id: vendor.use_account?.id,
           vendor_phone_id: vendor.use_vendor.store_phone[0].id,
@@ -364,7 +364,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           accept=".csv, .xls, .xlxs"
           customRequest={({ file, onSuccess }) => {
             form.append("files", file);
-            form.append("rt_store_id", storeId?.toString() ?? "");
+            form.append("rt_store_id", store.id?.toString() ?? "");
             parseVendorsQuery.mutate(form);
           }}
         >
