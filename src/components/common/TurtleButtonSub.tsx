@@ -48,8 +48,8 @@ function TurtleButtonSub({
       icon={icon === "download" ? <DownloadOutlined /> : icon === "file" ? <FileOutlined /> : ""}
       style={{
         borderRadius: 4,
-        paddingTop: size === "small" ? "2.8px" : "",
         padding: "4px 10px",
+        paddingTop: size === "small" ? "1.5px" : "4px",
         color: makeColor(),
         borderColor: makeColor(),
       }}
