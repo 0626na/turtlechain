@@ -59,7 +59,7 @@ const OrderCreatePage = function () {
         breadcrumbList={[t("common.home"), t("order.management"), t("order.create")]}
       />
       <Toolbar />
-      <OrderCreateForm form={form} onCreate={onCreate} />
+      <OrderCreateForm />
       <OrderPreviewList list={list} setList={setList} />
     </>
   );

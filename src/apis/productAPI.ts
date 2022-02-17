@@ -25,6 +25,7 @@ export interface RequestGetProductList {
   page: number;
   search_string: string;
   type: string;
+  vendor_id?: number;
 }
 
 export interface ResponseGetProductList {
