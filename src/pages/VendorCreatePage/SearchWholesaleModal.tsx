@@ -1,34 +1,32 @@
 import { message, Modal, Pagination, Popover, Radio, Row, Space, Table, Tooltip } from "antd";
 import { vendorAPI } from "apis";
-import { RequestSearchVendor, VendorAccount, WholeSaleStore } from "apis/vendorAPI";
+import { RequestSearchWholesale, VendorAccount, Wholesale } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleBadge from "components/common/TurtleBadge";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import SearchFilter from "components/SearchFilter";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
+import { t } from "i18next";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectRow: (wholeSaleStore: WholeSaleStore) => void;
+  selectRow: (wholeSaleStore: Wholesale) => void;
 }
 
-function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
-  const { t } = useTranslation();
+function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
+  const [list, setList] = useState<Array<Wholesale>>([]);
 
-  const [list, setList] = useState<Array<WholeSaleStore>>([]);
-
-  const [searchQuery, setSearchQuery] = useState<RequestSearchVendor>({
+  const [searchQuery, setSearchQuery] = useState<RequestSearchWholesale>({
     page: 1,
     type: "all",
     search_string: "",
   });
 
-  const searchVendorQuery = useQuery(
-    ["searchVendor", searchQuery],
-    () => vendorAPI.searchVendor(searchQuery),
+  const searchWholesaleQuery = useQuery(
+    ["searchWholesale", searchQuery],
+    () => vendorAPI.searchWholesale(searchQuery),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -39,7 +37,7 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
     },
   );
 
-  const onClickSelect = (record: WholeSaleStore) => {
+  const onClickSelect = (record: Wholesale) => {
     if (record.store_phone.length !== 1) {
       message.warning("휴대번호를 선택해주세요");
       return;
@@ -60,6 +58,10 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
     setSearchQuery({ ...searchQuery, page });
   };
 
+  const searchWholesale = ({ type, search_string }: { type: string; search_string: string }) => {
+    setSearchQuery({ page: 1, type, search_string });
+  };
+
   return (
     <Modal
       centered
@@ -73,18 +75,13 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
       bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
-        <SearchFilter
-          type="vendor"
-          onSearch={({ type, search_string }) => {
-            setSearchQuery({ page: 1, type, search_string });
-          }}
-        />
+        <SearchFilter type="vendor" onSearch={searchWholesale} />
       </Row>
 
       <Table
         size="small"
         style={{ padding: "24px 0px" }}
-        loading={searchVendorQuery.isLoading}
+        loading={searchWholesaleQuery.isLoading}
         dataSource={list}
         rowKey={(record) => record.id}
         pagination={false}
@@ -93,20 +90,16 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
             width: "20%",
             ellipsis: true,
             title: t("vendor.name"),
-            render: (_, record) => (
-              <Tooltip placement="topLeft" title={record.name}>
-                {record.name}
-              </Tooltip>
-            ),
+            render: (_, record) => record.name,
           },
           {
             width: "18%",
             ellipsis: true,
             title: t("vendor.address"),
-            render: (_, { building, floor, col, loc, ext }) => {
-              const address = `${building} ${floor}${floor ? "층" : ""} ${col}${
-                col ? "열" : ""
-              } ${loc}${floor ? "호" : ""} ${ext}`;
+            render: (_, record) => {
+              const address = `${record.building} ${record.floor}${record.floor ? "층" : ""} ${
+                record.col
+              }${record.col ? "열" : ""} ${record.loc}${record.floor ? "호" : ""} ${record.ext}`;
               return (
                 <Tooltip placement="topLeft" title={address}>
                   {address}
@@ -256,7 +249,7 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
           <Row justify="center">
             <Pagination
               size="small"
-              total={searchVendorQuery.data?.data.total_count}
+              total={searchWholesaleQuery.data?.data.total_count}
               showSizeChanger={false}
               current={searchQuery.page}
               onChange={selectPage}
@@ -268,4 +261,4 @@ function SearchVendorsModal({ visible, closeModal, selectRow }: Props) {
   );
 }
 
-export default SearchVendorsModal;
+export default SearchWholesaleModal;

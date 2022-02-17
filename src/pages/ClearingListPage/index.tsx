@@ -1,4 +1,3 @@
-import { RequestGetVendors } from "apis/vendorAPI";
 import PageHeader from "components/PageHeader";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -48,7 +47,7 @@ function ClearingListPage() {
       page: 1,
       status: "",
     });
-  }, [store.id])
+  }, [store.id]);
 
   return (
     <>

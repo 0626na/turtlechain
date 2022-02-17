@@ -22,7 +22,21 @@ export interface VendorCompany {
   biz_num: string;
 }
 
-export interface WholeSaleStore {
+// 거래처 타입
+export interface Vendor {
+  id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  is_vat_included: boolean;
+  memo: string;
+  vendor_phone: VendorPhone;
+  vendor_account: VendorAccount;
+  ws_store_info: Wholesale;
+}
+
+// 마스터 도매 타입
+export interface Wholesale {
   id: number;
   name: string;
   phone: string;
@@ -36,44 +50,33 @@ export interface WholeSaleStore {
   ext: string;
 }
 
-// 거래처 타입
-export interface Vendor {
-  id: number;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  is_vat_included: boolean;
-  memo: string;
-  vendor_phone: VendorPhone;
-  vendor_account: VendorAccount;
-  ws_store_info: WholeSaleStore;
-}
-
-// Request: 거래처 마스터 도매 조회
-export interface RequestSearchVendor {
+// Request: 마스터 도매 검색
+export interface RequestSearchWholesale {
   page: number;
   type: string;
   search_string: string;
 }
 
-// Response: 거래처 마스터 도매 조회
-export interface ResponseSearchVendor {
+// Response: 마스터 도매 검색
+export interface ResponseSearchWholesale {
   msg: string;
   data: {
     total_count: number;
-    vendor_list: Array<WholeSaleStore>;
+    vendor_list: Array<Wholesale>;
   };
 }
 
-// 거래처 마스터 도매 조회
-const searchVendor = async function (query: RequestSearchVendor) {
-  let url = `provisioning/search_vendor?`;
+// 마스터 도매 검색
+const searchWholesale = async function (query: RequestSearchWholesale) {
+  let url = `provisioning/search_wholesale?`;
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseSearchVendor>(url);
+  const response = await v2Axios.get<ResponseSearchWholesale>(url);
   return response.data;
 };
+
+const createVendorCode = async function () {};
 
 // Request: 거래처 등록
 export interface RequestCreateVendor {
@@ -100,7 +103,7 @@ export interface ResponseCreateVendor {
   };
 }
 
-// 거래처 등록
+// 거래처 등록 요청
 const createVendor = async function (data: Array<RequestCreateVendor>) {
   const url = `provisioning/vendor`;
   const response = await v2Axios.post<ResponseCreateVendor>(url, data);
@@ -108,7 +111,7 @@ const createVendor = async function (data: Array<RequestCreateVendor>) {
 };
 
 // Request: 거래처 리스트
-export interface RequestGetVendors {
+export interface RequestGetVendorList {
   page: number;
   type: string;
   search_string: string;
@@ -116,17 +119,18 @@ export interface RequestGetVendors {
 }
 
 // Response: 거래처 리스트
-export interface ResponseGetVendors {
+export interface ResponseGetVendorList {
   msg: string;
   data: { vendor_list: Array<Vendor>; total_count: number };
 }
 
-const getVendors = async function (query: RequestGetVendors) {
+// 거래처 리스트 요청
+const getVendorList = async function (query: RequestGetVendorList) {
   let url = "provisioning/vendor?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetVendors>(url);
+  const response = await v2Axios.get<ResponseGetVendorList>(url);
   return response.data;
 };
 
@@ -142,6 +146,7 @@ export interface ResponseUpdateVendor {
   msg: string;
 }
 
+// 거래처 수정 요청
 const updateVendor = async function (data: RequestUpdateVendor) {
   const url = `provisioning/vendor/${data.id}`;
   const response = await v2Axios.put<ResponseUpdateVendor>(url, data);
@@ -149,10 +154,10 @@ const updateVendor = async function (data: RequestUpdateVendor) {
 };
 
 const vendorAPI = {
-  getVendors,
+  getVendorList,
   updateVendor,
   createVendor,
-  searchVendor,
+  searchWholesale,
 };
 
 export default vendorAPI;

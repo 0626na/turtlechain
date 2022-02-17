@@ -1,7 +1,7 @@
 import { Form, Input, message, notification, Row, Space, Switch } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { vendorAPI } from "apis";
-import { WholeSaleStore } from "apis/vendorAPI";
+import { Wholesale } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
@@ -15,13 +15,13 @@ import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
-import SearchVendorsModal from "./SearchVendorsModal";
+import SearchWholesaleModal from "./SearchWholesaleModal";
 
 function CreateVendorForm() {
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
   // 선택된 거래처
-  const [selectedVendor, selectVendor] = useState<WholeSaleStore>();
+  const [selectedVendor, selectVendor] = useState<Wholesale>();
   // createVendor 요청 data 담을 객체
   const [form] = useForm();
   // 거래처 검색 모달
@@ -46,7 +46,7 @@ function CreateVendorForm() {
   };
 
   // 거래처 선택후 폼에 채워넣기
-  const fillVendor = (vendor: WholeSaleStore) => {
+  const fillVendor = (vendor: Wholesale) => {
     selectVendor(vendor);
     form.setFieldsValue({
       ...form.getFieldsValue(),
@@ -273,7 +273,7 @@ function CreateVendorForm() {
         </Row>
       </Form>
 
-      <SearchVendorsModal //
+      <SearchWholesaleModal //
         visible={searchModalVisible}
         closeModal={closeSearchModal}
         selectRow={fillVendor}

@@ -16,7 +16,7 @@ import { AxiosError } from "axios";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
 import { useMutation, useQuery } from "react-query";
-import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
+import { Vendor, RequestGetVendorList, VendorAccount } from "apis/vendorAPI";
 import { useCallback, useEffect, useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
@@ -39,7 +39,7 @@ function VendorList() {
   //const [selectedVendor, selectVendor] = useState<VendorShow>();
 
   // 거래처 목록 불러오기 query
-  const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
+  const [searchQuery, setSearchQuery] = useState<RequestGetVendorList>({
     page: 1,
     type: "all",
     search_string: "",
@@ -49,7 +49,7 @@ function VendorList() {
   // 거래처 목록 불러오기 요청
   const getVendorsQuery = useQuery(
     ["getVendors", searchQuery], //
-    () => vendorAPI.getVendors({ ...searchQuery, rt_store_id: store.id ?? -1 }),
+    () => vendorAPI.getVendorList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
