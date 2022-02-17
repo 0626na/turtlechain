@@ -13,13 +13,13 @@ import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
-import { storeIdState } from "store/storeIdState";
+import { storeState } from "store/storeState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
 import SearchVendorsModal from "./SearchVendorsModal";
 
 function CreateVendorForm() {
   // 쇼핑몰 id
-  const storeId = useRecoilValue(storeIdState);
+  const store = useRecoilValue(storeState);
   // 선택된 거래처
   const [selectedVendor, selectVendor] = useState<WholeSaleStore>();
   // createVendor 요청 data 담을 객체
@@ -67,9 +67,9 @@ function CreateVendorForm() {
   useEffect(() => {
     form.setFieldsValue({
       ...form.getFieldsValue(),
-      rt_store_id: storeId,
+      rt_store_id: store.id,
     });
-  }, [storeId, form]);
+  }, [store.id, form]);
 
   const onClickCreate = () => {
     if (!form.getFieldValue("ws_store_id")) {
@@ -93,7 +93,7 @@ function CreateVendorForm() {
         ext: "",
       });
       form.setFieldsValue({
-        rt_store_id: storeId,
+        rt_store_id: store.id,
       });
     });
   };
@@ -264,7 +264,7 @@ function CreateVendorForm() {
           </TurtleText>
           <TurtleButton
             type="primary"
-            disabled={!storeId}
+            disabled={!store.id}
             loading={createVendorQuery.isLoading}
             onClick={onClickCreate}
           >

@@ -16,7 +16,7 @@ const WarehousingCreatePage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("warehousing create")}`;
 
-  const [mall_id, setMallId] = useState(-1);
+  const [rt_store_id, setMallId] = useState(-1);
   const [mall_name, setMallName] = useState("");
   const [list, setList] = useState<Array<CreateSheetItem>>([]);
 
@@ -34,7 +34,7 @@ const WarehousingCreatePage = function () {
         sheet_id: data.data,
         item_list: list.map((item) => ({
           ...item,
-          mall_id,
+          rt_store_id,
           mall_name,
         })),
       });
@@ -64,12 +64,12 @@ const WarehousingCreatePage = function () {
 
   // 입고장 등록
   const onSubmit = () => {
-    if (mall_id === -1 || !mall_name) {
+    if (rt_store_id === -1 || !mall_name) {
       message.error(t("description.select mall"));
     } else {
       createSheetQuery.mutate({
         created_date: moment().format("YYYY-MM-DD"),
-        mall_id,
+        rt_store_id,
         mall_name,
       });
     }

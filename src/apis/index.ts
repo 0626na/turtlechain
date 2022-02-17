@@ -8,6 +8,8 @@ import orderAPI from "./orderAPI";
 import vendorAPI from "./vendorAPI";
 import basicDataAPI from "./basicDataAPI";
 import bucketListAPI from "./bucketListAPI";
+import clearingAPI from "./clearingAPI";
+import adjustmentAPI from "./adjustmentAPI";
 import excelAPI from "./excelAPI";
 import productAPI from "./productAPI";
 
@@ -43,5 +45,7 @@ export {
   vendorAPI,
   basicDataAPI,
   bucketListAPI,
+  clearingAPI,
+  adjustmentAPI,
   excelAPI,
 };

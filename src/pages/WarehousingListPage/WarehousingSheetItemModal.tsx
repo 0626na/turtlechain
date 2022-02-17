@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { SheetItem } from "apis/warehousingAPI";
+import warehousingAPI, { WarehousingSheetItem } from "apis/warehousingAPI";
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -64,7 +64,7 @@ const WarehousingSheetItemModal = function ({
     },
   ];
 
-  const [list, setList] = useState<Array<SheetItem>>([]);
+  const [list, setList] = useState<Array<WarehousingSheetItem>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 입고장 상세내역 리스트 요청
@@ -77,29 +77,26 @@ const WarehousingSheetItemModal = function ({
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setList(data.data);
+        setList([]);
+        // setList(data.data);
       },
     },
   );
 
   // 입고장 상세내역 수정 요청
-  const updateSheetQuery = useMutation(
-    ["updateSheet"],
-    warehousingAPI.bulkUpdateSheetItem,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        notification.open({
-          type: "success",
-          message: t("message.success update warehousing detail list"),
-        });
-        onClose();
-        onUpdated();
-      },
+  const updateSheetQuery = useMutation(["updateSheet"], warehousingAPI.bulkUpdateSheetItem, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-  );
+    onSuccess: () => {
+      notification.open({
+        type: "success",
+        message: t("message.success update warehousing detail list"),
+      });
+      onClose();
+      onUpdated();
+    },
+  });
 
   // 입고 수량 합계
   const totalItemCount = useMemo(
@@ -131,10 +128,7 @@ const WarehousingSheetItemModal = function ({
   const filteredList = useMemo(
     () =>
       list.filter((item) =>
-        item[searchType].toString().indexOf(searchText) !== -1 &&
-        !item.is_deleted
-          ? true
-          : false,
+        item[searchType].toString().indexOf(searchText) !== -1 && !item.is_deleted ? true : false,
       ),
     [list, searchType, searchText],
   );
@@ -181,7 +175,7 @@ const WarehousingSheetItemModal = function ({
           onClose();
         }
       }}
-      title={`${mall_name} ${t("warehousing detail list")}`}
+      title={`${mall_name} ${t("warehousing.detail list")}`}
       footer={
         !is_confirmed && [
           <Popconfirm
@@ -192,11 +186,7 @@ const WarehousingSheetItemModal = function ({
               updateSheetQuery.mutate({ sheet_id, items: list });
             }}
           >
-            <Button
-              type="primary"
-              icon={<SyncOutlined />}
-              loading={updateSheetQuery.isLoading}
-            >
+            <Button type="primary" icon={<SyncOutlined />} loading={updateSheetQuery.isLoading}>
               {t("reflect update")}
             </Button>
           </Popconfirm>,
@@ -207,13 +197,13 @@ const WarehousingSheetItemModal = function ({
         <StatisticContainer>
           <Card>
             <Statistic //
-              title={t("warehousing date")}
+              title={t("warehousing.date")}
               value={created_time}
             />
           </Card>
           <Card>
             <Statistic //
-              title={t("warehousing total count")}
+              title={t("warehousing.total count")}
               value={totalItemCount}
             />
           </Card>
@@ -279,7 +269,7 @@ const WarehousingSheetItemModal = function ({
             },
             {
               align: "right",
-              title: t("warehousing count"),
+              title: t("warehousing.count"),
               dataIndex: "count",
               render: (_, record) => (
                 <InputNumber //
@@ -287,9 +277,7 @@ const WarehousingSheetItemModal = function ({
                   defaultValue={record.count}
                   onChange={(value) => {
                     const newList = list.map((item) =>
-                      item.product_code === record.product_code
-                        ? { ...item, count: value }
-                        : item,
+                      item.product_code === record.product_code ? { ...item, count: value } : item,
                     );
                     setList(newList);
                     setIsUpdated(true);
