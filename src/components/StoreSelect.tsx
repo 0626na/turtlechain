@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { storeState } from "store/storeState";
 import { t } from "i18next";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Store } from "../store/storeState";
 
 interface Props {
@@ -59,6 +59,11 @@ function CustomStoreSelect({ warningMessage }: Props) {
         name: storeList.find((item) => item.id === value)?.name,
       } as Store;
     });
+  }, []);
+
+  // 페이지 바뀔때 마다 storeId 초기화
+  useEffect(() => {
+    setStore({ id: undefined, name: "" });
   }, []);
 
   return (

@@ -44,10 +44,10 @@ const getProductList = async function (query: RequestGetProductList) {
   return response.data;
 };
 
-export interface RequestCreateProducts {
+export interface RequestCreateProduct {
   rt_store_id: number;
   vendor_id: number;
-  product_id: number;
+  product_code: string;
   name: string;
   price: number;
   image_url: string;
@@ -56,18 +56,17 @@ export interface RequestCreateProducts {
   memo: string;
 }
 
-export interface ResponseCreateProducts {
+export interface ResponseCreateProduct {
   msg: string;
   data: {
-    fail_with_vendor_id: number;
-    fail_with_less_data: number;
-    already_exist_product_id: number;
+    success: number;
+    fail: number;
   };
 }
 
-const createProducts = async function (data: Array<RequestCreateProducts>) {
+const createProduct = async function (data: Array<RequestCreateProduct>) {
   const url = `provisioning/product`;
-  const response = await v2Axios.post<ResponseCreateProducts>(url, data);
+  const response = await v2Axios.post<ResponseCreateProduct>(url, data);
   return response.data;
 };
 
@@ -92,7 +91,7 @@ const updateProduct = async function (data: RequestUpdateProduct) {
 
 const productAPI = {
   getProductList,
-  createProducts,
+  createProduct,
 };
 
 export default productAPI;

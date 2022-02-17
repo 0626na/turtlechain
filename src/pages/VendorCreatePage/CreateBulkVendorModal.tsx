@@ -20,14 +20,14 @@ import TurtleInfo from "components/common/TurtleInfo";
 import { useMutation } from "react-query";
 import { excelAPI, vendorAPI } from "apis";
 import { AxiosError } from "axios";
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { MasterVendor, ParseCount, Vendor, VendorShow } from "apis/excelAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleBadge from "components/common/TurtleBadge";
 import { FileTextOutlined } from "@ant-design/icons";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
-import { RequestCreateVendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
+import { RequestCreateVendor, VendorAccount } from "apis/vendorAPI";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
@@ -41,8 +41,12 @@ interface Props {
 function CreateVendorsModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
   const form = new FormData();
+  const [successList, setSuccessList] = useState<Array<VendorShow>>();
+  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
+  const [failList, setFailList] = useState<Array<Vendor>>();
+  const [count, setCount] = useState<ParseCount>();
 
-  const parseVendorsQuery = useMutation("parseVendors", excelAPI.parseVendors, {
+  const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -53,7 +57,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           memo: "",
           memo_value: "",
           memo_active: true,
-          is_taxed: false,
+          is_vat_included: false,
           use_vendor_name: vendor.name,
         })),
       );
@@ -63,7 +67,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           memo: "",
           memo_value: "",
           memo_active: true,
-          is_taxed: false,
+          is_vat_included: false,
           use_vendor_name: vendor.name,
           use_vendor: vendor.ws_store_info.length === 1 ? vendor.ws_store_info[0] : undefined,
           use_account:
@@ -78,13 +82,8 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     },
   });
 
-  const [count, setCount] = useState<ParseCount>();
-  const [successList, setSuccessList] = useState<Array<VendorShow>>();
-  const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
-  const [failList, setFailList] = useState<Array<Vendor>>();
-
-  const createVendorsQuery = useMutation(
-    ["createVendors"], //
+  const createVendorQuery = useMutation(
+    ["createVendor"], //
     vendorAPI.createVendor,
     {
       onError: (error: AxiosError) => {
@@ -157,7 +156,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -238,7 +237,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -320,7 +319,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         vendor_address: vendor.ws_store_info[0].address,
         vendor_name: vendor.use_vendor_name,
         memo: vendor.memo,
-        is_taxed: vendor.is_taxed,
+        is_vat_included: vendor.is_vat_included,
       });
     });
     suggestList?.forEach((vendor) => {
@@ -334,11 +333,11 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           vendor_address: vendor.use_vendor.address,
           vendor_name: vendor.use_vendor_name,
           memo: vendor.memo,
-          is_taxed: vendor.is_taxed,
+          is_vat_included: vendor.is_vat_included,
         });
       }
     });
-    createVendorsQuery.mutate(resultList);
+    createVendorQuery.mutate(resultList);
   };
 
   return (
@@ -349,7 +348,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLXS만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
@@ -358,14 +357,15 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       bodyStyle={{ height: "800px", overflowY: "auto" }}
     >
       <Space>
-        <Typography.Text>거래처 업로드</Typography.Text>
+        <Typography.Text>거래처 업로드 | </Typography.Text>
         <Upload //
-          multiple={false}
-          accept=".csv, .xls, .xlxs"
+          maxCount={1}
+          accept=".csv, .xls, .xlsx"
           customRequest={({ file, onSuccess }) => {
+            if (!store.id) return;
             form.append("files", file);
             form.append("rt_store_id", store.id?.toString() ?? "");
-            parseVendorsQuery.mutate(form);
+            parseVendorQuery.mutate(form);
           }}
         >
           <Button icon={<UploadOutlined />}>파일 선택하기</Button>
@@ -389,7 +389,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -511,7 +511,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                   return (
                     <Switch
                       checkedChildren={t("button.include")}
-                      checked={record.is_taxed}
+                      checked={record.is_vat_included}
                       onClick={() => {
                         setSuccessIsTaxed(record);
                       }}
@@ -530,15 +530,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                     record.ws_store_info.length === 1 &&
                     record.ws_store_info[0]?.store_account.length === 1
                   ) {
-                    // resultList에 넣기 - 거래처 등록 버튼클릭시에 넣어야할듯
-                    // resultList?.push({
-                    //   rt_store_id: -1,
-                    //   vendor_code: record.vendor_code,
-                    //   vendor_account_id: record.ws_store_info[0]?.store_account[0].id,
-                    //   vendor_phone_id: record.ws_store_info[0]?.store_phone[0].id,
-                    //   memo: record.memo,
-                    //   is_taxed: record.is_taxed,
-                    // });
                     return <CheckOutlined style={{ color: "green" }} />;
                   }
                   return <CloseOutlined style={{ color: "red" }} />;
@@ -574,7 +565,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{getSuggestCount}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -756,7 +747,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                   return (
                     <Switch
                       checkedChildren={t("button.include")}
-                      checked={record.is_taxed}
+                      checked={record.is_vat_included}
                       onClick={() => {
                         setSuggestIsTaxed(record);
                       }}
@@ -767,6 +758,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 align: "center",
+                title: "(체크)",
                 render: (_, record) => {
                   if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
@@ -775,6 +767,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 },
               },
               {
+                ellipsis: true,
                 title: "사용할 거래처명",
                 render: (_, record) => (
                   <Input
@@ -800,10 +793,10 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          */}
         <Tabs.TabPane tab="미매칭" key="3">
           거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>{count?.fail_count}</span>건
+          <span style={{ color: "red", textDecoration: "underline" }}>{failList?.length}</span>건
           <Table
             size="small"
-            loading={parseVendorsQuery.isLoading}
+            loading={parseVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -862,7 +855,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         <TurtleButton
           type="primary"
           //disabled={form.getFieldValue("rt_store_id") !== -1}
-          //loading={createVendorQuery.isLoading}
+          loading={createVendorQuery.isLoading}
           onClick={onClickCreate}
         >
           {t("vendor.create")}

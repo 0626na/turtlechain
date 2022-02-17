@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import ProductList from "./ProductList";
 import Toolbar from "./Toolbar";
 
-function ProductCreatePage() {
+function ProductListPage() {
   const title = `${t("turtlechain")} - ${t("product.list")}`;
 
   return (
@@ -21,4 +21,4 @@ function ProductCreatePage() {
   );
 }
 
-export default ProductCreatePage;
+export default ProductListPage;

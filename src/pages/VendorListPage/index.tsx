@@ -1,8 +1,5 @@
-import { RequestGetVendors } from "apis/vendorAPI";
 import PageHeader from "components/PageHeader";
-import { useCallback, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import VendorList from "./VendorList";
 import { t } from "i18next";

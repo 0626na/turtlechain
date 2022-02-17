@@ -1,7 +1,7 @@
 import { Form, Input, message, notification, Row, Space, Switch } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { vendorAPI } from "apis";
-import { RequestCreateVendor, WholeSaleStore } from "apis/vendorAPI";
+import { WholeSaleStore } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
@@ -11,7 +11,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
@@ -55,7 +55,7 @@ function CreateVendorForm() {
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
       memo: "",
-      is_taxed: false,
+      is_vat_included: false,
       owner: vendor.company[0]?.owner,
       biz_num: vendor.company[0]?.biz_num,
       biz_name: vendor.company[0]?.name,
@@ -205,14 +205,14 @@ function CreateVendorForm() {
               <Input readOnly={true} />
             </Form.Item>
             <Form.Item>
-              <TurtleButtonSub color="blue" onClick={() => {}}>
+              <TurtleButtonSub color="blue" onClick={() => {}} disabled={true}>
                 코드 만들기
               </TurtleButtonSub>
             </Form.Item>
           </Space>
         </Form.Item>
         <Form.Item
-          name="is_taxed"
+          name="is_vat_included"
           label="부가세 포함 여부"
           valuePropName="checked"
           required={false}
@@ -264,7 +264,7 @@ function CreateVendorForm() {
           </TurtleText>
           <TurtleButton
             type="primary"
-            disabled={form.getFieldValue("rt_store_id") === -1}
+            disabled={!store.id}
             loading={createVendorQuery.isLoading}
             onClick={onClickCreate}
           >

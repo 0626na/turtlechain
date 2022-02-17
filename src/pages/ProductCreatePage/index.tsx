@@ -1,6 +1,7 @@
 import PageHeader from "components/PageHeader";
 import { t } from "i18next";
 import { Helmet } from "react-helmet";
+import Toolbar from "./Toolbar";
 
 function ProductCreatePage() {
   const title = `${t("turtlechain")} - ${t("product.create")}`;
@@ -13,6 +14,7 @@ function ProductCreatePage() {
         title={t("product.create")}
         breadcrumbList={[t("common.home"), t("product.management"), t("product.create")]}
       />
+      <Toolbar />
     </>
   );
 }

@@ -80,7 +80,9 @@
     "download order list": "주문 내역 다운로드",
     "download list": "내역 다운로드",
     "create bulk vendor": "거래처 대량 등록",
+    "create bulk product": "상품 대량 등록",
     "load vendor": "거래처 불러오기",
+    "load product": "상품 목록 불러오기",
     "download vendor": "거래처 다운로드",
     "download product": "상품 다운로드",
     "include": "포함 ",
@@ -204,6 +206,7 @@
   "product": {
     "": "상품",
     "create": "상품 등록",
+    "bulk create": "상품 대량 등록하기",
     "list": "상품 목록",
     "lists": "상품 리스트",
     "search": "상품 조회하기",
@@ -217,7 +220,7 @@
   },
   "vendor": {
     "": "거래처",
-    "create": "거래처 등록하기",
+    "create": "거래처 등록",
     "list": "거래처 목록",
     "lists": "거래처 리스트",
     "management": "거래처 관리",

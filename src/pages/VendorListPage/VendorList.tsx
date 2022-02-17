@@ -15,7 +15,7 @@ import { vendorAPI } from "apis";
 import { AxiosError } from "axios";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Vendor, RequestGetVendors, VendorAccount } from "apis/vendorAPI";
 import { useCallback, useEffect, useState } from "react";
 import TurtleBadge from "components/common/TurtleBadge";
@@ -36,7 +36,7 @@ function VendorList() {
   const store = useRecoilValue(storeState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
-  const [selectedVendor, selectVendor] = useState<VendorShow>();
+  //const [selectedVendor, selectVendor] = useState<VendorShow>();
 
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGetVendors>({
@@ -121,7 +121,7 @@ function VendorList() {
       updateVendorQuery.mutate({
         id: record.id,
         memo: record.memo_value,
-        is_taxed: record.is_taxed,
+        is_vat_included: record.is_vat_included,
       });
     },
     [vendorList, updateVendorQuery],
@@ -150,7 +150,7 @@ function VendorList() {
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                is_taxed: !record.is_taxed,
+                is_vat_included: !record.is_vat_included,
               }
             : vendor,
         ),
@@ -158,7 +158,7 @@ function VendorList() {
       updateVendorQuery.mutate({
         id: record.id,
         memo: record.memo,
-        is_taxed: !record.is_taxed,
+        is_vat_included: !record.is_vat_included,
       });
     },
     [vendorList, updateVendorQuery],
@@ -367,7 +367,7 @@ function VendorList() {
                 >
                   <Switch
                     checkedChildren={t("button.include")}
-                    checked={record.is_taxed}
+                    checked={record.is_vat_included}
                     style={{ width: "52px" }}
                   />
                 </Popconfirm>
@@ -411,14 +411,13 @@ function VendorList() {
             />
           </Row>
         )}
-
         // end of Table
       />
-      <VendorUpdateModal //
+      {/* <VendorUpdateModal //
         visible={visibleUpdateModal}
         closeModal={closeUpdateModal}
-        //selectedRow={selectedRow}
-      />
+        selectedRow={selectedRow}
+      /> */}
     </>
   );
 }
