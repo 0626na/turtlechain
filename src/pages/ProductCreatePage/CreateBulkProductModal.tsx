@@ -106,7 +106,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("product.bulk create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLXS만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS 또는 .XLXS만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}

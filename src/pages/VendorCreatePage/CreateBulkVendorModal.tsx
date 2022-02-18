@@ -33,6 +33,7 @@ import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { RcFile, UploadChangeParam } from "antd/lib/upload";
+import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 
 interface Props {
   visible: boolean;
@@ -45,7 +46,11 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const [successList, setSuccessList] = useState<Array<VendorShow>>();
   const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
   const [failList, setFailList] = useState<Array<Vendor>>();
-  const [count, setCount] = useState<ParseCount>();
+  const [count, setCount] = useState<ParseCount>({
+    success_count: 0,
+    suggest_count: 0,
+    fail_count: 0,
+  });
 
   const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
@@ -176,6 +181,23 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     [successList],
   );
 
+  const setSuccessMemoInactive = useCallback(
+    (record) => {
+      setSuccessList(
+        successList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_active: false,
+                memo_value: vendor.memo,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [successList],
+  );
+
   const setSuccessIsTaxed = useCallback(
     (record) => {
       setSuccessList(
@@ -216,6 +238,23 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             ? {
                 ...vendor,
                 memo_active: true,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [suggestList],
+  );
+
+  const setSuggestMemoInactive = useCallback(
+    (record) => {
+      setSuggestList(
+        suggestList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_active: false,
+                memo_value: vendor.memo,
               }
             : vendor,
         ),
@@ -375,7 +414,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX 만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS 또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
@@ -437,9 +476,17 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                       />
                       <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
                         <Col>
-                          <TurtleButtonSub size="small" color="grey">
-                            취소
-                          </TurtleButtonSub>
+                          {record.memo && (
+                            <TurtleButtonSub
+                              size="small"
+                              color="grey"
+                              onClick={() => {
+                                setSuccessMemoInactive(record);
+                              }}
+                            >
+                              취소
+                            </TurtleButtonSub>
+                          )}
                         </Col>
                         <Col>
                           <TurtleButtonSub
@@ -499,7 +546,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "거래처명",
+                title: "추천 거래처명",
                 render: (_, record) => record.ws_store_info[0]?.name,
               },
               {
@@ -530,11 +577,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 },
               },
               Table.EXPAND_COLUMN,
-              {
-                ellipsis: true,
-                title: "메모",
-                width: "5%",
-              },
               {
                 ellipsis: true,
                 title: "부가세 포함 여부",
@@ -568,7 +610,12 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "사용할 거래처명",
+                title: (
+                  <>
+                    사용할 거래처명
+                    <TurtleQuestionTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
+                  </>
+                ),
                 render: (_, record) => (
                   <Input
                     size="small"
@@ -613,9 +660,17 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                       />
                       <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
                         <Col>
-                          <TurtleButtonSub size="small" color="grey">
-                            취소
-                          </TurtleButtonSub>
+                          {record.memo && (
+                            <TurtleButtonSub
+                              size="small"
+                              color="grey"
+                              onClick={() => {
+                                setSuggestMemoInactive(record);
+                              }}
+                            >
+                              취소
+                            </TurtleButtonSub>
+                          )}
                         </Col>
                         <Col>
                           <TurtleButtonSub
@@ -661,6 +716,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             columns={[
               {
                 ellipsis: true,
+                width: "8%",
                 title: "거래처 코드",
                 render: (_, record) => record.vendor_code,
               },
@@ -674,30 +730,27 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "거래처명",
+                title: "추천 거래처명",
                 render: (_, record) => {
                   return (
                     <TurtleBadge count={record.ws_store_info.length} color="red">
                       <Popover
                         content={
-                          <>
-                            <p>이미 등록된 거래처명</p>
-                            <Radio.Group value={record.use_vendor?.id}>
-                              <Space direction="vertical">
-                                {record.ws_store_info.map(({ name, address, id }) => (
-                                  <Radio
-                                    key={id}
-                                    value={id}
-                                    onClick={() => {
-                                      setSuggestVendor(record, id);
-                                    }}
-                                  >
-                                    {name} | {address}
-                                  </Radio>
-                                ))}
-                              </Space>
-                            </Radio.Group>
-                          </>
+                          <Radio.Group value={record.use_vendor?.id}>
+                            <Space direction="vertical">
+                              {record.ws_store_info.map(({ name, address, id }) => (
+                                <Radio
+                                  key={id}
+                                  value={id}
+                                  onClick={() => {
+                                    setSuggestVendor(record, id);
+                                  }}
+                                >
+                                  {name} | {address}
+                                </Radio>
+                              ))}
+                            </Space>
+                          </Radio.Group>
                         }
                       >
                         <div style={{ color: record.use_vendor ? "" : "red" }}>
@@ -732,26 +785,23 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                     <TurtleBadge count={record.use_vendor?.store_account.length} color="red">
                       <Popover
                         content={
-                          <>
-                            <p>이미 등록된 계좌정보</p>
-                            <Radio.Group value={record.use_account?.id}>
-                              <Space direction="vertical">
-                                {record.use_vendor?.store_account.map(
-                                  ({ id, bank, account_number, account_holder }) => (
-                                    <Radio
-                                      value={id}
-                                      key={id}
-                                      onClick={() => {
-                                        setSuggestAccount(record, id);
-                                      }}
-                                    >
-                                      {bank} {account_number} {account_holder}
-                                    </Radio>
-                                  ),
-                                )}
-                              </Space>
-                            </Radio.Group>
-                          </>
+                          <Radio.Group value={record.use_account?.id}>
+                            <Space direction="vertical">
+                              {record.use_vendor?.store_account.map(
+                                ({ id, bank, account_number, account_holder }) => (
+                                  <Radio
+                                    value={id}
+                                    key={id}
+                                    onClick={() => {
+                                      setSuggestAccount(record, id);
+                                    }}
+                                  >
+                                    {bank} {account_number} {account_holder}
+                                  </Radio>
+                                ),
+                              )}
+                            </Space>
+                          </Radio.Group>
                         }
                       >
                         <div style={{ color: record.check_account ? "" : "red" }}>
@@ -767,10 +817,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
                 },
               },
               Table.EXPAND_COLUMN,
-              {
-                title: "메모",
-                width: "5%",
-              },
               {
                 title: "부가세 포함 여부",
                 ellipsis: true,
@@ -799,7 +845,12 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "사용할 거래처명",
+                title: (
+                  <>
+                    사용할 거래처명
+                    <TurtleQuestionTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
+                  </>
+                ),
                 render: (_, record) => (
                   <Input
                     size="small"
@@ -824,7 +875,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          */}
         <Tabs.TabPane tab="미매칭" key="3">
           거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>{failList?.length}</span>건
+          <span style={{ color: "red", textDecoration: "underline" }}>{count.fail_count}</span>건
           <Table
             size="small"
             loading={parseVendorQuery.isLoading}
@@ -834,6 +885,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             columns={[
               {
                 ellipsis: true,
+                width: "8%",
                 title: "거래처 코드",
                 render: (_, record) => record.vendor_code,
               },
