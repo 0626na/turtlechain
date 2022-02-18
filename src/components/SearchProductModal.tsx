@@ -50,10 +50,10 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
     },
   );
 
-  // 쇼핑몰 바뀔때 상품 리스트 재검색
+  // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
-  }, [store.id]);
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id, vendor_id: vendorId });
+  }, [store.id, vendorId]);
 
   // 검색 버튼 클릭
   const searchProductList = useCallback(

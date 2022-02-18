@@ -53,6 +53,7 @@ export interface ResponseParseVendor {
     suggest: Array<Vendor>;
     fail: Array<Vendor>;
     count: ParseCount;
+    error?: string;
   };
 }
 
@@ -90,6 +91,7 @@ export interface ResponseParseProduct {
   data: {
     success: Array<Product>;
     fail: Array<Product>;
+    error?: string;
   };
 }
 

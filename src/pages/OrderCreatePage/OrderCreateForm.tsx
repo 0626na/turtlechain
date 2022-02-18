@@ -34,22 +34,26 @@ const OrderCreateForm = function () {
   // 쇼핑몰 선택시 모든 필드 초기화
   useEffect(() => {
     form.resetFields();
-  }, [store.id]);
+  }, [store.id, form]);
 
-  const selectVendor = useCallback((vendor_id, vendor_name, vendor_address, vendor_phone) => {
-    form.setFieldsValue({
-      vendor_id,
-      vendor_name,
-      vendor_address,
-      vendor_phone,
-      product_id: undefined,
-      product_name: undefined,
-      product_code: undefined,
-      product_option: undefined,
-      product_price: undefined,
-    });
-    setVendorModalVisible(false);
-  }, []);
+  const selectVendor = useCallback(
+    (vendor_id, vendor_name, vendor_address, vendor_phone) => {
+      form.setFieldsValue({
+        vendor_id,
+        vendor_name,
+        vendor_address,
+        vendor_phone,
+        product_id: undefined,
+        product_name: undefined,
+        product_code: undefined,
+        product_option: undefined,
+        product_price: undefined,
+        product_count: undefined,
+      });
+      setVendorModalVisible(false);
+    },
+    [form],
+  );
 
   const selectProduct = useCallback(
     (product_id, product_name, product_code, product_option, product_price) => {
@@ -59,10 +63,11 @@ const OrderCreateForm = function () {
         product_code,
         product_option,
         product_price,
+        product_count: 1,
       });
       setProductModalVisible(false);
     },
-    [],
+    [form],
   );
 
   return (

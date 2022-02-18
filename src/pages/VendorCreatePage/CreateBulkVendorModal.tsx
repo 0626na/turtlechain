@@ -32,6 +32,7 @@ import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { RcFile, UploadChangeParam } from "antd/lib/upload";
 
 interface Props {
   visible: boolean;
@@ -40,7 +41,7 @@ interface Props {
 
 function CreateVendorsModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
-  const form = new FormData();
+  const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<VendorShow>>();
   const [suggestList, setSuggestList] = useState<Array<VendorShow>>();
   const [failList, setFailList] = useState<Array<Vendor>>();
@@ -49,8 +50,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
+      resetField();
     },
     onSuccess: (data) => {
+      if (data.data.error) {
+        message.error(data.data.error);
+        resetField();
+        return;
+      }
       setSuccessList(
         data.data.success.map((vendor) => ({
           ...vendor,
@@ -94,10 +101,30 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           type: "success",
           message: `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         });
-        closeModal();
+        onCloseModal();
       },
     },
   );
+
+  const resetField = useCallback(() => {
+    setSuccessList([]);
+    setSuggestList([]);
+    setFailList([]);
+    setCount({ success_count: 0, suggest_count: 0, fail_count: 0 });
+    setFileList([]);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    closeModal();
+    resetField();
+  }, []);
+
+  const loadFile = (file: RcFile) => {
+    const form = new FormData();
+    form.append("files", file);
+    form.append("rt_store_id", store.id?.toString() ?? "");
+    parseVendorQuery.mutate(form);
+  };
 
   const setSuccessMemoValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, record: VendorShow) => {
@@ -348,11 +375,11 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
+          <TurtleInfo>대량 업로드 파일은 .CSV .XLS또는 .XLSX 만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
-      onCancel={closeModal}
+      onCancel={onCloseModal}
       footer={false}
       bodyStyle={{ height: "800px", overflowY: "auto" }}
     >
@@ -361,14 +388,18 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         <Upload //
           maxCount={1}
           accept=".csv, .xls, .xlsx"
-          customRequest={({ file, onSuccess }) => {
-            if (!store.id) return;
-            form.append("files", file);
-            form.append("rt_store_id", store.id?.toString() ?? "");
-            parseVendorQuery.mutate(form);
+          beforeUpload={(file) => {
+            setFileList([file]);
+            loadFile(file);
+            return false;
           }}
+          onRemove={() => {
+            resetField();
+            return false;
+          }}
+          fileList={fileList}
         >
-          <Button icon={<UploadOutlined />}>파일 선택하기</Button>
+          <TurtleButtonSub>파일 선택하기</TurtleButtonSub>
         </Upload>
       </Space>
       <Tabs defaultActiveKey="1" size="large">

@@ -91,6 +91,10 @@ function CreateVendorForm() {
       vendor_account_id: vendor.store_account[0].id,
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
+      vendor_name: vendor.name,
+      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${vendor.col}${
+        vendor.col ? "열" : ""
+      } ${vendor.loc}${vendor.floor ? "호" : ""} ${vendor.ext}`,
       memo: "",
       is_vat_included: false,
       owner: vendor.company[0]?.owner,
@@ -147,6 +151,12 @@ function CreateVendorForm() {
       >
         <TurtleText>{t("vendor.basic info")}</TurtleText>
         <Form.Item name="rt_store_id" hidden>
+          <Input hidden />
+        </Form.Item>
+        <Form.Item name="vendor_name" hidden>
+          <Input hidden />
+        </Form.Item>
+        <Form.Item name="vendor_address" hidden>
           <Input hidden />
         </Form.Item>
         <Form.Item name="vendor_account_id" hidden>

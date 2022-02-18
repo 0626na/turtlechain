@@ -41,9 +41,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: (data) => {
-        console.log("목록 불러오기");
-      },
+      onSuccess: (data) => {},
     },
   );
 
@@ -62,7 +60,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   );
 
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
+    setSearchQuery({ ...searchQuery, page: 1, rt_store_id: store.id });
   }, [store.id]);
 
   return (

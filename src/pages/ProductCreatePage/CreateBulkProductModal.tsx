@@ -1,7 +1,8 @@
 import { Button, message, notification, Row, Space, Table, Tabs, Typography, Upload } from "antd";
 import Modal from "antd/lib/modal/Modal";
+import { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
-import { ProductShow } from "apis/excelAPI";
+import { Product, ProductShow } from "apis/excelAPI";
 import productAPI, { RequestCreateProduct } from "apis/productAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
@@ -20,14 +21,20 @@ interface Props {
 
 function CreateBulkProductModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
-  const form = new FormData();
+  const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<ProductShow>>();
+  const [failList, setFailList] = useState<Array<Product>>();
 
   const parseProductQuery = useMutation("parseProduct", excelAPI.parseProduct, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
+      if (data.data.error) {
+        message.error(data.data.error);
+        resetField();
+        return;
+      }
       setSuccessList(
         data.data.success.map((product) => ({
           ...product,
@@ -35,6 +42,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
           memo_active: !!product.memo,
         })),
       );
+      setFailList(data.data.fail);
     },
   });
 
@@ -50,10 +58,28 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
           type: "success",
           message: `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
         });
-        closeModal();
+        onCloseModal();
       },
     },
   );
+
+  const resetField = useCallback(() => {
+    setSuccessList([]);
+    setFailList([]);
+    setFileList([]);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    closeModal();
+    resetField();
+  }, []);
+
+  const loadFile = (file: RcFile) => {
+    const form = new FormData();
+    form.append("files", file);
+    form.append("rt_store_id", store.id?.toString() ?? "");
+    parseProductQuery.mutate(form);
+  };
 
   const onClickCreate = useCallback(() => {
     if (!store.id) {
@@ -84,7 +110,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
         </>
       }
       visible={visible}
-      onCancel={closeModal}
+      onCancel={onCloseModal}
       footer={false}
       bodyStyle={{ height: "800px" }}
     >
@@ -93,12 +119,16 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
         <Upload //
           maxCount={1}
           accept=".csv, .xls, .xlsx"
-          customRequest={({ file, onSuccess, onProgress, onError }) => {
-            if (!store.id) return;
-            form.append("files", file);
-            form.append("rt_store_id", store.id?.toString());
-            parseProductQuery.mutate(form);
+          beforeUpload={(file) => {
+            setFileList([file]);
+            loadFile(file);
+            return false;
           }}
+          onRemove={() => {
+            resetField();
+            return false;
+          }}
+          fileList={fileList}
         >
           <TurtleButtonSub>파일 선택하기</TurtleButtonSub>
         </Upload>
@@ -194,14 +224,12 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
          */}
         <Tabs.TabPane tab="실패" key="2">
           상품 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>
-            {parseProductQuery.data?.data.fail.length}
-          </span>
+          <span style={{ color: "red", textDecoration: "underline" }}>{failList?.length}</span>
           건
           <Table
             size="small"
             loading={parseProductQuery.isLoading}
-            dataSource={parseProductQuery.data?.data.fail}
+            dataSource={failList}
             rowKey={(record) => record.product_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
             columns={[
