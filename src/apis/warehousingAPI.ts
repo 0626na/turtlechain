@@ -77,7 +77,7 @@ export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
   data: {
-    item_list: Array<WarehousingItem2>;
+    item_list: Array<WarehousingItemForClearing>;
     total_count: number;
   };
 }
@@ -204,7 +204,7 @@ export interface ProductInfo {
   option: string;
 }
 
-export interface WarehousingItem2 {
+export interface WarehousingItemForClearing {
   id: number;
   sheet_id: number;
   rt_store_id: number;

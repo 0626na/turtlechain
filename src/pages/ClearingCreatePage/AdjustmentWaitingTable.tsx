@@ -1,14 +1,15 @@
-import { useState, Dispatch, SetStateAction, useRef } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 import { Select, Space, Table, message, Tooltip } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
+import { useRecoilValue } from "recoil";
+import { storeState } from "store/storeState";
 import { AdjustmentItem } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
+
 /*
   Parent : ClearingCreateAccordion
   Children : None
@@ -138,7 +139,9 @@ function AdjustmentWaitingTable({
           // 처리가 차감이거나 선택되어있지 않다면 갯수를 차감최대갯수로 변경
           process_count:
             record.process_type === "subtract" || record.process_type === undefined
-              ? max_adjustable_count
+              ? max_adjustable_count > record.count_left
+                ? record.count_left
+                : max_adjustable_count
               : record.count_left,
           price: record.price,
         };
@@ -152,7 +155,9 @@ function AdjustmentWaitingTable({
           checked: true,
           process_count:
             record.process_type === "subtract" || record.process_type === undefined
-              ? max_adjustable_count
+              ? max_adjustable_count > record.count_left
+                ? record.count_left
+                : max_adjustable_count
               : record.count_left,
           process_type: record.process_type ? record.process_type : "subtract",
         };

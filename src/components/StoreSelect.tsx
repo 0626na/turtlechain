@@ -33,19 +33,20 @@ function CustomStoreSelect({ warningMessage }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setStoreList(
-          data?.data.data.map((store) => ({
-            id: store.id,
-            name: store.name,
-          })),
-        );
+        if (data?.data.data.length > 0)
+          setStoreList(
+            data?.data.data.map((store: any) => ({
+              id: store.id,
+              name: store.name,
+            })),
+          );
         // TODO: 쇼핑몰이 1개일때는 해당 쇼핑몰 선택, 다중일때는 선택 안함 추가
       },
     },
   );
 
   // 쇼핑몰 선택
-  const handleChange = useCallback((value: number) => {
+  const handleChange = (value: number) => {
     setStore((prevStore: Store) => {
       if (prevStore.id && warningMessage) {
         const answer = window.confirm(warningMessage);
@@ -59,7 +60,7 @@ function CustomStoreSelect({ warningMessage }: Props) {
         name: storeList.find((item) => item.id === value)?.name,
       } as Store;
     });
-  }, []);
+  };
 
   // 페이지 바뀔때 마다 storeId 초기화
   useEffect(() => {
