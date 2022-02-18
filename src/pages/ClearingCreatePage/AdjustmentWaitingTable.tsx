@@ -1,14 +1,15 @@
-import { useState, Dispatch, SetStateAction, useRef } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 import { Select, Space, Table, message, Tooltip } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
+import { useRecoilValue } from "recoil";
+import { storeState } from "store/storeState";
 import { AdjustmentItem } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
+
 /*
   Parent : ClearingCreateAccordion
   Children : None

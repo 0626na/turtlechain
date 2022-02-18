@@ -11,7 +11,6 @@ import WarehousingWaitingTable from "./WarehousingWaitingTable";
 import AdjustmentWaitingTable from "./AdjustmentWaitingTable";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { adjustmentItem } from "apis/clearingAPI";
 const { Panel } = Collapse;
 
 /*
@@ -30,7 +29,8 @@ const { Panel } = Collapse;
     selectedWarehousingSheet = 선택 된 입고장의 Sheet data
 
   * React Function
-    useEffect = 선택한 쇼핑몰이 변경되면 입고결제대기 창(첫번째 패널)이 열림
+    useEffect[store.id] = 선택한 쇼핑몰이 변경되면 입고결제대기 창(첫번째 패널)이 열림
+    useEffect[clearingCart] = 정산에 담아둔 내역 기반으로 차감금액을 계산
     warehousingTotal = 입고 총 금액 계산
     warehousingVatTotal = 입고 세액 총 금액 계산
     adjustmentTotal = 매입 총 금액 계산
@@ -38,6 +38,10 @@ const { Panel } = Collapse;
 
   * Custom Function
     handleActivePanelChange = Collapse 컴포넌트에서 열려있는 패널 아이디를 변경하는 함수
+    onClickCreateClearing = "결제 요청 등록" 버튼 클릭 시 정산장 생성
+    getTodayReserved = 당일 미송 가져오는 API 호출 함수
+    mutateCreateClearingSheet = 정산 시트 생성 API 호출 함수
+    mutateCreateClearingItem = 정산 아이템 생성 API 호출 함수
 
   * Custom Component
     panelOneHeader = 이름만 봐도 뭔지 아시겠지요?
@@ -334,6 +338,10 @@ function ClearingCreateAccordion() {
             });
         });
     }
+    setClearingCart([]);
+    setAdjustablePrice({});
+    setSelectedWarehousingSheetRowKeys([]);
+    setActivePanelId("1");
   };
 
   const panelOneHeader = (
