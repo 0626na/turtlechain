@@ -85,7 +85,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      getContainer={false}
       bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>

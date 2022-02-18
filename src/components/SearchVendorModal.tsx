@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { phonePattern } from "utils/pattern";
 import TurtleButtonSub from "./common/TurtleButtonSub";
 import SearchFilter from "./SearchFilter";
 
@@ -72,7 +73,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      getContainer={false}
       bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
@@ -100,7 +100,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
           {
             ellipsis: true,
             title: t("vendor.store phone"),
-            render: (_, record) => record.vendor_phone.phone,
+            render: (_, record) => record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
           },
           {
             ellipsis: true,

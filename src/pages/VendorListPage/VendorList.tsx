@@ -26,6 +26,7 @@ import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import VendorUpdateModal from "./VendorUpdateModal";
+import { phonePattern } from "utils/pattern";
 
 interface VendorShow extends Vendor {
   memo_active: boolean;
@@ -85,7 +86,7 @@ function VendorList() {
 
   // 쇼핑몰 바뀔 때 거래처 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id, page: 1 });
   }, [store.id]);
 
   const changeMemoValue = useCallback(
@@ -305,9 +306,9 @@ function VendorList() {
             render: (_, { ws_store_info: { store_phone } }) => {
               if (store_phone.length === 1) {
                 return (
-                  <Tooltip placement="topLeft" title={store_phone[0].phone}>
-                    {store_phone[0].phone}
-                  </Tooltip>
+                  <Popover content={store_phone[0].phone}>
+                    {store_phone[0].phone.replace(phonePattern, `$1-$2-$3`)}
+                  </Popover>
                 );
               }
 
@@ -315,10 +316,10 @@ function VendorList() {
                 <TurtleBadge count={store_phone.length}>
                   <Popover
                     content={store_phone.map(({ id, phone }) => (
-                      <p key={id}>{phone}</p>
+                      <p key={id}>{phone.replace(phonePattern, `$1-$2-$3`)}</p>
                     ))}
                   >
-                    {store_phone[0].phone}
+                    {store_phone[0].phone.replace(phonePattern, `$1-$2-$3`)}
                   </Popover>
                 </TurtleBadge>
               );
@@ -329,24 +330,18 @@ function VendorList() {
             width: "20%",
             title: t("vendor.account"),
             render: (_, { ws_store_info: { store_account } }) => {
-              const accounts: Array<VendorAccount> = [];
-              store_account.forEach(({ id, bank, account_holder, account_number }) => {
-                accounts.push({ id, bank, account_holder, account_number });
-              });
-
-              const makeContent = (account: VendorAccount) => {
-                return `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
-              };
-
-              const contents = accounts.map((account) => {
-                return <p key={account.account_number}>{makeContent(account)}</p>;
-              });
+              const makeAccount = (account: VendorAccount) =>
+                `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
               return (
-                <TurtleBadge count={contents.length}>
-                  <Tooltip placement="topLeft" title={contents}>
-                    {makeContent(accounts[0])}
-                  </Tooltip>
+                <TurtleBadge count={store_account.length}>
+                  <Popover
+                    content={store_account.map((account) => (
+                      <p key={account.id}>{makeAccount(account)}</p>
+                    ))}
+                  >
+                    {makeAccount(store_account[0])}
+                  </Popover>
                 </TurtleBadge>
               );
             },
@@ -390,6 +385,7 @@ function VendorList() {
                 <TurtleButtonSub //
                   size="small"
                   color="green"
+                  disabled={true}
                   onClick={() => {
                     openUpdateModal(record);
                   }}

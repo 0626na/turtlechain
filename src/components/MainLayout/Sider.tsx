@@ -70,13 +70,22 @@ const Sider = function ({ collapsed }: Props) {
       ],
     },
     {
-      title: t("sample return.management"),
+      title: t("sample_return.management"),
       icon: (
         <div>
           <TurtleIcon type="menu" name="sample_return" />
         </div>
       ),
-      submenu: [],
+      submenu: [
+        {
+          title: t("sample_return.create"),
+          pathname: "/sample_return/create",
+        },
+        {
+          title: t("sample_return.list"),
+          pathname: "/sample_return/list",
+        },
+      ],
     },
     {
       title: t("warehousing.management"),
@@ -190,6 +199,14 @@ const Sider = function ({ collapsed }: Props) {
         {
           title: t("store.info"),
           pathname: "/my/store",
+        },
+        {
+          title: t("staff.info"),
+          pathname: "/my/staff",
+        },
+        {
+          title: t("membership.info"),
+          pathname: "/my/membership",
         },
       ],
     },

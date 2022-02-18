@@ -34,7 +34,7 @@ function ProductList() {
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id });
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id, page: 1 });
   }, [store.id]);
 
   // 검색 버튼 클릭
@@ -87,6 +87,7 @@ function ProductList() {
         columns={[
           {
             ellipsis: true,
+            width: "8%",
             title: "거래처 코드",
             render: (_, record) => record.vendor_info.vendor_code,
           },

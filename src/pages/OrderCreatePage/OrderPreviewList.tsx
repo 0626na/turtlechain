@@ -6,12 +6,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleButton from "components/common/TurtleButton";
 
-interface Props {
-  list: Array<CreateOrderItem>;
-  setList: React.Dispatch<React.SetStateAction<CreateOrderItem[]>>;
-}
-
-const OrderPreviewList = function ({ list, setList }: Props) {
+const OrderPreviewList = function () {
   const { t } = useTranslation();
 
   return (
@@ -21,7 +16,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
         size="small"
         scroll={{ x: 1000, y: 400 }}
         pagination={false}
-        dataSource={list}
+        //dataSource={list}
         rowKey={(record) => record.product_code}
         columns={[
           {
@@ -73,10 +68,7 @@ const OrderPreviewList = function ({ list, setList }: Props) {
               <TurtleButtonSub //
                 size="small"
                 color="red"
-                onClick={() => {
-                  const newList = list.filter((item) => item.product_code !== record.product_code);
-                  setList(newList);
-                }}
+                onClick={() => {}}
               >
                 {t("button.delete")}
               </TurtleButtonSub>

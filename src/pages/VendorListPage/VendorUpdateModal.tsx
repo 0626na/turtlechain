@@ -42,7 +42,6 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      getContainer={false}
       bodyStyle={{ height: "700px", overflowY: "auto" }}
       forceRender
     >

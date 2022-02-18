@@ -131,10 +131,12 @@
       "resend": "주문서 재전송"
     }
   },
-  "sample return": {
+  "sample_return": {
     "": "샘플",
     "return": "샘플반납",
-    "management": "샘플반납 관리"
+    "management": "샘플반납 관리",
+    "create": "샘플반납 등록",
+    "list": "샘플반납 내역"
   },
   "warehousing": {
     "": "입고",
@@ -191,7 +193,7 @@
       "complete": "결제 완료 일자"
     },
     "vendor": {
-      "code":"거래처 코드",
+      "code": "거래처 코드",
       "name": "거래처명",
       "address": "거래처 주소"
     },
@@ -266,6 +268,12 @@
     "create": "쇼핑몰 추가하기",
     "update": "쇼핑몰 수정하기",
     "address": "쇼핑몰 주소"
+  },
+  "staff": {
+    "info": "직원 정보"
+  },
+  "membership": {
+    "info": "멤버십 정보"
   },
   "common": {
     "all": "전체",
