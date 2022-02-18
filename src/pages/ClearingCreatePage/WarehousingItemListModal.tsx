@@ -4,9 +4,9 @@ import { Table, message, Modal, Descriptions, Switch } from "antd";
 import { AxiosError } from "axios";
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
-import { WarehousingSheet, WarehousingSheetItem, WarehousingItem2 } from "apis/warehousingAPI";
+import { WarehousingSheet, WarehousingItemForClearing } from "apis/warehousingAPI";
 
-export interface WarehousingSheetItem4Clearing extends WarehousingItem2 {
+export interface WarehousingItemForClearingExtended extends WarehousingItemForClearing {
   type: "warehousing";
 }
 
@@ -47,7 +47,7 @@ function WarehousingItemListModal({
   setClearingCart,
   deleteWarehousingData,
 }: Props) {
-  const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingItem2>>([]);
+  const [warehousingItemList, setWarehousingItemList] = useState<Array<WarehousingItemForClearing>>([]);
   const [totalVatPrice, setTotalVatPrice] = useState<number>(0);
   const [dataPreexist, setdataPreexist] = useState<boolean>(false);
 
@@ -83,7 +83,7 @@ function WarehousingItemListModal({
     },
   );
 
-  const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingItem2>) => {
+  const calculateTotalVatPrice = (warehousingItemList: Array<WarehousingItemForClearing>) => {
     const totalVat: number = warehousingItemList
       .filter((value) => value.is_vat_included)
       .map((value) => value.price * value.count)
@@ -94,7 +94,7 @@ function WarehousingItemListModal({
     setTotalVatPrice(totalVat);
   };
 
-  const onChangeIsVatIncluded = (record: WarehousingItem2) => {
+  const onChangeIsVatIncluded = (record: WarehousingItemForClearing) => {
     // state 로 들어가 있는 리스트 아이템(warehousingItemList)을 변경
     if (warehousingItemList) {
       const newWarehousingItemList = warehousingItemList.map((value) =>
@@ -115,7 +115,7 @@ function WarehousingItemListModal({
           ({
             ...item,
             type: "warehousing",
-          } as WarehousingSheetItem4Clearing),
+          } as WarehousingItemForClearingExtended),
       );
       // 정산 장바구니에 정보를 넣는다
       setClearingCart([...clearingCart, ...refinedWarehousingItemList]);
@@ -195,6 +195,10 @@ function WarehousingItemListModal({
             ellipsis: true,
             title: t("supply price"),
             dataIndex: "price",
+            // editable: true
+            // render: (value: any, record: WarehousingItemForClearing, index: number) => {
+            //   return <span>{value}</span>
+            // }
           },
           {
             ellipsis: true,

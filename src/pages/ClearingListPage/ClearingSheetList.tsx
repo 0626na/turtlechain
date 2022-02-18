@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { message, Table, Space, Popconfirm } from "antd";
 import { AxiosError } from "axios";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { t } from "i18next";
 import { clearingAPI } from "apis";
 import { RequestGetClearingSheet, ClearingSheet } from "apis/clearingAPI";
@@ -28,6 +28,7 @@ interface Props {
 }
 
 function ClearingSheetList({ searchQuery, searchState }: Props) {
+  const qc = useQueryClient();
   const [detailModalVisible, setDetailModalVisible] = useState<boolean>(false);
   const [selectedClearingSheet, setSelectedClearingSheet] = useState<ClearingSheet>();
 
@@ -53,6 +54,10 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
     ["updateClearingSheet"],
     clearingAPI.updateClearingSheet,
     {
+      onSuccess: () => {
+        message.success(t("message.success delete clearing"));
+        qc.refetchQueries("getClearingSheet");
+      },
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -60,11 +65,10 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
   );
 
   const onClickDelete = (record: ClearingSheet) => {
-    console.log("deeleleleltleltletl");
-    // mutateUpdateClearingSheet.mutate({
-    //   ...record,
-    //   is_inactive: true,
-    // });
+    mutateUpdateClearingSheet.mutate({
+      ...record,
+      is_inactive: true,
+    });
   };
 
   return (
@@ -121,8 +125,15 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
             render: (record) => {
               if (record.status === "request")
                 return (
-                  <Popconfirm title={t("message.confirm delete")} onConfirm={() => onClickDelete(record)}>
-                    <TurtleButtonSub color="red" children={t("button.delete")} />
+                  <Popconfirm
+                    title={t("message.confirm delete")}
+                    onConfirm={() => onClickDelete(record)}
+                  >
+                    <TurtleButtonSub
+                      color="red"
+                      children={t("button.delete")}
+                      loading={mutateUpdateClearingSheet.isLoading}
+                    />
                   </Popconfirm>
                 );
             },
