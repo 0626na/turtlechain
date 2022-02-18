@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { message, Table, Space, Popconfirm } from "antd";
+import { message, Table, Space, Popconfirm, Row } from "antd";
+import { WarningOutlined } from "@ant-design/icons";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { t } from "i18next";
@@ -35,13 +36,33 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
   const getClearingSheetQuery = useQuery(
     [
       "getClearingSheet",
-      [searchQuery.rt_store_id, searchState.clearing_status, searchState.clearing_date],
+      [
+        searchQuery.rt_store_id,
+        searchState.clearing_status,
+        searchState.clearing_date,
+        searchQuery.start_date,
+        searchQuery.end_date,
+      ],
     ], //
-    () =>
-      clearingAPI.getClearingSheet({
+    () => {
+      const params: RequestGetClearingSheet = {
         rt_store_id: searchQuery.rt_store_id,
         page: searchState.page,
-      }),
+      };
+      if (searchState.clearing_status !== "all") {
+        params.status = searchState.clearing_status;
+      }
+      if (searchState.clearing_date) {
+        params.date_filter = searchState.clearing_date;
+      }
+      if (searchQuery.start_date) {
+        params.start_date = searchQuery.start_date;
+      }
+      if (searchQuery.end_date) {
+        params.end_date = searchQuery.end_date;
+      }
+      return clearingAPI.getClearingSheet(params);
+    },
     {
       enabled: searchQuery.rt_store_id !== undefined,
       onError: (error: AxiosError) => {
@@ -73,6 +94,12 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
 
   return (
     <>
+      <Row>
+        <Space>
+          <WarningOutlined />
+          <span>{t("message.warning clearing information")}</span>
+        </Space>
+      </Row>
       <Table
         rowKey={"id"}
         onRow={(record) => ({
@@ -97,6 +124,7 @@ function ClearingSheetList({ searchQuery, searchState }: Props) {
             ellipsis: true,
             title: t("clearing.total_price"),
             dataIndex: "total_price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,

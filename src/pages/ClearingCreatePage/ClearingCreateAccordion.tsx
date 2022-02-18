@@ -94,7 +94,9 @@ function ClearingCreateAccordion() {
       var sumObjectsByKey = function (...objs: any[]) {
         return objs.reduce((a, b) => {
           for (let k in b) {
-            if (b.hasOwnProperty(k)) a[k] = parseInt(a[k] || 0) + parseInt(b[k]);
+            if (b.hasOwnProperty(k))
+              a[k] =
+                parseInt(a[k] || 0) + parseInt(b[k]) < 0 ? 0 : parseInt(a[k] || 0) + parseInt(b[k]);
           }
           return a;
         }, {});
@@ -246,6 +248,11 @@ function ClearingCreateAccordion() {
     {
       onSuccess: () => {
         message.success(t("message.success create clearing"));
+        setClearingCart([]);
+        setAdjustablePrice({});
+        setSelectedWarehousingSheetRowKeys([]);
+        setActivePanelId("1");
+        qc.refetchQueries("getWarehousingSheet");
       },
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -284,7 +291,9 @@ function ClearingCreateAccordion() {
                   account_number: value.vendor_info.vendor_account.account_number,
                   account_holder: value.vendor_info.vendor_account.account_holder,
                   is_vat_included: value.is_vat_included,
-                  total_price: Math.floor(value.price * value.count * 1.1),
+                  total_price: value.is_vat_included
+                    ? Math.floor(value.price * value.count * 1.1)
+                    : value.price * value.count,
                   deposit_price: value.is_vat_included
                     ? Math.floor(value.price * value.count * 1.1)
                     : value.price * value.count,
@@ -297,7 +306,9 @@ function ClearingCreateAccordion() {
               .filter((value: any) => value.type === "adjustment")
               .map((value: any) => ({
                 ...value,
-                total_price: Math.floor(value.price * value.process_count * 1.1),
+                total_price: value.is_vat_included
+                  ? Math.floor(value.price * value.process_count * 1.1)
+                  : value.price * value.process_count,
                 deposit_price: value.is_vat_included
                   ? Math.floor(value.price * value.process_count * 1.1)
                   : value.price * value.process_count,
@@ -338,10 +349,6 @@ function ClearingCreateAccordion() {
             });
         });
     }
-    setClearingCart([]);
-    setAdjustablePrice({});
-    setSelectedWarehousingSheetRowKeys([]);
-    setActivePanelId("1");
   };
 
   const panelOneHeader = (

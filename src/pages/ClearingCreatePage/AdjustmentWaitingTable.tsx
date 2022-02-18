@@ -9,7 +9,6 @@ import { storeState } from "store/storeState";
 import { AdjustmentItem2 } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
-
 /*
   Parent : ClearingCreateAccordion
   Children : None
@@ -127,6 +126,7 @@ function AdjustmentWaitingTable({
         // 정산에 맞는 입고 아이템 형식으로 변경
         const refinedAdjustmentItem = {
           type: "adjustment",
+          adjustment_type: record.type,
           original_id: record.id,
           ws_store_id: record.ws_store_id,
           vendor_id: record.vendor_id,
@@ -171,6 +171,7 @@ function AdjustmentWaitingTable({
         // 정산에 맞는 입고 아이템 형식으로 변경
         const refinedAdjustmentItem = {
           type: "adjustment",
+          adjustment_type: record.type,
           original_id: record.id,
           ws_store_id: record.ws_store_id,
           vendor_id: record.vendor_id,
@@ -215,13 +216,23 @@ function AdjustmentWaitingTable({
         record.process_count > max_adjustable_count &&
         replaceData["process_type"] === "subtract")
     ) {
-      alert(`최대 차감 가능 갯수는 ${max_adjustable_count}개 입니다.`);
+      alert(
+        `${t("message.info max adjustable count1")}${max_adjustable_count}${t(
+          "message.info max adjustable count2",
+        )}`,
+      );
       let newAdjustmentList = [...adjustmentList];
       const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
       let replacingRow = newAdjustmentList[rowDataIndex];
       replacingRow = { ...replacingRow, ...replaceData, process_count: max_adjustable_count };
       newAdjustmentList[rowDataIndex] = replacingRow;
       setAdjustmentList(newAdjustmentList);
+      return;
+    }
+
+    // 입고를 고르지 않은 상태에서 매입차감을 시도하려 하면 오류
+    if (replaceData["process_type"] === "subtract" && Object.keys(adjustablePrice).length === 0) {
+      alert(t("message.error no adjustable price"));
       return;
     }
 
@@ -263,9 +274,9 @@ function AdjustmentWaitingTable({
       if (adjustablePrice[props.children[0].props.record.ws_store_id]) {
         return (
           <Tooltip
-            title={`해당 도매 차감 가능 금액: ${
-              adjustablePrice[props.children[0].props.record.ws_store_id]
-            }`}
+            title={`${t("message.info max adjustable price")}${adjustablePrice[
+              props.children[0].props.record.ws_store_id
+            ].toLocaleString()}`}
           >
             <tr {...props} />
           </Tooltip>
