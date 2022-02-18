@@ -8,6 +8,7 @@ import SearchFilter from "components/SearchFilter";
 import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { t } from "i18next";
+import { phonePattern } from "utils/pattern";
 
 interface Props {
   visible: boolean;
@@ -112,7 +113,6 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      getContainer={false}
       bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
@@ -149,7 +149,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
             title: t("vendor.store phone"),
             render: (_, record) => {
               if (record.store_phone.length === 1) {
-                return record.store_phone[0].phone;
+                return record.store_phone[0].phone.replace(phonePattern, `$1-$2-$3`);
               }
 
               return (
@@ -157,7 +157,6 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
                   <Popover
                     content={
                       <>
-                        <p>이미 등록된 휴대번호</p>
                         <Radio.Group>
                           <Space direction="vertical">
                             {record.store_phone.map((storePhone) => (
@@ -168,7 +167,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
                                   selectStorePhone(record, storePhone);
                                 }}
                               >
-                                {storePhone.phone}
+                                {storePhone.phone.replace(phonePattern, `$1-$2-$3`)}
                               </Radio>
                             ))}
                           </Space>
@@ -177,7 +176,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
                     }
                   >
                     <span style={{ color: "red", cursor: "pointer" }}>
-                      {record.store_phone[0]?.phone}
+                      {record.store_phone[0]?.phone.replace(phonePattern, `$1-$2-$3`)}
                     </span>
                   </Popover>
                 </TurtleBadge>
@@ -204,7 +203,6 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
                   <Popover
                     content={
                       <>
-                        <p>이미 등록된 계좌번호</p>
                         <Radio.Group>
                           <Space direction="vertical">
                             {record.store_account.map((storeAccount) => (
