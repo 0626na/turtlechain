@@ -1,6 +1,5 @@
 import { Col, Row, Space, Typography, Select, DatePicker } from "antd";
 import TurtleButton from "components/common/TurtleButton";
-import { useTranslation } from "react-i18next";
 import StoreSelect from "components/StoreSelect";
 import moment from "moment";
 import { Dispatch, SetStateAction } from "react";
@@ -26,7 +25,14 @@ function Toolbar({ searchQuery, setSearchQuery, searchState, setSearchState }: P
         </Col>
         <Col>
           <Space>
-            <TurtleButton type="primary">{t("button.download list")}</TurtleButton>
+            <TurtleButton
+              onClick={() => {
+                window.alert("준비중입니다.");
+              }}
+              type="primary"
+            >
+              {t("button.download list")}
+            </TurtleButton>
           </Space>
         </Col>
       </Row>
@@ -69,17 +75,21 @@ function Toolbar({ searchQuery, setSearchQuery, searchState, setSearchState }: P
                 });
               }}
               allowClear={true}
+              onClear={() => {
+                setSearchQuery({ ...searchQuery, start_date: "", end_date: "" });
+                setSearchState({ ...searchState, clearing_date: undefined });
+              }}
             >
-              <Select.Option value={2} key={2}>
+              <Select.Option value={"request_date"} key={1}>
                 {t("clearing.date.request")}
               </Select.Option>
-              <Select.Option value={3} key={3}>
+              <Select.Option value={"complete_date"} key={2}>
                 {t("clearing.date.complete")}
               </Select.Option>
             </Select>
             <DatePicker.RangePicker
               disabled={searchState.clearing_date === undefined}
-              allowClear={false}
+              allowClear={true}
               value={[
                 searchQuery.start_date ? moment(searchQuery.start_date) : null,
                 searchQuery.end_date ? moment(searchQuery.end_date) : null,

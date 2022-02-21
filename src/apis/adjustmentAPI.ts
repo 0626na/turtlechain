@@ -1,4 +1,6 @@
 import { v2Axios } from "./index";
+import { VendorInfo, ProductInfo } from "./warehousingAPI";
+
 
 // 입고아이템 타입
 export interface AdjustmentItem2 {
@@ -89,9 +91,67 @@ const createAdjustmentItem = async function (data: RequestCreateAdjustmentItem) 
   return response.data;
 };
 
+
+
+
+export interface adjustmentItemResponse {
+  id: number;
+  is_inactive: boolean;
+  created_date: string;
+  cleared_time: string | null;
+  rt_store_id: number;
+  ws_store_id: number;
+  vendor_info: VendorInfo,
+  product_info: ProductInfo,
+  count: number;
+  count_left: number;
+  price: number;
+  is_vat_included: boolean;
+  type: "reserve" | "takeback" | "exchange" | "refund";
+  memo: string;
+}
+
+
+// Request: 정산아이템 조회
+export interface RequestGetAdjustmentForClearing {
+  rt_store_id: number | undefined;
+  start_date?: string;
+  end_date?: string;
+  type?: "reserve" | "takeback" | "exchange" | "refund";
+  is_cleared?: number;
+}
+
+// Response: 정산장 조회
+export interface ResponseGetAdjustmentForClearing {
+  msg: string;
+  data: {
+    adjustment_list: Array<adjustmentItemResponse>;
+    statistics: {
+      cleared: {
+        count: number;
+        price: number;
+      };
+      not_cleared: {
+        count: number;
+        price: number;
+      };
+    };
+  };
+}
+
+const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForClearing) {
+  let url = "adjustment/item?";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetAdjustmentForClearing>(url);
+  return response.data;
+};
+
 const adjustmentAPI = {
   getAdjustmentList,
   createAdjustmentItem,
+  getAdjustmentForClearing
 };
 
 export default adjustmentAPI;

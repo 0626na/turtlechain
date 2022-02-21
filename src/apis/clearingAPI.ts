@@ -96,6 +96,7 @@ export interface ResponseClearingItem {
 // Request: 정산장 조회
 export interface RequestGetClearingSheet {
   rt_store_id: number | undefined;
+  date_filter?: "request_date" | "complete_date";
   start_date?: string; // format: YYYY-MM-DD
   end_date?: string; // format: YYYY-MM-DD
   page?: number;
