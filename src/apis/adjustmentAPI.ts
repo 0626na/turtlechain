@@ -31,11 +31,10 @@ export interface AdjustmentItem2 {
 
 export interface AdjustmentItem {
   rt_store_id: number;
-  ws_store_id: number;
   vendor_id: number;
   product_id: number;
-  adj_count: number;
-  product_price: number;
+  count: number;
+  price: number;
   type: "reserve" | "takeback" | "exchange" | "balance" | "extra";
 }
 

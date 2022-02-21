@@ -21,7 +21,7 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
 
     // 매입조정 합계
     const totalAdjValue = useMemo(
-      () => adjList.reduce((acc, cur) => acc + cur.adj_count * cur.product_price, 0),
+      () => adjList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
       [adjList]
     );
     
@@ -52,7 +52,7 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
         },
         {
           title: t("supply price"),
-          render:(_, record) => numberTextFormat(record.product_price, "currency")  
+          render:(_, record) => numberTextFormat(record.price, "currency")  
         },
         {
           width: 100,

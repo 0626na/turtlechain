@@ -120,7 +120,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
           <Input hidden />
         </Form.Item>
         
-      <TurtleText>{t("whs.section_title1")}</TurtleText>
+      <TurtleText>{t("warehousing.section_title1")}</TurtleText>
       
       <TurtleSearchInput //
           name="vendor_name"
@@ -174,7 +174,9 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
       
       <TurtleInputNumber // count Input
         name="product_count"
-        label={t("product.count")}/> 
+        min = {1}
+        defaultValue={1}
+        label={t("warehousing.count")}/> 
     <Row justify="center">
       <TurtleButton type="default" onClick={onClickCreate}>{t("button.add")}</TurtleButton>
     </Row>

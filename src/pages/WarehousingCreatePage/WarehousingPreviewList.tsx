@@ -78,7 +78,7 @@ const WarehousingPreviewList = function ({
   return (
     <TableContainer>
       <TurtleText>
-        {t("whs.section_title2")} 
+        {t("warehousing.section_title2")} 
         {`(${list.length.toLocaleString()})`}
       </TurtleText>
       <Form layout="inline">
@@ -188,7 +188,7 @@ const WarehousingPreviewList = function ({
           <Footer>
             <TotalContainer>
               <b>
-                {`${t("warehousing total count")} : `}
+                {`${t("warehousing.total count")} : `}
                 {numberTextFormat(totalItemCount, "count")}
               </b>
               <b>
