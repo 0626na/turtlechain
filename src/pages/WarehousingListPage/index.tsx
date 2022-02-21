@@ -162,7 +162,6 @@ const WarehousingListPage = function () {
       <WarehousingSheetItemModal
         {...selectedRow}
         sheet_id={selectedRow.sheet_id}
-        // filteredList={filteredList}
         visible={visibleDetailModal}
         onClose={() => {
           setVisibleDetailModal(false);
