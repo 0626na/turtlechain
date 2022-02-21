@@ -11,8 +11,7 @@ interface Props {
   list:Array<AdjustmentItem>;
   totalCount: number;
   currentPage: number;
-  onPrev: () => void;
-  onNext: () => void;
+
   onSelectRow: (row: AdjustmentItem) => void;
   onDelete: (row: AdjustmentItem) => void;
   onConfirm: (row: AdjustmentItem) => void;
@@ -23,13 +22,20 @@ const AdjustmentList = function ({
   list,
   totalCount,
   currentPage,
-  onPrev,
-  onNext,
+
   onSelectRow,
   onDelete,
   onConfirm,
 }: Props) {
   const { t } = useTranslation();
+
+  let adjTypes = {
+    "exchange" : "교환",
+    "reserve" : "미송",
+    "balance" : "잔",
+    "takeback" : "반품"
+  }
+
   return (
     <Table
       size="small"
@@ -55,31 +61,35 @@ const AdjustmentList = function ({
           title: t("adjustment date"),
           dataIndex: "created_time",
           render: (_, record) =>
-            moment(record.created_time).format("YYYY-MM-DD"),
+            moment(record.created_date).format("YYYY-MM-DD"),
         },
         {
-          title: t("mall name"),
-          dataIndex: "mall_name",
+          title: t("vendor.name"),
+          dataIndex: "vendor_info.vendor_name",
+          render:(_, record) => record.vendor_info?.vendor_name
         },
         {
-          title: t("client name"),
-          dataIndex: "client_name",
+          title: t("product.name"),
+          dataIndex: "product_info.product_name",
+          render:(_, record) => record.product_info?.name
         },
         {
-          title: t("account info"),
-          dataIndex: "account_info",
-        },
-        {
-          width: 100,
-          align: "center",
-          title: t("adjustment type"),
-          dataIndex: "adjustment_type",
+          title: t("product.vendor_product_name"),
+          dataIndex: "product_info.vendor_product_name",
+          render:(_, record) => record.product_info?.vendor_product_name
         },
         {
           align: "right",
           title: t("supply price"),
           dataIndex: "price",
-          render: (_, record) => record.supply_price.toLocaleString(),
+          render: (_, record) => record.price.toLocaleString(),
+        },
+        {
+          width: 100,
+          align: "center",
+          title: t("adjustment.type.default"),
+          dataIndex: "type",
+          render: (_, record) => adjTypes[record.type]
         },
         {
           width: 300,
@@ -96,7 +106,8 @@ const AdjustmentList = function ({
                 >
                   {t("view details")}
                 </Button>
-                {!record.is_confirmed && (
+                {!record.is_cleared&& (
+                  
                   <>
                     <Popconfirm
                       title={t("description.really delete")}
@@ -136,8 +147,9 @@ const AdjustmentList = function ({
       ]}
       title={() => (
         <b>
-          {`${t("adjustment")} ${t("list")}`}
-          {`(${MOCK_LIST.length.toLocaleString()})`}
+          {`${t("adjustment.list")}`}
+          
+          {`(${list.length.toLocaleString()})`}
         </b>
       )}
       footer={() => (

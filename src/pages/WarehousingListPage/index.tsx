@@ -26,7 +26,6 @@ const WarehousingListPage = function () {
 
   type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("vendor_name");
-  
   const [searchText, setSearchText] = useState("");
   const search_options = [
     {
@@ -69,7 +68,6 @@ const WarehousingListPage = function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: store.id ?? -1,
-
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),

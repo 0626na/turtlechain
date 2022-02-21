@@ -178,6 +178,7 @@
       "subtract": "차감",
       "refund": "환불"
     },
+    "count" : "매입조정 수량",
     "type": {
       "default": "매입조정 종류",
       "reserve": "미송",

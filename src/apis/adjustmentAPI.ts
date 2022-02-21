@@ -32,13 +32,18 @@ export interface AdjustmentItem2 {
 }
 
 export interface AdjustmentItem {
+  id:number;
   rt_store_id: number;
   vendor_id: number;
   product_id: number;
   count: number;
   price: number;
-  is_cleared: number;
+  is_cleared: boolean ;
+  created_date:"";
   type: "reserve" | "takeback" | "exchange" | "balance" ;
+  vendor_info: VendorInfo | undefined;
+  product_info:ProductInfo | undefined;
+  memo: string | undefined;
 }
 
 // Request: 정산아이템 조회
@@ -47,7 +52,8 @@ export interface RequestGetAdjustmentList {
   page: number;
   start_date?: string;
   end_date?: string;
-  is_cleared?: number;
+  is_cleared?: number | "";
+  type: "reserve" | "takeback" | "exchange" | "balance"| "all";
 }
 
 // Response: 정산장 조회
