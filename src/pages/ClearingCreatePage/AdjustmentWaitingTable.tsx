@@ -6,7 +6,7 @@ import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { AdjustmentItem2 } from "apis/adjustmentAPI";
+import { adjustmentItemResponse } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
 /*
@@ -31,7 +31,7 @@ import { adjustmentAPI } from "apis";
     CustomRow = adjustablePrice에 있는 도매라면 마우스 hover시에 차감가능 금액이 뜨게하는 component
 */
 
-interface AdjustmentItemExtended extends AdjustmentItem2 {
+interface AdjustmentItemExtended extends adjustmentItemResponse {
   process_type?: string;
   process_count?: number;
   checked: boolean;
@@ -56,17 +56,14 @@ function AdjustmentWaitingTable({
   const getAdjustmentQuery = useQuery(
     ["getAdjustment", store.id], //
     () =>
-      adjustmentAPI.getAdjustment({
+      adjustmentAPI.getAdjustmentForClearing({
         rt_store_id: store.id,
         is_cleared: 0,
-        offset: 1000,
-        last_id: -1,
-        switch_type: "next",
       }),
     {
       enabled: store.id !== undefined,
       onSuccess: (data) => {
-        const responseData = data ? data.data.data : [];
+        const responseData = data ? data.data.adjustment_list : [];
         setAdjustmentList(
           responseData.map(
             (value) =>
@@ -125,15 +122,16 @@ function AdjustmentWaitingTable({
         }
         // 정산에 맞는 입고 아이템 형식으로 변경
         const refinedAdjustmentItem = {
+          ...record,
           type: "adjustment",
           adjustment_type: record.type,
           original_id: record.id,
-          ws_store_id: record.ws_store_id,
-          vendor_id: record.vendor_id,
-          vendor_name: record.vendor_name,
-          bank: record.bank,
-          account_number: record.account_number,
-          account_holder: record.account_holder,
+          // ws_store_id: record.ws_store_id,
+          vendor_id: record.vendor_info.id,
+          vendor_name: record.vendor_info.vendor_name,
+          bank: record.vendor_info.vendor_account.bank,
+          account_number: record.vendor_info.vendor_account.account_number,
+          account_holder: record.vendor_info.vendor_account.account_holder,
           is_vat_included: record.is_vat_included,
           adjustment_process_type: record.process_type ? record.process_type : "subtract",
           // 처리가 차감이거나 선택되어있지 않다면 갯수를 차감최대갯수로 변경
@@ -170,15 +168,16 @@ function AdjustmentWaitingTable({
       } else {
         // 정산에 맞는 입고 아이템 형식으로 변경
         const refinedAdjustmentItem = {
+          ...record,
           type: "adjustment",
           adjustment_type: record.type,
           original_id: record.id,
-          ws_store_id: record.ws_store_id,
-          vendor_id: record.vendor_id,
-          vendor_name: record.vendor_name,
-          bank: record.bank,
-          account_number: record.account_number,
-          account_holder: record.account_holder,
+          // ws_store_id: record.ws_store_id,
+          vendor_id: record.vendor_info.id,
+          vendor_name: record.vendor_info.vendor_name,
+          bank: record.vendor_info.vendor_account.bank,
+          account_number: record.vendor_info.vendor_account.account_number,
+          account_holder: record.vendor_info.vendor_account.account_holder,
           is_vat_included: record.is_vat_included,
           adjustment_process_type: "refund",
           process_count: record.process_count ? record.process_count : record.count_left,
@@ -253,14 +252,15 @@ function AdjustmentWaitingTable({
     let newAdjustmentForCart = newAdjustmentList
       .filter((value) => value.checked)
       .map((value) => ({
+        ...record,
         type: "adjustment",
         original_id: value.id,
-        ws_store_id: value.ws_store_id,
-        vendor_id: value.vendor_id,
-        vendor_name: value.vendor_name,
-        bank: value.bank,
-        account_number: value.account_number,
-        account_holder: value.account_holder,
+        // ws_store_id: value.ws_store_id,
+        vendor_id: record.vendor_info.id,
+        vendor_name: record.vendor_info.vendor_name,
+        bank: record.vendor_info.vendor_account.bank,
+        account_number: record.vendor_info.vendor_account.account_number,
+        account_holder: record.vendor_info.vendor_account.account_holder,
         is_vat_included: value.is_vat_included,
         adjustment_process_type: value.process_type,
         process_count: value.process_count,
@@ -328,12 +328,12 @@ function AdjustmentWaitingTable({
           {
             ellipsis: true,
             title: t("adjustment.vendor_info"),
-            dataIndex: ["vendor_name", "address"],
+            dataIndex: ["vendor_info", "vendor_address"],
             render: (text, row) => {
               return (
                 <Space>
-                  {row["vendor_name"]}
-                  {row["address"]}
+                  {row.vendor_info.vendor_name}
+                  {row.vendor_info.vendor_address}
                 </Space>
               );
             },

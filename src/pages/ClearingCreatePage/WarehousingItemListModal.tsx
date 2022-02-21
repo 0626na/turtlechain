@@ -156,12 +156,12 @@ function WarehousingItemListModal({
           {selectedWarehousingSheet?.created_date}
         </Descriptions.Item>
         <Descriptions.Item label={t("warehousing.total count")}>
-          {selectedWarehousingSheet?.total_item_count}
+          {selectedWarehousingSheet?.total_item_count.toLocaleString()}
         </Descriptions.Item>
         <Descriptions.Item label={t("total supply price")}>
-          {selectedWarehousingSheet?.total_price}
+          {selectedWarehousingSheet?.total_price.toLocaleString()}
         </Descriptions.Item>
-        <Descriptions.Item label={t("total vat price")}>{totalVatPrice}</Descriptions.Item>
+        <Descriptions.Item label={t("total vat price")}>{totalVatPrice.toLocaleString()}</Descriptions.Item>
       </Descriptions>
       <Table
         loading={getWarehousingItemQuery.isLoading}
@@ -184,12 +184,12 @@ function WarehousingItemListModal({
             ellipsis: true,
             title: t("product.name"),
             dataIndex: ["product_info","name"],
-            // render: () => {}
           },
           {
             ellipsis: true,
             title: t("warehousing.count"),
             dataIndex: "count",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,
@@ -199,6 +199,7 @@ function WarehousingItemListModal({
             // render: (value: any, record: WarehousingItemForClearing, index: number) => {
             //   return <span>{value}</span>
             // }
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,

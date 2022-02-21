@@ -41,7 +41,7 @@ function WarehousingWaitingTable({
   selectedWarehousingSheetRowKeys,
   setSelectedWarehousingSheetRowKeys,
 }: Props) {
-  const store = useRecoilValue(storeState)
+  const store = useRecoilValue(storeState);
   const getWarehousingSheetQuery = useQuery(
     ["getWarehousingSheet", store.id], //
     () =>
@@ -51,7 +51,7 @@ function WarehousingWaitingTable({
         start_date: "2017-01-01",
         end_date: "9999-12-31",
         did_settlement: 0,
-        page: 1
+        page: 1,
       }),
     {
       enabled: store.id !== undefined,
@@ -125,6 +125,7 @@ function WarehousingWaitingTable({
             ellipsis: true,
             title: t("warehousing.price"),
             dataIndex: "total_price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
         ]}
       />

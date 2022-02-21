@@ -216,12 +216,9 @@ function ClearingCreateAccordion() {
         (today.getMonth() + 1).toString().padStart(2, "0") +
         "-" +
         today.getDate().toString().padStart(2, "0");
-      return adjustmentAPI.getAdjustment({
+      return adjustmentAPI.getAdjustmentForClearing({
         rt_store_id: store.id,
         is_cleared: 0,
-        offset: 1000,
-        last_id: -1,
-        switch_type: "next",
         start_date: todayString,
         end_date: todayString,
         type: "reserve",
@@ -317,15 +314,16 @@ function ClearingCreateAccordion() {
               })),
             // 당일 미송
           ];
-          const todayReserved = getTodayReserved.data?.data.data.map((value: any) => ({
+          const todayReserved = getTodayReserved.data?.data.adjustment_list.map((value: any) => ({
+            ...value,
             type: "adjustment",
             original_id: value.id,
-            ws_store_id: value.ws_store_id,
-            vendor_id: value.vendor_id,
-            vendor_name: value.vendor_name,
-            bank: value.bank,
-            account_number: value.account_number,
-            account_holder: value.account_holder,
+            // ws_store_id: value.ws_store_id,
+            vendor_id: value.vendor_info.id,
+            vendor_name: value.vendor_info.vendor_name,
+            bank: value.vendor_info.vendor_account.bank,
+            account_number: value.vendor_info.vendor_account.account_number,
+            account_holder: value.vendor_info.vendor_account.account_holder,
             is_vat_included: value.is_vat_included,
             adjustment_process_type: null,
             process_count: 0,
