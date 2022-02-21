@@ -40,6 +40,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
   const [adjList, setAdjList] = useState<Array<AdjustmentItem>>();
 
   const onClickCreate = () => {
+    form.setFieldsValue({"rt_store_id":store.id})
     form.validateFields().then(() => {
       onAdjItemCreated({
         ...form.getFieldsValue(),
@@ -52,7 +53,6 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
     { name: "교환", value: "exchange" },
     { name: "반품", value: "takeback" },
     { name: "잔", value: "balance" },
-    { name: "기타", value: "extra" },
   ];
   // 거래처 선택후 폼에 채워넣기
   // 거래처 선택후 폼에 채워넣기
@@ -69,6 +69,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         product_option: undefined,
         product_price: undefined,
         product_count: undefined,
+        rt_store_id:store.id,
       });
       setVendorModalVisible(false);
     },
@@ -97,10 +98,8 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         vendor_product_name,
         product_code,
         product_option,
-        product_price,
-        product_count: 1,
-      });
-      setProductModalVisible(false);
+        price:product_price,
+      });      setProductModalVisible(false);
     },
     [form],
   );
@@ -132,7 +131,12 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         <Form.Item name="rt_store_id" hidden>
           <Input hidden />
         </Form.Item>
-        <Form.Item name="ws_store_id" hidden>
+
+        <Form.Item name="product_id" hidden>
+          <Input hidden />
+        </Form.Item>
+
+        <Form.Item name="price" hidden>
           <Input hidden />
         </Form.Item>
 
@@ -185,16 +189,33 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         />
 
         <TurtleInputNumber // count Input
-          name="adj_count"
+          name="count"
+          min = {1}
+          defaultValue={1}
           label={t("product.count")}
         />
 
-        <TurtleInput // price Input
-          name="product_price"
+        <TurtleInputNumber // price Input
+          name="price"
+          min={0} 
+          defaultValue={0}
           label={t("product.price")}
         />
 
-        <TurtleInputSelect label={t("adjustment.type.default")} selectOptions={selectOptions} />
+        <Form.Item
+          required={true}
+          name="type"
+          label={t("adjustment.type.default")}
+          >
+            <Select>
+             {selectOptions.map((option) => {
+      
+             return <Select.Option value={option.value}>{option.name}</Select.Option>
+            
+            })}; 
+            </Select>
+        </Form.Item>
+        {/* <TurtleInputSelect name="type" label={t("adjustment.type.default")} selectOptions={selectOptions} /> */}
         <TurtleTextArea
           label={t("adjustment.memo")}
           name="memo"

@@ -140,6 +140,8 @@ const OrderCreateForm = function () {
             />
             <TurtleInputNumber // 상품 발주수량 Input
               name="product_count"
+              min = {1}
+              defaultValue={1}
               label={t("product.count")}
             />
           </Col>

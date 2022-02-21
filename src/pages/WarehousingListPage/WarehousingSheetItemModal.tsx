@@ -276,6 +276,11 @@ const WarehousingSheetItemModal = function ({
               title: t("product.option"),
               render:(_, item) => item.product_info.option
             },
+            
+            {
+              title: t("product.vendor_product_name"),
+              render:(_, item) => item.product_info.vendor_product_name
+            },
             {
               align: "right",
               title: t("warehousing.count"),

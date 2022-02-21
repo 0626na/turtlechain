@@ -36,12 +36,12 @@ function Toolbar() {
               }}
               disabled={!store}
             >
-              {t("btn_upload_whs_sheet")}
+              {t("warehousing.btn_upload_whs_sheet")}
             </TurtleButtonSub>
             <TurtleButtonSub // 거래처 불러오기 Button
               icon="download"
             >
-              {t("btn_prepopulate_whs")}
+              {t("warehousing.btn_prepopulate_whs")}
             </TurtleButtonSub>
           </Space>
         </Col>

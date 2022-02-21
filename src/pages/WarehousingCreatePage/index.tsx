@@ -40,8 +40,6 @@ const WarehousingCreatePage = function () {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      console.log("!!!!");
-      console.log(data.data);
       createSheetItemsQuery.mutate({
         sheet_id: data.data,
         rt_store_id: store.id!,
@@ -100,7 +98,7 @@ const WarehousingCreatePage = function () {
         pageName="warehousing"
         title={t("warehousing create")}
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
-        info={t("whs_upload_title_details")}
+        info={t("warehousing.upload_title_details")}
       />
       
       <Toolbar/>
