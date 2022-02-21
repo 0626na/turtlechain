@@ -204,18 +204,96 @@ function AdjustmentWaitingTable({
   };
 
   const replaceRowData = (record: AdjustmentItemExtended, replaceData: { [key: string]: any }) => {
-    // 해당 거래처에서 차감할 수 있는 최대 갯수
+    let newAdjustmentList2 = [...adjustmentList];
+    const rowDataIndex2 = newAdjustmentList2.findIndex((value) => value.id === record.id);
+    let replacingRow2 = newAdjustmentList2[rowDataIndex2];
+    const selectedMax = clearingCart
+      .filter(
+        (value: any) =>
+          value.ws_store_id === record.ws_store_id && value.adjustment_process_type === "subtract",
+      )
+      .reduce((acc: any, cur: any) => {
+        return acc + cur.process_count * cur.price;
+      }, 0);
+    // 해당 거래처의 차감 가능 최대 금액
+    let max_adjustable_price = selectedMax + adjustablePrice[record.ws_store_id];
+
+    // 현재 해당 거래처에서 차감할 수 있는 최대 갯수
     const max_adjustable_count = parseInt(
       (adjustablePrice[record.ws_store_id] / record.price).toString(),
     );
 
+    // 해당 거래처 최대 차감 합 - 현재 변환하는 행을 제외한 같은 마스터도매를 가진 차감의 합 = 변화하는 행에서 차감가능 금액
+    const currentAdjustablePrice =
+      max_adjustable_price -
+      clearingCart
+        .filter(
+          (value: any) =>
+            value.type === "adjustment" &&
+            value.original_id !== record.id &&
+            value.ws_store_id === record.ws_store_id &&
+            value.adjustment_process_type === "subtract",
+        )
+        .reduce((acc: any, cur: any) => {
+          return acc + cur.process_count * cur.price;
+        }, 0);
+
     // 초기 예외처리
-    // 처리가 "차감"일 때 처리 수량이 차감 최대 갯수를 넘으면 오류
+    // 차감가능 금액이 없는 경우 차감을 하려 할때 오류
     if (
-      (record.process_type === "subtract" && replaceData["process_count"] > max_adjustable_count) ||
-      (record.process_count &&
-        record.process_count > max_adjustable_count &&
-        replaceData["process_type"] === "subtract")
+      !adjustablePrice[record.ws_store_id] &&
+      Object.keys(replaceData)[0] === "process_type" &&
+      replaceData.process_type === "subtract"
+    ) {
+      alert(t("message.error no adjustable price"));
+      let newAdjustmentList = [...adjustmentList];
+      const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
+      let replacingRow = newAdjustmentList[rowDataIndex];
+      newAdjustmentList[rowDataIndex] = {
+        ...replacingRow,
+        process_type: replacingRow.process_type ? replacingRow.process_type : undefined,
+      };
+      setAdjustmentList(newAdjustmentList);
+      return;
+    }
+    // 처리가 "차감"일 때 처리수량 변경 시
+    if (record.process_type === "subtract" && replaceData["process_count"]) {
+      // 처리 가능수량보다 많으면 오류
+      if (currentAdjustablePrice < record.price * replaceData.process_count) {
+        const current_adjustable_count = parseInt(
+          (currentAdjustablePrice / record.price).toString(),
+        );
+        alert(
+          `${t("message.info max adjustable count1")}${current_adjustable_count}${t(
+            "message.info max adjustable count2",
+          )}`,
+        );
+        if (current_adjustable_count === 0) {
+          newAdjustmentList2[rowDataIndex2] = {
+            ...replacingRow2,
+            process_type: undefined,
+            process_count: undefined,
+            checked: false,
+          };
+        } else {
+          newAdjustmentList2[rowDataIndex2] = {
+            ...replacingRow2,
+            process_type: replacingRow2.process_type ? replacingRow2.process_type : "subtract",
+            process_count: current_adjustable_count,
+            checked: true,
+          };
+        }
+
+        setAdjustmentList(newAdjustmentList2);
+        return;
+      }
+    }
+
+    // "차감"을 선택할 때
+    if (
+      record.process_count &&
+      record.process_count > 0 &&
+      replaceData.process_type === "subtract"
     ) {
       alert(
         `${t("message.info max adjustable count1")}${max_adjustable_count}${t(
@@ -225,7 +303,22 @@ function AdjustmentWaitingTable({
       let newAdjustmentList = [...adjustmentList];
       const rowDataIndex = adjustmentList.findIndex((value) => value.id === record.id);
       let replacingRow = newAdjustmentList[rowDataIndex];
-      replacingRow = { ...replacingRow, ...replaceData, process_count: max_adjustable_count };
+      if (max_adjustable_count === 0) {
+        replacingRow = {
+          ...replacingRow,
+          ...replaceData,
+          process_type: replacingRow.process_type ? replacingRow.process_type : undefined,
+          process_count: replacingRow.process_count ? replacingRow.process_count : undefined,
+          // 차감 가능 갯수 0개면 체크해제
+        };
+      } else {
+        replacingRow = {
+          ...replacingRow,
+          ...replaceData,
+          process_count: max_adjustable_count,
+        };
+      }
+
       newAdjustmentList[rowDataIndex] = replacingRow;
       setAdjustmentList(newAdjustmentList);
       return;
