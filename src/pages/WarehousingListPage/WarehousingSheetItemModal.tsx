@@ -107,30 +107,18 @@ const WarehousingSheetItemModal = function ({
     );  
     
     const totalItemAmount= useMemo(
-      ()=>{
-        console.log("AASDFSD@!#$@!$@#$")
-        console.log(list)
-        return list.reduce((sum, current)=> sum+(current.count* current.price), 0)
-
-      } 
-      
-        , [list, searchType, searchText]
-      
+      () => list.reduce((sum, current)=> sum+(current.count* current.price), 0)
+      , [list, searchType, searchText]    
       );   
     
   // 필터된 리스트
   const filteredList = useMemo(
     () =>
-
       list.filter((item) =>{
-
-               if(searchType === "vendor_name"){
+        if(searchType === "vendor_name"){
           return item.vendor_info["vendor_name"].toString().indexOf(searchText) !== -1 
         }
-      }
-
-   
-      ),
+      }),
     [list, searchType, searchText],
   );
 
@@ -162,8 +150,6 @@ const WarehousingSheetItemModal = function ({
         onClose();
       },
       onOk: () => {
-        // let warehousingItem2List = list.map((item)=>{ret2urn warehousingSheetItemToWarehousingItem2(item)})
-        // updateSheetQuery.mutate({ sheet_id, items: warehousingItem2List });
         updateWarehousingSheetItems()
       },
     });
@@ -189,7 +175,7 @@ const WarehousingSheetItemModal = function ({
       maskClosable={false}
       visible={visible}
       onCancel={() => {
-        if (isUpdated) {
+        if (isUpdated && !is_confirmed) {
           confirmClose();
         } else {
           onClose();
@@ -204,7 +190,6 @@ const WarehousingSheetItemModal = function ({
             cancelText={t("no")}
             onConfirm={() => {
               updateWarehousingSheetItems()
-              // updateSheetQuery.mutate({ sheet_id, items: list!.map((item)=>warehousingItem2ToBulkUpdateItem(item)) });
             }}
           >
             <Button type="primary" icon={<SyncOutlined />} loading={updateSheetQuery.isLoading}>
@@ -239,6 +224,7 @@ const WarehousingSheetItemModal = function ({
         <Form layout="inline">
           <Form.Item>
             <Select
+
               style={{ width: 150 }}
               value={searchType}
               onChange={(value) => {
@@ -296,7 +282,9 @@ const WarehousingSheetItemModal = function ({
               dataIndex: "count",
               render: (_, record) => (
                 <InputNumber //
-                  size="small"
+                disabled={is_confirmed==1 ? true : false}  
+                min={0}
+                size="small"
                   defaultValue={record.count}
                   onChange={(value) => {
                     const newList = list.map((item) =>
@@ -321,6 +309,7 @@ const WarehousingSheetItemModal = function ({
               render: (_, record) => (
                 <Button //
                   danger
+                  disabled={is_confirmed===1 ? true : false}
                   size="small"
                   shape="round"
                   type="primary"
@@ -333,10 +322,9 @@ const WarehousingSheetItemModal = function ({
                     } 
                     setInactiveList([...inactiveList, inactiveItem])
                     const newList = list.filter(
-                      (item) => item.product_info.product_code !== record.product_info.product_code
+                      (item) => item.id !== record.id
                     );
                     setList(newList);
-                    // setIsUpdated(true);
                   }
                 }
                 >
