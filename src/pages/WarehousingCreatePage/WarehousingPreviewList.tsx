@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CreateSheetItem } from "apis/warehousingAPI";
+import { CreateSheetItems, WarehousingSheetItem } from "apis/warehousingAPI";
 import { UploadOutlined, DeleteFilled } from "@ant-design/icons";
+import { numberTextFormat } from "utils/general";
 import {
   Button,
   Table,
@@ -13,11 +14,14 @@ import {
   Select,
   Input,
 } from "antd";
+import TurtleText from "components/common/TurtleText";
 
 interface Props {
   isLoading: boolean;
-  list: Array<CreateSheetItem>;
-  setList: React.Dispatch<React.SetStateAction<CreateSheetItem[]>>;
+  list: Array<WarehousingSheetItem>;
+  setList: React.Dispatch<React.SetStateAction<WarehousingSheetItem[]>>;
+
+  
   onSubmit: () => void;
 }
 
@@ -29,17 +33,17 @@ const WarehousingPreviewList = function ({
 }: Props) {
   const { t } = useTranslation();
 
-  type SearchType = "store_name" | "address" | "product_code" | "product_name";
-  const [searchType, setSearchType] = useState<SearchType>("store_name");
+  type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
+  const [searchType, setSearchType] = useState<SearchType>("vendor_name");
   const [searchText, setSearchText] = useState("");
   const search_options = [
     {
-      value: "store_name",
-      label: t("client name"),
+      value: "vendor_name",
+      label: t("vendor.name"),
     },
     {
-      value: "address",
-      label: t("client address"),
+      value: "vendor_address",
+      label: t("vendor.address"),
     },
     {
       value: "product_code",
@@ -55,35 +59,36 @@ const WarehousingPreviewList = function ({
   const filteredList = useMemo(
     () =>
       list.filter((item) =>
-        item[searchType].toString().indexOf(searchText) !== -1 ? true : false
-      ),
-    [list, searchType, searchText]
+      item[searchType].toString().indexOf(searchText) !== -1 ? true : false
+      ),    [list, searchType, searchText]
   );
 
   // 입고 수량 합계
   const totalItemCount = useMemo(
-    () => list.reduce((acc, cur) => acc + cur.count, 0),
+    () => list.reduce((acc, cur) => acc + cur.product_count, 0),
     [list]
   );
 
   // 공급가 합계
   const totalItemPrice = useMemo(
-    () => list.reduce((acc, cur) => acc + cur.count * cur.price, 0),
+    () => list.reduce((acc, cur) => acc + cur.product_count * cur.product_price, 0),
     [list]
   );
 
   return (
     <TableContainer>
-      <Typography.Text strong>
-        {t("warehousing")} {t("list")} {t("preview")}{" "}
+      <TurtleText>
+        {t("whs.section_title2")} 
         {`(${list.length.toLocaleString()})`}
-      </Typography.Text>
+      </TurtleText>
       <Form layout="inline">
         <Form.Item>
           <Select
             style={{ width: 150 }}
             value={searchType}
             onChange={(value) => {
+
+
               setSearchType(value);
             }}
           >
@@ -112,33 +117,33 @@ const WarehousingPreviewList = function ({
         rowKey={(record) => record.product_code}
         columns={[
           {
-            title: t("client name"),
-            dataIndex: "store_name",
+            title: t("vendor.name"),
+            dataIndex: "vendor_name",
           },
           {
-            title: t("client address"),
-            dataIndex: "address",
+            title: t("vendor.address"),
+            dataIndex: "vendor_address",
           },
           {
-            title: t("product code"),
+            title: t("product.code"),
             dataIndex: "product_code",
           },
           {
-            title: t("product name"),
+            title: t("product.name"),
             dataIndex: "product_name",
           },
           {
-            title: t("option"),
-            dataIndex: "option",
+            title: t("product.option"),
+            dataIndex: "product_option",
           },
           {
             align: "right",
-            title: t("warehousing.count"),
-            dataIndex: "count",
+            title: t("product.count"),
+            dataIndex: "product_count",
             render: (_, record) => (
               <InputNumber //
                 size="small"
-                defaultValue={record.count}
+                defaultValue={record.product_count}
                 onChange={(value) => {
                   const newList = list.map((item) =>
                     item.product_code === record.product_code
@@ -152,8 +157,8 @@ const WarehousingPreviewList = function ({
           },
           {
             align: "right",
-            title: t("supply price"),
-            render: (_, record) => record.price.toLocaleString(),
+            title: t("product.price"),
+            render: (_, record) => numberTextFormat(record.product_price, "currency"),
           },
           {
             width: 100,
@@ -183,12 +188,12 @@ const WarehousingPreviewList = function ({
           <Footer>
             <TotalContainer>
               <b>
-                {`${t("warehousing.total count")} : `}
-                {totalItemCount.toLocaleString()}
+                {`${t("warehousing total count")} : `}
+                {numberTextFormat(totalItemCount, "count")}
               </b>
               <b>
                 {`${t("total supply price")} : `}
-                {totalItemPrice.toLocaleString()}
+                {numberTextFormat(totalItemPrice, "currency")}
               </b>
             </TotalContainer>
             <Popconfirm
@@ -198,7 +203,7 @@ const WarehousingPreviewList = function ({
               cancelText={t("no")}
               onConfirm={() => {
                 setSearchText("");
-                setSearchType("store_name");
+                setSearchType("vendor_name");
                 onSubmit();
               }}
             >

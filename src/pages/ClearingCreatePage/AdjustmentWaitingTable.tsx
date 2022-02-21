@@ -6,7 +6,7 @@ import { FileTextOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { AdjustmentItem } from "apis/adjustmentAPI";
+import { AdjustmentItem2 } from "apis/adjustmentAPI";
 import { adjustmentAPI } from "apis";
 
 
@@ -32,7 +32,7 @@ import { adjustmentAPI } from "apis";
     CustomRow = adjustablePrice에 있는 도매라면 마우스 hover시에 차감가능 금액이 뜨게하는 component
 */
 
-interface AdjustmentItemExtended extends AdjustmentItem {
+interface AdjustmentItemExtended extends AdjustmentItem2 {
   process_type?: string;
   process_count?: number;
   checked: boolean;
@@ -76,7 +76,7 @@ function AdjustmentWaitingTable({
                 checked: false,
                 process_type: undefined,
                 process_count: undefined,
-              } as AdjustmentItemExtended),
+              } as never as AdjustmentItemExtended),
           ),
         );
       },

@@ -4,6 +4,7 @@ import PageHeader from "components/PageHeader";
 import SvgIcon from "components/SvgIcon";
 import AdjustmentSearchFilter from "./AdjustmentSearchFilter";
 import AdjustmentList from "./AdjustmentList";
+import Toolbar from "./Toolbar";
 
 const AdjustmentListPage = function () {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const AdjustmentListPage = function () {
         title={t("adjustment list")}
         breadcrumbList={[t("adjustment management"), t("adjustment list")]}
       />
+      <Toolbar/>
       <AdjustmentSearchFilter />
       <AdjustmentList />
     </>

@@ -1,46 +1,99 @@
 import moment from "moment";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation } from "react-query";
-import warehousingAPI, { RequestGetSheet } from "apis/warehousingAPI";
+import warehousingAPI, {WarehousingSheet, RequestGetSheet, WarehousingSheetItem } from "apis/warehousingAPI";
 import { message, notification } from "antd";
 import PageHeader from "components/PageHeader";
 import WarehousingSheetItemModal from "./WarehousingSheetItemModal";
 import WarehousingSearchFilter from "./WarehousingSearchFilter";
 import WarehousingSheetList from "./WarehousingSheetList";
-
+import { storeIdState } from "store/storeIdState";
+import { useRecoilValue } from "recoil";
+import { FilterButton } from "components/common/FilterButtonType";
+import StoreFilter from "components/common/Filter";
+import Toolbar from "./Toolbar";
+import { storeState } from "store/storeState";
 const WarehousingListPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;
-
+  // 쇼핑몰 id
+  const store = useRecoilValue(storeState);
+  // const [storeId, setStoreId] = useState(-1)
   const [visibleDetailModal, setVisibleDetailModal] = useState(false);
+
+
+  const [sheetItemList, setSheetItemList] = useState<Array<WarehousingSheetItem>>([]);
+
+  type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
+  const [searchType, setSearchType] = useState<SearchType>("vendor_name");
+  
+  const [searchText, setSearchText] = useState("");
+  const search_options = [
+    {
+      value: "vendor_name",
+      label: t("vendor.name"),
+    },
+    {
+      value: "vendor_address",
+      label: t("vendor.address"),
+    },
+    {
+      value: "product_code",
+      label: t("product code"),
+    },
+    {
+      value: "product_name",
+      label: t("product name"),
+    },
+  ];
+  
+
   const [selectedRow, selectRow] = useState({
-    sheet_id: -1,
-    mall_name: "",
+    sheet_id:-1, 
+    rt_store_id: -1,
     created_time: "",
-    is_confirmed: false,
+    is_confirmed: 0,
   });
 
+  const filteredList = useMemo(
+    () =>
+
+      sheetItemList.filter((item) =>
+      // item
+        item![searchType].toString().indexOf(searchText) !== -1 
+      ),
+    [sheetItemList, searchType, searchText],
+  );
+
+  const [sheetList, setSheetList] = useState<Array<WarehousingSheet>>();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
-    rt_store_id: undefined,
+    rt_store_id: store.id ?? -1,
+
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
+    page:1
+    // offset: 100,
+    // last_id: -1,
+    // switch_type: "next",
   });
 
   // 입고장 리스트 요청
   const getSheetQuery = useQuery(
     ["getSheet", searchQuery],
-    () => warehousingAPI.getSheet(searchQuery),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-    },
+    () => warehousingAPI.getSheet(searchQuery), {
+      enabled : !!store.id,
+    }
   );
+
+  const FilterButtons : FilterButton[] = [
+    {type:"primary", status:true, text:t("whs.filter_button_list_download")},
+    {type:"primary", status:true, text:t("whs.filter_button_list_forward")}
+  ]
 
   // 입고장 삭제 요청
   const deleteSheetQuery = useMutation(["deleteSheet"], warehousingAPI.updateSheet, {
@@ -52,7 +105,8 @@ const WarehousingListPage = function () {
         getSheetQuery.refetch();
       } else {
         setCurrentPage(1);
-        setSearchQuery({ ...searchQuery });
+        setSearchQuery({ ...searchQuery  });
+        // setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
       }
 
       notification.open({
@@ -88,6 +142,14 @@ const WarehousingListPage = function () {
     [getSheetQuery.data],
   );
 
+      // 입고장 상세내역 리스트 요청
+
+
+  useEffect(() => {
+    setSearchQuery({...searchQuery, rt_store_id: store.id ?? -1})
+  }, [store.id])
+
+
   return (
     <>
       <Helmet title={title} />
@@ -96,8 +158,11 @@ const WarehousingListPage = function () {
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
+      <Toolbar/>
       <WarehousingSheetItemModal
         {...selectedRow}
+        sheet_id={selectedRow.sheet_id}
+        // filteredList={filteredList}
         visible={visibleDetailModal}
         onClose={() => {
           setVisibleDetailModal(false);
@@ -114,19 +179,18 @@ const WarehousingListPage = function () {
         list={list}
         totalCount={totalCount}
         currentPage={currentPage}
-        pageSize={100}
         // 이전 페이지
         onPrev={() => {
           const switch_type = "prev";
           const last_id = list[0].id;
-          setSearchQuery({ ...searchQuery});
+          setSearchQuery({ ...searchQuery });
           setCurrentPage(currentPage - 1);
         }}
         // 다음 페이지
         onNext={() => {
           const switch_type = "next";
           const last_id = list[list.length - 1].id;
-          setSearchQuery({ ...searchQuery });
+          setSearchQuery({ ...searchQuery});
           setCurrentPage(currentPage + 1);
         }}
         // 행 선택
@@ -134,9 +198,9 @@ const WarehousingListPage = function () {
           setVisibleDetailModal(true);
           selectRow({
             sheet_id: row.id,
-            mall_name: row.mall_name,
             created_time: moment(row.created_time).format("YYYY-MM-DD"),
-            is_confirmed: row.is_confirmed,
+            rt_store_id:store.id!,
+            is_confirmed: (row.is_confirmed? 1 : 0),
           });
         }}
         // 삭제
@@ -144,7 +208,7 @@ const WarehousingListPage = function () {
           deleteSheetQuery.mutate({
             ...row,
             sheet_id: row.id,
-            is_deleted: true,
+            is_inactive: true,
           });
         }}
         // 마감

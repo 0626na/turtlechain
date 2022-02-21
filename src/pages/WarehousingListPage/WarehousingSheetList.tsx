@@ -1,17 +1,20 @@
 import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
-import { WarehousingSheet } from "apis/warehousingAPI";
+import { RequestGetSheet, WarehousingSheet } from "apis/warehousingAPI";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
-import { Table, Tag, Button, Popconfirm } from "antd";
+import { Table, Tag, Button, Popconfirm, Pagination } from "antd";
 import SimplePagination from "components/SimplePagination";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { storeState } from "store/storeState";
 
 interface Props {
   isLoading: boolean;
   list: Array<WarehousingSheet>;
   totalCount: number;
   currentPage: number;
-  pageSize: number;
   onPrev: () => void;
   onNext: () => void;
   onSelectRow: (row: WarehousingSheet) => void;
@@ -19,12 +22,12 @@ interface Props {
   onConfirm: (row: WarehousingSheet) => void;
 }
 
+
 const WarehousingSheetList = function ({
   isLoading,
   list,
   totalCount,
   currentPage,
-  pageSize,
   onPrev,
   onNext,
   onSelectRow,
@@ -32,7 +35,19 @@ const WarehousingSheetList = function ({
   onConfirm,
 }: Props) {
   const { t } = useTranslation();
+  const store = useRecoilValue(storeState);
+  const [getSheetQuery, setGetSheetQuery] = useState<RequestGetSheet>({
+    rt_store_id:-1,
+    is_confirmed: "",
+    start_date:"", 
+    end_date:"",
+    page:1
+  });
 
+  useEffect(() => {
+
+  },[store]); 
+  
   return (
     <Table
       size="small"
@@ -62,8 +77,8 @@ const WarehousingSheetList = function ({
           },
         },
         {
-          title: t("mall name"),
-          dataIndex: "mall_name",
+          title: t("vendor.name"),
+          dataIndex: "vendor_name",
         },
         {
           width: 120,
@@ -152,19 +167,17 @@ const WarehousingSheetList = function ({
       ]}
       title={() => (
         <b>
-          {`${t("warehousing")} ${t("list")}`}
+          {`${t("warehousing.list")} `}
           {`(${totalCount.toLocaleString()})`}
         </b>
       )}
       footer={() => (
         <Footer>
-          <SimplePagination
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            isLoading={isLoading}
-            onPrev={onPrev}
-            onNext={onNext}
+          <Pagination
+            size="small"
+            total={totalCount}
+            showSizeChanger={false}
+            current={getSheetQuery.page}
           />
         </Footer>
       )}

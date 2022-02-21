@@ -20,7 +20,7 @@ import {
   MyStorePage,
   MyStaffPage,
   MyMembershipPage,
-} from "pages";
+} from "../pages";
 
 const MainRouter = function () {
   return (

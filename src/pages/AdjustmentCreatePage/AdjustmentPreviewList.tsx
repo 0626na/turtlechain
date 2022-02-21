@@ -2,49 +2,43 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { DeleteFilled, UploadOutlined } from "@ant-design/icons";
 import { Table, Button, Popconfirm, Input } from "antd";
+import { AdjustmentItem } from "apis/adjustmentAPI";
+import React, { useMemo } from "react";
+import { numberTextFormat } from "utils/general";
 
-// MOCK DATA
-const MOCK_LIST = [
-  {
-    client_name: "세기모자",
-    client_address: "뉴존 2F 522",
-    account_info: "기업 01050221059 죠르디",
-    adjustment_type: "미송",
-    supply_price: 10000,
-  },
-  {
-    client_name: "카시오",
-    client_address: "디오트 D 3F 522",
-    account_info: "기업 01050221059 라이언",
-    adjustment_type: "주문",
-    supply_price: 20000,
-  },
-];
 
-const MOCK_TOTAL_SUPPLY_PRICE = MOCK_LIST.reduce(
-  (acc, cur) => acc + cur.supply_price,
-  0
-);
 
-interface Props {}
+interface Props {
 
-const WarehousingSheetList = function ({}: Props) {
+  isLoading:boolean;
+  adjList:Array<AdjustmentItem>;
+  setAdjList: React.Dispatch<React.SetStateAction<AdjustmentItem[]>>;
+  onSubmit: () => void;
+}
+
+const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit}: Props) {
   const { t } = useTranslation();
 
+    // 매입조정 합계
+    const totalAdjValue = useMemo(
+      () => adjList.reduce((acc, cur) => acc + cur.adj_count * cur.product_price, 0),
+      [adjList]
+    );
+    
   return (
     <Table
       size="small"
       scroll={{ x: "auto", y: 400 }}
       pagination={false}
-      dataSource={MOCK_LIST}
+      dataSource={adjList}
       columns={[
         {
-          title: t("client name"),
-          dataIndex: "client_name",
+          title: t("vendor.name"),
+          dataIndex: "vendor_name",
         },
         {
-          title: t("client address"),
-          dataIndex: "client_address",
+          title: t("vendor.address"),
+          dataIndex: "vendor_address",
         },
         {
           title: t("account info"),
@@ -54,12 +48,11 @@ const WarehousingSheetList = function ({}: Props) {
           width: 100,
           align: "center",
           title: t("adjustment type"),
-          dataIndex: "adjustment_type",
+          dataIndex: "type",
         },
         {
           title: t("supply price"),
-          dataIndex: "supply_price",
-          render: (_, record) => <Input value={record.supply_price} />,
+          render:(_, record) => numberTextFormat(record.product_price, "currency")  
         },
         {
           width: 100,
@@ -83,15 +76,20 @@ const WarehousingSheetList = function ({}: Props) {
         <Footer>
           <b>
             {`${t("total supply price")} : `}
-            {MOCK_TOTAL_SUPPLY_PRICE.toLocaleString()}
+            {numberTextFormat(totalAdjValue, "currency")}
           </b>
           <Popconfirm
             title={t("description.really register")}
             okText={t("yes")}
             cancelText={t("no")}
+            onConfirm={() => {
+              onSubmit();
+            }}
           >
             <Button //
               icon={<UploadOutlined />}
+              disabled={!adjList.length || isLoading}
+              loading={isLoading}
               type="primary"
             >
               {t("adjustment create")}
