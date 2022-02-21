@@ -35,26 +35,23 @@ export interface AdjustmentItem {
   product_id: number;
   count: number;
   price: number;
-  type: "reserve" | "takeback" | "exchange" | "balance" | "extra";
+  is_cleared: number;
+  type: "reserve" | "takeback" | "exchange" | "balance" ;
 }
 
 // Request: 정산아이템 조회
-export interface RequestGetAdjustment {
+export interface RequestGetAdjustmentList {
   rt_store_id: number | undefined;
-  last_id: number;
-  offset: number;
-  switch_type: "next" | "prev";
+  page: number;
   start_date?: string;
   end_date?: string;
-  type?: "reserve" | "takeback" | "exchange" | "refund";
   is_cleared?: number;
 }
 
 // Response: 정산장 조회
-export interface ResponseGetAdjustment {
+export interface ResponseGetAdjustmentList {
   msg: string;
   data: {
-    data: Array<AdjustmentItem>;
     statistics: {
       cleared: {
         count: number;
@@ -65,15 +62,17 @@ export interface ResponseGetAdjustment {
         price: number;
       };
     };
+    total_count:number;
+    adjustment_list:Array<AdjustmentItem>;
   };
 }
 
-const getAdjustment = async function (query: RequestGetAdjustment) {
+const getAdjustmentList = async function (query: RequestGetAdjustmentList) {
   let url = "adjustment/item?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetAdjustment>(url);
+  const response = await v2Axios.get<ResponseGetAdjustmentList>(url);
   return response.data;
 };
 
@@ -91,7 +90,7 @@ const createAdjustmentItem = async function (data: RequestCreateAdjustmentItem) 
 };
 
 const adjustmentAPI = {
-  getAdjustment,
+  getAdjustmentList,
   createAdjustmentItem,
 };
 

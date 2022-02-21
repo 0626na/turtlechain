@@ -57,17 +57,17 @@ function AdjustmentWaitingTable({
   const getAdjustmentQuery = useQuery(
     ["getAdjustment", store.id], //
     () =>
-      adjustmentAPI.getAdjustment({
+      adjustmentAPI.getAdjustmentList({
         rt_store_id: store.id,
         is_cleared: 0,
-        offset: 1000,
-        last_id: -1,
-        switch_type: "next",
+        page:1,
+        start_date:"",
+        end_date:""
       }),
     {
       enabled: store.id !== undefined,
       onSuccess: (data) => {
-        const responseData = data ? data.data.data : [];
+        const responseData = data ? data.data : [];
         setAdjustmentList(
           responseData.map(
             (value) =>

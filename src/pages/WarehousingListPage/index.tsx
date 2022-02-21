@@ -21,10 +21,7 @@ const WarehousingListPage = function () {
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
-  // const [storeId, setStoreId] = useState(-1)
   const [visibleDetailModal, setVisibleDetailModal] = useState(false);
-
-
   const [sheetItemList, setSheetItemList] = useState<Array<WarehousingSheetItem>>([]);
 
   type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
@@ -77,9 +74,6 @@ const WarehousingListPage = function () {
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page:1
-    // offset: 100,
-    // last_id: -1,
-    // switch_type: "next",
   });
 
   // 입고장 리스트 요청
