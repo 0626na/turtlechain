@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { WarehousingSheetItem } from "apis/warehousingAPI";
+import warehousingAPI, { BulkUpdateSheetItem, WarehousingItem2, WarehousingSheetItem } from "apis/warehousingAPI";
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -19,13 +19,14 @@ import {
   Statistic,
   Card,
 } from "antd";
+import { createImportSpecifier } from "typescript";
+import { warehousingItem2ToBulkUpdateItem, warehousingSheetItemToWarehousingItem2 } from "./util";
 
 interface Props {
   visible: boolean;
   sheet_id: number;
-  mall_name: string;
   created_time: string;
-  is_confirmed: boolean;
+  is_confirmed: number;
   onClose: () => void;
   onUpdated: () => void;
 }
@@ -33,7 +34,6 @@ interface Props {
 const WarehousingSheetItemModal = function ({
   visible,
   sheet_id,
-  mall_name,
   created_time,
   is_confirmed,
   onClose,
@@ -42,17 +42,18 @@ const WarehousingSheetItemModal = function ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  type SearchType = "store_name" | "address" | "product_code" | "product_name";
-  const [searchType, setSearchType] = useState<SearchType>("store_name");
+  type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
+  const [searchType, setSearchType] = useState<SearchType>("vendor_name");
+  
   const [searchText, setSearchText] = useState("");
   const search_options = [
     {
-      value: "store_name",
-      label: t("client name"),
+      value: "vendor_name",
+      label: t("vendor.name"),
     },
     {
-      value: "address",
-      label: t("client address"),
+      value: "vendor_address",
+      label: t("vendor.address"),
     },
     {
       value: "product_code",
@@ -63,22 +64,23 @@ const WarehousingSheetItemModal = function ({
       label: t("product name"),
     },
   ];
+  
 
-  const [list, setList] = useState<Array<WarehousingSheetItem>>([]);
+  const [list, setList] = useState<Array<WarehousingItem2>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [inactiveList, setInactiveList] = useState<Array<BulkUpdateSheetItem>>([]);
 
   // 입고장 상세내역 리스트 요청
   const getSheetItemQuery = useQuery(
     ["getSheetItem"],
-    () => warehousingAPI.getSheetItem(sheet_id),
+    () => warehousingAPI.getSheetItem2(sheet_id),
     {
       enabled: visible && sheet_id !== -1 ? true : false,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setList([]);
-        // setList(data.data);
+        setList(data.data.item_list);
       },
     },
   );
@@ -98,40 +100,56 @@ const WarehousingSheetItemModal = function ({
     },
   });
 
-  // 입고 수량 합계
-  const totalItemCount = useMemo(
-    () =>
-      list.reduce((acc, cur) => {
-        if (!cur.is_deleted) {
-          return acc + cur.count;
-        } else {
-          return 0;
-        }
-      }, 0),
-    [list],
-  );
+  const totalItemCount= useMemo(
+    ()=>
+    list.reduce((sum, current)=> sum+current.count, 0)
+    , [list, searchType, searchText]
+    );  
+    
+    const totalItemAmount= useMemo(
+      ()=>{
+        console.log("AASDFSD@!#$@!$@#$")
+        console.log(list)
+        return list.reduce((sum, current)=> sum+(current.count* current.price), 0)
 
-  // 공급가 합계
-  const totalItemPrice = useMemo(
-    () =>
-      list.reduce((acc, cur) => {
-        if (!cur.is_deleted) {
-          return acc + cur.count * cur.price;
-        } else {
-          return 0;
-        }
-      }, 0),
-    [list],
-  );
-
+      } 
+      
+        , [list, searchType, searchText]
+      
+      );   
+    
   // 필터된 리스트
   const filteredList = useMemo(
     () =>
-      list.filter((item) =>
-        item[searchType].toString().indexOf(searchText) !== -1 && !item.is_deleted ? true : false,
+
+      list.filter((item) =>{
+
+               if(searchType === "vendor_name"){
+          return item.vendor_info["vendor_name"].toString().indexOf(searchText) !== -1 
+        }
+      }
+
+   
       ),
     [list, searchType, searchText],
   );
+
+  const updateWarehousingSheetItems = () => {
+    if(inactiveList && inactiveList.length){
+      updateSheetQuery.mutateAsync({sheet_id, items: inactiveList.map((item) => {
+          return {
+            id: item.id,
+            is_inactive:true,
+            count:item.count
+          }
+      })})
+      setInactiveList([])
+    }
+    if(isUpdated){
+      updateSheetQuery.mutate({ sheet_id, items: list!.map((item)=>warehousingItem2ToBulkUpdateItem(item))});
+    }
+
+  }
 
   // 모달창 닫기 확인
   // 업데이트가 발새한 경우 실행
@@ -144,7 +162,9 @@ const WarehousingSheetItemModal = function ({
         onClose();
       },
       onOk: () => {
-        updateSheetQuery.mutate({ sheet_id, items: list });
+        // let warehousingItem2List = list.map((item)=>{ret2urn warehousingSheetItemToWarehousingItem2(item)})
+        // updateSheetQuery.mutate({ sheet_id, items: warehousingItem2List });
+        updateWarehousingSheetItems()
       },
     });
   };
@@ -153,7 +173,7 @@ const WarehousingSheetItemModal = function ({
   useEffect(() => {
     if (!visible) {
       return () => {
-        setSearchType("store_name");
+        setSearchType("vendor_name");
         setSearchText("");
         setList([]);
         setIsUpdated(false);
@@ -175,7 +195,7 @@ const WarehousingSheetItemModal = function ({
           onClose();
         }
       }}
-      title={`${mall_name} ${t("warehousing.detail list")}`}
+      title={`${t("warehousing.detail list")}`}
       footer={
         !is_confirmed && [
           <Popconfirm
@@ -183,7 +203,8 @@ const WarehousingSheetItemModal = function ({
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={() => {
-              updateSheetQuery.mutate({ sheet_id, items: list });
+              updateWarehousingSheetItems()
+              // updateSheetQuery.mutate({ sheet_id, items: list!.map((item)=>warehousingItem2ToBulkUpdateItem(item)) });
             }}
           >
             <Button type="primary" icon={<SyncOutlined />} loading={updateSheetQuery.isLoading}>
@@ -210,7 +231,8 @@ const WarehousingSheetItemModal = function ({
           <Card>
             <Statistic //
               title={t("total supply price")}
-              value={totalItemPrice}
+              value={totalItemAmount}
+              
             />
           </Card>
         </StatisticContainer>
@@ -245,27 +267,28 @@ const WarehousingSheetItemModal = function ({
           loading={getSheetItemQuery.isLoading}
           pagination={false}
           dataSource={filteredList}
-          rowKey={(record) => record.id}
+          rowKey={(sheetItem) => sheetItem.id}
+          
           columns={[
             {
-              title: t("client name"),
-              dataIndex: "store_name",
+              title: t("vendor.name"),
+              render:(_, item) => item.vendor_info.vendor_name
             },
             {
-              title: t("client address"),
-              dataIndex: "address",
+              title: t("vendor.address"),
+              render:(_, item) => item.vendor_info.vendor_address
             },
             {
-              title: t("product code"),
-              dataIndex: "product_code",
+              title: t("product.code"),
+              render:(_, item) => item.product_info.product_code
             },
             {
-              title: t("product name"),
-              dataIndex: "product_name",
+              title: t("product.name"),
+              render:(_, item) => item.product_info.name
             },
             {
-              title: t("option"),
-              dataIndex: "option",
+              title: t("product.option"),
+              render:(_, item) => item.product_info.option
             },
             {
               align: "right",
@@ -277,7 +300,7 @@ const WarehousingSheetItemModal = function ({
                   defaultValue={record.count}
                   onChange={(value) => {
                     const newList = list.map((item) =>
-                      item.product_code === record.product_code ? { ...item, count: value } : item,
+                      item.product_info.product_code === record.product_info.product_code ? { ...item, count: value } : item,
                     );
                     setList(newList);
                     setIsUpdated(true);
@@ -288,7 +311,7 @@ const WarehousingSheetItemModal = function ({
             {
               align: "right",
               title: t("supply price"),
-              render: (_, record) => record.price.toLocaleString(),
+              render: (_, item) => item.price.toLocaleString(),
             },
             {
               width: 100,
@@ -303,12 +326,19 @@ const WarehousingSheetItemModal = function ({
                   type="primary"
                   icon={<DeleteFilled />}
                   onClick={() => {
+                    let inactiveItem:BulkUpdateSheetItem = {
+                      id : record.id,
+                      is_inactive: true,
+                      count: record.count
+                    } 
+                    setInactiveList([...inactiveList, inactiveItem])
                     const newList = list.filter(
-                      (item) => item.product_code !== record.product_code,
+                      (item) => item.product_info.product_code !== record.product_info.product_code
                     );
                     setList(newList);
-                    setIsUpdated(true);
-                  }}
+                    // setIsUpdated(true);
+                  }
+                }
                 >
                   {t("delete")}
                 </Button>

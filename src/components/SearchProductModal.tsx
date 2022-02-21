@@ -15,6 +15,7 @@ interface Props {
   onClickSelect: (
     product_id: number,
     product_name: string,
+    vendor_product_name: string,
     product_code: string,
     product_option: string,
     product_price: number,
@@ -131,6 +132,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
                     record.id,
                     record.name,
                     record.product_code,
+                    record.vendor_product_name,
                     record.option,
                     record.price,
                   );

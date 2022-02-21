@@ -1,7 +1,7 @@
 import { v2Axios } from "./index";
 
 // 입고아이템 타입
-export interface AdjustmentItem {
+export interface AdjustmentItem2 {
   id: number;
   created_by: number;
   created_time: Date;
@@ -27,6 +27,16 @@ export interface AdjustmentItem {
   account_number: string;
   account_holder: string;
   type: "reserve" | "takeback" | "exchange" | "refund";
+}
+
+export interface AdjustmentItem {
+  rt_store_id: number;
+  ws_store_id: number;
+  vendor_id: number;
+  product_id: number;
+  adj_count: number;
+  product_price: number;
+  type: "reserve" | "takeback" | "exchange" | "balance" | "extra";
 }
 
 // Request: 정산아이템 조회
@@ -68,8 +78,22 @@ const getAdjustment = async function (query: RequestGetAdjustment) {
   return response.data;
 };
 
+export interface RequestCreateAdjustmentItem {
+  item_list: Array<AdjustmentItem>;
+}
+
+export interface ResponseCreateAdjustmentItem {
+  data: null;
+}
+const createAdjustmentItem = async function (data: RequestCreateAdjustmentItem) {
+  const url = "adjustment/item";
+  const response = await v2Axios.post<ResponseCreateAdjustmentItem>(url, data);
+  return response.data;
+};
+
 const adjustmentAPI = {
   getAdjustment,
+  createAdjustmentItem,
 };
 
 export default adjustmentAPI;

@@ -51,6 +51,7 @@ function WarehousingWaitingTable({
         start_date: "2017-01-01",
         end_date: "9999-12-31",
         did_settlement: 0,
+        page: 1
       }),
     {
       enabled: store.id !== undefined,
