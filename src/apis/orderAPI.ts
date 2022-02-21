@@ -2,16 +2,19 @@ import { v2Axios } from "apis";
 
 // 주문 등록 추가 타입
 export interface CreateOrderItem {
+  vendor_id: number;
+  product_id: number;
   vendor_name: string;
   vendor_address: string;
   vendor_phone: string;
-  product_code: number;
   product_name: string;
+  product_code: string;
   product_option: string;
-  product_price: number;
-  product_count: number;
-  order_type: string;
-  order_memo: string;
+  count: number;
+  price: number;
+  type: string;
+  image_url?: string;
+  memo: string;
 }
 
 // 주문서 타입
@@ -119,10 +122,35 @@ const getItem = async function (query: RequestGetItem) {
   return response.data;
 };
 
+export interface RequestCreateSheet {
+  created_date: string;
+  rt_store_id: number;
+  status: string;
+  type: string;
+}
+
+export interface RequestCreateItem {
+  sheet_id: number;
+  rt_store_id: number;
+  item_list: Array<CreateOrderItem>;
+}
+
+export interface ResponseCreateItem {
+  msg: string;
+  data: null;
+}
+
+const createItem = async function (data: RequestCreateItem) {
+  const url = `order/item`;
+  const response = await v2Axios.post<ResponseCreateItem>(url, data);
+  return response.data;
+};
+
 const orderAPI = {
   getList,
   get,
   getItem,
+  createItem,
 };
 
 export default orderAPI;

@@ -77,7 +77,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
           {
             ellipsis: true,
             title: "거래처명",
-            //render: (_, record) => record.product_info.vendor_info.vendor_name,
+            render: (_, record) => record.product_info.vendor_info.vendor_name,
           },
           {
             ellipsis: true,

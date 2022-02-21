@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // antd
-import { Form, Col, Row, FormInstance, Input, message } from "antd";
+import { Form, Col, Row, FormInstance, Input, message, Radio } from "antd";
 // api
 import { CreateOrderItem } from "apis/orderAPI";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
@@ -18,18 +18,16 @@ import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import SearchProductModal from "components/SearchProductModal";
 
-const OrderCreateForm = function () {
+interface Props {
+  addItem: (item: CreateOrderItem) => void;
+}
+
+const OrderCreateForm = function ({ addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [form] = Form.useForm();
-  const [orderType, setOrderType] = useState("order");
 
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
-
-  // 주문 종류 변경
-  const onChangeOrderType = (e: any) => {
-    setOrderType(e.target.value);
-  };
 
   // 쇼핑몰 선택시 모든 필드 초기화
   useEffect(() => {
@@ -47,8 +45,8 @@ const OrderCreateForm = function () {
         product_name: undefined,
         product_code: undefined,
         product_option: undefined,
-        product_price: undefined,
-        product_count: undefined,
+        price: undefined,
+        count: undefined,
       });
       setVendorModalVisible(false);
     },
@@ -56,14 +54,22 @@ const OrderCreateForm = function () {
   );
 
   const selectProduct = useCallback(
-    (product_id, product_name, product_code, product_option, product_price) => {
+    (
+      product_id,
+      product_name,
+      vendor_product_name,
+      product_code,
+      product_option,
+      product_price,
+    ) => {
       form.setFieldsValue({
         product_id,
         product_name,
+        vendor_product_name,
         product_code,
         product_option,
-        product_price,
-        product_count: 1,
+        price: product_price,
+        count: 1,
       });
       setProductModalVisible(false);
     },
@@ -134,31 +140,46 @@ const OrderCreateForm = function () {
               disabled={true}
             />
             <TurtleInput // 상품 공급가 Input
-              name="product_price"
+              name="price"
               label={t("product.price")}
               disabled={true}
             />
             <TurtleInputNumber // 상품 발주수량 Input
-              name="product_count"
+              name="count"
               label={t("product.count")}
             />
           </Col>
           <Col span={10}>
-            <TurtleRadio // 주문종류 Select
-              name="order_type"
-              label={t("order.type.")}
-              value={orderType}
-              onChange={onChangeOrderType}
-            />
+            <Form.Item name="type" label={t("order.type.")} rules={[{ required: true }]}>
+              <Radio.Group>
+                <Radio value="order">{t("order.type.order")}</Radio>
+                <Radio value="reserve">{t("order.type.reserved")}</Radio>
+                <Radio value="takeback">{t("order.type.take back")}</Radio>
+                <Radio value="exchange">{t("order.type.exchange")}</Radio>
+                <Radio value="sample">{t("order.type.sample")}</Radio>
+                <Radio value="pickup">{t("order.type.pickup")}</Radio>
+                <Radio value="extra">{t("order.type.etc")}</Radio>
+              </Radio.Group>
+            </Form.Item>
             <TurtleTextArea // 주문 메모 TextArea
-              name="order_memo"
+              name="memo"
               label={t("order.memo")}
               placeholder={t("placeholder.memo")}
             />
           </Col>
         </Row>
         <Row justify="end">
-          <TurtleButton type="default">{t("button.add")}</TurtleButton>
+          <TurtleButton
+            type="default"
+            onClick={() => {
+              form.validateFields().then(() => {
+                addItem(form.getFieldsValue());
+                form.resetFields();
+              });
+            }}
+          >
+            {t("button.add")}
+          </TurtleButton>
         </Row>
       </Form>
       <TurtleDivider />
