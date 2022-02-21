@@ -102,7 +102,10 @@ function ClearingStatusCard() {
             {
               ellipsis: true,
               title: "정산 총 금액",
-              render: (_, record) => `${record.total_price}원 (부가세 ${record.vat_price}원 포함)`,
+              render: (_, record) =>
+                `${record.total_price}원 ${
+                  record.vat_price === 0 ? "" : `(부가세 ${record.vat_price}원 포함)`
+                }`,
             },
             {
               ellipsis: true,

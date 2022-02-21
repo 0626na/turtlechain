@@ -1,17 +1,19 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
-import { Card, Col, Row, Select, Space, Table } from "antd";
+import { Card, Col, Row, Select, Space, Table, Typography } from "antd";
 import PageHeader from "components/PageHeader";
 import { useMutation, useQuery } from "react-query";
 import { mainAPI } from "apis";
 import ClearingStatusCard from "./ClearingStatusCard";
+import OrderChartCard from "./OrderChartCard";
+import ClearingChartCard from "./ClearingChartCard";
 
 const HomePage = function () {
   const title = `${t("turtlechain")} - ${t("common.home")}`;
 
   const cardStyle = {
     width: "100%",
-    height: 250,
+    height: "100%",
   };
 
   const getUnprocessedStatusQuery = useQuery("getUnprocessedStatus", mainAPI.getUnprocessedStatus);
@@ -30,31 +32,39 @@ const HomePage = function () {
       <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 환불 현황"} style={cardStyle}>
-            <Row justify="center">{getUnprocessedStatusQuery.data?.data.refunds.counts} 건</Row>
+            <Row justify="center" align="middle">
+              <Typography.Title level={2}>
+                {getUnprocessedStatusQuery.data?.data.refunds.counts} 건
+              </Typography.Title>
+            </Row>
             <Row justify="center">
-              {getUnprocessedStatusQuery.data?.data.refunds.total_price} 원
+              <Typography.Title level={2}>
+                {getUnprocessedStatusQuery.data?.data.refunds.total_price} 원
+              </Typography.Title>
             </Row>
           </Card>
         </Col>
         <Col span={18}>
-          <Card title={"누적 주문"} style={cardStyle}>
-            차트
-          </Card>
+          <OrderChartCard />
         </Col>
       </Row>
       <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 매입조정 현황"} style={cardStyle}>
-            <Row justify="center">{getUnprocessedStatusQuery.data?.data.adjustments.counts} 건</Row>
+            <Typography.Title level={2}>
+              <Row justify="center" align="middle">
+                {getUnprocessedStatusQuery.data?.data.adjustments.counts} 건
+              </Row>
+            </Typography.Title>
             <Row justify="center">
-              {getUnprocessedStatusQuery.data?.data.adjustments.total_price} 원
+              <Typography.Title level={2}>
+                {getUnprocessedStatusQuery.data?.data.adjustments.total_price} 원
+              </Typography.Title>
             </Row>
           </Card>
         </Col>
         <Col span={18}>
-          <Card title={"누적 정산"} style={cardStyle}>
-            차트
-          </Card>
+          <ClearingChartCard />
         </Col>
       </Row>
     </>

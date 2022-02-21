@@ -47,9 +47,33 @@ const getUnprocessedStatus = async function () {
   return response.data;
 };
 
+export interface RequestGetClearingStatistic {
+  start_date: string;
+  end_date: string;
+}
+
+export interface ResponseGetClearingStatistic {}
+
+const getClearingStatistic = async function () {
+  let url = `main/clearing`;
+  const response = await v2Axios.get<ResponseGetClearingStatistic>(url);
+  return response.data;
+};
+
+export interface RequestGetOrderStatistic {
+  start_date: string;
+  end_date: string;
+}
+
+export interface ResponseGetOrderStatistic {}
+
+const getOrderStatistic = async function () {};
+
 const mainAPI = {
   getClearingStatus,
   getUnprocessedStatus,
+  getClearingStatistic,
+  getOrderStatistic,
 };
 
 export default mainAPI;
