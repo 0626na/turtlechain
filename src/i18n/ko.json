@@ -186,7 +186,8 @@
       "refund": "환불",
       "exchange": "교환",
       "takeback": "반품"
-    }
+    },
+    "placeholder": "매입조정에 관한 메모를 적어주세요"
   },
   "clearing": {
     "": "정산",
