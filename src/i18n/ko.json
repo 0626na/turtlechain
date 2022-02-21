@@ -21,6 +21,7 @@
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
+    "success create adjustment": "매입조정내역을 등록하였습니다.",
     "success update warehousing": "입고 내역을 수정하였습니다.",
     "success delete warehousing": "입고 내역을 삭제하였습니다.",
     "success confirm warehousing": "입고 내역을 마감하였습니다.",
@@ -178,6 +179,7 @@
       "subtract": "차감",
       "refund": "환불"
     },
+    "count" : "매입조정 수량",
     "type": {
       "default": "매입조정 종류",
       "reserve": "미송",

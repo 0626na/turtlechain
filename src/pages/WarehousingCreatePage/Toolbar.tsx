@@ -1,4 +1,4 @@
-import { Col, Row, Space } from "antd";
+import { Col, message, Row, Space } from "antd";
 import StoreSelect from "components/StoreSelect";
 import { useState } from "react";
 import CreateBulkWhsModal from "./CreateBulkWhsModal";
@@ -9,7 +9,7 @@ import { storeIdState } from "store/storeIdState";
 import { storeState } from "store/storeState";
 
 function Toolbar() {
-  const store = useRecoilState(storeState)
+  const store = useRecoilValue(storeState)
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   return (
@@ -32,6 +32,10 @@ function Toolbar() {
             <TurtleButtonSub // 거래처 대량 등록 Button
               icon="file"
               onClick={() => {
+                if (!store.id) {
+                  message.warn("쇼핑몰을 선택해주세요.");
+                  return;
+                }
                 setCreateModalVisible(true);
               }}
               disabled={!store}

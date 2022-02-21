@@ -1,4 +1,5 @@
 import { v2Axios } from "./index";
+import { ResponseUpdate } from "./retailerStoreAPI";
 import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
 
@@ -32,28 +33,34 @@ export interface AdjustmentItem2 {
 }
 
 export interface AdjustmentItem {
+  id:number;
   rt_store_id: number;
   vendor_id: number;
   product_id: number;
   count: number;
   price: number;
-  type: "reserve" | "takeback" | "exchange" | "balance" | "extra";
+  is_cleared: boolean ;
+  created_date:"";
+  type: "reserve" | "takeback" | "exchange" | "refund" ;
+  vendor_info: VendorInfo | undefined;
+  product_info:ProductInfo | undefined;
+  memo: string | undefined;
 }
 
 // Request: 정산아이템 조회
-export interface RequestGetAdjustment {
+export interface RequestGetAdjustmentList {
   rt_store_id: number | undefined;
+  page: number;
   start_date?: string;
   end_date?: string;
-  type?: "reserve" | "takeback" | "exchange" | "refund";
-  is_cleared?: number;
+  is_cleared?: number | "";
+  type: "reserve" | "takeback" | "exchange" | "balance"| "all";
 }
 
 // Response: 정산장 조회
-export interface ResponseGetAdjustment {
+export interface ResponseGetAdjustmentList {
   msg: string;
   data: {
-    data: Array<AdjustmentItem>;
     statistics: {
       cleared: {
         count: number;
@@ -64,15 +71,17 @@ export interface ResponseGetAdjustment {
         price: number;
       };
     };
+    total_count:number;
+    adjustment_list:Array<AdjustmentItem>;
   };
 }
 
-const getAdjustment = async function (query: RequestGetAdjustment) {
+const getAdjustmentList = async function (query: RequestGetAdjustmentList) {
   let url = "adjustment/item?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetAdjustment>(url);
+  const response = await v2Axios.get<ResponseGetAdjustmentList>(url);
   return response.data;
 };
 
@@ -146,9 +155,25 @@ const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForC
   return response.data;
 };
 
+// 입고장 수정하기 요청 타입
+export interface RequestUpdateAdj extends AdjustmentItem{
+  item_id: number;
+}
+
+export interface ResponseUpdateAdj{
+  data: AdjustmentItem;
+}
+
+const updateAdjustment = async function (data: RequestUpdateAdj){
+  const url = `adjustment/item/${data.item_id}`;
+  const response = await v2Axios.put<ResponseUpdateAdj>(url, data);
+  return response.data.data;
+};
+
 const adjustmentAPI = {
-  getAdjustment,
+  getAdjustmentList,
   createAdjustmentItem,
+  updateAdjustment,
   getAdjustmentForClearing
 };
 

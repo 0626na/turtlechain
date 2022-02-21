@@ -4,39 +4,44 @@ import { useTranslation } from "react-i18next";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
+import { AdjustmentItem } from "apis/adjustmentAPI";
 
-// MOCK DATA
-const MOCK_LIST = [
-  {
-    is_confirmed: false,
-    mall_name: "스타일날까",
-    created_time: new Date(),
-    adjustment_type: "주문",
-    client_name: "세기모자",
-    account_info: "기업 01050221059 테스트",
-    supply_price: 20000,
-  },
-  {
-    is_confirmed: true,
-    mall_name: "스타일날까",
-    created_time: new Date(),
-    adjustment_type: "미송",
-    client_name: "세기모자",
-    account_info: "기업 01050221059 테스트",
-    supply_price: 30000,
-  },
-];
+interface Props {
+  isLoading: boolean;
+  list:Array<AdjustmentItem>;
+  totalCount: number;
+  currentPage: number;
 
-interface Props {}
+  onSelectRow: (row: AdjustmentItem) => void;
+  onDelete: (row: AdjustmentItem) => void;
+  onConfirm: (row: AdjustmentItem) => void;
+}
 
-const AdjustmentList = function ({}: Props) {
+const AdjustmentList = function ({
+  isLoading,
+  list,
+  totalCount,
+  currentPage,
+
+  onSelectRow,
+  onDelete,
+  onConfirm,
+}: Props) {
   const { t } = useTranslation();
+
+  let adjTypes = {
+    "exchange" : "교환",
+    "reserve" : "미송",
+    "refund" : "환불",
+    "takeback" : "반품"
+  }
+
   return (
     <Table
       size="small"
       scroll={{ x: "auto", y: 400 }}
       pagination={false}
-      dataSource={MOCK_LIST}
+      dataSource={list}
       columns={[
         {
           width: 100,
@@ -44,9 +49,9 @@ const AdjustmentList = function ({}: Props) {
           title: t("progress"),
           dataIndex: "is_confirmed",
           render: (_, record) => {
-            const { is_confirmed } = record;
-            const color = is_confirmed ? "green" : "red";
-            const text = is_confirmed ? t("confirmed") : t("waiting");
+            const { is_cleared} = record;
+            const color = is_cleared? "green" : "red";
+            const text = is_cleared? t("confirmed") : t("waiting");
             return <Tag color={color}>{text}</Tag>;
           },
         },
@@ -56,31 +61,35 @@ const AdjustmentList = function ({}: Props) {
           title: t("adjustment date"),
           dataIndex: "created_time",
           render: (_, record) =>
-            moment(record.created_time).format("YYYY-MM-DD"),
+            moment(record.created_date).format("YYYY-MM-DD"),
         },
         {
-          title: t("mall name"),
-          dataIndex: "mall_name",
+          title: t("vendor.name"),
+          dataIndex: "vendor_info.vendor_name",
+          render:(_, record) => record.vendor_info?.vendor_name
         },
         {
-          title: t("client name"),
-          dataIndex: "client_name",
+          title: t("product.name"),
+          dataIndex: "product_info.product_name",
+          render:(_, record) => record.product_info?.name
         },
         {
-          title: t("account info"),
-          dataIndex: "account_info",
-        },
-        {
-          width: 100,
-          align: "center",
-          title: t("adjustment type"),
-          dataIndex: "adjustment_type",
+          title: t("product.vendor_product_name"),
+          dataIndex: "product_info.vendor_product_name",
+          render:(_, record) => record.product_info?.vendor_product_name
         },
         {
           align: "right",
           title: t("supply price"),
           dataIndex: "price",
-          render: (_, record) => record.supply_price.toLocaleString(),
+          render: (_, record) => record.price.toLocaleString(),
+        },
+        {
+          width: 100,
+          align: "center",
+          title: t("adjustment.type.default"),
+          dataIndex: "type",
+          render: (_, record) => adjTypes[record.type]
         },
         {
           width: 300,
@@ -97,12 +106,17 @@ const AdjustmentList = function ({}: Props) {
                 >
                   {t("view details")}
                 </Button>
-                {!record.is_confirmed && (
+                {!record.is_cleared&& (
+                  
                   <>
                     <Popconfirm
                       title={t("description.really delete")}
                       okText={t("yes")}
-                      cancelText={t("no")}
+                      cancelText={t("no")
+                    }
+                    onConfirm={() => {
+                      onDelete(record);
+                    }}
                     >
                       <Button
                         icon={<DeleteFilled />}
@@ -137,8 +151,9 @@ const AdjustmentList = function ({}: Props) {
       ]}
       title={() => (
         <b>
-          {`${t("adjustment")} ${t("list")}`}
-          {`(${MOCK_LIST.length.toLocaleString()})`}
+          {`${t("adjustment.list")}`}
+          
+          {`(${list.length.toLocaleString()})`}
         </b>
       )}
       footer={() => (
