@@ -67,7 +67,7 @@ function ClearingDetailModal({
       <Descriptions
         size="small"
         column={4}
-        title={t("warehousing.detail list")}
+        title={t("clearing.detail list")}
         layout="vertical"
         bordered
         style={{ marginBottom: 12 }}
@@ -100,7 +100,7 @@ function ClearingDetailModal({
           {
             ellipsis: true,
             title: t("clearing.vendor.address"),
-            dataIndex: "total_price",
+            dataIndex: "vendor_address",
           },
           {
             ellipsis: true,
@@ -111,22 +111,52 @@ function ClearingDetailModal({
             ellipsis: true,
             title: t("clearing.price"),
             dataIndex: "total_price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,
             title: t("clearing.supply_price"),
             dataIndex: "supply_price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,
             title: t("clearing.vat_price"),
             dataIndex: "vat_price",
+            render: (value) => <span>{value.toLocaleString()}</span>,
           },
           {
             ellipsis: true,
             title: t("clearing.is_vat_included"),
             dataIndex: "is_vat_included",
             render: (value) => <>{!!value ? "O" : ""}</>,
+          },
+          {
+            ellipsis: true,
+            title: t("clearing.detail.type.default"),
+            render: (_v, record) => {
+              const dict: any = {
+                warehousing: t("clearing.detail.type.warehousing"),
+                adjustment: {
+                  "": t("clearing.detail.type.adjustment todayreserve"),
+                  subtract: t("clearing.detail.type.adjustment subtract"),
+                  refund: t("clearing.detail.type.adjustment refund"),
+                },
+              };
+              if (record.type === "warehousing") {
+                return <>{dict[record.type]}</>;
+              } else if (record.type === "adjustment") {
+                return (
+                  <>
+                    {
+                      dict[record.type][
+                        record.adjustment_process_type ? record.adjustment_process_type : ""
+                      ]
+                    }
+                  </>
+                );
+              }
+            },
           },
         ]}
       />
