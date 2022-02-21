@@ -63,7 +63,7 @@ function SearchFilter({ type, onSearch }: Props) {
       value: "name",
     },
     {
-      name: t("product.vendor name"),
+      name: t("product.vendor_product_name"),
       value: "vendor_product_name",
     },
     {

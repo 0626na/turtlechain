@@ -10,18 +10,21 @@ import { useEffect, useMemo, useState } from "react";
 import { storeIdState } from "store/storeIdState";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import moment from "moment";
+import { AxiosError } from "axios";
+import { message, notification } from "antd";
 
 const AdjustmentListPage = function () {
   const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("adjustment list")}`;
   const [visibleDetailModal, setVisibleDetailModal] = useState(false);
   const store = useRecoilValue(storeState);
+  const [currentPage, setCurrentPage] = useState(1);
   const [adjItemList, setAdjItemList] = useState<Array<AdjustmentItem>>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetAdjustmentList>({
     rt_store_id: store.id ?? -1,
-    is_cleared:0,
+    is_cleared:2,
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page:1,
@@ -39,6 +42,28 @@ const AdjustmentListPage = function () {
     rt_store_id: -1,
     created_time: "",
     is_confirmed: 0,
+  });
+
+
+  // 입고장 삭제 요청
+  const deleteAdjQuery = useMutation(["deleteAdj"], adjustmentAPI.updateAdjustment, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      if (currentPage === 1) {
+        getAdjustmentListQuery.refetch();
+      } else {
+        setCurrentPage(1);
+        setSearchQuery({ ...searchQuery  });
+        // setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
+      }
+
+      notification.open({
+        type: "success",
+        message: t("message.success delete warehousing"),
+      });
+    },
   });
 
 

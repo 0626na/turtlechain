@@ -72,7 +72,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
     );
 
     const selectProduct = useCallback(
-      (product_id, product_name, vendor_product_name, product_code, product_option, product_price) => {
+      (product_id, product_name,  product_code, vendor_product_name,product_option, product_price) => {
         form.setFieldsValue({
           product_id,
           product_name,
@@ -137,6 +137,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
 
       <TurtleInput // 거래처 주소 Input
         name="vendor_address"
+        disabled={true}
         label={t("vendor.address")}/>
 
     <TurtleSearchInput
@@ -157,18 +158,22 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
               />
       
       <TurtleInput // 거래처상품명 Input
+        disabled={true}
         name="vendor_product_name"
         label={t("product.vendor_product_name")}/> 
       
       <TurtleInput // 상품 바코드 Input
+        disabled={true}
         name="product_code"
         label={t("product.code")}/> 
       
       <TurtleInput // 옵션Input
+        disabled={true}
         name="product_option"
         label={t("product.option")}/> 
         
       <TurtleInput // price Input
+        disabled={true}
         name="product_price"
         label={t("product.price")}/> 
       

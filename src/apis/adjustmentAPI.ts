@@ -1,4 +1,5 @@
 import { v2Axios } from "./index";
+import { ResponseUpdate } from "./retailerStoreAPI";
 import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
 
@@ -40,7 +41,7 @@ export interface AdjustmentItem {
   price: number;
   is_cleared: boolean ;
   created_date:"";
-  type: "reserve" | "takeback" | "exchange" | "balance" ;
+  type: "reserve" | "takeback" | "exchange" | "refund" ;
   vendor_info: VendorInfo | undefined;
   product_info:ProductInfo | undefined;
   memo: string | undefined;
@@ -154,9 +155,25 @@ const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForC
   return response.data;
 };
 
+// 입고장 수정하기 요청 타입
+export interface RequestUpdateAdj extends AdjustmentItem{
+  item_id: number;
+}
+
+export interface ResponseUpdateAdj{
+  data: AdjustmentItem;
+}
+
+const updateAdjustment = async function (data: RequestUpdateAdj){
+  const url = `adjustment/item/${data.item_id}`;
+  const response = await v2Axios.put<ResponseUpdateAdj>(url, data);
+  return response.data.data;
+};
+
 const adjustmentAPI = {
   getAdjustmentList,
   createAdjustmentItem,
+  updateAdjustment,
   getAdjustmentForClearing
 };
 

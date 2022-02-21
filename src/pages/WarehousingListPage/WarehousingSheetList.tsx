@@ -44,6 +44,12 @@ const WarehousingSheetList = function ({
     page:1
   });
 
+  let adjTypes = {
+    "exchange" : "교환",
+    "reserve" : "미송",
+    "balance" : "잔",
+    "takeback" : "반품"
+  }
   useEffect(() => {
 
   },[store]); 

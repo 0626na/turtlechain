@@ -38,11 +38,12 @@ const AdjustmentSearchFilter = function ({ searchQuery, setSearchQuery }: Props)
         <Select 
         style={{ width: 100 }}
         value={searchQuery.is_cleared}
+        defaultValue={2}
         onChange={(is_cleared)=>{
           setSearchQuery({...searchQuery, is_cleared})
         } }
         >
-          <Select.Option value="">{t("all")}</Select.Option>
+          <Select.Option value={2}>{t("all")}</Select.Option>
           <Select.Option value={0}>{t("waiting")}</Select.Option>
           <Select.Option value={1}>{t("confirmed")}</Select.Option>
         </Select>

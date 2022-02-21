@@ -24,6 +24,13 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
       () => adjList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
       [adjList]
     );
+
+    let adjTypes = {
+      "exchange" : "교환",
+      "reserve" : "미송",
+      "refund" : "환불",
+      "takeback" : "반품"
+    }
     
   return (
     <Table
@@ -41,14 +48,11 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
           dataIndex: "vendor_address",
         },
         {
-          title: t("account info"),
-          dataIndex: "account_info",
-        },
-        {
           width: 100,
           align: "center",
           title: t("adjustment type"),
           dataIndex: "type",
+          render: (_, record) => adjTypes[record.type]
         },
         {
           title: t("supply price"),

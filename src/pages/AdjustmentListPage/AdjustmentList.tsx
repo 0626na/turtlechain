@@ -32,7 +32,7 @@ const AdjustmentList = function ({
   let adjTypes = {
     "exchange" : "교환",
     "reserve" : "미송",
-    "balance" : "잔",
+    "refund" : "환불",
     "takeback" : "반품"
   }
 
@@ -112,7 +112,11 @@ const AdjustmentList = function ({
                     <Popconfirm
                       title={t("description.really delete")}
                       okText={t("yes")}
-                      cancelText={t("no")}
+                      cancelText={t("no")
+                    }
+                    onConfirm={() => {
+                      onDelete(record);
+                    }}
                     >
                       <Button
                         icon={<DeleteFilled />}
