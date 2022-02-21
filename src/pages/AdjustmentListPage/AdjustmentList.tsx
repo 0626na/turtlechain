@@ -5,6 +5,7 @@ import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
 import { AdjustmentItem } from "apis/adjustmentAPI";
+import { getLocalDateTimeString } from "utils/general";
 
 interface Props {
   isLoading: boolean;
@@ -29,6 +30,7 @@ const AdjustmentList = function ({
 }: Props) {
   const { t } = useTranslation();
 
+  
   let adjTypes = {
     "exchange" : "교환",
     "reserve" : "미송",
@@ -61,7 +63,8 @@ const AdjustmentList = function ({
           title: t("adjustment date"),
           dataIndex: "created_time",
           render: (_, record) =>
-            moment(record.created_date).format("YYYY-MM-DD"),
+            // moment(record.created_date).format("YYYY-MM-DD"),
+            getLocalDateTimeString(record.created_date),
         },
         {
           title: t("vendor.name"),
