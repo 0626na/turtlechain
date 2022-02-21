@@ -5,15 +5,7 @@ import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import retailerStoreAPI from "apis/retailerStoreAPI";
 // antd
-import {
-  Modal,
-  Form,
-  Input,
-  message,
-  notification,
-  Radio,
-  Typography,
-} from "antd";
+import { Modal, Form, Input, message, notification, Radio, Typography, Select } from "antd";
 
 interface Props {
   visible: boolean;
@@ -22,34 +14,23 @@ interface Props {
   onSuccess?: () => void;
 }
 
-const UpdateStoreModal = function ({
-  visible,
-  store_id,
-  onClose,
-  onSuccess,
-}: Props) {
+const UpdateStoreModal = function ({ visible, store_id, onClose, onSuccess }: Props) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
 
-  const requiredRules = [
-    { required: true, message: t("description.required item") },
-  ];
+  const requiredRules = [{ required: true, message: t("description.required item") }];
 
   // 쇼핑몰 정보 요청
-  const { data: storeData } = useQuery(
-    ["getStore"],
-    () => retailerStoreAPI.getStore(store_id),
-    {
-      enabled: visible && store_id ? true : false,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
-        form.setFieldsValue(data.data);
-      },
-    }
-  );
+  const { data: storeData } = useQuery(["getStore"], () => retailerStoreAPI.getStore(store_id), {
+    enabled: visible && store_id ? true : false,
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: (data) => {
+      form.setFieldsValue(data.data);
+    },
+  });
 
   // 수정하기 요청
   const updateeQuery = useMutation(["updateeQuery"], retailerStoreAPI.update, {
@@ -86,10 +67,10 @@ const UpdateStoreModal = function ({
     <Modal
       closable={false}
       maskClosable={false}
-      title={t("update mall")}
+      title={t("store.update")}
       visible={visible}
       cancelText={t("close")}
-      okText={t("update mall")}
+      okText={t("store.update")}
       onCancel={handleClose}
       onOk={handleSubmit}
       confirmLoading={updateeQuery.isLoading}
@@ -110,7 +91,7 @@ const UpdateStoreModal = function ({
         </Form.Item>
         <Form.Item //
           name="name"
-          label={t("mall name")}
+          label={t("store.name")}
           rules={requiredRules}
         >
           <Input />
@@ -123,27 +104,36 @@ const UpdateStoreModal = function ({
         </Form.Item>
         <Form.Item //
           name="mall_url"
-          label={t("mall url")}
+          label={t("store.url")}
           rules={requiredRules}
         >
           <Input />
         </Form.Item>
         <Form.Item //
           name="phone"
-          label={t("mall phone")}
+          label={t("store.phone")}
           rules={requiredRules}
         >
           <Input />
         </Form.Item>
+        <Form.Item //
+          name="order_formats"
+          label="재고관리 프로그램"
+          rules={requiredRules}
+        >
+          <Select placeholder="제고관리 프로그램을 선택해주세요">
+            <Select.Option value={1}>셀메이트</Select.Option>
+            <Select.Option value={2}>이지어드민</Select.Option>
+            <Select.Option value={3}>터틀체인</Select.Option>
+          </Select>
+        </Form.Item>
         <Form.Item>
           <Typography.Text>
-            {t("created time")} : {storeData?.data.created_time}(
-            {storeData?.data.created_by})
+            {t("created time")} : {storeData?.data.created_time}({storeData?.data.created_by})
           </Typography.Text>
           <br />
           <Typography.Text>
-            {t("updated time")} : {storeData?.data.updated_time}(
-            {storeData?.data.updated_by})
+            {t("updated time")} : {storeData?.data.updated_time}({storeData?.data.updated_by})
           </Typography.Text>
         </Form.Item>
       </Form>

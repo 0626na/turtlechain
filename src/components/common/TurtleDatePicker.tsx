@@ -1,15 +1,16 @@
-import { DatePicker, Space, Typography } from "antd";
+import { DatePicker, Typography } from "antd";
+import { Moment } from "moment";
 
 interface Props {
-  label: string;
+  label?: string;
 }
 
 function TurtleDatePicker({ label }: Props) {
   return (
-    <Space size="large">
+    <>
       <Typography.Text>{label}</Typography.Text>
       <DatePicker.RangePicker allowClear={false} />
-    </Space>
+    </>
   );
 }
 

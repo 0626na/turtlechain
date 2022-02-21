@@ -7,6 +7,7 @@ export interface Store {
   phone: string;
   alimtalk_name: string;
   is_closed: boolean;
+  order_formats: number;
   created_time: Date;
   updated_time: Date;
   created_by: string;
@@ -58,6 +59,7 @@ export interface RequestUpdate {
   mall_url: string;
   phone: string;
   alimtalk_name: string;
+  order_formats: number;
 }
 
 export interface ResponseUpdate {
@@ -76,6 +78,7 @@ export interface RequestCreate {
   mall_url: string;
   phone: string;
   alimtalk_name: string;
+  order_formats: number;
 }
 
 export interface ResponseCreate {

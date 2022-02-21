@@ -157,6 +157,12 @@ const MyStoreTable = function () {
             dataIndex: "phone",
           },
           {
+            title: "재고관리 프로그램",
+            dataIndex: "order_formats",
+            render: (order_formats) =>
+              order_formats === 1 ? "셀메이트" : order_formats === 2 ? "이지어드민" : "터틀체인",
+          },
+          {
             title: "",
             dataIndex: "action",
             render: (text, record) => (

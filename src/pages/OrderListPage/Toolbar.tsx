@@ -1,4 +1,4 @@
-import { Col, Row, Space } from "antd";
+import { Col, Row, Space, Typography } from "antd";
 import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
 import TurtleDatePicker from "components/common/TurtleDatePicker";
@@ -18,6 +18,7 @@ function Toolbar() {
       <Col>
         <Space size="large">
           <StoreSelect />
+          <Typography.Text style={{ fontSize: "16px" }}>{t("order.date")}</Typography.Text>
           <TurtleDatePicker label={t("order.date")} />
         </Space>
       </Col>
