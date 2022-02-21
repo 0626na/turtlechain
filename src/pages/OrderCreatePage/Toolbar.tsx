@@ -23,7 +23,7 @@ function Toolbar() {
       <Col>
         <Space>
           <TurtleButtonSub icon="file">{t("button.upload order sheet")}</TurtleButtonSub>
-          <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub>
+          {/* <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub> */}
         </Space>
       </Col>
     </Row>
