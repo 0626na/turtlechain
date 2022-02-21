@@ -2,28 +2,31 @@ import moment from "moment";
 import { Table, Button, Popconfirm, Row, message } from "antd";
 import SimplePagination from "components/SimplePagination";
 import TurtleText from "components/common/TurtleText";
-import orderAPI, { RequestGetOrderList } from "apis/orderAPI";
+import orderAPI, { OrderSheet, RequestGetList } from "apis/orderAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
+import { useCallback, useEffect, useState } from "react";
+import OrderSheetModal from "./OrderSheetModal";
 
-const OrderSheetList = function () {
+interface Props {
+  searchQuery: RequestGetList;
+  setSearchQuery: React.Dispatch<React.SetStateAction<RequestGetList>>;
+}
+
+const OrderSheetList = function ({ searchQuery, setSearchQuery }: Props) {
   const store = useRecoilValue(storeState);
-
-  const [searchQuery, setSearchQuery] = useState<RequestGetOrderList>({
-    rt_store_id: 0,
-    start_date: moment(new Date(2022, 0, 1)).format("YYYY-MM-DD"),
-    end_date: moment(new Date(2022, 2, 15)).format("YYYY-MM-DD"),
-  });
+  const [sheetId, setSheetId] = useState<number>();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const getOrderListQuery = useQuery(
     ["getOrderList", searchQuery],
-    () => orderAPI.getOrderList({ ...searchQuery, rt_store_id: store.id ?? 0 }),
+    () => orderAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
+      enabled: !!store.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -31,38 +34,54 @@ const OrderSheetList = function () {
     },
   );
 
+  useEffect(() => {
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
+  }, [store.id]);
+
+  const openModal = useCallback((id) => {
+    setSheetId(id);
+    setModalVisible(true);
+  }, []);
+
   return (
     <Row>
-      <TurtleText>{t("order.sheet.list")}</TurtleText>
+      <TurtleText>
+        {t("order.sheet.list")}({getOrderListQuery.data?.data.total_count})
+      </TurtleText>
       <Table
         size="small"
-        pagination={false}
-        //loading={isLoading}
-        //dataSource={list}
-        //rowKey={(record) => fakeKey++}
+        loading={getOrderListQuery.isLoading}
+        dataSource={getOrderListQuery.data?.data.order_sheet_list}
+        rowKey={(record) => record.id}
+        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
         columns={[
           {
             ellipsis: true,
+            width: "8%",
             title: t("order.status"),
-            dataIndex: "order_status",
+            render: (_, record) =>
+              record.status === "Y" ? "처리" : record.status === "N" ? "미처리" : "취소",
           },
           {
             ellipsis: true,
+            width: "8%",
             title: t("order.time"),
-            render: (_, record) => moment(record.order_time).format("YYYY.MM.DD"),
+            render: (_, record) => moment(record.created_date).format("YYYY.MM.DD"),
           },
           {
             ellipsis: true,
             title: t("order.content"),
-            dataIndex: "order_content",
+            render: (_, record) =>
+              `주문${record.order_count} / 미송${record.reserve_count} / 반품${record.takeback_count} / 교환${record.exchange_count} / 샘플${record.sample_case_count} / 픽업${record.pickup_case_count} / 기타${record.extra_count}`,
           },
           {
             ellipsis: true,
             title: t("order.sheet.status"),
-            dataIndex: "order_sheet_status",
+            render: (_, record) => `알림톡${record.kakao} / SMS${record.sms} / 실패${record.fail}`,
           },
           {
             ellipsis: true,
+            width: "8%",
             title: t("order.sheet.resend"),
             render: (_, record) => {
               return (
@@ -72,27 +91,35 @@ const OrderSheetList = function () {
                   cancelText={t("no")}
                   onConfirm={() => {}}
                 >
-                  <TurtleButtonSub size="small">{t("button.resend")}</TurtleButtonSub>
+                  <TurtleButtonSub size="small" disabled={true}>
+                    {t("button.resend")}
+                  </TurtleButtonSub>
                 </Popconfirm>
               );
             },
           },
           {
             ellipsis: true,
+            width: "8%",
             title: t("view details"),
-            dataIndex: "action",
             render: (_, record) => (
-              <TurtleButtonSub size="small" color="green">
+              <TurtleButtonSub
+                size="small"
+                color="grey"
+                onClick={() => {
+                  openModal(record.id);
+                }}
+              >
                 {t("button.details")}
               </TurtleButtonSub>
             ),
           },
         ]}
-        footer={() => (
-          <Row justify="center">
-            <SimplePagination />
-          </Row>
-        )}
+      />
+      <OrderSheetModal
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        sheetId={sheetId}
       />
     </Row>
   );
