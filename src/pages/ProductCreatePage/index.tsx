@@ -1,6 +1,7 @@
 import PageHeader from "components/PageHeader";
 import { t } from "i18next";
 import { Helmet } from "react-helmet";
+import CreateProductForm from "./CreateProductForm";
 import Toolbar from "./Toolbar";
 
 function ProductCreatePage() {
@@ -15,6 +16,7 @@ function ProductCreatePage() {
         breadcrumbList={[t("common.home"), t("product.management"), t("product.create")]}
       />
       <Toolbar />
+      <CreateProductForm />
     </>
   );
 }

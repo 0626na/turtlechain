@@ -1,15 +1,15 @@
 import { v2Axios } from "apis";
 
-interface RequestGetClearingStatus {
+export interface RequestGetClearingStatus {
   start_date: string;
   end_date: string;
 }
 
-interface ResponseGetClearingStatus {
+export interface ResponseGetClearingStatus {
   msg: string;
   data: Array<{
     request_date: string;
-    completed_date: string;
+    complete_date: string;
     rt_store_name: string;
     vendor_total_count: string;
     total_price: number;
@@ -23,11 +23,11 @@ const getClearingStatus = async function (query: RequestGetClearingStatus) {
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<Array<ResponseGetClearingStatus>>(url);
+  const response = await v2Axios.get<ResponseGetClearingStatus>(url);
   return response.data;
 };
 
-interface ResponseGetUnprocessedStatus {
+export interface ResponseGetUnprocessedStatus {
   msg: string;
   data: {
     refunds: {

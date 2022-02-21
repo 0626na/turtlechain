@@ -1,9 +1,10 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
-import { Card, Col, Row, Space, Table } from "antd";
+import { Card, Col, Row, Select, Space, Table } from "antd";
 import PageHeader from "components/PageHeader";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { mainAPI } from "apis";
+import ClearingStatusCard from "./ClearingStatusCard";
 
 const HomePage = function () {
   const title = `${t("turtlechain")} - ${t("common.home")}`;
@@ -13,10 +14,7 @@ const HomePage = function () {
     height: 250,
   };
 
-  const getUnprocessedStatusQuery = useQuery(
-    "getUnprocessedStatusQuery",
-    mainAPI.getUnprocessedStatus,
-  );
+  const getUnprocessedStatusQuery = useQuery("getUnprocessedStatus", mainAPI.getUnprocessedStatus);
 
   return (
     <>
@@ -27,39 +25,15 @@ const HomePage = function () {
         info={t("description.check home")}
       />
       <Row>
-        <Card title={"정산 처리 현황"} style={{ ...cardStyle, height: "100%" }}>
-          <Table
-            size="small"
-            //loading={}
-            //dataSource={}
-            //rowKey={}
-            //pagination={true}
-            columns={[
-              {
-                ellipsis: true,
-                title: "정산 요청 날짜",
-              },
-              {
-                ellipsis: true,
-                title: "총 거래처 수",
-              },
-              {
-                ellipsis: true,
-                title: "정산 총 금액",
-              },
-              {
-                ellipsis: true,
-                title: "정산 처리 상태",
-              },
-            ]}
-          />
-        </Card>
+        <ClearingStatusCard />
       </Row>
       <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 환불 현황"} style={cardStyle}>
-            <Row justify="center">{getUnprocessedStatusQuery.data?.data.refunds.counts}</Row>
-            <Row justify="center">{getUnprocessedStatusQuery.data?.data.refunds.total_price}</Row>
+            <Row justify="center">{getUnprocessedStatusQuery.data?.data.refunds.counts} 건</Row>
+            <Row justify="center">
+              {getUnprocessedStatusQuery.data?.data.refunds.total_price} 원
+            </Row>
           </Card>
         </Col>
         <Col span={18}>
@@ -71,9 +45,9 @@ const HomePage = function () {
       <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 매입조정 현황"} style={cardStyle}>
-            <Row justify="center">{getUnprocessedStatusQuery.data?.data.adjustments.counts}</Row>
+            <Row justify="center">{getUnprocessedStatusQuery.data?.data.adjustments.counts} 건</Row>
             <Row justify="center">
-              {getUnprocessedStatusQuery.data?.data.adjustments.total_price}
+              {getUnprocessedStatusQuery.data?.data.adjustments.total_price} 원
             </Row>
           </Card>
         </Col>
