@@ -100,9 +100,7 @@ function ClearingDetailModal({
           {
             ellipsis: true,
             title: t("clearing.vendor.address"),
-            dataIndex: "total_price",
-            // TODO : 주소가 필요합니다.
-            render: (value) => <span>{"need address"}</span>,
+            dataIndex: "vendor_address",
           },
           {
             ellipsis: true,

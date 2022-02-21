@@ -8,6 +8,7 @@ import { WarehousingSheet, WarehousingItemForClearing } from "apis/warehousingAP
 
 export interface WarehousingItemForClearingExtended extends WarehousingItemForClearing {
   type: "warehousing";
+  vendor_address: string;
 }
 
 /*
@@ -115,6 +116,7 @@ function WarehousingItemListModal({
           ({
             ...item,
             type: "warehousing",
+            vendor_address: item.vendor_info.vendor_address,
           } as WarehousingItemForClearingExtended),
       );
       // 정산 장바구니에 정보를 넣는다
