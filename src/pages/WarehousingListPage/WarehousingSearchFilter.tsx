@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { RequestGetSheet } from "apis/warehousingAPI";
 import { Form, DatePicker, Select } from "antd";
 import StoreSelect from "components/StoreSelect";
+import { getLocalDateTimeString } from "utils/general";
 
 interface Props {
   searchQuery: RequestGetSheet;
@@ -11,6 +12,8 @@ interface Props {
 
 const WarehousingSearchFilter = function ({ searchQuery, setSearchQuery }: Props) {
   const { t } = useTranslation();
+
+  
   return (
     <Form layout="inline">
       <Form.Item label={t("warehousing.date")}>

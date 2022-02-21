@@ -162,12 +162,12 @@ function CreateBulkWhsModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: t("product barcode"),
+                title: t("product.code"),
                 render: (_, sheetItem) => sheetItem.product_code,
               },
               {
                 ellipsis: true,
-                title: t("product name"),
+                title: t("product.name"),
                 render: (_, sheetItem) => sheetItem.product_name,
               },
               {
