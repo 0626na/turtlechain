@@ -147,6 +147,7 @@ const OrderCreateForm = function ({ addItem }: Props) {
             <TurtleInputNumber // 상품 발주수량 Input
               name="count"
               label={t("product.count")}
+              min={1}
             />
           </Col>
           <Col span={10}>

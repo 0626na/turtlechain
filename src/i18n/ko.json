@@ -161,7 +161,6 @@
     "btn_upload_whs_sheet": "입고장 업로드",
     "btn_prepopulate_whs": "주문내역 불러오기",
     "price": "입고 금액 (공급가)"
-
   },
   "adjustment": {
     "": "매입조정",
@@ -179,7 +178,7 @@
       "subtract": "차감",
       "refund": "환불"
     },
-    "count" : "매입조정 수량",
+    "count": "매입조정 수량",
     "type": {
       "default": "매입조정 종류",
       "reserve": "미송",
@@ -260,7 +259,8 @@
     "option": "옵션",
     "price": "공급가",
     "count": "발주수량",
-    "vendor_product_name": "거래처 상품명"
+    "vendor_product_name": "거래처 상품명",
+    "basic info": "상품 기본 정보"
   },
   "vendor": {
     "": "거래처",
