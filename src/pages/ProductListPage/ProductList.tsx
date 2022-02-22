@@ -1,5 +1,5 @@
 import { message, Pagination, Row, Table } from "antd";
-import productAPI, { RequestGetProductList } from "apis/productAPI";
+import productAPI, { Product, RequestGetProductList } from "apis/productAPI";
 import { AxiosError } from "axios";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleText from "components/common/TurtleText";
@@ -10,9 +10,12 @@ import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
+import UpdateProductModal from "./UpdateProductModal";
 
 function ProductList() {
   const store = useRecoilValue(storeState);
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [selectedRow, selectRow] = useState<Product>();
 
   const [searchQuery, setSearchQuery] = useState<RequestGetProductList>({
     rt_store_id: -1,
@@ -76,7 +79,7 @@ function ProductList() {
           expandIcon: ({ expanded, onExpand, record }) => {
             return (
               <FileTextOutlined
-                style={record.memo ? {} : { opacity: "0.4" }}
+                style={record.memo ? {} : { opacity: "0.4", cursor: "auto" }}
                 onClick={(e) => {
                   record.memo && onExpand(record, e);
                 }}
@@ -143,7 +146,10 @@ function ProductList() {
               <TurtleButtonSub //
                 size="small"
                 color="green"
-                onClick={() => {}}
+                onClick={() => {
+                  selectRow(record);
+                  setUpdateModalVisible(true);
+                }}
               >
                 수정하기
               </TurtleButtonSub>
@@ -161,6 +167,15 @@ function ProductList() {
             />
           </Row>
         )}
+      />
+      {/* 상품 수정 모달 */}
+      <UpdateProductModal
+        visible={updateModalVisible}
+        closeModal={() => {
+          getProductListQuery.refetch();
+          setUpdateModalVisible(false);
+        }}
+        selectedRow={selectedRow}
       />
     </>
   );

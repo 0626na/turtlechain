@@ -93,6 +93,7 @@ const updateProduct = async function (data: RequestUpdateProduct) {
 const productAPI = {
   getProductList,
   createProduct,
+  updateProduct,
 };
 
 export default productAPI;

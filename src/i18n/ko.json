@@ -260,7 +260,8 @@
     "price": "공급가",
     "count": "발주수량",
     "vendor_product_name": "거래처 상품명",
-    "basic info": "상품 기본 정보"
+    "basic info": "상품 기본 정보",
+    "update info": "상품 정보 수정하기"
   },
   "vendor": {
     "": "거래처",
