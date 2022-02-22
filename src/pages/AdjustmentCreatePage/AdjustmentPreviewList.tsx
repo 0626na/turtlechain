@@ -16,7 +16,7 @@ interface Props {
   onSubmit: () => void;
 }
 
-const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit}: Props) {
+const AdjustmentListPreview = function ({isLoading, adjList, setAdjList, onSubmit}: Props) {
   const { t } = useTranslation();
 
     // 매입조정 합계
@@ -48,6 +48,14 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
           dataIndex: "vendor_address",
         },
         {
+          title: t("product.name"),
+          dataIndex: "product_name",
+        },
+        {
+          title: t("product.vendor_product_name"),
+          dataIndex: "vendor_product_name",
+        },
+        {
           width: 100,
           align: "center",
           title: t("adjustment type"),
@@ -70,6 +78,13 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
               size="small"
               shape="round"
               type="primary"
+              onClick={() => {
+                console.log(record)
+                const newList = adjList.filter(
+                  (item) => item.product_id!== record.product_id
+                );
+                setAdjList(newList);
+              }}
             >
               {t("delete")}
             </Button>
@@ -111,4 +126,4 @@ const Footer = styled.div`
   align-items: center;
 `;
 
-export default WarehousingSheetList;
+export default AdjustmentListPreview;
