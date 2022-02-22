@@ -125,14 +125,19 @@ const getItem = async function (query: RequestGetItem) {
 export interface RequestCreateSheet {
   created_date: string;
   rt_store_id: number;
-  status: string;
-  type: string;
+  status: "sent" | "reserved" | "cancel";
+  type: "new" | "add" | "modify";
 }
 
 export interface RequestCreateItem {
-  sheet_id: number;
+  sheet_id?: number;
   rt_store_id: number;
   item_list: Array<CreateOrderItem>;
+}
+
+export interface ResponseCreateSheet {
+  msg: string;
+  data: number;
 }
 
 export interface ResponseCreateItem {
@@ -140,17 +145,22 @@ export interface ResponseCreateItem {
   data: null;
 }
 
-const createItem = async function (data: RequestCreateItem) {
-  const url = `order/item`;
-  const response = await v2Axios.post<ResponseCreateItem>(url, data);
-  return response.data;
+const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
+  let url = `order/sheet`;
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
+  url = `order/item`;
+  const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
+    ...data.item,
+    sheet_id: sheetResponse.data.data,
+  });
+  return itemResponse.data;
 };
 
 const orderAPI = {
   getList,
   get,
   getItem,
-  createItem,
+  create,
 };
 
 export default orderAPI;

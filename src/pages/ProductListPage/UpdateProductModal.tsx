@@ -1,4 +1,4 @@
-import { Form, Input, message, Modal, notification, Row } from "antd";
+import { Form, Input, message, Modal, notification, Popconfirm, Row } from "antd";
 import { productAPI } from "apis";
 import { Product } from "apis/productAPI";
 import { AxiosError } from "axios";
@@ -114,13 +114,19 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           disabled={true}
         />
         <Row justify="end">
-          <TurtleButton
-            type="primary"
-            loading={updateProductQuery.isLoading}
-            onClick={onClickUpdate}
+          <Popconfirm
+            title={t("description.really update")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={onClickUpdate}
           >
-            {t("button.update")}
-          </TurtleButton>
+            <TurtleButton // 수정하기 Button
+              type="primary"
+              loading={updateProductQuery.isLoading}
+            >
+              {t("button.update")}
+            </TurtleButton>
+          </Popconfirm>
         </Row>
       </Form>
     </Modal>

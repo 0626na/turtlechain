@@ -1,4 +1,4 @@
-import { Form, Input, message, Modal, notification, Row } from "antd";
+import { Form, Input, message, Modal, notification, Popconfirm, Row } from "antd";
 import AddressSelect from "components/AddressSelect";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
@@ -22,10 +22,10 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
 
   const [selectedAddress, selectAddress] = useState<StoreAddress>({
-    building: "",
-    floor: "",
-    col: "",
-    loc: "",
+    building: undefined,
+    floor: undefined,
+    col: undefined,
+    loc: undefined,
   });
 
   const [accountList, setAccountList] = useState<Array<StoreAccountView>>([
@@ -41,6 +41,10 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
         type: "success",
         message: "성공적으로 등록하였습니다.",
       });
+      setAccountList([{ bank: "", account_number: "", account_holder: "", is_main: true }]);
+      selectAddress({ building: "", floor: "", col: "", loc: "" });
+      form.resetFields();
+      closeModal();
     },
   });
 
@@ -65,12 +69,8 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
         floor: selectedAddress.floor,
         col: selectedAddress.col,
         loc: selectedAddress.loc,
-        accounts: accountList,
+        banks: accountList,
       });
-      setAccountList([{ bank: "", account_number: "", account_holder: "", is_main: true }]);
-      selectAddress({ building: "", floor: "", col: "", loc: "" });
-      form.resetFields();
-      closeModal();
     });
   };
 
@@ -143,9 +143,19 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
           placeholder={t("placeholder.biz owner")}
           required={false}
         />
-        <Row justify="center">
+        <Row justify="end">
           <Form.Item>
-            <TurtleButton onClick={onClickCreate}>{t("button.request create")}</TurtleButton>
+            <Popconfirm
+              title={t("description.really register")}
+              okText={t("yes")}
+              cancelText={t("no")}
+              onConfirm={onClickCreate}
+            >
+              <TurtleButton // 등록 요청하기 Button
+              >
+                {t("button.request create")}
+              </TurtleButton>
+            </Popconfirm>
           </Form.Item>
         </Row>
       </Form>

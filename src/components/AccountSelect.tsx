@@ -83,7 +83,13 @@ function AccountSelect({ accountList, setAccountList }: Props) {
         <Form.Item
           label={index === 0 ? t("vendor.account") : ""}
           required={true}
-          wrapperCol={{ span: 24, offset: 1 }}
+          rules={[
+            {
+              required: true,
+              message: "계좌정보 입력해 주세요",
+            },
+          ]}
+          wrapperCol={{ span: 13, offset: 1 }}
           key={index}
           style={{ marginBottom: "0" }}
         >
@@ -101,7 +107,7 @@ function AccountSelect({ accountList, setAccountList }: Props) {
               <Select
                 value={account.bank}
                 placeholder="은행명"
-                style={{ width: "15%" }}
+                style={{ width: "25%" }}
                 onChange={(value) => {
                   setBank(value, index);
                 }}
@@ -127,7 +133,7 @@ function AccountSelect({ accountList, setAccountList }: Props) {
               <Input
                 value={account.account_number}
                 placeholder="계좌번호"
-                style={{ width: "20%" }}
+                style={{ width: "32%" }}
                 onChange={(value) => {
                   setAccountNumber(value, index);
                 }}
@@ -156,7 +162,7 @@ function AccountSelect({ accountList, setAccountList }: Props) {
             <Form.Item style={{ marginLeft: "10px" }}>
               <Switch //
                 checkedChildren="주계좌"
-                style={{ width: "64px" }}
+                style={{ width: "66px" }}
                 checked={account.is_main}
                 onClick={() => {
                   setMainAccount(index);
@@ -175,8 +181,13 @@ function AccountSelect({ accountList, setAccountList }: Props) {
         </Form.Item>
       ))}
 
-      <Form.Item wrapperCol={{ span: 14, offset: 1 }}>
-        <Button type="dashed" onClick={addAccount} style={{ width: "90%" }} icon={<PlusOutlined />}>
+      <Form.Item wrapperCol={{ span: 10, offset: 1 }}>
+        <Button
+          type="dashed"
+          onClick={addAccount}
+          style={{ width: "100%" }}
+          icon={<PlusOutlined />}
+        >
           {t("button.add account")}
         </Button>
       </Form.Item>

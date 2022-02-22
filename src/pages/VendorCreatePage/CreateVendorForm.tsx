@@ -1,4 +1,4 @@
-import { Form, Input, message, notification, Row, Space, Switch } from "antd";
+import { Form, Input, message, notification, Popconfirm, Row, Space, Switch } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { vendorAPI } from "apis";
 import { Wholesale } from "apis/vendorAPI";
@@ -63,6 +63,23 @@ function CreateVendorForm() {
         type: "success",
         message: "성공적으로 등록하였습니다.",
       });
+      form.resetFields();
+      selectVendor({
+        id: -1,
+        name: "",
+        phone: "",
+        store_account: [],
+        store_phone: [],
+        company: [],
+        building: "",
+        floor: "",
+        col: "",
+        loc: "",
+        ext: "",
+      });
+      form.setFieldsValue({
+        rt_store_id: store.id,
+      });
     },
   });
 
@@ -120,23 +137,6 @@ function CreateVendorForm() {
     }
     form.validateFields().then(() => {
       createVendorQuery.mutate([{ ...form.getFieldsValue() }]);
-      form.resetFields();
-      selectVendor({
-        id: -1,
-        name: "",
-        phone: "",
-        store_account: [],
-        store_phone: [],
-        company: [],
-        building: "",
-        floor: "",
-        col: "",
-        loc: "",
-        ext: "",
-      });
-      form.setFieldsValue({
-        rt_store_id: store.id,
-      });
     });
   };
 
@@ -245,11 +245,13 @@ function CreateVendorForm() {
         <Form.Item // 거래처 코드 Input
           label={t("vendor.code")}
           required={true}
-          rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
           style={{ marginBottom: 0 }}
         >
           <Space>
-            <Form.Item name="vendor_code" rules={[{ required: true }]}>
+            <Form.Item
+              name="vendor_code"
+              rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
+            >
               <Input />
             </Form.Item>
             <Form.Item>
@@ -310,14 +312,20 @@ function CreateVendorForm() {
               신규 등록 요청하기 {">"}
             </span>
           </TurtleText>
-          <TurtleButton
-            type="primary"
-            disabled={!store.id}
-            loading={createVendorQuery.isLoading}
-            onClick={onClickCreate}
+          <Popconfirm
+            title={t("description.really register")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={onClickCreate}
           >
-            {t("vendor.create")}
-          </TurtleButton>
+            <TurtleButton // 거래처 등록 Button
+              type="primary"
+              disabled={!store.id}
+              loading={createVendorQuery.isLoading}
+            >
+              {t("vendor.create")}
+            </TurtleButton>
+          </Popconfirm>
         </Row>
       </Form>
 

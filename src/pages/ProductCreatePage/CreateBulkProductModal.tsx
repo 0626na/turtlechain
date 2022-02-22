@@ -1,4 +1,15 @@
-import { Button, message, notification, Row, Space, Table, Tabs, Typography, Upload } from "antd";
+import {
+  Button,
+  message,
+  notification,
+  Popconfirm,
+  Row,
+  Space,
+  Table,
+  Tabs,
+  Typography,
+  Upload,
+} from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
@@ -82,11 +93,6 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
   };
 
   const onClickCreate = useCallback(() => {
-    if (!store.id) {
-      message.warning("거래처를 먼저 선택해 주세요");
-      return;
-    }
-
     const resultList: Array<RequestCreateProduct> = [];
     successList?.forEach((product) => {
       resultList.push({
@@ -316,14 +322,20 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
       <Row justify="end" style={{ padding: "1rem 0px" }}>
-        <TurtleButton
-          type="primary"
-          //disabled={}
-          loading={createProductQuery.isLoading}
-          onClick={onClickCreate}
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={onClickCreate}
         >
-          {t("product.create")}
-        </TurtleButton>
+          <TurtleButton
+            type="primary"
+            disabled={fileList.length === 0}
+            loading={createProductQuery.isLoading}
+          >
+            {t("product.create")}
+          </TurtleButton>
+        </Popconfirm>
       </Row>
     </Modal>
   );

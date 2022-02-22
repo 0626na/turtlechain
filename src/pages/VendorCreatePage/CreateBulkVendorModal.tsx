@@ -5,6 +5,7 @@ import {
   message,
   Modal,
   notification,
+  Popconfirm,
   Popover,
   Radio,
   Row,
@@ -15,7 +16,6 @@ import {
   Typography,
   Upload,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 import TurtleInfo from "components/common/TurtleInfo";
 import { useMutation } from "react-query";
 import { excelAPI, vendorAPI } from "apis";
@@ -25,14 +25,13 @@ import { MasterVendor, ParseCount, Vendor, VendorShow } from "apis/excelAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleBadge from "components/common/TurtleBadge";
 import { FileTextOutlined } from "@ant-design/icons";
-import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
 import { RequestCreateVendor, VendorAccount } from "apis/vendorAPI";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { RcFile, UploadChangeParam } from "antd/lib/upload";
+import { RcFile } from "antd/lib/upload";
 import TurtleQuestionTooltip from "components/common/TurtleQuestionTooltip";
 
 interface Props {
@@ -923,8 +922,9 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
 
-      <Row justify="space-between" style={{ padding: "1rem 0px" }}>
-        <TurtleText>
+      <Row justify="end" style={{ padding: "1rem 0px" }}>
+        {/**
+         <TurtleText>
           등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}
           <span
             style={{ color: "#033A88", cursor: "pointer", textDecoration: "underline" }}
@@ -934,15 +934,22 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           >
             신규 등록 요청하기 {">"}
           </span>
-        </TurtleText>
-        <TurtleButton
-          type="primary"
-          //disabled={form.getFieldValue("rt_store_id") !== -1}
-          loading={createVendorQuery.isLoading}
-          onClick={onClickCreate}
+        </TurtleText> 
+         */}
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={onClickCreate}
         >
-          {t("vendor.create")}
-        </TurtleButton>
+          <TurtleButton
+            type="primary"
+            disabled={fileList.length === 0}
+            loading={createVendorQuery.isLoading}
+          >
+            {t("vendor.create")}
+          </TurtleButton>
+        </Popconfirm>
       </Row>
     </Modal>
   );

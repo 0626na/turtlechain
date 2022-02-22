@@ -128,14 +128,31 @@ function VendorList() {
     [vendorList, updateVendorQuery],
   );
 
-  const changeMemoActive = useCallback(
+  const setMemoActive = useCallback(
     (record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
           vendor.vendor_code === record.vendor_code
             ? {
                 ...vendor,
-                memo_active: !record.memo_active,
+                memo_active: true,
+              }
+            : vendor,
+        ),
+      );
+    },
+    [vendorList],
+  );
+
+  const setMemoInactive = useCallback(
+    (record: VendorShow) => {
+      setVendorList(
+        vendorList?.map((vendor) =>
+          vendor.vendor_code === record.vendor_code
+            ? {
+                ...vendor,
+                memo_active: false,
+                memo_value: record.memo,
               }
             : vendor,
         ),
@@ -221,9 +238,17 @@ function VendorList() {
                   />
                   <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
                     <Col>
-                      <TurtleButtonSub size="small" color="grey">
-                        취소
-                      </TurtleButtonSub>
+                      {record.memo && (
+                        <TurtleButtonSub
+                          size="small"
+                          color="grey"
+                          onClick={() => {
+                            setMemoInactive(record);
+                          }}
+                        >
+                          취소
+                        </TurtleButtonSub>
+                      )}
                     </Col>
                     <Col>
                       <TurtleButtonSub
@@ -245,7 +270,7 @@ function VendorList() {
                       <TurtleButtonSub
                         size="small"
                         onClick={() => {
-                          changeMemoActive(record);
+                          setMemoActive(record);
                         }}
                       >
                         수정

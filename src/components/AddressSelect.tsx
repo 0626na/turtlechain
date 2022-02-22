@@ -2,9 +2,9 @@ import { Form, FormInstance, Input, message, Select } from "antd";
 import { basicDataAPI } from "apis";
 import { StoreAddress } from "apis/bucketListAPI";
 import { AxiosError } from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Dispatch, SetStateAction } from "react";
 import { useQuery } from "react-query";
+import { t } from "i18next";
 
 interface Props {
   selectedAddress: StoreAddress;
@@ -12,8 +12,6 @@ interface Props {
 }
 
 function AddressSelect({ selectedAddress, selectAddress }: Props) {
-  const { t } = useTranslation();
-
   const getAddressQuery = useQuery("getAddress", basicDataAPI.getAddress, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
@@ -26,15 +24,16 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
     <Form.Item label={t("vendor.address")} required={true}>
       <Input.Group compact>
         <Form.Item //
+          //name="building"
           noStyle
-          rules={[{ required: true, whitespace: true }]}
+          rules={[{ required: true, message: "상가명 입력해주세요" }]}
         >
           <Select // 건물 select
             placeholder={t("placeholder.building")}
-            style={{ width: "32.5%" }}
+            style={{ width: "34%" }}
             value={selectedAddress.building}
             onChange={(value: string) => {
-              selectAddress({ building: value, floor: "", col: "", loc: "" });
+              selectAddress({ building: value, floor: undefined, col: undefined, loc: undefined });
             }}
           >
             {address &&
@@ -47,15 +46,16 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
         </Form.Item>
 
         <Form.Item //
+          //name="floor"
           noStyle
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "층 입력해주세요" }]}
         >
           <Select // 층 select
             placeholder={t("placeholder.floor")}
-            style={{ width: "32%" }}
+            style={{ width: "33%" }}
             value={selectedAddress.floor}
             onChange={(value: string) => {
-              selectAddress({ ...selectedAddress, floor: value, col: "", loc: "" });
+              selectAddress({ ...selectedAddress, floor: value, col: undefined, loc: undefined });
             }}
           >
             {selectedAddress?.building &&
@@ -69,20 +69,21 @@ function AddressSelect({ selectedAddress, selectAddress }: Props) {
           </Select>
         </Form.Item>
         <Form.Item //
+          //name="col"
           noStyle
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "열·호 입력해 주세요" }]}
         >
           <Select // 열,호 select
             placeholder={t("placeholder.col loc")}
-            value={`${selectedAddress.col} ${selectedAddress.loc}`}
-            style={{ width: "32%" }}
+            value={`${selectedAddress.col ?? ""} ${selectedAddress.loc ?? ""}`}
+            style={{ width: "33%" }}
             onChange={(value: string) => {
               const [col, loc] = value.split(" ");
               selectAddress({ ...selectedAddress, col: col, loc: loc });
             }}
           >
             {selectedAddress.floor &&
-              Object.values(address[selectedAddress.building][selectedAddress.floor]).map(
+              Object.values(address[selectedAddress.building ?? ""][selectedAddress.floor]).map(
                 (value: any, index) => {
                   const [col, loc] = value.split(" ");
                   return (

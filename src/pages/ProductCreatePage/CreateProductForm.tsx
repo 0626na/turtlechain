@@ -115,7 +115,7 @@ function CreateProductForm() {
         />
         <Row justify="end">
           <Popconfirm
-            title={"정말 등록하시겠습니까?"}
+            title={t("description.really register")}
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={onClickCreate}

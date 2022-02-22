@@ -11,10 +11,10 @@ export interface StoreAccountView extends StoreAccount {
 }
 
 export interface StoreAddress {
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
+  building?: string;
+  floor?: string;
+  col?: string;
+  loc?: string;
 }
 
 // Request: 거래처 버킷 리스트 생성
