@@ -1,4 +1,4 @@
-import { Form, Input, message, notification, Row } from "antd";
+import { Form, Input, message, notification, Popconfirm, Row } from "antd";
 import { productAPI } from "apis";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
@@ -114,14 +114,20 @@ function CreateProductForm() {
           disabled={true}
         />
         <Row justify="end">
-          <TurtleButton
-            type="primary"
-            disabled={!store.id}
-            loading={createProductQuery.isLoading}
-            onClick={onClickCreate}
+          <Popconfirm
+            title={"정말 등록하시겠습니까?"}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={onClickCreate}
           >
-            {t("product.create")}
-          </TurtleButton>
+            <TurtleButton
+              type="primary"
+              disabled={!store.id}
+              loading={createProductQuery.isLoading}
+            >
+              {t("product.create")}
+            </TurtleButton>
+          </Popconfirm>
         </Row>
       </Form>
       {/* 거래처 검색 모달 */}
