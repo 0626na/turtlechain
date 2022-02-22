@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { getLocalDateTimeString } from "utils/general";
 
 interface Props {
   isLoading: boolean;
@@ -44,6 +45,12 @@ const WarehousingSheetList = function ({
     page:1
   });
 
+  let adjTypes = {
+    "exchange" : "교환",
+    "reserve" : "미송",
+    "balance" : "잔",
+    "takeback" : "반품"
+  }
   useEffect(() => {
 
   },[store]); 
@@ -86,7 +93,8 @@ const WarehousingSheetList = function ({
           title: t("warehousing.date"),
           dataIndex: "created_time",
           render: (_, record) =>
-            moment(record.created_time).format("YYYY-MM-DD"),
+            getLocalDateTimeString(record.created_time)
+            // moment(record.created_time).format("YYYY-MM-DD"),
         },
         {
           align: "right",

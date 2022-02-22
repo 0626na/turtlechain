@@ -26,7 +26,10 @@ export const v2Axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://devel.turtleship.io/v2"
+      // ? "http://localhost:8000/v2"
       : "https://devel.turtleship.io/v2",
+      // : "http://localhost:8000/v2",
+      // : "https://devel.turtleship.io/v2",
   headers: { "Content-Type": "application/json" },
 });
 

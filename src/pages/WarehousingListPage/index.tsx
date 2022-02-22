@@ -21,15 +21,11 @@ const WarehousingListPage = function () {
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
-  // const [storeId, setStoreId] = useState(-1)
   const [visibleDetailModal, setVisibleDetailModal] = useState(false);
-
-
   const [sheetItemList, setSheetItemList] = useState<Array<WarehousingSheetItem>>([]);
 
   type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("vendor_name");
-  
   const [searchText, setSearchText] = useState("");
   const search_options = [
     {
@@ -72,14 +68,10 @@ const WarehousingListPage = function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: store.id ?? -1,
-
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page:1
-    // offset: 100,
-    // last_id: -1,
-    // switch_type: "next",
   });
 
   // 입고장 리스트 요청
@@ -162,7 +154,6 @@ const WarehousingListPage = function () {
       <WarehousingSheetItemModal
         {...selectedRow}
         sheet_id={selectedRow.sheet_id}
-        // filteredList={filteredList}
         visible={visibleDetailModal}
         onClose={() => {
           setVisibleDetailModal(false);

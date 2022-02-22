@@ -30,7 +30,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
 
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
-
+  const [adjType, setAdjType] = useState("reserve")
   const store = useRecoilValue(storeState);
   // 거래처 검색 모달
   const [searchModalVisible, setSearchModalVisible] = useState(false);
@@ -40,6 +40,8 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
   const [adjList, setAdjList] = useState<Array<AdjustmentItem>>();
 
   const onClickCreate = () => {
+    form.setFieldsValue({"rt_store_id":store.id})
+    form.setFieldsValue({"type":adjType})
     form.validateFields().then(() => {
       onAdjItemCreated({
         ...form.getFieldsValue(),
@@ -51,8 +53,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
     { name: "미송", value: "reserve" },
     { name: "교환", value: "exchange" },
     { name: "반품", value: "takeback" },
-    { name: "잔", value: "balance" },
-    { name: "기타", value: "extra" },
+    { name: "환불", value: "refund" },
   ];
   // 거래처 선택후 폼에 채워넣기
   // 거래처 선택후 폼에 채워넣기
@@ -69,6 +70,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         product_option: undefined,
         product_price: undefined,
         product_count: undefined,
+        rt_store_id:store.id,
       });
       setVendorModalVisible(false);
     },
@@ -86,21 +88,20 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
     (
       product_id: number,
       product_name: string,
-      vendor_product_name: string,
       product_code: string,
+      vendor_product_name: string,
       product_option: string,
       product_price: number,
     ) => {
+
       form.setFieldsValue({
-        product_id,
-        product_name,
-        vendor_product_name,
-        product_code,
-        product_option,
-        product_price,
-        product_count: 1,
-      });
-      setProductModalVisible(false);
+        product_id:product_id,
+        product_name:product_name,
+        vendor_product_name:vendor_product_name,
+        product_code:product_code,
+        product_option:product_option,
+        price:product_price,
+      });      setProductModalVisible(false);
     },
     [form],
   );
@@ -132,7 +133,12 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         <Form.Item name="rt_store_id" hidden>
           <Input hidden />
         </Form.Item>
-        <Form.Item name="ws_store_id" hidden>
+
+        <Form.Item name="product_id" hidden>
+          <Input hidden />
+        </Form.Item>
+
+        <Form.Item name="price" hidden>
           <Input hidden />
         </Form.Item>
 
@@ -156,6 +162,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         <TurtleInput // 거래처 주소 Input
           name="vendor_address"
           label={t("vendor.address")}
+          disabled={true}
         />
 
         <TurtleSearchInput
@@ -177,24 +184,49 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         <TurtleInput // 거래처상품명 Input
           name="vendor_product_name"
           label={t("product.vendor_product_name")}
+          disabled={true}
         />
 
         <TurtleInput // 옵션Input
           name="product_option"
           label={t("product.option")}
+          disabled={true}
         />
 
         <TurtleInputNumber // count Input
-          name="adj_count"
-          label={t("product.count")}
+          name="count"
+          min = {1}
+          defaultValue={1}
+          label={t("adjustment.count")}
         />
 
-        <TurtleInput // price Input
-          name="product_price"
+        <TurtleInputNumber // price Input
+          name="price"
+          min={0} 
+          defaultValue={0}
           label={t("product.price")}
         />
 
-        <TurtleInputSelect label={t("adjustment.type.default")} selectOptions={selectOptions} />
+        <Form.Item
+          required={true}
+          name="type"
+          
+          label={t("adjustment.type.default")}
+          
+          >
+            <Select 
+            defaultValue={"reserve"}
+            onSelect={(type:string) => {
+              setAdjType(type)
+            }}
+            >
+             {selectOptions.map((option) => {
+      
+             return <Select.Option value={option.value}>{option.name}</Select.Option>
+            
+            })}; 
+            </Select>
+        </Form.Item>
         <TurtleTextArea
           label={t("adjustment.memo")}
           name="memo"

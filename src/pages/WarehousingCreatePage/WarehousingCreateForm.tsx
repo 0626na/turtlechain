@@ -72,7 +72,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
     );
 
     const selectProduct = useCallback(
-      (product_id, product_name, vendor_product_name, product_code, product_option, product_price) => {
+      (product_id, product_name,  product_code, vendor_product_name,product_option, product_price) => {
         form.setFieldsValue({
           product_id,
           product_name,
@@ -120,7 +120,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
           <Input hidden />
         </Form.Item>
         
-      <TurtleText>{t("whs.section_title1")}</TurtleText>
+      <TurtleText>{t("warehousing.section_title1")}</TurtleText>
       
       <TurtleSearchInput //
           name="vendor_name"
@@ -137,6 +137,7 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
 
       <TurtleInput // 거래처 주소 Input
         name="vendor_address"
+        disabled={true}
         label={t("vendor.address")}/>
 
     <TurtleSearchInput
@@ -157,24 +158,30 @@ const WarehousingCreateForm = function ({ onSheetDetailsAdded }: Props) {
               />
       
       <TurtleInput // 거래처상품명 Input
+        disabled={true}
         name="vendor_product_name"
         label={t("product.vendor_product_name")}/> 
       
       <TurtleInput // 상품 바코드 Input
+        disabled={true}
         name="product_code"
         label={t("product.code")}/> 
       
       <TurtleInput // 옵션Input
+        disabled={true}
         name="product_option"
         label={t("product.option")}/> 
         
       <TurtleInput // price Input
+        disabled={true}
         name="product_price"
         label={t("product.price")}/> 
       
       <TurtleInputNumber // count Input
         name="product_count"
-        label={t("product.count")}/> 
+        min = {1}
+        defaultValue={1}
+        label={t("warehousing.count")}/> 
     <Row justify="center">
       <TurtleButton type="default" onClick={onClickCreate}>{t("button.add")}</TurtleButton>
     </Row>

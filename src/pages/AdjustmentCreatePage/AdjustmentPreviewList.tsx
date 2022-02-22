@@ -21,9 +21,16 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
 
     // 매입조정 합계
     const totalAdjValue = useMemo(
-      () => adjList.reduce((acc, cur) => acc + cur.adj_count * cur.product_price, 0),
+      () => adjList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
       [adjList]
     );
+
+    let adjTypes = {
+      "exchange" : "교환",
+      "reserve" : "미송",
+      "refund" : "환불",
+      "takeback" : "반품"
+    }
     
   return (
     <Table
@@ -41,18 +48,15 @@ const WarehousingSheetList = function ({isLoading, adjList, setAdjList, onSubmit
           dataIndex: "vendor_address",
         },
         {
-          title: t("account info"),
-          dataIndex: "account_info",
-        },
-        {
           width: 100,
           align: "center",
           title: t("adjustment type"),
           dataIndex: "type",
+          render: (_, record) => adjTypes[record.type]
         },
         {
           title: t("supply price"),
-          render:(_, record) => numberTextFormat(record.product_price, "currency")  
+          render:(_, record) => numberTextFormat(record.price, "currency")  
         },
         {
           width: 100,

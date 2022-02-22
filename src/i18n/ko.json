@@ -21,6 +21,7 @@
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
+    "success create adjustment": "매입조정내역을 등록하였습니다.",
     "success update warehousing": "입고 내역을 수정하였습니다.",
     "success delete warehousing": "입고 내역을 삭제하였습니다.",
     "success confirm warehousing": "입고 내역을 마감하였습니다.",
@@ -43,7 +44,12 @@
     "confirm exclude": "정말 제외하시겠습니까?",
     "confirm delete": "정말 삭제하시겠습니까?",
     "success create clearing": "정산내역을 등록하였습니다.",
-    "success delete clearing": "정산내역을 삭제하였습니다."
+    "success delete clearing": "정산내역을 삭제하였습니다.",
+    "error no adjustable price": "차감 가능 금액이 없습니다.",
+    "info max adjustable count1": "최대 차감 가능 갯수는 ",
+    "info max adjustable count2": "개 입니다.",
+    "info max adjustable price": "해당 도매 차감 가능 금액: ",
+    "warning clearing information": "원활한 입금을 위해서 당일 정산은 17:30까지 요청 바랍니다. “대기” 시점에서는 정산서 수정이 불가합니다."
   },
   "status": {
     "open": "영업",
@@ -149,7 +155,13 @@
     "count": "입고 수량",
     "date": "입고 날짜",
     "total count": "입고 수량 합계",
+    "upload_title_details": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다.",
+    "section_title1": "입고 정보 입력",
+    "section_title2": "입고장 미리보기",
+    "btn_upload_whs_sheet": "입고장 업로드",
+    "btn_prepopulate_whs": "주문내역 불러오기",
     "price": "입고 금액 (공급가)"
+
   },
   "adjustment": {
     "": "매입조정",
@@ -167,19 +179,22 @@
       "subtract": "차감",
       "refund": "환불"
     },
+    "count" : "매입조정 수량",
     "type": {
       "default": "매입조정 종류",
       "reserve": "미송",
       "refund": "환불",
       "exchange": "교환",
       "takeback": "반품"
-    }
+    },
+    "placeholder": "매입조정에 관한 메모를 적어주세요"
   },
   "clearing": {
     "": "정산",
     "management": "정산 관리",
     "create": "정산 등록",
     "list": "정산 내역",
+    "detail list": "정산 상세내역",
     "request_date": "결제 요청 일자",
     "complete_date": "결제 완료 일자",
     "total_price": "총 결제 금액",
@@ -221,7 +236,16 @@
       "today reserved": "당일미송",
       "total": "합계"
     },
-    "detail": { "default": "상세보기" }
+    "detail": {
+      "default": "상세보기",
+      "type": {
+        "default": "구분",
+        "adjustment subtract": "매입차감",
+        "adjustment refund": "매입환불",
+        "adjustment todayreserve": "당일미송",
+        "warehousing": "입고"
+      }
+    }
   },
   "product": {
     "": "상품",
@@ -236,7 +260,7 @@
     "option": "옵션",
     "price": "공급가",
     "count": "발주수량",
-    "vendor name": "거래처 상품명"
+    "vendor_product_name": "거래처 상품명"
   },
   "vendor": {
     "": "거래처",
