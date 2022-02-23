@@ -5,6 +5,9 @@ export interface VendorInfo {
   vendor_code: string;
   vendor_name: string;
   vendor_address: string;
+  vendor_phone: {
+    phone: string;
+  };
 }
 
 export interface Product {

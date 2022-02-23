@@ -45,8 +45,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       memo: selectedRow?.memo,
       vendor_name: selectedRow?.vendor_info.vendor_name,
       vendor_address: selectedRow?.vendor_info.vendor_address,
-      vendor_phone: "임시번호",
-      //vendor_phone: selectedRow?.vendor_info.vendor
+      vendor_phone: selectedRow?.vendor_info.vendor_phone.phone,
     });
   }, [selectedRow]);
 

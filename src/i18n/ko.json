@@ -13,6 +13,7 @@
     "really register": "정말 등록하시겠습니까?",
     "really confirmed": "정말 마감하시겠습니까?",
     "really resend": "정말 재전송하시겠습니까?",
+    "really add": "정말 추가하시겠습니까?",
     "select mall": "쇼핑몰을 선택하세요.",
     "changed data": "변경된 데이터가 있습니다.",
     "search vendor": "거래처명으로 검색하면 쉽게 찾을 수 있습니다.",
@@ -103,7 +104,8 @@
     "cancel": "취소",
     "next step": "다음 단계",
     "select": "선택하기",
-    "request clearing": "결제 요청 등록"
+    "request clearing": "결제 요청 등록",
+    "add order": "주문 추가하기"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",

@@ -1,7 +1,7 @@
 import { v2Axios } from "apis";
 
 // 주문 등록 추가 타입
-export interface CreateOrderItem {
+export interface OrderItemShow {
   vendor_id: number;
   product_id: number;
   vendor_name: string;
@@ -13,7 +13,7 @@ export interface CreateOrderItem {
   count: number;
   price: number;
   type: string;
-  image_url?: string;
+  image_url: string;
   memo: string;
 }
 
@@ -51,7 +51,7 @@ export interface OrderItem {
     product_code: string;
     name: string;
     vendor_product_name: string;
-    price: string;
+    price: number;
     option: string;
     memo: string;
     image_url: string;
@@ -125,14 +125,24 @@ const getItem = async function (query: RequestGetItem) {
 export interface RequestCreateSheet {
   created_date: string;
   rt_store_id: number;
-  status: "sent" | "reserved" | "cancel";
+  status: "N";
   type: "new" | "add" | "modify";
+}
+
+export interface Item {
+  vendor_id: number;
+  product_id: number;
+  count: number;
+  price: number;
+  type: string;
+  image_url: string;
+  memo: string;
 }
 
 export interface RequestCreateItem {
   sheet_id?: number;
   rt_store_id: number;
-  item_list: Array<CreateOrderItem>;
+  item_list: Array<Item>;
 }
 
 export interface ResponseCreateSheet {

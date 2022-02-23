@@ -5,19 +5,16 @@ import OrderPreviewList from "./OrderPreviewList";
 import Toolbar from "./Toolbar";
 import { t } from "i18next";
 import { useCallback, useState } from "react";
-import { CreateOrderItem } from "apis/orderAPI";
+import { OrderItemShow } from "apis/orderAPI";
 
 const OrderCreatePage = function () {
   const title = `${t("turtlechain")} - ${t("order.create")}`;
 
-  const [itemList, setItemList] = useState<Array<CreateOrderItem>>([]);
+  const [itemList, setItemList] = useState<Array<OrderItemShow>>([]);
 
-  const addItem = useCallback(
-    (item: CreateOrderItem) => {
-      setItemList([...itemList, item]);
-    },
-    [itemList],
-  );
+  const addItem = useCallback((item: OrderItemShow) => {
+    setItemList((itemList) => [...itemList, item]);
+  }, []);
 
   const deleteItem = useCallback(
     (id) => {
@@ -34,7 +31,7 @@ const OrderCreatePage = function () {
         title={t("order.create")}
         breadcrumbList={[t("common.home"), t("order.management"), t("order.create")]}
       />
-      <Toolbar />
+      <Toolbar addItem={addItem} />
       <OrderCreateForm addItem={addItem} />
       <OrderPreviewList list={itemList} deleteItem={deleteItem} />
     </>

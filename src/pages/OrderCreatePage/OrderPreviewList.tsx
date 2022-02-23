@@ -1,5 +1,5 @@
 import { Button, message, notification, Popconfirm, Row, Table } from "antd";
-import orderAPI, { CreateOrderItem } from "apis/orderAPI";
+import orderAPI, { OrderItemShow } from "apis/orderAPI";
 import TurtleText from "components/common/TurtleText";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleButton from "components/common/TurtleButton";
@@ -12,19 +12,20 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 
 interface Props {
-  list: Array<CreateOrderItem>;
+  list: Array<OrderItemShow>;
   deleteItem: (id: number) => void;
 }
+
 const OrderPreviewList = function ({ list, deleteItem }: Props) {
   const store = useRecoilValue(storeState);
   const makeType = (type: string) => {
-    if (type === "order") return "주문";
+    if (type === "extra") return "기타";
     else if (type === "reserve") return "미송";
     else if (type === "takeback") return "반품";
     else if (type === "exchange") return "교환";
     else if (type === "sample") return "샘플";
     else if (type === "pickup") return "픽업";
-    else return "기타";
+    else return "주문";
   };
 
   const createOrderQuery = useMutation("createOrder", orderAPI.create, {
@@ -45,23 +46,32 @@ const OrderPreviewList = function ({ list, deleteItem }: Props) {
       sheet: {
         created_date: moment().format("YYYY-MM-DD"),
         rt_store_id: store.id,
-        status: "sent",
+        status: "N",
         type: "new",
       },
       item: {
         rt_store_id: store.id,
-        item_list: list,
+        item_list: list.map((item) => ({
+          vendor_id: item.vendor_id,
+          product_id: item.product_id,
+          count: item.count,
+          price: item.price,
+          // type을 없을 시 order로 임시
+          type: "order",
+          image_url: item.image_url,
+          memo: item.memo,
+        })),
       },
     });
   }, [list, store.id]);
 
   return (
-    <Row>
+    <div>
       <TurtleText>{t("order.preview list")}</TurtleText>
       <Table
         size="small"
         scroll={{ y: 800 }}
-        pagination={false}
+        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
         dataSource={list}
         rowKey={(record) => record.product_id}
         columns={[
@@ -133,25 +143,23 @@ const OrderPreviewList = function ({ list, deleteItem }: Props) {
             ),
           },
         ]}
-        footer={() => (
-          <Row justify="end">
-            <Popconfirm
-              title={t("description.really register")}
-              okText={t("yes")}
-              cancelText={t("no")}
-              onConfirm={onClickCreate}
-            >
-              <TurtleButton // 주문 등록 Button
-                disabled={list.length === 0}
-                loading={createOrderQuery.isLoading}
-              >
-                {t("order.create")}
-              </TurtleButton>
-            </Popconfirm>
-          </Row>
-        )}
       />
-    </Row>
+      <Row justify="end">
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={onClickCreate}
+        >
+          <TurtleButton // 주문 등록 Button
+            disabled={list.length === 0}
+            loading={createOrderQuery.isLoading}
+          >
+            {t("order.create")}
+          </TurtleButton>
+        </Popconfirm>
+      </Row>
+    </div>
   );
 };
 

@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 // antd
 import { Form, Col, Row, FormInstance, Input, message, Radio } from "antd";
 // api
-import { CreateOrderItem } from "apis/orderAPI";
+import { OrderItemShow } from "apis/orderAPI";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleInput from "components/common/TurtleInput";
-import TurtleRadio from "components/common/TurtleRadio";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleDivider from "components/common/TurtleDivider";
@@ -19,7 +17,7 @@ import { useRecoilValue } from "recoil";
 import SearchProductModal from "components/SearchProductModal";
 
 interface Props {
-  addItem: (item: CreateOrderItem) => void;
+  addItem: (item: OrderItemShow) => void;
 }
 
 const OrderCreateForm = function ({ addItem }: Props) {

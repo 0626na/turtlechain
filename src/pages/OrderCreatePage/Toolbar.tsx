@@ -1,4 +1,5 @@
 import { Col, message, Row, Space } from "antd";
+import { OrderItemShow } from "apis/orderAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
@@ -7,7 +8,11 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import CreateBulkOrderModal from "./CreateBulkOrderModal";
 
-function Toolbar() {
+interface Props {
+  addItem: (item: OrderItemShow) => void;
+}
+
+function Toolbar({ addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
@@ -49,6 +54,7 @@ function Toolbar() {
         closeModal={() => {
           setCreateModalVisible(false);
         }}
+        addItem={addItem}
       />
     </>
   );

@@ -328,11 +328,11 @@ function VendorList() {
           {
             ellipsis: true,
             title: t("vendor.store phone"),
-            render: (_, { ws_store_info: { store_phone } }) => {
+            render: (_, { vendor_phone, ws_store_info: { store_phone } }) => {
               if (store_phone.length === 1) {
                 return (
                   <Popover content={store_phone[0].phone}>
-                    {store_phone[0].phone.replace(phonePattern, `$1-$2-$3`)}
+                    {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
                   </Popover>
                 );
               }
@@ -354,7 +354,7 @@ function VendorList() {
             ellipsis: true,
             width: "20%",
             title: t("vendor.account"),
-            render: (_, { ws_store_info: { store_account } }) => {
+            render: (_, { vendor_account, ws_store_info: { store_account } }) => {
               const makeAccount = (account: VendorAccount) =>
                 `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
@@ -365,7 +365,7 @@ function VendorList() {
                       <p key={account.id}>{makeAccount(account)}</p>
                     ))}
                   >
-                    {makeAccount(store_account[0])}
+                    {makeAccount(vendor_account)}
                   </Popover>
                 </TurtleBadge>
               );

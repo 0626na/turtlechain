@@ -135,18 +135,24 @@ const parseWarehousingSheetFile = async function (data: FormData) {
 };
 
 export interface OrderItem {
-  vendor_id: string;
+  vendor_id: number;
+  vendor_code: string;
   vendor_name: string;
   vendor_address: string;
   vendor_phone: string;
-  product_id: string;
-  product_name: string;
   vendor_product_name: string;
-  order_price: string;
+
+  product_id: number;
+  product_code: string;
+  product_name: string;
+  product_price: string;
+
+  count: number;
+  order_price: number;
   option: string;
   image_url: string;
+  memo: string;
   type: string;
-  product_price: string;
 }
 
 export interface ResponseParseOrder {
