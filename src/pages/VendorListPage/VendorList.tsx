@@ -329,14 +329,6 @@ function VendorList() {
             ellipsis: true,
             title: t("vendor.store phone"),
             render: (_, { vendor_phone, ws_store_info: { store_phone } }) => {
-              if (store_phone.length === 1) {
-                return (
-                  <Popover content={store_phone[0].phone}>
-                    {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
-                  </Popover>
-                );
-              }
-
               return (
                 <TurtleBadge count={store_phone.length}>
                   <Popover
@@ -344,7 +336,7 @@ function VendorList() {
                       <p key={id}>{phone.replace(phonePattern, `$1-$2-$3`)}</p>
                     ))}
                   >
-                    {store_phone[0].phone.replace(phonePattern, `$1-$2-$3`)}
+                    {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
                   </Popover>
                 </TurtleBadge>
               );
