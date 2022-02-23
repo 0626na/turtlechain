@@ -11,7 +11,7 @@ interface Props {
 
 const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
   const getOrderQuery = useQuery(
-    "getOrder",
+    ["getOrder", sheetId],
     () => orderAPI.get({ order_sheet_id: sheetId ?? -1 }),
     {
       enabled: !!sheetId,
@@ -19,7 +19,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
   );
 
   const getOrderItemQuery = useQuery(
-    "getOrderItem",
+    ["getOrderItem", sheetId],
     () => orderAPI.getItem({ sheet_id: sheetId ?? -1 }),
     {
       enabled: !!sheetId,
@@ -36,7 +36,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
       onOk={closeModal}
       onCancel={closeModal}
     >
-      <Table // 상단 주문서 정보 테이블
+      {/* <Table // 상단 주문서 정보 테이블
         size="small"
         scroll={{ x: "auto", y: 400 }}
         pagination={false}
@@ -65,7 +65,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
             render: () => "8,000,000",
           },
         ]}
-      />
+      /> */}
 
       <Table
         size="small"
@@ -82,11 +82,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
           {
             ellipsis: true,
             title: "거래처 주소",
-            dataIndex: "",
-          },
-          {
-            title: t("client address"),
-            dataIndex: "address",
+            render: (_, record) => record.product_info.vendor_info.vendor_address,
           },
           {
             title: t("phone"),

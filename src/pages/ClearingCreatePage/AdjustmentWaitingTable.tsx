@@ -65,15 +65,17 @@ function AdjustmentWaitingTable({
       onSuccess: (data) => {
         const responseData = data ? data.data.adjustment_list : [];
         setAdjustmentList(
-          responseData.map(
-            (value) =>
-              ({
-                ...value,
-                checked: false,
-                process_type: undefined,
-                process_count: undefined,
-              } as never as AdjustmentItemExtended),
-          ),
+          responseData
+            .filter((value) => value.type !== "reserve")
+            .map(
+              (value) =>
+                ({
+                  ...value,
+                  checked: false,
+                  process_type: undefined,
+                  process_count: undefined,
+                } as never as AdjustmentItemExtended),
+            ),
         );
       },
       onError: (error: AxiosError) => {

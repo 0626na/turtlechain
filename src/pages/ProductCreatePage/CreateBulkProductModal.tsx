@@ -46,6 +46,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
         resetField();
         return;
       }
+      message.info(`이미 등록된 상품이 ${data.data.count.duplicated_count}개 있습니다.`);
       setSuccessList(
         data.data.success.map((product) => ({
           ...product,

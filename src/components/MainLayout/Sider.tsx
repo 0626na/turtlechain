@@ -69,24 +69,24 @@ const Sider = function ({ collapsed }: Props) {
         },
       ],
     },
-    {
-      title: t("sample_return.management"),
-      icon: (
-        <div>
-          <TurtleIcon type="menu" name="sample_return" />
-        </div>
-      ),
-      submenu: [
-        {
-          title: t("sample_return.create"),
-          pathname: "/sample_return/create",
-        },
-        {
-          title: t("sample_return.list"),
-          pathname: "/sample_return/list",
-        },
-      ],
-    },
+    // {
+    //   title: t("sample_return.management"),
+    //   icon: (
+    //     <div>
+    //       <TurtleIcon type="menu" name="sample_return" />
+    //     </div>
+    //   ),
+    //   submenu: [
+    //     {
+    //       title: t("sample_return.create"),
+    //       pathname: "/sample_return/create",
+    //     },
+    //     {
+    //       title: t("sample_return.list"),
+    //       pathname: "/sample_return/list",
+    //     },
+    //   ],
+    // },
     {
       title: t("warehousing.management"),
       icon: (

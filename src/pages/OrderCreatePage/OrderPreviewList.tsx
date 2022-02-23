@@ -14,18 +14,19 @@ import { storeState } from "store/storeState";
 interface Props {
   list: Array<OrderItemShow>;
   deleteItem: (id: number) => void;
+  resetList: () => void;
 }
 
-const OrderPreviewList = function ({ list, deleteItem }: Props) {
+const OrderPreviewList = function ({ list, deleteItem, resetList }: Props) {
   const store = useRecoilValue(storeState);
   const makeType = (type: string) => {
     if (type === "extra") return "기타";
-    else if (type === "reserve") return "미송";
-    else if (type === "takeback") return "반품";
-    else if (type === "exchange") return "교환";
-    else if (type === "sample") return "샘플";
-    else if (type === "pickup") return "픽업";
-    else return "주문";
+    if (type === "reserve") return "미송";
+    if (type === "takeback") return "반품";
+    if (type === "exchange") return "교환";
+    if (type === "sample") return "샘플";
+    if (type === "pickup") return "픽업";
+    return "주문";
   };
 
   const createOrderQuery = useMutation("createOrder", orderAPI.create, {
@@ -37,6 +38,7 @@ const OrderPreviewList = function ({ list, deleteItem }: Props) {
         type: "success",
         message: `성공적으로 등록하였습니다.`,
       });
+      resetList();
     },
   });
 
@@ -56,7 +58,7 @@ const OrderPreviewList = function ({ list, deleteItem }: Props) {
           product_id: item.product_id,
           count: item.count,
           price: item.price,
-          // type을 없을 시 order로 임시
+          // TODO : type 받아와서 넣어야 함 (excel 파싱 이후)
           type: "order",
           image_url: item.image_url,
           memo: item.memo,

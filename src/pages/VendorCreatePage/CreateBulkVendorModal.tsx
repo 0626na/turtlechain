@@ -49,6 +49,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     success_count: 0,
     suggest_count: 0,
     fail_count: 0,
+    duplicated_count: 0,
   });
 
   const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
@@ -62,6 +63,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         resetField();
         return;
       }
+      message.info(`이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`);
       setSuccessList(
         data.data.success.map((vendor) => ({
           ...vendor,
@@ -114,7 +116,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     setSuccessList([]);
     setSuggestList([]);
     setFailList([]);
-    setCount({ success_count: 0, suggest_count: 0, fail_count: 0 });
+    setCount({ success_count: 0, suggest_count: 0, fail_count: 0, duplicated_count: 0 });
     setFileList([]);
   }, []);
 

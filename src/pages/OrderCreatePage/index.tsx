@@ -23,6 +23,10 @@ const OrderCreatePage = function () {
     [itemList],
   );
 
+  const resetItemList = useCallback(() => {
+    setItemList([]);
+  }, []);
+
   return (
     <>
       <Helmet title={title} />
@@ -33,7 +37,7 @@ const OrderCreatePage = function () {
       />
       <Toolbar addItem={addItem} />
       <OrderCreateForm addItem={addItem} />
-      <OrderPreviewList list={itemList} deleteItem={deleteItem} />
+      <OrderPreviewList list={itemList} deleteItem={deleteItem} resetList={resetItemList} />
     </>
   );
 };

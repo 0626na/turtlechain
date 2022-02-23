@@ -45,6 +45,7 @@ export interface ParseCount {
   success_count: number;
   suggest_count: number;
   fail_count: number;
+  duplicated_count: number;
 }
 
 export interface RequestParseVendor {
@@ -97,6 +98,9 @@ export interface ResponseParseProduct {
   data: {
     success: Array<Product>;
     fail: Array<Product>;
+    count: {
+      duplicated_count: number;
+    };
     error?: string;
   };
 }
