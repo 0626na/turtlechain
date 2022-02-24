@@ -36,8 +36,8 @@
   "scripts": {
     "start": "export PORT=52273 && craco start",
     "build:dev": "craco build",
-    "deploy:devel": "env-cmd -f .env.development ./deploy.sh --env devel",
-    "deploy:alpha": "env-cmd -f .env.test ./deploy.sh --env alpha",
+    "deploy:devel": "env-cmd -f .env.development ./deploy.sh --env devel --branch devel",
+    "deploy:alpha": "env-cmd -f .env.test ./deploy.sh --env alpha --branch alpha",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
