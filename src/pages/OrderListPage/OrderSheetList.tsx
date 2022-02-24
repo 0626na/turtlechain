@@ -25,7 +25,6 @@ const OrderSheetList = function ({ searchQuery, setSearchQuery }: Props) {
     ["getOrderList", searchQuery],
     () => orderAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
-      enabled: !!store.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -52,7 +51,8 @@ const OrderSheetList = function ({ searchQuery, setSearchQuery }: Props) {
         loading={getOrderListQuery.isLoading}
         dataSource={getOrderListQuery.data?.data.order_sheet_list}
         rowKey={(record) => record.id}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+        pagination={{ position: ["bottomCenter"], showSizeChanger: false, pageSize: 13 }}
+        style={{ height: "630px" }}
         columns={[
           {
             ellipsis: true,

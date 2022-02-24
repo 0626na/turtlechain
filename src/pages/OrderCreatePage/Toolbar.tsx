@@ -29,7 +29,7 @@ function Toolbar({ addItem }: Props) {
         }}
       >
         <Col>
-          <StoreSelect />
+          <StoreSelect warningMessage="쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 변경하시겠습니까?" />
         </Col>
         <Col>
           <Space>

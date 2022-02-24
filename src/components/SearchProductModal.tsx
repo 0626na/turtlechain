@@ -81,7 +81,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
     <Modal
       centered
       width="70%"
-      maskClosable={false}
       title={t("product.search")}
       visible={visible}
       onCancel={closeModal}

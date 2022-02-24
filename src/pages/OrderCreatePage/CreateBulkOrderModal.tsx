@@ -121,7 +121,6 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
     <Modal
       centered
       width="80%"
-      maskClosable={false}
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("order.upload")}</span>
