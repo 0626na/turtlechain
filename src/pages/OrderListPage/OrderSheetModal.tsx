@@ -6,7 +6,8 @@ import { phonePattern } from "utils/pattern";
 import SearchFilter from "components/SearchFilter";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { OrderItem } from "apis/orderAPI";
 
 interface Props {
   visible: boolean;
@@ -14,8 +15,14 @@ interface Props {
   sheetId?: number;
 }
 
+interface SearchState {
+  type: string;
+  search_string: string;
+}
+
 const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
   const store = useRecoilValue(storeState);
+  const [itemList, setItemList] = useState<Array<OrderItem>>([]);
 
   const makeOrderType = (type: string) => {
     if (type === "extra") return "기타";
@@ -40,10 +47,37 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
     () => orderAPI.getItem({ sheet_id: sheetId ?? -1 }),
     {
       enabled: !!sheetId,
+      onSuccess: (data) => {
+        setItemList(data.data.order_item_list);
+      },
     },
   );
 
   const sheetInfo = useMemo(() => getOrderQuery.data?.data, [getOrderQuery.data?.data]);
+
+  const searchItemList = useCallback(
+    ({ type, search_string }: SearchState) => {
+      setItemList([
+        ...(getOrderItemQuery.data?.data.order_item_list.filter((item) => {
+          if (type === "name") {
+            return item.product_info.name.includes(search_string);
+          }
+          if (type === "vendor_product_name") {
+            return item.product_info.vendor_product_name.includes(search_string);
+          }
+          if (type === "vendor_name") {
+            return item.product_info.vendor_info.vendor_name.includes(search_string);
+          }
+          return (
+            item.product_info.name.includes(search_string) ||
+            item.product_info.vendor_product_name.includes(search_string) ||
+            item.product_info.vendor_info.vendor_name.includes(search_string)
+          );
+        }) ?? []),
+      ]);
+    },
+    [getOrderItemQuery.data?.data.order_item_list],
+  );
 
   return (
     <Modal
@@ -55,6 +89,7 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
       visible={visible}
       onOk={closeModal}
       onCancel={closeModal}
+      bodyStyle={{ height: "800px" }}
     >
       <Table // 상단 주문서 정보 테이블
         size="small"
@@ -66,28 +101,29 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
         columns={[
           {
             ellipsis: true,
+            width: "15%",
             title: "주문 날짜",
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
             title: "총 거래처 수",
-            render: (_, record) => 125,
+            render: (_, record) => record.total_store_count,
           },
           {
             ellipsis: true,
             title: "총 상품 수",
-            render: () => 240,
+            render: (_, record) => record.total_item_subcount,
           },
           {
             ellipsis: true,
             title: "총 주문 공급가액",
-            render: () => "8,000,000",
+            render: (_, record) => record.total_price?.toLocaleString(),
           },
         ]}
       />
       <Row style={{ padding: "1rem 0" }}>
-        <SearchFilter type="product" onSearch={() => {}} />
+        <SearchFilter type="product" onSearch={searchItemList} />
       </Row>
       <Row style={{ paddingBottom: "1rem" }} gutter={16} justify="space-between">
         <Col span={3}>
@@ -135,11 +171,12 @@ const OrderSheetItemModal = function ({ visible, closeModal, sheetId }: Props) {
       </Row>
       <Table
         size="small"
-        scroll={{ x: 1000, y: 400 }}
+        scroll={{ x: 1000, y: 1000 }}
         loading={getOrderItemQuery.isLoading}
         pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-        dataSource={getOrderItemQuery.data?.data.order_item_list}
+        dataSource={itemList}
         rowKey={(record) => record.id}
+        style={{ height: "480px" }}
         columns={[
           {
             ellipsis: true,

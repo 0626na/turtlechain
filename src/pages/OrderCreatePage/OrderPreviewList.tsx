@@ -146,7 +146,7 @@ const OrderPreviewList = function ({ list, deleteItem, resetList }: Props) {
           },
         ]}
       />
-      <Row justify="end">
+      <Row justify="end" style={{ paddingTop: "1rem" }}>
         <Popconfirm
           title={t("description.really register")}
           okText={t("yes")}

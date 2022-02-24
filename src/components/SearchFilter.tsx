@@ -27,6 +27,7 @@ function SearchFilter({ type, onSearch }: Props) {
 
   const onChangeSearchString = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchState({ ...searchState, search_string: e.currentTarget.value });
+    onSearch({ ...searchState, search_string: e.currentTarget.value });
   };
 
   // 엔터키 눌렀을 때 검색

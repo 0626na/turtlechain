@@ -46,6 +46,9 @@ export interface OrderSheet {
   kakao: number;
   sms: number;
   fail: number;
+  total_store_count: number;
+  total_item_subcount: number;
+  total_price: number;
 }
 
 export interface OrderItem {

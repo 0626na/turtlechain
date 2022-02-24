@@ -131,7 +131,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "800px", overflowY: "auto" }}
+      bodyStyle={{ height: "750px", overflowY: "auto" }}
     >
       <Space>
         <Typography.Text>주문서 업로드 | </Typography.Text>
@@ -166,6 +166,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
         dataSource={allList}
         rowKey={(record) => record.product_code}
         pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+        style={{ height: "485px" }}
         columns={[
           {
             ellipsis: true,
