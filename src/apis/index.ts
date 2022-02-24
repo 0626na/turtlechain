@@ -15,21 +15,12 @@ import productAPI from "./productAPI";
 import mainAPI from "./mainAPI";
 
 export const v1Axios = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://dev.turtleship.io/api/v1"
-      : "https://dev.turtleship.io/api/v1",
+  baseURL: "https://dev.turtleship.io/api/v1",
   headers: { "Content-Type": "application/json" },
 });
 
 export const v2Axios = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://devel.turtleship.io/v2"
-      // ? "http://localhost:8000/v2"
-      : "https://devel.turtleship.io/v2",
-      // : "http://localhost:8000/v2",
-      // : "https://devel.turtleship.io/v2",
+  baseURL: process.env.REACT_APP_API_URL,
   headers: { "Content-Type": "application/json" },
 });
 

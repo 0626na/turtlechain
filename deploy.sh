@@ -18,9 +18,9 @@ export AWS_ACCESS_KEY_ID='AKIATY4RDQNBLGEIDOVW'
 export AWS_SECRET_ACCESS_KEY='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'
 
 # env
-DEV_ENV='dev'
-TEST_ENV='test'
-PROD_ENV='production'
+DEV_ENV='devel'
+TEST_ENV='alpha'
+PROD_ENV='prod'
 
 # s3 temporary backup
 BACKUP_DIR='./.tmp-s3-backup'
