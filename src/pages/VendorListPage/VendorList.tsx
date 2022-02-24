@@ -351,15 +351,7 @@ function VendorList() {
                 `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
               return (
-                <TurtleBadge count={store_account.length}>
-                  <Popover
-                    content={store_account.map((account) => (
-                      <p key={account.id}>{makeAccount(account)}</p>
-                    ))}
-                  >
-                    {makeAccount(vendor_account)}
-                  </Popover>
-                </TurtleBadge>
+                <Tooltip title={makeAccount(vendor_account)}>{makeAccount(vendor_account)}</Tooltip>
               );
             },
           },

@@ -30,12 +30,19 @@ export interface OrderSheet {
   pickup_case_count: number;
   extra_case_count: number;
   order_count: number;
+  order_price: number;
   reserve_count: number;
+  reserve_price: number;
   takeback_count: number;
+  takeback_price: number;
   exchange_count: number;
+  exchange_price: number;
   sample_count: number;
+  sample_price: number;
   pickup_count: number;
+  pickup_price: number;
   extra_count: number;
+  extra_price: number;
   kakao: number;
   sms: number;
   fail: number;
@@ -47,6 +54,9 @@ export interface OrderItem {
     vendor_info: {
       vendor_name: string;
       vendor_address: string;
+      vendor_phone: {
+        phone: string;
+      };
     };
     product_code: string;
     name: string;
