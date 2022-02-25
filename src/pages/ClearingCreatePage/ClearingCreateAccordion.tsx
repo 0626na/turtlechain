@@ -186,6 +186,10 @@ function ClearingCreateAccordion() {
   );
 
   const handleActivePanelChange = (activeKey: string | string[]) => {
+    if (!!!store.id) {
+      alert(t("description.select mall"));
+      return;
+    }
     // 선택된 쇼핑몰이 있고 매입이 선택 된 상태로 입고 결제대기로 돌아가려 할 때 warning
     const adjustmentItems = clearingCart.filter((value: any) => value.type === "adjustment");
     if (
