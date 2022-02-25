@@ -1,7 +1,7 @@
 import moment from "moment";
 import { Table, Popconfirm, Row, message } from "antd";
 import TurtleText from "components/common/TurtleText";
-import orderAPI, { RequestGetList } from "apis/orderAPI";
+import orderAPI, { OrderSheet, RequestGetList } from "apis/orderAPI";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
@@ -28,7 +28,7 @@ const OrderSheetList = function ({ searchQuery, setSearchQuery }: Props) {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: () => {},
+      onSuccess: (data) => {},
     },
   );
 
@@ -53,6 +53,7 @@ const OrderSheetList = function ({ searchQuery, setSearchQuery }: Props) {
         rowKey={(record) => record.id}
         pagination={{ position: ["bottomCenter"], showSizeChanger: false, pageSize: 13 }}
         style={{ height: "630px" }}
+        scroll={{ y: 630 }}
         columns={[
           {
             ellipsis: true,

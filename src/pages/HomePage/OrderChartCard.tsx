@@ -75,13 +75,13 @@ function OrderChartCard() {
         <Col span={6}>
           <Space direction="vertical">
             <Typography.Text>주문건수</Typography.Text>
-            <Typography.Title>999,999건</Typography.Title>
+            <Typography.Title>0건</Typography.Title>
           </Space>
         </Col>
         <Col span={6}>
           <Space direction="vertical">
             <Typography.Text>주문금액</Typography.Text>
-            <Typography.Title>999,999,999원</Typography.Title>
+            <Typography.Title>0원</Typography.Title>
           </Space>
         </Col>
       </Row>

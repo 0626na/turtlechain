@@ -411,7 +411,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     <Modal
       centered
       width="80%"
-      maskClosable={false}
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
@@ -421,7 +420,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "800px", overflowY: "auto" }}
+      bodyStyle={{ height: "750px", overflowY: "auto" }}
     >
       <Space>
         <Typography.Text>거래처 업로드 | </Typography.Text>
@@ -464,6 +463,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            style={{ height: "505px" }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
@@ -648,6 +648,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            style={{ height: "505px" }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
@@ -883,6 +884,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            style={{ height: "505px" }}
             columns={[
               {
                 ellipsis: true,
@@ -924,7 +926,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
 
-      <Row justify="end" style={{ padding: "1rem 0px" }}>
+      <Row justify="end">
         {/**
          <TurtleText>
           등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}

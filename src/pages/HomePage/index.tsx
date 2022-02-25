@@ -34,12 +34,12 @@ const HomePage = function () {
           <Card title={"미처리 환불 현황"} style={cardStyle}>
             <Row justify="center" align="middle">
               <Typography.Title level={2}>
-                {getUnprocessedStatusQuery.data?.data.refunds.counts} 건
+                {getUnprocessedStatusQuery.data?.data.refunds.counts ?? 0} 건
               </Typography.Title>
             </Row>
             <Row justify="center">
               <Typography.Title level={2}>
-                {getUnprocessedStatusQuery.data?.data.refunds.total_price} 원
+                {getUnprocessedStatusQuery.data?.data.refunds.total_price ?? 0} 원
               </Typography.Title>
             </Row>
           </Card>
@@ -53,12 +53,12 @@ const HomePage = function () {
           <Card title={"미처리 매입조정 현황"} style={cardStyle}>
             <Typography.Title level={2}>
               <Row justify="center" align="middle">
-                {getUnprocessedStatusQuery.data?.data.adjustments.counts} 건
+                {getUnprocessedStatusQuery.data?.data.adjustments.counts ?? 0} 건
               </Row>
             </Typography.Title>
             <Row justify="center">
               <Typography.Title level={2}>
-                {getUnprocessedStatusQuery.data?.data.adjustments.total_price} 원
+                {getUnprocessedStatusQuery.data?.data.adjustments.total_price ?? 0} 원
               </Typography.Title>
             </Row>
           </Card>

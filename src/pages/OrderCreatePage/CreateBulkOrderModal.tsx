@@ -267,11 +267,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
           cancelText={t("no")}
           onConfirm={onClickAdd}
         >
-          <TurtleButton
-            type="primary"
-            disabled={fileList.length === 0}
-            //loading={createProductQuery.isLoading}
-          >
+          <TurtleButton type="primary" disabled={fileList.length === 0}>
             {t("button.add order")}
           </TurtleButton>
         </Popconfirm>

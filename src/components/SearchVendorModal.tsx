@@ -72,7 +72,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
         <SearchFilter type="vendor" onSearch={searchVendor} />
@@ -80,7 +79,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
 
       <Table
         size="small"
-        style={{ padding: "24px 0px" }}
+        style={{ height: "550px", padding: "24px 0px" }}
         loading={getVendorListQuery.isLoading}
         dataSource={getVendorListQuery.data?.data.vendor_list}
         rowKey={(record) => record.id}

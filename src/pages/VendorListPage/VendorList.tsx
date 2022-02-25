@@ -27,6 +27,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import VendorUpdateModal from "./VendorUpdateModal";
 import { phonePattern } from "utils/pattern";
+import moment from "moment";
 
 interface VendorShow extends Vendor {
   memo_active: boolean;
@@ -225,6 +226,7 @@ function VendorList() {
         dataSource={vendorList}
         rowKey={(record) => record.vendor_code}
         pagination={false}
+        style={{ height: "600px" }}
         expandable={{
           expandedRowRender: (record) => (
             <>

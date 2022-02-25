@@ -85,7 +85,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "700px", overflowY: "auto" }}
     >
       <Row>
         <SearchFilter type="product" onSearch={searchProductList} />
@@ -93,7 +92,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
 
       <Table
         size="small"
-        style={{ padding: "24px 0px" }}
+        style={{ height: "550px", padding: "24px 0px" }}
         loading={getProductListQuery.isLoading}
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}

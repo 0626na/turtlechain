@@ -41,6 +41,9 @@ function CustomStoreSelect({ warningMessage }: Props) {
             })),
           );
         // TODO: 쇼핑몰이 1개일때는 해당 쇼핑몰 선택, 다중일때는 선택 안함 추가
+        if (data.data.data.length === 1) {
+          setStore({ id: data.data.data[0].id, name: data.data.data[0].name });
+        }
       },
     },
   );

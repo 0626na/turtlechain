@@ -119,7 +119,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "800px" }}
+      bodyStyle={{ height: 800 }}
     >
       <Space>
         <Typography.Text>상품 목록 업로드 | </Typography.Text>
@@ -164,6 +164,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
             dataSource={successList}
             rowKey={(record) => record.product_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            style={{ height: "510px" }}
             columns={[
               {
                 ellipsis: true,
@@ -239,6 +240,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
             dataSource={failList}
             rowKey={(record) => record.product_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+            style={{ height: "510px" }}
             columns={[
               {
                 ellipsis: true,
@@ -260,7 +262,7 @@ function CreateBulkProductModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "거래처주소",
+                title: "거래처 주소",
                 render: (_, record) => (
                   <span style={{ color: record.vendor_code ? "red" : "#DCE0E4" }}>
                     {record.vendor_address || "(정보없음)"}

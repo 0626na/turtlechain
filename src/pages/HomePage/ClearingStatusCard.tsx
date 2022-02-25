@@ -8,7 +8,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 
 function ClearingStatusCard() {
-  const [clearingStatus, setClearingStatus] = useState<string>("pending");
+  const [clearingStatus, setClearingStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<RequestGetClearingStatus>({
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
