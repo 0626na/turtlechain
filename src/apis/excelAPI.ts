@@ -115,6 +115,7 @@ export interface ResponseParseWarehousingSheetFile {
   data: {
     success: Array<WarehousingSheetItem>;
     fail: Array<WarehousingSheetItem>;
+    error: string;
   };
 }
 

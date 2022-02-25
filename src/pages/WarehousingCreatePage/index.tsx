@@ -27,9 +27,9 @@ const WarehousingCreatePage = function () {
 
   const [list, setList] = useState<Array<WarehousingSheetItem>>([]);
 
-  const[visibleCFOModal, setVisibleCFOModal] = useState(false);
+  const [visibleCFOModal, setVisibleCFOModal] = useState(false);
   const storeId: number | undefined = useRecoilValue(storeIdState);
-  const store = useRecoilValue(storeState)
+  const store = useRecoilValue(storeState);
   // 입고장 생성 절차
   // 1. 입고장 추가하기 요청
   // 2. 입고장 생성을 통해 얻은 sheet_id를 가지고 입고장 상세내역 추가하기 요청
@@ -44,11 +44,10 @@ const WarehousingCreatePage = function () {
         sheet_id: data.data,
         rt_store_id: store.id!,
         item_list: list.map((item) => ({
-          vendor_id:item.vendor_id,
-          product_id:item.product_id,
-          count:item.product_count,
-          price:item.product_price,
-          
+          vendor_id: item.vendor_id,
+          product_id: item.product_id,
+          count: item.product_count,
+          price: item.product_price,
         })),
       });
     },
@@ -72,24 +71,19 @@ const WarehousingCreatePage = function () {
   const onCreate = (value: WarehousingSheetItem) => {
     setList([...list, { ...value }]);
   };
- 
-
 
   // 입고장 등록
   const onSubmit = () => {
     createSheetQuery.mutate({
       created_date: moment().format("YYYY-MM-DD"),
-      rt_store_id:store.id!,
-    
+      rt_store_id: store.id!,
     });
   };
 
-
-
-  const FilterButtons : FilterButton[] = [
-    {type:"primary", status:true, text:t("whs.filter_button_bulk_insert")},
-    {type:"primary", status:true, text:t("whs.filter_button_prepopulate")}
-  ]
+  const FilterButtons: FilterButton[] = [
+    { type: "primary", status: true, text: t("whs.filter_button_bulk_insert") },
+    { type: "primary", status: true, text: t("whs.filter_button_prepopulate") },
+  ];
 
   return (
     <>
@@ -100,12 +94,12 @@ const WarehousingCreatePage = function () {
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
         info={t("warehousing.upload_title_details")}
       />
-      
-      <Toolbar/>
+
+      <Toolbar />
       <WarehousingCreateFromOrderModal
         visible={visibleCFOModal}
         mall_name="hi"
-        onClose={()=>{
+        onClose={() => {
           setVisibleCFOModal(false);
         }}
       />
