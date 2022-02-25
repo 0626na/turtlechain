@@ -37,7 +37,6 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
     <Modal
       centered
       width="80%"
-      maskClosable={false}
       title={t("vendor.request update")}
       visible={visible}
       onCancel={closeModal}

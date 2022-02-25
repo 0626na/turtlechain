@@ -42,7 +42,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
         resetField();
         return;
       }
-      setAllList([...data.data.fail, ...data.data.success]);
+      setAllList([...data.data.success, ...data.data.fail]);
       setSuccessList(data.data.success);
       setFailList(data.data.fail);
     },
@@ -70,7 +70,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
   const searchAllList = useCallback(
     ({ type, search_string }: SearchState) => {
       setAllList(
-        [...failList, ...successList].filter((item) => {
+        [...successList, ...failList].filter((item) => {
           if (type === "name") {
             return item.product_name.includes(search_string);
           }
@@ -111,17 +111,14 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
         image_url: item.image_url,
         memo: item.memo,
       });
-      console.log("add item");
     });
-    resetField();
-    closeModal();
+    onCloseModal();
   }, [successList, addItem, closeModal, resetField]);
 
   return (
     <Modal
       centered
       width="80%"
-      maskClosable={false}
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("order.upload")}</span>
@@ -268,11 +265,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
           cancelText={t("no")}
           onConfirm={onClickAdd}
         >
-          <TurtleButton
-            type="primary"
-            disabled={fileList.length === 0}
-            //loading={createProductQuery.isLoading}
-          >
+          <TurtleButton type="primary" disabled={fileList.length === 0}>
             {t("button.add order")}
           </TurtleButton>
         </Popconfirm>

@@ -4,7 +4,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import TurtleButton from "components/common/TurtleButton";
 import { t } from "i18next";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import moment from "moment";
@@ -42,6 +42,10 @@ const OrderPreviewList = function ({ list, deleteItem, resetList }: Props) {
     },
   });
 
+  useEffect(() => {
+    resetList();
+  }, [store.id, resetList]);
+
   const onClickCreate = useCallback(() => {
     if (!store.id) return;
     createOrderQuery.mutate({
@@ -76,6 +80,7 @@ const OrderPreviewList = function ({ list, deleteItem, resetList }: Props) {
         pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
         dataSource={list}
         rowKey={(record) => record.product_id}
+        style={{ height: "510px" }}
         columns={[
           {
             ellipsis: true,

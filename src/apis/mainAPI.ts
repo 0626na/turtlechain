@@ -52,10 +52,27 @@ export interface RequestGetClearingStatistic {
   end_date: string;
 }
 
-export interface ResponseGetClearingStatistic {}
+export interface ResponseGetClearingStatistic {
+  msg: string;
+  data: {
+    store_list: Array<{
+      rt_store_id: number;
+      rt_store_name: string;
+      store_total_price: number;
+      daily_list: Array<{
+        complete_date: string;
+        total_price: number;
+      }>;
+    }>;
+    company_total_price: number;
+  };
+}
 
-const getClearingStatistic = async function () {
-  let url = `main/clearing`;
+const getClearingStatistic = async function (query: RequestGetClearingStatistic) {
+  let url = `main/clearing?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
   const response = await v2Axios.get<ResponseGetClearingStatistic>(url);
   return response.data;
 };

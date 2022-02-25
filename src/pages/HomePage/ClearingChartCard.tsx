@@ -1,5 +1,5 @@
 import { Card, Col, DatePicker, Row, Space, Typography } from "antd";
-import { RequestGetClearingStatistic } from "apis/mainAPI";
+import mainAPI, { RequestGetClearingStatistic } from "apis/mainAPI";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,44 +11,91 @@ import {
   Legend,
 } from "chart.js";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { useQuery } from "react-query";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function ClearingChartCard() {
   const [searchQuery, setSearchQuery] = useState<RequestGetClearingStatistic>({
-    start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
-    end_date: moment().format("YYYY-MM-DD"),
+    start_date: moment().startOf("week").format("YYYY-MM-DD"),
+    end_date: moment().endOf("week").format("YYYY-MM-DD"),
   });
+
+  const getClearingStatisticQuery = useQuery(
+    ["getClearingStatistic", searchQuery],
+    () => mainAPI.getClearingStatistic(searchQuery),
+    {
+      onSuccess: () => {
+        console.log("hi");
+      },
+    },
+  );
+
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "chartArea" as const,
+        position: "top" as const,
       },
     },
   };
 
-  const labels = ["January", "February", "March", "April", "May", "June", "July"];
+  const labels = useMemo(() => {
+    const returnArr = [];
+    for (let i = 0; i < 7; i++) {
+      returnArr.push(moment(searchQuery.start_date).add(i, "d").format("MM-DD"));
+    }
+    return returnArr;
+  }, [searchQuery.start_date]);
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "쇼핑몰 A",
-        data: labels.map(() => 1000),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "쇼핑몰 B",
-        data: labels.map(() => 1100),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
-  };
+  const borderColors = [
+    "rgba(255, 99, 132, 1)",
+    "rgba(54, 162, 235, 1)",
+    "rgba(255, 206, 86, 1)",
+    "rgba(75, 192, 192, 1)",
+    "rgba(153, 102, 255, 1)",
+    "rgba(255, 159, 64, 1)",
+  ];
+  const backgroundColors = [
+    "rgba(255, 99, 132, 0.2)",
+    "rgba(54, 162, 235, 0.2)",
+    "rgba(255, 206, 86, 0.2)",
+    "rgba(75, 192, 192, 0.2)",
+    "rgba(153, 102, 255, 0.2)",
+    "rgba(255, 159, 64, 0.2)",
+  ];
+
+  const data = useMemo(
+    () => ({
+      labels,
+      datasets: getClearingStatisticQuery.data?.data.store_list.map((store, i) => {
+        return {
+          label: store.rt_store_name,
+          data: labels.map((label) => {
+            let price = 0;
+            store.daily_list.forEach((daily) => {
+              if (daily.complete_date.includes(label)) {
+                price = daily.total_price;
+              }
+            });
+            return price;
+          }),
+          borderColor: borderColors[i % 6],
+          backgroundColor: backgroundColors[i % 6],
+        };
+      }) ?? [{ label: "no data", data: [] }],
+    }),
+    [getClearingStatisticQuery.data?.data.store_list],
+  );
+
+  const customWeekStartEndFormat = (value: any) =>
+    `${moment(value).startOf("week").format(weekFormat)} ~ ${moment(value)
+      .endOf("week")
+      .format(weekFormat)}`;
+
+  const weekFormat = "MM/DD";
 
   return (
     <Card
@@ -57,11 +104,16 @@ function ClearingChartCard() {
           <Col>누적 정산</Col>
           <Col>
             <Space>
-              <DatePicker.RangePicker
-                value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-                onChange={(_, dateStrings) => {
-                  setSearchQuery({ start_date: dateStrings[0], end_date: dateStrings[1] });
+              <DatePicker
+                defaultValue={moment()}
+                onChange={(date) => {
+                  setSearchQuery({
+                    start_date: moment(date).startOf("week").format("YYYY-MM-DD"),
+                    end_date: moment(date).endOf("week").format("YYYY-MM-DD"),
+                  });
                 }}
+                format={customWeekStartEndFormat}
+                picker="week"
               />
             </Space>
           </Col>
@@ -75,7 +127,9 @@ function ClearingChartCard() {
         <Col span={12}>
           <Space direction="vertical">
             <Typography.Text>정산금액</Typography.Text>
-            <Typography.Title>9,999,999원</Typography.Title>
+            <Typography.Title>
+              {getClearingStatisticQuery.data?.data.company_total_price.toLocaleString()}원
+            </Typography.Title>
           </Space>
         </Col>
       </Row>
