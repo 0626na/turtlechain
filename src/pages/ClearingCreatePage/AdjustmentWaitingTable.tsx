@@ -64,16 +64,25 @@ function AdjustmentWaitingTable({
       enabled: store.id !== undefined,
       onSuccess: (data) => {
         const responseData = data ? data.data.adjustment_list : [];
+        var today = new Date();
+        var todayString =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1).toString().padStart(2, "0") +
+          "-" +
+          today.getDate().toString().padStart(2, "0");
         setAdjustmentList(
-          responseData.map(
-            (value) =>
-              ({
-                ...value,
-                checked: false,
-                process_type: undefined,
-                process_count: undefined,
-              } as never as AdjustmentItemExtended),
-          ),
+          responseData
+            .filter((value) => !(value.created_date === todayString && value.type === "reserve"))
+            .map(
+              (value) =>
+                ({
+                  ...value,
+                  checked: false,
+                  process_type: undefined,
+                  process_count: undefined,
+                } as never as AdjustmentItemExtended),
+            ),
         );
       },
       onError: (error: AxiosError) => {
