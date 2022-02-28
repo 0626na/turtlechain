@@ -15,7 +15,7 @@ import productAPI from "./productAPI";
 import mainAPI from "./mainAPI";
 
 export const v1Axios = axios.create({
-  baseURL: "https://dev.turtleship.io/api/v1",
+  baseURL: "https://api.turtleship.io/api/v1",
   headers: { "Content-Type": "application/json" },
 });
 

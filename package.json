@@ -38,6 +38,7 @@
     "build:dev": "craco build",
     "deploy:devel": "env-cmd -f .env.development ./deploy.sh --env devel --branch devel",
     "deploy:alpha": "env-cmd -f .env.test ./deploy.sh --env alpha --branch alpha",
+    "deploy:prod": "env-cmd -f .env.production ./deploy.sh --env prod --branch prod",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
