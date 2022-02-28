@@ -253,7 +253,13 @@ const StyledSider = styled(Layout.Sider)`
   overflow: auto;
 
   .ant-menu-submenu .ant-menu-submenu-title {
-    height: 50px;
+    height: 54px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .ant-menu-submenu .ant-menu-item {
+    height: 54px;
     margin-top: 0;
     margin-bottom: 0;
   }
