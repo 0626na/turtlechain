@@ -4,7 +4,11 @@ import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation } from "react-query";
-import warehousingAPI, {WarehousingSheet, RequestGetSheet, WarehousingSheetItem } from "apis/warehousingAPI";
+import warehousingAPI, {
+  WarehousingSheet,
+  RequestGetSheet,
+  WarehousingSheetItem,
+} from "apis/warehousingAPI";
 import { message, notification } from "antd";
 import PageHeader from "components/PageHeader";
 import WarehousingSheetItemModal from "./WarehousingSheetItemModal";
@@ -12,8 +16,6 @@ import WarehousingSearchFilter from "./WarehousingSearchFilter";
 import WarehousingSheetList from "./WarehousingSheetList";
 import { storeIdState } from "store/storeIdState";
 import { useRecoilValue } from "recoil";
-import { FilterButton } from "components/common/FilterButtonType";
-import StoreFilter from "components/common/Filter";
 import Toolbar from "./Toolbar";
 import { storeState } from "store/storeState";
 const WarehousingListPage = function () {
@@ -45,10 +47,9 @@ const WarehousingListPage = function () {
       label: t("product name"),
     },
   ];
-  
 
   const [selectedRow, selectRow] = useState({
-    sheet_id:-1, 
+    sheet_id: -1,
     rt_store_id: -1,
     created_time: "",
     is_confirmed: 0,
@@ -56,10 +57,10 @@ const WarehousingListPage = function () {
 
   const filteredList = useMemo(
     () =>
-
-      sheetItemList.filter((item) =>
-      // item
-        item![searchType].toString().indexOf(searchText) !== -1 
+      sheetItemList.filter(
+        (item) =>
+          // item
+          item![searchType].toString().indexOf(searchText) !== -1,
       ),
     [sheetItemList, searchType, searchText],
   );
@@ -71,21 +72,17 @@ const WarehousingListPage = function () {
     is_confirmed: "",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
-    page:1
+    page: 1,
   });
 
   // 입고장 리스트 요청
   const getSheetQuery = useQuery(
     ["getSheet", searchQuery],
-    () => warehousingAPI.getSheet(searchQuery), {
-      enabled : !!store.id,
-    }
+    () => warehousingAPI.getSheet(searchQuery),
+    {
+      enabled: !!store.id,
+    },
   );
-
-  const FilterButtons : FilterButton[] = [
-    {type:"primary", status:true, text:t("whs.filter_button_list_download")},
-    {type:"primary", status:true, text:t("whs.filter_button_list_forward")}
-  ]
 
   // 입고장 삭제 요청
   const deleteSheetQuery = useMutation(["deleteSheet"], warehousingAPI.updateSheet, {
@@ -97,7 +94,7 @@ const WarehousingListPage = function () {
         getSheetQuery.refetch();
       } else {
         setCurrentPage(1);
-        setSearchQuery({ ...searchQuery  });
+        setSearchQuery({ ...searchQuery });
         // setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
       }
 
@@ -134,13 +131,11 @@ const WarehousingListPage = function () {
     [getSheetQuery.data],
   );
 
-      // 입고장 상세내역 리스트 요청
-
+  // 입고장 상세내역 리스트 요청
 
   useEffect(() => {
-    setSearchQuery({...searchQuery, rt_store_id: store.id ?? -1})
-  }, [store.id])
-
+    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
+  }, [store.id]);
 
   return (
     <>
@@ -150,7 +145,7 @@ const WarehousingListPage = function () {
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
-      <Toolbar/>
+      <Toolbar />
       <WarehousingSheetItemModal
         {...selectedRow}
         sheet_id={selectedRow.sheet_id}
@@ -181,7 +176,7 @@ const WarehousingListPage = function () {
         onNext={() => {
           const switch_type = "next";
           const last_id = list[list.length - 1].id;
-          setSearchQuery({ ...searchQuery});
+          setSearchQuery({ ...searchQuery });
           setCurrentPage(currentPage + 1);
         }}
         // 행 선택
@@ -190,8 +185,8 @@ const WarehousingListPage = function () {
           selectRow({
             sheet_id: row.id,
             created_time: moment(row.created_time).format("YYYY-MM-DD"),
-            rt_store_id:store.id!,
-            is_confirmed: (row.is_confirmed? 1 : 0),
+            rt_store_id: store.id!,
+            is_confirmed: row.is_confirmed ? 1 : 0,
           });
         }}
         // 삭제

@@ -13,8 +13,6 @@ import WarehousingCreateForm from "./WarehousingCreateForm";
 import WarehousingPreviewList from "./WarehousingPreviewList";
 import { FileExcelOutlined, ExportOutlined } from "@ant-design/icons";
 import WarehousingCreateFromOrderModal from "./WarehousingCreateFromOrderModal";
-// import StoreFilter from "components/common/Filter";
-import { FilterButton } from "components/common/FilterButtonType";
 import { StoreId, storeIdState } from "store/storeIdState";
 import { useRecoilValue } from "recoil";
 import { storeNameState } from "store/storeNameState";
@@ -79,11 +77,6 @@ const WarehousingCreatePage = function () {
       rt_store_id: store.id!,
     });
   };
-
-  const FilterButtons: FilterButton[] = [
-    { type: "primary", status: true, text: t("whs.filter_button_bulk_insert") },
-    { type: "primary", status: true, text: t("whs.filter_button_prepopulate") },
-  ];
 
   return (
     <>

@@ -1,6 +1,6 @@
+import { t } from "i18next";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { TOKEN } from "constant";
 // custom hooks
 import useLogin from "hooks/useLogin";
@@ -9,14 +9,13 @@ import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Divider, Typography, message } from "antd";
+import { Form, Input, Button, Checkbox, Divider, Typography, message, Space } from "antd";
 
 const LoginForm = function () {
-  const { t } = useTranslation();
-  const { login } = useLogin();
+  const login = useLogin();
   const [form] = Form.useForm();
 
-  const requiredRules = [{ required: true, message: t("description.required item") }];
+  const requiredRules = [{ required: false }];
 
   // 로그인 요청
   const loginQuery = useMutation(["login"], authAPI.login, {
@@ -35,6 +34,10 @@ const LoginForm = function () {
   // 로그인
   const onSubmit = (values: { login_id: string; password: string }) => {
     const { login_id, password } = values;
+    if (!(login_id && password)) {
+      message.warn(t("message.insert id password"));
+      return;
+    }
     loginQuery.mutate({ login_id, password });
   };
 
@@ -44,10 +47,12 @@ const LoginForm = function () {
       <Form.Item //
         name="login_id"
         rules={requiredRules}
+        style={{ marginBottom: "12px" }}
       >
         <Input //
           placeholder={t("id")}
           prefix={<UserOutlined />}
+          style={{ height: "44px" }}
         />
       </Form.Item>
       <Form.Item //
@@ -57,9 +62,10 @@ const LoginForm = function () {
         <Input.Password //
           placeholder={t("password")}
           prefix={<LockOutlined />}
+          style={{ height: "44px" }}
         />
       </Form.Item>
-      <FormItemContainer>
+      <Space>
         <Form.Item //
           name="autoLogin"
           valuePropName="checked"
@@ -67,11 +73,11 @@ const LoginForm = function () {
           <Checkbox>{t("auto login")}</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Link to="/find-id">{t("find id")}</Link>
+          <GreyLink to="/find-id">{t("find id")}</GreyLink>
           <Divider type="vertical" />
-          <Link to="/reset-password">{t("reset password")}</Link>
+          <GreyLink to="/reset-password">{t("reset password")}</GreyLink>
         </Form.Item>
-      </FormItemContainer>
+      </Space>
       <Form.Item>
         <Button
           block
@@ -89,12 +95,12 @@ const LoginForm = function () {
       </Form.Item>
       <Divider />
       <BottomContainer>
-        <Typography>
+        <GreyTypography>
           {t("description.not member")} <Link to="/signup">{t("signup")}</Link>
-        </Typography>
-        <Typography>
+        </GreyTypography>
+        <GreyTypography>
           {t("description.about membership")} <Link to="#">{t("about membership")}</Link>
-        </Typography>
+        </GreyTypography>
       </BottomContainer>
     </Form>
   );
@@ -107,13 +113,16 @@ const LogoImage = styled.img`
   margin-bottom: 60px;
 `;
 
-const FormItemContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const BottomContainer = styled.div`
   text-align: center;
+`;
+
+const GreyLink = styled(Link)`
+  color: #7c7d82;
+`;
+
+const GreyTypography = styled(Typography)`
+  color: #434852;
 `;
 
 export default LoginForm;
