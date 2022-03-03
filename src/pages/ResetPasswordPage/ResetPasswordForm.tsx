@@ -18,26 +18,20 @@ const ResetPasswordForm = function () {
   const [phone, setPhone] = useState("");
   const [token, setToken] = useState("");
 
-  const requiredRules = [
-    { required: true, message: t("description.required item") },
-  ];
+  const requiredRules = [{ required: true, message: t("description.required item") }];
 
   // 비밀번호 재설정 요청
-  const resetPasswordQuery = useMutation(
-    ["resetPassword"],
-    userAPI.resetPassword,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        form.resetFields();
-        setPhone("");
-        setToken("");
-        message.success(t("message.success reset password"));
-      },
-    }
-  );
+  const resetPasswordQuery = useMutation(["resetPassword"], userAPI.resetPassword, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      form.resetFields();
+      setPhone("");
+      setToken("");
+      message.success(t("message.success reset password"));
+    },
+  });
 
   // 비밀번호 재설정
   const handleReset = () => {
@@ -62,9 +56,7 @@ const ResetPasswordForm = function () {
       />
       <Form form={form} layout="vertical">
         <Typography.Title level={3}>{t("reset password")}</Typography.Title>
-        <Typography style={{ marginBottom: 20 }}>
-          {t("description.please phone auth")}
-        </Typography>
+        <Typography style={{ marginBottom: 20 }}>{t("description.please phone auth")}</Typography>
         <Form.Item>
           <Button //
             type="primary"
@@ -99,9 +91,7 @@ const ResetPasswordForm = function () {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     } else {
-                      return Promise.reject(
-                        new Error(t("message.not match password"))
-                      );
+                      return Promise.reject(new Error(t("message.not match password")));
                     }
                   },
                 }),

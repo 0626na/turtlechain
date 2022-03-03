@@ -1,19 +1,13 @@
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Form, Input, Button, InputNumber, Card, Select, Row, message } from "antd";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import { useCallback, useState } from "react";
-import { Wholesale } from "apis/vendorAPI";
 import { AdjustmentItem } from "apis/adjustmentAPI";
-import SearchWholesaleModal from "pages/VendorCreatePage/SearchWholesaleModal";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
-import TurtleSelect from "components/common/TurtleSelect";
-import TurtleInputSelect from "components/common/TurtleInputSelect";
 import { BaseOptionType } from "antd/lib/select";
 import TurtleButton from "components/common/TurtleButton";
-import { FormProvider } from "antd/lib/form/context";
 import SearchVendorModal from "components/SearchVendorModal";
 import SearchProductModal from "components/SearchProductModal";
 import { useRecoilValue } from "recoil";
@@ -30,7 +24,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
 
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
-  const [adjType, setAdjType] = useState("reserve")
+  const [adjType, setAdjType] = useState("reserve");
   const store = useRecoilValue(storeState);
   // 거래처 검색 모달
   const [searchModalVisible, setSearchModalVisible] = useState(false);
@@ -40,8 +34,8 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
   const [adjList, setAdjList] = useState<Array<AdjustmentItem>>();
 
   const onClickCreate = () => {
-    form.setFieldsValue({"rt_store_id":store.id})
-    form.setFieldsValue({"type":adjType})
+    form.setFieldsValue({ rt_store_id: store.id });
+    form.setFieldsValue({ type: adjType });
     form.validateFields().then(() => {
       onAdjItemCreated({
         ...form.getFieldsValue(),
@@ -70,7 +64,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
         product_option: undefined,
         product_price: undefined,
         product_count: undefined,
-        rt_store_id:store.id,
+        rt_store_id: store.id,
       });
       setVendorModalVisible(false);
     },
@@ -93,15 +87,15 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
       product_option: string,
       product_price: number,
     ) => {
-
       form.setFieldsValue({
-        product_id:product_id,
-        product_name:product_name,
-        vendor_product_name:vendor_product_name,
-        product_code:product_code,
-        product_option:product_option,
-        price:product_price,
-      });      setProductModalVisible(false);
+        product_id: product_id,
+        product_name: product_name,
+        vendor_product_name: vendor_product_name,
+        product_code: product_code,
+        product_option: product_option,
+        price: product_price,
+      });
+      setProductModalVisible(false);
     },
     [form],
   );
@@ -195,37 +189,30 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
 
         <TurtleInputNumber // count Input
           name="count"
-          min = {1}
+          min={1}
           defaultValue={1}
           label={t("adjustment.count")}
         />
 
         <TurtleInputNumber // price Input
           name="price"
-          min={0} 
+          min={0}
           defaultValue={0}
           label={t("product.price")}
         />
 
-        <Form.Item
-          required={true}
-          name="type"
-          
-          label={t("adjustment.type.default")}
-          
-          >
-            <Select 
+        <Form.Item required={true} name="type" label={t("adjustment.type.default")}>
+          <Select
             defaultValue={"reserve"}
-            onSelect={(type:string) => {
-              setAdjType(type)
+            onSelect={(type: string) => {
+              setAdjType(type);
             }}
-            >
-             {selectOptions.map((option) => {
-      
-             return <Select.Option value={option.value}>{option.name}</Select.Option>
-            
-            })}; 
-            </Select>
+          >
+            {selectOptions.map((option) => {
+              return <Select.Option value={option.value}>{option.name}</Select.Option>;
+            })}
+            ;
+          </Select>
         </Form.Item>
         <TurtleTextArea
           label={t("adjustment.memo")}

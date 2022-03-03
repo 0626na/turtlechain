@@ -1,16 +1,18 @@
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
-import PageTemplate from "./PageTemplate";
+import { t } from "i18next";
 import ResetPasswordForm from "./ResetPasswordForm";
+import TurtleTemplate from "components/common/TurtleTemplate";
 
 const FindIdPage = function () {
-  const { t } = useTranslation();
   const title = `${t("turtlechain")} - ${t("reset password")}`;
+
   return (
-    <PageTemplate>
+    <>
       <Helmet title={title} />
-      <ResetPasswordForm />
-    </PageTemplate>
+      <TurtleTemplate>
+        <ResetPasswordForm />
+      </TurtleTemplate>
+    </>
   );
 };
 
