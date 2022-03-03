@@ -35,7 +35,6 @@ const OrderCreatePage = function () {
         title={t("order.create")}
         breadcrumbList={[t("common.home"), t("order.management"), t("order.create")]}
       />
-      <Toolbar addItem={addItem} />
       <OrderCreateForm addItem={addItem} />
       <OrderPreviewList list={itemList} deleteItem={deleteItem} resetList={resetItemList} />
     </>
