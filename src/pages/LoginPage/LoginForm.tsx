@@ -13,7 +13,7 @@ import { Form, Input, Button, Checkbox, Divider, Typography, message } from "ant
 
 const LoginForm = function () {
   const { t } = useTranslation();
-  const { login } = useLogin();
+  const login = useLogin();
   const [form] = Form.useForm();
 
   const requiredRules = [{ required: true, message: t("description.required item") }];

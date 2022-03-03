@@ -9,37 +9,37 @@ import LoginRouter from "./LoginRouter";
 import MainRouter from "./MainRouter";
 
 const Router = function () {
-  const { login } = useLogin();
+  const login = useLogin();
+  const token = useRecoilValue(tokenState);
   const localStorageToken = localStorage.getItem(TOKEN);
-  const storeToken = useRecoilValue(tokenState);
+  const sessionStorageToken = sessionStorage.getItem(TOKEN);
 
   useEffect(() => {
     if (localStorageToken) {
       login(localStorageToken);
     }
-  }, []);
+    if (sessionStorageToken) {
+      login(sessionStorageToken);
+    }
+  });
 
-  if (localStorageToken && !storeToken) {
-    return null;
-  } else {
-    return (
-      <BrowserRouter>
-        {storeToken ? (
-          <MainLayout
-            content={
-              <Suspense fallback="loading">
-                <MainRouter />
-              </Suspense>
-            }
-          />
-        ) : (
-          <Suspense fallback="loading">
-            <LoginRouter />
-          </Suspense>
-        )}
-      </BrowserRouter>
-    );
-  }
+  return (
+    <BrowserRouter>
+      {token ? (
+        <MainLayout
+          content={
+            <Suspense fallback="loading">
+              <MainRouter />
+            </Suspense>
+          }
+        />
+      ) : (
+        <Suspense fallback="loading">
+          <LoginRouter />
+        </Suspense>
+      )}
+    </BrowserRouter>
+  );
 };
 
 export default Router;

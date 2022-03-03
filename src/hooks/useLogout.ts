@@ -12,10 +12,11 @@ const useLogout = function () {
     v2Axios.defaults.headers.common["Authorization"] = "";
     queryClient.refetchQueries();
     localStorage.removeItem(TOKEN);
+    sessionStorage.removeItem(TOKEN);
     resetToken();
   };
 
-  return { logout };
+  return logout;
 };
 
 export default useLogout;

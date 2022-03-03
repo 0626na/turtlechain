@@ -14,7 +14,7 @@ interface Props {
 const Header = function ({ handleMenuVisible }: Props) {
   const { t } = useTranslation();
   const history = useHistory();
-  const { logout } = useLogout();
+  const logout = useLogout();
 
   const menu = (
     <Menu>

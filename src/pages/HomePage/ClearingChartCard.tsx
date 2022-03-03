@@ -27,9 +27,7 @@ function ClearingChartCard() {
     ["getClearingStatistic", searchQuery],
     () => mainAPI.getClearingStatistic(searchQuery),
     {
-      onSuccess: () => {
-        console.log("hi");
-      },
+      onSuccess: () => {},
     },
   );
 
