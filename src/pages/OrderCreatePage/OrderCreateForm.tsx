@@ -27,7 +27,6 @@ const OrderCreateForm = function ({ addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [form] = Form.useForm();
 
-  const [createModalVisible, setCreateModalVisible] = useState(false);
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
 
@@ -80,32 +79,6 @@ const OrderCreateForm = function ({ addItem }: Props) {
 
   return (
     <>
-      <Toolbar>
-        <Col>
-          <Space>
-            <TurtleButtonSub
-              icon="file"
-              onClick={() => {
-                if (!store.id) {
-                  message.warn("쇼핑몰을 선택해주세요.");
-                  return;
-                }
-                setCreateModalVisible(true);
-              }}
-            >
-              {t("button.upload order sheet")}
-            </TurtleButtonSub>
-            {/* <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub> */}
-          </Space>
-        </Col>
-      </Toolbar>
-      <CreateBulkOrderModal
-        visible={createModalVisible}
-        closeModal={() => {
-          setCreateModalVisible(false);
-        }}
-        addItem={addItem}
-      />
       <Form layout="vertical" form={form}>
         <TurtleText>{t("order.enter info")}</TurtleText>
         <Row gutter={32}>

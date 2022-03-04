@@ -29,12 +29,12 @@ const GlobalStyle = createGlobalStyle`
   }
   @font-face {
     font-family: "Spoqa Han Sans";
-    font-weight: 450;
+    font-weight: 500;
     src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Medium.ttf")
   }
 @font-face {
     font-family: "Spoqa Han Sans";
-    font-weight: 500;
+    font-weight: 700;
     src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Bold.ttf")
   }
   body {

@@ -88,6 +88,8 @@ const LoginForm = function () {
           style={{
             background: "linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)",
             border: "none",
+            borderRadius: "4px",
+            height: "46px",
           }}
         >
           {t("login")}

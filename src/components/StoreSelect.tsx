@@ -5,15 +5,15 @@ import { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { storeState } from "store/storeState";
 import { t } from "i18next";
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Store } from "../store/storeState";
+import Form from "antd/lib/form/Form";
 
 interface Props {
   warningMessage?: string;
 }
 
 function CustomStoreSelect({ warningMessage }: Props) {
-  // 쇼핑몰 식별 번호
   const [store, setStore] = useRecoilState(storeState);
   const [storeList, setStoreList] = useState<Array<Store>>([]);
 
@@ -33,14 +33,17 @@ function CustomStoreSelect({ warningMessage }: Props) {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        if (data?.data.data.length > 0)
-          setStoreList(
-            data?.data.data.map((store: any) => ({
-              id: store.id,
-              name: store.name,
-            })),
-          );
-        // TODO: 쇼핑몰이 1개일때는 해당 쇼핑몰 선택, 다중일때는 선택 안함 추가
+        if (data.data.data.length === 0) return;
+
+        // storeList 채워준다.
+        setStoreList(
+          data.data.data.map((store: Store) => ({
+            id: store.id,
+            name: store.name,
+          })),
+        );
+
+        // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택
         if (data.data.data.length === 1) {
           setStore({ id: data.data.data[0].id, name: data.data.data[0].name });
         }
@@ -49,21 +52,21 @@ function CustomStoreSelect({ warningMessage }: Props) {
   );
 
   // 쇼핑몰 선택
-  const handleChange = (value: number) => {
-    setStore((prevStore: Store) => {
-      if (prevStore.id && warningMessage) {
-        const answer = window.confirm(warningMessage);
-        if (!answer) {
-          return prevStore;
-        }
+  const handleChange = useCallback(
+    (value: number) => {
+      // warningMessage 없으면 return
+      if (!warningMessage) return;
+
+      // store.id 가 기존에 있으면 confirm 받고 false 시 return;
+      if (store.id && !window.confirm(warningMessage)) {
+        return;
       }
 
-      return {
-        id: value,
-        name: storeList.find((item) => item.id === value)?.name,
-      } as Store;
-    });
-  };
+      // setStore 한다.
+      setStore({ id: value, name: storeList.find((item) => item.id === value)!.name });
+    },
+    [store, storeList, setStore, warningMessage],
+  );
 
   // 페이지 바뀔때 마다 storeId 초기화
   useEffect(() => {
@@ -80,13 +83,11 @@ function CustomStoreSelect({ warningMessage }: Props) {
         onChange={handleChange}
         value={store.id}
       >
-        {storeList.map((store) => {
-          return (
-            <Select.Option key={store.id} value={store.id}>
-              {store.name}
-            </Select.Option>
-          );
-        })}
+        {storeList.map((store) => (
+          <Select.Option key={store.id} value={store.id}>
+            {store.name}
+          </Select.Option>
+        ))}
       </Select>
     </Space>
   );

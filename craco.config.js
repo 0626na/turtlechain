@@ -15,7 +15,7 @@ module.exports = {
               "@input-height-base": "36px",
 
               // Form
-              "@form-item-margin-bottom": "20px",
+              "@form-item-margin-bottom": "22px",
 
               // Switch
               "@switch-color": "#2174F1",

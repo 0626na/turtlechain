@@ -1,4 +1,4 @@
-import { Col, message, Row, Space } from "antd";
+import { Col, Row, Space } from "antd";
 import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
 
@@ -11,18 +11,19 @@ function Toolbar({ children }: Props) {
     <>
       <Row
         gutter={24}
-        align={"middle"}
+        align="middle"
         justify="space-between"
         style={{
-          margin: "0",
-          padding: "12px 12px",
-          backgroundColor: "rgba(243,246,249, 0.4)",
+          margin: 0,
+          padding: "24px 12px",
         }}
       >
         <Col>
-          <StoreSelect warningMessage="쇼핑몰 변경 시 작업하였던 정보가 모두 사라집니다. 변경하시겠습니까?" />
+          <StoreSelect warningMessage={t("message.warning change mall")} />
         </Col>
-        {children}
+        <Col>
+          <Space>{children}</Space>
+        </Col>
       </Row>
     </>
   );

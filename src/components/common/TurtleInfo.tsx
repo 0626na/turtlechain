@@ -1,5 +1,4 @@
-import { Row, Typography } from "antd";
-import styled from "styled-components";
+import { Typography } from "antd";
 import { InfoCircleOutlined as InfoIcon } from "@ant-design/icons";
 
 interface Props {
@@ -8,16 +7,10 @@ interface Props {
 
 function TurtleInfo({ children }: Props) {
   return (
-    <StyledRow>
-      <Typography.Text type="secondary" style={{ fontSize: "14px" }}>
-        <InfoIcon /> {children}
-      </Typography.Text>
-    </StyledRow>
+    <Typography.Text type="secondary" style={{ fontSize: "14px" }}>
+      <InfoIcon /> {children}
+    </Typography.Text>
   );
 }
-
-const StyledRow = styled(Row)`
-  padding-top: 0 !important;
-`;
 
 export default TurtleInfo;

@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { Col, Row, Space, Typography } from "antd";
 import TurtleDivider from "./common/TurtleDivider";
 import TurtleBreadCrumb from "./common/TurtleBreadCrumb";
-import TurtleIcon from "./common/TurtleIcon";
-import { InfoCircleOutlined as InfoIcon } from "@ant-design/icons";
+import TurtleInfo from "./common/TurtleInfo";
+import { t } from "i18next";
 
 interface Props {
-  pageName: string;
+  pageName?: string;
   title: string;
   breadcrumbList?: Array<string>;
   info?: string;
@@ -17,32 +17,23 @@ const PageHeader = function ({ pageName, title, breadcrumbList, info }: Props) {
     <>
       <Row align="middle" justify="space-between">
         <Col>
-          <Space>
-            <TurtleIcon type="pageHeader" name={`${pageName}_gr`} />
-            <StyledTitle level={3}>{title}</StyledTitle>
-          </Space>
+          <StyledTitle level={3}>{title}</StyledTitle>
+          {info && <TurtleInfo>{info}</TurtleInfo>}
         </Col>
-        <Col>{breadcrumbList && <TurtleBreadCrumb list={breadcrumbList}></TurtleBreadCrumb>}</Col>
+        <Col>
+          {breadcrumbList && (
+            <TurtleBreadCrumb list={[t("HOME"), ...breadcrumbList]}></TurtleBreadCrumb>
+          )}
+        </Col>
       </Row>
-      {info && (
-        <StyledRow>
-          <Typography.Text type="secondary">
-            <InfoIcon /> {info}
-          </Typography.Text>
-        </StyledRow>
-      )}
       <TurtleDivider />
     </>
   );
 };
 
 const StyledTitle = styled(Typography.Title)`
-  margin: 4px 0 0 1px;
-  margin-bottom: 0 !important;
-`;
-
-const StyledRow = styled(Row)`
-  padding-top: 0;
+  margin-top: 12px !important;
+  margin-bottom: 8px !important;
 `;
 
 export default PageHeader;

@@ -19,7 +19,8 @@
     "search vendor": "거래처명으로 검색하면 쉽게 찾을 수 있습니다.",
     "update tax included": "부가세 포함 여부를 변경하시겠습니까?",
     "check home": "각 항목별 상세 내역은 매입조정 관리 또는 정산 관리 메뉴에서 확인 바랍니다.",
-    "today reserve included": "당일 미송은 자동으로 결제금액에 포함됩니다."
+    "today reserve included": "당일 미송은 자동으로 결제금액에 포함됩니다.",
+    "excel type": "대량 업로드 파일은 .CSV .XLS 또는 .XLSX 만 사용할 수 있습니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
