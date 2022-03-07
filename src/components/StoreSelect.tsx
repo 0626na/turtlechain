@@ -54,11 +54,8 @@ function CustomStoreSelect({ warningMessage }: Props) {
   // 쇼핑몰 선택
   const handleChange = useCallback(
     (value: number) => {
-      // warningMessage 없으면 return
-      if (!warningMessage) return;
-
       // store.id 가 기존에 있으면 confirm 받고 false 시 return;
-      if (store.id && !window.confirm(warningMessage)) {
+      if (store.id && warningMessage && !window.confirm(warningMessage)) {
         return;
       }
 
