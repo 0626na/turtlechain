@@ -1,9 +1,10 @@
 import { Button } from "antd";
-import { TFunctionResult } from "i18next";
 import { DownloadOutlined, FileOutlined } from "@ant-design/icons";
 
 interface Props {
-  children: TFunctionResult;
+  children: React.ReactNode;
+  type?: "primary" | "default";
+  shape?: "round" | "default";
   icon?: "download" | "file";
   size?: "small" | "middle";
   color?: "skyblue" | "blue" | "red" | "green" | "grey" | "gray";
@@ -14,6 +15,8 @@ interface Props {
 
 function TurtleButtonSub({
   children,
+  type = "default",
+  shape = "default",
   icon,
   size = "middle",
   disabled = false,
@@ -45,19 +48,21 @@ function TurtleButtonSub({
 
   return (
     <Button
+      type={type}
+      shape={shape}
       size={size}
       onClick={onClick}
       icon={icon === "download" ? <DownloadOutlined /> : icon === "file" ? <FileOutlined /> : ""}
       style={{
-        borderRadius: 4,
+        borderRadius: shape === "default" ? 2 : "",
         padding: "4px 10px",
         paddingTop: size === "small" ? "1.5px" : "4px",
-        color: makeColor(),
+        color: type === "default" ? makeColor() : "",
+        backgroundColor: type === "primary" ? makeColor() : "",
         borderColor: makeColor(),
       }}
-      disabled={disabled}
       loading={loading}
-      ghost
+      disabled={disabled}
     >
       {children}
     </Button>

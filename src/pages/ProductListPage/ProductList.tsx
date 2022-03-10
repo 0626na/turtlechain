@@ -11,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
 import UpdateProductModal from "./UpdateProductModal";
+import Toolbar from "components/Toolbar";
 
 function ProductList() {
   const store = useRecoilValue(storeState);
@@ -63,16 +64,30 @@ function ProductList() {
 
   return (
     <>
-      <div>
-        <TurtleText>{t("product.lists")}</TurtleText>
+      <Toolbar />
+      <Row>
+        <TurtleText>{`${t("product.lists")} (${
+          getProductListQuery.data?.data.total_count ?? 0
+        })`}</TurtleText>
+      </Row>
+      <Row>
         <SearchFilter type="product" onSearch={searchProductList} />
-      </div>
+      </Row>
       <Table
         size="small"
         loading={getProductListQuery.isLoading}
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}
+        onRow={(record) => {
+          return {
+            onClick: (event) => {
+              selectRow(record);
+              setUpdateModalVisible(true);
+            },
+          };
+        }}
         pagination={false}
+        style={{ height: 550 }}
         expandable={{
           expandedRowRender: (record) => <div>{record.memo}</div>,
           columnWidth: 25,
@@ -81,6 +96,7 @@ function ProductList() {
               <FileTextOutlined
                 style={record.memo ? {} : { opacity: "0.4", cursor: "auto" }}
                 onClick={(e) => {
+                  e.stopPropagation();
                   record.memo && onExpand(record, e);
                 }}
               />
@@ -96,6 +112,7 @@ function ProductList() {
           },
           {
             ellipsis: true,
+            width: "8%",
             title: "거래처명",
             render: (_, record) => record.vendor_info.vendor_name,
           },
@@ -121,40 +138,22 @@ function ProductList() {
           },
           {
             ellipsis: true,
+            width: "10%",
             title: "옵션",
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
+            width: "8%",
             title: "공급가(원)",
-            render: (_, record) => record.price,
-          },
-          Table.EXPAND_COLUMN,
-          {
-            ellipsis: true,
-            title: "메모",
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,
             title: "상품이미지URL",
             render: (_, record) => record.image_url,
           },
-          {
-            ellipsis: true,
-            title: "수정",
-            render: (_, record) => (
-              <TurtleButtonSub //
-                size="small"
-                color="green"
-                onClick={() => {
-                  selectRow(record);
-                  setUpdateModalVisible(true);
-                }}
-              >
-                수정하기
-              </TurtleButtonSub>
-            ),
-          },
+          Table.EXPAND_COLUMN,
         ]}
         footer={() => (
           <Row justify="center">

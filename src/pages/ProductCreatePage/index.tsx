@@ -1,8 +1,7 @@
 import PageHeader from "components/PageHeader";
 import { t } from "i18next";
 import { Helmet } from "react-helmet";
-import CreateProductForm from "./CreateProductForm";
-import Toolbar from "./Toolbar";
+import ProductPreviewList from "./ProductPreviewList";
 
 function ProductCreatePage() {
   const title = `${t("turtlechain")} - ${t("product.create")}`;
@@ -11,12 +10,11 @@ function ProductCreatePage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="product"
         title={t("product.create")}
-        breadcrumbList={[t("common.home"), t("product.management"), t("product.create")]}
+        breadcrumbList={[t("product.management"), t("product.create")]}
+        info={t("description.excel type")}
       />
-      <Toolbar />
-      <CreateProductForm />
+      <ProductPreviewList />
     </>
   );
 }

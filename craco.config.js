@@ -39,7 +39,7 @@ module.exports = {
 
               // Buttons
               "@btn-font-weight": "400",
-              "@btn-border-radius-base": "8px",
+              "@btn-border-radius-base": "4px",
               "@btn-border-radius-sm": "4px",
               "@btn-shadow": "0",
               "@btn-primary-shadow": "0",

@@ -93,10 +93,30 @@ const updateProduct = async function (data: RequestUpdateProduct) {
   return response.data;
 };
 
+export interface RequestGetCode {
+  rt_store_id: number;
+  vendor_id: string;
+}
+
+export interface ResponseGetCode {
+  msg: string;
+  data: string;
+}
+
+const getCode = async function (query: RequestGetCode) {
+  let url = "provisioning/create_product_id&";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetCode>(url);
+  return response.data;
+};
+
 const productAPI = {
   getProductList,
   createProduct,
   updateProduct,
+  getCode,
 };
 
 export default productAPI;

@@ -11,11 +11,9 @@ function ProductListPage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="product"
         title={t("product.list")}
-        breadcrumbList={[t("common.home"), t("product.management"), t("product.list")]}
+        breadcrumbList={[t("product.management"), t("product.list")]}
       />
-      <Toolbar />
       <ProductList />
     </>
   );

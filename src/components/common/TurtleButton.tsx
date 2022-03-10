@@ -6,10 +6,18 @@ interface Props {
   type?: "primary" | "secondary" | "default";
   disabled?: boolean;
   loading?: boolean;
+  htmlType?: "submit";
   onClick?: () => void;
 }
 
-function TurtleButton({ children, type = "primary", disabled = false, loading, onClick }: Props) {
+function TurtleButton({
+  children,
+  type = "primary",
+  disabled = false,
+  loading,
+  htmlType,
+  onClick,
+}: Props) {
   return (
     <Button
       type={type === "default" ? "default" : "primary"}
@@ -22,6 +30,7 @@ function TurtleButton({ children, type = "primary", disabled = false, loading, o
         backgroundColor: type === "secondary" ? "#13BC9E" : "",
         borderColor: type === "secondary" ? "#13BC9E" : "",
       }}
+      htmlType={htmlType}
     >
       {children}
     </Button>

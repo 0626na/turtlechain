@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Row, Typography } from "antd";
 import { TFunctionResult } from "i18next";
 import styled from "styled-components";
 
@@ -11,8 +11,6 @@ function TurtleText({ children }: Props) {
 }
 
 const StyledText = styled(Typography.Text)`
-  display: block;
-  margin-bottom: 1rem;
   font-size: 18px;
 `;
 

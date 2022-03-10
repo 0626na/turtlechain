@@ -5,14 +5,14 @@ import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
 import { t } from "i18next";
 
+export interface SearchState {
+  type: string;
+  search_string: string;
+}
+
 interface Props {
   type: "vendor" | "product";
   onSearch: (searchState: SearchState) => void;
-}
-
-interface SearchState {
-  type: string;
-  search_string: string;
 }
 
 function SearchFilter({ type, onSearch }: Props) {
@@ -64,7 +64,7 @@ function SearchFilter({ type, onSearch }: Props) {
       value: "name",
     },
     {
-      name: t("product.vendor_product_name"),
+      name: t("product.vendor product name"),
       value: "vendor_product_name",
     },
     {

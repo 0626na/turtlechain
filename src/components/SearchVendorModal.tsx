@@ -7,8 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import styled from "styled-components";
 import { phonePattern } from "utils/pattern";
-import TurtleButtonSub from "./common/TurtleButtonSub";
 import SearchFilter from "./SearchFilter";
 
 interface Props {
@@ -65,9 +65,9 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   }, [store.id]);
 
   return (
-    <Modal
+    <StyledModal
       centered
-      width="70%"
+      width="45%"
       title={t("vendor.search")}
       visible={visible}
       onCancel={closeModal}
@@ -76,27 +76,41 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       <Row>
         <SearchFilter type="vendor" onSearch={searchVendor} />
       </Row>
-
       <Table
         size="small"
         style={{ height: "550px", padding: "24px 0px" }}
         loading={getVendorListQuery.isLoading}
         dataSource={getVendorListQuery.data?.data.vendor_list}
         rowKey={(record) => record.id}
+        onRow={(record) => {
+          return {
+            onClick: (event) => {
+              onClickSelect(
+                record.id,
+                record.vendor_name,
+                record.vendor_address,
+                record.vendor_phone.phone,
+              );
+            },
+          };
+        }}
         pagination={false}
         columns={[
           {
             ellipsis: true,
+            width: "20%",
             title: t("vendor.name"),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
+            width: "20%",
             title: t("vendor.address"),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
+            width: "20%",
             title: t("vendor.store phone"),
             render: (_, record) => record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
           },
@@ -105,26 +119,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
             title: t("vendor.account"),
             render: (_, record) =>
               `${record.vendor_account.bank} ${record.vendor_account.account_number} ${record.vendor_account.account_holder}`,
-          },
-          {
-            align: "center",
-            title: "",
-            render: (_, record) => (
-              <TurtleButtonSub //
-                size="small"
-                color="green"
-                onClick={() => {
-                  onClickSelect(
-                    record.id,
-                    record.vendor_name,
-                    record.vendor_address,
-                    record.vendor_phone.phone,
-                  );
-                }}
-              >
-                {t("button.select")}
-              </TurtleButtonSub>
-            ),
           },
         ]}
         footer={() => (
@@ -139,8 +133,14 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
           </Row>
         )}
       />
-    </Modal>
+    </StyledModal>
   );
 }
+
+const StyledModal = styled(Modal)`
+  .ant-modal-header {
+    background-color: #f3f6f9;
+  }
+`;
 
 export default SearchVendorModal;

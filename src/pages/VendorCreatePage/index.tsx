@@ -11,7 +11,6 @@ function VendorCreatePage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="vendor"
         title={t("vendor.create")}
         breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.create")]}
         info={t("description.search vendor")}

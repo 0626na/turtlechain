@@ -3,10 +3,11 @@ import StoreSelect from "components/StoreSelect";
 import { t } from "i18next";
 
 interface Props {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  isWarning?: boolean;
 }
 
-function Toolbar({ children }: Props) {
+function Toolbar({ children, isWarning }: Props) {
   return (
     <>
       <Row
@@ -19,7 +20,7 @@ function Toolbar({ children }: Props) {
         }}
       >
         <Col>
-          <StoreSelect warningMessage={t("message.warning change mall")} />
+          <StoreSelect warningMessage={isWarning ? t("message.warning change mall") : ""} />
         </Col>
         <Col>
           <Space>{children}</Space>

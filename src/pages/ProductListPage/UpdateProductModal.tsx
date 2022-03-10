@@ -1,4 +1,4 @@
-import { Form, Input, message, Modal, notification, Popconfirm, Row } from "antd";
+import { Divider, Form, Input, message, Modal, notification, Popconfirm, Row } from "antd";
 import { productAPI } from "apis";
 import { Product } from "apis/productAPI";
 import { AxiosError } from "axios";
@@ -10,6 +10,8 @@ import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useCallback, useEffect } from "react";
 import { useMutation } from "react-query";
+import styled from "styled-components";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface Props {
   visible: boolean;
@@ -56,47 +58,26 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
   }, [form, closeModal]);
 
   return (
-    <Modal
+    <StyledModal
       centered
-      width="80%"
-      maskClosable={false}
-      getContainer={false}
-      forceRender
+      width="50%"
       title={t("product.update info")}
+      closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
       visible={visible}
-      footer={false}
       onCancel={closeModal}
+      footer={false}
     >
       <Form
         layout="horizontal"
         form={form}
-        labelCol={{ span: 3 }}
-        wrapperCol={{ span: 7 }}
         colon={false}
+        labelCol={{ span: 7 }}
+        wrapperCol={{ span: 12 }}
       >
         <Form.Item name="id" hidden>
           <Input hidden />
         </Form.Item>
-        <TurtleText>{t("product.basic info")}</TurtleText>
-        <TurtleInput label="상품명" name="name" required={true} />
-        <TurtleInput
-          label="거래처 상품명"
-          name="vendor_product_name"
-          required={true}
-          disabled={true}
-        />
-        <TurtleInput label="상품 바코드 번호" name="product_code" disabled={true} />
-        <TurtleInput label="옵션" name="option" />
-        <TurtleInputNumber label="공급가" name="price" min={0} />
-        <TurtleInput label="상품 이미지 URL" name="image_url" required={false} disabled={true} />
-        <TurtleTextArea // 메모 TextArea
-          required={false}
-          name="memo"
-          label={t("vendor.memo")}
-          placeholder={t("placeholder.memo")}
-          rows={5}
-        />
-        <TurtleText>{t("vendor.basic info")}</TurtleText>
+
         <TurtleInput // 거래처명 Input
           name="vendor_name"
           label={t("vendor.name")}
@@ -112,7 +93,47 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           label={t("vendor.store phone")}
           disabled={true}
         />
-        <Row justify="end">
+        <Divider />
+        <TurtleInput // 상품명 Input
+          label={t("product.name")}
+          name="name"
+          required={true}
+        />
+        <TurtleInput // 거래처 상품명 Input
+          label={t("product.vendor product name")}
+          name="vendor_product_name"
+          required={true}
+          disabled={true}
+        />
+        <TurtleInput // 상품 바코드 Input
+          label={t("product.code")}
+          name="product_code"
+          disabled={true}
+        />
+        <TurtleInput // 옵션 Input
+          label={t("product.option")}
+          name="option"
+        />
+        <TurtleInputNumber //
+          label={t("product.price")}
+          name="price"
+          min={0}
+        />
+        <TurtleInput //
+          label={t("product.image url")}
+          name="image_url"
+          required={false}
+          disabled={true}
+        />
+        <TurtleTextArea // 메모 TextArea
+          required={false}
+          label={t("vendor.memo")}
+          name="memo"
+          placeholder={t("placeholder.memo")}
+          rows={5}
+        />
+
+        <Row justify="center">
           <Popconfirm
             title={t("description.really update")}
             okText={t("yes")}
@@ -128,8 +149,17 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           </Popconfirm>
         </Row>
       </Form>
-    </Modal>
+    </StyledModal>
   );
 }
+
+const StyledModal = styled(Modal)`
+  .ant-modal-header {
+    background-color: #2b3140;
+  }
+  .ant-modal-title {
+    color: #ffffff;
+  }
+`;
 
 export default UpdateProductModal;
