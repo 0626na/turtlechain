@@ -1,4 +1,16 @@
-import { Button, Col, message, notification, Popconfirm, Row, Space, Table } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Menu,
+  message,
+  notification,
+  Popconfirm,
+  Row,
+  Space,
+  Table,
+  Upload,
+} from "antd";
 import orderAPI, { OrderItemShow } from "apis/orderAPI";
 import TurtleText from "components/common/TurtleText";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
@@ -13,10 +25,18 @@ import { storeState } from "store/storeState";
 import Toolbar from "components/Toolbar";
 import CreateBulkOrderModal from "./CreateBulkOrderModal";
 import OrderCreateForm from "./OrderCreateForm";
+import { FileOutlined, DownOutlined } from "@ant-design/icons";
+import { RcFile } from "antd/lib/upload";
+import excelAPI, { OrderItem } from "apis/excelAPI";
+import TurtleInfo from "../../components/common/TurtleInfo";
 
 const OrderPreviewList = function () {
   const store = useRecoilValue(storeState);
+  const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [itemList, setItemList] = useState<Array<OrderItemShow>>([]);
+  const [allList, setAllList] = useState<Array<OrderItem>>([]);
+  const [successList, setSuccessList] = useState<Array<OrderItem>>([]);
+  const [failList, setFailList] = useState<Array<OrderItem>>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   const makeType = (type: string) => {
@@ -29,18 +49,52 @@ const OrderPreviewList = function () {
     return "주문";
   };
 
-  const createOrderQuery = useMutation("createOrder", orderAPI.create, {
+  const parseOrderQuery = useMutation("parseOrder", excelAPI.parseOrder, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      notification.open({
-        type: "success",
-        message: `성공적으로 등록하였습니다.`,
-      });
-      resetItemList();
+      if (data.data.error) {
+        message.error(data.data.error);
+        resetField();
+        return;
+      }
+      setAllList([...data.data.success, ...data.data.fail]);
+      setSuccessList(data.data.success);
+      setFailList(data.data.fail);
     },
   });
+
+  const loadFile = (file: RcFile) => {
+    const form = new FormData();
+    form.append("files", file);
+    form.append("rt_store_id", store.id?.toString() ?? "");
+    parseOrderQuery.mutate(form);
+  };
+
+  const resetField = useCallback(() => {
+    setFileList([]);
+    setAllList([]);
+    setSuccessList([]);
+    setFailList([]);
+  }, []);
+
+  const createOrderQuery = useMutation(
+    "createOrder", //
+    orderAPI.create,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        notification.open({
+          type: "success",
+          message: `성공적으로 등록하였습니다.`,
+        });
+        resetItemList();
+      },
+    },
+  );
 
   const addItem = useCallback((item: OrderItemShow) => {
     setItemList((itemList) => [...itemList, item]);
@@ -86,30 +140,64 @@ const OrderPreviewList = function () {
     });
   }, [itemList, store.id]);
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Upload //
+          maxCount={1}
+          accept=".csv, .xls, .xlsx"
+          beforeUpload={(file) => {
+            if (!store.id) {
+              message.warn(t("message.select store"));
+              return false;
+            }
+            setFileList([file]);
+            loadFile(file);
+            return false;
+          }}
+          onRemove={() => {
+            resetField();
+            return false;
+          }}
+          fileList={fileList}
+        >
+          {t("button.upload excel")}
+        </Upload>
+      </Menu.Item>
+      <Menu.Item key="2">{t("button.add single order")}</Menu.Item>
+      <Menu.Item key="3">{t("button.load adjustment")}</Menu.Item>
+    </Menu>
+  );
+
   return (
     <>
       <Toolbar>
-        <TurtleButtonSub
-          icon="file"
-          onClick={() => {
-            if (!store.id) {
-              message.warn("쇼핑몰을 선택해주세요.");
-              return;
-            }
-            setCreateModalVisible(true);
-          }}
-        >
-          {t("button.upload order sheet")}
+        <TurtleButtonSub type="primary" color="skyblue">
+          {t("button.load program")}
         </TurtleButtonSub>
-        {/* <TurtleButtonSub icon="download">{t("button.load adjustment")}</TurtleButtonSub> */}
+        <Dropdown overlay={menu} placement="bottomCenter">
+          <Button
+            style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
+            icon={<FileOutlined />}
+          >
+            {t("button.add order")} <DownOutlined />
+          </Button>
+        </Dropdown>
       </Toolbar>
       <Row>
-        <TurtleText>{t("order.preview list")}</TurtleText>
+        <TurtleText>
+          {t("order.preview list")}
+          <br />
+          <TurtleInfo>
+            붉은 색으로 표시된 "주문불가" 상품은 등록되지 않은 상품으로 오늘 주문에서 제외됩니다.
+          </TurtleInfo>
+        </TurtleText>
         <Table
           size="small"
           scroll={{ y: 800 }}
+          loading={parseOrderQuery.isLoading}
           pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-          dataSource={itemList}
+          dataSource={successList}
           rowKey={(record) => record.product_id}
           style={{ height: "510px" }}
           columns={[
