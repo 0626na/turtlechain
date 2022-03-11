@@ -2,7 +2,6 @@ import PageHeader from "components/PageHeader";
 import { t } from "i18next";
 import { Helmet } from "react-helmet";
 import ProductList from "./ProductList";
-import Toolbar from "./Toolbar";
 
 function ProductListPage() {
   const title = `${t("turtlechain")} - ${t("product.list")}`;

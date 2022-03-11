@@ -5,7 +5,6 @@ import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
-import TurtleText from "components/common/TurtleText";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import { t } from "i18next";
 import { useCallback, useEffect } from "react";
@@ -132,7 +131,6 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           placeholder={t("placeholder.memo")}
           rows={5}
         />
-
         <Row justify="center">
           <Popconfirm
             title={t("description.really update")}
