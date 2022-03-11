@@ -16,7 +16,6 @@ export interface ResponseGetProduct {
       success_count: number;
       fail_count: number;
     };
-    error: string;
   };
 }
 

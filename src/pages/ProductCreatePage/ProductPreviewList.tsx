@@ -61,11 +61,11 @@ function ProductPreviewList() {
 
   const connectProductQuery = useMutation("connectProduct", externalAPI.getSellmateProduct, {
     onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+      message.error(error.response?.data.message);
     },
     onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
+      if (data.msg) {
+        message.error(data.msg);
         resetField();
         return;
       }
