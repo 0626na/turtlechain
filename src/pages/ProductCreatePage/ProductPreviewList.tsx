@@ -27,6 +27,7 @@ import { RequestCreateProduct } from "apis/productAPI";
 import AddSingleProductModal from "./AddProductModal";
 import ConnectExternalModal from "../../components/ConnectExternalModal";
 import externalAPI from "../../apis/eternalAPI";
+import TurtleInfo from "components/common/TurtleInfo";
 
 function ProductPreviewList() {
   const store = useRecoilValue(storeState);
@@ -55,7 +56,7 @@ function ProductPreviewList() {
         })),
         ...successList,
       ]);
-      setFailList(data.data.fail);
+      setFailList([...data.data.fail, ...failList]);
     },
   });
 
@@ -78,7 +79,7 @@ function ProductPreviewList() {
         })),
         ...successList,
       ]);
-      setFailList(data.data.fail);
+      setFailList([...data.data.fail, ...failList]);
     },
   });
 
@@ -213,14 +214,18 @@ function ProductPreviewList() {
         </Dropdown>
       </Toolbar>
       <Row>
-        <TurtleText>{t("product.preview list")}</TurtleText>
+        <TurtleText>
+          {`${t("product.preview list")} (${successList.length + failList.length})`}
+          <br />
+          <TurtleInfo>{t("description.warn red product")}</TurtleInfo>
+        </TurtleText>
       </Row>
       <Row>
         <Table
           size="small"
           loading={parseProductQuery.isLoading}
           pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-          dataSource={successList}
+          dataSource={[...successList, ...failList]}
           rowKey={(record) => record.product_code}
           style={{ height: "52vh" }}
           columns={[
@@ -237,12 +242,20 @@ function ProductPreviewList() {
             {
               ellipsis: true,
               title: t("product.name"),
-              render: (_, record) => record.name,
+              render: (_, record) => (
+                <span style={{ color: record.price === "0" || !record.vendor_id ? "red" : "" }}>
+                  {record.name}
+                </span>
+              ),
             },
             {
               ellipsis: true,
               title: t("product.vendor product name"),
-              render: (_, record) => record.vendor_product_name,
+              render: (_, record) => (
+                <span style={{ color: record.price === "0" || !record.vendor_id ? "red" : "" }}>
+                  {record.vendor_product_name}
+                </span>
+              ),
             },
             {
               ellipsis: true,

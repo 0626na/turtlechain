@@ -130,7 +130,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
                 name="product_code"
                 rules={[{ required: true, message: "상품 바코드 입력해 주세요" }]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item>
                 <TurtleButtonSub color="blue" onClick={createProductCode}>

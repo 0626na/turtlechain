@@ -2,7 +2,7 @@ import { Typography } from "antd";
 import { InfoCircleOutlined as InfoIcon } from "@ant-design/icons";
 
 interface Props {
-  children: React.ReactChild;
+  children: React.ReactNode;
 }
 
 function TurtleInfo({ children }: Props) {
