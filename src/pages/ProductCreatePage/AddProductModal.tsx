@@ -32,12 +32,12 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     () =>
       productAPI.getCode({
         rt_store_id: store.id!,
-        vendor_id: form.getFieldValue("vendor_id"),
+        vendor_code: form.getFieldValue("vendor_id"),
       }),
     {
       enabled: false,
       onSuccess: (data) => {
-        form.setFieldsValue({ ...form.getFieldsValue, vendor_id: data.data });
+        form.setFieldsValue({ ...form.getFieldsValue, product_code: data.data });
       },
     },
   );
