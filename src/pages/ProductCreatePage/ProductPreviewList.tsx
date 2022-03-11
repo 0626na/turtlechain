@@ -64,7 +64,7 @@ function ProductPreviewList() {
       message.error(error.response?.data.message);
     },
     onSuccess: (data) => {
-      if (data.msg) {
+      if (data.msg !== "success") {
         message.error(data.msg);
         resetField();
         return;
