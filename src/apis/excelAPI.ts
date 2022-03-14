@@ -1,6 +1,6 @@
 import { v2Axios } from "./index";
 import { VendorAccount, VendorPhone } from "./vendorAPI";
-import { WarehousingSheet, WarehousingSheetItem } from "./warehousingAPI";
+import { WarehousingProduct } from "./warehousingAPI";
 
 export interface MasterVendor {
   id: number;
@@ -36,44 +36,6 @@ export interface VendorShow extends Vendor {
   check_account?: boolean;
 }
 
-export interface SheetShow extends WarehousingSheet {
-  fail: Array<WarehousingSheet>;
-  count: number;
-}
-
-export interface ParseCount {
-  success_count: number;
-  suggest_count: number;
-  fail_count: number;
-  duplicated_count: number;
-}
-
-export interface RequestParseVendor {
-  files: FormData;
-  rt_store_id: number;
-}
-
-export interface ResponseParseVendor {
-  msg: string;
-  data: {
-    success: Array<Vendor>;
-    suggest: Array<Vendor>;
-    fail: Array<Vendor>;
-    count: ParseCount;
-    error?: string;
-  };
-}
-
-const parseVendor = async function (data: FormData) {
-  const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseVendor>(url, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
-
 export interface Product {
   vendor_id: string;
   vendor_code: string;
@@ -92,52 +54,6 @@ export interface ProductShow extends Product {
   memo_value: string;
   memo_active: boolean;
 }
-
-export interface ResponseParseProduct {
-  msg: string;
-  data: {
-    success: Array<Product>;
-    fail: Array<Product>;
-    count: {
-      duplicated_count: number;
-    };
-    error?: string;
-  };
-}
-
-export interface RequestParseWarehousingSheet {
-  files: FormData;
-  rt_store_id: number;
-}
-
-export interface ResponseParseWarehousingSheetFile {
-  msg: string;
-  data: {
-    success: Array<WarehousingSheetItem>;
-    fail: Array<WarehousingSheetItem>;
-    error: string;
-  };
-}
-
-const parseProduct = async function (data: FormData) {
-  const url = `excel/product`;
-  const response = await v2Axios.post<ResponseParseProduct>(url, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
-
-const parseWarehousingSheetFile = async function (data: FormData) {
-  const url = `excel/warehousing`;
-  const response = await v2Axios.post<ResponseParseWarehousingSheetFile>(url, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
 
 export interface OrderItem {
   vendor_id: number;
@@ -160,6 +76,68 @@ export interface OrderItem {
   type: string;
 }
 
+export interface ParseCount {
+  success_count: number;
+  suggest_count: number;
+  fail_count: number;
+  duplicated_count: number;
+}
+
+/*
+ *   거래처 파싱
+ */
+
+export interface ResponseParseVendor {
+  msg: string;
+  data: {
+    success: Array<Vendor>;
+    suggest: Array<Vendor>;
+    fail: Array<Vendor>;
+    count: ParseCount;
+    error?: string;
+  };
+}
+
+const parseVendor = async function (data: FormData) {
+  const url = `excel/vendor`;
+  const response = await v2Axios.post<ResponseParseVendor>(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+/*
+ *   상품 파싱
+ */
+
+export interface ResponseParseProduct {
+  msg: string;
+  data: {
+    success: Array<Product>;
+    fail: Array<Product>;
+    count: {
+      duplicated_count: number;
+    };
+    error?: string;
+  };
+}
+
+const parseProduct = async function (data: FormData) {
+  const url = `excel/product`;
+  const response = await v2Axios.post<ResponseParseProduct>(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+/*
+ *   주문 파싱
+ */
+
 export interface ResponseParseOrder {
   msg: string;
   data: {
@@ -179,10 +157,34 @@ const parseOrder = async function (data: FormData) {
   return response.data;
 };
 
+/*
+ *   입고 파싱
+ */
+
+export interface ResponseParseWarehousing {
+  msg: string;
+  data: {
+    success: Array<WarehousingProduct>;
+    fail: Array<WarehousingProduct>;
+    count: ParseCount;
+    error: string;
+  };
+}
+
+const parseWarehousing = async function (data: FormData) {
+  const url = `excel/warehousing`;
+  const response = await v2Axios.post<ResponseParseWarehousing>(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
 const excelAPI = {
   parseVendor,
   parseProduct,
-  parseWarehousingSheetFile,
+  parseWarehousing,
   parseOrder,
 };
 

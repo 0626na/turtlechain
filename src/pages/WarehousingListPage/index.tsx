@@ -7,7 +7,7 @@ import { useQuery, useMutation } from "react-query";
 import warehousingAPI, {
   WarehousingSheet,
   RequestGetSheet,
-  WarehousingSheetItem,
+  WarehousingProduct,
 } from "apis/warehousingAPI";
 import { message, notification } from "antd";
 import PageHeader from "components/PageHeader";
@@ -24,7 +24,7 @@ const WarehousingListPage = function () {
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
   const [visibleDetailModal, setVisibleDetailModal] = useState(false);
-  const [sheetItemList, setSheetItemList] = useState<Array<WarehousingSheetItem>>([]);
+  const [sheetItemList, setSheetItemList] = useState<Array<WarehousingProduct>>([]);
 
   type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("vendor_name");

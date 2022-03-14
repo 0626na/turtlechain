@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import styled from "styled-components";
 import TurtleButtonSub from "./common/TurtleButtonSub";
 import SearchFilter from "./SearchFilter";
 
@@ -78,9 +79,9 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
   );
 
   return (
-    <Modal
+    <StyledModal
       centered
-      width="70%"
+      width="45%"
       title={t("product.search")}
       visible={visible}
       onCancel={closeModal}
@@ -97,55 +98,52 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}
         pagination={false}
+        onRow={(record) => {
+          return {
+            onClick: (event) => {
+              onClickSelect(
+                record.id,
+                record.name,
+                record.product_code,
+                record.vendor_product_name,
+                record.option,
+                record.price,
+              );
+              setSearchQuery({
+                rt_store_id: -1,
+                vendor_id: -1,
+                page: 1,
+                search_string: "",
+                type: "all",
+              });
+            },
+          };
+        }}
         columns={[
           {
             ellipsis: true,
-            title: "상품 바코드",
+            title: t("product.code"),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            title: "상품명",
+            title: t("product.name"),
             render: (_, record) => record.name,
           },
           {
             ellipsis: true,
-            title: "옵션",
+            title: t("product.vendor product name"),
+            render: (_, record) => record.vendor_product_name,
+          },
+          {
+            ellipsis: true,
+            title: t("product.option"),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
-            title: "공급가",
-            render: (_, record) => record.price,
-          },
-          {
-            align: "center",
-            title: "",
-            render: (_, record) => (
-              <TurtleButtonSub //
-                size="small"
-                color="green"
-                onClick={() => {
-                  onClickSelect(
-                    record.id,
-                    record.name,
-                    record.product_code,
-                    record.vendor_product_name,
-                    record.option,
-                    record.price,
-                  );
-                  setSearchQuery({
-                    rt_store_id: -1,
-                    vendor_id: -1,
-                    page: 1,
-                    search_string: "",
-                    type: "all",
-                  });
-                }}
-              >
-                {t("button.select")}
-              </TurtleButtonSub>
-            ),
+            title: t("product.price"),
+            render: (_, record) => record.price.toLocaleString(),
           },
         ]}
         footer={() => (
@@ -160,8 +158,14 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
           </Row>
         )}
       />
-    </Modal>
+    </StyledModal>
   );
 }
+
+const StyledModal = styled(Modal)`
+  .ant-modal-header {
+    background-color: #f3f6f9;
+  }
+`;
 
 export default SearchProductModal;

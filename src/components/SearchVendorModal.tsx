@@ -82,6 +82,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
         loading={getVendorListQuery.isLoading}
         dataSource={getVendorListQuery.data?.data.vendor_list}
         rowKey={(record) => record.id}
+        pagination={false}
         onRow={(record) => {
           return {
             onClick: (event) => {
@@ -94,7 +95,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
             },
           };
         }}
-        pagination={false}
         columns={[
           {
             ellipsis: true,

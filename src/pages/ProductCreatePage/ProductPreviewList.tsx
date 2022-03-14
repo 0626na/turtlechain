@@ -7,6 +7,7 @@ import {
   Popconfirm,
   Row,
   Table,
+  Tabs,
   Upload,
 } from "antd";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
@@ -213,88 +214,142 @@ function ProductPreviewList() {
           </Button>
         </Dropdown>
       </Toolbar>
-      <Row>
+      <Row style={{ paddingTop: 0, paddingBottom: 0 }}>
         <TurtleText>
-          {`${t("product.preview list")} (${successList.length + failList.length})`}
+          {`${t("product.preview list")}`}
           <br />
           <TurtleInfo>{t("description.warn red product")}</TurtleInfo>
         </TurtleText>
-      </Row>
-      <Row>
-        <Table
-          size="small"
-          loading={parseProductQuery.isLoading}
-          pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-          dataSource={[...successList, ...failList]}
-          rowKey={(record) => record.product_code}
-          style={{ height: "52vh" }}
-          columns={[
-            {
-              ellipsis: true,
-              title: t("vendor.name"),
-              render: (_, record) => record.vendor_name,
-            },
-            {
-              ellipsis: true,
-              title: t("vendor.address"),
-              render: (_, record) => record.vendor_address,
-            },
-            {
-              ellipsis: true,
-              title: t("product.name"),
-              render: (_, record) => (
-                <span style={{ color: record.price === "0" || !record.vendor_id ? "red" : "" }}>
-                  {record.name}
-                </span>
-              ),
-            },
-            {
-              ellipsis: true,
-              title: t("product.vendor product name"),
-              render: (_, record) => (
-                <span style={{ color: record.price === "0" || !record.vendor_id ? "red" : "" }}>
-                  {record.vendor_product_name}
-                </span>
-              ),
-            },
-            {
-              ellipsis: true,
-              title: t("product.code"),
-              render: (_, record) => record.product_code,
-            },
-            {
-              ellipsis: true,
-              title: t("product.option"),
-              render: (_, record) => record.option,
-            },
-            {
-              ellipsis: true,
-              title: t("product.price"),
-              render: (_, record) => record.price,
-            },
-            {
-              ellipsis: true,
-              title: t("product.image url"),
-              render: (_, record) => record.image_url,
-            },
-            {
-              ellipsis: true,
-              title: t("product.memo"),
-              render: (_, record) => record.memo,
-            },
-            {
-              ellipsis: true,
-              render: (_, record) => (
-                <DeleteOutlined //
-                  style={{ cursor: "pointer", color: "#A1A2A6" }}
-                  onClick={() => {
-                    deleteItem(record.product_code);
-                  }}
-                />
-              ),
-            },
-          ]}
-        />
+
+        <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
+          <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
+            <Table
+              size="small"
+              loading={parseProductQuery.isLoading}
+              pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+              dataSource={successList}
+              rowKey={(record) => record.product_code}
+              style={{ height: "510px" }}
+              columns={[
+                {
+                  ellipsis: true,
+                  title: t("vendor.name"),
+                  render: (_, record) => record.vendor_name,
+                },
+                {
+                  ellipsis: true,
+                  title: t("vendor.address"),
+                  render: (_, record) => record.vendor_address,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.name"),
+                  render: (_, record) => record.name,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.vendor product name"),
+                  render: (_, record) => record.vendor_product_name,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.code"),
+                  render: (_, record) => record.product_code,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.option"),
+                  render: (_, record) => record.option,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.price"),
+                  render: (_, record) => record.price,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.image url"),
+                  render: (_, record) => record.image_url,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.memo"),
+                  render: (_, record) => record.memo,
+                },
+                {
+                  ellipsis: true,
+                  render: (_, record) => (
+                    <DeleteOutlined //
+                      style={{ cursor: "pointer", color: "#A1A2A6" }}
+                      onClick={() => {
+                        deleteItem(record.product_code);
+                      }}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={`실패(${successList.length})`} key="2">
+            <Table
+              size="small"
+              loading={parseProductQuery.isLoading}
+              pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+              dataSource={failList}
+              rowKey={(record) => record.product_code}
+              style={{ height: "510px" }}
+              columns={[
+                {
+                  ellipsis: true,
+                  title: t("vendor.name"),
+                  render: (_, record) => record.vendor_name,
+                },
+                {
+                  ellipsis: true,
+                  title: t("vendor.address"),
+                  render: (_, record) => record.vendor_address,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.name"),
+                  render: (_, record) => <span style={{ color: "red" }}>{record.name}</span>,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.vendor product name"),
+                  render: (_, record) => (
+                    <span style={{ color: "red" }}>{record.vendor_product_name}</span>
+                  ),
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.code"),
+                  render: (_, record) => record.product_code,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.option"),
+                  render: (_, record) => record.option,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.price"),
+                  render: (_, record) => record.price,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.image url"),
+                  render: (_, record) => record.image_url,
+                },
+                {
+                  ellipsis: true,
+                  title: t("product.memo"),
+                  render: (_, record) => record.memo,
+                },
+              ]}
+            />
+          </Tabs.TabPane>
+        </Tabs>
       </Row>
       <Row justify="end">
         <Popconfirm

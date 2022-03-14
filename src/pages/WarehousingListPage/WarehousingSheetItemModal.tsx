@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { BulkUpdateSheetItem, WarehousingItem2, WarehousingSheetItem } from "apis/warehousingAPI";
+import warehousingAPI, { BulkUpdateSheetItem, WarehousingItem2 } from "apis/warehousingAPI";
 import { DeleteFilled, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -19,7 +19,6 @@ import {
   Statistic,
   Card,
 } from "antd";
-import { createImportSpecifier } from "typescript";
 import { warehousingItem2ToBulkUpdateItem, warehousingSheetItemToWarehousingItem2 } from "./util";
 
 interface Props {
@@ -44,7 +43,7 @@ const WarehousingSheetItemModal = function ({
 
   type SearchType = "vendor_name" | "vendor_address" | "product_code" | "product_name";
   const [searchType, setSearchType] = useState<SearchType>("vendor_name");
-  
+
   const [searchText, setSearchText] = useState("");
   const search_options = [
     {
@@ -64,7 +63,6 @@ const WarehousingSheetItemModal = function ({
       label: t("product name"),
     },
   ];
-  
 
   const [list, setList] = useState<Array<WarehousingItem2>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -100,44 +98,48 @@ const WarehousingSheetItemModal = function ({
     },
   });
 
-  const totalItemCount= useMemo(
-    ()=>
-    list.reduce((sum, current)=> sum+current.count, 0)
-    , [list, searchType, searchText]
-    );  
-    
-    const totalItemAmount= useMemo(
-      () => list.reduce((sum, current)=> sum+(current.count* current.price), 0)
-      , [list, searchType, searchText]    
-      );   
-    
+  const totalItemCount = useMemo(
+    () => list.reduce((sum, current) => sum + current.count, 0),
+    [list, searchType, searchText],
+  );
+
+  const totalItemAmount = useMemo(
+    () => list.reduce((sum, current) => sum + current.count * current.price, 0),
+    [list, searchType, searchText],
+  );
+
   // 필터된 리스트
   const filteredList = useMemo(
     () =>
-      list.filter((item) =>{
-        if(searchType === "vendor_name"){
-          return item.vendor_info["vendor_name"].toString().indexOf(searchText) !== -1 
+      list.filter((item) => {
+        if (searchType === "vendor_name") {
+          return item.vendor_info["vendor_name"].toString().indexOf(searchText) !== -1;
         }
       }),
     [list, searchType, searchText],
   );
 
   const updateWarehousingSheetItems = () => {
-    if(inactiveList && inactiveList.length){
-      updateSheetQuery.mutateAsync({sheet_id, items: inactiveList.map((item) => {
+    if (inactiveList && inactiveList.length) {
+      updateSheetQuery.mutateAsync({
+        sheet_id,
+        items: inactiveList.map((item) => {
           return {
             id: item.id,
-            is_inactive:true,
-            count:item.count
-          }
-      })})
-      setInactiveList([])
+            is_inactive: true,
+            count: item.count,
+          };
+        }),
+      });
+      setInactiveList([]);
     }
-    if(isUpdated){
-      updateSheetQuery.mutate({ sheet_id, items: list!.map((item)=>warehousingItem2ToBulkUpdateItem(item))});
+    if (isUpdated) {
+      updateSheetQuery.mutate({
+        sheet_id,
+        items: list!.map((item) => warehousingItem2ToBulkUpdateItem(item)),
+      });
     }
-
-  }
+  };
 
   // 모달창 닫기 확인
   // 업데이트가 발새한 경우 실행
@@ -150,7 +152,7 @@ const WarehousingSheetItemModal = function ({
         onClose();
       },
       onOk: () => {
-        updateWarehousingSheetItems()
+        updateWarehousingSheetItems();
       },
     });
   };
@@ -189,7 +191,7 @@ const WarehousingSheetItemModal = function ({
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={() => {
-              updateWarehousingSheetItems()
+              updateWarehousingSheetItems();
             }}
           >
             <Button type="primary" icon={<SyncOutlined />} loading={updateSheetQuery.isLoading}>
@@ -217,14 +219,12 @@ const WarehousingSheetItemModal = function ({
             <Statistic //
               title={t("total supply price")}
               value={totalItemAmount}
-              
             />
           </Card>
         </StatisticContainer>
         <Form layout="inline">
           <Form.Item>
             <Select
-
               style={{ width: 150 }}
               value={searchType}
               onChange={(value) => {
@@ -254,32 +254,31 @@ const WarehousingSheetItemModal = function ({
           pagination={false}
           dataSource={filteredList}
           rowKey={(sheetItem) => sheetItem.id}
-          
           columns={[
             {
               title: t("vendor.name"),
-              render:(_, item) => item.vendor_info.vendor_name
+              render: (_, item) => item.vendor_info.vendor_name,
             },
             {
               title: t("vendor.address"),
-              render:(_, item) => item.vendor_info.vendor_address
+              render: (_, item) => item.vendor_info.vendor_address,
             },
             {
               title: t("product.code"),
-              render:(_, item) => item.product_info.product_code
+              render: (_, item) => item.product_info.product_code,
             },
             {
               title: t("product.name"),
-              render:(_, item) => item.product_info.name
+              render: (_, item) => item.product_info.name,
             },
             {
               title: t("product.option"),
-              render:(_, item) => item.product_info.option
+              render: (_, item) => item.product_info.option,
             },
-            
+
             {
               title: t("product.vendor_product_name"),
-              render:(_, item) => item.product_info.vendor_product_name
+              render: (_, item) => item.product_info.vendor_product_name,
             },
             {
               align: "right",
@@ -287,13 +286,15 @@ const WarehousingSheetItemModal = function ({
               dataIndex: "count",
               render: (_, record) => (
                 <InputNumber //
-                disabled={is_confirmed==1 ? true : false}  
-                min={0}
-                size="small"
+                  disabled={is_confirmed == 1 ? true : false}
+                  min={0}
+                  size="small"
                   defaultValue={record.count}
                   onChange={(value) => {
                     const newList = list.map((item) =>
-                      item.product_info.product_code === record.product_info.product_code ? { ...item, count: value } : item,
+                      item.product_info.product_code === record.product_info.product_code
+                        ? { ...item, count: value }
+                        : item,
                     );
                     setList(newList);
                     setIsUpdated(true);
@@ -314,24 +315,21 @@ const WarehousingSheetItemModal = function ({
               render: (_, record) => (
                 <Button //
                   danger
-                  disabled={is_confirmed===1 ? true : false}
+                  disabled={is_confirmed === 1 ? true : false}
                   size="small"
                   shape="round"
                   type="primary"
                   icon={<DeleteFilled />}
                   onClick={() => {
-                    let inactiveItem:BulkUpdateSheetItem = {
-                      id : record.id,
+                    let inactiveItem: BulkUpdateSheetItem = {
+                      id: record.id,
                       is_inactive: true,
-                      count: record.count
-                    } 
-                    setInactiveList([...inactiveList, inactiveItem])
-                    const newList = list.filter(
-                      (item) => item.id !== record.id
-                    );
+                      count: record.count,
+                    };
+                    setInactiveList([...inactiveList, inactiveItem]);
+                    const newList = list.filter((item) => item.id !== record.id);
                     setList(newList);
-                  }
-                }
+                  }}
                 >
                   {t("delete")}
                 </Button>

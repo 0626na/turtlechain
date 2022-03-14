@@ -6,3 +6,6 @@ export const numPattern = /[0-9]/;
 
 // 휴대번호 패턴
 export const phonePattern = /^(\d{2,3})(\d{3,4})(\d{4})$/;
+
+// 금액 패턴
+export const pricePattern = /\B(?=(\d{3})+(?!\d))/g;

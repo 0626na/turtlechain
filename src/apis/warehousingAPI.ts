@@ -1,9 +1,8 @@
 import { v2Axios } from "apis";
-import { MomentInput } from "moment";
 
 // 입고장 타입
 export interface WarehousingSheet {
-  start_date: MomentInput;
+  start_date: string;
   id: number;
   created_date: Date;
   created_time: Date;
@@ -18,50 +17,7 @@ export interface WarehousingSheet {
   rt_store_id: number;
 }
 
-// 입고장 타입
-export interface WarehousingSheet2 {
-  id: number;
-  rt_store_id: number;
-  mall_name: string;
-  created_date: Date;
-  created_time: Date;
-  is_deleted: boolean;
-  is_confirmed: boolean;
-  total_price: number;
-  total_item_count: number;
-  total_store_count: number;
-  total_item_subcount: number;
-  created_by: number;
-}
-
-// 입고장 상세내역 타입
-export interface WarehousingSheetItem2 {
-  id: number;
-  sheet_id: number;
-  rt_store_id: number;
-  mall_name: string;
-  store_id: number;
-  store_code: number;
-  store_name: string;
-  address: string;
-  product_id: number;
-  product_code: string;
-  product_name: string;
-  option: string;
-  count: number;
-  product_price: number;
-  memo: string;
-  created_by: number;
-  created_time: Date;
-  is_deleted: boolean;
-  is_vat_included: boolean;
-  vendor_id: number;
-}
-
-export interface WarehousingSheetItem {
-  item_id: number;
-  sheet_id: number;
-  rt_store_id: number;
+export interface WarehousingProduct {
   vendor_name: string;
   vendor_address: string;
   product_name: string;
@@ -69,10 +25,13 @@ export interface WarehousingSheetItem {
   product_option: string;
   product_price: number;
   product_count: number;
-  count: number;
   product_code: number;
   vendor_id: number;
   product_id: number;
+}
+
+export interface WarehousingProductShow extends WarehousingProduct {
+  index: number;
 }
 
 // 입고장 상세내역 추가 타입

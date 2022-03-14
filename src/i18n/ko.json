@@ -118,7 +118,9 @@
     "add single order": "주문 단건추가",
     "add product": "상품 추가하기",
     "add single product": "상품 단건추가",
-    "connect": "연동하기"
+    "connect": "연동하기",
+    "add warehousing": "입고 추가하기",
+    "create warehousing": "입고 등록하기"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
@@ -176,7 +178,8 @@
     "section_title2": "입고장 미리보기",
     "btn_upload_whs_sheet": "입고장 업로드",
     "btn_prepopulate_whs": "주문내역 불러오기",
-    "price": "입고 금액 (공급가)"
+    "price": "입고 금액 (공급가)",
+    "preview": "입고서 미리보기"
   },
   "adjustment": {
     "": "매입조정",
@@ -275,7 +278,7 @@
     "name": "상품명",
     "option": "옵션",
     "price": "공급가",
-    "count": "발주수량",
+    "count": "수량",
     "vendor product name": "거래처 상품명",
     "memo": "메모",
     "image url": "이미지 URL",

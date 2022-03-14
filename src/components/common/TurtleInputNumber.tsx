@@ -3,7 +3,7 @@ import { Form, InputNumber } from "antd";
 interface Props {
   name: string;
   label: string;
-  min: number | 1;
+  min: number;
   defaultValue?: number | 0;
 }
 

@@ -173,7 +173,7 @@ const OrderPreviewList = function () {
     <>
       <Toolbar>
         <TurtleButtonSub type="primary" color="skyblue">
-          {t("button.load program")}
+          {t("button.connect external program")}
         </TurtleButtonSub>
         <Dropdown overlay={menu} placement="bottomCenter">
           <Button
