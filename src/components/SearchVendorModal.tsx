@@ -67,6 +67,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   return (
     <StyledModal
       centered
+      getContainer={false}
       width="45%"
       title={t("vendor.search")}
       visible={visible}

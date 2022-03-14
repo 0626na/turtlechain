@@ -243,7 +243,7 @@ function WarehousingPreviewList() {
         </Dropdown>
       </Toolbar>
 
-      <Row style={{ paddingTop: 0, paddingBottom: 0 }}>
+      <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
         <TurtleText>
           {`${t("warehousing.preview")}`}
           <br />

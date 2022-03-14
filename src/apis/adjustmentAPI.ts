@@ -2,7 +2,6 @@ import { v2Axios } from "./index";
 import { ResponseUpdate } from "./retailerStoreAPI";
 import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
-
 // 입고아이템 타입
 export interface AdjustmentItem2 {
   id: number;
@@ -32,19 +31,34 @@ export interface AdjustmentItem2 {
   type: "reserve" | "takeback" | "exchange" | "refund";
 }
 
-export interface AdjustmentItem {
-  id:number;
-  rt_store_id: number;
+export interface AdjustmentProduct {
   vendor_id: number;
+  vendor_name: string;
+  vendor_address: string;
+
   product_id: number;
-  count: number;
-  price: number;
-  is_cleared: boolean ;
-  created_date:"";
-  type: "reserve" | "takeback" | "exchange" | "refund" ;
-  vendor_info: VendorInfo | undefined;
-  product_info:ProductInfo | undefined;
-  memo: string | undefined;
+  product_name: string;
+  vendor_product_name: string;
+  product_option: string;
+  product_price: number;
+  product_count: number;
+  product_code: number;
+
+  type?: "reserve" | "takeback" | "exchange" | "refund";
+  memo?: string | undefined;
+
+  // 수정필요
+  is_cleared?: boolean;
+  created_date?: string;
+  is_vat_included?: boolean;
+  vendor_info?: {
+    vendor_name: string;
+  };
+  product_info?: {
+    name: string;
+    vendor_product_name: string;
+  };
+  price?: number;
 }
 
 // Request: 정산아이템 조회
@@ -54,7 +68,7 @@ export interface RequestGetAdjustmentList {
   start_date?: string;
   end_date?: string;
   is_cleared?: number | "";
-  type: "reserve" | "takeback" | "exchange" | "balance"| "all";
+  type: "reserve" | "takeback" | "exchange" | "balance" | "all";
 }
 
 // Response: 정산장 조회
@@ -71,8 +85,8 @@ export interface ResponseGetAdjustmentList {
         price: number;
       };
     };
-    total_count:number;
-    adjustment_list:Array<AdjustmentItem>;
+    total_count: number;
+    adjustment_list: Array<AdjustmentProduct>;
   };
 }
 
@@ -85,21 +99,19 @@ const getAdjustmentList = async function (query: RequestGetAdjustmentList) {
   return response.data;
 };
 
-export interface RequestCreateAdjustmentItem {
-  item_list: Array<AdjustmentItem>;
+export interface RequestCreate {
+  item_list: Array<AdjustmentProduct>;
 }
 
-export interface ResponseCreateAdjustmentItem {
+export interface ResponseCreate {
   data: null;
 }
-const createAdjustmentItem = async function (data: RequestCreateAdjustmentItem) {
+
+const create = async function (data: RequestCreate) {
   const url = "adjustment/item";
-  const response = await v2Axios.post<ResponseCreateAdjustmentItem>(url, data);
+  const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };
-
-
-
 
 export interface adjustmentItemResponse {
   id: number;
@@ -108,8 +120,8 @@ export interface adjustmentItemResponse {
   cleared_time: string | null;
   rt_store_id: number;
   ws_store_id: number;
-  vendor_info: VendorInfo,
-  product_info: ProductInfo,
+  vendor_info: VendorInfo;
+  product_info: ProductInfo;
   count: number;
   count_left: number;
   price: number;
@@ -117,7 +129,6 @@ export interface adjustmentItemResponse {
   type: "reserve" | "takeback" | "exchange" | "refund";
   memo: string;
 }
-
 
 // Request: 정산아이템 조회
 export interface RequestGetAdjustmentForClearing {
@@ -156,15 +167,15 @@ const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForC
 };
 
 // 입고장 수정하기 요청 타입
-export interface RequestUpdateAdj extends AdjustmentItem{
+export interface RequestUpdateAdj extends AdjustmentProduct {
   item_id: number;
 }
 
-export interface ResponseUpdateAdj{
-  data: AdjustmentItem;
+export interface ResponseUpdateAdj {
+  data: AdjustmentProduct;
 }
 
-const updateAdjustment = async function (data: RequestUpdateAdj){
+const updateAdjustment = async function (data: RequestUpdateAdj) {
   const url = `adjustment/item/${data.item_id}`;
   const response = await v2Axios.put<ResponseUpdateAdj>(url, data);
   return response.data.data;
@@ -172,9 +183,9 @@ const updateAdjustment = async function (data: RequestUpdateAdj){
 
 const adjustmentAPI = {
   getAdjustmentList,
-  createAdjustmentItem,
+  create,
   updateAdjustment,
-  getAdjustmentForClearing
+  getAdjustmentForClearing,
 };
 
 export default adjustmentAPI;

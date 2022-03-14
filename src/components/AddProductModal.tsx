@@ -92,6 +92,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
+        //getContainer={false}
       >
         <Form
           layout="horizontal"

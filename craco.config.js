@@ -38,6 +38,7 @@ module.exports = {
               "@border-radius-base": "4px",
 
               // Buttons
+              "@btn-height-base": "36px",
               "@btn-font-weight": "400",
               "@btn-border-radius-base": "4px",
               "@btn-border-radius-sm": "4px",
@@ -54,6 +55,17 @@ module.exports = {
 
               // Radio
               "@radio-dot-color": "#00BB88",
+
+              // Tabs
+              "@tabs-title-font-size-lg": "15px",
+              "@tabs-highlight-color": "#2174F1",
+              "@tabs-active-color": "#2174F1",
+              "@tabs-hover-color": "#2174F1",
+              "@tabs-ink-bar-color": "#2174F1",
+
+              "@tabs-horizontal-padding-lg": "30px 16px 8px 16px",
+
+              //"@tabs-horizontal-padding-lg": "12px 0",
             },
             javascriptEnabled: true,
           },

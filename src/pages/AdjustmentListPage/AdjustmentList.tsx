@@ -4,18 +4,18 @@ import { useTranslation } from "react-i18next";
 import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
 import { Table, Tag, Button, Popconfirm } from "antd";
 import SimplePagination from "components/SimplePagination";
-import { AdjustmentItem } from "apis/adjustmentAPI";
+import { AdjustmentProduct } from "apis/adjustmentAPI";
 import { getLocalDateTimeString } from "utils/general";
 
 interface Props {
   isLoading: boolean;
-  list:Array<AdjustmentItem>;
+  list: Array<AdjustmentProduct>;
   totalCount: number;
   currentPage: number;
 
-  onSelectRow: (row: AdjustmentItem) => void;
-  onDelete: (row: AdjustmentItem) => void;
-  onConfirm: (row: AdjustmentItem) => void;
+  onSelectRow: (row: AdjustmentProduct) => void;
+  onDelete: (row: AdjustmentProduct) => void;
+  onConfirm: (row: AdjustmentProduct) => void;
 }
 
 const AdjustmentList = function ({
@@ -30,13 +30,12 @@ const AdjustmentList = function ({
 }: Props) {
   const { t } = useTranslation();
 
-  
   let adjTypes = {
-    "exchange" : "교환",
-    "reserve" : "미송",
-    "refund" : "환불",
-    "takeback" : "반품"
-  }
+    exchange: "교환",
+    reserve: "미송",
+    refund: "환불",
+    takeback: "반품",
+  };
 
   return (
     <Table
@@ -51,9 +50,9 @@ const AdjustmentList = function ({
           title: t("progress"),
           dataIndex: "is_confirmed",
           render: (_, record) => {
-            const { is_cleared} = record;
-            const color = is_cleared? "green" : "red";
-            const text = is_cleared? t("confirmed") : t("waiting");
+            const { is_cleared } = record;
+            const color = is_cleared ? "green" : "red";
+            const text = is_cleared ? t("confirmed") : t("waiting");
             return <Tag color={color}>{text}</Tag>;
           },
         },
@@ -64,35 +63,35 @@ const AdjustmentList = function ({
           dataIndex: "created_time",
           render: (_, record) =>
             // moment(record.created_date).format("YYYY-MM-DD"),
-            getLocalDateTimeString(record.created_date),
+            getLocalDateTimeString(record.created_date!),
         },
         {
           title: t("vendor.name"),
           dataIndex: "vendor_info.vendor_name",
-          render:(_, record) => record.vendor_info?.vendor_name
+          render: (_, record) => record.vendor_info?.vendor_name,
         },
         {
           title: t("product.name"),
           dataIndex: "product_info.product_name",
-          render:(_, record) => record.product_info?.name
+          render: (_, record) => record.product_info?.name,
         },
         {
           title: t("product.vendor_product_name"),
           dataIndex: "product_info.vendor_product_name",
-          render:(_, record) => record.product_info?.vendor_product_name
+          render: (_, record) => record.product_info?.vendor_product_name,
         },
         {
           align: "right",
           title: t("supply price"),
           dataIndex: "price",
-          render: (_, record) => record.price.toLocaleString(),
+          render: (_, record) => record.price!.toLocaleString(),
         },
         {
           width: 100,
           align: "center",
           title: t("adjustment.type.default"),
           dataIndex: "type",
-          render: (_, record) => adjTypes[record.type]
+          render: (_, record) => adjTypes[record.type!],
         },
         {
           width: 300,
@@ -109,17 +108,15 @@ const AdjustmentList = function ({
                 >
                   {t("view details")}
                 </Button>
-                {!record.is_cleared&& (
-                  
+                {!record.is_cleared && (
                   <>
                     <Popconfirm
                       title={t("description.really delete")}
                       okText={t("yes")}
-                      cancelText={t("no")
-                    }
-                    onConfirm={() => {
-                      onDelete(record);
-                    }}
+                      cancelText={t("no")}
+                      onConfirm={() => {
+                        onDelete(record);
+                      }}
                     >
                       <Button
                         icon={<DeleteFilled />}
@@ -155,7 +152,7 @@ const AdjustmentList = function ({
       title={() => (
         <b>
           {`${t("adjustment.list")}`}
-          
+
           {`(${list.length.toLocaleString()})`}
         </b>
       )}

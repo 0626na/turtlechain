@@ -81,6 +81,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
   return (
     <StyledModal
       centered
+      getContainer={false}
       width="45%"
       title={t("product.search")}
       visible={visible}

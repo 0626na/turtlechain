@@ -72,7 +72,7 @@ function ProductPreviewList() {
         resetField();
         return;
       }
-      message.info(`이미 등록된 상품이 ${data.data.count.fail_count}건 있습니다.`);
+      message.info(`이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`);
       setSuccessList([
         ...data.data.success.map((product) => ({
           ...product,
@@ -218,6 +218,7 @@ function ProductPreviewList() {
           color="skyblue"
           onClick={onClickConnect}
           loading={connectProductQuery.isLoading}
+          //disabled={connectProductQuery.isSuccess}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
@@ -230,7 +231,7 @@ function ProductPreviewList() {
           </Button>
         </Dropdown>
       </Toolbar>
-      <Row style={{ paddingTop: 0, paddingBottom: 0 }}>
+      <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
         <TurtleText>
           {`${t("product.preview list")}`}
           <br />

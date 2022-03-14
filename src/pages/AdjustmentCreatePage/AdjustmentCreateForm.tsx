@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Form, Input, Button, InputNumber, Card, Select, Row, message } from "antd";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import { useCallback, useState } from "react";
-import { AdjustmentItem } from "apis/adjustmentAPI";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
 import { BaseOptionType } from "antd/lib/select";
@@ -13,9 +12,10 @@ import SearchProductModal from "components/SearchProductModal";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import TurtleTextArea from "components/common/TurtleTextArea";
+import { AdjustmentProduct } from "apis/adjustmentAPI";
 
 interface Props {
-  onAdjItemCreated: (value: AdjustmentItem) => void;
+  onAdjItemCreated: (value: AdjustmentProduct) => void;
 }
 
 const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
@@ -31,7 +31,7 @@ const AdjustmentCreateForm = function ({ onAdjItemCreated }: Props) {
   const closeSearchModal = () => {
     setSearchModalVisible(false);
   };
-  const [adjList, setAdjList] = useState<Array<AdjustmentItem>>();
+  const [adjList, setAdjList] = useState<Array<AdjustmentProduct>>();
 
   const onClickCreate = () => {
     form.setFieldsValue({ rt_store_id: store.id });

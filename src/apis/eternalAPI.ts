@@ -13,6 +13,7 @@ export interface ResponseGetProduct {
     count: {
       success_count: number;
       fail_count: number;
+      duplicated_count: number;
     };
   };
 }

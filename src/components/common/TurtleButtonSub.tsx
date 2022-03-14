@@ -6,7 +6,7 @@ interface Props {
   type?: "primary" | "default";
   shape?: "round" | "default";
   icon?: "download" | "file";
-  size?: "small" | "middle";
+  size?: "small" | "middle" | "large";
   color?: "skyblue" | "blue" | "red" | "green" | "grey" | "gray";
   disabled?: boolean;
   loading?: boolean;
@@ -59,6 +59,7 @@ function TurtleButtonSub({
         paddingTop: size === "small" ? "1.5px" : "4px",
         color: type === "default" ? makeColor() : "",
         backgroundColor: type === "primary" ? makeColor() : "",
+        width: "140px",
         borderColor: makeColor(),
       }}
       loading={loading}
