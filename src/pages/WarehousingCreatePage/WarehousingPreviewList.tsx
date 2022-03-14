@@ -38,7 +38,6 @@ function WarehousingPreviewList() {
   const [successList, setSuccessList] = useState<Array<WarehousingProductShow>>([]);
   const [failList, setFailList] = useState<Array<WarehousingProduct>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
-  const [connectModalVisible, setConnectModalVisible] = useState(false);
   const index = useRef(0);
   const failIndex = useRef(0);
 
@@ -229,7 +228,7 @@ function WarehousingPreviewList() {
               message.warn(t("message.select store"));
               return;
             }
-            setConnectModalVisible(true);
+            message.info("준비중입니다....");
           }}
         >
           {t("button.connect external program")}
@@ -428,19 +427,6 @@ function WarehousingPreviewList() {
         </Popconfirm>
       </Row>
 
-      {/* 재고프로그램 연동 모달*/}
-      <ConnectExternalModal
-        visible={connectModalVisible}
-        closeModal={() => {
-          setConnectModalVisible(false);
-        }}
-        onClick={async ({ start_date, end_date }) => {
-          // await connectProductQuery.mutateAsync({ rt_store_id: store.id!, start_date, end_date });
-          message.info("준비중입니다....");
-          await setConnectModalVisible(false);
-        }}
-        loading={false}
-      />
       {/* 상품 단건 추가 모달 */}
       <AddSingleProductModal
         visible={addProductModalVisible}

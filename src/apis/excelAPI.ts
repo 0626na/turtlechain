@@ -44,7 +44,7 @@ export interface Product {
   product_code: string;
   name: string;
   vendor_product_name: string;
-  price: string;
+  price: number;
   option: string;
   image_url: string;
   memo: string;

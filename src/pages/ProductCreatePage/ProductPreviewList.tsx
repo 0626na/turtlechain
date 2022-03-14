@@ -1,6 +1,7 @@
 import {
   Button,
   Dropdown,
+  InputNumber,
   Menu,
   message,
   notification,
@@ -29,6 +30,7 @@ import AddSingleProductModal from "./AddProductModal";
 import ConnectExternalModal from "../../components/ConnectExternalModal";
 import externalAPI from "../../apis/eternalAPI";
 import TurtleInfo from "components/common/TurtleInfo";
+import { pricePattern } from "utils/pattern";
 
 function ProductPreviewList() {
   const store = useRecoilValue(storeState);
@@ -36,7 +38,6 @@ function ProductPreviewList() {
   const [successList, setSuccessList] = useState<Array<ProductShow>>([]);
   const [failList, setFailList] = useState<Array<Product>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
-  const [connectModalVisible, setConnectModalVisible] = useState(false);
 
   const parseProductQuery = useMutation("parseProduct", excelAPI.parseProduct, {
     onError: (error: AxiosError) => {
@@ -144,11 +145,31 @@ function ProductPreviewList() {
         ...product,
         rt_store_id: store.id ?? -1,
         vendor_id: parseInt(product.vendor_id),
-        price: parseInt(product.price),
+        price: product.price,
       });
     });
     createProductQuery.mutate(resultList);
   }, [successList, store.id]);
+
+  const onClickConnect = useCallback(() => {
+    if (!store.id) {
+      message.warn(t("message.select store"));
+      return;
+    }
+    connectProductQuery.mutateAsync({ rt_store_id: store.id! });
+  }, [store.id]);
+
+  // 공급가 변경
+  const setPrice = useCallback(
+    (value, code) => {
+      setSuccessList(
+        successList.map((product) =>
+          product.product_code === code ? { ...product, price: value } : product,
+        ),
+      );
+    },
+    [successList],
+  );
 
   const menu = (
     <Menu>
@@ -195,13 +216,8 @@ function ProductPreviewList() {
         <TurtleButtonSub
           type="primary"
           color="skyblue"
-          onClick={() => {
-            if (!store.id) {
-              message.warn(t("message.select store"));
-              return;
-            }
-            setConnectModalVisible(true);
-          }}
+          onClick={onClickConnect}
+          loading={connectProductQuery.isLoading}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
@@ -225,7 +241,7 @@ function ProductPreviewList() {
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
             <Table
               size="small"
-              loading={parseProductQuery.isLoading}
+              loading={connectProductQuery.isLoading || parseProductQuery.isLoading}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               dataSource={successList}
               rowKey={(record) => record.product_code}
@@ -263,8 +279,20 @@ function ProductPreviewList() {
                 },
                 {
                   ellipsis: true,
+                  width: "12%",
                   title: t("product.price"),
-                  render: (_, record) => record.price,
+                  render: (_, record) => (
+                    <InputNumber
+                      size="small"
+                      step={1000}
+                      value={record.price}
+                      formatter={(value) => `${value}`.replace(pricePattern, ",")}
+                      min={0}
+                      onChange={(value) => {
+                        setPrice(value, record.product_code);
+                      }}
+                    />
+                  ),
                 },
                 {
                   ellipsis: true,
@@ -278,6 +306,7 @@ function ProductPreviewList() {
                 },
                 {
                   ellipsis: true,
+                  width: "8%",
                   render: (_, record) => (
                     <DeleteOutlined //
                       style={{ cursor: "pointer", color: "#A1A2A6" }}
@@ -290,10 +319,10 @@ function ProductPreviewList() {
               ]}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`실패(${successList.length})`} key="2">
+          <Tabs.TabPane tab={`실패(${failList.length})`} key="2">
             <Table
               size="small"
-              loading={parseProductQuery.isLoading}
+              loading={connectProductQuery.isLoading || parseProductQuery.isLoading}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               dataSource={failList}
               rowKey={(record) => record.product_code}
@@ -334,7 +363,7 @@ function ProductPreviewList() {
                 {
                   ellipsis: true,
                   title: t("product.price"),
-                  render: (_, record) => record.price,
+                  render: (_, record) => record.price.toLocaleString(),
                 },
                 {
                   ellipsis: true,
@@ -374,18 +403,6 @@ function ProductPreviewList() {
           setAddProductModalVisible(false);
         }}
         addProduct={addItem}
-      />
-      {/* 재고프로그램 연동 모달*/}
-      <ConnectExternalModal
-        visible={connectModalVisible}
-        closeModal={() => {
-          setConnectModalVisible(false);
-        }}
-        onClick={async ({ start_date, end_date }) => {
-          await connectProductQuery.mutateAsync({ rt_store_id: store.id!, start_date, end_date });
-          await setConnectModalVisible(false);
-        }}
-        loading={connectProductQuery.isLoading}
       />
     </>
   );

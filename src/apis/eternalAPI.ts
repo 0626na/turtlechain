@@ -3,8 +3,6 @@ import { Product } from "apis/excelAPI";
 
 export interface RequestQuery {
   rt_store_id: number;
-  start_date: string;
-  end_date: string;
 }
 
 export interface ResponseGetProduct {
@@ -20,7 +18,7 @@ export interface ResponseGetProduct {
 }
 
 const getSellmateProduct = async function (query: RequestQuery) {
-  let url = "external-api/sellmate/products?";
+  let url = "external-api/inventory/products?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
