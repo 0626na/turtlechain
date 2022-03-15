@@ -32,6 +32,8 @@ export interface AdjustmentItem2 {
 }
 
 export interface AdjustmentProduct {
+  index: number;
+
   vendor_id: number;
   vendor_name: string;
   vendor_address: string;
@@ -44,10 +46,11 @@ export interface AdjustmentProduct {
   product_count: number;
   product_code: number;
 
-  type?: "reserve" | "takeback" | "exchange" | "refund";
+  type: "reserve" | "takeback" | "exchange" | "refund";
   memo?: string | undefined;
 
   // 수정필요
+  id?: number;
   is_cleared?: boolean;
   created_date?: string;
   is_vat_included?: boolean;
@@ -100,7 +103,16 @@ const getAdjustmentList = async function (query: RequestGetAdjustmentList) {
 };
 
 export interface RequestCreate {
-  item_list: Array<AdjustmentProduct>;
+  item_list: Array<{
+    rt_store_id: number;
+    vendor_id: number;
+    product_id: number;
+    count: number;
+    price: number;
+    type: string;
+    is_vat_included: boolean;
+    memo?: string;
+  }>;
 }
 
 export interface ResponseCreate {

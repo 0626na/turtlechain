@@ -1,4 +1,4 @@
-import { Divider, Form, Input, Modal, Row } from "antd";
+import { Divider, Form, Input, InputNumber, Modal, Row } from "antd";
 import { t } from "i18next";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
@@ -9,6 +9,7 @@ import TurtleInputNumber from "components/common/TurtleInputNumber";
 import TurtleButton from "components/common/TurtleButton";
 import SearchVendorModal from "components/SearchVendorModal";
 import SearchProductModal from "./SearchProductModal";
+import { pricePattern } from "utils/pattern";
 
 export interface AddProduct {
   vendor_name: string;
@@ -92,7 +93,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
-        //getContainer={false}
+        getContainer={false}
       >
         <Form
           layout="horizontal"
@@ -142,15 +143,38 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
               setProductModalVisible(true);
             }}
           />
-          <TurtleInput
+          <TurtleInput // 거래처 상품명 Input
             label={t("product.vendor product name")}
             name="vendor_product_name"
             disabled
           />
-          <TurtleInput label={t("product.code")} name="product_code" disabled />
-          <TurtleInput label={t("product.option")} name="product_option" disabled />
-          <TurtleInputNumber label={t("product.price")} name="product_price" min={0} />
-          <TurtleInputNumber label={t("product.count")} name="product_count" min={1} />
+          <TurtleInput // 상품 바코드 Input
+            label={t("product.code")}
+            name="product_code"
+            disabled
+          />
+          <TurtleInput // 상품 옵션 Input
+            label={t("product.option")}
+            name="product_option"
+            disabled
+          />
+          <Form.Item // 상품 공급가 Input
+            label={t("product.price")}
+            name="product_price"
+            rules={[{ required: true }]}
+          >
+            <InputNumber
+              style={{ width: "100%" }}
+              step={1000}
+              min={0}
+              formatter={(value) => `${value}`.replace(pricePattern, ",")}
+            />
+          </Form.Item>
+          <TurtleInputNumber // 상품 수량 Input
+            label={t("product.count")}
+            name="product_count"
+            min={1}
+          />
 
           <Row justify="center">
             <TurtleButton type="default" htmlType="submit">

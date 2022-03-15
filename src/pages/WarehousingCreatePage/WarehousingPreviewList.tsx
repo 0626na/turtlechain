@@ -110,6 +110,7 @@ function WarehousingPreviewList() {
     resetField();
   }, [store.id, resetField]);
 
+  // 상품 추가
   const addProduct = useCallback(
     (product: AddProduct) => {
       setSuccessList([{ ...product, index: index.current++ }, ...successList]);
@@ -118,7 +119,8 @@ function WarehousingPreviewList() {
     [successList, index],
   );
 
-  const deleteItem = useCallback(
+  // 상품 삭제
+  const deleteProduct = useCallback(
     (index) => {
       setSuccessList(successList?.filter((product) => product.index !== index));
     },
@@ -337,7 +339,7 @@ function WarehousingPreviewList() {
                     <DeleteOutlined //
                       style={{ cursor: "pointer", color: "#A1A2A6" }}
                       onClick={() => {
-                        deleteItem(record.index);
+                        deleteProduct(record.index);
                       }}
                     />
                   ),

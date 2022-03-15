@@ -40,15 +40,17 @@ const AdjustmentList = function ({
   return (
     <Table
       size="small"
-      scroll={{ x: "auto", y: 400 }}
-      pagination={false}
       dataSource={list}
+      pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+      //loading={}
+      rowKey={(record) => record.id!}
+      style={{ height: "500px" }}
       columns={[
         {
+          ellipsis: true,
           width: 100,
           align: "center",
           title: t("progress"),
-          dataIndex: "is_confirmed",
           render: (_, record) => {
             const { is_cleared } = record;
             const color = is_cleared ? "green" : "red";
@@ -57,97 +59,91 @@ const AdjustmentList = function ({
           },
         },
         {
+          ellipsis: true,
           width: 120,
-          align: "center",
           title: t("adjustment date"),
-          dataIndex: "created_time",
           render: (_, record) =>
             // moment(record.created_date).format("YYYY-MM-DD"),
             getLocalDateTimeString(record.created_date!),
         },
         {
+          ellipsis: true,
           title: t("vendor.name"),
-          dataIndex: "vendor_info.vendor_name",
           render: (_, record) => record.vendor_info?.vendor_name,
         },
         {
+          ellipsis: true,
           title: t("product.name"),
-          dataIndex: "product_info.product_name",
           render: (_, record) => record.product_info?.name,
         },
         {
-          title: t("product.vendor_product_name"),
-          dataIndex: "product_info.vendor_product_name",
+          ellipsis: true,
+          title: t("product.vendor product name"),
           render: (_, record) => record.product_info?.vendor_product_name,
         },
         {
-          align: "right",
+          ellipsis: true,
           title: t("supply price"),
-          dataIndex: "price",
-          render: (_, record) => record.price!.toLocaleString(),
+          render: (_, record) => record.price?.toLocaleString(),
         },
         {
-          width: 100,
-          align: "center",
-          title: t("adjustment.type.default"),
-          dataIndex: "type",
+          ellipsis: true,
+          title: t("adjustment.type."),
           render: (_, record) => adjTypes[record.type!],
         },
-        {
-          width: 300,
-          align: "center",
-          title: "",
-          dataIndex: "action",
-          render: (_, record) => {
-            return (
-              <ActionContainer onClick={() => {}}>
-                <Button //
-                  size="small"
-                  shape="round"
-                  onClick={() => {}}
-                >
-                  {t("view details")}
-                </Button>
-                {!record.is_cleared && (
-                  <>
-                    <Popconfirm
-                      title={t("description.really delete")}
-                      okText={t("yes")}
-                      cancelText={t("no")}
-                      onConfirm={() => {
-                        onDelete(record);
-                      }}
-                    >
-                      <Button
-                        icon={<DeleteFilled />}
-                        danger
-                        type="primary"
-                        size="small"
-                        shape="round"
-                      >
-                        {t("delete")}
-                      </Button>
-                    </Popconfirm>
-                    <Popconfirm
-                      title={t("description.really confirmed")}
-                      okText={t("yes")}
-                      cancelText={t("no")}
-                    >
-                      <Button //
-                        icon={<CheckOutlined />}
-                        type="primary"
-                        size="small"
-                        shape="round"
-                      >
-                        {t("confirmed")}
-                      </Button>
-                    </Popconfirm>
-                  </>
-                )}
-              </ActionContainer>
-            );
-          },
-        },
+        // {
+        //   title: "",
+        //   dataIndex: "action",
+        //   render: (_, record) => {
+        //     return (
+        //       <>
+        //         <Button //
+        //           size="small"
+        //           shape="round"
+        //           onClick={() => {}}
+        //         >
+        //           {t("view details")}
+        //         </Button>
+        //         {!record.is_cleared && (
+        //           <>
+        //             <Popconfirm
+        //               title={t("description.really delete")}
+        //               okText={t("yes")}
+        //               cancelText={t("no")}
+        //               onConfirm={() => {
+        //                 onDelete(record);
+        //               }}
+        //             >
+        //               <Button
+        //                 icon={<DeleteFilled />}
+        //                 danger
+        //                 type="primary"
+        //                 size="small"
+        //                 shape="round"
+        //               >
+        //                 {t("delete")}
+        //               </Button>
+        //             </Popconfirm>
+        //             <Popconfirm
+        //               title={t("description.really confirmed")}
+        //               okText={t("yes")}
+        //               cancelText={t("no")}
+        //             >
+        //               <Button //
+        //                 icon={<CheckOutlined />}
+        //                 type="primary"
+        //                 size="small"
+        //                 shape="round"
+        //               >
+        //                 {t("confirmed")}
+        //               </Button>
+        //             </Popconfirm>
+        //           </>
+        //         )}
+        //       </>
+        //     );
+        //   },
+        // },
       ]}
       title={() => (
         <b>
@@ -156,11 +152,6 @@ const AdjustmentList = function ({
           {`(${list.length.toLocaleString()})`}
         </b>
       )}
-      footer={() => (
-        <Footer>
-          <SimplePagination />
-        </Footer>
-      )}
     />
   );
 };
@@ -168,12 +159,6 @@ const AdjustmentList = function ({
 const Footer = styled.div`
   display: flex;
   justify-content: center;
-`;
-
-const ActionContainer = styled.div`
-  & > * + * {
-    margin-left: 10px;
-  }
 `;
 
 export default AdjustmentList;
