@@ -88,10 +88,6 @@ const WarehousingSheetList = function ({
             },
           },
           {
-            title: t("vendor.name"),
-            dataIndex: "vendor_name",
-          },
-          {
             width: 120,
             align: "center",
             title: t("warehousing.date"),
@@ -152,7 +148,7 @@ const WarehousingSheetList = function ({
                           {t("delete")}
                         </Button>
                       </Popconfirm>
-                      <Popconfirm
+                      {/* <Popconfirm
                         title={t("description.really confirmed")}
                         okText={t("yes")}
                         cancelText={t("no")}
@@ -168,7 +164,7 @@ const WarehousingSheetList = function ({
                         >
                           {t("confirmed")}
                         </Button>
-                      </Popconfirm>
+                      </Popconfirm> */}
                     </>
                   )}
                 </ActionContainer>

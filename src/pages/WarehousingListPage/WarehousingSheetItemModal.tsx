@@ -277,7 +277,7 @@ const WarehousingSheetItemModal = function ({
             },
 
             {
-              title: t("product.vendor_product_name"),
+              title: t("product.vendor product name"),
               render: (_, item) => item.product_info.vendor_product_name,
             },
             {
