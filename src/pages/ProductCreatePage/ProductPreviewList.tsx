@@ -106,7 +106,12 @@ function ProductPreviewList() {
     setSuccessList([]);
     setFailList([]);
     setFileList([]);
+    connectProductQuery.reset();
   }, []);
+
+  useEffect(() => {
+    resetField();
+  }, [store.id, resetField]);
 
   const loadFile = (file: RcFile) => {
     const form = new FormData();
@@ -114,10 +119,6 @@ function ProductPreviewList() {
     form.append("rt_store_id", store.id?.toString() ?? "");
     parseProductQuery.mutate(form);
   };
-
-  useEffect(() => {
-    resetField();
-  }, [store.id, resetField]);
 
   const addItem = useCallback(
     (item: ProductShow) => {
@@ -218,7 +219,7 @@ function ProductPreviewList() {
           color="skyblue"
           onClick={onClickConnect}
           loading={connectProductQuery.isLoading}
-          //disabled={connectProductQuery.isSuccess}
+          disabled={connectProductQuery.isSuccess}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
@@ -246,7 +247,7 @@ function ProductPreviewList() {
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               dataSource={successList}
               rowKey={(record) => record.product_code}
-              style={{ height: "510px" }}
+              scroll={{ y: "auto" }}
               columns={[
                 {
                   ellipsis: true,

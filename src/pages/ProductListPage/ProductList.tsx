@@ -16,7 +16,6 @@ function ProductList() {
   const store = useRecoilValue(storeState);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [selectedRow, selectRow] = useState<Product>();
-
   const [searchQuery, setSearchQuery] = useState<RequestGetProductList>({
     rt_store_id: -1,
     page: 1,
@@ -24,6 +23,7 @@ function ProductList() {
     type: "all",
   });
 
+  // 상품 리스트 불러오기 요청
   const getProductListQuery = useQuery(
     ["getProductList", searchQuery], //
     () => productAPI.getProductList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
@@ -64,19 +64,35 @@ function ProductList() {
   return (
     <>
       <Toolbar />
-      <Row>
-        <TurtleText>{`${t("product.lists")} (${
-          getProductListQuery.data?.data.total_count ?? 0
-        })`}</TurtleText>
+
+      <Row style={{ paddingBottom: 0 }}>
+        <TurtleText>{`${t("product.lists")}`}</TurtleText>
       </Row>
-      <Row>
-        <SearchFilter type="product" onSearch={searchProductList} />
-      </Row>
+
       <Table
         size="small"
         loading={getProductListQuery.isLoading}
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}
+        pagination={false}
+        scroll={{ y: "auto" }}
+        title={() => (
+          <Row justify="space-between">
+            <b>{`총 ${getProductListQuery.data?.data.total_count ?? 0}건`}</b>
+            <SearchFilter type="product" onSearch={searchProductList} />
+          </Row>
+        )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={getProductListQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         onRow={(record) => {
           return {
             onClick: (event) => {
@@ -85,8 +101,6 @@ function ProductList() {
             },
           };
         }}
-        pagination={false}
-        style={{ height: 550 }}
         expandable={{
           expandedRowRender: (record) => <div>{record.memo}</div>,
           columnWidth: 25,
@@ -105,66 +119,57 @@ function ProductList() {
         columns={[
           {
             ellipsis: true,
-            width: "8%",
-            title: "거래처 코드",
+            width: 90,
+            title: t("vendor.code"),
             render: (_, record) => record.vendor_info.vendor_code,
           },
           {
             ellipsis: true,
             width: "8%",
-            title: "거래처명",
+            title: t("vendor.name"),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: "거래처주소",
+            width: "10%",
+            title: t("vendor.address"),
             render: (_, record) => record.vendor_info.vendor_address,
           },
           {
             ellipsis: true,
-            title: "상품명",
+            title: t("product.name"),
             render: (_, record) => record.name,
           },
           {
             ellipsis: true,
-            title: "거래처 상품명",
+            title: t("product.vendor product name"),
             render: (_, record) => record.vendor_product_name,
           },
           {
             ellipsis: true,
-            title: "상품 바코드",
+            width: 120,
+            title: t("product.code"),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
             width: "10%",
-            title: "옵션",
+            title: t("product.option"),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
-            width: "8%",
-            title: "공급가(원)",
+            width: 100,
+            title: t("product.price"),
             render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,
-            title: "상품이미지URL",
+            title: t("product.image url"),
             render: (_, record) => record.image_url,
           },
           Table.EXPAND_COLUMN,
         ]}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={getProductListQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={selectPage}
-            />
-          </Row>
-        )}
       />
       {/* 상품 수정 모달 */}
       <UpdateProductModal

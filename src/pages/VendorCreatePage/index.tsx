@@ -1,6 +1,5 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
-import Toolbar from "./Toolbar";
 import CreateVendorForm from "./CreateVendorForm";
 import { t } from "i18next";
 
@@ -12,10 +11,9 @@ function VendorCreatePage() {
       <Helmet title={title} />
       <PageHeader
         title={t("vendor.create")}
-        breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.create")]}
+        breadcrumbList={[t("vendor.management"), t("vendor.create")]}
         info={t("description.search vendor")}
       />
-      <Toolbar />
       <CreateVendorForm />
     </>
   );

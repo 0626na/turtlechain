@@ -68,21 +68,37 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
     <StyledModal
       centered
       width="45%"
+      maskClosable={false}
       title={t("vendor.search")}
       visible={visible}
       onCancel={closeModal}
       footer={false}
+      bodyStyle={{ height: "60vh" }}
     >
-      <Row>
-        <SearchFilter type="vendor" onSearch={searchVendor} />
-      </Row>
       <Table
         size="small"
-        style={{ height: "550px", padding: "24px 0px" }}
+        scroll={{ y: "auto" }}
         loading={getVendorListQuery.isLoading}
         dataSource={getVendorListQuery.data?.data.vendor_list}
         rowKey={(record) => record.id}
         pagination={false}
+        title={() => (
+          <Row justify="space-between">
+            {`총 ${getVendorListQuery.data?.data.total_count ?? 0}개`}
+            <SearchFilter type="vendor" onSearch={searchVendor} />
+          </Row>
+        )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={getVendorListQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         onRow={(record) => {
           return {
             onClick: (event) => {
@@ -121,17 +137,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
               `${record.vendor_account.bank} ${record.vendor_account.account_number} ${record.vendor_account.account_holder}`,
           },
         ]}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={getVendorListQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={selectPage}
-            />
-          </Row>
-        )}
       />
     </StyledModal>
   );

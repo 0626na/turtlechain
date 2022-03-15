@@ -279,7 +279,7 @@
     "code": "상품 바코드",
     "name": "상품명",
     "option": "옵션",
-    "price": "공급가",
+    "price": "공급가(원)",
     "count": "수량",
     "vendor product name": "거래처 상품명",
     "memo": "메모",

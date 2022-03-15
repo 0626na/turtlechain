@@ -54,7 +54,13 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
 
   // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id, vendor_id: vendorId });
+    setSearchQuery({
+      ...searchQuery,
+      rt_store_id: store.id,
+      vendor_id: vendorId,
+      search_string: "",
+      type: "all",
+    });
   }, [store.id, vendorId]);
 
   // 검색 버튼 클릭
@@ -86,18 +92,32 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
       visible={visible}
       onCancel={closeModal}
       footer={false}
+      bodyStyle={{ height: "60vh" }}
     >
-      <Row>
-        <SearchFilter type="product" onSearch={searchProductList} />
-      </Row>
-
       <Table
         size="small"
-        style={{ height: "550px", padding: "24px 0px" }}
+        scroll={{ y: "auto" }}
         loading={getProductListQuery.isLoading}
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}
         pagination={false}
+        title={() => (
+          <Row justify="space-between">
+            {`총 ${getProductListQuery.data?.data.total_count ?? 0}개`}
+            <SearchFilter type="product" onSearch={searchProductList} />
+          </Row>
+        )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={getProductListQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         onRow={(record) => {
           return {
             onClick: (event) => {
@@ -146,17 +166,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
             render: (_, record) => record.price.toLocaleString(),
           },
         ]}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={getProductListQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={selectPage}
-            />
-          </Row>
-        )}
       />
     </StyledModal>
   );

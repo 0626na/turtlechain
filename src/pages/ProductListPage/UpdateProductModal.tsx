@@ -21,6 +21,7 @@ interface Props {
 function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
 
+  // 상품 수정 요청
   const updateProductQuery = useMutation("updateProduct", productAPI.updateProduct, {
     onSuccess: (data) => {
       notification.open({
@@ -34,6 +35,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
+  // 모달 렌더링 될 때 상품정보 채워주기
   useEffect(() => {
     form.setFieldsValue({
       id: selectedRow?.id,
@@ -50,6 +52,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
     });
   }, [selectedRow]);
 
+  // 수정버튼 클릭
   const onClickUpdate = useCallback(async () => {
     form.validateFields().then(() => {
       updateProductQuery.mutate({ ...form.getFieldsValue() });

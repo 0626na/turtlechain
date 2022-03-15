@@ -9,11 +9,13 @@ import TurtleInput from "components/common/TurtleInput";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleText from "components/common/TurtleText";
 import TurtleTextArea from "components/common/TurtleTextArea";
+import Toolbar from "components/Toolbar";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import CreateBulkVendorModal from "./CreateBulkVendorModal";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
 import SearchWholesaleModal from "./SearchWholesaleModal";
 
@@ -24,11 +26,14 @@ function CreateVendorForm() {
   const [selectedVendor, selectVendor] = useState<Wholesale>();
   // createVendor 요청 data 담을 객체
   const [form] = useForm();
+  // 대량등록 모달
+  const [createModalVisible, setCreateModalVisible] = useState(false);
   // 거래처 검색 모달
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   // 거래처 신규 등록 요청 모달
   const [requestModalVisible, setRequestModalVisible] = useState(false);
 
+  // 거래처 코드 생성 요청
   const createVendorCode = useQuery(
     "createVendorCode",
     () =>
@@ -47,6 +52,7 @@ function CreateVendorForm() {
     },
   );
 
+  // 거래처 생성 요청
   const createVendorQuery = useMutation(["createVendor"], vendorAPI.createVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
@@ -83,10 +89,21 @@ function CreateVendorForm() {
     },
   });
 
+  //쇼핑몰 선택 감지하여 form에 넣어줌
+  useEffect(() => {
+    form.setFieldsValue({
+      ...form.getFieldsValue(),
+      rt_store_id: store.id,
+      vendor_code: undefined,
+    });
+  }, [store.id, form]);
+
+  // 거래처 검색 modal 닫기
   const closeSearchModal = () => {
     setSearchModalVisible(false);
   };
 
+  // 코드 만들기 Button 클릭
   const clickCreateVendorCode = () => {
     if (!store.id) {
       message.warn("쇼핑몰을 선택해 주세요");
@@ -121,15 +138,7 @@ function CreateVendorForm() {
     closeSearchModal();
   };
 
-  //쇼핑몰 선택 감지하여 form에 넣어줌
-  useEffect(() => {
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      rt_store_id: store.id,
-      vendor_code: undefined,
-    });
-  }, [store.id, form]);
-
+  // 거래처 등록 버튼 클릭
   const onClickCreate = () => {
     if (!form.getFieldValue("ws_store_id")) {
       message.warning("거래처를 선택해 주세요");
@@ -142,6 +151,21 @@ function CreateVendorForm() {
 
   return (
     <>
+      <Toolbar>
+        <TurtleButtonSub // 거래처 대량 등록 Button
+          icon="file"
+          onClick={() => {
+            if (!store.id) {
+              message.warn("쇼핑몰을 선택해주세요.");
+              return;
+            }
+            setCreateModalVisible(true);
+          }}
+        >
+          {t("button.create bulk vendor")}
+        </TurtleButtonSub>
+      </Toolbar>
+
       <Form //
         layout="horizontal"
         form={form}
@@ -174,6 +198,10 @@ function CreateVendorForm() {
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
           onSearch={() => {
+            if (!store.id) {
+              message.warn("쇼핑몰을 선택해주세요.");
+              return;
+            }
             setSearchModalVisible(true);
           }}
         />
@@ -329,11 +357,20 @@ function CreateVendorForm() {
         </Row>
       </Form>
 
+      {/* 거래처 대량등록 모달 */}
+      <CreateBulkVendorModal
+        visible={createModalVisible}
+        closeModal={() => {
+          setCreateModalVisible(false);
+        }}
+      />
+      {/* master 도매 검색 모달 */}
       <SearchWholesaleModal //
         visible={searchModalVisible}
         closeModal={closeSearchModal}
         selectRow={fillVendor}
       />
+      {/* 거래처 신규 등록 요청 모달 */}
       <CreateVendorRequestModal //
         visible={requestModalVisible}
         closeModal={() => {

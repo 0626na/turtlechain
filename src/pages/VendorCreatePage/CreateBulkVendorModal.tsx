@@ -52,6 +52,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     duplicated_count: 0,
   });
 
+  // 거래처 파싱 요청
   const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
@@ -95,6 +96,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     },
   });
 
+  // 거래처 대량 등록 요청
   const createVendorQuery = useMutation(
     ["createVendor"], //
     vendorAPI.createVendor,
@@ -112,6 +114,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     },
   );
 
+  // state 초기화
   const resetField = useCallback(() => {
     setSuccessList([]);
     setSuggestList([]);
@@ -120,11 +123,13 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     setFileList([]);
   }, []);
 
+  // 모달 닫기
   const onCloseModal = useCallback(() => {
     closeModal();
     resetField();
   }, []);
 
+  // 파일 upload
   const loadFile = (file: RcFile) => {
     const form = new FormData();
     form.append("files", file);
@@ -369,7 +374,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   const getSuggestCount = useMemo((): number => {
     let count = 0;
     suggestList?.forEach((vendor: VendorShow) => {
-      if (!(vendor.use_vendor && vendor.check_account)) count++;
+      if (vendor.use_vendor && vendor.check_account) count++;
     });
     return count;
   }, [suggestList]);
@@ -414,13 +419,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       title={
         <>
           <span style={{ fontSize: "18px" }}>{t("vendor.request create")}</span>
+          <br />
           <TurtleInfo>대량 업로드 파일은 .CSV .XLS 또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
         </>
       }
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "750px", overflowY: "auto" }}
+      bodyStyle={{ height: "85vh", overflowY: "auto" }}
     >
       <Space>
         <Typography.Text>거래처 업로드 | </Typography.Text>
@@ -451,19 +457,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          *
          */}
-        <Tabs.TabPane tab="매칭" key="1">
-          거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "#00BB88", textDecoration: "underline" }}>
-            {count?.success_count}
-          </span>
-          건
+        <Tabs.TabPane tab={`매칭(${count.success_count})`} key="1">
           <Table
             size="small"
             loading={parseVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            style={{ height: "505px" }}
+            scroll={{ y: "auto" }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
@@ -639,16 +640,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          *
          */}
-        <Tabs.TabPane tab="추천" key="2">
-          거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>{getSuggestCount}</span>건
+        <Tabs.TabPane tab={`추천(${getSuggestCount}/${count.suggest_count})`} key="2">
           <Table
             size="small"
             loading={parseVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            style={{ height: "505px" }}
+            scroll={{ y: "auto" }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
@@ -718,7 +717,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
             columns={[
               {
                 ellipsis: true,
-                width: "8%",
+                width: 100,
                 title: "거래처 코드",
                 render: (_, record) => record.vendor_code,
               },
@@ -821,6 +820,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               Table.EXPAND_COLUMN,
               {
                 title: "부가세 포함 여부",
+                width: 130,
                 ellipsis: true,
                 render: (_, record) => {
                   return (
@@ -837,7 +837,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
               },
               {
                 align: "center",
-                title: "(체크)",
+                width: 50,
                 render: (_, record) => {
                   if (record.use_vendor && record.check_account) {
                     return <CheckOutlined style={{ color: "green" }} />;
@@ -875,16 +875,16 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          *
          */}
-        <Tabs.TabPane tab="미매칭" key="3">
-          거래처 대량 등록 미리보기{" "}
-          <span style={{ color: "red", textDecoration: "underline" }}>{count.fail_count}</span>건
+        <Tabs.TabPane tab={`미매칭(${count.fail_count})`} key="3">
+          {/* 거래처 대량 등록 미리보기{" "}
+          <span style={{ color: "red", textDecoration: "underline" }}>{count.fail_count}</span>건 */}
           <Table
             size="small"
             loading={parseVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            style={{ height: "505px" }}
+            scroll={{ y: "auto" }}
             columns={[
               {
                 ellipsis: true,
@@ -926,20 +926,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
 
-      <Row justify="end">
-        {/**
-         <TurtleText>
-          등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}
-          <span
-            style={{ color: "#033A88", cursor: "pointer", textDecoration: "underline" }}
-            onClick={() => {
-              //setRequestModalVisible(true);
-            }}
-          >
-            신규 등록 요청하기 {">"}
-          </span>
-        </TurtleText> 
-         */}
+      <Row justify="end" style={{ paddingTop: 20 }}>
         <Popconfirm
           title={t("description.really register")}
           okText={t("yes")}
@@ -948,7 +935,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         >
           <TurtleButton
             type="primary"
-            disabled={fileList.length === 0}
+            disabled={successList?.length === 0}
             loading={createVendorQuery.isLoading}
           >
             {t("vendor.create")}

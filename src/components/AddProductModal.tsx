@@ -87,7 +87,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     <>
       <StyledModal
         centered
-        width="50%"
+        width="60%"
         title={t("product.add single")}
         closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
         visible={visible}

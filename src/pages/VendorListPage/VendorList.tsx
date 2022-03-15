@@ -206,31 +206,38 @@ function VendorList() {
     [searchQuery],
   );
 
-  const openUpdateModal = useCallback((record: VendorShow) => {
-    //selectRow(record);
-    setVisibleUpdateModal(true);
-  }, []);
-
-  const closeUpdateModal = useCallback(() => {
-    setVisibleUpdateModal(false);
-  }, []);
-
   return (
     <>
       <Toolbar />
-      <Row>
+
+      <Row style={{ paddingBottom: 0 }}>
         <TurtleText>{t("vendor.lists")}</TurtleText>
       </Row>
-      <Row>
-        <SearchFilter type="vendor" onSearch={searchVendors} />
-      </Row>
+
       <Table
         size="small"
         loading={getVendorsQuery.isLoading}
         dataSource={vendorList}
         rowKey={(record) => record.vendor_code}
         pagination={false}
-        style={{ height: "600px" }}
+        scroll={{ y: "auto" }}
+        title={() => (
+          <Row justify="space-between">
+            <b>{`총 ${getVendorsQuery.data?.data.total_count ?? 0}건`}</b>
+            <SearchFilter type="vendor" onSearch={searchVendors} />
+          </Row>
+        )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={getVendorsQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         expandable={{
           expandedRowRender: (record) => (
             <>
@@ -350,7 +357,6 @@ function VendorList() {
           },
           {
             ellipsis: true,
-            width: "20%",
             title: t("vendor.account"),
             render: (_, { vendor_account, ws_store_info: { store_account } }) => {
               const makeAccount = (account: VendorAccount) =>
@@ -361,74 +367,30 @@ function VendorList() {
               );
             },
           },
-          Table.EXPAND_COLUMN,
           {
             ellipsis: true,
+            width: 120,
             title: t("vendor.include tax"),
-            render: (_, record) => {
-              return (
-                <Popconfirm
-                  title={t("description.update tax included")}
-                  okText={t("yes")}
-                  cancelText={t("no")}
-                  onConfirm={() => {
-                    changeIsTaxed(record);
-                  }}
-                >
-                  <Switch
-                    checkedChildren={t("button.include")}
-                    checked={record.is_vat_included}
-                    style={{ width: "52px" }}
-                  />
-                </Popconfirm>
-              );
-            },
+            render: (_, record) => (
+              <Popconfirm
+                title={t("description.update tax included")}
+                okText={t("yes")}
+                cancelText={t("no")}
+                onConfirm={() => {
+                  changeIsTaxed(record);
+                }}
+              >
+                <Switch
+                  checkedChildren={t("button.include")}
+                  checked={record.is_vat_included}
+                  style={{ width: "52px" }}
+                />
+              </Popconfirm>
+            ),
           },
-          {
-            ellipsis: true,
-            align: "center",
-            title: () => {
-              return (
-                <>
-                  {t("common.request update")}
-                  <TurtleQuestionTooltip content={t("tooltip.request update")} />
-                </>
-              );
-            },
-            render: (_, record) => {
-              return (
-                <TurtleButtonSub //
-                  size="small"
-                  color="green"
-                  disabled={true}
-                  onClick={() => {
-                    openUpdateModal(record);
-                  }}
-                >
-                  {t("button.request update")}
-                </TurtleButtonSub>
-              );
-            },
-          },
+          Table.EXPAND_COLUMN,
         ]}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={getVendorsQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={selectPage}
-            />
-          </Row>
-        )}
-        // end of Table
       />
-      {/* <VendorUpdateModal //
-        visible={visibleUpdateModal}
-        closeModal={closeUpdateModal}
-        selectedRow={selectedRow}
-      /> */}
     </>
   );
 }

@@ -180,11 +180,7 @@ const AdjustmentListPreview = function () {
       </Toolbar>
 
       <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
-        <TurtleText>
-          {`${t("adjustment.preview")}`}
-          <br />
-          <TurtleInfo>정보 넣을 예정</TurtleInfo>
-        </TurtleText>
+        <TurtleText>{`${t("adjustment.preview")}`}</TurtleText>
 
         <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
@@ -194,7 +190,7 @@ const AdjustmentListPreview = function () {
               dataSource={successList}
               rowKey={(record) => record.index}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-              style={{ height: "500px" }}
+              scroll={{ y: "auto" }}
               footer={() => `공급가 합계 : ${totalPrice.toLocaleString()}원`}
               columns={[
                 {

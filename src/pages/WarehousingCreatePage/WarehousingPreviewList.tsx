@@ -260,7 +260,7 @@ function WarehousingPreviewList() {
               dataSource={successList}
               rowKey={(record) => record.index}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-              style={{ height: "530px" }}
+              scroll={{ y: "auto" }}
               footer={() =>
                 `입고수량 합계 : ${totalProductCount}개 | 공급가 합계 : ${totalProductPrice.toLocaleString()}원`
               }
@@ -354,7 +354,7 @@ function WarehousingPreviewList() {
               dataSource={failList}
               rowKey={(record) => failIndex.current++}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-              style={{ height: "530px" }}
+              scroll={{ y: "auto" }}
               columns={[
                 {
                   ellipsis: true,

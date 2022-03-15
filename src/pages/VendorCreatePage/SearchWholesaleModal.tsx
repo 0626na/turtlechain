@@ -9,6 +9,7 @@ import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { t } from "i18next";
 import { phonePattern } from "utils/pattern";
+import styled from "styled-components";
 
 interface Props {
   visible: boolean;
@@ -25,6 +26,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
     search_string: "",
   });
 
+  // master 도매 검색 요청
   const searchWholesaleQuery = useQuery(
     ["searchWholesale", searchQuery],
     () => vendorAPI.searchWholesale(searchQuery),
@@ -105,37 +107,50 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
   );
 
   return (
-    <Modal
+    <StyledModal
       centered
-      width="70%"
+      width="60%"
       maskClosable={false}
       title={t("vendor.search")}
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "700px", overflowY: "auto" }}
+      bodyStyle={{ height: "75vh", overflowY: "auto" }}
     >
-      <Row>
-        <SearchFilter type="vendor" onSearch={searchWholesale} />
-      </Row>
-
       <Table
         size="small"
-        style={{ padding: "24px 0px" }}
         loading={searchWholesaleQuery.isLoading}
         dataSource={wholesaleList}
         rowKey={(record) => record.id}
         pagination={false}
+        scroll={{ y: "auto" }}
+        title={() => (
+          <Row justify="space-between">
+            {`총 ${searchWholesaleQuery.data?.data.total_count ?? 0}개`}
+            <SearchFilter type="vendor" onSearch={searchWholesale} />
+          </Row>
+        )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={searchWholesaleQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         columns={[
           {
-            width: "20%",
             ellipsis: true,
+            width: "20%",
             title: t("vendor.name"),
             render: (_, record) => record.name,
           },
           {
-            width: "18%",
             ellipsis: true,
+            width: "20%",
             title: t("vendor.address"),
             render: (_, record) => {
               return `${record.building} ${record.floor && record.floor + "층"} ${
@@ -144,8 +159,8 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
             },
           },
           {
-            width: "16%",
             ellipsis: true,
+            width: "20%",
             title: t("vendor.store phone"),
             render: (_, record) => {
               if (record.store_phone.length === 1) {
@@ -230,7 +245,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
             },
           },
           {
-            width: "13%",
+            width: 100,
             align: "center",
             title: "",
             render: (_, record) => (
@@ -244,20 +259,15 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
             ),
           },
         ]}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={searchWholesaleQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={selectPage}
-            />
-          </Row>
-        )}
       />
-    </Modal>
+    </StyledModal>
   );
 }
+
+const StyledModal = styled(Modal)`
+  .ant-modal-header {
+    background-color: #f3f6f9;
+  }
+`;
 
 export default SearchWholesaleModal;

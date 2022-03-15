@@ -12,7 +12,7 @@ function VendorListPage() {
       <PageHeader
         pageName="vendor"
         title={t("vendor.list")}
-        breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.list")]}
+        breadcrumbList={[t("vendor.management"), t("vendor.list")]}
       />
       <VendorList />
     </>

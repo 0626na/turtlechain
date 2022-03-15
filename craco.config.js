@@ -13,6 +13,7 @@ module.exports = {
               // Input
               "@input-placeholder-color": "#CBCCD1",
               "@input-height-base": "36px",
+              "@input-height-sm": "28px",
 
               // Form
               "@form-item-margin-bottom": "22px",

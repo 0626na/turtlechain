@@ -57,9 +57,9 @@ function TurtleButtonSub({
         borderRadius: shape === "default" ? 2 : "",
         padding: "4px 10px",
         paddingTop: size === "small" ? "1.5px" : "4px",
-        color: type === "default" ? makeColor() : "",
+        color: disabled ? "white" : type === "default" ? makeColor() : "",
         backgroundColor: type === "primary" ? makeColor() : "",
-        width: "140px",
+        width: size === "middle" ? "140px" : "",
         borderColor: makeColor(),
       }}
       loading={loading}

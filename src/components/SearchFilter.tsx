@@ -1,6 +1,6 @@
-import { Space } from "antd";
+import { Select, Space } from "antd";
 import Search from "antd/lib/input/Search";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import TurtleSelect from "./common/TurtleSelect";
 import { t } from "i18next";
@@ -35,57 +35,66 @@ function SearchFilter({ type, onSearch }: Props) {
     if (e.key === "Enter") onSearch({ ...searchState });
   };
 
-  const vendorOptions: Array<{ name: string; value: string }> = [
-    {
-      name: t("common.all"),
-      value: "all",
-    },
-    {
-      name: t("vendor.name"),
-      value: "name",
-    },
-    {
-      name: t("vendor.account"),
-      value: "account",
-    },
-    {
-      name: t("vendor.store phone"),
-      value: "phone",
-    },
-  ];
-
-  const productOptions: Array<{ name: string; value: string }> = [
-    {
-      name: t("common.all"),
-      value: "all",
-    },
-    {
-      name: t("product.name"), //
-      value: "name",
-    },
-    {
-      name: t("product.vendor product name"),
-      value: "vendor_product_name",
-    },
-    {
-      name: t("vendor.name"),
-      value: "vendor_name",
-    },
-  ];
+  // Select Box 옵션 선택
+  const options = useMemo(() => {
+    if (type === "vendor")
+      return [
+        {
+          name: t("common.all"),
+          value: "all",
+        },
+        {
+          name: t("product.name"), //
+          value: "name",
+        },
+        {
+          name: t("product.vendor product name"),
+          value: "vendor_product_name",
+        },
+        {
+          name: t("vendor.name"),
+          value: "vendor_name",
+        },
+      ];
+    if (type === "product")
+      return [
+        {
+          name: t("common.all"),
+          value: "all",
+        },
+        {
+          name: t("vendor.name"),
+          value: "name",
+        },
+        {
+          name: t("vendor.account"),
+          value: "account",
+        },
+        {
+          name: t("vendor.store phone"),
+          value: "phone",
+        },
+      ];
+  }, [type]);
 
   return (
     <Space>
-      <TurtleSelect //
-        label={t("common.search")}
-        width="short"
-        placeholder={t("placeholder.all")}
-        options={type === "vendor" ? vendorOptions : productOptions}
+      <Select
+        style={{ width: 100 }}
+        size="small"
         value={searchState.type}
         onSelect={onSelectSearchType}
-      />
+      >
+        {options?.map(({ name, value }) => (
+          <Select.Option key={value} value={value}>
+            {name}
+          </Select.Option>
+        ))}
+      </Select>
       <StyledSearch //
+        size="small"
         placeholder={t("placeholder.search")}
-        style={{ width: "20rem" }}
+        style={{ width: 200 }}
         value={searchState.search_string}
         onChange={onChangeSearchString}
         onKeyPress={onEnterPress}

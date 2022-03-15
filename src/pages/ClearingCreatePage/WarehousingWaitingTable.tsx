@@ -47,7 +47,7 @@ function WarehousingWaitingTable({
     () =>
       warehousingAPI.getSheet({
         rt_store_id: store.id,
-        is_confirmed: 1,
+        is_confirmed: 0,
         start_date: "2017-01-01",
         end_date: "9999-12-31",
         did_settlement: 0,
