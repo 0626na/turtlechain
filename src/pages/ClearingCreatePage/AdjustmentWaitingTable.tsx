@@ -445,7 +445,7 @@ function AdjustmentWaitingTable({
           },
           {
             ellipsis: true,
-            title: t("adjustment.type.default"),
+            title: t("adjustment.type."),
             dataIndex: "type",
             render: (value) => {
               return <Space>{t("adjustment.type." + value)}</Space>;
