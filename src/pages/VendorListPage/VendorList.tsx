@@ -28,6 +28,7 @@ import { storeState } from "store/storeState";
 import VendorUpdateModal from "./VendorUpdateModal";
 import { phonePattern } from "utils/pattern";
 import moment from "moment";
+import Toolbar from "components/Toolbar";
 
 interface VendorShow extends Vendor {
   memo_active: boolean;
@@ -216,10 +217,13 @@ function VendorList() {
 
   return (
     <>
-      <div>
+      <Toolbar />
+      <Row>
         <TurtleText>{t("vendor.lists")}</TurtleText>
+      </Row>
+      <Row>
         <SearchFilter type="vendor" onSearch={searchVendors} />
-      </div>
+      </Row>
       <Table
         size="small"
         loading={getVendorsQuery.isLoading}

@@ -1,6 +1,5 @@
 import PageHeader from "components/PageHeader";
 import { Helmet } from "react-helmet";
-import Toolbar from "./Toolbar";
 import VendorList from "./VendorList";
 import { t } from "i18next";
 
@@ -15,7 +14,6 @@ function VendorListPage() {
         title={t("vendor.list")}
         breadcrumbList={[t("common.home"), t("vendor.management"), t("vendor.list")]}
       />
-      <Toolbar />
       <VendorList />
     </>
   );
