@@ -23,9 +23,8 @@ import Toolbar from "components/Toolbar";
 import { FileOutlined, DownOutlined, DeleteOutlined } from "@ant-design/icons";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
-import AddSingleProductModal, { AddProduct } from "components/AddProductModal";
 import TurtleText from "components/common/TurtleText";
-import TurtleInfo from "components/common/TurtleInfo";
+import AddProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
 import { BaseOptionType } from "antd/lib/select";
 import TurtleButton from "components/common/TurtleButton";
@@ -61,8 +60,9 @@ const AdjustmentListPreview = function () {
 
   // 상품 추가
   const addProduct = useCallback(
-    (product: AddProduct) => {
-      setSuccessList([{ ...product, index: index.current++, type: "reserve" }, ...successList]);
+    (product: AdjustmentProduct) => {
+      setSuccessList([{ ...product, index: index.current++ }, ...successList]);
+      console.log(product);
       return true;
     },
     [successList, index],
@@ -316,7 +316,7 @@ const AdjustmentListPreview = function () {
       </Row>
 
       {/* 상품 단건 추가 모달 */}
-      <AddSingleProductModal
+      <AddProductModal
         visible={addProductModalVisible}
         closeModal={() => {
           setAddProductModalVisible(false);

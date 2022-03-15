@@ -4,7 +4,7 @@ import TextArea from "antd/lib/input/TextArea";
 interface Props {
   name: string;
   label: string;
-  placeholder: string;
+  placeholder?: string;
   rows?: number;
   required?: boolean;
 }
