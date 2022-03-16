@@ -111,16 +111,17 @@ const create = async function (data: RequestCreate) {
 };
 
 // Request: 매입조정 상품 수정
-export interface RequestUpdate extends AdjustmentProductShow {
-  //item_id: number;
-  is_inactive: boolean;
-  product_id: number;
-  vendor_id: number;
+export interface RequestUpdate {
+  id: number;
+  is_inactive?: boolean;
+  memo?: string;
 }
 
 // Response: 매입조정 상품 수정
 export interface ResponseUpdate {
-  data: AdjustmentProduct;
+  data: {
+    is_inactive: boolean;
+  };
 }
 
 // 매입조정 상품 수정
