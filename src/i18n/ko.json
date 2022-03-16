@@ -49,6 +49,7 @@
     "warning previous clearing": "매입 조정 정보가 모두 사라집니다. 진행하시겠습니까?",
     "confirm exclude": "정말 제외하시겠습니까?",
     "confirm delete": "정말 삭제하시겠습니까?",
+    "success delete": "성공적으로 삭제하였습니다.",
     "success create clearing": "정산내역을 등록하였습니다.",
     "success delete clearing": "정산내역을 삭제하였습니다.",
     "error no adjustable price": "차감 가능 금액이 없습니다.",

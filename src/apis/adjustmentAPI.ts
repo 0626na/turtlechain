@@ -43,8 +43,6 @@ export interface AdjustmentProductShow {
   memo: string;
   memo_active?: boolean;
   memo_value?: string;
-
-  created_by: string;
 }
 
 // Request: 매입조정 리스트 조회
@@ -112,6 +110,27 @@ const create = async function (data: RequestCreate) {
   return response.data;
 };
 
+// Request: 매입조정 상품 수정
+export interface RequestUpdate {
+  id: number;
+  is_inactive?: boolean;
+  memo?: string;
+}
+
+// Response: 매입조정 상품 수정
+export interface ResponseUpdate {
+  data: {
+    is_inactive: boolean;
+  };
+}
+
+// 매입조정 상품 수정
+const update = async function (data: RequestUpdate) {
+  const url = `adjustment/item/${data.id}`;
+  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  return response.data.data;
+};
+
 // Request: 매입조정 아이템 조회
 export interface RequestGetAdjustmentForClearing {
   rt_store_id: number | undefined;
@@ -165,26 +184,6 @@ const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForC
   }
   const response = await v2Axios.get<ResponseGetAdjustmentForClearing>(url);
   return response.data;
-};
-
-// Request: 매입조정 상품 수정
-export interface RequestUpdate extends AdjustmentProductShow {
-  //item_id: number;
-  is_inactive: boolean;
-  product_id: number;
-  vendor_id: number;
-}
-
-// Response: 매입조정 상품 수정
-export interface ResponseUpdate {
-  data: AdjustmentProduct;
-}
-
-// 매입조정 상품 수정
-const update = async function (data: RequestUpdate) {
-  const url = `adjustment/item/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
-  return response.data.data;
 };
 
 const adjustmentAPI = {

@@ -66,12 +66,13 @@ const AdjustmentList = function () {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       notification.open({
         type: "success",
-        message: t("message.success delete warehousing"),
+        message: data.is_inactive ? t("message.success delete") : t("message.success update"),
       });
       setSearchQuery({ ...searchQuery, page: 1 });
+      getAdjustmentListQuery.refetch();
     },
   });
 
@@ -235,7 +236,10 @@ const AdjustmentList = function () {
                     okText={t("yes")}
                     cancelText={t("no")}
                     onConfirm={() => {
-                      alert("삭제 구현중.. api 주세요ㅠㅠ");
+                      updateAdjustmentQuery.mutate({
+                        id: record.id,
+                        is_inactive: true,
+                      });
                     }}
                   >
                     <DeleteOutlined style={{ cursor: "pointer", color: "#A1A2A6" }} />
@@ -287,8 +291,7 @@ const AdjustmentList = function () {
                       <TurtleButtonSub
                         size="small"
                         onClick={() => {
-                          //changeMemo(record);
-                          alert("수정구현중 api주세요ㅠㅠ");
+                          updateAdjustmentQuery.mutate({ id: record.id, memo: record.memo_value });
                         }}
                       >
                         확인
