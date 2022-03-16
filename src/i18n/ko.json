@@ -172,6 +172,7 @@
     "management": "입고 관리",
     "create": "입고 등록",
     "list": "입고 내역",
+    "lists": "입고 리스트",
     "count": "입고 수량",
     "date": "입고 날짜",
     "total count": "입고 수량 합계",
