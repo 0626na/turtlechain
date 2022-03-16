@@ -1,22 +1,39 @@
 import moment from "moment";
-import { DeleteFilled, CheckOutlined } from "@ant-design/icons";
-import { Table, Tag, Button, Popconfirm, Row, Space, Divider, Select, DatePicker } from "antd";
-import SimplePagination from "components/SimplePagination";
-import adjustmentAPI, { RequestGetList } from "apis/adjustmentAPI";
-import { getLocalDateTimeString } from "utils/general";
-import AdjustmentSearchFilter from "./AdjustmentSearchFilter";
-import { useQuery } from "react-query";
+import { DeleteOutlined, FileTextOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Tag,
+  Row,
+  Space,
+  Divider,
+  Select,
+  DatePicker,
+  Pagination,
+  Input,
+  Col,
+  message,
+  notification,
+  Button,
+  Popconfirm,
+  Card,
+} from "antd";
+import adjustmentAPI, { AdjustmentProductShow, RequestGetList } from "apis/adjustmentAPI";
+import { useMutation, useQuery } from "react-query";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import Toolbar from "components/Toolbar";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
+import TurtleButtonSub from "components/common/TurtleButtonSub";
+import { AxiosError } from "axios";
+import Meta from "antd/lib/card/Meta";
+import TurtleCard from "components/common/TurtleCard";
 
 const AdjustmentList = function () {
   const store = useRecoilValue(storeState);
-
+  const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentProductShow>>();
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: store.id ?? -1,
     is_cleared: 2,
@@ -26,67 +43,71 @@ const AdjustmentList = function () {
     type: "all",
   });
 
+  // 매입조정 리스트 요청
   const getAdjustmentListQuery = useQuery(
     ["getAdjustmentList", searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
       enabled: !!store.id,
+      onSuccess: (data) => {
+        setAdjustmentList(
+          data.data.adjustment_list.map((product) => ({
+            ...product,
+            memo_active: !product.memo,
+            memo_value: product.memo,
+          })),
+        );
+      },
     },
   );
 
+  // 매입조정 수정, 삭제 요청
+  const updateAdjustmentQuery = useMutation("deleteAdjustment", adjustmentAPI.update, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      notification.open({
+        type: "success",
+        message: t("message.success delete warehousing"),
+      });
+      setSearchQuery({ ...searchQuery, page: 1 });
+    },
+  });
+
+  // 쇼핑몰 바뀔때 마다 재요청
   useEffect(() => {
     setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
   }, [store.id]);
 
-  // const [selectedRow, selectRow] = useState({
-  //   sheet_id: -1,
-  //   rt_store_id: -1,
-  //   created_time: "",
-  //   is_confirmed: 0,
-  // });
-
-  // // 입고장 삭제 요청
-  // const deleteAdjQuery = useMutation(["deleteAdj"], adjustmentAPI.updateAdjustment, {
-  //   onError: (error: AxiosError) => {
-  //     message.error(error.response?.data?.msg);
-  //   },
-  //   onSuccess: () => {
-  //     if (currentPage === 1) {
-  //       getAdjustmentListQuery.refetch();
-  //     } else {
-  //       setCurrentPage(1);
-  //       setSearchQuery({ ...searchQuery });
-  //       // setSearchQuery({ ...searchQuery, last_id: -1, switch_type: "next" });
-  //     }
-
-  //     notification.open({
-  //       type: "success",
-  //       message: t("message.success delete warehousing"),
-  //     });
-  //   },
-  // });
-
-  // // 전체 데이터 수
-  // const totalCount = useMemo(
-  //   () => (getAdjustmentListQuery.data ? getAdjustmentListQuery.data.data.total_count : 0),
-  //   [getAdjustmentListQuery.data],
-  // );
-
-  // const list = useMemo(
-  //   () => (getAdjustmentListQuery.data ? getAdjustmentListQuery.data.data.adjustment_list : []),
-  //   [getAdjustmentListQuery.data],
-  // );
-
-  let adjTypes = {
-    exchange: "교환",
-    reserve: "미송",
-    refund: "환불",
-    takeback: "반품",
-  };
+  // 페이지 선택
+  const selectPage = useCallback(
+    (page) => {
+      setSearchQuery({ ...searchQuery, page });
+    },
+    [searchQuery],
+  );
 
   return (
     <>
       <Toolbar />
+
+      <Row gutter={16}>
+        <TurtleCard
+          color="orange"
+          title={t("adjustment.pending")}
+          span={4}
+          count={getAdjustmentListQuery.data?.data.statistics.not_cleared.count ?? 0}
+          price={getAdjustmentListQuery.data?.data.statistics.not_cleared.price ?? 0}
+        />
+        <TurtleCard
+          color="geekblue"
+          title={t("adjustment.confirmed")}
+          span={4}
+          count={getAdjustmentListQuery.data?.data.statistics.cleared.count ?? 0}
+          price={getAdjustmentListQuery.data?.data.statistics.cleared.price ?? 0}
+        />
+      </Row>
 
       <Row style={{ paddingBottom: 0 }}>
         <TurtleText>{t("adjustment.lists")}</TurtleText>
@@ -94,21 +115,27 @@ const AdjustmentList = function () {
 
       <Table
         size="small"
-        dataSource={getAdjustmentListQuery.data?.data.adjustment_list}
+        dataSource={adjustmentList}
         loading={getAdjustmentListQuery.isLoading}
         pagination={false}
         rowKey={(record) => record.id}
         scroll={{ y: "auto" }}
         title={() => (
           <Row justify="space-between">
-            {`총 ${getAdjustmentListQuery.data?.data.total_count ?? 0}건`}
+            <span>
+              총{" "}
+              <span style={{ color: "#32ACDD" }}>
+                {getAdjustmentListQuery.data?.data.total_count ?? 0}
+              </span>
+              건
+            </span>
+
             <Space>
-              <SearchFilter type="product" onSearch={() => {}} />
+              {/* <SearchFilter type="product" onSearch={() => {}} /> */}
 
               <Divider type="vertical" style={{ margin: 0 }} />
 
               <Select
-                bordered={false}
                 size="small"
                 style={{ width: 100 }}
                 value={searchQuery.is_cleared}
@@ -126,7 +153,6 @@ const AdjustmentList = function () {
 
               <DatePicker.RangePicker
                 size="small"
-                bordered={false}
                 allowClear={false}
                 value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
                 onChange={(_, dateStrings) => {
@@ -138,6 +164,17 @@ const AdjustmentList = function () {
             </Space>
           </Row>
         )}
+        footer={() => (
+          <Row justify="center">
+            <Pagination
+              size="small"
+              total={getAdjustmentListQuery.data?.data.total_count}
+              showSizeChanger={false}
+              current={searchQuery.page}
+              onChange={selectPage}
+            />
+          </Row>
+        )}
         columns={[
           {
             ellipsis: true,
@@ -146,7 +183,7 @@ const AdjustmentList = function () {
             title: t("progress"),
             render: (_, record) => {
               const { is_cleared } = record;
-              const color = is_cleared ? "green" : "red";
+              const color = is_cleared ? "geekblue" : "orange";
               const text = is_cleared ? t("confirmed") : t("waiting");
               return <Tag color={color}>{text}</Tag>;
             },
@@ -180,70 +217,121 @@ const AdjustmentList = function () {
           {
             ellipsis: true,
             title: t("adjustment.count"),
-            render: (_, record) => record.count,
+            render: (_, record) => `${record.count_left} / ${record.count}`,
           },
           {
             ellipsis: true,
             title: t("adjustment.type."),
-            render: (_, record) => adjTypes[record.type],
+            render: (_, record) => t(`adjustment.type.${record.type}`),
           },
-          // {
-          //   title: "",
-          //   dataIndex: "action",
-          //   render: (_, record) => {
-          //     return (
-          //       <>
-          //         <Button //
-          //           size="small"
-          //           shape="round"
-          //           onClick={() => {}}
-          //         >
-          //           {t("view details")}
-          //         </Button>
-          //         {!record.is_cleared && (
-          //           <>
-          //             <Popconfirm
-          //               title={t("description.really delete")}
-          //               okText={t("yes")}
-          //               cancelText={t("no")}
-          //               onConfirm={() => {
-          //                 onDelete(record);
-          //               }}
-          //             >
-          //               <Button
-          //                 icon={<DeleteFilled />}
-          //                 danger
-          //                 type="primary"
-          //                 size="small"
-          //                 shape="round"
-          //               >
-          //                 {t("delete")}
-          //               </Button>
-          //             </Popconfirm>
-          //             <Popconfirm
-          //               title={t("description.really confirmed")}
-          //               okText={t("yes")}
-          //               cancelText={t("no")}
-          //             >
-          //               <Button //
-          //                 icon={<CheckOutlined />}
-          //                 type="primary"
-          //                 size="small"
-          //                 shape="round"
-          //               >
-          //                 {t("confirmed")}
-          //               </Button>
-          //             </Popconfirm>
-          //           </>
-          //         )}
-          //       </>
-          //     );
-          //   },
-          // },
+          Table.EXPAND_COLUMN,
+          {
+            ellipsis: true,
+            render: (_, record) => (
+              <Space>
+                {!record.is_cleared && (
+                  <Popconfirm
+                    title={t("description.really delete")}
+                    okText={t("yes")}
+                    cancelText={t("no")}
+                    onConfirm={() => {
+                      alert("삭제 구현중.. api 주세요ㅠㅠ");
+                    }}
+                  >
+                    <DeleteOutlined style={{ cursor: "pointer", color: "#A1A2A6" }} />
+                  </Popconfirm>
+                )}
+              </Space>
+            ),
+          },
         ]}
+        // 메모
+        expandable={{
+          expandedRowRender: (record) => (
+            <>
+              {record.memo_active ? (
+                <>
+                  <Input
+                    value={record.memo_value}
+                    onChange={(e) => {
+                      setAdjustmentList(
+                        adjustmentList?.map((product) =>
+                          product.id === record.id
+                            ? { ...product, memo_value: e.currentTarget.value }
+                            : product,
+                        ),
+                      );
+                    }}
+                  />
+                  <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                    <Col>
+                      {record.memo && (
+                        <TurtleButtonSub
+                          size="small"
+                          color="grey"
+                          onClick={() => {
+                            setAdjustmentList(
+                              adjustmentList?.map((product) =>
+                                product.id === record.id
+                                  ? { ...product, memo_active: false }
+                                  : product,
+                              ),
+                            );
+                          }}
+                        >
+                          취소
+                        </TurtleButtonSub>
+                      )}
+                    </Col>
+                    <Col>
+                      <TurtleButtonSub
+                        size="small"
+                        onClick={() => {
+                          //changeMemo(record);
+                          alert("수정구현중 api주세요ㅠㅠ");
+                        }}
+                      >
+                        확인
+                      </TurtleButtonSub>
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <>
+                  <div>{record.memo} </div>
+                  <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                    <Col>
+                      <TurtleButtonSub
+                        size="small"
+                        onClick={() => {
+                          setAdjustmentList(
+                            adjustmentList?.map((product) =>
+                              product.id === record.id
+                                ? { ...product, memo_active: true }
+                                : product,
+                            ),
+                          );
+                        }}
+                      >
+                        수정
+                      </TurtleButtonSub>
+                    </Col>
+                  </Row>
+                </>
+              )}
+            </>
+          ),
+          columnWidth: 25,
+          expandIcon: ({ expanded, onExpand, record }) => {
+            return (
+              <FileTextOutlined
+                style={record.memo ? {} : { opacity: "0.4" }}
+                onClick={(e) => onExpand(record, e)}
+              />
+            );
+          },
+        }}
       />
-
-      {/* <AdjustmentSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> */}
     </>
   );
 };

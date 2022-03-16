@@ -1,34 +1,6 @@
 import { v2Axios } from "./index";
 import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
-export interface AdjustmentItem2 {
-  id: number;
-  created_by: number;
-  created_time: Date;
-  is_inactive: boolean;
-  created_date: string;
-  is_cleared: boolean;
-  cleared_time: Date | null;
-  rt_store_id: number;
-  rt_store_name: string;
-  ws_store_id: number;
-  vendor_id: number;
-  vendor_name: string;
-  address: string;
-  product_id: number;
-  product_name: string;
-  option: string;
-  count: number;
-  count_left: number;
-  price: number;
-  memo: string;
-  is_vat_included: boolean;
-  bank: string;
-  account_number: string;
-  account_holder: string;
-  type: "reserve" | "takeback" | "exchange" | "refund";
-}
-
 // 매입조정 상품
 export interface AdjustmentProduct {
   index: number;
@@ -60,12 +32,19 @@ export interface AdjustmentProductShow {
   price: number;
   type: "reserve" | "takeback" | "exchange" | "refund";
   vendor_info: {
+    id: number;
     vendor_name: string;
   };
   product_info: {
+    id: number;
     name: string;
     vendor_product_name: string;
   };
+  memo: string;
+  memo_active?: boolean;
+  memo_value?: string;
+
+  created_by: string;
 }
 
 // Request: 매입조정 리스트 조회
@@ -75,7 +54,7 @@ export interface RequestGetList {
   start_date?: string;
   end_date?: string;
   is_cleared?: number | "";
-  type: "reserve" | "takeback" | "exchange" | "balance" | "all";
+  type: "reserve" | "takeback" | "exchange" | "refund" | "all";
 }
 
 // Response: 매입조정 리스트 조회
@@ -142,7 +121,7 @@ export interface RequestGetAdjustmentForClearing {
   is_cleared?: number;
 }
 
-// TODO: 없애야함(중복)
+// TODO: 없애야함(중복) but 정산에서 사용중 so 버리면안됨
 export interface adjustmentItemResponse {
   id: number;
   is_inactive: boolean;
@@ -189,26 +168,29 @@ const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForC
 };
 
 // Request: 매입조정 상품 수정
-export interface RequestUpdateAdj extends AdjustmentProduct {
-  item_id: number;
+export interface RequestUpdate extends AdjustmentProductShow {
+  //item_id: number;
+  is_inactive: boolean;
+  product_id: number;
+  vendor_id: number;
 }
 
 // Response: 매입조정 상품 수정
-export interface ResponseUpdateAdj {
+export interface ResponseUpdate {
   data: AdjustmentProduct;
 }
 
 // 매입조정 상품 수정
-const updateAdjustment = async function (data: RequestUpdateAdj) {
-  const url = `adjustment/item/${data.item_id}`;
-  const response = await v2Axios.put<ResponseUpdateAdj>(url, data);
+const update = async function (data: RequestUpdate) {
+  const url = `adjustment/item/${data.id}`;
+  const response = await v2Axios.put<ResponseUpdate>(url, data);
   return response.data.data;
 };
 
 const adjustmentAPI = {
   getList,
   create,
-  updateAdjustment,
+  update,
   getAdjustmentForClearing,
 };
 

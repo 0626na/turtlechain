@@ -208,7 +208,9 @@
       "exchange": "교환",
       "takeback": "반품"
     },
-    "preview": "매입조정 미리보기"
+    "preview": "매입조정 미리보기",
+    "pending": "대기",
+    "confirmed": "마감"
   },
   "clearing": {
     "": "정산",
