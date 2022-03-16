@@ -78,7 +78,7 @@ function ProductList() {
         scroll={{ y: "auto" }}
         title={() => (
           <Row justify="space-between">
-            <b>{`총 ${getProductListQuery.data?.data.total_count ?? 0}건`}</b>
+            {`총 ${getProductListQuery.data?.data.total_count ?? 0}건`}
             <SearchFilter type="product" onSearch={searchProductList} />
           </Row>
         )}

@@ -227,7 +227,7 @@ const AdjustmentListPreview = function () {
                 },
                 {
                   ellipsis: true,
-                  width: "11%",
+                  width: 100,
                   title: t("adjustment.type."),
                   render: (_, record) => (
                     <Select
@@ -249,7 +249,7 @@ const AdjustmentListPreview = function () {
                 },
                 {
                   ellipsis: true,
-                  width: "11%",
+                  width: 100,
                   title: t("product.price"),
                   render: (_, record) => (
                     <InputNumber
@@ -266,7 +266,7 @@ const AdjustmentListPreview = function () {
                 },
                 {
                   ellipsis: true,
-                  width: "11%",
+                  width: 100,
                   title: t("adjustment.count"),
                   render: (_, record) => (
                     <InputNumber

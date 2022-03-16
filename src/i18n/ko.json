@@ -188,6 +188,7 @@
     "management": "매입조정 관리",
     "create": "매입조정 등록",
     "list": "매입조정 내역",
+    "lists": "매입조정 리스트",
     "date": "매입조정 등록날짜",
     "process_count": "처리 수량",
     "price": "공급가",
