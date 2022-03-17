@@ -25,7 +25,7 @@ function ConnectExternalModal({ visible, closeModal, onClick, loading }: Props) 
     <Modal
       centered
       width={350}
-      title={t("common.connect eternal program")}
+      title={t("common.connect external program")}
       visible={visible}
       onCancel={loading ? () => {} : closeModal}
       footer={false}

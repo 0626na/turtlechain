@@ -27,8 +27,7 @@ import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
 import { RequestCreateProduct } from "apis/productAPI";
 import AddSingleProductModal from "./AddProductModal";
-import ConnectExternalModal from "../../components/ConnectExternalModal";
-import externalAPI from "../../apis/eternalAPI";
+import externalAPI from "apis/externalAPI";
 import TurtleInfo from "components/common/TurtleInfo";
 import { pricePattern } from "utils/pattern";
 

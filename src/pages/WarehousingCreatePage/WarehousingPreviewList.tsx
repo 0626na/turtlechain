@@ -31,6 +31,7 @@ import TurtleButton from "components/common/TurtleButton";
 import AddSingleProductModal, { AddProduct } from "components/AddProductModal";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
 import { pricePattern } from "utils/pattern";
+import externalAPI from "apis/externalAPI";
 
 function WarehousingPreviewList() {
   const store = useRecoilValue(storeState);
@@ -61,6 +62,31 @@ function WarehousingPreviewList() {
       setFailList([...data.data.fail, ...failList]);
     },
   });
+
+  const connectWarehousingQuery = useMutation(
+    "parseWarehousing",
+    externalAPI.getSellmateWarehousing,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        if (data.data.error) {
+          message.error(data.data.error);
+          resetField();
+          return;
+        }
+        setSuccessList([
+          ...data.data.success.map((product) => ({
+            ...product,
+            index: index.current++,
+          })),
+          ...successList,
+        ]);
+        setFailList([...data.data.fail, ...failList]);
+      },
+    },
+  );
 
   const createSheetQuery = useMutation(["createSheet"], warehousingAPI.createSheet, {
     onError: (error: AxiosError) => {
@@ -109,6 +135,14 @@ function WarehousingPreviewList() {
   useEffect(() => {
     resetField();
   }, [store.id, resetField]);
+
+  const onClickConnect = useCallback(() => {
+    if (!store.id) {
+      message.warn(t("message.select store"));
+      return;
+    }
+    connectWarehousingQuery.mutate({ rt_store_id: store.id! });
+  }, [store.id]);
 
   // 상품 추가
   const addProduct = useCallback(
@@ -225,13 +259,9 @@ function WarehousingPreviewList() {
         <TurtleButtonSub
           type="primary"
           color="skyblue"
-          onClick={() => {
-            if (!store.id) {
-              message.warn(t("message.select store"));
-              return;
-            }
-            message.info("준비중입니다....");
-          }}
+          onClick={onClickConnect}
+          loading={connectWarehousingQuery.isLoading}
+          disabled={connectWarehousingQuery.isSuccess}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
