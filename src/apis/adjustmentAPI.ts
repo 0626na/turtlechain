@@ -131,6 +131,13 @@ const update = async function (data: RequestUpdate) {
   return response.data.data;
 };
 
+/**
+ *
+ *
+ *
+ * 정산 페이지 사용 api
+ *
+ */
 // Request: 매입조정 아이템 조회
 export interface RequestGetAdjustmentForClearing {
   rt_store_id: number | undefined;

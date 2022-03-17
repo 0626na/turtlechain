@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import warehousingAPI, { WarehousingProduct, WarehousingProductShow } from "apis/warehousingAPI";
+import warehousingAPI, { WarehousingProduct } from "apis/warehousingAPI";
 import { FileOutlined, DownOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -21,28 +21,27 @@ import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import Toolbar from "components/Toolbar";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
-import ConnectExternalModal from "components/ConnectExternalModal";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
 import moment from "moment";
 import TurtleText from "components/common/TurtleText";
 import TurtleInfo from "components/common/TurtleInfo";
 import TurtleButton from "components/common/TurtleButton";
-import AddSingleProductModal, { AddProduct } from "components/AddProductModal";
-import TurtleInputNumber from "components/common/TurtleInputNumber";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
+import AddSingleProductModal from "./AddProductModal";
 
 function WarehousingPreviewList() {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<WarehousingProductShow>>([]);
+  const [successList, setSuccessList] = useState<Array<WarehousingProduct>>([]);
   const [failList, setFailList] = useState<Array<WarehousingProduct>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
   const index = useRef(0);
   const failIndex = useRef(0);
 
-  const parseWarehousingQuery = useMutation("parseWarehousing", excelAPI.parseWarehousing, {
+  // 엑셀파싱 요청
+  const parseQuery = useMutation("parseWarehousing", excelAPI.parseWarehousing, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -88,25 +87,8 @@ function WarehousingPreviewList() {
     },
   );
 
-  const createSheetQuery = useMutation(["createSheet"], warehousingAPI.createSheet, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-    onSuccess: (data) => {
-      createSheetItemsQuery.mutate({
-        sheet_id: data.data!,
-        rt_store_id: store.id!,
-        item_list: successList!.map((product) => ({
-          vendor_id: product.vendor_id,
-          product_id: product.product_id,
-          count: product.product_count,
-          price: product.product_price,
-        })),
-      });
-    },
-  });
-
-  const createSheetItemsQuery = useMutation(["createSheetItems"], warehousingAPI.createSheetItems, {
+  // 입고장 생성 요청
+  const createQuery = useMutation("createWarehousing", warehousingAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -119,19 +101,22 @@ function WarehousingPreviewList() {
     },
   });
 
+  // 엑셀파일 업로드
   const loadFile = (file: RcFile) => {
     const form = new FormData();
     form.append("files", file);
     form.append("rt_store_id", store.id!.toString());
-    parseWarehousingQuery.mutate(form);
+    parseQuery.mutate(form);
   };
 
+  // 모든 상태 초기화
   const resetField = useCallback(() => {
     setFileList([]);
     setSuccessList([]);
     setFailList([]);
   }, []);
 
+  // 쇼핑몰 변경시 모든 state 초기화
   useEffect(() => {
     resetField();
   }, [store.id, resetField]);
@@ -146,7 +131,7 @@ function WarehousingPreviewList() {
 
   // 상품 추가
   const addProduct = useCallback(
-    (product: AddProduct) => {
+    (product: WarehousingProduct) => {
       setSuccessList([{ ...product, index: index.current++ }, ...successList]);
       return true;
     },
@@ -161,32 +146,15 @@ function WarehousingPreviewList() {
     [successList],
   );
 
-  // 입고장 등록
-  const onSubmit = useCallback(() => {
-    createSheetQuery.mutate({
-      created_date: moment().format("YYYY-MM-DD"),
-      rt_store_id: store.id!,
-    });
-  }, [successList, store.id]);
-
-  // // 필터된 리스트
-  // const filteredList = useMemo(
-  //   () =>
-  //     list.filter((item) =>
-  //       item[searchType].toString().indexOf(searchText) !== -1 ? true : false,
-  //     ),
-  //   [list, searchType, searchText],
-  // );
-
   // 입고 수량 합계
   const totalProductCount = useMemo(
-    () => successList.reduce((acc, cur) => acc + cur.product_count, 0),
+    () => successList.reduce((acc, cur) => acc + cur.count, 0),
     [successList],
   );
 
   // 공급가 합계
   const totalProductPrice = useMemo(
-    () => successList.reduce((acc, cur) => acc + cur.product_count * cur.product_price, 0),
+    () => successList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
     [successList],
   );
 
@@ -195,7 +163,7 @@ function WarehousingPreviewList() {
     (value, index) => {
       setSuccessList(
         successList.map((product) =>
-          product.index === index ? { ...product, product_price: value } : product,
+          product.index === index ? { ...product, price: value } : product,
         ),
       );
     },
@@ -207,7 +175,7 @@ function WarehousingPreviewList() {
     (value, index) => {
       setSuccessList(
         successList.map((product) =>
-          product.index === index ? { ...product, product_count: value } : product,
+          product.index === index ? { ...product, count: value } : product,
         ),
       );
     },
@@ -286,9 +254,9 @@ function WarehousingPreviewList() {
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
             <Table
               size="small"
-              loading={parseWarehousingQuery.isLoading}
+              loading={parseQuery.isLoading}
               dataSource={successList}
-              rowKey={(record) => record.index}
+              rowKey={(record) => record.index!}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               scroll={{ y: "auto" }}
               footer={() =>
@@ -327,7 +295,6 @@ function WarehousingPreviewList() {
                   ellipsis: true,
                   width: "12%",
                   title: t("product.option"),
-
                   render: (_, record) => record.product_option,
                 },
                 {
@@ -338,7 +305,7 @@ function WarehousingPreviewList() {
                     <InputNumber
                       size="small"
                       step={1000}
-                      value={record.product_price}
+                      value={record.price}
                       formatter={(value) => `${value}`.replace(pricePattern, ",")}
                       min={0}
                       onChange={(value) => {
@@ -355,7 +322,7 @@ function WarehousingPreviewList() {
                     <InputNumber
                       size="small"
                       min={1}
-                      value={record.product_count}
+                      value={record.count}
                       onChange={(value) => {
                         setCount(value, record.index);
                       }}
@@ -380,7 +347,7 @@ function WarehousingPreviewList() {
           <Tabs.TabPane tab={`실패(${failList.length})`} key="2">
             <Table
               size="small"
-              loading={parseWarehousingQuery.isLoading}
+              loading={parseQuery.isLoading}
               dataSource={failList}
               rowKey={(record) => failIndex.current++}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -428,13 +395,13 @@ function WarehousingPreviewList() {
                   ellipsis: true,
                   width: "12%",
                   title: t("product.price"),
-                  render: (_, record) => record.product_price.toLocaleString(),
+                  render: (_, record) => record.price.toLocaleString(),
                 },
                 {
                   ellipsis: true,
                   width: "12%",
                   title: t("warehousing.count"),
-                  render: (_, record) => record.product_count,
+                  render: (_, record) => record.count,
                 },
               ]}
             />
@@ -447,12 +414,29 @@ function WarehousingPreviewList() {
           title={t("description.really register")}
           okText={t("yes")}
           cancelText={t("no")}
-          onConfirm={onSubmit}
+          onConfirm={() => {
+            createQuery.mutate({
+              sheet: {
+                created_date: moment().format("YYYY-MM-DD"),
+                rt_store_id: store.id!,
+              },
+              product: {
+                rt_store_id: store.id!,
+                item_list: successList.map((product) => ({
+                  vendor_id: product.vendor_id,
+                  product_id: product.product_id,
+                  count: product.count,
+                  price: product.price,
+                  memo: product.memo,
+                })),
+              },
+            });
+          }}
         >
           <TurtleButton
             type="primary"
             disabled={successList.length === 0}
-            loading={createSheetItemsQuery.isLoading}
+            loading={createQuery.isLoading}
           >
             {t("button.create warehousing")}
           </TurtleButton>

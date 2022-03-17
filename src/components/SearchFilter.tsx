@@ -44,25 +44,6 @@ function SearchFilter({ type, onSearch }: Props) {
           value: "all",
         },
         {
-          name: t("product.name"), //
-          value: "name",
-        },
-        {
-          name: t("product.vendor product name"),
-          value: "vendor_product_name",
-        },
-        {
-          name: t("vendor.name"),
-          value: "vendor_name",
-        },
-      ];
-    if (type === "product")
-      return [
-        {
-          name: t("common.all"),
-          value: "all",
-        },
-        {
           name: t("vendor.name"),
           value: "name",
         },
@@ -73,6 +54,26 @@ function SearchFilter({ type, onSearch }: Props) {
         {
           name: t("vendor.store phone"),
           value: "phone",
+        },
+      ];
+    if (type === "product")
+      return [
+        {
+          name: t("common.all"),
+          value: "all",
+        },
+
+        {
+          name: t("product.name"), //
+          value: "name",
+        },
+        {
+          name: t("product.vendor product name"),
+          value: "vendor_product_name",
+        },
+        {
+          name: t("vendor.name"),
+          value: "vendor_name",
         },
       ];
   }, [type]);

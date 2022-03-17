@@ -85,6 +85,8 @@
     "clearing_date": "일자 검색"
   },
   "button": {
+    "return": "돌아가기",
+    "close": "닫기",
     "add": "추가하기",
     "delete": "삭제",
     "update": "수정하기",
@@ -173,6 +175,7 @@
     "management": "입고 관리",
     "create": "입고 등록",
     "list": "입고 내역",
+    "lists": "입고 리스트",
     "count": "입고 수량",
     "date": "입고 날짜",
     "total count": "입고 수량 합계",

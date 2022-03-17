@@ -8,26 +8,14 @@ import TurtleInput from "components/common/TurtleInput";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
 import TurtleButton from "components/common/TurtleButton";
 import SearchVendorModal from "components/SearchVendorModal";
-import SearchProductModal from "./SearchProductModal";
 import { pricePattern } from "utils/pattern";
-
-export interface AddProduct {
-  vendor_name: string;
-  vendor_address: string;
-  product_name: string;
-  vendor_product_name: string;
-  product_option: string;
-  product_price: number;
-  product_count: number;
-  product_code: number;
-  vendor_id: number;
-  product_id: number;
-}
+import { WarehousingProduct } from "apis/warehousingAPI";
+import SearchProductModal from "components/SearchProductModal";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: AddProduct) => boolean;
+  addProduct: (item: WarehousingProduct) => boolean;
 }
 
 function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
@@ -47,8 +35,8 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
         product_code: undefined,
         vendor_product_name: undefined,
         product_option: undefined,
-        product_price: undefined,
-        product_count: undefined,
+        price: undefined,
+        count: undefined,
       });
       setVendorModalVisible(false);
     },
@@ -56,22 +44,15 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
   );
 
   const selectProduct = useCallback(
-    (
-      product_id,
-      product_name,
-      product_code,
-      vendor_product_name,
-      product_option,
-      product_price,
-    ) => {
+    (product_id, product_name, product_code, vendor_product_name, product_option, price) => {
       form.setFieldsValue({
         product_id,
         product_name,
         vendor_product_name,
         product_code,
         product_option,
-        product_price,
-        product_count: 1,
+        price,
+        count: 1,
       });
       setProductModalVisible(false);
     },
@@ -160,7 +141,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           />
           <Form.Item // 상품 공급가 Input
             label={t("product.price")}
-            name="product_price"
+            name="price"
             rules={[{ required: true }]}
           >
             <InputNumber
@@ -172,7 +153,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           </Form.Item>
           <TurtleInputNumber // 상품 수량 Input
             label={t("product.count")}
-            name="product_count"
+            name="count"
             min={1}
           />
 
