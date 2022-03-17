@@ -180,6 +180,7 @@ const WarehousingSheetList = function () {
             },
             {
               ellipsis: true,
+              align: "center",
               render: (_, record) => (
                 <Space>
                   {!record.is_confirmed && (

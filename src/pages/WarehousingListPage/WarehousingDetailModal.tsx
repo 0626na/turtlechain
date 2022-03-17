@@ -1,21 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClientProvider,
-  QueryClient,
-} from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import warehousingAPI, { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
 import { DeleteOutlined, SyncOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   Modal,
-  Form,
-  Select,
   Table,
   message,
-  Input,
   InputNumber,
   Button,
   Popconfirm,
@@ -28,6 +19,7 @@ import {
 } from "antd";
 import { t } from "i18next";
 import styled from "styled-components";
+import SearchFilter from "components/SearchFilter";
 
 interface Props {
   visible: boolean;
@@ -39,7 +31,6 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
   const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
-  let i = 0;
 
   // 입고장 상세내역 리스트 요청
   const getProductQuery = useQuery(
@@ -86,27 +77,30 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
     [productList],
   );
 
+  // // 검색
   // const searchProductList = useCallback(
   //   ({ type, search_string }) => {
   //     console.log(type, search_string);
-  //     filteredList.filter((product) => {
-  //       if (type === "name") {
-  //         return product.product_info.name.includes(search_string);
-  //       }
-  //       if (type === "vendor_product_name") {
-  //         return product.product_info.vendor_product_name.includes(search_string);
-  //       }
-  //       if (type === "vendor_name") {
-  //         return product.vendor_info.vendor_name.includes(search_string);
-  //       }
-  //       return (
-  //         product.product_info.name.includes(search_string) ||
-  //         product.product_info.vendor_product_name.includes(search_string) ||
-  //         product.vendor_info.vendor_name.includes(search_string)
-  //       );
-  //     });
+  //     setProductListShow(
+  //       productList.filter((product) => {
+  //         if (type === "name") {
+  //           return product.product_info.name.includes(search_string);
+  //         }
+  //         if (type === "vendor_product_name") {
+  //           return product.product_info.vendor_product_name.includes(search_string);
+  //         }
+  //         if (type === "vendor_name") {
+  //           return product.vendor_info.vendor_name.includes(search_string);
+  //         }
+  //         return (
+  //           product.product_info.name.includes(search_string) ||
+  //           product.product_info.vendor_product_name.includes(search_string) ||
+  //           product.vendor_info.vendor_name.includes(search_string)
+  //         );
+  //       }),
+  //     );
   //   },
-  //   [filteredList],
+  //   [productList],
   // );
 
   // const totalItemCount = useMemo(
@@ -119,31 +113,12 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
   //   [list, searchType, searchText],
   // );
 
-  // const updateWarehousingSheetItems = () => {
-  //   if (inactiveList && inactiveList.length) {
-  //     updateSheetQuery.mutateAsync({
-  //       sheet_id,
-  //       items: inactiveList.map((item) => {
-  //         return {
-  //           id: item.id,
-  //           is_inactive: true,
-  //           count: item.count,
-  //         };
-  //       }),
-  //     });
-  //     setInactiveList([]);
-  //   }
-  //   if (isUpdated) {
-  //     updateSheetQuery.mutate({
-  //       sheet_id,
-  //       items: list!.map((item) => warehousingItem2ToBulkUpdateItem(item)),
-  //     });
-  //   }
-  // };
-
-  // 모달창 닫기 확인
-  // 업데이트가 발새한 경우 실행
+  // 모달창 닫기
   const confirmClose = () => {
+    if (!isUpdated) {
+      onClose();
+      return;
+    }
     Modal.confirm({
       title: t("description.changed data"),
       cancelText: t("button.return"),
@@ -155,6 +130,34 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
     });
   };
 
+  // 수량 변경
+  const setCount = useCallback(
+    (record, value) => {
+      console.log("change count");
+      setProductList(
+        productList.map((product) =>
+          product.id === record.id ? { ...product, count: value } : product,
+        ),
+      );
+      setIsUpdated(true);
+    },
+    [productList],
+  );
+
+  // 상품 삭제
+  const deleteProduct = useCallback(
+    (record) => {
+      console.log("delete product");
+      setProductList(
+        productList?.map((product) =>
+          product.id === record.id ? { ...product, is_inactive: true } : product,
+        ),
+      );
+      setIsUpdated(true);
+    },
+    [productList],
+  );
+
   return (
     <StyledModal //
       centered
@@ -163,13 +166,7 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
       title={`${t("warehousing.detail list")}`}
       closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
       visible={visible}
-      onCancel={() => {
-        if (isUpdated) {
-          confirmClose();
-          return;
-        }
-        onClose();
-      }}
+      onCancel={confirmClose}
       footer={
         !sheet?.is_confirmed && [
           <Popconfirm
@@ -237,7 +234,10 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
             <span>
               총 <span style={{ color: "#32ACDD" }}>{filteredList.length ?? 0}</span>건
             </span>
-            {/* <SearchFilter type="product" onSearch={} /> */}
+            {/* <SearchFilter
+              type="product"
+              onSearch={({ type, search_string }) => searchProductList({ type, search_string })}
+            /> */}
           </Row>
         )}
         columns={[
@@ -263,13 +263,18 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
           },
           {
             ellipsis: true,
+            title: t("product.vendor product name"),
+            render: (_, item) => item.product_info.vendor_product_name,
+          },
+          {
+            ellipsis: true,
             title: t("product.option"),
             render: (_, item) => item.product_info.option,
           },
           {
             ellipsis: true,
-            title: t("product.vendor product name"),
-            render: (_, item) => item.product_info.vendor_product_name,
+            title: t("product.price"),
+            render: (_, item) => item.price.toLocaleString(),
           },
           {
             ellipsis: true,
@@ -277,24 +282,14 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
             render: (_, record) => (
               <InputNumber //
                 disabled={sheet?.is_confirmed}
-                min={0}
+                min={1}
                 size="small"
                 defaultValue={record.count}
                 onChange={(value) => {
-                  setProductList(
-                    productList.map((product) =>
-                      product.id === record.id ? { ...product, count: value } : product,
-                    ),
-                  );
-                  setIsUpdated(true);
+                  setCount(record, value);
                 }}
               />
             ),
-          },
-          {
-            align: "right",
-            title: t("supply price"),
-            render: (_, item) => item.price.toLocaleString(),
           },
           {
             width: 100,
@@ -307,12 +302,7 @@ const WarehousingDetailModal = function ({ visible, onClose, sheet }: Props) {
                   <DeleteOutlined
                     style={{ cursor: "pointer", color: "#A1A2A6" }}
                     onClick={() => {
-                      setProductList(
-                        productList?.map((product) =>
-                          product.id === record.id ? { ...product, is_inactive: true } : product,
-                        ),
-                      );
-                      setIsUpdated(true);
+                      deleteProduct(record);
                     }}
                   />
                 )}
