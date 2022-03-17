@@ -14,7 +14,7 @@ function TurtleCard({ color, span, title, count = 0, price = 0 }: Props) {
     <Col span={span}>
       <Card size="small">
         <Row justify="center">
-          <Tag color={color} style={{ margin: 4, borderRadius: 10 }}>
+          <Tag color={color} style={{ margin: 4 }}>
             {title}
           </Tag>
         </Row>

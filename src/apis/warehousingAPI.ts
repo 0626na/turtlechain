@@ -1,65 +1,114 @@
 import { v2Axios } from "apis";
 
-// 입고장 타입
+// 입고장
 export interface WarehousingSheet {
-  start_date: string;
   id: number;
-  created_date: Date;
-  created_time: Date;
-  is_inactive: boolean;
+  is_confirmed: boolean;
+  created_date: string;
+  created_time: string;
   clearing_sheet_id: number;
   total_price: number;
   total_row_count: number;
-  is_confirmed: boolean;
   total_store_count: number;
   total_item_count: number;
   created_by: number;
   rt_store_id: number;
+  is_inactive: boolean;
 }
 
+// 입고상품
 export interface WarehousingProduct {
+  vendor_id: number;
   vendor_name: string;
   vendor_address: string;
+
+  product_id: number;
   product_name: string;
   vendor_product_name: string;
   product_option: string;
-  product_price: number;
-  product_count: number;
   product_code: number;
-  vendor_id: number;
-  product_id: number;
+
+  price: number;
+  count: number;
+  memo?: string;
+
+  // 입고 미리보기에서 index로 사용
+  index?: number;
 }
 
-export interface WarehousingProductShow extends WarehousingProduct {
-  index: number;
-}
-
-// 입고장 상세내역 추가 타입
-export interface CreateSheetItem {
-  rt_store_id: number;
-  store_id: number;
-  store_code: number;
-  store_name: string;
-  address: string;
-  product_id: number;
-  product_code: string;
-  product_name: string;
-  option: string;
+// 입고상품 가져오기
+export interface WarehousingProductShow {
+  id: number;
+  vendor_info: {
+    vendor_name: string;
+    vendor_address: string;
+  };
+  product_info: {
+    name: string;
+    vendor_product_name: string;
+    price: number;
+    option: string;
+    product_code: string;
+  };
   count: number;
   price: number;
   memo: string;
+  is_vat_included: boolean;
+  is_inactive: boolean;
 }
 
-// 입고장 요청 타입
+// Request: 입고장 생성
+export interface RequestCreateSheet {
+  created_date: string;
+  rt_store_id: number;
+}
+
+// Response: 입고장 생성
+export interface ResponseCreateSheet {
+  msg: string;
+  data: number;
+}
+// Request: 입고상품 생성
+export interface RequestCreateProduct {
+  sheet_id?: number;
+  rt_store_id: number;
+  item_list: Array<{
+    vendor_id: number;
+    product_id: number;
+    count: number;
+    price: number;
+    memo?: string;
+  }>;
+}
+
+// Response: 입고상품 생성
+export interface ResponseCreateProduct {
+  data: null;
+}
+
+// 입고 생성
+const create = async function (data: { sheet: RequestCreateSheet; product: RequestCreateProduct }) {
+  let url = "warehousing/sheet";
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
+  url = "warehousing/item";
+  const productResponse = await v2Axios.post<ResponseCreateProduct>(url, {
+    ...data.product,
+    sheet_id: sheetResponse.data.data,
+  });
+  return productResponse.data;
+};
+
+// Request: 입고장 리스트 가져오기
 export interface RequestGetSheet {
-  rt_store_id: number | undefined;
+  rt_store_id: number;
   is_confirmed: number | "";
   start_date: string;
   end_date: string;
   did_settlement?: number;
-  page: number | 1;
+  page: number;
 }
 
+// Response: 입고장 리스트 가져오기
 export interface ResponseGetSheet {
   data: {
     sheet_list: Array<WarehousingSheet>;
@@ -67,7 +116,100 @@ export interface ResponseGetSheet {
   };
 }
 
-// 입고장 상세내역 요청 타입
+// 입고장 리스트 가져오기 요청
+const getSheet = async function (query: RequestGetSheet) {
+  let url = "warehousing/sheet?";
+  for (const [key, value] of Object.entries(query)) {
+    value !== "" && (url = url + `${key}=${value}&`);
+  }
+  const response = await v2Axios.get<ResponseGetSheet>(url);
+  return response.data.data;
+};
+
+// Request: 입고장 수정
+export interface RequestUpdateSheet extends WarehousingSheet {}
+
+// Response: 입고장 수정
+export interface ResponseUpdateSheet {
+  data: WarehousingSheet;
+}
+
+// 입고장 수정하기 요청
+const updateSheet = async function (data: RequestUpdateSheet) {
+  const url = `warehousing/sheet/${data.id}`;
+  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
+  return response.data.data;
+};
+
+// Request: 입고상품 리스트
+export type RequestGetProduct = {
+  sheet_id: number;
+};
+
+// Response: 입고상품 리스트
+export interface ResponseGetProduct {
+  msg: string;
+  data: {
+    item_list: Array<WarehousingProductShow>;
+    total_count: number;
+  };
+}
+
+// 입고상품 리스트 가져오기
+const getProduct = async function (data: RequestGetProduct) {
+  const url = `warehousing/item?sheet_id=${data.sheet_id}`;
+  const response = await v2Axios.get<ResponseGetProduct>(url);
+  return response.data;
+};
+
+// Request: 입고상품 수정
+export interface RequestUpdateProduct {
+  sheet_id: number;
+  items: Array<{
+    id: number;
+    is_inactive: boolean;
+    count: number;
+  }>;
+}
+
+// Response: 입고상품 수정
+export interface ResponseUpdateProduct {
+  data: null;
+}
+
+// 입고상품 수정 요청
+const updateProduct = async function (data: RequestUpdateProduct) {
+  const url = "warehousing/item/bulk_update";
+  const response = await v2Axios.put<ResponseUpdateProduct>(url, data);
+  return response.data;
+};
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * 수정중
+ */
+
+// 입고장 상세내역 대량 수정하기 타입
+// export interface RequestBulkUpdateSheetItem {
+//   sheet_id: number;
+//   items: Array<WarehousingSheetItem>;
+// }
+
 export type RequestGetSheetItem = number;
 
 export interface ResponseGetSheetItem {
@@ -77,88 +219,10 @@ export interface ResponseGetSheetItem {
   };
 }
 
-// 입고장 수정하기 요청 타입
-export interface RequestUpdateSheet extends WarehousingSheet {
-  sheet_id: number;
-}
-
-export interface ResponseUpdateSheet {
-  data: WarehousingSheet;
-}
-
-// 입고장 상세내역 대량 수정하기 타입
-// export interface RequestBulkUpdateSheetItem {
-//   sheet_id: number;
-//   items: Array<WarehousingSheetItem>;
-// }
-
-export interface ResponseBulkUpdateSheetItem {
-  data: null;
-}
-
-// 입고장 추가하기 요청 타입
-export interface RequestCreateSheet {
-  created_date: string;
-  rt_store_id: number;
-}
-
-export interface ResponseCreateSheet {
-  data: number;
-}
-
-// 입고장 상세내역 추가하기 요청 타입
-export interface RequestCreateSheetItem {
-  sheet_id: number;
-  item_list: Array<CreateSheetItem>;
-}
-
-export interface ResponseCreateSheetItem {
-  data: null;
-}
-
-// 입고장 가져오기
-const getSheet = async function (query: RequestGetSheet) {
-  let url = "warehousing/sheet?";
-  for (const [key, value] of Object.entries(query)) {
-    value !== "" && (url = url + `${key}=${value}&`);
-  }
-
-  const response = await v2Axios.get<ResponseGetSheet>(url);
-  return response.data.data;
-};
-
 // 입고장 상세내역 가져오기
 const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
   const url = `warehousing/item?sheet_id=${sheet_id}`;
   const response = await v2Axios.get<ResponseGetSheetItem>(url);
-  return response.data;
-};
-
-// 입고장 수정하기
-const updateSheet = async function (data: RequestUpdateSheet) {
-  const url = `warehousing/sheet/${data.sheet_id}`;
-  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
-  return response.data.data;
-};
-
-// 입고장 상세내역 대량 수정하기
-const bulkUpdateSheetItem = async function (data: RequestBulkUpdateSheetItem) {
-  const url = "warehousing/item/bulk_update";
-  const response = await v2Axios.put<ResponseBulkUpdateSheetItem>(url, data);
-  return response.data;
-};
-
-// 입고장 추가하기
-// const createSheet = async function (data: RequestCreateSheet) {
-//   const url = "warehousing/sheet";
-//   const response = await v2Axios.post<ResponseCreateSheet>(url, data);
-//   return response.data;
-// };
-
-// 입고장 상세내역 추가하기
-const createSheetItem = async function (data: RequestCreateSheetItem) {
-  const url = "warehousing/item";
-  const response = await v2Axios.post<ResponseCreateSheetItem>(url, data);
   return response.data;
 };
 
@@ -168,15 +232,6 @@ export interface VendorAccount {
   account_holder: string;
   bank: string;
 }
-
-// export interface VendorInfo {
-//   id: number;
-//   ws_store_id: number;
-//   vendor_code: string;
-//   vendor_name: string;
-//   vendor_address: string;
-//   vendor_account: VendorAccount;
-// }
 
 export interface ProductInfo {
   id: number;
@@ -198,76 +253,6 @@ export interface WarehousingItemForClearing {
   is_vat_included: boolean;
   memo: string | null;
 }
-
-// 입고장 상세내역 추가 타입
-export interface CreateSheetItems {
-  vendor_id: number;
-  product_id: number;
-  count: number;
-  price: number;
-}
-
-// 입고장 상세내역 추가하기 요청 타입
-export interface RequestCreateSheetItems {
-  sheet_id: number;
-  rt_store_id: number;
-  // rt_store_name: string;
-  item_list: Array<CreateSheetItems>;
-}
-
-export interface ResponseCreateSheetItems {
-  data: null;
-}
-
-// 입고장 상세내역 추가하기 요청 타입
-export interface RequestCreateSheetItems {
-  sheet_id: number;
-  rt_store_id: number;
-  // rt_store_name: string;
-  item_list: Array<CreateSheetItems>;
-}
-
-export interface ResponseCreateSheetItems {
-  data: null;
-}
-
-// 입고장 상세내역 추가하기 요청 타입
-export interface RequestCreateSheetItems {
-  sheet_id: number;
-  rt_store_id: number;
-  // rt_store_name: string;
-  item_list: Array<CreateSheetItems>;
-}
-
-export interface ResponseCreateSheetItems {
-  data: null;
-}
-
-// 입고장 상세내역 추가하기
-const createSheetItems = async function (data: RequestCreateSheetItems) {
-  const url = "warehousing/item";
-  const response = await v2Axios.post<ResponseCreateSheetItems>(url, data);
-  return response.data;
-};
-
-// 입고장 추가하기 요청 타입
-export interface RequestCreateSheet {
-  created_date: string;
-  rt_store_id: number;
-  // rt_store_name: string;
-}
-
-export interface ResponseCreateSheet {
-  msg: string;
-  data: number;
-}
-
-// 입고장 추가하기
-const createSheet = async function (data: RequestCreateSheet) {
-  const url = "warehousing/sheet";
-  const response = await v2Axios.post<ResponseCreateSheet>(url, data);
-  return response.data;
-};
 
 export interface WarehousingItem2 {
   id: number;
@@ -301,46 +286,14 @@ export interface WsStoreInfo {
   ext: string;
 }
 
-export interface ResponseBulkUpdateSheetItem {
-  data: null;
-}
-
-export interface BulkUpdateSheetItem {
-  id: number; // warehousing item id
-  is_inactive: boolean;
-  count: number;
-}
-// 입고장 상세내역 대량 수정하기 타입
-export interface RequestBulkUpdateSheetItem {
-  sheet_id: number;
-  items: Array<BulkUpdateSheetItem>;
-}
-
-export type RequestGetSheetItem2 = number;
-
-export interface ResponseGetSheetItem2 {
-  data: {
-    item_list: Array<WarehousingItem2>;
-    total_count: number;
-  };
-}
-
-// 입고장 상세내역 가져오기
-const getSheetItem2 = async function (sheet_id: RequestGetSheetItem) {
-  const url = `warehousing/item?sheet_id=${sheet_id}`;
-  const response = await v2Axios.get<ResponseGetSheetItem2>(url);
-  return response.data;
-};
-
 const warehousingAPI = {
+  create,
   getSheet,
-  getSheetItem,
   updateSheet,
-  bulkUpdateSheetItem,
-  createSheet,
-  createSheetItem,
-  createSheetItems,
-  getSheetItem2,
+  getProduct,
+  updateProduct,
+  // 수정예정
+  getSheetItem,
 };
 
 export default warehousingAPI;

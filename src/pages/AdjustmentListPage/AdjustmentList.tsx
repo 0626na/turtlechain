@@ -13,9 +13,7 @@ import {
   Col,
   message,
   notification,
-  Button,
   Popconfirm,
-  Card,
 } from "antd";
 import adjustmentAPI, { AdjustmentProductShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
@@ -28,7 +26,6 @@ import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { AxiosError } from "axios";
-import Meta from "antd/lib/card/Meta";
 import TurtleCard from "components/common/TurtleCard";
 
 const AdjustmentList = function () {
@@ -76,7 +73,7 @@ const AdjustmentList = function () {
     },
   });
 
-  // 쇼핑몰 바뀔때 마다 재요청
+  // 쇼핑몰 바뀔때 마다 매입조정 리스트 재요청
   useEffect(() => {
     setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
   }, [store.id]);
@@ -191,6 +188,7 @@ const AdjustmentList = function () {
           },
           {
             ellipsis: true,
+            align: "center",
             width: 120,
             title: t("adjustment date"),
             render: (_, record) => record.created_date,
