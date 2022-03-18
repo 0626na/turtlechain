@@ -48,27 +48,27 @@ const Sider = function ({ collapsed }: Props) {
         </div>
       ),
     },
-    // {
-    //   title: t("order.management"),
-    //   icon: (
-    //     <div>
-    //       <TurtleIcon //
-    //         type="menu"
-    //         name="order"
-    //       />
-    //     </div>
-    //   ),
-    //   submenu: [
-    //     {
-    //       title: t("order.create"),
-    //       pathname: "/order/create",
-    //     },
-    //     {
-    //       title: t("order.list"),
-    //       pathname: "/order/list",
-    //     },
-    //   ],
-    // },
+    {
+      title: t("order.management"),
+      icon: (
+        <div>
+          <TurtleIcon //
+            type="menu"
+            name="order"
+          />
+        </div>
+      ),
+      submenu: [
+        {
+          title: t("order.create"),
+          pathname: "/order/create",
+        },
+        {
+          title: t("order.list"),
+          pathname: "/order/list",
+        },
+      ],
+    },
     // {
     //   title: t("sample_return.management"),
     //   icon: (
