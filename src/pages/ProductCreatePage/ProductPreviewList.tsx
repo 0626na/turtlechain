@@ -27,9 +27,9 @@ import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
 import { RequestCreateProduct } from "apis/productAPI";
 import AddSingleProductModal from "./AddProductModal";
-import externalAPI from "apis/externalAPI";
 import TurtleInfo from "components/common/TurtleInfo";
 import { pricePattern } from "utils/pattern";
+import externalAPI from "apis/externalAPI";
 
 function ProductPreviewList() {
   const store = useRecoilValue(storeState);
@@ -235,7 +235,7 @@ function ProductPreviewList() {
         <TurtleText>
           {`${t("product.preview list")}`}
           <br />
-          <TurtleInfo>{t("description.warn red product")}</TurtleInfo>
+          <TurtleInfo>{t("description.fail product")}</TurtleInfo>
         </TurtleText>
 
         <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
