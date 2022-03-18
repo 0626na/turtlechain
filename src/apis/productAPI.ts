@@ -10,7 +10,7 @@ export interface VendorInfo {
   };
 }
 
-export interface Product {
+export interface ProductShow {
   id: number;
   rt_store_id: number;
   vendor_info: VendorInfo;
@@ -34,7 +34,7 @@ export interface RequestGetProductList {
 export interface ResponseGetProductList {
   msg: string;
   data: {
-    product_list: Array<Product>;
+    product_list: Array<ProductShow>;
     total_count: number;
   };
 }

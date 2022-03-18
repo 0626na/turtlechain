@@ -23,9 +23,7 @@ export interface Vendor {
   account: string;
   ws_store_info: Array<MasterVendor>;
   match_type: string;
-}
 
-export interface VendorShow extends Vendor {
   memo: string;
   memo_active: boolean;
   memo_value: string;
@@ -48,14 +46,12 @@ export interface Product {
   option: string;
   image_url: string;
   memo: string;
+
+  memo_value?: string;
+  memo_active?: boolean;
 }
 
-export interface ProductShow extends Product {
-  memo_value: string;
-  memo_active: boolean;
-}
-
-export interface OrderItem {
+export interface OrderProduct {
   vendor_id: number;
   vendor_code: string;
   vendor_name: string;
@@ -141,8 +137,8 @@ const parseProduct = async function (data: FormData) {
 export interface ResponseParseOrder {
   msg: string;
   data: {
-    success: Array<OrderItem>;
-    fail: Array<OrderItem>;
+    success: Array<OrderProduct>;
+    fail: Array<OrderProduct>;
     error: string;
   };
 }

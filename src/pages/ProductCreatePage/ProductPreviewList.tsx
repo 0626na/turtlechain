@@ -22,7 +22,7 @@ import { AxiosError } from "axios";
 import { excelAPI, productAPI } from "apis";
 import { useCallback, useEffect, useState } from "react";
 import { RcFile } from "antd/lib/upload";
-import { Product, ProductShow } from "apis/excelAPI";
+import { Product } from "apis/excelAPI";
 import TurtleText from "components/common/TurtleText";
 import TurtleButton from "components/common/TurtleButton";
 import { RequestCreateProduct } from "apis/productAPI";
@@ -34,7 +34,7 @@ import { pricePattern } from "utils/pattern";
 function ProductPreviewList() {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<ProductShow>>([]);
+  const [successList, setSuccessList] = useState<Array<Product>>([]);
   const [failList, setFailList] = useState<Array<Product>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
 
@@ -61,7 +61,7 @@ function ProductPreviewList() {
     },
   });
 
-  const connectProductQuery = useMutation("connectProduct", externalAPI.getSellmateProduct, {
+  const connectProductQuery = useMutation("connectProduct", externalAPI.connectSellmateProduct, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data.message);
     },
@@ -120,7 +120,7 @@ function ProductPreviewList() {
   };
 
   const addItem = useCallback(
-    (item: ProductShow) => {
+    (item: Product) => {
       if (successList.find((product) => product.product_code === item.product_code)) {
         message.warn(t("message.already exist product"));
         return false;

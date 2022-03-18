@@ -27,16 +27,16 @@ import CreateBulkOrderModal from "./CreateBulkOrderModal";
 import OrderCreateForm from "./OrderCreateForm";
 import { FileOutlined, DownOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
-import excelAPI, { OrderItem } from "apis/excelAPI";
+import excelAPI, { OrderProduct } from "apis/excelAPI";
 import TurtleInfo from "../../components/common/TurtleInfo";
 
 const OrderPreviewList = function () {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [itemList, setItemList] = useState<Array<OrderItemShow>>([]);
-  const [allList, setAllList] = useState<Array<OrderItem>>([]);
-  const [successList, setSuccessList] = useState<Array<OrderItem>>([]);
-  const [failList, setFailList] = useState<Array<OrderItem>>([]);
+  const [allList, setAllList] = useState<Array<OrderProduct>>([]);
+  const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
+  const [failList, setFailList] = useState<Array<OrderProduct>>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   const makeType = (type: string) => {

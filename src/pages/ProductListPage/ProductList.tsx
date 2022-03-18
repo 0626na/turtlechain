@@ -1,5 +1,5 @@
 import { message, Pagination, Row, Table } from "antd";
-import productAPI, { Product, RequestGetProductList } from "apis/productAPI";
+import productAPI, { ProductShow, RequestGetProductList } from "apis/productAPI";
 import { AxiosError } from "axios";
 import TurtleText from "components/common/TurtleText";
 import SearchFilter from "components/SearchFilter";
@@ -15,7 +15,7 @@ import Toolbar from "components/Toolbar";
 function ProductList() {
   const store = useRecoilValue(storeState);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
-  const [selectedRow, selectRow] = useState<Product>();
+  const [selectedRow, selectRow] = useState<ProductShow>();
   const [searchQuery, setSearchQuery] = useState<RequestGetProductList>({
     rt_store_id: -1,
     page: 1,

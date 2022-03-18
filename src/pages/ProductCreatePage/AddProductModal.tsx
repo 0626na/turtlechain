@@ -3,7 +3,6 @@ import { t } from "i18next";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
-import { ProductShow } from "apis/excelAPI";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -15,11 +14,12 @@ import TurtleInputNumber from "components/common/TurtleInputNumber";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import TurtleButton from "components/common/TurtleButton";
 import SearchVendorModal from "components/SearchVendorModal";
+import { Product } from "apis/excelAPI";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: ProductShow) => boolean;
+  addProduct: (item: Product) => boolean;
 }
 
 function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {

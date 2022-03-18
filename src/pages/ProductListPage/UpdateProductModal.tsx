@@ -1,6 +1,6 @@
 import { Divider, Form, Input, message, Modal, notification, Popconfirm, Row } from "antd";
 import { productAPI } from "apis";
-import { Product } from "apis/productAPI";
+import { ProductShow } from "apis/productAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
 import TurtleInput from "components/common/TurtleInput";
@@ -15,7 +15,7 @@ import { CloseOutlined } from "@ant-design/icons";
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectedRow?: Product;
+  selectedRow?: ProductShow;
 }
 
 function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {

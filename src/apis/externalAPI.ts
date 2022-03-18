@@ -1,5 +1,5 @@
 import { v2Axios } from "apis";
-import { ParseCount, Product } from "apis/excelAPI";
+import { ParseCount, Product, Vendor } from "apis/excelAPI";
 import { WarehousingProduct } from "./warehousingAPI";
 
 export interface RequestQuery {
@@ -7,7 +7,7 @@ export interface RequestQuery {
 }
 
 // Response: 상품 연동
-export interface ResponseGetProduct {
+export interface ResponseConnectProduct {
   msg: string;
   data: {
     success: Array<Product>;
@@ -21,17 +21,17 @@ export interface ResponseGetProduct {
 }
 
 // 셀메이트 상품연동 요청
-const getSellmateProduct = async function (query: RequestQuery) {
+const connectSellmateProduct = async function (query: RequestQuery) {
   let url = "external-api/inventory/products?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetProduct>(url);
+  const response = await v2Axios.get<ResponseConnectProduct>(url);
   return response.data;
 };
 
 // Response: 입고상품 연동
-export interface ResponseGetWarehousing {
+export interface ResponseConnectWarehousing {
   msg: string;
   data: {
     success: Array<WarehousingProduct>;
@@ -41,18 +41,42 @@ export interface ResponseGetWarehousing {
   };
 }
 
-const getSellmateWarehousing = async function (query: RequestQuery) {
+// 셀메이트 입고연동 요청
+const connectSellmateWarehousing = async function (query: RequestQuery) {
   let url = "external-api/inventory/warehousing?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetWarehousing>(url);
+  const response = await v2Axios.get<ResponseConnectWarehousing>(url);
+  return response.data;
+};
+
+// Response: 셀메이트 거래처 연동
+export interface ResponseGetVendor {
+  msg: string;
+  data: {
+    success: Array<Vendor>;
+    suggest: Array<Vendor>;
+    fail: Array<Vendor>;
+    count: ParseCount;
+    error?: string;
+  };
+}
+
+// 셀메이트 거래처 연동 요청
+const connectSellmateVendor = async function (query: RequestQuery) {
+  let url = "external-api/inventory/vendors?";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetVendor>(url);
   return response.data;
 };
 
 const externalAPI = {
-  getSellmateProduct,
-  getSellmateWarehousing,
+  connectSellmateProduct,
+  connectSellmateWarehousing,
+  connectSellmateVendor,
 };
 
 export default externalAPI;

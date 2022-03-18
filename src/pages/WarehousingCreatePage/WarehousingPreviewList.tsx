@@ -62,9 +62,10 @@ function WarehousingPreviewList() {
     },
   });
 
+  // 재고관리 연동 요청
   const connectWarehousingQuery = useMutation(
     "parseWarehousing",
-    externalAPI.getSellmateWarehousing,
+    externalAPI.connectSellmateWarehousing,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);

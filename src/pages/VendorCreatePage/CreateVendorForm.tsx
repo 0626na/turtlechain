@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import ConnectProgramModal from "./ConnectProgramModal";
 import CreateBulkVendorModal from "./CreateBulkVendorModal";
 import CreateVendorRequestModal from "./CreateVendorRequestModal";
 import SearchWholesaleModal from "./SearchWholesaleModal";
@@ -32,6 +33,8 @@ function CreateVendorForm() {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   // 거래처 신규 등록 요청 모달
   const [requestModalVisible, setRequestModalVisible] = useState(false);
+  // 재고관리 연동 모달
+  const [connectModalVisible, setConnectModalVisible] = useState(false);
 
   // 거래처 코드 생성 요청
   const createVendorCode = useQuery(
@@ -152,6 +155,19 @@ function CreateVendorForm() {
   return (
     <>
       <Toolbar>
+        <TurtleButtonSub // 재고프로그램 연동 Button
+          type="primary"
+          color="skyblue"
+          onClick={() => {
+            if (!store.id) {
+              message.warn("쇼핑몰을 선택해주세요.");
+              return;
+            }
+            setConnectModalVisible(true);
+          }}
+        >
+          {t("button.connect external program")}
+        </TurtleButtonSub>
         <TurtleButtonSub // 거래처 대량 등록 Button
           icon="file"
           onClick={() => {
@@ -357,6 +373,13 @@ function CreateVendorForm() {
         </Row>
       </Form>
 
+      {/* 거래처 재고연동 모달 */}
+      <ConnectProgramModal
+        visible={connectModalVisible}
+        closeModal={() => {
+          setConnectModalVisible(false);
+        }}
+      />
       {/* 거래처 대량등록 모달 */}
       <CreateBulkVendorModal
         visible={createModalVisible}

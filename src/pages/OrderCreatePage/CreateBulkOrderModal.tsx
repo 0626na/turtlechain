@@ -1,7 +1,7 @@
 import { message, Modal, Popconfirm, Row, Space, Table, Typography } from "antd";
 import Upload, { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
-import { OrderItem } from "apis/excelAPI";
+import { OrderProduct } from "apis/excelAPI";
 import { OrderItemShow } from "apis/orderAPI";
 import { AxiosError } from "axios";
 import TurtleButton from "components/common/TurtleButton";
@@ -28,9 +28,9 @@ interface SearchState {
 function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [allList, setAllList] = useState<Array<OrderItem>>([]);
-  const [successList, setSuccessList] = useState<Array<OrderItem>>([]);
-  const [failList, setFailList] = useState<Array<OrderItem>>([]);
+  const [allList, setAllList] = useState<Array<OrderProduct>>([]);
+  const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
+  const [failList, setFailList] = useState<Array<OrderProduct>>([]);
 
   const parseOrderQuery = useMutation("parseOrder", excelAPI.parseOrder, {
     onError: (error: AxiosError) => {
