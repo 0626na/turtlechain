@@ -25,7 +25,7 @@ const Router = function () {
 
   return (
     <BrowserRouter>
-      {token ? (
+      {sessionStorageToken || localStorageToken ? (
         <MainLayout
           content={
             <Suspense fallback="loading">
