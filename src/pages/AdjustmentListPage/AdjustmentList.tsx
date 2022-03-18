@@ -228,7 +228,7 @@ const AdjustmentList = function () {
             ellipsis: true,
             render: (_, record) => (
               <Space>
-                {!record.is_cleared && (
+                {record.count === record.count_left && (
                   <Popconfirm
                     title={t("description.really delete")}
                     okText={t("yes")}
