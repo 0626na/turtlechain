@@ -42,9 +42,9 @@ interface Props {
 function CreateVendorsModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<Vendor>>();
-  const [suggestList, setSuggestList] = useState<Array<Vendor>>();
-  const [failList, setFailList] = useState<Array<Vendor>>();
+  const [successList, setSuccessList] = useState<Array<Vendor>>([]);
+  const [suggestList, setSuggestList] = useState<Array<Vendor>>([]);
+  const [failList, setFailList] = useState<Array<Vendor>>([]);
   const [count, setCount] = useState<ParseCount>({
     success_count: 0,
     suggest_count: 0,
