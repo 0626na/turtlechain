@@ -935,7 +935,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         >
           <TurtleButton
             type="primary"
-            disabled={successList?.length === 0}
+            disabled={getSuggestCount === 0 && successList?.length === 0}
             loading={createVendorQuery.isLoading}
           >
             {t("vendor.create")}
