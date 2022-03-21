@@ -9,13 +9,8 @@ function SampleReturnCreatePage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="sample_return"
         title={t("sample_return.create")}
-        breadcrumbList={[
-          t("common.home"),
-          t("sample_return.management"),
-          t("sample_return.create"),
-        ]}
+        breadcrumbList={[t("sample_return.management"), t("sample_return.create")]}
       />
     </>
   );

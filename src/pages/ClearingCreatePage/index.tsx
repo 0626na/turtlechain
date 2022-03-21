@@ -15,7 +15,6 @@ function ClearingCreatePage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="clearing"
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />

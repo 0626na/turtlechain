@@ -7,8 +7,7 @@ import koKR from "antd/es/locale/ko_KR";
 import "moment/locale/ko";
 import "antd/dist/antd.less";
 import "./i18n";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import theme from "utils/theme";
+import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient({
@@ -32,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 500;
     src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Medium.ttf")
   }
-@font-face {
+  @font-face {
     font-family: "Spoqa Han Sans";
     font-weight: 700;
     src : url("${process.env.PUBLIC_URL}/assets/font/SpoqaHanSansNeo-Bold.ttf")
@@ -48,11 +47,9 @@ ReactDOM.render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={koKR}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <ReactQueryDevtools />
-          <Router />
-        </ThemeProvider>
+        <GlobalStyle />
+        <ReactQueryDevtools />
+        <Router />
       </ConfigProvider>
     </QueryClientProvider>
   </RecoilRoot>,

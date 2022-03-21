@@ -1,5 +1,3 @@
-import { useRecoilValue } from "recoil";
-import { tokenState } from "store/tokenState";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import useLogin from "hooks/useLogin";
@@ -10,7 +8,6 @@ import MainRouter from "./MainRouter";
 
 const Router = function () {
   const login = useLogin();
-  const token = useRecoilValue(tokenState);
   const localStorageToken = localStorage.getItem(TOKEN);
   const sessionStorageToken = sessionStorage.getItem(TOKEN);
 

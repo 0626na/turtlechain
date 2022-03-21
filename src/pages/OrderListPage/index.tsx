@@ -20,7 +20,6 @@ const OrderListPage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="order"
         title={t("order.list")}
         breadcrumbList={[t("common.home"), t("order.management"), t("order.list")]}
       />

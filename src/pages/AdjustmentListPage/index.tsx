@@ -10,7 +10,6 @@ const AdjustmentListPage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="adjustment"
         title={t("adjustment list")}
         breadcrumbList={[t("adjustment management"), t("adjustment list")]}
       />

@@ -7,7 +7,6 @@ import { storeState } from "store/storeState";
 import { t } from "i18next";
 import { useState, useEffect, useCallback } from "react";
 import { Store } from "../store/storeState";
-import Form from "antd/lib/form/Form";
 
 interface Props {
   warningMessage?: string;

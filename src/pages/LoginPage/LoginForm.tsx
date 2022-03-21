@@ -98,10 +98,16 @@ const LoginForm = function () {
       <Divider />
       <BottomContainer>
         <GreyTypography>
-          {t("description.not member")} <Link to="/signup">{t("signup")}</Link>
+          {t("description.not member")}{" "}
+          <Link to="/signup">
+            <u>{t("signup")}</u>
+          </Link>
         </GreyTypography>
         <GreyTypography>
-          {t("description.about membership")} <Link to="#">{t("about membership")}</Link>
+          {t("description.about membership")}{" "}
+          <Link to="#">
+            <u>{t("about membership")}</u>
+          </Link>
         </GreyTypography>
       </BottomContainer>
     </Form>

@@ -22,7 +22,6 @@ const HomePage = function () {
     <>
       <Helmet title={title} />
       <PageHeader //
-        pageName="home"
         title={t("common.home")}
         info={t("description.check home")}
       />

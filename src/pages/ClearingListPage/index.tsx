@@ -52,7 +52,6 @@ function ClearingListPage() {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="clearing"
         title={t("clearing.list")}
         breadcrumbList={[t("clearing.management"), t("clearing.list")]}
       />

@@ -6,13 +6,12 @@ import TurtleInfo from "./common/TurtleInfo";
 import { t } from "i18next";
 
 interface Props {
-  pageName?: string;
   title: string;
   breadcrumbList?: Array<string>;
   info?: string;
 }
 
-const PageHeader = function ({ pageName, title, breadcrumbList, info }: Props) {
+const PageHeader = function ({ title, breadcrumbList, info }: Props) {
   return (
     <>
       <Row align="middle" justify="space-between">

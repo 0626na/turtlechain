@@ -10,7 +10,6 @@ const WarehousingListPage = function () {
     <>
       <Helmet title={title} />
       <PageHeader
-        pageName="warehousing"
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
