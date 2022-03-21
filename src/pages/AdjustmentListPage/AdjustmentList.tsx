@@ -215,8 +215,8 @@ const AdjustmentList = function () {
           },
           {
             ellipsis: true,
-            title: t("adjustment.count"),
-            render: (_, record) => `${record.count_left} / ${record.count}`,
+            title: t("adjustment.count all"),
+            render: (_, record) => `${record.count - record.count_left} / ${record.count}`,
           },
           {
             ellipsis: true,

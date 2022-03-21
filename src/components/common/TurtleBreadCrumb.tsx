@@ -16,7 +16,7 @@ function TurtleBreadCrumb({ list }: Props) {
 }
 
 const StyledBreadcrumb = styled(Breadcrumb)`
-  background-color: ${({ theme }) => theme.breadcrumb};
+  background-color: #f3f6f9;
   padding: 0.4rem 1rem;
   border-radius: 100px;
   line-height: 1.4;

@@ -5,9 +5,12 @@ import MainLayout from "components/MainLayout";
 import { TOKEN } from "constant";
 import LoginRouter from "./LoginRouter";
 import MainRouter from "./MainRouter";
+import { tokenState } from "store/tokenState";
+import { useRecoilValue } from "recoil";
 
 const Router = function () {
   const login = useLogin();
+  const token = useRecoilValue(tokenState);
   const localStorageToken = localStorage.getItem(TOKEN);
   const sessionStorageToken = sessionStorage.getItem(TOKEN);
 
@@ -19,6 +22,8 @@ const Router = function () {
       login(sessionStorageToken);
     }
   });
+
+  useEffect(() => {}, [token]);
 
   return (
     <BrowserRouter>

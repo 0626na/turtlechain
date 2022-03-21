@@ -1,6 +1,6 @@
 import { t } from "i18next";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { TOKEN } from "constant";
 // custom hooks
 import useLogin from "hooks/useLogin";

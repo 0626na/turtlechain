@@ -13,7 +13,7 @@ import {
 } from "antd";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import Toolbar from "components/Toolbar";
-import { FileOutlined, DownOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FileOutlined, DeleteOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
@@ -217,7 +217,6 @@ function ProductPreviewList() {
           type="primary"
           color="skyblue"
           onClick={onClickConnect}
-          loading={connectProductQuery.isLoading}
           disabled={connectProductQuery.isSuccess}
         >
           {t("button.connect external program")}
@@ -227,7 +226,7 @@ function ProductPreviewList() {
             style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
             icon={<FileOutlined />}
           >
-            {t("button.add product")} <DownOutlined />
+            {t("button.add product")}
           </Button>
         </Dropdown>
       </Toolbar>
@@ -327,7 +326,7 @@ function ProductPreviewList() {
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               dataSource={failList}
               rowKey={(record) => record.product_code}
-              style={{ height: "510px" }}
+              scroll={{ y: "auto" }}
               columns={[
                 {
                   ellipsis: true,

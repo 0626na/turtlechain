@@ -428,9 +428,10 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
       footer={false}
       bodyStyle={{ height: "85vh", overflowY: "auto" }}
     >
-      <Space>
+      <Space style={{ height: 110 }}>
         <Typography.Text>거래처 업로드 | </Typography.Text>
         <Upload //
+          listType="picture"
           maxCount={1}
           accept=".csv, .xls, .xlsx"
           beforeUpload={(file) => {

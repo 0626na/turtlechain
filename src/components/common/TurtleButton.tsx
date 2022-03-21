@@ -29,6 +29,7 @@ function TurtleButton({
         width: "160px",
         backgroundColor: type === "secondary" ? "#13BC9E" : "",
         borderColor: type === "secondary" ? "#13BC9E" : "",
+        border: disabled ? "none" : "",
       }}
       htmlType={htmlType}
     >

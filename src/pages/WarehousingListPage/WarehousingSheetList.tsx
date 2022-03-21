@@ -43,6 +43,9 @@ const WarehousingSheetList = function () {
     () => warehousingAPI.getSheet(searchQuery),
     {
       enabled: !!store.id,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
     },
   );
 

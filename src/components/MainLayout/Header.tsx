@@ -66,6 +66,7 @@ const Container = styled(Layout.Header)`
   position: fixed;
   z-index: 1;
   width: 100%;
+  padding-left: 16px;
   /*
   top: 0;
   */

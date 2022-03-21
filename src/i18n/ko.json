@@ -124,8 +124,10 @@
     "connect": "연동하기",
     "add warehousing": "입고 추가하기",
     "create warehousing": "입고 등록하기",
-    "add adjustment": "매입조정 추가하기",
-    "create adjustment": "매입조정 등록하기"
+    "add adjustment": "매입조정 추가",
+    "create adjustment": "매입조정 등록하기",
+    "load warehousing": "입고내역 불러오기",
+    "add reserve product": "미송상품 단건추가"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
@@ -185,7 +187,8 @@
     "btn_upload_whs_sheet": "입고장 업로드",
     "btn_prepopulate_whs": "주문내역 불러오기",
     "price": "입고 금액 (공급가)",
-    "preview": "입고서 미리보기"
+    "preview": "입고서 미리보기",
+    "load": "입고내역 불러오기"
   },
   "adjustment": {
     "": "매입조정",
@@ -214,7 +217,9 @@
     },
     "preview": "매입조정 미리보기",
     "pending": "대기",
-    "confirmed": "마감"
+    "confirmed": "마감",
+    "add reserve product": "미송상품 단건추가",
+    "count all": "처리 수량/총 수량"
   },
   "clearing": {
     "": "정산",

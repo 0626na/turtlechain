@@ -24,8 +24,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import Toolbar from "components/Toolbar";
 import CreateBulkOrderModal from "./CreateBulkOrderModal";
-import OrderCreateForm from "./OrderCreateForm";
-import { FileOutlined, DownOutlined } from "@ant-design/icons";
+import { FileOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import excelAPI, { OrderProduct } from "apis/excelAPI";
 import TurtleInfo from "../../components/common/TurtleInfo";
@@ -180,7 +179,7 @@ const OrderPreviewList = function () {
             style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
             icon={<FileOutlined />}
           >
-            {t("button.add order")} <DownOutlined />
+            {t("button.add order")}
           </Button>
         </Dropdown>
       </Toolbar>

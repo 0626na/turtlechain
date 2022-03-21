@@ -414,7 +414,7 @@ function ConnectProgramModal({ visible, closeModal }: Props) {
           onClick={() => {
             connectVendorQuery.mutate({ rt_store_id: store.id! });
           }}
-          loading={connectVendorQuery.isLoading}
+          //loading={connectVendorQuery.isLoading}
           //disabled={connectVendorQuery.isSuccess}
         >
           {t("button.connect")}

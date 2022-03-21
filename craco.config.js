@@ -65,6 +65,7 @@ module.exports = {
               "@tabs-ink-bar-color": "#2174F1",
 
               "@tabs-horizontal-padding-lg": "30px 16px 8px 16px",
+              "@tabs-horizontal-margin": "0 0 0 0",
 
               //"@tabs-horizontal-padding-lg": "12px 0",
             },

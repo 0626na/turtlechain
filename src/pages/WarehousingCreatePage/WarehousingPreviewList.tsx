@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import warehousingAPI, { WarehousingProduct } from "apis/warehousingAPI";
-import { FileOutlined, DownOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FileOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
   message,
@@ -63,30 +63,26 @@ function WarehousingPreviewList() {
   });
 
   // 재고관리 연동 요청
-  const connectWarehousingQuery = useMutation(
-    "parseWarehousing",
-    externalAPI.connectSellmateWarehousing,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
-        if (data.data.error) {
-          message.error(data.data.error);
-          resetField();
-          return;
-        }
-        setSuccessList([
-          ...data.data.success.map((product) => ({
-            ...product,
-            index: index.current++,
-          })),
-          ...successList,
-        ]);
-        setFailList([...data.data.fail, ...failList]);
-      },
+  const connectQuery = useMutation("connectWarehousing", externalAPI.connectSellmateWarehousing, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-  );
+    onSuccess: (data) => {
+      if (data.data.error) {
+        message.error(data.data.error);
+        resetField();
+        return;
+      }
+      setSuccessList([
+        ...data.data.success.map((product) => ({
+          ...product,
+          index: index.current++,
+        })),
+        ...successList,
+      ]);
+      setFailList([...data.data.fail, ...failList]);
+    },
+  });
 
   // 입고장 생성 요청
   const createQuery = useMutation("createWarehousing", warehousingAPI.create, {
@@ -127,7 +123,7 @@ function WarehousingPreviewList() {
       message.warn(t("message.select store"));
       return;
     }
-    connectWarehousingQuery.mutate({ rt_store_id: store.id! });
+    connectQuery.mutate({ rt_store_id: store.id! });
   }, [store.id]);
 
   // 상품 추가
@@ -229,8 +225,7 @@ function WarehousingPreviewList() {
           type="primary"
           color="skyblue"
           onClick={onClickConnect}
-          loading={connectWarehousingQuery.isLoading}
-          disabled={connectWarehousingQuery.isSuccess}
+          disabled={connectQuery.isSuccess}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
@@ -239,7 +234,7 @@ function WarehousingPreviewList() {
             style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
             icon={<FileOutlined />}
           >
-            {t("button.add warehousing")} <DownOutlined />
+            {t("button.add warehousing")}
           </Button>
         </Dropdown>
       </Toolbar>
@@ -255,7 +250,7 @@ function WarehousingPreviewList() {
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
             <Table
               size="small"
-              loading={parseQuery.isLoading}
+              loading={connectQuery.isLoading || parseQuery.isLoading}
               dataSource={successList}
               rowKey={(record) => record.index!}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -348,7 +343,7 @@ function WarehousingPreviewList() {
           <Tabs.TabPane tab={`실패(${failList.length})`} key="2">
             <Table
               size="small"
-              loading={parseQuery.isLoading}
+              loading={connectQuery.isLoading || parseQuery.isLoading}
               dataSource={failList}
               rowKey={(record) => failIndex.current++}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
