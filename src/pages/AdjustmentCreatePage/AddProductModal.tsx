@@ -87,7 +87,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
       <StyledModal
         centered
         width="60%"
-        title={t("product.add single")}
+        title={t("adjustment.add reserve product")}
         closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
         visible={visible}
         onCancel={onCloseModal}
@@ -101,7 +101,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
           onFinish={(value) => {
-            if (addProduct(value)) {
+            if (addProduct({ ...value, type: "reserve", warehousing_item_id: 0 })) {
               onCloseModal();
             }
           }}
@@ -174,17 +174,6 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             name="product_count"
             min={1}
           />
-          <Form.Item name="type" label={t("adjustment.type.")} rules={[{ required: true }]}>
-            <Select>
-              {selectOptions.map((option) => {
-                return (
-                  <Select.Option key={option.value} value={option.value}>
-                    {option.name}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
 
           <TurtleTextArea name="memo" label={t("adjustment.memo")} rows={3} />
 

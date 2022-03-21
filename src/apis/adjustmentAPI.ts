@@ -8,6 +8,8 @@ export interface AdjustmentProduct {
   vendor_id: number;
   vendor_name: string;
   vendor_address: string;
+  // 미송의 경우 0
+  warehousing_item_id: number;
 
   product_id: number;
   product_name: string;
@@ -90,6 +92,8 @@ export interface RequestCreate {
     rt_store_id: number;
     vendor_id: number;
     product_id: number;
+    // 미송의 경우 0
+    warehousing_item_id: number;
     count: number;
     price: number;
     type: string;

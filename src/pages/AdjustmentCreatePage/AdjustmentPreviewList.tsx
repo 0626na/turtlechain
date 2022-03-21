@@ -20,7 +20,7 @@ import { t } from "i18next";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import Toolbar from "components/Toolbar";
-import { FileOutlined, DownOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FileOutlined, DeleteOutlined } from "@ant-design/icons";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import TurtleText from "components/common/TurtleText";
@@ -28,12 +28,14 @@ import AddProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
 import { BaseOptionType } from "antd/lib/select";
 import TurtleButton from "components/common/TurtleButton";
+import LoadWarehousingModal from "./LoadWarehousingModal";
 
 const AdjustmentListPreview = function () {
   const store = useRecoilValue(storeState);
   const [successList, setSuccessList] = useState<Array<AdjustmentProduct>>([]);
   const [failList, setFailList] = useState<Array<AdjustmentProduct>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
+  const [loadWarehousingModalVisible, setLoadWarehousingModalVisible] = useState(false);
   const index = useRef(0);
 
   const createAdjustmentQuery = useMutation(["createAdjustment"], adjustmentAPI.create, {
@@ -119,6 +121,7 @@ const AdjustmentListPreview = function () {
         rt_store_id: store.id!,
         vendor_id: product.vendor_id,
         product_id: product.product_id,
+        warehousing_item_id: product.warehousing_item_id,
         count: product.product_count,
         price: product.product_price,
         type: product.type,
@@ -134,13 +137,6 @@ const AdjustmentListPreview = function () {
     () => successList.reduce((acc, cur) => acc + cur.product_count * cur.product_price, 0),
     [successList],
   );
-
-  let adjTypes = {
-    exchange: "교환",
-    reserve: "미송",
-    refund: "환불",
-    takeback: "반품",
-  };
 
   const selectOptions: BaseOptionType[] = [
     { name: "미송", value: "reserve" },
@@ -158,10 +154,22 @@ const AdjustmentListPreview = function () {
             message.warn(t("message.select store"));
             return;
           }
+          setLoadWarehousingModalVisible(true);
+        }}
+      >
+        {t("button.load warehousing")}
+      </Menu.Item>
+      <Menu.Item
+        key="2"
+        onClick={() => {
+          if (!store.id) {
+            message.warn(t("message.select store"));
+            return;
+          }
           setAddProductModalVisible(true);
         }}
       >
-        {t("button.add single product")}
+        {t("button.add reserve product")}
       </Menu.Item>
     </Menu>
   );
@@ -174,7 +182,7 @@ const AdjustmentListPreview = function () {
             style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
             icon={<FileOutlined />}
           >
-            {t("button.add adjustment")} <DownOutlined />
+            {t("button.add adjustment")}
           </Button>
         </Dropdown>
       </Toolbar>
@@ -315,7 +323,7 @@ const AdjustmentListPreview = function () {
         </Popconfirm>
       </Row>
 
-      {/* 상품 단건 추가 모달 */}
+      {/* 미송상품 단건 추가 모달 */}
       <AddProductModal
         visible={addProductModalVisible}
         closeModal={() => {
@@ -323,90 +331,15 @@ const AdjustmentListPreview = function () {
         }}
         addProduct={addProduct}
       />
-    </>
 
-    // <Table
-    //   size="small"
-    //   scroll={{ x: "auto", y: 400 }}
-    //   pagination={false}
-    //   dataSource={adjList}
-    //   columns={[
-    //     {
-    //       title: t("vendor.name"),
-    //       dataIndex: "vendor_name",
-    //     },
-    //     {
-    //       title: t("vendor.address"),
-    //       dataIndex: "vendor_address",
-    //     },
-    //     {
-    //       title: t("product.name"),
-    //       dataIndex: "product_name",
-    //     },
-    //     {
-    //       title: t("product.vendor_product_name"),
-    //       dataIndex: "vendor_product_name",
-    //     },
-    //     {
-    //       width: 100,
-    //       align: "center",
-    //       title: t("adjustment type"),
-    //       dataIndex: "type",
-    //       render: (_, record) => adjTypes[record.type],
-    //     },
-    //     {
-    //       title: t("supply price"),
-    //       render: (_, record) => numberTextFormat(record.price, "currency"),
-    //     },
-    //     {
-    //       width: 100,
-    //       align: "center",
-    //       title: " ",
-    //       dataIndex: "action",
-    //       render: (_, record) => (
-    //         <Button //
-    //           danger
-    //           icon={<DeleteFilled />}
-    //           size="small"
-    //           shape="round"
-    //           type="primary"
-    //           onClick={() => {
-    //             console.log(record);
-    //             const newList = adjList.filter((item) => item.product_id !== record.product_id);
-    //             setAdjList(newList);
-    //           }}
-    //         >
-    //           {t("delete")}
-    //         </Button>
-    //       ),
-    //     },
-    //   ]}
-    //   footer={() => (
-    //     <Footer>
-    //       <b>
-    //         {`${t("total supply price")} : `}
-    //         {numberTextFormat(totalAdjValue, "currency")}
-    //       </b>
-    //       <Popconfirm
-    //         title={t("description.really register")}
-    //         okText={t("yes")}
-    //         cancelText={t("no")}
-    //         onConfirm={() => {
-    //           onSubmit();
-    //         }}
-    //       >
-    //         <Button //
-    //           icon={<UploadOutlined />}
-    //           disabled={!adjList.length}
-    //           //loading={isLoading}
-    //           type="primary"
-    //         >
-    //           {t("adjustment create")}
-    //         </Button>
-    //       </Popconfirm>
-    //     </Footer>
-    //   )}
-    // />
+      {/* 입고내역 불러오기 모달*/}
+      <LoadWarehousingModal
+        visible={loadWarehousingModalVisible}
+        closeModal={() => {
+          setLoadWarehousingModalVisible(false);
+        }}
+      />
+    </>
   );
 };
 
