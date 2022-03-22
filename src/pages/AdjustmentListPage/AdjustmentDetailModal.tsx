@@ -99,7 +99,9 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
       <Table
         size="small"
         loading={getDetailQuery.isLoading}
-        dataSource={getDetailQuery.data?.data.clearing_info}
+        dataSource={
+          getDetailQuery.data?.data.clearing_info && getDetailQuery.data?.data.clearing_info
+        }
         rowKey={(record) => record.id}
         pagination={false}
         columns={[
@@ -167,7 +169,9 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
         size="small"
         loading={getDetailQuery.isLoading}
         pagination={false}
-        dataSource={getDetailQuery.data && [getDetailQuery.data?.data.warehousing_info]}
+        dataSource={
+          getDetailQuery.data?.data.warehousing_info && [getDetailQuery.data?.data.warehousing_info]
+        }
         rowKey={(product) => product.id}
         columns={[
           {
