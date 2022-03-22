@@ -28,7 +28,7 @@ const HomePage = function () {
       <Row>
         <ClearingStatusCard />
       </Row>
-      <Row gutter={26}>
+      {/* <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 환불 현황"} style={cardStyle}>
             <Row justify="center" align="middle">
@@ -46,18 +46,19 @@ const HomePage = function () {
         <Col span={18}>
           <OrderChartCard />
         </Col>
-      </Row>
+      </Row> */}
       <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 매입조정 현황"} style={cardStyle}>
             <Typography.Title level={2}>
               <Row justify="center" align="middle">
-                {getUnprocessedStatusQuery.data?.data.adjustments.counts ?? 0} 건
+                {getUnprocessedStatusQuery.data?.data.adjustments.counts ?? 0}건
               </Row>
             </Typography.Title>
             <Row justify="center">
               <Typography.Title level={2}>
-                {getUnprocessedStatusQuery.data?.data.adjustments.total_price ?? 0} 원
+                {getUnprocessedStatusQuery.data?.data.adjustments.total_price.toLocaleString() ?? 0}
+                원
               </Typography.Title>
             </Row>
           </Card>

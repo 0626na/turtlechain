@@ -115,6 +115,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
       onCancel={closeModal}
       footer={false}
       getContainer={false}
+      bodyStyle={{ height: "93vh", overflowY: "auto" }}
     >
       <Row style={{ marginBottom: 16 }}>
         <DatePicker.RangePicker
