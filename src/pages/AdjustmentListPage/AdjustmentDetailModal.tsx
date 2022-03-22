@@ -199,7 +199,7 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
           {
             ellipsis: true,
             title: t("product.price"),
-            render: (_, record) => record.price,
+            render: (_, record) => record.price.toLocaleString(),
           },
         ]}
       />

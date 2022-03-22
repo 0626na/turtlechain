@@ -250,14 +250,23 @@ const AdjustmentList = function () {
                     title={t("description.really delete")}
                     okText={t("yes")}
                     cancelText={t("no")}
-                    onConfirm={() => {
+                    onCancel={(e) => {
+                      e?.stopPropagation();
+                    }}
+                    onConfirm={(e) => {
+                      e?.stopPropagation();
                       updateAdjustmentQuery.mutate({
                         id: record.id,
                         is_inactive: true,
                       });
                     }}
                   >
-                    <DeleteOutlined style={{ cursor: "pointer", color: "#A1A2A6" }} />
+                    <DeleteOutlined
+                      style={{ cursor: "pointer", color: "#A1A2A6" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    />
                   </Popconfirm>
                 )}
               </Space>
@@ -344,7 +353,10 @@ const AdjustmentList = function () {
             return (
               <FileTextOutlined
                 style={record.memo ? {} : { opacity: "0.4" }}
-                onClick={(e) => onExpand(record, e)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  return onExpand(record, e);
+                }}
               />
             );
           },

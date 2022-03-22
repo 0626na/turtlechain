@@ -200,6 +200,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
           onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
             selectRows(selectedRows);
           },
+          checkStrictly: true,
         }}
         columns={[
           {
