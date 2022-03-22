@@ -150,11 +150,6 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
           },
           {
             ellipsis: true,
-            title: t("adjustment.type."),
-            render: (_, record) => t(`adjustment.type.${record.adjustment_type}`),
-          },
-          {
-            ellipsis: true,
             title: t("adjustment.process type."),
             render: (_, record) => t(`adjustment.process type.${record.adjustment_process_type}`),
           },
