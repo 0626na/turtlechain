@@ -221,7 +221,7 @@ function ProductPreviewList() {
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
-        <Dropdown overlay={menu} placement="bottomCenter">
+        <Dropdown overlay={menu}>
           <Button
             style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
             icon={<FileOutlined />}

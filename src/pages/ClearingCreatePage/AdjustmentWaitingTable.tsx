@@ -453,7 +453,7 @@ function AdjustmentWaitingTable({
           },
           {
             ellipsis: true,
-            title: t("adjustment.process_type.default"),
+            title: t("adjustment.process type.default"),
             render: (_value, record) => (
               <Select
                 placeholder={t("placeholder.process_type")}
@@ -466,10 +466,10 @@ function AdjustmentWaitingTable({
                 value={record.process_type}
               >
                 <Select.Option key={"subtract"} value={"subtract"}>
-                  {t("adjustment.process_type.subtract")}
+                  {t("adjustment.process type.subtract")}
                 </Select.Option>
                 <Select.Option key={"refund"} value={"refund"}>
-                  {t("adjustment.process_type.refund")}
+                  {t("adjustment.process type.refund")}
                 </Select.Option>
               </Select>
             ),

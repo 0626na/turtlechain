@@ -202,7 +202,8 @@
     "is_vat_included": "세액 포함 여부",
     "vendor_info": "거래처 정보",
     "memo": "메모",
-    "process_type": {
+    "process type": {
+      "": "구분",
       "default": "매입조정 처리",
       "subtract": "차감",
       "refund": "환불"
@@ -219,7 +220,15 @@
     "pending": "대기",
     "confirmed": "마감",
     "add reserve product": "미송상품 단건추가",
-    "count all": "처리 수량/총 수량"
+    "count all": "처리 수량/총 수량",
+    "is vat included": "부가세 포함 여부",
+    "detail": "매입조정 상세보기",
+    "clearing list": "매입조정 정산이력",
+    "warehousing list": "매입조정 입고내역",
+    "clearing date": "정산 날짜",
+    "total price": "결제 금액",
+    "supply price": "공급가액",
+    "vat price": "부가세"
   },
   "clearing": {
     "": "정산",

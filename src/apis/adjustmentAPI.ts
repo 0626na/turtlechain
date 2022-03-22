@@ -136,6 +136,55 @@ const update = async function (data: RequestUpdate) {
   return response.data.data;
 };
 
+// Request: 매입조정 상세보기
+export interface RequestGet {
+  id: number;
+}
+
+// Response: 매입조정 상세보기
+export interface ResponseGet {
+  msg: string;
+  data: {
+    clearing_info: Array<{
+      id: number;
+      created_date: string;
+
+      vendor_name: string;
+      vendor_address: string;
+      bank: string;
+      account_holder: string;
+      account_number: string;
+
+      total_price: number;
+      supply_price: number;
+      vat_price: number;
+      is_vat_included: boolean;
+      adjustment_process_type: "subtract" | "refund" | "";
+      adjustment_type: "reserve" | "takeback" | "exchange" | "refund";
+    }>;
+    warehousing_info: {
+      id: number;
+      count: number;
+      price: number;
+      vendor_info: {
+        vendor_name: string;
+      };
+      product_info: {
+        name: string;
+        vendor_product_name: string;
+        option: string;
+      };
+    };
+  };
+}
+
+// 매입조정 상세보기
+const get = async function (data: RequestGet) {
+  const url = `adjustment/item/${data.id}`;
+  const response = await v2Axios.get<ResponseGet>(url);
+  return response.data;
+};
+
 /**
  *
  *
@@ -202,6 +251,7 @@ const adjustmentAPI = {
   getList,
   create,
   update,
+  get,
   getAdjustmentForClearing,
 };
 

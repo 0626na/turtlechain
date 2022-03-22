@@ -23,14 +23,16 @@ import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import Toolbar from "components/Toolbar";
 import TurtleText from "components/common/TurtleText";
-import SearchFilter from "components/SearchFilter";
 import TurtleButtonSub from "components/common/TurtleButtonSub";
 import { AxiosError } from "axios";
 import TurtleCard from "components/common/TurtleCard";
+import AdjustmentDetailModal from "./AdjustmentDetailModal";
 
 const AdjustmentList = function () {
   const store = useRecoilValue(storeState);
   const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentProductShow>>();
+  const [selectedRow, selectRow] = useState<AdjustmentProductShow>();
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: store.id ?? -1,
     is_cleared: 2,
@@ -45,7 +47,7 @@ const AdjustmentList = function () {
     ["getAdjustmentList", searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
-      enabled: !!store.id,
+      enabled: !!store.id && searchQuery.rt_store_id !== -1,
       onSuccess: (data) => {
         setAdjustmentList(
           data.data.adjustment_list.map((product) => ({
@@ -86,6 +88,11 @@ const AdjustmentList = function () {
     [searchQuery],
   );
 
+  const openDetailModal = useCallback((adjustmentProduct) => {
+    selectRow(adjustmentProduct);
+    setDetailModalVisible(true);
+  }, []);
+
   return (
     <>
       <Toolbar />
@@ -118,6 +125,11 @@ const AdjustmentList = function () {
         pagination={false}
         rowKey={(record) => record.id}
         scroll={{ y: "auto" }}
+        onRow={(record) => ({
+          onClick: () => {
+            openDetailModal(record);
+          },
+        })}
         title={() => (
           <Row justify="space-between">
             <span>
@@ -207,6 +219,11 @@ const AdjustmentList = function () {
             ellipsis: true,
             title: t("product.vendor product name"),
             render: (_, record) => record.product_info.vendor_product_name,
+          },
+          {
+            ellipsis: true,
+            title: t("adjustment.is vat included"),
+            render: (_, record) => (record.is_vat_included ? "포함" : "미포함"),
           },
           {
             ellipsis: true,
@@ -332,6 +349,15 @@ const AdjustmentList = function () {
             );
           },
         }}
+      />
+
+      {/* 매입조정 상세보기 모달 */}
+      <AdjustmentDetailModal
+        visible={detailModalVisible}
+        closeModal={() => {
+          setDetailModalVisible(false);
+        }}
+        selectedRow={selectedRow}
       />
     </>
   );
