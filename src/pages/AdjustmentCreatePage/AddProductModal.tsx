@@ -2,7 +2,7 @@ import { Divider, Form, Input, InputNumber, Modal, Row, Select } from "antd";
 import { t } from "i18next";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TurtleSearchInput from "components/common/TurtleSearchInput";
 import TurtleInput from "components/common/TurtleInput";
 import TurtleInputNumber from "components/common/TurtleInputNumber";
@@ -10,7 +10,6 @@ import TurtleButton from "components/common/TurtleButton";
 import SearchVendorModal from "components/SearchVendorModal";
 import SearchProductModal from "components/SearchProductModal";
 import { pricePattern } from "utils/pattern";
-import { BaseOptionType } from "antd/lib/select";
 import TurtleTextArea from "components/common/TurtleTextArea";
 import { AdjustmentProduct } from "apis/adjustmentAPI";
 
@@ -75,13 +74,6 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     closeModal();
   }, [form, closeModal]);
 
-  const selectOptions: BaseOptionType[] = [
-    { name: "미송", value: "reserve" },
-    { name: "교환", value: "exchange" },
-    { name: "반품", value: "takeback" },
-    { name: "환불", value: "refund" },
-  ];
-
   return (
     <>
       <StyledModal
@@ -92,7 +84,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
-        getContainer={false}
+        forceRender
       >
         <Form
           layout="horizontal"
@@ -101,7 +93,14 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
           onFinish={(value) => {
-            if (addProduct({ ...value, type: "reserve", warehousing_item_id: 0 })) {
+            if (
+              addProduct({
+                ...value,
+                type: "reserve",
+                warehousing_item_id: 0,
+                is_vat_included: false,
+              })
+            ) {
               onCloseModal();
             }
           }}

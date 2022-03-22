@@ -1,12 +1,14 @@
 import { DatePicker, message, Row, Table, Tag } from "antd";
 import { warehousingAPI } from "apis";
+import { AdjustmentProduct } from "apis/adjustmentAPI";
 import { RequestGetSheet, WarehousingProductShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
+import TurtleButton from "components/common/TurtleButton";
 import TurtleModal from "components/common/TurtleModal";
 import TurtleText from "components/common/TurtleText";
 import { t } from "i18next";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -14,15 +16,16 @@ import { storeState } from "store/storeState";
 interface Props {
   visible: boolean;
   closeModal: () => void;
+  addProduct: (item: AdjustmentProduct) => boolean;
 }
 
-function LoadWarehousingModal({ visible, closeModal }: Props) {
+function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   const store = useRecoilValue(storeState);
   const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
-  const [sheetId, setSheetId] = useState<number>();
+  const [selectedRows, selectRows] = useState<Array<WarehousingProductShow>>([]);
+  const [sheetId, setSheetId] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
-    // is_confirmed : 0 => 마감 전
     is_confirmed: 0,
     start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
@@ -45,9 +48,9 @@ function LoadWarehousingModal({ visible, closeModal }: Props) {
   // 입고장 상세내역 리스트 요청
   const getProductQuery = useQuery(
     ["getWarehousingProduct", sheetId],
-    () => warehousingAPI.getProduct({ sheet_id: sheetId! }),
+    () => warehousingAPI.getProduct({ sheet_id: sheetId }),
     {
-      enabled: visible && !!sheetId,
+      enabled: visible && sheetId !== -1,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -57,9 +60,51 @@ function LoadWarehousingModal({ visible, closeModal }: Props) {
     },
   );
 
-  useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
+  // 상태 초기화
+  const resetStates = useCallback(() => {
+    setProductList([]);
+    setSheetId(-1);
+    setSearchQuery({
+      rt_store_id: store.id!,
+      is_confirmed: 0,
+      start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
+      end_date: moment().format("YYYY-MM-DD"),
+      page: 1,
+    });
   }, [store.id]);
+
+  // 모달열릴때 마다 상태 초기화
+  useEffect(() => {
+    resetStates();
+  }, [visible, resetStates]);
+
+  // 상품 미리보기테이블에 추가
+  const clickAddProduct = useCallback(() => {
+    if (selectedRows.length === 0) {
+      message.info("선택된 상품이 없습니다.");
+      return;
+    }
+
+    selectedRows.forEach((product) => {
+      addProduct({
+        vendor_id: product.vendor_info.id,
+        vendor_name: product.vendor_info.vendor_name,
+        vendor_address: product.vendor_info.vendor_address,
+        warehousing_item_id: product.id,
+        product_id: product.product_info.id,
+        product_name: product.product_info.name,
+        vendor_product_name: product.product_info.vendor_product_name,
+        product_option: product.product_info.option,
+        product_price: product.product_info.price,
+        product_count: 0,
+        product_code: product.product_info.product_code,
+        is_vat_included: false,
+        type: "",
+        memo: "",
+      });
+    });
+    closeModal();
+  }, [selectedRows, addProduct, closeModal]);
 
   return (
     <TurtleModal
@@ -130,7 +175,7 @@ function LoadWarehousingModal({ visible, closeModal }: Props) {
         ]}
       />
 
-      <Row style={{ margin: "16px 0" }}>
+      <Row style={{ marginTop: 32 }}>
         <TurtleText>{t("warehousing.lists")}</TurtleText>
       </Row>
 
@@ -145,10 +190,17 @@ function LoadWarehousingModal({ visible, closeModal }: Props) {
         title={() => (
           <Row justify="space-between">
             <span>
-              총 <span style={{ color: "#32ACDD" }}>{productList.length ?? 0}</span>건
+              총 <span style={{ color: "#32ACDD" }}>{productList?.length ?? 0}</span>건 | 선택
+              {"  "}
+              <span style={{ color: "#32ACDD" }}>{selectedRows?.length ?? 0}</span>건
             </span>
           </Row>
         )}
+        rowSelection={{
+          onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
+            selectRows(selectedRows);
+          },
+        }}
         columns={[
           {
             ellipsis: true,
@@ -187,6 +239,12 @@ function LoadWarehousingModal({ visible, closeModal }: Props) {
           },
         ]}
       />
+
+      <Row justify="end">
+        <TurtleButton type="default" onClick={clickAddProduct}>
+          {t("button.add product")}
+        </TurtleButton>
+      </Row>
     </TurtleModal>
   );
 }

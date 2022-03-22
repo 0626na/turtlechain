@@ -38,7 +38,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
     ["getVendorList", searchQuery], //
     () => vendorAPI.getVendorList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
-      enabled: !!store.id,
+      enabled: visible && !!store.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -61,14 +61,13 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   );
 
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, page: 1, rt_store_id: store.id });
-  }, [store.id]);
+    setSearchQuery({ page: 1, type: "all", search_string: "", rt_store_id: store.id });
+  }, [visible, store.id]);
 
   return (
     <StyledModal
       centered
-      width="45%"
-      maskClosable={false}
+      width="55%"
       title={t("vendor.search")}
       visible={visible}
       onCancel={closeModal}

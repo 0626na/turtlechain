@@ -40,10 +40,12 @@ export interface WarehousingProduct {
 export interface WarehousingProductShow {
   id: number;
   vendor_info: {
+    id: number;
     vendor_name: string;
     vendor_address: string;
   };
   product_info: {
+    id: number;
     name: string;
     vendor_product_name: string;
     price: number;

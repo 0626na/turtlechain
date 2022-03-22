@@ -20,7 +20,7 @@ interface Props {
     product_option: string,
     product_price: number,
   ) => void;
-  vendorId: number;
+  vendorId?: number;
 }
 
 function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Props) {
@@ -43,7 +43,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
         vendor_id: vendorId,
       }),
     {
-      enabled: !!vendorId,
+      enabled: visible && !!vendorId,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },

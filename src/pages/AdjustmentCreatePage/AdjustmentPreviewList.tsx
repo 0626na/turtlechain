@@ -13,6 +13,7 @@ import {
   Tabs,
   InputNumber,
   Select,
+  Switch,
 } from "antd";
 import adjustmentAPI, { AdjustmentProduct } from "apis/adjustmentAPI";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -20,7 +21,7 @@ import { t } from "i18next";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import Toolbar from "components/Toolbar";
-import { FileOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FileTextOutlined, FileOutlined, DeleteOutlined } from "@ant-design/icons";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import TurtleText from "components/common/TurtleText";
@@ -40,7 +41,7 @@ const AdjustmentListPreview = function () {
 
   const createAdjustmentQuery = useMutation(["createAdjustment"], adjustmentAPI.create, {
     onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+      message.error("매입조정 종류를 입력해주세요");
     },
     onSuccess: (data) => {
       resetField();
@@ -63,11 +64,10 @@ const AdjustmentListPreview = function () {
   // 상품 추가
   const addProduct = useCallback(
     (product: AdjustmentProduct) => {
-      setSuccessList([{ ...product, index: index.current++ }, ...successList]);
-      console.log(product);
+      setSuccessList((prevState) => [{ ...product, index: index.current++ }, ...prevState]);
       return true;
     },
-    [successList, index],
+    [index],
   );
 
   // 상품 삭제
@@ -110,11 +110,35 @@ const AdjustmentListPreview = function () {
           product.index === index ? { ...product, type: value } : product,
         ),
       );
-      console.log(value);
     },
     [successList],
   );
 
+  // 메모 변경
+  const setMemo = useCallback(
+    (value, index) => {
+      setSuccessList(
+        successList.map((product) =>
+          product.index === index ? { ...product, memo: value } : product,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  // 부가세 변경
+  const setIsVatIncluded = useCallback(
+    (value, index) => {
+      setSuccessList(
+        successList.map((product) =>
+          product.index === index ? { ...product, is_vat_included: value } : product,
+        ),
+      );
+    },
+    [successList],
+  );
+
+  // 매입조정 등록하기 버튼 클릭
   const onClickCreate = useCallback(() => {
     createAdjustmentQuery.mutate({
       item_list: successList.map((product) => ({
@@ -125,8 +149,7 @@ const AdjustmentListPreview = function () {
         count: product.product_count,
         price: product.product_price,
         type: product.type,
-        // TODO: 임시 세금 미포함
-        is_vat_included: false,
+        is_vat_included: product.is_vat_included,
         memo: product.memo,
       })),
     });
@@ -196,20 +219,35 @@ const AdjustmentListPreview = function () {
               size="small"
               //loading={}
               dataSource={successList}
-              rowKey={(record) => record.index}
+              rowKey={(record) => record.index!}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
               scroll={{ y: "auto" }}
               footer={() => `공급가 합계 : ${totalPrice.toLocaleString()}원`}
+              expandable={{
+                columnWidth: 25,
+                expandIcon: ({ expanded, onExpand, record }) => (
+                  <FileTextOutlined
+                    style={record.memo ? {} : { opacity: "0.4" }}
+                    onClick={(e) => onExpand(record, e)}
+                  />
+                ),
+                expandedRowRender: (record) => (
+                  <Input
+                    value={record.memo}
+                    onChange={(e) => {
+                      setMemo(e.target.value, record.index);
+                    }}
+                  />
+                ),
+              }}
               columns={[
                 {
                   ellipsis: true,
-                  width: "10%",
                   title: t("vendor.name"),
                   render: (_, record) => record.vendor_name,
                 },
                 {
                   ellipsis: true,
-                  width: "10%",
                   title: t("vendor.address"),
                   render: (_, record) => record.vendor_address,
                 },
@@ -235,29 +273,21 @@ const AdjustmentListPreview = function () {
                 },
                 {
                   ellipsis: true,
-                  width: 100,
-                  title: t("adjustment.type."),
+                  title: "부가세 포함 여부",
                   render: (_, record) => (
-                    <Select
-                      size="small"
-                      value={record.type}
-                      onSelect={(value: string) => {
-                        setType(value, record.index);
+                    <Switch
+                      style={{ width: "52px" }}
+                      checkedChildren={t("button.include")}
+                      checked={record.is_vat_included}
+                      onClick={() => {
+                        setIsVatIncluded(!record.is_vat_included, record.index);
                       }}
-                    >
-                      {selectOptions.map((option) => {
-                        return (
-                          <Select.Option key={option.value} value={option.value}>
-                            {option.name}
-                          </Select.Option>
-                        );
-                      })}
-                    </Select>
+                    />
                   ),
                 },
                 {
                   ellipsis: true,
-                  width: 100,
+                  width: 110,
                   title: t("product.price"),
                   render: (_, record) => (
                     <InputNumber
@@ -274,11 +304,12 @@ const AdjustmentListPreview = function () {
                 },
                 {
                   ellipsis: true,
-                  width: 100,
+                  width: 110,
                   title: t("adjustment.count"),
                   render: (_, record) => (
                     <InputNumber
                       size="small"
+                      status={record.product_count === 0 ? "error" : ""}
                       min={1}
                       value={record.product_count}
                       onChange={(value) => {
@@ -287,10 +318,34 @@ const AdjustmentListPreview = function () {
                     />
                   ),
                 },
-
                 {
                   ellipsis: true,
-                  width: "8%",
+                  width: 100,
+                  title: t("adjustment.type."),
+                  render: (_, record) => (
+                    <Select
+                      size="small"
+                      status={record.type === "" ? "error" : ""}
+                      style={{ width: 70 }}
+                      value={record.type}
+                      onSelect={(value: string) => {
+                        setType(value, record.index);
+                      }}
+                    >
+                      {selectOptions.map((option) => {
+                        return (
+                          <Select.Option key={option.value} value={option.value}>
+                            {option.name}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  ),
+                },
+                Table.EXPAND_COLUMN,
+                {
+                  ellipsis: true,
+                  width: 30,
                   render: (_, record) => (
                     <DeleteOutlined //
                       style={{ cursor: "pointer", color: "#A1A2A6" }}
@@ -338,6 +393,7 @@ const AdjustmentListPreview = function () {
         closeModal={() => {
           setLoadWarehousingModalVisible(false);
         }}
+        addProduct={addProduct}
       />
     </>
   );

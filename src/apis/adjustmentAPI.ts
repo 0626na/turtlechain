@@ -3,7 +3,7 @@ import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
 // 매입조정 상품
 export interface AdjustmentProduct {
-  index: number;
+  index?: number;
 
   vendor_id: number;
   vendor_name: string;
@@ -16,10 +16,11 @@ export interface AdjustmentProduct {
   vendor_product_name: string;
   product_option: string;
   product_price: number;
-  product_count: number;
-  product_code: number;
+  product_code: string;
+  is_vat_included: boolean;
 
-  type: "reserve" | "takeback" | "exchange" | "refund";
+  product_count: number;
+  type: "reserve" | "takeback" | "exchange" | "refund" | "";
   memo?: string | undefined;
 }
 
