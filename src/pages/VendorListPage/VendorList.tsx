@@ -223,7 +223,13 @@ function VendorList() {
         scroll={{ y: "auto" }}
         title={() => (
           <Row justify="space-between">
-            <b>{`총 ${getVendorsQuery.data?.data.total_count ?? 0}건`}</b>
+            <span>
+              총{" "}
+              <span style={{ color: "#32ACDD" }}>
+                {getVendorsQuery.data?.data.total_count ?? 0}
+              </span>
+              건
+            </span>
             <SearchFilter type="vendor" onSearch={searchVendors} />
           </Row>
         )}

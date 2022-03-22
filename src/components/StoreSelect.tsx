@@ -36,10 +36,12 @@ function CustomStoreSelect({ warningMessage }: Props) {
 
         // storeList 채워준다.
         setStoreList(
-          data.data.data.map((store: Store) => ({
-            id: store.id,
-            name: store.name,
-          })),
+          data.data.data
+            .filter((store) => !store.is_closed)
+            .map((store) => ({
+              id: store.id,
+              name: store.name,
+            })),
         );
 
         // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택

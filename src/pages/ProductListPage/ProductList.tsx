@@ -78,7 +78,13 @@ function ProductList() {
         scroll={{ y: "auto" }}
         title={() => (
           <Row justify="space-between">
-            {`총 ${getProductListQuery.data?.data.total_count ?? 0}건`}
+            <span>
+              총{" "}
+              <span style={{ color: "#32ACDD" }}>
+                {getProductListQuery.data?.data.total_count ?? 0}
+              </span>
+              건
+            </span>
             <SearchFilter type="product" onSearch={searchProductList} />
           </Row>
         )}
