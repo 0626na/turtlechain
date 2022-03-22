@@ -170,7 +170,9 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
         loading={getDetailQuery.isLoading}
         pagination={false}
         dataSource={
-          getDetailQuery.data?.data.warehousing_info && [getDetailQuery.data?.data.warehousing_info]
+          getDetailQuery.data?.data.warehousing_info.id
+            ? [getDetailQuery.data?.data.warehousing_info]
+            : []
         }
         rowKey={(product) => product.id}
         columns={[
