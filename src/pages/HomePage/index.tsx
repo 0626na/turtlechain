@@ -57,7 +57,8 @@ const HomePage = function () {
             </Typography.Title>
             <Row justify="center">
               <Typography.Title level={2}>
-                {getUnprocessedStatusQuery.data?.data.adjustments.total_price.toLocaleString() ?? 0}
+                {getUnprocessedStatusQuery.data?.data.adjustments.total_price?.toLocaleString() ??
+                  0}
                 원
               </Typography.Title>
             </Row>
