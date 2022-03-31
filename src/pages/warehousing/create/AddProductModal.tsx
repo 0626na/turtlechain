@@ -1,11 +1,15 @@
 import { Divider, Form, Input, InputNumber, Modal, Row } from "antd";
 import { t } from "i18next";
-import styled from "styled-components";
-import { CloseOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import { pricePattern } from "utils/pattern";
 import { WarehousingProduct } from "apis/warehousingAPI";
-import { TurtleButton, TurtleInput, TurtleInputNumber, TurtleSearchInput } from "components/common";
+import {
+  TurtleButton,
+  TurtleInput,
+  TurtleInputNumber,
+  TurtleModal,
+  TurtleSearchInput,
+} from "components/common";
 import { SearchProductModal, SearchVendorModal } from "components/combine";
 
 interface Props {
@@ -62,15 +66,15 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
 
   return (
     <>
-      <StyledModal
+      <TurtleModal
         centered
         width="60%"
         title={t("product.add single")}
-        closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
         getContainer={false}
+        forceRender
       >
         <Form
           layout="horizontal"
@@ -159,7 +163,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             </TurtleButton>
           </Row>
         </Form>
-      </StyledModal>
+      </TurtleModal>
 
       {/* 거래처 검색 모달 */}
       <SearchVendorModal
@@ -182,14 +186,5 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     </>
   );
 }
-
-const StyledModal = styled(Modal)`
-  .ant-modal-header {
-    background-color: #2b3140;
-  }
-  .ant-modal-title {
-    color: #ffffff;
-  }
-`;
 
 export default AddSingleProductModal;

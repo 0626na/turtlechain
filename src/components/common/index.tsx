@@ -14,6 +14,7 @@ import TurtleSearchInput from "./TurtleSearchInput";
 import TurtleSelect from "./TurtleSelect";
 import TurtleText from "./TurtleText";
 import TurtleTextArea from "./TurtleTextArea";
+import TurtleDropdown from "./TurtleDropdown";
 
 export {
   TurtleBadge,
@@ -32,4 +33,5 @@ export {
   TurtleSelect,
   TurtleText,
   TurtleTextArea,
+  TurtleDropdown,
 };

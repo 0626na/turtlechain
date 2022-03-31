@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import warehousingAPI, { WarehousingProduct } from "apis/warehousingAPI";
-import { FileOutlined, DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import {
-  Button,
   message,
-  Dropdown,
   Menu,
   Upload,
   notification,
@@ -25,11 +23,20 @@ import moment from "moment";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
 import { Toolbar } from "layouts/main";
-import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
+import {
+  TurtleButton,
+  TurtleButtonSub,
+  TurtleDropdown,
+  TurtleInfo,
+  TurtleText,
+} from "components/common";
 import AddSingleProductModal from "./AddProductModal";
+import TurtleUpload from "components/common/TurtleUpload";
+import { useStoreExist } from "hooks";
 
 function WarehousingPreviewList() {
   const store = useRecoilValue(storeState);
+  const isStoreExist = useStoreExist();
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<WarehousingProduct>>([]);
   const [failList, setFailList] = useState<Array<WarehousingProduct>>([]);
@@ -116,10 +123,7 @@ function WarehousingPreviewList() {
   }, [store.id, resetField]);
 
   const onClickConnect = useCallback(() => {
-    if (!store.id) {
-      message.warn(t("message.select store"));
-      return;
-    }
+    if (!isStoreExist()) return;
     connectQuery.mutate({ rt_store_id: store.id! });
   }, [store.id]);
 
@@ -140,13 +144,13 @@ function WarehousingPreviewList() {
     [successList],
   );
 
-  // 입고 수량 합계
+  // 입고 수량 합계 계산
   const totalProductCount = useMemo(
     () => successList.reduce((acc, cur) => acc + cur.count, 0),
     [successList],
   );
 
-  // 공급가 합계
+  // 공급가 합계 계산
   const totalProductPrice = useMemo(
     () => successList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
     [successList],
@@ -176,45 +180,6 @@ function WarehousingPreviewList() {
     [successList],
   );
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">
-        <Upload //
-          maxCount={1}
-          accept=".csv, .xls, .xlsx"
-          beforeUpload={(file) => {
-            if (!store.id) {
-              message.warn(t("message.select store"));
-              return false;
-            }
-            setFileList([file]);
-            loadFile(file);
-            return false;
-          }}
-          onRemove={() => {
-            resetField();
-            return false;
-          }}
-          fileList={fileList}
-        >
-          {t("button.upload excel")}
-        </Upload>
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={() => {
-          if (!store.id) {
-            message.warn(t("message.select store"));
-            return;
-          }
-          setAddProductModalVisible(true);
-        }}
-      >
-        {t("button.add single product")}
-      </Menu.Item>
-    </Menu>
-  );
-
   return (
     <>
       <Toolbar isWarning>
@@ -226,14 +191,33 @@ function WarehousingPreviewList() {
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
-        <Dropdown overlay={menu}>
-          <Button
-            style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
-            icon={<FileOutlined />}
-          >
-            {t("button.add warehousing")}
-          </Button>
-        </Dropdown>
+        <TurtleDropdown //
+          menu={
+            <Menu>
+              <Menu.Item key="1">
+                <TurtleUpload
+                  beforeUpload={(file) => {
+                    setFileList([file]);
+                    loadFile(file);
+                  }}
+                  onRemove={resetField}
+                  fileList={fileList}
+                />
+              </Menu.Item>
+              <Menu.Item
+                key="2"
+                onClick={() => {
+                  if (!isStoreExist()) return;
+                  setAddProductModalVisible(true);
+                }}
+              >
+                {t("button.add single product")}
+              </Menu.Item>
+            </Menu>
+          }
+        >
+          {t("button.add warehousing")}
+        </TurtleDropdown>
       </Toolbar>
 
       <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
