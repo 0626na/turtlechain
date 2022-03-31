@@ -1,4 +1,4 @@
-import MainLayout from "layouts/main";
+import { MainLayout } from "layouts/main";
 import { Suspense } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import {

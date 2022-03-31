@@ -3,7 +3,7 @@ import { t } from "i18next";
 import { Card, Col, Row, Typography } from "antd";
 import { useQuery } from "react-query";
 import { mainAPI } from "apis";
-import { PageHeader } from "layouts/page";
+import { PageHeader } from "layouts/main";
 import ClearingStatusCard from "./ClearingStatusCard";
 import ClearingChartCard from "./ClearingChartCard";
 

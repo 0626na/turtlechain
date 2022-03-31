@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import WarehousingSheetList from "./WarehousingSheetList";
 import { t } from "i18next";
-import { PageHeader } from "layouts/page";
+import { PageHeader } from "layouts/main";
 
 function WarehousingListPage() {
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;

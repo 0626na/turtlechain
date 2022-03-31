@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
-import PageHeader from "layouts/page/PageHeader";
 import AdjustmentPreviewList from "./AdjustmentPreviewList";
 import { t } from "i18next";
+import { PageHeader } from "layouts/main";
 
 const AdjustmentCreatePage = function () {
   const title = `${t("turtlechain")} - ${t("adjustment create")}`;

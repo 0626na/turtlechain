@@ -3,7 +3,7 @@ import { t } from "i18next";
 import { useState } from "react";
 import { RequestGetList } from "apis/orderAPI";
 import moment from "moment";
-import { PageHeader, Toolbar } from "layouts/page";
+import { PageHeader, Toolbar } from "layouts/main";
 import OrderSheetList from "./OrderSheetList";
 
 function OrderListPage() {

@@ -3,6 +3,8 @@ import { Layout } from "antd";
 import Header from "./Header";
 import Sider from "./Sider";
 import Content from "./Content";
+import PageHeader from "./page/PageHeader";
+import Toolbar from "./page/Toolbar";
 
 interface Props {
   children: React.ReactNode;
@@ -26,4 +28,4 @@ function MainLayout({ children }: Props) {
   );
 }
 
-export default MainLayout;
+export { MainLayout, PageHeader, Toolbar };

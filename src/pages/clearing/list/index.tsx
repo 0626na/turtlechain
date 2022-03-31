@@ -1,4 +1,3 @@
-import PageHeader from "layouts/page/PageHeader";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Toolbar from "./Toolbar";
@@ -7,6 +6,7 @@ import { RequestGetClearingSheet } from "apis/clearingAPI";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { PageHeader } from "layouts/main";
 
 export interface searchStateProps {
   page: number;

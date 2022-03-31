@@ -12,7 +12,7 @@ import {
   TurtleTextArea,
 } from "components/common";
 import { t } from "i18next";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";

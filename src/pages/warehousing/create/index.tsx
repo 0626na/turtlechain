@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
-import { PageHeader } from "layouts/page";
+import { PageHeader } from "layouts/main";
 import WarehousingPreviewList from "./WarehousingPreviewList";
 
 function WarehousingCreatePage() {

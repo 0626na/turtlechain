@@ -24,7 +24,7 @@ import { excelAPI } from "apis";
 import moment from "moment";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
 import AddSingleProductModal from "./AddProductModal";
 

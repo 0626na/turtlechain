@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import CreateVendorForm from "./CreateVendorForm";
 import { t } from "i18next";
-import { PageHeader } from "layouts/page";
+import { PageHeader } from "layouts/main";
 
 function VendorCreatePage() {
   const title = `${t("turtlechain")} - ${t("vendor.create")}`;

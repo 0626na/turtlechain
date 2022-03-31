@@ -21,7 +21,7 @@ import CreateBulkOrderModal from "./CreateBulkOrderModal";
 import { FileOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import excelAPI, { OrderProduct } from "apis/excelAPI";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
 
 function OrderPreviewList() {

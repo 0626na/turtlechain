@@ -25,7 +25,7 @@ import { RequestCreateProduct } from "apis/productAPI";
 import AddSingleProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
 
 function ProductPreviewList() {

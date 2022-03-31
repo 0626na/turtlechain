@@ -24,7 +24,7 @@ import { useRecoilValue } from "recoil";
 import AddProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
 import LoadWarehousingModal from "./LoadWarehousingModal";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { TurtleButton, TurtleText } from "components/common";
 
 const AdjustmentListPreview = function () {

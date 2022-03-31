@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { PageHeader } from "layouts/page";
+import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
 import OrderPreviewList from "./OrderPreviewList";
 

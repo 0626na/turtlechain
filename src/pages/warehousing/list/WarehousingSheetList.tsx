@@ -22,7 +22,7 @@ import { useMutation, useQuery } from "react-query";
 import moment from "moment";
 import { AxiosError } from "axios";
 import WarehousingDetailModal from "./WarehousingDetailModal";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 import { TurtleText } from "components/common";
 
 function WarehousingSheetList() {

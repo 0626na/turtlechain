@@ -24,7 +24,7 @@ import { useRecoilValue } from "recoil";
 import { AxiosError } from "axios";
 import AdjustmentDetailModal from "./AdjustmentDetailModal";
 import { TurtleButtonSub, TurtleCard, TurtleText } from "components/common";
-import { Toolbar } from "layouts/page";
+import { Toolbar } from "layouts/main";
 
 const AdjustmentList = function () {
   const store = useRecoilValue(storeState);

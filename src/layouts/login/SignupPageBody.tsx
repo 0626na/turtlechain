@@ -4,9 +4,9 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const SignupPageBody = function ({ children }: Props) {
+function SignupPageBody({ children }: Props) {
   return <Container>{children}</Container>;
-};
+}
 
 const Container = styled.div`
   width: 400px;

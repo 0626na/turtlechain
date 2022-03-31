@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
-import { PageHeader, Toolbar } from "layouts/page";
 import ClearingCreateAccordion from "./ClearingCreateAccordion";
+import { PageHeader, Toolbar } from "layouts/main";
 
 /*
   Parent : None
