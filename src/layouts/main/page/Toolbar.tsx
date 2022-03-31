@@ -11,12 +11,11 @@ function Toolbar({ children, isWarning }: Props) {
   return (
     <>
       <Row
-        gutter={24}
         align="middle"
         justify="space-between"
         style={{
-          margin: 0,
-          padding: "24px 12px",
+          paddingTop: 0,
+          paddingBottom: 24,
         }}
       >
         <Col>

@@ -2,8 +2,8 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import TurtleIcon from "components/common/TurtleIcon";
 import { t } from "i18next";
+import { TurtleImg } from "components/common";
 
 type MenuType = Array<{
   title: string;
@@ -41,7 +41,7 @@ function Sider({ collapsed }: Props) {
       pathname: "/home",
       icon: (
         <div>
-          <TurtleIcon //
+          <TurtleImg //
             type="menu"
             name="home"
           />
@@ -52,7 +52,7 @@ function Sider({ collapsed }: Props) {
     //   title: t("order.management"),
     //   icon: (
     //     <div>
-    //       <TurtleIcon //
+    //       <TurtleImg //
     //         type="menu"
     //         name="order"
     //       />
@@ -73,7 +73,7 @@ function Sider({ collapsed }: Props) {
     //   title: t("sample_return.management"),
     //   icon: (
     //     <div>
-    //       <TurtleIcon type="menu" name="sample_return" />
+    //       <TurtleImg type="menu" name="sample_return" />
     //     </div>
     //   ),
     //   submenu: [
@@ -91,7 +91,7 @@ function Sider({ collapsed }: Props) {
       title: t("warehousing.management"),
       icon: (
         <div>
-          <TurtleIcon type="menu" name="warehousing" />
+          <TurtleImg type="menu" name="warehousing" />
         </div>
       ),
       submenu: [
@@ -109,7 +109,7 @@ function Sider({ collapsed }: Props) {
       title: t("adjustment.management"),
       icon: (
         <div>
-          <TurtleIcon type="menu" name="adjustment" />
+          <TurtleImg type="menu" name="adjustment" />
         </div>
       ),
       submenu: [
@@ -127,7 +127,7 @@ function Sider({ collapsed }: Props) {
       title: t("clearing.management"),
       icon: (
         <div>
-          <TurtleIcon type="menu" name="clearing" />
+          <TurtleImg type="menu" name="clearing" />
         </div>
       ),
       submenu: [
@@ -145,7 +145,7 @@ function Sider({ collapsed }: Props) {
       title: t("product.management"),
       icon: (
         <div>
-          <TurtleIcon type="menu" name="product" />
+          <TurtleImg type="menu" name="product" />
         </div>
       ),
       submenu: [
@@ -163,7 +163,7 @@ function Sider({ collapsed }: Props) {
       title: t("vendor.management"),
       icon: (
         <div>
-          <TurtleIcon type="menu" name="vendor" />
+          <TurtleImg type="menu" name="vendor" />
         </div>
       ),
       submenu: [
@@ -181,7 +181,7 @@ function Sider({ collapsed }: Props) {
       title: t("setting"),
       icon: (
         <div>
-          <TurtleIcon //
+          <TurtleImg //
             type="menu"
             name="setting"
           />

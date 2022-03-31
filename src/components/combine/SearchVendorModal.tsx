@@ -2,6 +2,7 @@ import { message, Modal, Pagination, Row, Table } from "antd";
 import { vendorAPI } from "apis";
 import { RequestGetVendorList } from "apis/vendorAPI";
 import { AxiosError } from "axios";
+import { TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -82,10 +83,9 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
-          <Row justify="space-between">
-            {`총 ${getVendorListQuery.data?.data.total_count ?? 0}개`}
+          <TurtleTableTitle count={getVendorListQuery.data?.data.total_count ?? 0}>
             <SearchFilter type="vendor" onSearch={searchVendor} />
-          </Row>
+          </TurtleTableTitle>
         )}
         footer={() => (
           <Row justify="center">

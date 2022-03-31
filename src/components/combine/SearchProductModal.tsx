@@ -1,6 +1,7 @@
 import { message, Modal, Pagination, Row, Table } from "antd";
 import productAPI, { RequestGetProductList } from "apis/productAPI";
 import { AxiosError } from "axios";
+import { TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -34,6 +35,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
     type: "all",
   });
 
+  // 상품 리스트 요청
   const getProductListQuery = useQuery(
     ["getProductList", searchQuery], //
     () =>
@@ -54,13 +56,13 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
   // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
     setSearchQuery({
-      ...searchQuery,
       rt_store_id: store.id,
       vendor_id: vendorId,
       search_string: "",
       type: "all",
+      page: 1,
     });
-  }, [store.id, vendorId]);
+  }, [visible, store.id, vendorId]);
 
   // 검색 버튼 클릭
   const searchProductList = useCallback(
@@ -101,10 +103,9 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
-          <Row justify="space-between">
-            {`총 ${getProductListQuery.data?.data.total_count ?? 0}개`}
+          <TurtleTableTitle count={getProductListQuery.data?.data.total_count ?? 0}>
             <SearchFilter type="product" onSearch={searchProductList} />
-          </Row>
+          </TurtleTableTitle>
         )}
         footer={() => (
           <Row justify="center">

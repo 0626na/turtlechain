@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
 import { Toolbar } from "layouts/main";
-import { TurtleText } from "components/common";
+import { TurtleTableTitle, TurtleText } from "components/common";
 import { SearchFilter } from "components/combine";
 import UpdateProductModal from "./UpdateProductModal";
 
@@ -77,16 +77,9 @@ function ProductList() {
         pagination={false}
         scroll={{ y: "auto" }}
         title={() => (
-          <Row justify="space-between">
-            <span>
-              총{" "}
-              <span style={{ color: "#32ACDD" }}>
-                {getProductListQuery.data?.data.total_count ?? 0}
-              </span>
-              건
-            </span>
+          <TurtleTableTitle count={getProductListQuery.data?.data.total_count ?? 0}>
             <SearchFilter type="product" onSearch={searchProductList} />
-          </Row>
+          </TurtleTableTitle>
         )}
         footer={() => (
           <Row justify="center">

@@ -1,6 +1,6 @@
-import { Divider, Form, Input, InputNumber, Modal, Row } from "antd";
+import { Divider, Form, Input, InputNumber, Row } from "antd";
 import { t } from "i18next";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { pricePattern } from "utils/pattern";
 import { WarehousingProduct } from "apis/warehousingAPI";
 import {
@@ -59,19 +59,18 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     [form],
   );
 
-  const onCloseModal = useCallback(() => {
+  useEffect(() => {
     form.resetFields();
-    closeModal();
-  }, [form, closeModal]);
+  }, [visible, form]);
 
   return (
     <>
       <TurtleModal
         centered
-        width="60%"
+        width="50%"
         title={t("product.add single")}
         visible={visible}
-        onCancel={onCloseModal}
+        onCancel={closeModal}
         footer={false}
         getContainer={false}
         forceRender
@@ -83,9 +82,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
           onFinish={(value) => {
-            if (addProduct(value)) {
-              onCloseModal();
-            }
+            addProduct(value) && closeModal();
           }}
         >
           <Form.Item name="vendor_id" hidden>
@@ -99,7 +96,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             name="vendor_name"
             label={t("vendor.name")}
             placeholder={t("placeholder.vendor name")}
-            onSearch={() => {
+            onClick={() => {
               setVendorModalVisible(true);
             }}
           />
@@ -120,7 +117,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             name="product_name"
             label={t("product.name")}
             placeholder={t("placeholder.product name")}
-            onSearch={() => {
+            onClick={() => {
               setProductModalVisible(true);
             }}
           />

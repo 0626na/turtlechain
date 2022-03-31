@@ -7,17 +7,16 @@ interface Props {
   value?: string;
   label?: string;
   placeholder?: string;
-  onSearch?: () => void;
+  onClick?: () => void;
 }
 
-function TurtleSearchInput({ name, value, label, placeholder, onSearch }: Props) {
+function TurtleSearchInput({ name, value, label, placeholder, onClick }: Props) {
   return (
     <Form.Item name={name} label={label} rules={[{ required: true }]} required={true}>
-      <StyledSearch
+      <StyledSearch //
         placeholder={placeholder}
         value={value}
-        onClick={onSearch}
-        onSearch={onSearch}
+        onClick={onClick}
         readOnly={true}
       />
     </Form.Item>

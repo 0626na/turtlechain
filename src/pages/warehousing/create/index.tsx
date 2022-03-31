@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
 import { PageHeader } from "layouts/main";
-import WarehousingPreviewList from "./WarehousingPreviewList";
+import PageBody from "./PageBody";
 
 function WarehousingCreatePage() {
   const title = `${t("turtlechain")} - ${t("warehousing create")}`;
@@ -14,7 +14,7 @@ function WarehousingCreatePage() {
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
         info={t("description.excel type")}
       />
-      <WarehousingPreviewList />
+      <PageBody />
     </>
   );
 }

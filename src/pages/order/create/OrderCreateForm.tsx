@@ -92,7 +92,7 @@ function OrderCreateForm({ addItem }: Props) {
               name="vendor_name"
               label={t("vendor.name")}
               placeholder={t("placeholder.vendor name")}
-              onSearch={() => {
+              onClick={() => {
                 if (!store.id) {
                   message.warn("쇼핑몰을 선택해주세요.");
                   return;
@@ -116,7 +116,7 @@ function OrderCreateForm({ addItem }: Props) {
               name="product_name"
               label={t("product.name")}
               placeholder={t("placeholder.product name")}
-              onSearch={() => {
+              onClick={() => {
                 if (!store.id) {
                   message.warn("쇼핑몰을 선택해주세요.");
                   return;

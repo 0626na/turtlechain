@@ -4,7 +4,7 @@ import TurtleButton from "./TurtleButton";
 import TurtleButtonSub from "./TurtleButtonSub";
 import TurtleCard from "./TurtleCard";
 import TurtleDivider from "./TurtleDivider";
-import TurtleIcon from "./TurtleIcon";
+import TurtleImg from "./TurtleImg";
 import TurtleInfo from "./TurtleInfo";
 import TurtleInput from "./TurtleInput";
 import TurtleInputNumber from "./TurtleInputNumber";
@@ -15,6 +15,9 @@ import TurtleSelect from "./TurtleSelect";
 import TurtleText from "./TurtleText";
 import TurtleTextArea from "./TurtleTextArea";
 import TurtleDropdown from "./TurtleDropdown";
+import TurtleIcon from "./TurtleIcon";
+import TurtleUpload from "./TurtleUpload";
+import TurtleTableTitle from "./TurlteTableTitle";
 
 export {
   TurtleBadge,
@@ -23,7 +26,7 @@ export {
   TurtleButtonSub,
   TurtleCard,
   TurtleDivider,
-  TurtleIcon,
+  TurtleImg,
   TurtleInfo,
   TurtleInput,
   TurtleInputNumber,
@@ -34,4 +37,7 @@ export {
   TurtleText,
   TurtleTextArea,
   TurtleDropdown,
+  TurtleIcon,
+  TurtleUpload,
+  TurtleTableTitle,
 };

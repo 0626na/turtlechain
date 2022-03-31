@@ -215,7 +215,7 @@ function CreateVendorForm() {
           value={selectedVendor?.name}
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
-          onSearch={() => {
+          onClick={() => {
             if (!store.id) {
               message.warn("쇼핑몰을 선택해주세요.");
               return;

@@ -1,17 +1,7 @@
+import moment from "moment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import warehousingAPI, { WarehousingProduct } from "apis/warehousingAPI";
-import { DeleteOutlined } from "@ant-design/icons";
-import {
-  message,
-  Menu,
-  Upload,
-  notification,
-  Row,
-  Tabs,
-  Table,
-  Popconfirm,
-  InputNumber,
-} from "antd";
+import { message, Menu, notification, Row, Tabs, Table, Popconfirm, InputNumber } from "antd";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -19,7 +9,6 @@ import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
-import moment from "moment";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
 import { Toolbar } from "layouts/main";
@@ -27,14 +16,15 @@ import {
   TurtleButton,
   TurtleButtonSub,
   TurtleDropdown,
+  TurtleIcon,
   TurtleInfo,
   TurtleText,
+  TurtleUpload,
 } from "components/common";
-import AddSingleProductModal from "./AddProductModal";
-import TurtleUpload from "components/common/TurtleUpload";
 import { useStoreExist } from "hooks";
+import AddProductModal from "./AddProductModal";
 
-function WarehousingPreviewList() {
+function PageBody() {
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
@@ -52,7 +42,7 @@ function WarehousingPreviewList() {
     onSuccess: (data) => {
       if (data.data.error) {
         message.error(data.data.error);
-        resetField();
+        resetStates();
         return;
       }
       setSuccessList([
@@ -74,7 +64,7 @@ function WarehousingPreviewList() {
     onSuccess: (data) => {
       if (data.data.error) {
         message.error(data.data.error);
-        resetField();
+        resetStates();
         return;
       }
       setSuccessList([
@@ -94,7 +84,7 @@ function WarehousingPreviewList() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {
-      resetField();
+      resetStates();
       notification.open({
         type: "success",
         message: t("message.success create warehousing"),
@@ -111,7 +101,7 @@ function WarehousingPreviewList() {
   };
 
   // 모든 상태 초기화
-  const resetField = useCallback(() => {
+  const resetStates = useCallback(() => {
     setFileList([]);
     setSuccessList([]);
     setFailList([]);
@@ -119,9 +109,10 @@ function WarehousingPreviewList() {
 
   // 쇼핑몰 변경시 모든 state 초기화
   useEffect(() => {
-    resetField();
-  }, [store.id, resetField]);
+    resetStates();
+  }, [store.id, resetStates]);
 
+  // 재고 연동 버튼 클릭
   const onClickConnect = useCallback(() => {
     if (!isStoreExist()) return;
     connectQuery.mutate({ rt_store_id: store.id! });
@@ -200,7 +191,7 @@ function WarehousingPreviewList() {
                     setFileList([file]);
                     loadFile(file);
                   }}
-                  onRemove={resetField}
+                  onRemove={resetStates}
                   fileList={fileList}
                 />
               </Menu.Item>
@@ -310,8 +301,8 @@ function WarehousingPreviewList() {
                   ellipsis: true,
                   width: "8%",
                   render: (_, record) => (
-                    <DeleteOutlined //
-                      style={{ cursor: "pointer", color: "#A1A2A6" }}
+                    <TurtleIcon
+                      type="delete"
                       onClick={() => {
                         deleteProduct(record.index);
                       }}
@@ -421,7 +412,7 @@ function WarehousingPreviewList() {
       </Row>
 
       {/* 상품 단건 추가 모달 */}
-      <AddSingleProductModal
+      <AddProductModal
         visible={addProductModalVisible}
         closeModal={() => {
           setAddProductModalVisible(false);
@@ -432,4 +423,4 @@ function WarehousingPreviewList() {
   );
 }
 
-export default WarehousingPreviewList;
+export default PageBody;

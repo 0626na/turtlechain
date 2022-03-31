@@ -103,7 +103,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             name="vendor_name"
             label={t("vendor.name")}
             placeholder={t("placeholder.vendor name")}
-            onSearch={() => {
+            onClick={() => {
               setVendorModalVisible(true);
             }}
           />
