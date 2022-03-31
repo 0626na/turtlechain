@@ -1,4 +1,4 @@
-import { Row, Typography } from "antd";
+import { Typography } from "antd";
 import { TFunctionResult } from "i18next";
 import styled from "styled-components";
 
