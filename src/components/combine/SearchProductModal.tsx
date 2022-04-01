@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import styled from "styled-components";
-import { SearchFilter } from ".";
+import { NewSearchFilter, SearchFilter } from ".";
 
 interface Props {
   visible: boolean;
@@ -55,27 +55,14 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
 
   // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery({
+    setSearchQuery(() => ({
       rt_store_id: store.id,
       vendor_id: vendorId,
       search_string: "",
       type: "all",
       page: 1,
-    });
+    }));
   }, [visible, store.id, vendorId]);
-
-  // 검색 버튼 클릭
-  const searchProductList = useCallback(
-    ({ type, search_string }) => {
-      setSearchQuery({
-        ...searchQuery,
-        page: 1,
-        type,
-        search_string,
-      });
-    },
-    [searchQuery],
-  );
 
   // 페이지 선택
   const selectPage = useCallback(
@@ -88,7 +75,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
   return (
     <StyledModal
       centered
-      width="45%"
+      width="55%"
       title={t("product.search")}
       visible={visible}
       onCancel={closeModal}
@@ -104,7 +91,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
         pagination={false}
         title={() => (
           <TurtleTableTitle count={getProductListQuery.data?.data.total_count ?? 0}>
-            <SearchFilter type="product" onSearch={searchProductList} />
+            <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </TurtleTableTitle>
         )}
         footer={() => (

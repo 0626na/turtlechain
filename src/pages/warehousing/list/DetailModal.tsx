@@ -26,7 +26,7 @@ interface Props {
   sheet?: WarehousingSheet;
 }
 
-function WarehousingDetailModal({ visible, onClose, sheet }: Props) {
+function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
   const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -313,4 +313,4 @@ function WarehousingDetailModal({ visible, onClose, sheet }: Props) {
   );
 }
 
-export default WarehousingDetailModal;
+export default DetailModal;

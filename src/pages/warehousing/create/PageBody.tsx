@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI } from "apis";
 import { pricePattern } from "utils/pattern";
-import externalAPI from "apis/externalAPI";
+import externalAPI, { ResponseConnectWarehousing } from "apis/externalAPI";
 import { Toolbar } from "layouts/main";
 import {
   TurtleButton,
@@ -23,6 +23,7 @@ import {
 } from "components/common";
 import { useStoreExist } from "hooks";
 import AddProductModal from "./AddProductModal";
+import { ResponseParseWarehousing } from "apis/excelAPI";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -40,19 +41,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetStates();
-        return;
-      }
-      setSuccessList([
-        ...data.data.success.map((product) => ({
-          ...product,
-          index: index.current++,
-        })),
-        ...successList,
-      ]);
-      setFailList([...data.data.fail, ...failList]);
+      setStates(data);
     },
   });
 
@@ -62,19 +51,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetStates();
-        return;
-      }
-      setSuccessList([
-        ...data.data.success.map((product) => ({
-          ...product,
-          index: index.current++,
-        })),
-        ...successList,
-      ]);
-      setFailList([...data.data.fail, ...failList]);
+      setStates(data);
     },
   });
 
@@ -92,6 +69,33 @@ function PageBody() {
     },
   });
 
+  // 모든 상태 초기화
+  const resetStates = useCallback(() => {
+    setFileList([]);
+    setSuccessList([]);
+    setFailList([]);
+  }, []);
+
+  // 파싱 or 연동 후 상태 세팅
+  const setStates = useCallback(
+    (data: ResponseParseWarehousing | ResponseConnectWarehousing) => {
+      if (data.data.error) {
+        message.error(data.data.error);
+        resetStates();
+        return;
+      }
+      setSuccessList([
+        ...data.data.success.map((product) => ({
+          ...product,
+          index: index.current++,
+        })),
+        ...successList,
+      ]);
+      setFailList([...data.data.fail, ...failList]);
+    },
+    [successList, failList, resetStates],
+  );
+
   // 엑셀파일 업로드
   const loadFile = (file: RcFile) => {
     const form = new FormData();
@@ -99,13 +103,6 @@ function PageBody() {
     form.append("rt_store_id", store.id!.toString());
     parseQuery.mutate(form);
   };
-
-  // 모든 상태 초기화
-  const resetStates = useCallback(() => {
-    setFileList([]);
-    setSuccessList([]);
-    setFailList([]);
-  }, []);
 
   // 쇼핑몰 변경시 모든 state 초기화
   useEffect(() => {
@@ -116,7 +113,7 @@ function PageBody() {
   const onClickConnect = useCallback(() => {
     if (!isStoreExist()) return;
     connectQuery.mutate({ rt_store_id: store.id! });
-  }, [store.id]);
+  }, [store.id, connectQuery, isStoreExist]);
 
   // 상품 추가
   const addProduct = useCallback(
@@ -147,27 +144,12 @@ function PageBody() {
     [successList],
   );
 
-  // 공급가 변경
-  const setPrice = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, price: value } : product,
-        ),
-      );
-    },
-    [successList],
-  );
-
-  // 입고수량 변경
-  const setCount = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, count: value } : product,
-        ),
-      );
-    },
+  // successList의 index의 type값을 value로 바꾼다
+  const makeSuccessList = useCallback(
+    (type: string, index, value) =>
+      successList.map((product) =>
+        product.index === index ? { ...product, [type]: value } : product,
+      ),
     [successList],
   );
 
@@ -277,7 +259,7 @@ function PageBody() {
                       formatter={(value) => `${value}`.replace(pricePattern, ",")}
                       min={0}
                       onChange={(value) => {
-                        setPrice(value, record.index);
+                        setSuccessList(makeSuccessList("price", record.index, value));
                       }}
                     />
                   ),
@@ -292,7 +274,7 @@ function PageBody() {
                       min={1}
                       value={record.count}
                       onChange={(value) => {
-                        setCount(value, record.index);
+                        setSuccessList(makeSuccessList("count", record.index, value));
                       }}
                     />
                   ),

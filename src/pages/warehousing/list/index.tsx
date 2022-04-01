@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
-import WarehousingSheetList from "./WarehousingSheetList";
 import { t } from "i18next";
 import { PageHeader } from "layouts/main";
+import PageBody from "./PageBody";
 
 function WarehousingListPage() {
   const title = `${t("turtlechain")} - ${t("warehousing list")}`;
@@ -13,8 +13,7 @@ function WarehousingListPage() {
         title={t("warehousing list")}
         breadcrumbList={[t("warehousing management"), t("warehousing list")]}
       />
-
-      <WarehousingSheetList />
+      <PageBody />
     </>
   );
 }

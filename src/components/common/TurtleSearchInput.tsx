@@ -17,6 +17,7 @@ function TurtleSearchInput({ name, value, label, placeholder, onClick }: Props) 
         placeholder={placeholder}
         value={value}
         onClick={onClick}
+        onSearch={onClick}
         readOnly={true}
       />
     </Form.Item>

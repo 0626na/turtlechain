@@ -21,11 +21,11 @@ import { t } from "i18next";
 import { useMutation, useQuery } from "react-query";
 import moment from "moment";
 import { AxiosError } from "axios";
-import WarehousingDetailModal from "./WarehousingDetailModal";
+import WarehousingDetailModal from "./DetailModal";
 import { Toolbar } from "layouts/main";
-import { TurtleText } from "components/common";
+import { TurtleIcon, TurtleTableTitle, TurtleText } from "components/common";
 
-function WarehousingSheetList() {
+function PageBody() {
   const store = useRecoilValue(storeState);
   const [selectedRow, selectRow] = useState<WarehousingSheet>();
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -42,7 +42,7 @@ function WarehousingSheetList() {
     ["getWarehousingSheet", searchQuery],
     () => warehousingAPI.getSheet(searchQuery),
     {
-      enabled: !!store.id,
+      enabled: searchQuery.rt_store_id !== -1,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -66,7 +66,7 @@ function WarehousingSheetList() {
 
   // 쇼핑몰 바뀔때 마다 입고서 리스트 재요청
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
+    setSearchQuery((prevState) => ({ ...prevState, rt_store_id: store.id ?? -1 }));
   }, [store.id]);
 
   // 페이지 선택
@@ -105,39 +105,33 @@ function WarehousingSheetList() {
             },
           })}
           title={() => (
-            <Row justify="space-between">
-              <span>
-                총 <span style={{ color: "#32ACDD" }}>{getSheetQuery.data?.total_count ?? 0}</span>
-                건
-              </span>
-              <Space>
-                <Select
-                  size="small"
-                  style={{ width: 100 }}
-                  value={searchQuery.is_confirmed}
-                  onChange={(is_confirmed) => {
-                    setSearchQuery({ ...searchQuery, is_confirmed });
-                  }}
-                >
-                  <Select.Option value="">{t("all")}</Select.Option>
-                  <Select.Option value={0}>{t("waiting")}</Select.Option>
-                  <Select.Option value={1}>{t("confirmed")}</Select.Option>
-                </Select>
+            <TurtleTableTitle count={getSheetQuery.data?.total_count ?? 0}>
+              <Select
+                size="small"
+                style={{ width: 100 }}
+                value={searchQuery.is_confirmed}
+                onChange={(is_confirmed) => {
+                  setSearchQuery({ ...searchQuery, is_confirmed });
+                }}
+              >
+                <Select.Option value="">{t("all")}</Select.Option>
+                <Select.Option value={0}>{t("waiting")}</Select.Option>
+                <Select.Option value={1}>{t("confirmed")}</Select.Option>
+              </Select>
 
-                <Divider type="vertical" style={{ margin: 0 }} />
+              <Divider type="vertical" style={{ margin: 0 }} />
 
-                <DatePicker.RangePicker
-                  size="small"
-                  allowClear={false}
-                  value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-                  onChange={(_, dateStrings) => {
-                    const start_date = dateStrings[0];
-                    const end_date = dateStrings[1];
-                    setSearchQuery({ ...searchQuery, start_date, end_date });
-                  }}
-                />
-              </Space>
-            </Row>
+              <DatePicker.RangePicker
+                size="small"
+                allowClear={false}
+                value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
+                onChange={(_, dateStrings) => {
+                  const start_date = dateStrings[0];
+                  const end_date = dateStrings[1];
+                  setSearchQuery({ ...searchQuery, start_date, end_date });
+                }}
+              />
+            </TurtleTableTitle>
           )}
           footer={() => (
             <Row justify="center">
@@ -198,13 +192,11 @@ function WarehousingSheetList() {
                           is_inactive: true,
                         });
                       }}
+                      onCancel={(e) => {
+                        e?.stopPropagation();
+                      }}
                     >
-                      <DeleteOutlined
-                        style={{ cursor: "pointer", color: "#A1A2A6" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      />
+                      <TurtleIcon type="delete" />
                     </Popconfirm>
                   )}
                 </Space>
@@ -224,4 +216,4 @@ function WarehousingSheetList() {
   );
 }
 
-export default WarehousingSheetList;
+export default PageBody;

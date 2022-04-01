@@ -10,6 +10,7 @@ import SearchVendorModal from "./SearchVendorModal";
 import SelectDateModal from "./SelectDateModal";
 import SimplePagination from "./SimplePagination";
 import StoreSelect from "./StoreSelect";
+import NewSearchFilter from "./NewSearchFilter";
 
 export {
   AccountSelect,
@@ -24,4 +25,5 @@ export {
   SelectDateModal,
   SimplePagination,
   StoreSelect,
+  NewSearchFilter,
 };

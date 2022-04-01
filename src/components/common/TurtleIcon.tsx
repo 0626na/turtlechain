@@ -2,7 +2,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 
 interface Props {
   type: "delete";
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 function TurtleIcon({ type, onClick }: Props) {
@@ -11,7 +11,10 @@ function TurtleIcon({ type, onClick }: Props) {
   return (
     <DeleteOutlined //
       style={style}
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick && onClick();
+      }}
     />
   );
 }

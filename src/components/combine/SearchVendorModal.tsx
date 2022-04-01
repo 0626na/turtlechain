@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import styled from "styled-components";
 import { phonePattern } from "utils/pattern";
+import { NewSearchFilter } from ".";
 import SearchFilter from "./SearchFilter";
 
 interface Props {
@@ -84,7 +85,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
         pagination={false}
         title={() => (
           <TurtleTableTitle count={getVendorListQuery.data?.data.total_count ?? 0}>
-            <SearchFilter type="vendor" onSearch={searchVendor} />
+            <NewSearchFilter vendor searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </TurtleTableTitle>
         )}
         footer={() => (
