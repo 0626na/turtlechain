@@ -7,7 +7,7 @@ interface Props {
   isWarning?: boolean;
 }
 
-function Toolbar({ children, isWarning }: Props) {
+function MenuBar({ children, isWarning }: Props) {
   return (
     <>
       <Row
@@ -29,4 +29,4 @@ function Toolbar({ children, isWarning }: Props) {
   );
 }
 
-export default Toolbar;
+export default MenuBar;

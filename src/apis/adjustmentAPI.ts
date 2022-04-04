@@ -22,6 +22,8 @@ export interface AdjustmentProduct {
   product_count: number;
   type: "reserve" | "takeback" | "exchange" | "refund" | "";
   memo?: string | undefined;
+  // 매입조정 상품 등록 최대개수
+  product_count_max?: number;
 }
 
 // 매입조정 상품 Show
@@ -191,7 +193,25 @@ const get = async function (data: RequestGet) {
  *
  * 정산 페이지 사용 api
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
+
 // Request: 매입조정 아이템 조회
 export interface RequestGetAdjustmentForClearing {
   rt_store_id: number | undefined;
@@ -252,6 +272,7 @@ const adjustmentAPI = {
   create,
   update,
   get,
+  //수정필요
   getAdjustmentForClearing,
 };
 

@@ -3,7 +3,7 @@ import { t } from "i18next";
 import { useState } from "react";
 import { RequestGetList } from "apis/orderAPI";
 import moment from "moment";
-import { PageHeader, Toolbar } from "layouts/main";
+import { PageHeader, MenuBar } from "layouts/main";
 import OrderSheetList from "./OrderSheetList";
 
 function OrderListPage() {
@@ -22,7 +22,7 @@ function OrderListPage() {
         title={t("order.list")}
         breadcrumbList={[t("common.home"), t("order.management"), t("order.list")]}
       />
-      <Toolbar />
+      <MenuBar />
       <OrderSheetList searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
     </>
   );

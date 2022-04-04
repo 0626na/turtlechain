@@ -9,14 +9,12 @@ import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI, externalAPI, warehousingAPI } from "apis";
 import { pricePattern } from "utils/pattern";
-import { Toolbar } from "layouts/main";
+import { MainContent, MenuBar } from "layouts/main";
 import {
   TurtleButton,
   TurtleButtonSub,
   TurtleDropdown,
   TurtleIcon,
-  TurtleInfo,
-  TurtleText,
   TurtleUpload,
 } from "components/common";
 import { useStoreExist } from "hooks";
@@ -144,8 +142,8 @@ function PageBody() {
     [successList],
   );
 
-  // successList의 index의 type값을 value로 바꾼다
-  const makeSuccessList = useCallback(
+  // successList의 index의 type값을 value로 바꿔서 return 한다.
+  const changeSuccessList = useCallback(
     (type: string, index, value) =>
       successList.map((product) =>
         product.index === index ? { ...product, [type]: value } : product,
@@ -153,9 +151,32 @@ function PageBody() {
     [successList],
   );
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <TurtleUpload
+          beforeUpload={(file) => {
+            setFileList([file]);
+            loadFile(file);
+          }}
+          onRemove={resetStates}
+          fileList={fileList}
+        />
+      </Menu.Item>
+      <Menu.Item
+        key="2"
+        onClick={() => {
+          if (!isStoreExist()) return;
+          setAddProductModalVisible(true);
+        }}
+      >
+        {t("button.add single product")}
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <>
-      <Toolbar isWarning>
+      <MenuBar isWarning>
         <TurtleButtonSub
           type="primary"
           color="skyblue"
@@ -165,41 +186,16 @@ function PageBody() {
           {t("button.connect external program")}
         </TurtleButtonSub>
         <TurtleDropdown //
-          menu={
-            <Menu>
-              <Menu.Item key="1">
-                <TurtleUpload
-                  beforeUpload={(file) => {
-                    setFileList([file]);
-                    loadFile(file);
-                  }}
-                  onRemove={resetStates}
-                  fileList={fileList}
-                />
-              </Menu.Item>
-              <Menu.Item
-                key="2"
-                onClick={() => {
-                  if (!isStoreExist()) return;
-                  setAddProductModalVisible(true);
-                }}
-              >
-                {t("button.add single product")}
-              </Menu.Item>
-            </Menu>
-          }
+          menu={menu}
         >
           {t("button.add warehousing")}
         </TurtleDropdown>
-      </Toolbar>
+      </MenuBar>
 
-      <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
-        <TurtleText>
-          {`${t("warehousing.preview")}`}
-          <br />
-          <TurtleInfo>마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다.</TurtleInfo>
-        </TurtleText>
-
+      <MainContent //
+        title={t("warehousing.preview")}
+        info={t("description.check confirm")}
+      >
         <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
             <Table
@@ -259,7 +255,7 @@ function PageBody() {
                       formatter={(value) => `${value}`.replace(pricePattern, ",")}
                       min={0}
                       onChange={(value) => {
-                        setSuccessList(makeSuccessList("price", record.index, value));
+                        setSuccessList(changeSuccessList("price", record.index, value));
                       }}
                     />
                   ),
@@ -274,7 +270,7 @@ function PageBody() {
                       min={1}
                       value={record.count}
                       onChange={(value) => {
-                        setSuccessList(makeSuccessList("count", record.index, value));
+                        setSuccessList(changeSuccessList("count", record.index, value));
                       }}
                     />
                   ),
@@ -357,50 +353,49 @@ function PageBody() {
             />
           </Tabs.TabPane>
         </Tabs>
-      </Row>
-
-      <Row justify="end">
-        <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
-          onConfirm={() => {
-            createQuery.mutate({
-              sheet: {
-                created_date: moment().format("YYYY-MM-DD"),
-                rt_store_id: store.id!,
-              },
-              product: {
-                rt_store_id: store.id!,
-                item_list: successList.map((product) => ({
-                  vendor_id: product.vendor_id,
-                  product_id: product.product_id,
-                  count: product.count,
-                  price: product.price,
-                  memo: product.memo,
-                })),
-              },
-            });
-          }}
-        >
-          <TurtleButton
-            type="primary"
-            disabled={successList.length === 0}
-            loading={createQuery.isLoading}
+        <Row justify="end" style={{ paddingTop: 32 }}>
+          <Popconfirm
+            title={t("description.really register")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={() => {
+              createQuery.mutate({
+                sheet: {
+                  created_date: moment().format("YYYY-MM-DD"),
+                  rt_store_id: store.id!,
+                },
+                product: {
+                  rt_store_id: store.id!,
+                  item_list: successList.map((product) => ({
+                    vendor_id: product.vendor_id,
+                    product_id: product.product_id,
+                    count: product.count,
+                    price: product.price,
+                    memo: product.memo,
+                  })),
+                },
+              });
+            }}
           >
-            {t("button.create warehousing")}
-          </TurtleButton>
-        </Popconfirm>
-      </Row>
+            <TurtleButton
+              type="primary"
+              disabled={successList.length === 0}
+              loading={createQuery.isLoading}
+            >
+              {t("button.create warehousing")}
+            </TurtleButton>
+          </Popconfirm>
+        </Row>
 
-      {/* 상품 단건 추가 모달 */}
-      <AddProductModal
-        visible={addProductModalVisible}
-        closeModal={() => {
-          setAddProductModalVisible(false);
-        }}
-        addProduct={addProduct}
-      />
+        {/* 상품 단건 추가 모달 */}
+        <AddProductModal
+          visible={addProductModalVisible}
+          closeModal={() => {
+            setAddProductModalVisible(false);
+          }}
+          addProduct={addProduct}
+        />
+      </MainContent>
     </>
   );
 }

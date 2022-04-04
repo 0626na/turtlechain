@@ -1,12 +1,16 @@
-import { Divider, Form, Input, InputNumber, Modal, Row } from "antd";
+import { Divider, Form, Input, InputNumber, Row } from "antd";
 import { t } from "i18next";
-import styled from "styled-components";
-import { CloseOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
 import { pricePattern } from "utils/pattern";
-import TurtleTextArea from "components/common/TurtleTextArea";
 import { AdjustmentProduct } from "apis/adjustmentAPI";
-import { TurtleButton, TurtleInput, TurtleInputNumber, TurtleSearchInput } from "components/common";
+import {
+  TurtleButton,
+  TurtleInput,
+  TurtleInputNumber,
+  TurtleModal,
+  TurtleSearchInput,
+  TurtleTextArea,
+} from "components/common";
 import { SearchProductModal, SearchVendorModal } from "components/combine";
 
 interface Props {
@@ -72,11 +76,10 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
 
   return (
     <>
-      <StyledModal
+      <TurtleModal
         centered
         width="60%"
         title={t("adjustment.add reserve product")}
-        closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
@@ -89,16 +92,12 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
           onFinish={(value) => {
-            if (
-              addProduct({
-                ...value,
-                type: "reserve",
-                warehousing_item_id: 0,
-                is_vat_included: false,
-              })
-            ) {
-              onCloseModal();
-            }
+            addProduct({
+              ...value,
+              type: "reserve",
+              warehousing_item_id: 0,
+              is_vat_included: false,
+            }) && onCloseModal();
           }}
         >
           <Form.Item name="vendor_id" hidden>
@@ -178,7 +177,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             </TurtleButton>
           </Row>
         </Form>
-      </StyledModal>
+      </TurtleModal>
 
       {/* 거래처 검색 모달 */}
       <SearchVendorModal
@@ -201,14 +200,5 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     </>
   );
 }
-
-const StyledModal = styled(Modal)`
-  .ant-modal-header {
-    background-color: #2b3140;
-  }
-  .ant-modal-title {
-    color: #ffffff;
-  }
-`;
 
 export default AddSingleProductModal;

@@ -1,11 +1,12 @@
+import moment from "moment";
 import { DatePicker, message, Row, Table, Tag } from "antd";
 import { warehousingAPI } from "apis";
 import { AdjustmentProduct } from "apis/adjustmentAPI";
 import { RequestGetSheet, WarehousingProductShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
-import { TurtleButton, TurtleModal, TurtleText } from "components/common";
+import { TurtleButton, TurtleModal } from "components/common";
 import { t } from "i18next";
-import moment from "moment";
+import { MainContent } from "layouts/main";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
@@ -24,7 +25,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   const [sheetId, setSheetId] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
-    is_confirmed: 0,
+    is_confirmed: "",
     start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page: 1,
@@ -61,10 +62,11 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   // 상태 초기화
   const resetStates = useCallback(() => {
     setProductList([]);
+    selectRows([]);
     setSheetId(-1);
     setSearchQuery({
       rt_store_id: store.id!,
-      is_confirmed: 0,
+      is_confirmed: "",
       start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       page: 1,
@@ -83,6 +85,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
       return;
     }
 
+    // WarehousingProductShow -> AdjustmentProduct 타입 변환해서 넣어줌
     selectedRows.forEach((product) => {
       addProduct({
         vendor_id: product.vendor_info.id,
@@ -95,6 +98,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
         product_option: product.product_info.option,
         product_price: product.product_info.price,
         product_count: 0,
+        product_count_max: product.count,
         product_code: product.product_info.product_code,
         is_vat_included: false,
         type: "",
@@ -174,77 +178,80 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
         ]}
       />
 
-      <Row style={{ marginTop: 32 }}>
-        <TurtleText>{t("warehousing.lists")}</TurtleText>
-      </Row>
+      <MainContent title={t("warehousing.lists")}>
+        <Table
+          size="small"
+          loading={getProductQuery.isLoading}
+          pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+          dataSource={productList}
+          rowKey={(record) => record.id}
+          scroll={{ y: "auto" }}
+          style={{ height: "60vh" }}
+          title={() => (
+            <Row justify="space-between">
+              <span>
+                총 <span style={{ color: "#32ACDD" }}>{productList?.length ?? 0}</span>건 | 선택
+                {"  "}
+                <span style={{ color: "#32ACDD" }}>{selectedRows?.length ?? 0}</span>건
+              </span>
+            </Row>
+          )}
+          rowSelection={{
+            onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
+              selectRows(selectedRows);
+            },
+            checkStrictly: true,
+          }}
+          columns={[
+            {
+              ellipsis: true,
+              title: t("vendor.name"),
+              render: (_, record) => record.vendor_info.vendor_name,
+            },
+            {
+              ellipsis: true,
+              title: t("vendor.address"),
+              render: (_, record) => record.vendor_info.vendor_address,
+            },
+            {
+              ellipsis: true,
+              title: t("product.code"),
+              render: (_, record) => record.product_info.product_code,
+            },
+            {
+              ellipsis: true,
+              title: t("product.name"),
+              render: (_, record) => record.product_info.name,
+            },
+            {
+              ellipsis: true,
+              title: t("product.vendor product name"),
+              render: (_, record) => record.product_info.vendor_product_name,
+            },
+            {
+              ellipsis: true,
+              title: t("product.option"),
+              render: (_, record) => record.product_info.option,
+            },
+            {
+              ellipsis: true,
+              title: t("product.price"),
+              render: (_, record) => record.price.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              title: t("product.count"),
+              render: (_, record) => record.count,
+            },
+          ]}
+        />
 
-      <Table
-        size="small"
-        loading={getProductQuery.isLoading}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-        dataSource={productList}
-        rowKey={(record) => record.id}
-        scroll={{ y: "auto" }}
-        style={{ height: "60vh" }}
-        title={() => (
-          <Row justify="space-between">
-            <span>
-              총 <span style={{ color: "#32ACDD" }}>{productList?.length ?? 0}</span>건 | 선택
-              {"  "}
-              <span style={{ color: "#32ACDD" }}>{selectedRows?.length ?? 0}</span>건
-            </span>
-          </Row>
-        )}
-        rowSelection={{
-          onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
-            selectRows(selectedRows);
-          },
-          checkStrictly: true,
-        }}
-        columns={[
-          {
-            ellipsis: true,
-            title: t("vendor.name"),
-            render: (_, record) => record.vendor_info.vendor_name,
-          },
-          {
-            ellipsis: true,
-            title: t("vendor.address"),
-            render: (_, record) => record.vendor_info.vendor_address,
-          },
-          {
-            ellipsis: true,
-            title: t("product.code"),
-            render: (_, record) => record.product_info.product_code,
-          },
-          {
-            ellipsis: true,
-            title: t("product.name"),
-            render: (_, record) => record.product_info.name,
-          },
-          {
-            ellipsis: true,
-            title: t("product.vendor product name"),
-            render: (_, record) => record.product_info.vendor_product_name,
-          },
-          {
-            ellipsis: true,
-            title: t("product.option"),
-            render: (_, record) => record.product_info.option,
-          },
-          {
-            ellipsis: true,
-            title: t("product.price"),
-            render: (_, record) => record.price.toLocaleString(),
-          },
-        ]}
-      />
-
-      <Row justify="end">
-        <TurtleButton type="default" onClick={clickAddProduct}>
-          {t("button.add product")}
-        </TurtleButton>
-      </Row>
+        <Row justify="end">
+          <TurtleButton type="default" onClick={clickAddProduct}>
+            {t("button.add product")}
+          </TurtleButton>
+        </Row>
+      </MainContent>
     </TurtleModal>
   );
 }

@@ -1,11 +1,11 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
 import ClearingCreateAccordion from "./ClearingCreateAccordion";
-import { PageHeader, Toolbar } from "layouts/main";
+import { PageHeader, MenuBar } from "layouts/main";
 
 /*
   Parent : None
-  Children : Toolbar, ClearingCreateAccordion
+  Children : MenuBar, ClearingCreateAccordion
 */
 
 function ClearingCreatePage() {
@@ -17,7 +17,7 @@ function ClearingCreatePage() {
         title={t("clearing.create")}
         breadcrumbList={[t("clearing.management"), t("clearing.create")]}
       />
-      <Toolbar isWarning />
+      <MenuBar isWarning />
       <ClearingCreateAccordion />
     </>
   );

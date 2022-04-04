@@ -25,7 +25,7 @@ import { RequestCreateProduct } from "apis/productAPI";
 import AddSingleProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
 import externalAPI from "apis/externalAPI";
-import { Toolbar } from "layouts/main";
+import { MenuBar } from "layouts/main";
 import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
 
 function ProductPreviewList() {
@@ -209,7 +209,7 @@ function ProductPreviewList() {
 
   return (
     <>
-      <Toolbar isWarning>
+      <MenuBar isWarning>
         <TurtleButtonSub
           type="primary"
           color="skyblue"
@@ -226,7 +226,7 @@ function ProductPreviewList() {
             {t("button.add product")}
           </Button>
         </Dropdown>
-      </Toolbar>
+      </MenuBar>
       <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
         <TurtleText>
           {`${t("product.preview list")}`}

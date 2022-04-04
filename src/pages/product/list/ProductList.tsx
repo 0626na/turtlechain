@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
-import { Toolbar } from "layouts/main";
+import { MenuBar } from "layouts/main";
 import { TurtleTableTitle, TurtleText } from "components/common";
 import { SearchFilter } from "components/combine";
 import UpdateProductModal from "./UpdateProductModal";
@@ -63,7 +63,7 @@ function ProductList() {
 
   return (
     <>
-      <Toolbar />
+      <MenuBar />
 
       <Row style={{ paddingBottom: 0 }}>
         <TurtleText>{`${t("product.lists")}`}</TurtleText>

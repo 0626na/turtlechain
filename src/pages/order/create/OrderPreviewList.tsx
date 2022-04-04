@@ -21,7 +21,7 @@ import CreateBulkOrderModal from "./CreateBulkOrderModal";
 import { FileOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import excelAPI, { OrderProduct } from "apis/excelAPI";
-import { Toolbar } from "layouts/main";
+import { MenuBar } from "layouts/main";
 import { TurtleButton, TurtleButtonSub, TurtleInfo, TurtleText } from "components/common";
 
 function OrderPreviewList() {
@@ -165,7 +165,7 @@ function OrderPreviewList() {
 
   return (
     <>
-      <Toolbar>
+      <MenuBar>
         <TurtleButtonSub type="primary" color="skyblue">
           {t("button.connect external program")}
         </TurtleButtonSub>
@@ -177,7 +177,7 @@ function OrderPreviewList() {
             {t("button.add order")}
           </Button>
         </Dropdown>
-      </Toolbar>
+      </MenuBar>
       <Row>
         <TurtleText>
           {t("order.preview list")}

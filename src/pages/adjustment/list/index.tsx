@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
-import AdjustmentList from "./AdjustmentList";
+import PageBody from "./PageBody";
 
 const AdjustmentListPage = function () {
   const title = `${t("turtlechain")} - ${t("adjustment list")}`;
@@ -13,7 +13,7 @@ const AdjustmentListPage = function () {
         title={t("adjustment list")}
         breadcrumbList={[t("adjustment management"), t("adjustment list")]}
       />
-      <AdjustmentList />
+      <PageBody />
     </>
   );
 };

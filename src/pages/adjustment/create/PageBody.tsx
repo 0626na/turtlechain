@@ -1,11 +1,9 @@
 import {
   Table,
-  Button,
   Popconfirm,
   Input,
   message,
   notification,
-  Dropdown,
   Menu,
   Row,
   Tabs,
@@ -18,29 +16,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { t } from "i18next";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import { FileTextOutlined, FileOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FileTextOutlined } from "@ant-design/icons";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
-import AddProductModal from "./AddProductModal";
 import { pricePattern } from "utils/pattern";
+import { MainContent, MenuBar } from "layouts/main";
+import { TurtleButton, TurtleDropdown, TurtleIcon } from "components/common";
+import { useStoreExist } from "hooks";
+import AddProductModal from "./AddProductModal";
 import LoadWarehousingModal from "./LoadWarehousingModal";
-import { Toolbar } from "layouts/main";
-import { TurtleButton, TurtleText } from "components/common";
 
-const AdjustmentListPreview = function () {
+const PageBody = function () {
   const store = useRecoilValue(storeState);
+  const isStoreExist = useStoreExist();
   const [successList, setSuccessList] = useState<Array<AdjustmentProduct>>([]);
-  const [failList, setFailList] = useState<Array<AdjustmentProduct>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
   const [loadWarehousingModalVisible, setLoadWarehousingModalVisible] = useState(false);
   const index = useRef(0);
 
   const createAdjustmentQuery = useMutation(["createAdjustment"], adjustmentAPI.create, {
     onError: (error: AxiosError) => {
-      message.error("매입조정 종류를 입력해주세요");
+      message.error(error.response?.data.msg);
     },
     onSuccess: (data) => {
-      resetField();
+      resetStates();
       notification.open({
         type: "success",
         message: t("message.success create adjustment"),
@@ -48,14 +47,13 @@ const AdjustmentListPreview = function () {
     },
   });
 
-  const resetField = useCallback(() => {
+  const resetStates = useCallback(() => {
     setSuccessList([]);
-    setFailList([]);
   }, []);
 
   useEffect(() => {
-    resetField();
-  }, [store.id, resetField]);
+    resetStates();
+  }, [store.id, resetStates]);
 
   // 상품 추가
   const addProduct = useCallback(
@@ -74,68 +72,29 @@ const AdjustmentListPreview = function () {
     [successList],
   );
 
-  // 공급가 변경
-  const setPrice = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, product_price: value } : product,
-        ),
-      );
-    },
-    [successList],
-  );
-
-  // 입고수량 변경
-  const setCount = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, product_count: value } : product,
-        ),
-      );
-    },
-    [successList],
-  );
-
-  // 매입조정 타입 변경
-  const setType = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, type: value } : product,
-        ),
-      );
-    },
-    [successList],
-  );
-
-  // 메모 변경
-  const setMemo = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, memo: value } : product,
-        ),
-      );
-    },
-    [successList],
-  );
-
-  // 부가세 변경
-  const setIsVatIncluded = useCallback(
-    (value, index) => {
-      setSuccessList(
-        successList.map((product) =>
-          product.index === index ? { ...product, is_vat_included: value } : product,
-        ),
-      );
-    },
+  // successList의 index의 type값을 value로 바꿔서 return 한다.
+  const changeSuccessList = useCallback(
+    (type: string, index, value) =>
+      successList.map((product) =>
+        product.index === index ? { ...product, [type]: value } : product,
+      ),
     [successList],
   );
 
   // 매입조정 등록하기 버튼 클릭
   const onClickCreate = useCallback(() => {
+    let isTypeValid = true;
+    // 수량, 종류 선택했는지 확인
+    successList.forEach((product) => {
+      if (product.type === "" || product.product_count === 0) {
+        isTypeValid = false;
+        return;
+      }
+    });
+    if (!isTypeValid) {
+      message.warn("매입조정 수량, 종류를 확인해주세요.");
+      return;
+    }
     createAdjustmentQuery.mutate({
       item_list: successList.map((product) => ({
         rt_store_id: store.id!,
@@ -149,7 +108,7 @@ const AdjustmentListPreview = function () {
         memo: product.memo,
       })),
     });
-  }, [successList, store.id]);
+  }, [store.id, successList]);
 
   // 매입조정 합계
   const totalPrice = useMemo(
@@ -157,22 +116,12 @@ const AdjustmentListPreview = function () {
     [successList],
   );
 
-  const selectOptions = [
-    { name: "미송", value: "reserve" },
-    { name: "교환", value: "exchange" },
-    { name: "반품", value: "takeback" },
-    { name: "환불", value: "refund" },
-  ];
-
   const menu = (
     <Menu>
       <Menu.Item
         key="1"
         onClick={() => {
-          if (!store.id) {
-            message.warn(t("message.select store"));
-            return;
-          }
+          if (!isStoreExist()) return;
           setLoadWarehousingModalVisible(true);
         }}
       >
@@ -181,10 +130,7 @@ const AdjustmentListPreview = function () {
       <Menu.Item
         key="2"
         onClick={() => {
-          if (!store.id) {
-            message.warn(t("message.select store"));
-            return;
-          }
+          if (!isStoreExist()) return;
           setAddProductModalVisible(true);
         }}
       >
@@ -195,25 +141,19 @@ const AdjustmentListPreview = function () {
 
   return (
     <>
-      <Toolbar isWarning>
-        <Dropdown overlay={menu}>
-          <Button
-            style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
-            icon={<FileOutlined />}
-          >
-            {t("button.add adjustment")}
-          </Button>
-        </Dropdown>
-      </Toolbar>
+      <MenuBar isWarning>
+        <TurtleDropdown
+          menu={menu} //
+        >
+          {t("button.add adjustment")}
+        </TurtleDropdown>
+      </MenuBar>
 
-      <Row style={{ paddingTop: 30, paddingBottom: 0 }}>
-        <TurtleText>{`${t("adjustment.preview")}`}</TurtleText>
-
+      <MainContent title={t("adjustment.preview")}>
         <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
           <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
             <Table
               size="small"
-              //loading={}
               dataSource={successList}
               rowKey={(record) => record.index!}
               pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -231,7 +171,7 @@ const AdjustmentListPreview = function () {
                   <Input
                     value={record.memo}
                     onChange={(e) => {
-                      setMemo(e.target.value, record.index);
+                      setSuccessList(changeSuccessList("memo", record.index, e.target.value));
                     }}
                   />
                 ),
@@ -276,7 +216,13 @@ const AdjustmentListPreview = function () {
                       checkedChildren={t("button.include")}
                       checked={record.is_vat_included}
                       onClick={() => {
-                        setIsVatIncluded(!record.is_vat_included, record.index);
+                        setSuccessList(
+                          changeSuccessList(
+                            "is_vat_included",
+                            record.index,
+                            !record.is_vat_included,
+                          ),
+                        );
                       }}
                     />
                   ),
@@ -293,7 +239,7 @@ const AdjustmentListPreview = function () {
                       formatter={(value) => `${value}`.replace(pricePattern, ",")}
                       min={0}
                       onChange={(value) => {
-                        setPrice(value, record.index);
+                        setSuccessList(changeSuccessList("product_price", record.index, value));
                       }}
                     />
                   ),
@@ -307,9 +253,10 @@ const AdjustmentListPreview = function () {
                       size="small"
                       status={record.product_count === 0 ? "error" : ""}
                       min={1}
+                      max={record.product_count_max}
                       value={record.product_count}
                       onChange={(value) => {
-                        setCount(value, record.index);
+                        setSuccessList(changeSuccessList("product_count", record.index, value));
                       }}
                     />
                   ),
@@ -318,33 +265,47 @@ const AdjustmentListPreview = function () {
                   ellipsis: true,
                   width: 100,
                   title: t("adjustment.type."),
-                  render: (_, record) => (
-                    <Select
-                      size="small"
-                      status={record.type === "" ? "error" : ""}
-                      style={{ width: 70 }}
-                      value={record.type}
-                      onSelect={(value: string) => {
-                        setType(value, record.index);
-                      }}
-                    >
-                      {selectOptions.map((option) => {
-                        return (
-                          <Select.Option key={option.value} value={option.value}>
-                            {option.name}
+                  render: (_, record) =>
+                    record.type === "reserve" ? (
+                      <Select
+                        size="small"
+                        style={{ width: 70 }}
+                        value={record.type}
+                        onSelect={(value: string) => {
+                          setSuccessList(changeSuccessList("type", record.index, value));
+                        }}
+                      >
+                        {["reserve"].map((option) => (
+                          <Select.Option key={option} value={option}>
+                            {t(`adjustment.type.${option}`)}
                           </Select.Option>
-                        );
-                      })}
-                    </Select>
-                  ),
+                        ))}
+                      </Select>
+                    ) : (
+                      <Select
+                        size="small"
+                        status={record.type === "" ? "error" : ""}
+                        style={{ width: 70 }}
+                        value={record.type}
+                        onSelect={(value: string) => {
+                          setSuccessList(changeSuccessList("type", record.index, value));
+                        }}
+                      >
+                        {["takeback", "exchange"].map((option) => (
+                          <Select.Option key={option} value={option}>
+                            {t(`adjustment.type.${option}`)}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    ),
                 },
                 Table.EXPAND_COLUMN,
                 {
                   ellipsis: true,
                   width: 30,
                   render: (_, record) => (
-                    <DeleteOutlined //
-                      style={{ cursor: "pointer", color: "#A1A2A6" }}
+                    <TurtleIcon
+                      type="delete"
                       onClick={() => {
                         deleteProduct(record.index);
                       }}
@@ -355,44 +316,44 @@ const AdjustmentListPreview = function () {
             />
           </Tabs.TabPane>
         </Tabs>
-      </Row>
 
-      <Row justify="end">
-        <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
-          onConfirm={onClickCreate}
-        >
-          <TurtleButton
-            type="primary"
-            disabled={successList.length === 0}
-            loading={createAdjustmentQuery.isLoading}
+        <Row justify="end" style={{ paddingTop: 32 }}>
+          <Popconfirm
+            title={t("description.really register")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={onClickCreate}
           >
-            {t("button.create adjustment")}
-          </TurtleButton>
-        </Popconfirm>
-      </Row>
+            <TurtleButton
+              type="primary"
+              disabled={successList.length === 0}
+              loading={createAdjustmentQuery.isLoading}
+            >
+              {t("button.create adjustment")}
+            </TurtleButton>
+          </Popconfirm>
+        </Row>
 
-      {/* 미송상품 단건 추가 모달 */}
-      <AddProductModal
-        visible={addProductModalVisible}
-        closeModal={() => {
-          setAddProductModalVisible(false);
-        }}
-        addProduct={addProduct}
-      />
+        {/* 입고내역 불러오기 모달*/}
+        <LoadWarehousingModal
+          visible={loadWarehousingModalVisible}
+          closeModal={() => {
+            setLoadWarehousingModalVisible(false);
+          }}
+          addProduct={addProduct}
+        />
 
-      {/* 입고내역 불러오기 모달*/}
-      <LoadWarehousingModal
-        visible={loadWarehousingModalVisible}
-        closeModal={() => {
-          setLoadWarehousingModalVisible(false);
-        }}
-        addProduct={addProduct}
-      />
+        {/* 미송상품 단건 추가 모달 */}
+        <AddProductModal
+          visible={addProductModalVisible}
+          closeModal={() => {
+            setAddProductModalVisible(false);
+          }}
+          addProduct={addProduct}
+        />
+      </MainContent>
     </>
   );
 };
 
-export default AdjustmentListPreview;
+export default PageBody;

@@ -18,8 +18,8 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { useMutation, useQuery } from "react-query";
 import { AxiosError } from "axios";
-import { Toolbar } from "layouts/main";
-import { TurtleIcon, TurtleTableTitle, TurtleText } from "components/common";
+import { MainContent, MenuBar } from "layouts/main";
+import { TurtleIcon, TurtleTableTitle } from "components/common";
 import { warehousingAPI } from "apis";
 import { RequestGetSheet, WarehousingSheet } from "apis/warehousingAPI";
 import WarehousingDetailModal from "./DetailModal";
@@ -84,13 +84,9 @@ function PageBody() {
 
   return (
     <>
-      <Toolbar />
+      <MenuBar />
 
-      <Row style={{ paddingBottom: 0 }}>
-        <TurtleText>{t("warehousing.lists")}</TurtleText>
-      </Row>
-
-      <Row>
+      <MainContent title={t("warehousing.lists")}>
         <Table
           size="small"
           dataSource={getSheetQuery.data?.sheet_list}
@@ -203,14 +199,16 @@ function PageBody() {
             },
           ]}
         />
-      </Row>
-      <WarehousingDetailModal
-        visible={detailModalVisible}
-        onClose={() => {
-          setDetailModalVisible(false);
-        }}
-        sheet={selectedRow}
-      />
+
+        {/*상세 입고 내역 모달 */}
+        <WarehousingDetailModal
+          visible={detailModalVisible}
+          onClose={() => {
+            setDetailModalVisible(false);
+          }}
+          sheet={selectedRow}
+        />
+      </MainContent>
     </>
   );
 }

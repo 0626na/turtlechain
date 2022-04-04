@@ -22,7 +22,7 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { phonePattern } from "utils/pattern";
 import { TurtleBadge, TurtleText, TurtleButtonSub } from "components/common";
-import { Toolbar } from "layouts/main";
+import { MenuBar } from "layouts/main";
 import { SearchFilter } from "components/combine";
 
 interface VendorShow extends Vendor {
@@ -203,7 +203,7 @@ function VendorList() {
 
   return (
     <>
-      <Toolbar />
+      <MenuBar />
 
       <Row style={{ paddingBottom: 0 }}>
         <TurtleText>{t("vendor.lists")}</TurtleText>

@@ -4,7 +4,8 @@ import Header from "./Header";
 import Sider from "./Sider";
 import Content from "./Content";
 import PageHeader from "./page/PageHeader";
-import Toolbar from "./page/Toolbar";
+import MenuBar from "./page/MenuBar";
+import MainContent from "./page/MainContent";
 
 interface Props {
   children: React.ReactNode;
@@ -28,4 +29,4 @@ function MainLayout({ children }: Props) {
   );
 }
 
-export { MainLayout, PageHeader, Toolbar };
+export { MainLayout, PageHeader, MenuBar, MainContent };

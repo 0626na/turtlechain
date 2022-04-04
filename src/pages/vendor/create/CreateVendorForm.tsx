@@ -12,7 +12,7 @@ import {
   TurtleTextArea,
 } from "components/common";
 import { t } from "i18next";
-import { Toolbar } from "layouts/main";
+import { MenuBar } from "layouts/main";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
@@ -156,7 +156,7 @@ function CreateVendorForm() {
 
   return (
     <>
-      <Toolbar>
+      <MenuBar>
         <TurtleButtonSub // 재고프로그램 연동 Button
           type="primary"
           color="skyblue"
@@ -182,7 +182,7 @@ function CreateVendorForm() {
         >
           {t("button.create bulk vendor")}
         </TurtleButtonSub>
-      </Toolbar>
+      </MenuBar>
 
       <Form //
         layout="horizontal"

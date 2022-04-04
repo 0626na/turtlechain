@@ -21,7 +21,8 @@
     "check home": "각 항목별 상세 내역은 매입조정 관리 또는 정산 관리 메뉴에서 확인 바랍니다.",
     "today reserve included": "당일 미송은 자동으로 결제금액에 포함됩니다.",
     "excel type": "대량 업로드 파일은 .CSV .XLS 또는 .XLSX 만 사용할 수 있습니다.",
-    "fail product": "실패한 상품은 거래처 또는 일부 상품 정보가 정확하지 않아 추가하지 못한 상품들입니다."
+    "fail product": "실패한 상품은 거래처 또는 일부 상품 정보가 정확하지 않아 추가하지 못한 상품들입니다.",
+    "check confirm": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
