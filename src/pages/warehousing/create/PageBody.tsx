@@ -1,6 +1,5 @@
 import moment from "moment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import warehousingAPI, { WarehousingProduct } from "apis/warehousingAPI";
 import { message, Menu, notification, Row, Tabs, Table, Popconfirm, InputNumber } from "antd";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
@@ -8,9 +7,8 @@ import { storeState } from "store/storeState";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
-import { excelAPI } from "apis";
+import { excelAPI, externalAPI, warehousingAPI } from "apis";
 import { pricePattern } from "utils/pattern";
-import externalAPI, { ResponseConnectWarehousing } from "apis/externalAPI";
 import { Toolbar } from "layouts/main";
 import {
   TurtleButton,
@@ -22,8 +20,10 @@ import {
   TurtleUpload,
 } from "components/common";
 import { useStoreExist } from "hooks";
-import AddProductModal from "./AddProductModal";
 import { ResponseParseWarehousing } from "apis/excelAPI";
+import { ResponseConnectWarehousing } from "apis/externalAPI";
+import { WarehousingProduct } from "apis/warehousingAPI";
+import AddProductModal from "./AddProductModal";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
