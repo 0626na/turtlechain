@@ -6,6 +6,7 @@ import Content from "./Content";
 import PageHeader from "./page/PageHeader";
 import MenuBar from "./page/MenuBar";
 import MainContent from "./page/MainContent";
+import BottomBar from "./page/BottomBar";
 
 interface Props {
   children: React.ReactNode;
@@ -29,4 +30,4 @@ function MainLayout({ children }: Props) {
   );
 }
 
-export { MainLayout, PageHeader, MenuBar, MainContent };
+export { MainLayout, PageHeader, MenuBar, MainContent, BottomBar };

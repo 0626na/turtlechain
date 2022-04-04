@@ -5,7 +5,6 @@ import {
   message,
   notification,
   Menu,
-  Row,
   Tabs,
   InputNumber,
   Select,
@@ -20,7 +19,7 @@ import { FileTextOutlined } from "@ant-design/icons";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import { pricePattern } from "utils/pattern";
-import { MainContent, MenuBar } from "layouts/main";
+import { MainContent, MenuBar, BottomBar } from "layouts/main";
 import { TurtleButton, TurtleDropdown, TurtleIcon } from "components/common";
 import { useStoreExist } from "hooks";
 import AddProductModal from "./AddProductModal";
@@ -83,15 +82,7 @@ const PageBody = function () {
 
   // 매입조정 등록하기 버튼 클릭
   const onClickCreate = useCallback(() => {
-    let isTypeValid = true;
-    // 수량, 종류 선택했는지 확인
-    successList.forEach((product) => {
-      if (product.type === "" || product.product_count === 0) {
-        isTypeValid = false;
-        return;
-      }
-    });
-    if (!isTypeValid) {
+    if (!validateSuccessList()) {
       message.warn("매입조정 수량, 종류를 확인해주세요.");
       return;
     }
@@ -109,6 +100,19 @@ const PageBody = function () {
       })),
     });
   }, [store.id, successList]);
+
+  // 수량, 종류 선택되었는지 확인해서 이상없으면 true, 이상있으면 false
+  const validateSuccessList = useCallback(() => {
+    let isValid = true;
+    // 수량, 종류 선택했는지 확인
+    successList.forEach((product) => {
+      if (product.type === "" || product.product_count === 0) {
+        isValid = false;
+        return;
+      }
+    });
+    return isValid;
+  }, [successList]);
 
   // 매입조정 합계
   const totalPrice = useMemo(
@@ -317,23 +321,6 @@ const PageBody = function () {
           </Tabs.TabPane>
         </Tabs>
 
-        <Row justify="end" style={{ paddingTop: 32 }}>
-          <Popconfirm
-            title={t("description.really register")}
-            okText={t("yes")}
-            cancelText={t("no")}
-            onConfirm={onClickCreate}
-          >
-            <TurtleButton
-              type="primary"
-              disabled={successList.length === 0}
-              loading={createAdjustmentQuery.isLoading}
-            >
-              {t("button.create adjustment")}
-            </TurtleButton>
-          </Popconfirm>
-        </Row>
-
         {/* 입고내역 불러오기 모달*/}
         <LoadWarehousingModal
           visible={loadWarehousingModalVisible}
@@ -352,6 +339,23 @@ const PageBody = function () {
           addProduct={addProduct}
         />
       </MainContent>
+
+      <BottomBar>
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={onClickCreate}
+        >
+          <TurtleButton
+            type="primary"
+            disabled={successList.length === 0}
+            loading={createAdjustmentQuery.isLoading}
+          >
+            {t("button.create adjustment")}
+          </TurtleButton>
+        </Popconfirm>
+      </BottomBar>
     </>
   );
 };

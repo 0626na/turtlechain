@@ -1,3 +1,4 @@
+import { Row } from "antd";
 import { TurtleInfo, TurtleText } from "components/common";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 
 function MainContent({ title, info, children }: Props) {
   return (
-    <div style={{ paddingTop: 32, paddingBottom: 32 }}>
+    <Row style={{ paddingTop: 32, paddingBottom: 32 }}>
       <TurtleText>
         {title}
         {info && (
@@ -19,7 +20,7 @@ function MainContent({ title, info, children }: Props) {
         )}
       </TurtleText>
       {children}
-    </div>
+    </Row>
   );
 }
 

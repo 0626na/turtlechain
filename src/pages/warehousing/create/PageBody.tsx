@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { message, Menu, notification, Row, Tabs, Table, Popconfirm, InputNumber } from "antd";
+import { message, Menu, notification, Tabs, Table, Popconfirm, InputNumber } from "antd";
 import { t } from "i18next";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
 import { excelAPI, externalAPI, warehousingAPI } from "apis";
 import { pricePattern } from "utils/pattern";
-import { MainContent, MenuBar } from "layouts/main";
+import { BottomBar, MainContent, MenuBar } from "layouts/main";
 import {
   TurtleButton,
   TurtleButtonSub,
@@ -353,39 +353,6 @@ function PageBody() {
             />
           </Tabs.TabPane>
         </Tabs>
-        <Row justify="end" style={{ paddingTop: 32 }}>
-          <Popconfirm
-            title={t("description.really register")}
-            okText={t("yes")}
-            cancelText={t("no")}
-            onConfirm={() => {
-              createQuery.mutate({
-                sheet: {
-                  created_date: moment().format("YYYY-MM-DD"),
-                  rt_store_id: store.id!,
-                },
-                product: {
-                  rt_store_id: store.id!,
-                  item_list: successList.map((product) => ({
-                    vendor_id: product.vendor_id,
-                    product_id: product.product_id,
-                    count: product.count,
-                    price: product.price,
-                    memo: product.memo,
-                  })),
-                },
-              });
-            }}
-          >
-            <TurtleButton
-              type="primary"
-              disabled={successList.length === 0}
-              loading={createQuery.isLoading}
-            >
-              {t("button.create warehousing")}
-            </TurtleButton>
-          </Popconfirm>
-        </Row>
 
         {/* 상품 단건 추가 모달 */}
         <AddProductModal
@@ -396,6 +363,40 @@ function PageBody() {
           addProduct={addProduct}
         />
       </MainContent>
+
+      <BottomBar>
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={() => {
+            createQuery.mutate({
+              sheet: {
+                created_date: moment().format("YYYY-MM-DD"),
+                rt_store_id: store.id!,
+              },
+              product: {
+                rt_store_id: store.id!,
+                item_list: successList.map((product) => ({
+                  vendor_id: product.vendor_id,
+                  product_id: product.product_id,
+                  count: product.count,
+                  price: product.price,
+                  memo: product.memo,
+                })),
+              },
+            });
+          }}
+        >
+          <TurtleButton
+            type="primary"
+            disabled={successList.length === 0}
+            loading={createQuery.isLoading}
+          >
+            {t("button.create warehousing")}
+          </TurtleButton>
+        </Popconfirm>
+      </BottomBar>
     </>
   );
 }

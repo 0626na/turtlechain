@@ -4,7 +4,7 @@ import { warehousingAPI } from "apis";
 import { AdjustmentProduct } from "apis/adjustmentAPI";
 import { RequestGetSheet, WarehousingProductShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
-import { TurtleButton, TurtleModal } from "components/common";
+import { TurtleButton, TurtleModal, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { MainContent } from "layouts/main";
 import { useCallback, useEffect, useState } from "react";
@@ -188,13 +188,10 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
           scroll={{ y: "auto" }}
           style={{ height: "60vh" }}
           title={() => (
-            <Row justify="space-between">
-              <span>
-                총 <span style={{ color: "#32ACDD" }}>{productList?.length ?? 0}</span>건 | 선택
-                {"  "}
-                <span style={{ color: "#32ACDD" }}>{selectedRows?.length ?? 0}</span>건
-              </span>
-            </Row>
+            <TurtleTableTitle
+              count={productList?.length ?? 0}
+              selectedCount={selectedRows?.length ?? 0}
+            />
           )}
           rowSelection={{
             onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
@@ -245,13 +242,13 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
             },
           ]}
         />
-
-        <Row justify="end">
-          <TurtleButton type="default" onClick={clickAddProduct}>
-            {t("button.add product")}
-          </TurtleButton>
-        </Row>
       </MainContent>
+
+      <Row justify="end">
+        <TurtleButton type="default" onClick={clickAddProduct}>
+          {t("button.add product")}
+        </TurtleButton>
+      </Row>
     </TurtleModal>
   );
 }

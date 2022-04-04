@@ -113,6 +113,7 @@
     "price confirm": "금액 확정하기",
     "remove": "제외하기",
     "cancel": "취소",
+    "ok": "확인",
     "next step": "다음 단계",
     "select": "선택하기",
     "request clearing": "결제 요청 등록",
@@ -227,7 +228,7 @@
     "clearing list": "정산이력",
     "warehousing list": "입고내역",
     "clearing date": "정산 날짜",
-    "total price": "결제 금액",
+    "total price": "총 금액",
     "supply price": "공급가액",
     "vat price": "부가세"
   },

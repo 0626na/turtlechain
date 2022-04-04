@@ -14,6 +14,8 @@ import {
   message,
   notification,
   Popconfirm,
+  Form,
+  InputNumber,
 } from "antd";
 import adjustmentAPI, { AdjustmentProductShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
@@ -22,7 +24,13 @@ import { useCallback, useEffect, useState } from "react";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import { AxiosError } from "axios";
-import { TurtleButtonSub, TurtleCard, TurtleIcon, TurtleTableTitle } from "components/common";
+import {
+  TurtleButtonSub,
+  TurtleCard,
+  TurtleIcon,
+  TurtlePopConfirm,
+  TurtleTableTitle,
+} from "components/common";
 import { MainContent, MenuBar } from "layouts/main";
 import AdjustmentDetailModal from "./AdjustmentDetailModal";
 
@@ -37,7 +45,6 @@ const PageBody = function () {
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page: 1,
-    type: "all",
   });
 
   // 매입조정 리스트 요청
@@ -100,15 +107,15 @@ const PageBody = function () {
           color="orange"
           title={t("adjustment.pending")}
           span={4}
-          count={getAdjustmentListQuery.data?.data.statistics?.not_cleared.count ?? 0}
-          price={getAdjustmentListQuery.data?.data.statistics?.not_cleared.price ?? 0}
+          count={getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.count ?? 0}
+          price={getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.price ?? 0}
         />
         <TurtleCard
           color="geekblue"
           title={t("adjustment.confirmed")}
           span={4}
-          count={getAdjustmentListQuery.data?.data.statistics?.cleared.count ?? 0}
-          price={getAdjustmentListQuery.data?.data.statistics?.cleared.price ?? 0}
+          count={getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.count ?? 0}
+          price={getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0}
         />
       </Row>
 
@@ -212,8 +219,8 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
-              title: t("product.price"),
-              render: (_, record) => record.price.toLocaleString(),
+              title: t("adjustment.total price"),
+              render: (_, record) => (record.price * record.count).toLocaleString(),
             },
             {
               ellipsis: true,
@@ -224,6 +231,69 @@ const PageBody = function () {
               ellipsis: true,
               title: t("adjustment.type."),
               render: (_, record) => t(`adjustment.type.${record.type}`),
+            },
+            {
+              ellipsis: true,
+              render: (_, record) => (
+                <TurtlePopConfirm
+                  title={
+                    <Form colon={false}>
+                      <Form.Item label="처리 방식">
+                        <Select
+                          size="small"
+                          style={{ width: 100, marginLeft: 50 }}
+                          value={record.adjustment_process_type}
+                          onChange={(value) => {
+                            setAdjustmentList(
+                              adjustmentList?.map((product) =>
+                                product.id === record.id
+                                  ? { ...product, adjustment_process_type: value }
+                                  : product,
+                              ),
+                            );
+                          }}
+                        >
+                          {["subtract", "refund"].map((value) => (
+                            <Select.Option key={value} value={value}>
+                              {t(`adjustment.process type.${value}`)}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="처리수량 / 총 수량">
+                        <InputNumber
+                          size="small"
+                          style={{ width: 75 }}
+                          min={1}
+                          max={record.count_left}
+                          value={record.process_count}
+                          onChange={(value) => {
+                            setAdjustmentList(
+                              adjustmentList?.map((product) =>
+                                product.id === record.id
+                                  ? { ...product, process_count: value }
+                                  : product,
+                              ),
+                            );
+                          }}
+                        />
+                        &nbsp;&nbsp;/&nbsp;{record.count_left}
+                      </Form.Item>
+                    </Form>
+                  }
+                  onConfirm={() => {
+                    updateAdjustmentQuery.mutate({
+                      id: record.id,
+                      adjustment_process_type: record.adjustment_process_type,
+                      process_count: record.process_count,
+                    });
+                  }}
+                >
+                  <TurtleButtonSub color="skyblue" size="small">
+                    처리
+                  </TurtleButtonSub>
+                </TurtlePopConfirm>
+              ),
             },
             Table.EXPAND_COLUMN,
             {

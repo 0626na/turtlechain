@@ -35,7 +35,7 @@ export interface AdjustmentProductShow {
   is_vat_included: boolean;
   created_date: string;
   price: number;
-  type: "reserve" | "takeback" | "exchange" | "refund";
+  type: "reserve" | "takeback" | "exchange";
   vendor_info: {
     id: number;
     vendor_name: string;
@@ -48,6 +48,9 @@ export interface AdjustmentProductShow {
   memo: string;
   memo_active?: boolean;
   memo_value?: string;
+  // for 매입조정 처리
+  process_count?: number;
+  adjustment_process_type?: "substract" | "refund";
 }
 
 // Request: 매입조정 리스트 조회
@@ -57,14 +60,13 @@ export interface RequestGetList {
   start_date?: string;
   end_date?: string;
   is_cleared?: number | "";
-  type: "reserve" | "takeback" | "exchange" | "refund" | "all";
 }
 
 // Response: 매입조정 리스트 조회
 export interface ResponseGetList {
   msg: string;
   data: {
-    statistics: {
+    adjustment_summary: {
       cleared: {
         count: number;
         price: number;
@@ -122,6 +124,10 @@ export interface RequestUpdate {
   id: number;
   is_inactive?: boolean;
   memo?: string;
+
+  // for 매입조정 처리
+  process_count?: number;
+  adjustment_process_type?: "substract" | "refund";
 }
 
 // Response: 매입조정 상품 수정
