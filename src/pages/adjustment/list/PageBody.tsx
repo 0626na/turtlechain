@@ -234,6 +234,7 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
+              align: "center",
               width: 100,
               render: (_, record) =>
                 record.count_left !== 0 && (
