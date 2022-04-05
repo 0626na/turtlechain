@@ -32,7 +32,7 @@ import {
   TurtleTableTitle,
 } from "components/common";
 import { MainContent, MenuBar } from "layouts/main";
-import AdjustmentDetailModal from "./AdjustmentDetailModal";
+import DetailModal from "./DetailModal";
 
 const PageBody = function () {
   const store = useRecoilValue(storeState);
@@ -424,7 +424,7 @@ const PageBody = function () {
         />
 
         {/* 매입조정 상세보기 모달 */}
-        <AdjustmentDetailModal
+        <DetailModal
           visible={detailModalVisible}
           closeModal={() => {
             setDetailModalVisible(false);

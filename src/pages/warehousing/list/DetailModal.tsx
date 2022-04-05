@@ -18,7 +18,7 @@ import {
   Space,
 } from "antd";
 import { t } from "i18next";
-import { TurtleModal } from "components/common";
+import { TurtleModal, TurtleTableTitle } from "components/common";
 
 interface Props {
   visible: boolean;
@@ -228,51 +228,48 @@ function DetailModal({ visible, onClose, sheet }: Props) {
         rowKey={(product) => product.id}
         style={{ height: "60vh", paddingTop: 30 }}
         title={() => (
-          <Row justify="space-between">
-            <span>
-              총 <span style={{ color: "#32ACDD" }}>{filteredList.length ?? 0}</span>건
-            </span>
+          <TurtleTableTitle count={filteredList.length ?? 0}>
             {/* <SearchFilter
               type="product"
               onSearch={({ type, search_string }) => searchProductList({ type, search_string })}
             /> */}
-          </Row>
+          </TurtleTableTitle>
         )}
         columns={[
           {
             ellipsis: true,
             title: t("vendor.name"),
-            render: (_, item) => item.vendor_info.vendor_name,
+            render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
             title: t("vendor.address"),
-            render: (_, item) => item.vendor_info.vendor_address,
+            render: (_, record) => record.vendor_info.vendor_address,
           },
           {
             ellipsis: true,
             title: t("product.code"),
-            render: (_, item) => item.product_info.product_code,
+            render: (_, record) => record.product_info.product_code,
           },
           {
             ellipsis: true,
             title: t("product.name"),
-            render: (_, item) => item.product_info.name,
+            render: (_, record) => record.product_info.name,
           },
           {
             ellipsis: true,
             title: t("product.vendor product name"),
-            render: (_, item) => item.product_info.vendor_product_name,
+            render: (_, record) => record.product_info.vendor_product_name,
           },
           {
             ellipsis: true,
             title: t("product.option"),
-            render: (_, item) => item.product_info.option,
+            render: (_, record) => record.product_info.option,
           },
           {
             ellipsis: true,
             title: t("product.price"),
-            render: (_, item) => item.price.toLocaleString(),
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,

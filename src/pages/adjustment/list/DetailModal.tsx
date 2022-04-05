@@ -12,7 +12,7 @@ interface Props {
   selectedRow?: AdjustmentProductShow;
 }
 
-function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
+function DetailModal({ visible, closeModal, selectedRow }: Props) {
   // 매입조정 상세내역 요청
   const getDetailQuery = useQuery(
     ["getAdjustmentDetail"],
@@ -206,4 +206,4 @@ function AdjustmentDetailModal({ visible, closeModal, selectedRow }: Props) {
   );
 }
 
-export default AdjustmentDetailModal;
+export default DetailModal;
