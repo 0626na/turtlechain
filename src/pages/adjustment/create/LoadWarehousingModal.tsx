@@ -100,7 +100,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
         product_count: 0,
         product_count_max: product.count,
         product_code: product.product_info.product_code,
-        is_vat_included: false,
+        is_vat_included: product.is_vat_included,
         type: "",
         memo: "",
       });

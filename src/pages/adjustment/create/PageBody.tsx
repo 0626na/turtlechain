@@ -213,26 +213,6 @@ const PageBody = function () {
                 },
                 {
                   ellipsis: true,
-                  title: "부가세 포함 여부",
-                  render: (_, record) => (
-                    <Switch
-                      style={{ width: "52px" }}
-                      checkedChildren={t("button.include")}
-                      checked={record.is_vat_included}
-                      onClick={() => {
-                        setSuccessList(
-                          changeSuccessList(
-                            "is_vat_included",
-                            record.index,
-                            !record.is_vat_included,
-                          ),
-                        );
-                      }}
-                    />
-                  ),
-                },
-                {
-                  ellipsis: true,
                   width: 110,
                   title: t("product.price"),
                   render: (_, record) => (

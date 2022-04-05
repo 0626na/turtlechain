@@ -11,7 +11,6 @@ import { storeState } from "store/storeState";
 import styled from "styled-components";
 import { phonePattern } from "utils/pattern";
 import { NewSearchFilter } from ".";
-import SearchFilter from "./SearchFilter";
 
 interface Props {
   visible: boolean;
@@ -21,6 +20,7 @@ interface Props {
     vendor_name: string,
     vendor_address: string,
     vendor_phone: string,
+    is_vat_included: boolean,
   ) => void;
 }
 
@@ -46,13 +46,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       },
       onSuccess: (data) => {},
     },
-  );
-
-  const searchVendor = useCallback(
-    ({ type, search_string }: { type: string; search_string: string }) => {
-      setSearchQuery({ page: 1, type, search_string });
-    },
-    [],
   );
 
   const selectPage = useCallback(
@@ -107,6 +100,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
                 record.vendor_name,
                 record.vendor_address,
                 record.vendor_phone.phone,
+                record.is_vat_included,
               );
             },
           };

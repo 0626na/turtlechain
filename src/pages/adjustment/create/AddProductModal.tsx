@@ -25,12 +25,13 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
   const [productModalVisible, setProductModalVisible] = useState(false);
 
   const selectVendor = useCallback(
-    (vendor_id, vendor_name, vendor_address, vendor_phone) => {
+    (vendor_id, vendor_name, vendor_address, vendor_phone, is_vat_included) => {
       form.setFieldsValue({
         vendor_id,
         vendor_name,
         vendor_address,
         vendor_phone,
+        is_vat_included,
         product_id: undefined,
         product_name: undefined,
         product_code: undefined,
@@ -96,7 +97,6 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
               ...value,
               type: "reserve",
               warehousing_item_id: 0,
-              is_vat_included: false,
             }) && onCloseModal();
           }}
         >
@@ -104,6 +104,9 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             <Input hidden />
           </Form.Item>
           <Form.Item name="product_id" hidden>
+            <Input hidden />
+          </Form.Item>
+          <Form.Item name="is_vat_included" hidden>
             <Input hidden />
           </Form.Item>
 
