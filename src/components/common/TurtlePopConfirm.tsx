@@ -16,7 +16,7 @@ function TurtlePopConfirm({ title, onConfirm, children }: Props) {
       }}
     >
       <StyledPopconfirm
-        title={title}
+        title={<div style={{ paddingRight: 22 }}>{title}</div>}
         icon=""
         okText={t("button.ok")}
         cancelText={t("button.cancel")}
@@ -30,7 +30,7 @@ function TurtlePopConfirm({ title, onConfirm, children }: Props) {
 
 const StyledPopconfirm = styled(Popconfirm)`
   .ant-popover-message-title {
-    padding-left: 0 !important;
+    padding-left: 0px;
   }
 `;
 

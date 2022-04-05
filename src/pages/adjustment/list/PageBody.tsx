@@ -234,66 +234,67 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
-              render: (_, record) => (
-                <TurtlePopConfirm
-                  title={
-                    <Form colon={false}>
-                      <Form.Item label="처리 방식">
-                        <Select
-                          size="small"
-                          style={{ width: 100, marginLeft: 50 }}
-                          value={record.adjustment_process_type}
-                          onChange={(value) => {
-                            setAdjustmentList(
-                              adjustmentList?.map((product) =>
-                                product.id === record.id
-                                  ? { ...product, adjustment_process_type: value }
-                                  : product,
-                              ),
-                            );
-                          }}
-                        >
-                          {["subtract", "refund"].map((value) => (
-                            <Select.Option key={value} value={value}>
-                              {t(`adjustment.process type.${value}`)}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                      <Form.Item label="처리수량 / 총 수량">
-                        <InputNumber
-                          size="small"
-                          style={{ width: 75 }}
-                          min={1}
-                          max={record.count_left}
-                          value={record.process_count}
-                          onChange={(value) => {
-                            setAdjustmentList(
-                              adjustmentList?.map((product) =>
-                                product.id === record.id
-                                  ? { ...product, process_count: value }
-                                  : product,
-                              ),
-                            );
-                          }}
-                        />
-                        &nbsp;&nbsp;/&nbsp;{record.count_left}
-                      </Form.Item>
-                    </Form>
-                  }
-                  onConfirm={() => {
-                    updateAdjustmentQuery.mutate({
-                      id: record.id,
-                      adjustment_process_type: record.adjustment_process_type,
-                      process_count: record.process_count,
-                    });
-                  }}
-                >
-                  <TurtleButtonSub color="skyblue" size="small">
-                    처리
-                  </TurtleButtonSub>
-                </TurtlePopConfirm>
-              ),
+              render: (_, record) =>
+                record.count === record.count_left && (
+                  <TurtlePopConfirm
+                    title={
+                      <Form colon={false}>
+                        <Form.Item label="처리 방식">
+                          <Select
+                            size="small"
+                            style={{ width: 100, marginLeft: 50 }}
+                            value={record.adjustment_process_type}
+                            onChange={(value) => {
+                              setAdjustmentList(
+                                adjustmentList?.map((product) =>
+                                  product.id === record.id
+                                    ? { ...product, adjustment_process_type: value }
+                                    : product,
+                                ),
+                              );
+                            }}
+                          >
+                            {["subtract", "refund"].map((value) => (
+                              <Select.Option key={value} value={value}>
+                                {t(`adjustment.process type.${value}`)}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <Form.Item label="처리수량 / 총 수량">
+                          <InputNumber
+                            size="small"
+                            style={{ width: 75 }}
+                            min={1}
+                            max={record.count_left}
+                            value={record.process_count}
+                            onChange={(value) => {
+                              setAdjustmentList(
+                                adjustmentList?.map((product) =>
+                                  product.id === record.id
+                                    ? { ...product, process_count: value }
+                                    : product,
+                                ),
+                              );
+                            }}
+                          />
+                          &nbsp;&nbsp;/&nbsp;{record.count_left}
+                        </Form.Item>
+                      </Form>
+                    }
+                    onConfirm={() => {
+                      updateAdjustmentQuery.mutate({
+                        id: record.id,
+                        adjustment_process_type: record.adjustment_process_type,
+                        process_count: record.process_count,
+                      });
+                    }}
+                  >
+                    <TurtleButtonSub color="skyblue" size="small">
+                      처리
+                    </TurtleButtonSub>
+                  </TurtlePopConfirm>
+                ),
             },
             Table.EXPAND_COLUMN,
             {
