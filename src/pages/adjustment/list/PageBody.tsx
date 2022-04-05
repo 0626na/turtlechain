@@ -234,15 +234,16 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
+              width: 100,
               render: (_, record) =>
-                record.count === record.count_left && (
+                record.count_left !== 0 && (
                   <TurtlePopConfirm
                     title={
                       <Form colon={false}>
-                        <Form.Item label="처리 방식">
+                        <Form.Item label="처리방식">
                           <Select
                             size="small"
-                            style={{ width: 100, marginLeft: 50 }}
+                            style={{ width: 100, marginLeft: 62 }}
                             value={record.adjustment_process_type}
                             onChange={(value) => {
                               setAdjustmentList(
@@ -261,7 +262,7 @@ const PageBody = function () {
                             ))}
                           </Select>
                         </Form.Item>
-                        <Form.Item label="처리수량 / 총 수량">
+                        <Form.Item label="처리수량 / 남은수량">
                           <InputNumber
                             size="small"
                             style={{ width: 75 }}
@@ -282,7 +283,11 @@ const PageBody = function () {
                         </Form.Item>
                       </Form>
                     }
-                    onConfirm={() => {
+                    onConfirm={(e) => {
+                      if (!(record.process_count && record.adjustment_process_type)) {
+                        message.warn("처리 방식, 수량을 입력해주세요.");
+                        return;
+                      }
                       updateAdjustmentQuery.mutate({
                         id: record.id,
                         adjustment_process_type: record.adjustment_process_type,

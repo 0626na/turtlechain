@@ -1,10 +1,9 @@
 import { t } from "i18next";
 import { Popconfirm } from "antd";
-import styled from "styled-components";
 
 interface Props {
   title: React.ReactNode;
-  onConfirm: () => void;
+  onConfirm: (e?: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   children: React.ReactNode;
 }
 
@@ -15,7 +14,7 @@ function TurtlePopConfirm({ title, onConfirm, children }: Props) {
         e.stopPropagation();
       }}
     >
-      <StyledPopconfirm
+      <Popconfirm
         title={<div style={{ paddingRight: 22 }}>{title}</div>}
         icon=""
         okText={t("button.ok")}
@@ -23,15 +22,9 @@ function TurtlePopConfirm({ title, onConfirm, children }: Props) {
         onConfirm={onConfirm}
       >
         {children}
-      </StyledPopconfirm>
+      </Popconfirm>
     </div>
   );
 }
-
-const StyledPopconfirm = styled(Popconfirm)`
-  .ant-popover-message-title {
-    padding-left: 0px;
-  }
-`;
 
 export default TurtlePopConfirm;
