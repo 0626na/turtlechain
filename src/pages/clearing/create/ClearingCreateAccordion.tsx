@@ -233,127 +233,127 @@ function ClearingCreateAccordion() {
     },
   );
 
-  const mutateCreateClearingSheet = useMutation(
-    ["createClearingSheet"],
-    clearingAPI.createClearingSheet,
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-    },
-  );
+  // const mutateCreateClearingSheet = useMutation(
+  //   ["createClearingSheet"],
+  //   clearingAPI.createClearingSheet,
+  //   {
+  //     onError: (error: AxiosError) => {
+  //       message.error(error.response?.data?.msg);
+  //     },
+  //   },
+  // );
 
-  const mutateCreateClearingItem = useMutation(
-    ["createClearingItem"],
-    clearingAPI.createClearingItem,
-    {
-      onSuccess: () => {
-        message.success(t("message.success create clearing"));
-        setClearingCart([]);
-        setAdjustablePrice({});
-        setSelectedWarehousingSheetRowKeys([]);
-        setActivePanelId("1");
-        qc.refetchQueries("getWarehousingSheet");
-      },
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-    },
-  );
+  // const mutateCreateClearingItem = useMutation(
+  //   ["createClearingItem"],
+  //   clearingAPI.createClearingItem,
+  //   {
+  //     onSuccess: () => {
+  //       message.success(t("message.success create clearing"));
+  //       setClearingCart([]);
+  //       setAdjustablePrice({});
+  //       setSelectedWarehousingSheetRowKeys([]);
+  //       setActivePanelId("1");
+  //       qc.refetchQueries("getWarehousingSheet");
+  //     },
+  //     onError: (error: AxiosError) => {
+  //       message.error(error.response?.data?.msg);
+  //     },
+  //   },
+  // );
 
-  const onClickCreateClearing = async () => {
-    if (store.id && store.id > 0) {
-      await mutateCreateClearingSheet
-        .mutateAsync({
-          rt_store_id: store.id,
-          rt_store_name: store.name,
-          total_price:
-            warehousingTotal +
-            warehousingVatTotal +
-            adjustmentTotal +
-            adjustmentVatTotal +
-            (!!store.id ? getTodayReserved.data?.data.statistics.not_cleared.price : 0),
-          total_vat_price: warehousingVatTotal + adjustmentVatTotal,
-        })
-        .then((data) => {
-          // 최종으로 정산 생성을 위해 데이터 모양을 맞춤.
-          const createClearingItemList = [
-            // 입고
-            ...clearingCart
-              .filter((value: any) => value.type === "warehousing")
-              .map((value: any) => {
-                return {
-                  type: value.type,
-                  original_id: value.id,
-                  ws_store_id: value.vendor_info.ws_store_id,
-                  vendor_id: value.vendor_info.id,
-                  vendor_name: value.vendor_info.vendor_name,
-                  vendor_address: value.vendor_info.vendor_address,
-                  bank: value.vendor_info.vendor_account.bank,
-                  account_number: value.vendor_info.vendor_account.account_number,
-                  account_holder: value.vendor_info.vendor_account.account_holder,
-                  is_vat_included: value.is_vat_included,
-                  total_price: value.is_vat_included
-                    ? Math.floor(value.price * value.count * 1.1)
-                    : value.price * value.count,
-                  deposit_price: value.is_vat_included
-                    ? Math.floor(value.price * value.count * 1.1)
-                    : value.price * value.count,
-                  supply_price: value.price * value.count,
-                  vat_price: Math.floor(value.price * value.count * 0.1),
-                };
-              }),
-            // 매입
-            ...clearingCart
-              .filter((value: any) => value.type === "adjustment")
-              .map((value: any) => ({
-                ...value,
-                total_price: value.is_vat_included
-                  ? Math.floor(value.price * value.process_count * 1.1)
-                  : value.price * value.process_count,
-                deposit_price: value.is_vat_included
-                  ? Math.floor(value.price * value.process_count * 1.1)
-                  : value.price * value.process_count,
-                supply_price: value.price * value.process_count,
-                vat_price: Math.floor(value.price * value.process_count * 0.1),
-              })),
-            // 당일 미송
-          ];
-          const todayReserved = getTodayReserved.data?.data.adjustment_list.map((value: any) => ({
-            ...value,
-            type: "adjustment",
-            original_id: value.id,
-            // ws_store_id: value.ws_store_id,
-            vendor_id: value.vendor_info.id,
-            vendor_name: value.vendor_info.vendor_name,
-            vendor_address: value.vendor_info.vendor_address,
-            bank: value.vendor_info.vendor_account.bank,
-            account_number: value.vendor_info.vendor_account.account_number,
-            account_holder: value.vendor_info.vendor_account.account_holder,
-            is_vat_included: value.is_vat_included,
-            adjustment_process_type: null,
-            process_count: 0,
-            total_price: Math.floor(value.price * value.count * 1.1),
-            deposit_price: value.is_vat_included
-              ? Math.floor(value.price * value.count * 1.1)
-              : value.price * value.count,
-            supply_price: value.price * value.count,
-            vat_price: Math.floor(value.price * value.count * 0.1),
-          }));
-          if (todayReserved && todayReserved?.length > 0) {
-            createClearingItemList.push(...todayReserved);
-          }
+  // const onClickCreateClearing = async () => {
+  //   if (store.id && store.id > 0) {
+  //     await mutateCreateClearingSheet
+  //       .mutateAsync({
+  //         rt_store_id: store.id,
+  //         rt_store_name: store.name,
+  //         total_price:
+  //           warehousingTotal +
+  //           warehousingVatTotal +
+  //           adjustmentTotal +
+  //           adjustmentVatTotal +
+  //           (!!store.id ? getTodayReserved.data?.data.statistics.not_cleared.price : 0),
+  //         total_vat_price: warehousingVatTotal + adjustmentVatTotal,
+  //       })
+  //       .then((data) => {
+  //         // 최종으로 정산 생성을 위해 데이터 모양을 맞춤.
+  //         const createClearingItemList = [
+  //           // 입고
+  //           ...clearingCart
+  //             .filter((value: any) => value.type === "warehousing")
+  //             .map((value: any) => {
+  //               return {
+  //                 type: value.type,
+  //                 original_id: value.id,
+  //                 ws_store_id: value.vendor_info.ws_store_id,
+  //                 vendor_id: value.vendor_info.id,
+  //                 vendor_name: value.vendor_info.vendor_name,
+  //                 vendor_address: value.vendor_info.vendor_address,
+  //                 bank: value.vendor_info.vendor_account.bank,
+  //                 account_number: value.vendor_info.vendor_account.account_number,
+  //                 account_holder: value.vendor_info.vendor_account.account_holder,
+  //                 is_vat_included: value.is_vat_included,
+  //                 total_price: value.is_vat_included
+  //                   ? Math.floor(value.price * value.count * 1.1)
+  //                   : value.price * value.count,
+  //                 deposit_price: value.is_vat_included
+  //                   ? Math.floor(value.price * value.count * 1.1)
+  //                   : value.price * value.count,
+  //                 supply_price: value.price * value.count,
+  //                 vat_price: Math.floor(value.price * value.count * 0.1),
+  //               };
+  //             }),
+  //           // 매입
+  //           ...clearingCart
+  //             .filter((value: any) => value.type === "adjustment")
+  //             .map((value: any) => ({
+  //               ...value,
+  //               total_price: value.is_vat_included
+  //                 ? Math.floor(value.price * value.process_count * 1.1)
+  //                 : value.price * value.process_count,
+  //               deposit_price: value.is_vat_included
+  //                 ? Math.floor(value.price * value.process_count * 1.1)
+  //                 : value.price * value.process_count,
+  //               supply_price: value.price * value.process_count,
+  //               vat_price: Math.floor(value.price * value.process_count * 0.1),
+  //             })),
+  //           // 당일 미송
+  //         ];
+  //         const todayReserved = getTodayReserved.data?.data.adjustment_list.map((value: any) => ({
+  //           ...value,
+  //           type: "adjustment",
+  //           original_id: value.id,
+  //           // ws_store_id: value.ws_store_id,
+  //           vendor_id: value.vendor_info.id,
+  //           vendor_name: value.vendor_info.vendor_name,
+  //           vendor_address: value.vendor_info.vendor_address,
+  //           bank: value.vendor_info.vendor_account.bank,
+  //           account_number: value.vendor_info.vendor_account.account_number,
+  //           account_holder: value.vendor_info.vendor_account.account_holder,
+  //           is_vat_included: value.is_vat_included,
+  //           adjustment_process_type: null,
+  //           process_count: 0,
+  //           total_price: Math.floor(value.price * value.count * 1.1),
+  //           deposit_price: value.is_vat_included
+  //             ? Math.floor(value.price * value.count * 1.1)
+  //             : value.price * value.count,
+  //           supply_price: value.price * value.count,
+  //           vat_price: Math.floor(value.price * value.count * 0.1),
+  //         }));
+  //         if (todayReserved && todayReserved?.length > 0) {
+  //           createClearingItemList.push(...todayReserved);
+  //         }
 
-          if (store.id)
-            mutateCreateClearingItem.mutate({
-              sheet_id: data.data as number,
-              rt_store_id: store.id,
-              rt_store_name: store.name,
-              item_list: createClearingItemList,
-            });
-        });
-    }
-  };
+  //         if (store.id)
+  //           mutateCreateClearingItem.mutate({
+  //             sheet_id: data.data as number,
+  //             rt_store_id: store.id,
+  //             rt_store_name: store.name,
+  //             item_list: createClearingItemList,
+  //           });
+  //       });
+  //   }
+  // };
 
   const panelOneHeader = (
     <Space size={5}>
@@ -485,8 +485,8 @@ function ClearingCreateAccordion() {
           <Row justify="end" align="middle">
             <TurtleButton
               children={t("button.request clearing")}
-              onClick={onClickCreateClearing}
-              loading={mutateCreateClearingSheet.isLoading && mutateCreateClearingItem.isLoading}
+              // onClick={onClickCreateClearing}
+              // loading={mutateCreateClearingSheet.isLoading && mutateCreateClearingItem.isLoading}
             />
           </Row>
         </Panel>

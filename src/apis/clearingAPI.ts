@@ -1,10 +1,134 @@
 import { v2Axios } from "./index";
 
+// Request: 정산서 생성
+export interface RequestCreateSheet {
+  rt_store_id: number;
+  rt_store_name: string;
+  total_price: number;
+  total_vat_price: number;
+}
+
+// Response: 정산서 생성
+export interface ResponseCreateSheet {
+  msg: string;
+  data: number;
+}
+
+// Request: 정산 상품 생성
+export interface RequestCreateItem {
+  sheet_id?: number;
+  rt_store_id?: number;
+  rt_store_name?: string;
+  warehousing_item_list: Array<{
+    warehousing_item_id: number;
+    total_price: number;
+    deposit_price: number;
+    supply_price: number;
+    vat_price: number;
+  }>;
+  adjustment_item_list: Array<{
+    ws_store_id: number;
+    vendor_id: number;
+    balance: number;
+    is_vat_included: boolean;
+  }>;
+}
+
+// Response: 정산 상품 생성
+export interface ResponseCreateItem {
+  msg: string;
+}
+
+// 정산서 생성 요청
+const create = async function (data: { sheet: RequestCreateSheet; product: RequestCreateItem }) {
+  let url = "clearing/sheet";
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
+  url = "clearing/item";
+  const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
+    ...data.product,
+    sheet_id: sheetResponse.data.data,
+  });
+  return itemResponse.data;
+};
+
+export interface RequestGetBalance {
+  // 매입조정 처리내역 확인할때
+  original_id?: number;
+  // 정산에서 매입차감 위해 조회할 때
+  warehousing_sheet_id?: string;
+}
+
+export interface ResponseGetBalance {
+  msg: string;
+  data: {
+    item_list: Array<{
+      id: number;
+      original_id: number;
+      refund_amount: number;
+      overpaid_amount: number;
+      vendor_info: {
+        vendor_name: string;
+      };
+    }>;
+    total_count: number;
+  };
+}
+
+const getBalance = async function (query: RequestGetBalance) {
+  let url = "clearing/balance?";
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetClearingSheet>(url);
+  return response.data;
+};
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * 수정예정
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 export interface ClearingSheet {
   id: number;
   created_time: string;
   is_inactive: boolean;
-  status: "request" | "pending" | "complete",
+  status: "request" | "pending" | "complete";
   rt_store_id: number;
   rt_store_name: string;
   request_date: string;
@@ -90,7 +214,7 @@ export interface ResponseClearingItem {
   total_price: number;
   deposit_price: number;
   supply_price: number;
-  vat_price: number
+  vat_price: number;
 }
 
 // Request: 정산장 조회
@@ -116,26 +240,6 @@ const getClearingSheet = async function (query: RequestGetClearingSheet) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGetClearingSheet>(url);
-  return response.data;
-};
-
-// Request: 정산장 생성
-export interface RequestCreateClearingSheet {
-  rt_store_id: number;
-  rt_store_name: string;
-  total_price: number;
-  total_vat_price: number;
-}
-
-// Response: 정산장 생성
-export interface ResponseCreateClearingSheet {
-  msg: string;
-  data: number;
-}
-
-const createClearingSheet = async function (data: RequestCreateClearingSheet) {
-  let url = "clearing/sheet";
-  const response = await v2Axios.post<ResponseCreateClearingItem>(url, data);
   return response.data;
 };
 
@@ -176,56 +280,13 @@ const getClearingItem = async function (query: RequestGetClearingItem) {
   return response.data;
 };
 
-// 정산아이템 생성 입고 데이터
-export interface warehousingItem {
-  type: "warehousing" | "adjustment";
-  original_id: number;
-  ws_store_id: number;
-  vendor_id: number;
-  vendor_name: string;
-  bank: string;
-  account_number: string;
-  account_holder: string;
-  is_vat_included: boolean;
-  total_price: number;
-  deposit_price: number;
-  supply_price: number;
-  vat_price: number;
-}
-
-// 정산아이템 생성 매입 데이터
-export interface adjustmentItem extends warehousingItem {
-  adjustment_type: "reserve" | "takeback" | "exchange" | "refund";
-  adjustment_process_type: "subtract" | "refund" | null;
-  process_count: number;
-}
-
-// Request: 정산아이템 생성
-export interface RequestCreateClearingItem {
-  sheet_id: number;
-  rt_store_id: number;
-  rt_store_name: string;
-  item_list: Array<warehousingItem | adjustmentItem>;  
-}
-
-// Response: 거래처 리스트
-export interface ResponseCreateClearingItem {
-  msg: string;
-  data: {};
-}
-
-const createClearingItem = async function (data: RequestCreateClearingItem) {
-  let url = "clearing/item";
-  const response = await v2Axios.post<ResponseCreateClearingItem>(url, data);
-  return response.data;
-};
-
 const clearingAPI = {
+  create,
+  getBalance,
+  // 수정예정
   getClearingSheet,
-  createClearingSheet,
-  updateClearingSheet,
   getClearingItem,
-  createClearingItem,
+  updateClearingSheet,
 };
 
 export default clearingAPI;

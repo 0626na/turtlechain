@@ -9,9 +9,10 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheet?: WarehousingSheet;
+  onOk: () => void;
 }
 
-function WarehousingDetailModal({ visible, onClose, sheet }: Props) {
+function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
   const getProductQuery = useQuery(
     ["getWarehousingProduct"],
     () => warehousingAPI.getProduct({ sheet_id: sheet?.id! }),
@@ -19,15 +20,18 @@ function WarehousingDetailModal({ visible, onClose, sheet }: Props) {
       enabled: visible && !!sheet?.id,
     },
   );
+
   return (
     <TurtleModal
       centered
       width="90%"
       bodyStyle={{ height: "80vh", overflow: "auto" }}
-      title="입고내역 확정"
+      title="입고내역 확정하기"
       visible={visible}
+      okText="확정하기"
+      cancelText={t("button.cancel")}
       onCancel={onClose}
-      //footer={}
+      onOk={onOk}
     >
       <Row gutter={16}>
         <Col span={5}>
@@ -63,11 +67,7 @@ function WarehousingDetailModal({ visible, onClose, sheet }: Props) {
         dataSource={getProductQuery.data?.data.item_list}
         rowKey={(record) => record.id}
         style={{ height: "60vh", paddingTop: 30 }}
-        title={() => (
-          <TurtleTableTitle
-            count={getProductQuery.data?.data.item_list.length ?? 0}
-          ></TurtleTableTitle>
-        )}
+        title={() => <TurtleTableTitle count={getProductQuery.data?.data.item_list.length ?? 0} />}
         columns={[
           {
             ellipsis: true,
