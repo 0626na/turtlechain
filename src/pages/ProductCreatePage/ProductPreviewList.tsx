@@ -146,6 +146,8 @@ function ProductPreviewList() {
         rt_store_id: store.id ?? -1,
         vendor_id: parseInt(product.vendor_id),
         price: product.price,
+        memo: product.memo ? product.memo : "",
+        image_url: product.image_url ? product.image_url : "",
       });
     });
     createProductQuery.mutate(resultList);
