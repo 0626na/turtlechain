@@ -39,10 +39,12 @@ export interface WarehousingProduct {
 // 입고상품 가져오기
 export interface WarehousingProductShow {
   id: number;
+  sheet_id: number;
   vendor_info: {
     id: number;
     vendor_name: string;
     vendor_address: string;
+    ws_store_id: number;
   };
   product_info: {
     id: number;

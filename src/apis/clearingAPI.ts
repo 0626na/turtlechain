@@ -1,10 +1,29 @@
 import { v2Axios } from "./index";
 
+// 잔여 매입조정 금액
+export interface BalanceShow {
+  id: number;
+  original_id: number;
+  refund_amount: number;
+  overpaid_amount: number;
+  vendor_info: {
+    id: number;
+    vendor_name: string;
+    is_vat_included: boolean;
+    ws_store_id: number;
+  };
+
+  // 거래처별 입고된 금액 프론트에서 계산해줌
+  warehousing_amount?: number;
+  // 사용할 금액
+  balance?: number;
+}
+
 // Request: 정산서 생성
 export interface RequestCreateSheet {
-  rt_store_id: number;
-  rt_store_name: string;
-  total_price: number;
+  store_id: number;
+  store_name: string;
+  clearing_total_price: number;
   total_vat_price: number;
 }
 
@@ -20,7 +39,10 @@ export interface RequestCreateItem {
   rt_store_id?: number;
   rt_store_name?: string;
   warehousing_item_list: Array<{
+    sheet_id: number;
     warehousing_item_id: number;
+    ws_store_id: number;
+    vendor_id: number;
     total_price: number;
     deposit_price: number;
     supply_price: number;
@@ -40,17 +62,18 @@ export interface ResponseCreateItem {
 }
 
 // 정산서 생성 요청
-const create = async function (data: { sheet: RequestCreateSheet; product: RequestCreateItem }) {
+const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
   let url = "clearing/sheet";
   const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
   url = "clearing/item";
   const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
-    ...data.product,
+    ...data.item,
     sheet_id: sheetResponse.data.data,
   });
   return itemResponse.data;
 };
 
+// Request: 매입 결제대기 항목
 export interface RequestGetBalance {
   // 매입조정 처리내역 확인할때
   original_id?: number;
@@ -58,28 +81,22 @@ export interface RequestGetBalance {
   warehousing_sheet_id?: string;
 }
 
+// Response: 매입 결제대청 항목
 export interface ResponseGetBalance {
   msg: string;
   data: {
-    item_list: Array<{
-      id: number;
-      original_id: number;
-      refund_amount: number;
-      overpaid_amount: number;
-      vendor_info: {
-        vendor_name: string;
-      };
-    }>;
+    item_list: Array<BalanceShow>;
     total_count: number;
   };
 }
 
+// 매입 결제대기 항목 요청
 const getBalance = async function (query: RequestGetBalance) {
   let url = "clearing/balance?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetClearingSheet>(url);
+  const response = await v2Axios.get<ResponseGetBalance>(url);
   return response.data;
 };
 /**

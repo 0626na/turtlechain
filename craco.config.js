@@ -8,7 +8,7 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             modifyVars: {
-              "@primary-color": "#13BC9E",
+              "@primary-color": "#2174F1",
 
               // Input
               "@input-placeholder-color": "#CBCCD1",
@@ -35,7 +35,7 @@ module.exports = {
               "@menu-item-color": "#FFFFFF",
               "@menu-inline-submenu-bg": "#1A1E28",
               "@menu-highlight-color": "#FFFFFF",
-              "@menu-item-active-bg": "@primary-color",
+              "@menu-item-active-bg": "#00B594",
               "@border-radius-base": "4px",
 
               // Buttons
@@ -67,7 +67,9 @@ module.exports = {
               "@tabs-horizontal-padding-lg": "30px 16px 8px 16px",
               "@tabs-horizontal-margin": "0 0 0 0",
 
-              //"@tabs-horizontal-padding-lg": "12px 0",
+              // Table
+              "@item-active-bg": "#E3F4FC",
+              "@table-header-bg": "#F6F9FD",
             },
             javascriptEnabled: true,
           },

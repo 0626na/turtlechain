@@ -432,7 +432,7 @@ function AdjustmentWaitingTable({
           },
           {
             ellipsis: true,
-            title: t("adjustment.vendor_info"),
+            title: t("adjustment.vendor info"),
             dataIndex: ["vendor_info", "vendor_address"],
             render: (text, row) => {
               return (

@@ -116,7 +116,7 @@
     "ok": "확인",
     "next step": "다음 단계",
     "select": "선택하기",
-    "request clearing": "결제 요청 등록",
+    "request clearing": "결제요청 등록",
     "add order": "주문 추가하기",
     "connect external program": "재고프로그램 연동",
     "upload excel": "엑셀 업로드",
@@ -188,7 +188,7 @@
     "section_title2": "입고장 미리보기",
     "btn_upload_whs_sheet": "입고장 업로드",
     "btn_prepopulate_whs": "주문내역 불러오기",
-    "price": "입고 금액 (공급가)",
+    "price": "입고 금액",
     "preview": "입고서 미리보기",
     "load": "입고내역 불러오기"
   },

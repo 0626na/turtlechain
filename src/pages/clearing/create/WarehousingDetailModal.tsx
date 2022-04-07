@@ -1,6 +1,6 @@
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
-import { WarehousingSheet } from "apis/warehousingAPI";
+import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
 import { TurtleModal, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
 import { Card, Col, Row, Statistic, Table } from "antd";
@@ -9,7 +9,7 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheet?: WarehousingSheet;
-  onOk: () => void;
+  onOk: (itemList: WarehousingProductShow[]) => void;
 }
 
 function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
@@ -31,7 +31,9 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
       okText="확정하기"
       cancelText={t("button.cancel")}
       onCancel={onClose}
-      onOk={onOk}
+      onOk={() => {
+        onOk(getProductQuery.data?.data.item_list ?? []);
+      }}
     >
       <Row gutter={16}>
         <Col span={5}>

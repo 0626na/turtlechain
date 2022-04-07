@@ -1,8 +1,8 @@
-import { Badge, Collapse, Typography } from "antd";
+import { Collapse } from "antd";
 import { TurtlePanelHeader } from "components/common";
 import { t } from "i18next";
 import { MainContent, MenuBar } from "layouts/main";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import styled from "styled-components";
@@ -60,6 +60,9 @@ function PageBody() {
             key="3"
             header={<TurtlePanelHeader count={3} activeKey={activeKey} title="정산 미리보기" />}
             activeKey={activeKey}
+            clickCreate={() => {
+              setActiveKey("1");
+            }}
           />
         </StyledCollapse>
       </MainContent>
@@ -70,8 +73,8 @@ function PageBody() {
 const StyledCollapse = styled(Collapse)`
   background-color: white;
   .ant-collapse-item {
-    background-color: #f4f6f9;
-    border: 0;
+    background-color: #fbfcfe;
+    border: 1px solid #e3e6ea;
     margin-bottom: 12px;
     border-radius: 4px;
   }
