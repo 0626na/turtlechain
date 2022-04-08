@@ -8,6 +8,8 @@ import { t } from "i18next";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
+import { storeState } from "store/storeState";
 
 interface Props {
   visible: boolean;
@@ -16,11 +18,12 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
+  const store = useRecoilValue(storeState);
   const [searchQuery, setSearchQuery] = useState<RequestGetBalance>({
-    rt_store_id: selectedRow?.id,
+    rt_store_id: store.id,
     vendor_id: selectedRow?.vendor_info.id,
     start_date: selectedRow?.created_date,
-    end_date: moment().format("YYYY-MM-DD"),
+    end_date: moment().add(7, "d").format("YYYY-MM-DD"),
   });
 
   // 매입조정 상세내역 요청
@@ -28,7 +31,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     ["getAdjustmentDetail", selectedRow],
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
-      enabled: visible && !!selectedRow?.id,
+      enabled: !!searchQuery.rt_store_id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -50,9 +53,10 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
       ...searchQuery,
-      rt_store_id: selectedRow?.id,
+      rt_store_id: store.id,
       vendor_id: selectedRow?.vendor_info.id,
       start_date: selectedRow?.created_date,
+      end_date: moment().add(7, "d").format("YYYY-MM-DD"),
     }));
   }, [selectedRow]);
 
@@ -132,11 +136,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         rowKey={(record) => record.id}
         pagination={false}
         columns={[
-          {
-            ellipsis: true,
-            title: "정산날짜",
-            render: (_, record) => record.created_time,
-          },
           {
             ellipsis: true,
             title: "처리내용",

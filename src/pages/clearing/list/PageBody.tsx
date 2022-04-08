@@ -40,7 +40,7 @@ function PageBody() {
     ["getClearingSheet", searchQuery],
     () => clearingAPI.getSheet(searchQuery),
     {
-      enabled: store.id !== undefined,
+      enabled: !!searchQuery.store_id,
       onSuccess: (data) => {
         setSheetList(data.data.sheet_list);
       },
