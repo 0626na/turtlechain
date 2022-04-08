@@ -52,7 +52,7 @@ const PageBody = function () {
     ["getAdjustmentList", searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
-      enabled: !!store.id,
+      enabled: !!searchQuery.rt_store_id,
       onSuccess: (data) => {
         setAdjustmentList(
           data.data.adjustment_list.map((product) => ({

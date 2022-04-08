@@ -1,9 +1,12 @@
 import { message, Row, Table } from "antd";
-import { adjustmentAPI } from "apis";
+import { adjustmentAPI, clearingAPI } from "apis";
 import { AdjustmentProductShow } from "apis/adjustmentAPI";
+import { RequestGetBalance } from "apis/clearingAPI";
 import { AxiosError } from "axios";
 import { TurtleModal, TurtleText } from "components/common";
 import { t } from "i18next";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 interface Props {
@@ -13,18 +16,45 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
+  const [searchQuery, setSearchQuery] = useState<RequestGetBalance>({
+    rt_store_id: selectedRow?.id,
+    vendor_id: selectedRow?.vendor_info.id,
+    start_date: selectedRow?.created_date,
+    end_date: moment().format("YYYY-MM-DD"),
+  });
+
   // 매입조정 상세내역 요청
   const getDetailQuery = useQuery(
-    ["getAdjustmentDetail"],
+    ["getAdjustmentDetail", selectedRow],
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
-      enabled: visible && !!selectedRow,
+      enabled: visible && !!selectedRow?.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: (data) => {},
     },
   );
+
+  // 잔금 내역 조회 요청 청
+  const getBalanceQuery = useQuery(
+    ["getBalance", searchQuery], //
+    () => clearingAPI.getBalance(searchQuery),
+    {
+      enabled: !!searchQuery.rt_store_id,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data.msg);
+      },
+    },
+  );
+
+  useEffect(() => {
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: selectedRow?.id,
+      vendor_id: selectedRow?.vendor_info.id,
+      start_date: selectedRow?.created_date,
+    }));
+  }, [selectedRow]);
 
   return (
     <TurtleModal
@@ -92,6 +122,30 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       />
 
       <Row style={{ margin: "32px 0 16px 0" }}>
+        <TurtleText>매입조정 처리이력</TurtleText>
+      </Row>
+
+      <Table
+        size="small"
+        loading={getBalanceQuery.isLoading}
+        dataSource={getBalanceQuery.data?.data.item_list}
+        rowKey={(record) => record.id}
+        pagination={false}
+        columns={[
+          {
+            ellipsis: true,
+            title: "정산날짜",
+            render: (_, record) => record.created_time,
+          },
+          {
+            ellipsis: true,
+            title: "처리내용",
+            render: (_, record) => record.memo,
+          },
+        ]}
+      />
+
+      {/* <Row style={{ margin: "32px 0 16px 0" }}>
         <TurtleText>{t("adjustment.clearing list")}</TurtleText>
       </Row>
 
@@ -99,7 +153,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         size="small"
         loading={getDetailQuery.isLoading}
         dataSource={
-          getDetailQuery.data?.data.clearing_info && getDetailQuery.data?.data.clearing_info
+          getDetailQuery.data?.data?.clearing_info && getDetailQuery.data?.data.clearing_info
         }
         rowKey={(record) => record.id}
         pagination={false}
@@ -153,9 +207,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             render: (_, record) => t(`adjustment.process type.${record.adjustment_process_type}`),
           },
         ]}
-      />
+      /> */}
 
-      <Row style={{ margin: "32px 0 16px 0" }}>
+      {/* <Row style={{ margin: "32px 0 16px 0" }}>
         <TurtleText>{t("adjustment.warehousing list")}</TurtleText>
       </Row>
 
@@ -164,7 +218,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         loading={getDetailQuery.isLoading}
         pagination={false}
         dataSource={
-          getDetailQuery.data?.data.warehousing_info.id
+          getDetailQuery.data?.data?.warehousing_info.id
             ? [getDetailQuery.data?.data.warehousing_info]
             : []
         }
@@ -201,7 +255,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             render: (_, record) => record.price.toLocaleString(),
           },
         ]}
-      />
+      /> */}
     </TurtleModal>
   );
 }

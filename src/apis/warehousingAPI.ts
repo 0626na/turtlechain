@@ -59,6 +59,7 @@ export interface WarehousingProductShow {
   memo: string;
   is_vat_included: boolean;
   is_inactive: boolean;
+  created_date: string;
 }
 
 // Request: 입고장 생성
