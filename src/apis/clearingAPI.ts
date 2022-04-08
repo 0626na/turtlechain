@@ -15,8 +15,8 @@ export interface BalanceShow {
 
   // 거래처별 입고된 금액 프론트에서 계산해줌
   warehousing_amount?: number;
-  // 사용할 금액
-  balance?: number;
+  // 차감할 금액
+  subtract_price?: number;
 }
 
 // Request: 정산서 생성
@@ -48,10 +48,10 @@ export interface RequestCreateItem {
     supply_price: number;
     vat_price: number;
   }>;
-  adjustment_item_list: Array<{
+  subtract_item_list: Array<{
     ws_store_id: number;
     vendor_id: number;
-    balance: number;
+    price: number;
     is_vat_included: boolean;
   }>;
 }

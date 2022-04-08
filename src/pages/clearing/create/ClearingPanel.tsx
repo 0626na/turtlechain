@@ -104,7 +104,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   rt_store_id: store.id!,
                   rt_store_name: store.name!,
                   warehousing_item_list: cart.warehousing_item_list,
-                  adjustment_item_list: cart.adjustment_item_list,
+                  subtract_item_list: cart.subtract_item_list,
                 },
               });
             }}

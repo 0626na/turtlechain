@@ -3,7 +3,7 @@ import { Collapse, message, Row, Table, Typography, CollapsePanelProps, Space } 
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleButton } from "components/common";
-import { StrictMode, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -47,7 +47,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   );
 
   const resetStates = useCallback(() => {
-    setCart({ selectedKeys: [], warehousing_item_list: [], adjustment_item_list: [] });
+    setCart({ selectedKeys: [], warehousing_item_list: [], subtract_item_list: [] });
     selectSheet(undefined);
   }, [setCart]);
 
@@ -88,7 +88,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             };
           }),
         ],
-        adjustment_item_list: [],
+        subtract_item_list: [],
       });
       setDetailModalVisible(false);
     },

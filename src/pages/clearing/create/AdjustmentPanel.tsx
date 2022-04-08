@@ -45,16 +45,16 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
 
   // 차감 총 금액 판넬안에서 바뀌게 하기위함
   const totalBalance = useMemo(
-    () => balanceList.map((item) => item.balance ?? 0).reduce((cur, acc) => cur + acc, 0),
+    () => balanceList.map((item) => item.subtract_price ?? 0).reduce((cur, acc) => cur + acc, 0),
     [balanceList],
   );
 
   // cart에 차감금액이 없을 시 balanceList 초기화 (totalBalance 초기화 위함)
   useEffect(() => {
-    if (cart.adjustment_item_list.length === 0) {
+    if (cart.subtract_item_list.length === 0) {
       setBalanceList([]);
     }
-  }, [cart.adjustment_item_list]);
+  }, [cart.subtract_item_list]);
 
   return (
     <Collapse.Panel
@@ -104,11 +104,11 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                   step={1000}
                   min={0}
                   max={Math.min(record.overpaid_amount, record.warehousing_amount ?? 0)}
-                  value={record.balance}
+                  value={record.subtract_price}
                   onChange={(value) => {
                     setBalanceList(
                       balanceList.map((item) =>
-                        item.id === record.id ? { ...item, balance: value } : item,
+                        item.id === record.id ? { ...item, subtract_price: value } : item,
                       ),
                     );
                   }}
@@ -124,12 +124,12 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           onClick={() => {
             setCart({
               ...cart,
-              adjustment_item_list: balanceList
-                .filter((item) => item.balance !== undefined)
+              subtract_item_list: balanceList
+                .filter((item) => item.subtract_price !== undefined)
                 .map((item) => ({
                   ws_store_id: item.vendor_info.ws_store_id,
                   vendor_id: item.vendor_info.id,
-                  balance: item.balance!,
+                  price: item.subtract_price!,
                   is_vat_included: item.vendor_info.is_vat_included,
                 })),
             });
