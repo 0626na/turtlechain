@@ -125,7 +125,7 @@ const create = async function (data: RequestCreate) {
 // Request: 매입조정 상품 수정
 export interface RequestUpdate {
   id: number;
-  is_inactive?: boolean;
+  is_inactive?: number;
   memo?: string;
 
   // for 매입조정 처리

@@ -40,7 +40,7 @@ const PageBody = function () {
   const [selectedRow, selectRow] = useState<AdjustmentProductShow>();
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: store.id ?? -1,
+    rt_store_id: store.id,
     is_cleared: 2,
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
@@ -52,7 +52,7 @@ const PageBody = function () {
     ["getAdjustmentList", searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
-      enabled: !!store.id && searchQuery.rt_store_id !== -1,
+      enabled: !!store.id,
       onSuccess: (data) => {
         setAdjustmentList(
           data.data.adjustment_list.map((product) => ({
@@ -82,7 +82,7 @@ const PageBody = function () {
 
   // 쇼핑몰 바뀔때 마다 매입조정 리스트 재요청
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
+    setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id }));
   }, [store.id]);
 
   // 페이지 선택
@@ -319,7 +319,7 @@ const PageBody = function () {
                         e?.stopPropagation();
                         updateAdjustmentQuery.mutate({
                           id: record.id,
-                          is_inactive: true,
+                          is_inactive: 1,
                         });
                       }}
                     >

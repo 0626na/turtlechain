@@ -132,7 +132,6 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   // 수량 변경
   const setCount = useCallback(
     (record, value) => {
-      console.log("change count");
       setProductList(
         productList.map((product) =>
           product.id === record.id ? { ...product, count: value } : product,
@@ -146,7 +145,6 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   // 상품 삭제
   const deleteProduct = useCallback(
     (record) => {
-      console.log("delete product");
       setProductList(
         productList?.map((product) =>
           product.id === record.id ? { ...product, is_inactive: true } : product,

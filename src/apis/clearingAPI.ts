@@ -19,6 +19,21 @@ export interface BalanceShow {
   subtract_price?: number;
 }
 
+// 정산서
+export interface ClearingSheetShow {
+  id: number;
+  created_time: string;
+  status: "request" | "pending" | "complete";
+  rt_store_id: number;
+  rt_store_name: string;
+  request_date: string;
+  complete_date: string | null;
+  clearing_total_price: number;
+}
+
+// 정산 아이템
+export interface ClearingItemShow {}
+
 // Request: 정산서 생성
 export interface RequestCreateSheet {
   store_id?: number;
@@ -106,211 +121,126 @@ const getBalance = async function (query: RequestGetBalance) {
   const response = await v2Axios.get<ResponseGetBalance>(url);
   return response.data;
 };
-/**
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- * 수정예정
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
 
-export interface ClearingSheet {
-  id: number;
-  created_time: string;
-  is_inactive: boolean;
-  status: "request" | "pending" | "complete";
-  rt_store_id: number;
-  rt_store_name: string;
-  request_date: string;
-  complete_date: string | null;
-  total_price: number;
-  created_by: number;
-}
-
-interface ws_store_company {
-  id: number;
-  name: string;
-  biz_num: string;
-  is_closed: boolean;
-  memo: string;
-}
-
-interface ws_store_account {
-  id: number;
-  account_number: string;
-  account_holder: string;
-  bank: string;
-  is_proxy: boolean;
-  is_deleted: boolean;
-}
-
-interface ws_store_phone {
-  id: number;
-  is_deleted: boolean;
-  created_time: string;
-  updated_time: string;
-  phone: string;
-  send_alimtalk: boolean;
-  tag: string;
-  deleted_by: number | null;
-  created_by: number;
-  updated_by: number;
-  store: number;
-}
-
-interface ws_store {
-  id: number;
-  name: string;
-  phone: string;
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
-  ext: string;
-  is_closed: boolean;
-  memo: string;
-  companies: ws_store_company;
-  created_by: string;
-  updated_by: string;
-  created_time: string;
-  updated_time: string;
-  deleted_time: string;
-  store_account: Array<ws_store_account>;
-  store_phone: Array<ws_store_phone>;
-}
-
-export interface ResponseClearingItem {
-  id: number;
-  ws_store_id: ws_store;
-  created_by: number;
-  created_time: string;
-  created_date: string;
-  sheet_id: number;
-  is_inactive: boolean;
-  type: string;
-  original_id: number;
-  adjustment_type: string | null;
-  adjustment_process_type: string | null;
-  rt_store_id: number;
-  rt_store_name: string;
-  vendor_id: number;
-  vendor_name: string;
-  recipient_print: string;
-  is_vat_included: boolean;
-  bank: string;
-  account_number: string;
-  account_holder: string;
-  memo: string | null;
-  total_price: number;
-  deposit_price: number;
-  supply_price: number;
-  vat_price: number;
-}
-
-// Request: 정산장 조회
-export interface RequestGetClearingSheet {
-  rt_store_id: number | undefined;
+// Request: 정산서 조회
+export interface RequestGetSheet {
+  store_id?: number;
   date_filter?: "request_date" | "complete_date";
-  start_date?: string; // format: YYYY-MM-DD
-  end_date?: string; // format: YYYY-MM-DD
-  page?: number;
-  page_size?: number;
-  status?: "request" | "pending" | "complete" | "";
+  start_date: string;
+  end_date: string;
+  page: number;
+  page_size: number;
+  status: string; // "request" | "pending" | "complete" | "all"
 }
 
-// Response: 정산장 조회
-export interface ResponseGetClearingSheet {
+// Response: 정산서 조회
+export interface ResponseGetSheet {
   msg: string;
-  data: Array<ClearingSheet>;
+  data: {
+    sheet_list: ClearingSheetShow[];
+    total_count: number;
+    clearing_summary: {
+      request: {
+        count: number;
+        price: number;
+      };
+      pending: {
+        count: number;
+        price: number;
+      };
+      complete: {
+        count: number;
+        price: number;
+      };
+    };
+  };
 }
 
-const getClearingSheet = async function (query: RequestGetClearingSheet) {
+// 정산서 조회 요청
+const getSheet = async function (query: RequestGetSheet) {
   let url = "clearing/sheet?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetClearingSheet>(url);
+  const response = await v2Axios.get<ResponseGetSheet>(url);
   return response.data;
 };
 
-// Request: 정산장 수정
-export interface RequestUpdateClearingSheet extends ClearingSheet {}
+// Request: 정산장 수정 요청
+export interface RequestUpdateSheet extends ClearingSheetShow {
+  // 삭제 요청시 1
+  is_inactive: number;
+}
 
 // Response: 정산장 수정
-export interface ResponseUpdateClearingSheet {
+export interface ResponseUpdateSheet {
   msg: string;
   data: number;
 }
 
-const updateClearingSheet = async function (data: RequestUpdateClearingSheet) {
+// 정산장 수정 요청
+const updateSheet = async function (data: RequestUpdateSheet) {
   let url = `clearing/sheet/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdateClearingSheet>(url, data);
+  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
   return response.data;
 };
 
-// Request: 정산아이템 조회
-export interface RequestGetClearingItem {
+// Request: 정산 아이템 조회
+export interface RequestGetItem {
   sheet_id: number;
-  page?: number;
-  page_size?: number;
 }
 
-// Response: 정산장 조회
-export interface ResponseGetClearingItem {
+// Response: 정산 아이템 조회
+export interface ResponseGetItem {
   msg: string;
-  data: Array<ResponseClearingItem>;
+  data: {
+    item_list: Array<{
+      id: number;
+      created_by: number;
+      created_time: string;
+      created_date: string;
+      sheet_id: number;
+      is_inactive: boolean;
+      type: string;
+      original_id: number;
+      adjustment_type: string;
+      adjustment_process_type: string;
+      rt_store_id: number;
+      rt_store_name: string;
+      vendor_id: number;
+      vendor_name: string;
+      vendor_address: string;
+      recipient_print: string;
+      is_vat_included: boolean;
+      bank: string;
+      account_number: string;
+      account_holder: string;
+      memo: string | null;
+      total_price: number;
+      deposit_price: number;
+      supply_price: number;
+      vat_price: number;
+    }>;
+    total_count: number;
+  };
 }
 
-const getClearingItem = async function (query: RequestGetClearingItem) {
+// 정산 아이템 조회 요청
+const getItem = async function (query: RequestGetItem) {
   let url = "clearing/item?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetClearingItem>(url);
+  const response = await v2Axios.get<ResponseGetItem>(url);
   return response.data;
 };
 
 const clearingAPI = {
   create,
   getBalance,
-  // 수정예정
-  getClearingSheet,
-  getClearingItem,
-  updateClearingSheet,
+  getSheet,
+  updateSheet,
+  getItem,
 };
 
 export default clearingAPI;
