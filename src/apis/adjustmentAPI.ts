@@ -1,5 +1,4 @@
 import { v2Axios } from "./index";
-import { VendorInfo, ProductInfo } from "./warehousingAPI";
 
 // 매입조정 상품
 export interface AdjustmentProduct {
@@ -29,6 +28,7 @@ export interface AdjustmentProduct {
 // 매입조정 상품 Show
 export interface AdjustmentProductShow {
   id: number;
+  ws_store_id: number;
   count: number;
   count_left: number;
   is_cleared: boolean;
@@ -55,11 +55,14 @@ export interface AdjustmentProductShow {
 
 // Request: 매입조정 리스트 조회
 export interface RequestGetList {
-  rt_store_id: number;
-  page: number;
-  start_date?: string;
-  end_date?: string;
-  is_cleared?: number | "";
+  rt_store_id?: number;
+  start_date: string;
+  end_date: string;
+  is_cleared?: number;
+  page?: number;
+  type?: "reserve" | "takeback" | "exchange" | "refund";
+  // 당일 미송 조회시 넣어준다.
+  original_id?: 0;
 }
 
 // Response: 매입조정 리스트 조회
@@ -193,93 +196,11 @@ const get = async function (data: RequestGet) {
   return response.data;
 };
 
-/**
- *
- *
- *
- * 정산 페이지 사용 api
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-// Request: 매입조정 아이템 조회
-export interface RequestGetAdjustmentForClearing {
-  rt_store_id: number | undefined;
-  start_date?: string;
-  end_date?: string;
-  type?: "reserve" | "takeback" | "exchange" | "refund";
-  is_cleared?: number;
-}
-
-// TODO: 없애야함(중복) but 정산에서 사용중 so 버리면안됨
-export interface adjustmentItemResponse {
-  id: number;
-  is_inactive: boolean;
-  created_date: string;
-  cleared_time: string | null;
-  rt_store_id: number;
-  ws_store_id: number;
-  vendor_info: VendorInfo;
-  product_info: ProductInfo;
-  count: number;
-  count_left: number;
-  price: number;
-  is_vat_included: boolean;
-  type: "reserve" | "takeback" | "exchange" | "refund";
-  memo: string;
-}
-
-// Response: 매입조정 아이템 조회
-export interface ResponseGetAdjustmentForClearing {
-  msg: string;
-  data: {
-    adjustment_list: Array<adjustmentItemResponse>;
-    statistics: {
-      cleared: {
-        count: number;
-        price: number;
-      };
-      not_cleared: {
-        count: number;
-        price: number;
-      };
-    };
-  };
-}
-
-// 매입조정 아이템 조회 요청
-const getAdjustmentForClearing = async function (query: RequestGetAdjustmentForClearing) {
-  let url = "adjustment/item?";
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetAdjustmentForClearing>(url);
-  return response.data;
-};
-
 const adjustmentAPI = {
   getList,
   create,
   update,
   get,
-  //수정필요
-  getAdjustmentForClearing,
 };
 
 export default adjustmentAPI;

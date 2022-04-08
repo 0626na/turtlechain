@@ -10,14 +10,15 @@ import {
   Row,
 } from "antd";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "store/cartState";
 import useCart from "hooks/useCart";
 import { TurtleButton } from "components/common";
-import { useMutation } from "react-query";
-import { clearingAPI } from "apis";
+import { useMutation, useQuery } from "react-query";
+import { adjustmentAPI, clearingAPI } from "apis";
 import { AxiosError } from "axios";
 import { storeState } from "store/storeState";
+import moment from "moment";
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -26,9 +27,38 @@ interface Props extends CollapsePanelProps {
 
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const store = useRecoilValue(storeState);
-  const cart = useRecoilValue(cartState);
+  const [cart, setCart] = useRecoilState(cartState);
   const [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice] =
     useCart();
+
+  const getTodayReserveListQuery = useQuery(
+    ["getTodayReserveList"],
+    () =>
+      adjustmentAPI.getList({
+        rt_store_id: store.id,
+        is_cleared: 0,
+        start_date: moment().format("YYYY-MM-DD"),
+        end_date: moment().format("YYYY-MM-DD"),
+        type: "reserve",
+        original_id: 0,
+      }),
+    {
+      enabled: activeKey === "3",
+      onSuccess: (data) => {
+        console.log(data.data.adjustment_list);
+        setCart({
+          ...cart,
+          reserve_item_list: data.data.adjustment_list.map((item) => ({
+            adjustment_item_id: item.id,
+            ws_store_id: item.ws_store_id,
+            vendor_id: item.vendor_info.id,
+            price: item.price * item.count,
+            is_vat_included: item.is_vat_included,
+          })),
+        });
+      },
+    },
+  );
 
   const createClearingQuery = useMutation(["createClearing"], clearingAPI.create, {
     onError: (error: AxiosError) => {
@@ -47,7 +77,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     <Collapse.Panel {...props} style={{ border: "1px solid #e3e6ea" }}>
       <StyledCard>
         <Row>
-          <Col span={3}>입고</Col>
+          <Col span={3}>입고 금액 (+)</Col>
           <Col>
             {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{" "}
             {(totalVatPrice ?? 0).toLocaleString()}원 포함)
@@ -56,14 +86,14 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>차감 금액</Col>
-          <Col>-{(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
+          <Col span={3}>차감 금액 (-)</Col>
+          <Col>{(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>당일 미송</Col>
-          <Col>0 원</Col>
+          <Col span={3}>당일 미송 (+)</Col>
+          <Col>{(totalReservePrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
 
@@ -95,16 +125,17 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             onConfirm={() => {
               createClearingQuery.mutate({
                 sheet: {
-                  store_id: store.id!,
-                  store_name: store.name!,
+                  store_id: store.id,
+                  store_name: store.name,
                   clearing_total_price: totalPrice!,
                   total_vat_price: totalVatPrice!,
                 },
                 item: {
-                  rt_store_id: store.id!,
-                  rt_store_name: store.name!,
+                  rt_store_id: store.id,
+                  rt_store_name: store.name,
                   warehousing_item_list: cart.warehousing_item_list,
                   subtract_item_list: cart.subtract_item_list,
+                  reserve_item_list: cart.reserve_item_list,
                 },
               });
             }}

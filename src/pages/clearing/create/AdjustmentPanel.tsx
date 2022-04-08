@@ -74,11 +74,6 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
-            title: "id",
-            render: (_, record) => record.vendor_info.id,
-          },
-          {
-            ellipsis: true,
             title: t("vendor.name"),
             render: (_, record) => record.vendor_info.vendor_name,
           },

@@ -12,5 +12,6 @@ export const cartState = atom<CartState>({
     selectedKeys: [],
     warehousing_item_list: [],
     subtract_item_list: [],
+    reserve_item_list: [],
   },
 });

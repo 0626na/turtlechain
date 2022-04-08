@@ -21,8 +21,8 @@ export interface BalanceShow {
 
 // Request: 정산서 생성
 export interface RequestCreateSheet {
-  store_id: number;
-  store_name: string;
+  store_id?: number;
+  store_name?: string;
   clearing_total_price: number;
   total_vat_price: number;
 }
@@ -49,6 +49,13 @@ export interface RequestCreateItem {
     vat_price: number;
   }>;
   subtract_item_list: Array<{
+    ws_store_id: number;
+    vendor_id: number;
+    price: number;
+    is_vat_included: boolean;
+  }>;
+  reserve_item_list: Array<{
+    adjustment_item_id: number;
     ws_store_id: number;
     vendor_id: number;
     price: number;

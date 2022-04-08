@@ -20,15 +20,18 @@ function useCart() {
   );
 
   const totalSubtractPrice = useMemo(
-    () => cart.adjustment_item_list.map((item) => item.balance).reduce((cur, acc) => cur + acc, 0),
-    [cart.adjustment_item_list],
+    () => cart.subtract_item_list.map((item) => item.price).reduce((cur, acc) => cur + acc, 0),
+    [cart.subtract_item_list],
   );
 
-  const totalReservePrice = useMemo(() => {}, []);
+  const totalReservePrice = useMemo(
+    () => cart.reserve_item_list.map((item) => item.price).reduce((cur, acc) => cur + acc, 0),
+    [cart.reserve_item_list],
+  );
 
   const totalPrice = useMemo(
-    () => totalDepositPrice - totalSubtractPrice,
-    [totalDepositPrice, totalSubtractPrice],
+    () => totalDepositPrice - totalSubtractPrice + totalReservePrice,
+    [totalDepositPrice, totalSubtractPrice, totalReservePrice],
   );
 
   return [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice];

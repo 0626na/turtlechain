@@ -47,7 +47,12 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   );
 
   const resetStates = useCallback(() => {
-    setCart({ selectedKeys: [], warehousing_item_list: [], subtract_item_list: [] });
+    setCart({
+      selectedKeys: [],
+      warehousing_item_list: [],
+      subtract_item_list: [],
+      reserve_item_list: [],
+    });
     selectSheet(undefined);
   }, [setCart]);
 
@@ -89,6 +94,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           }),
         ],
         subtract_item_list: [],
+        reserve_item_list: [],
       });
       setDetailModalVisible(false);
     },

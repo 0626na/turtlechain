@@ -188,116 +188,12 @@ const updateProduct = async function (data: RequestUpdateProduct) {
   return response.data;
 };
 
-/**
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- * 수정중
- */
-
-// 입고장 상세내역 대량 수정하기 타입
-// export interface RequestBulkUpdateSheetItem {
-//   sheet_id: number;
-//   items: Array<WarehousingSheetItem>;
-// }
-
-export type RequestGetSheetItem = number;
-
-export interface ResponseGetSheetItem {
-  data: {
-    item_list: Array<WarehousingItemForClearing>;
-    total_count: number;
-  };
-}
-
-// 입고장 상세내역 가져오기
-const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
-  const url = `warehousing/item?sheet_id=${sheet_id}`;
-  const response = await v2Axios.get<ResponseGetSheetItem>(url);
-  return response.data;
-};
-
-export interface VendorAccount {
-  id: number;
-  account_number: string;
-  account_holder: string;
-  bank: string;
-}
-
-export interface ProductInfo {
-  id: number;
-  product_code: string;
-  name: string;
-  vendor_product_name: string;
-  price: number;
-  option: string;
-}
-
-export interface WarehousingItemForClearing {
-  id: number;
-  sheet_id: number;
-  rt_store_id: number;
-  vendor_info: VendorInfo;
-  product_info: ProductInfo;
-  count: number;
-  price: number;
-  is_vat_included: boolean;
-  memo: string | null;
-}
-
-export interface WarehousingItem2 {
-  id: number;
-  sheet_id: number;
-  rt_store_id: number;
-  vendor_info: VendorInfo;
-  product_info: ProductInfo;
-  count: number;
-  price: number;
-  is_vat_included: boolean;
-  memo: string | null;
-  is_inactive: boolean | false;
-}
-
-export interface VendorInfo {
-  id: number;
-  ws_store: WsStoreInfo;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  vendor_account: VendorAccount;
-}
-
-export interface WsStoreInfo {
-  id: number;
-  name: string;
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
-  ext: string;
-}
-
 const warehousingAPI = {
   create,
-  getSheet,
   updateSheet,
-  getProduct,
   updateProduct,
-  // 수정예정
-  getSheetItem,
+  getSheet,
+  getProduct,
 };
 
 export default warehousingAPI;
