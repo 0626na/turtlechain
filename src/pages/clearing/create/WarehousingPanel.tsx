@@ -75,12 +75,11 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             // (도매에게) 이체금액
             const deposit_price = count * price;
             // 부가세
-            const vat_price = count * (is_vat_included ? Math.floor(deposit_price / 11) : 0);
+            const vat_price = is_vat_included ? Math.floor(deposit_price / 11) : 0;
             // 공급가
-            const supply_price = count * (deposit_price - vat_price);
+            const supply_price = deposit_price - vat_price;
             // (소매가) 발행금액
-            const total_price =
-              count * (is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1));
+            const total_price = is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1);
             return {
               sheet_id,
               warehousing_item_id: id,
