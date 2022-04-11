@@ -1,4 +1,4 @@
-import { Card, Col, message, Row, Statistic, Table } from "antd";
+import { message, Table } from "antd";
 import clearingAPI, { ClearingSheetShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
 import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
@@ -36,41 +36,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
       onCancel={closeModal}
       footer={false}
     >
-      <Row gutter={16}>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("clearing.status.default")}
-              value={t(`clearing.status.${sheet?.status}`).toString()}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("clearing.request date")}
-              value={sheet?.request_date}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("clearing.complete date")}
-              value={sheet?.complete_date ?? " "}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("clearing.total price")}
-              value={sheet?.clearing_total_price}
-            />
-          </Card>
-        </Col>
-      </Row>
-
       <TurtleStatistics
         value={[
           {
@@ -123,11 +88,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             title: t("clearing.price"),
             render: (_, record) => record.deposit_price.toLocaleString(),
           },
-          //   {
-          //     ellipsis: true,
-          //     title: t("clearing.detail.type.default"),
-          //     render: (_, record) => record.type,
-          //   },
         ]}
       />
     </TurtleModal>

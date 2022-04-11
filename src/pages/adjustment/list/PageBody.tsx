@@ -94,22 +94,22 @@ const PageBody = function () {
     <>
       <MenuBar />
 
-      <Row gutter={16}>
-        <TurtleCard
-          color="orange"
-          title={t("adjustment.pending")}
-          span={4}
-          count={getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.count ?? 0}
-          price={getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.price ?? 0}
-        />
-        <TurtleCard
-          color="geekblue"
-          title={t("adjustment.confirmed")}
-          span={4}
-          count={getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.count ?? 0}
-          price={getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0}
-        />
-      </Row>
+      <TurtleCard
+        value={[
+          {
+            color: "orange",
+            title: t("adjustment.pending"),
+            count: getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.count ?? 0,
+            price: getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.price ?? 0,
+          },
+          {
+            color: "geekblue",
+            title: t("adjustment.confirmed"),
+            count: getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.count ?? 0,
+            price: getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0,
+          },
+        ]}
+      />
 
       <MainContent title={t("adjustment.lists")}>
         <Table
