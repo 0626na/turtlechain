@@ -2,7 +2,7 @@ import { Divider, Form, Input, InputNumber, Row } from "antd";
 import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { pricePattern } from "utils/pattern";
-import { WarehousingProduct } from "apis/warehousingAPI";
+import { WarehousingItem } from "apis/warehousingAPI";
 import {
   TurtleButton,
   TurtleInput,
@@ -15,7 +15,7 @@ import { SearchProductModal, SearchVendorModal } from "components/combine";
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: WarehousingProduct) => boolean;
+  addProduct: (item: WarehousingItem) => boolean;
 }
 
 function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {

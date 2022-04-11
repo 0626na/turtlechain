@@ -20,15 +20,15 @@ import {
 import { useStoreExist } from "hooks";
 import { ResponseParseWarehousing } from "apis/excelAPI";
 import { ResponseConnectWarehousing } from "apis/externalAPI";
-import { WarehousingProduct } from "apis/warehousingAPI";
+import { WarehousingItem } from "apis/warehousingAPI";
 import AddProductModal from "./AddProductModal";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<WarehousingProduct>>([]);
-  const [failList, setFailList] = useState<Array<WarehousingProduct>>([]);
+  const [successList, setSuccessList] = useState<Array<WarehousingItem>>([]);
+  const [failList, setFailList] = useState<Array<WarehousingItem>>([]);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
   const index = useRef(0);
   const failIndex = useRef(0);
@@ -115,7 +115,7 @@ function PageBody() {
 
   // 상품 추가
   const addProduct = useCallback(
-    (product: WarehousingProduct) => {
+    (product: WarehousingItem) => {
       setSuccessList([{ ...product, index: index.current++ }, ...successList]);
       return true;
     },

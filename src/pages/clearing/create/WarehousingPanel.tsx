@@ -3,14 +3,14 @@ import { Collapse, message, Row, Table, Typography, CollapsePanelProps, Space } 
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleButton } from "components/common";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import WarehousingDetailModal from "./WarehousingDetailModal";
-import { cartState } from "store/cartState";
-import useCart from "hooks/useCart";
+import { clearingCartState } from "store/clearingCartState";
+import useClearingCart from "hooks/useClearingCart";
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -19,8 +19,8 @@ interface Props extends CollapsePanelProps {
 
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
-  const [cart, setCart] = useRecoilState(cartState);
-  const [totalDepositPrice, totalVatPrice] = useCart();
+  const [cart, setCart] = useRecoilState(clearingCartState);
+  const [totalDepositPrice, totalVatPrice] = useClearingCart();
   const [DetailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedSheet, selectSheet] = useState<WarehousingSheet>();
 
@@ -99,10 +99,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
     },
     [selectedSheet, cart, setCart],
   );
-
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
 
   // 입고 확정 모달 열기
   const openDetailModal = useCallback(

@@ -3,7 +3,7 @@ import { Collapse, CollapsePanelProps, InputNumber, Row, Space, Table, Typograph
 import { TurtleButton, TurtleQuestionTooltip } from "components/common";
 import { clearingAPI } from "apis";
 import { useQuery } from "react-query";
-import { cartState } from "store/cartState";
+import { clearingCartState } from "store/clearingCartState";
 import { useRecoilState } from "recoil";
 import { useEffect, useMemo, useState } from "react";
 import { BalanceShow } from "apis/clearingAPI";
@@ -15,7 +15,7 @@ interface Props extends CollapsePanelProps {
 }
 
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
-  const [cart, setCart] = useRecoilState(cartState);
+  const [cart, setCart] = useRecoilState(clearingCartState);
   const [balanceList, setBalanceList] = useState<BalanceShow[]>([]);
 
   const getBalanceQuery = useQuery(

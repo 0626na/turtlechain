@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
+import warehousingAPI, { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { DeleteOutlined, SyncOutlined } from "@ant-design/icons";
 import {
   Modal,
@@ -28,13 +28,13 @@ interface Props {
 
 function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
-  const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
+  const [productList, setProductList] = useState<Array<WarehousingItemShow>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 입고장 상세내역 리스트 요청
   const getProductQuery = useQuery(
-    ["getWarehousingProduct"],
-    () => warehousingAPI.getProduct({ sheet_id: sheet?.id! }),
+    ["getWarehousingItem"],
+    () => warehousingAPI.getItem({ sheet_id: sheet?.id! }),
     {
       enabled: visible && !!sheet?.id,
       onError: (error: AxiosError) => {
@@ -48,8 +48,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
 
   // 입고장 상세내역 수정 요청
   const updateProductQuery = useMutation(
-    ["updateWarehousingProduct"], //
-    warehousingAPI.updateProduct,
+    ["updateWarehousingItem"], //
+    warehousingAPI.updateItem,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
