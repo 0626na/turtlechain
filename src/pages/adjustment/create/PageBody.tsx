@@ -8,7 +8,6 @@ import {
   Tabs,
   InputNumber,
   Select,
-  Switch,
 } from "antd";
 import adjustmentAPI, { AdjustmentProduct } from "apis/adjustmentAPI";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
