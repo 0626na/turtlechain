@@ -1,11 +1,11 @@
+import { t } from "i18next";
 import moment from "moment";
 import { DatePicker, message, Row, Table, Tag } from "antd";
 import { warehousingAPI } from "apis";
-import { AdjustmentProduct } from "apis/adjustmentAPI";
+import { AdjustmentItem } from "apis/adjustmentAPI";
 import { RequestGetSheet, WarehousingItemShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
 import { TurtleButton, TurtleModal, TurtleTableTitle } from "components/common";
-import { t } from "i18next";
 import { MainContent } from "layouts/main";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -15,14 +15,13 @@ import { storeState } from "store/storeState";
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: AdjustmentProduct) => boolean;
+  addItem: (item: AdjustmentItem) => boolean;
 }
 
-function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
+function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
   const store = useRecoilValue(storeState);
-  const [productList, setProductList] = useState<Array<WarehousingItemShow>>([]);
-  const [selectedRows, selectRows] = useState<Array<WarehousingItemShow>>([]);
-  const [sheetId, setSheetId] = useState<number>(-1);
+  const [selectedSheetId, selectSheetId] = useState<number>(-1);
+  const [selectedItems, selectItems] = useState<Array<WarehousingItemShow>>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
     is_confirmed: "",
@@ -45,25 +44,22 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   );
 
   // 입고장 상세내역 리스트 요청
-  const getProductQuery = useQuery(
-    ["getWarehousingProduct", sheetId],
-    () => warehousingAPI.getItem({ sheet_id: sheetId }),
+  const getItemQuery = useQuery(
+    ["getWarehousingItem", selectedSheetId],
+    () => warehousingAPI.getItem({ sheet_id: selectedSheetId }),
     {
-      enabled: visible && sheetId !== -1,
+      enabled: visible && selectedSheetId !== -1,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: (data) => {
-        setProductList(data.data.item_list);
-      },
+      onSuccess: (data) => {},
     },
   );
 
   // 상태 초기화
   const resetStates = useCallback(() => {
-    setProductList([]);
-    selectRows([]);
-    setSheetId(-1);
+    selectItems([]);
+    selectSheetId(-1);
     setSearchQuery({
       rt_store_id: store.id!,
       is_confirmed: "",
@@ -73,40 +69,51 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
     });
   }, [store.id]);
 
+  const onClickItemRow = useCallback(
+    (record: WarehousingItemShow) => {
+      if (selectedItems.find((item) => item.id === record.id)) {
+        selectItems((selectedItems) => selectedItems.filter((item) => item.id !== record.id));
+        return;
+      }
+      selectItems((selectedItems) => [...selectedItems, record]);
+    },
+    [selectItems, selectedItems],
+  );
+
   // 모달열릴때 마다 상태 초기화
   useEffect(() => {
     resetStates();
   }, [visible, resetStates]);
 
   // 상품 미리보기테이블에 추가
-  const clickAddProduct = useCallback(() => {
-    if (selectedRows.length === 0) {
+  const onClickAddItem = useCallback(() => {
+    if (selectedItems.length === 0) {
       message.info("선택된 상품이 없습니다.");
       return;
     }
 
     // WarehousingProductShow -> AdjustmentProduct 타입 변환해서 넣어줌
-    selectedRows.forEach((product) => {
-      addProduct({
-        vendor_id: product.vendor_info.id,
-        vendor_name: product.vendor_info.vendor_name,
-        vendor_address: product.vendor_info.vendor_address,
-        warehousing_item_id: product.id,
-        product_id: product.product_info.id,
-        product_name: product.product_info.name,
-        vendor_product_name: product.product_info.vendor_product_name,
-        product_option: product.product_info.option,
-        product_price: product.product_info.price,
+    selectedItems.forEach((item) => {
+      addItem({
+        vendor_id: item.vendor_info.id,
+        vendor_name: item.vendor_info.vendor_name,
+        vendor_address: item.vendor_info.vendor_address,
+        warehousing_item_id: item.id,
+        product_id: item.product_info.id,
+        product_name: item.product_info.name,
+        vendor_product_name: item.product_info.vendor_product_name,
+        product_option: item.product_info.option,
+        product_price: item.product_info.price,
         product_count: 0,
-        product_count_max: product.count,
-        product_code: product.product_info.product_code,
-        is_vat_included: product.is_vat_included,
+        product_count_max: item.count,
+        product_code: item.product_info.product_code,
+        is_vat_included: item.is_vat_included,
         type: "",
         memo: "",
       });
     });
     closeModal();
-  }, [selectedRows, addProduct, closeModal]);
+  }, [selectedItems, addItem, closeModal]);
 
   return (
     <TurtleModal
@@ -117,16 +124,17 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
       onCancel={closeModal}
       footer={false}
       getContainer={false}
-      bodyStyle={{ height: "93vh", overflowY: "auto" }}
+      bodyStyle={{ height: "90vh", overflowY: "auto" }}
     >
+      {/*
+       * 입고서 리스트 테이블
+       */}
       <Row style={{ marginBottom: 16 }}>
         <DatePicker.RangePicker
           size="small"
           allowClear={false}
           value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-          onChange={(_, dateStrings) => {
-            const start_date = dateStrings[0];
-            const end_date = dateStrings[1];
+          onChange={(_, [start_date, end_date]) => {
             setSearchQuery({ ...searchQuery, start_date, end_date });
           }}
         />
@@ -141,7 +149,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
         rowKey={(record) => record.id}
         onRow={(record) => ({
           onClick: () => {
-            setSheetId(record.id);
+            selectSheetId(record.id);
           },
         })}
         columns={[
@@ -178,27 +186,33 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
         ]}
       />
 
+      {/*
+       *입고 상품 리스트 테이블
+       */}
       <MainContent title={t("warehousing.lists")}>
         <Table
           size="small"
-          loading={getProductQuery.isLoading}
+          loading={getItemQuery.isLoading}
           pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-          dataSource={productList}
+          dataSource={getItemQuery.data?.data.item_list}
           rowKey={(record) => record.id}
           scroll={{ y: "auto" }}
-          style={{ height: "60vh" }}
           title={() => (
             <TurtleTableTitle
-              count={productList?.length ?? 0}
-              selectedCount={selectedRows?.length ?? 0}
+              count={getItemQuery.data?.data.total_count ?? 0}
+              selectedCount={selectedItems?.length ?? 0}
             />
           )}
           rowSelection={{
-            onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingItemShow[]) => {
-              selectRows(selectedRows);
-            },
-            checkStrictly: true,
+            selectedRowKeys: selectedItems.map((item) => item.id),
+            onSelect: onClickItemRow,
+            hideSelectAll: true,
           }}
+          onRow={(record) => ({
+            onClick: () => {
+              onClickItemRow(record);
+            },
+          })}
           columns={[
             {
               ellipsis: true,
@@ -245,7 +259,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
       </MainContent>
 
       <Row justify="end">
-        <TurtleButton type="default" onClick={clickAddProduct}>
+        <TurtleButton type="default" onClick={onClickAddItem}>
           {t("button.add product")}
         </TurtleButton>
       </Row>

@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import moment from "moment";
 import { FileTextOutlined } from "@ant-design/icons";
 import {
@@ -17,9 +18,8 @@ import {
   Form,
   InputNumber,
 } from "antd";
-import adjustmentAPI, { AdjustmentProductShow, RequestGetList } from "apis/adjustmentAPI";
+import adjustmentAPI, { AdjustmentItemShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
-import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
@@ -36,8 +36,8 @@ import DetailModal from "./DetailModal";
 
 const PageBody = function () {
   const store = useRecoilValue(storeState);
-  const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentProductShow>>();
-  const [selectedRow, selectRow] = useState<AdjustmentProductShow>();
+  const [adjustmentList, setAdjustmentList] = useState<Array<AdjustmentItemShow>>();
+  const [selectedRow, selectRow] = useState<AdjustmentItemShow>();
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: store.id,
@@ -55,10 +55,10 @@ const PageBody = function () {
       enabled: !!searchQuery.rt_store_id,
       onSuccess: (data) => {
         setAdjustmentList(
-          data.data.adjustment_list.map((product) => ({
-            ...product,
-            memo_active: !product.memo,
-            memo_value: product.memo,
+          data.data.adjustment_list.map((item) => ({
+            ...item,
+            memo_active: !item.memo,
+            memo_value: item.memo,
           })),
         );
       },
@@ -84,14 +84,6 @@ const PageBody = function () {
   useEffect(() => {
     setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id }));
   }, [store.id]);
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
 
   const openDetailModal = useCallback((adjustmentProduct) => {
     selectRow(adjustmentProduct);
@@ -158,9 +150,7 @@ const PageBody = function () {
                 size="small"
                 allowClear={false}
                 value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-                onChange={(_, dateStrings) => {
-                  const start_date = dateStrings[0];
-                  const end_date = dateStrings[1];
+                onChange={(_, [start_date, end_date]) => {
                   setSearchQuery({ ...searchQuery, start_date, end_date });
                 }}
               />
@@ -173,7 +163,9 @@ const PageBody = function () {
                 total={getAdjustmentListQuery.data?.data.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
-                onChange={selectPage}
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
+                }}
               />
             </Row>
           )}
@@ -248,10 +240,10 @@ const PageBody = function () {
                             value={record.adjustment_process_type}
                             onChange={(value) => {
                               setAdjustmentList(
-                                adjustmentList?.map((product) =>
-                                  product.id === record.id
-                                    ? { ...product, adjustment_process_type: value }
-                                    : product,
+                                adjustmentList?.map((item) =>
+                                  item.id === record.id
+                                    ? { ...item, adjustment_process_type: value }
+                                    : item,
                                 ),
                               );
                             }}
@@ -272,10 +264,8 @@ const PageBody = function () {
                             value={record.process_count}
                             onChange={(value) => {
                               setAdjustmentList(
-                                adjustmentList?.map((product) =>
-                                  product.id === record.id
-                                    ? { ...product, process_count: value }
-                                    : product,
+                                adjustmentList?.map((item) =>
+                                  item.id === record.id ? { ...item, process_count: value } : item,
                                 ),
                               );
                             }}
@@ -340,10 +330,10 @@ const PageBody = function () {
                       value={record.memo_value}
                       onChange={(e) => {
                         setAdjustmentList(
-                          adjustmentList?.map((product) =>
-                            product.id === record.id
-                              ? { ...product, memo_value: e.currentTarget.value }
-                              : product,
+                          adjustmentList?.map((item) =>
+                            item.id === record.id
+                              ? { ...item, memo_value: e.currentTarget.value }
+                              : item,
                           ),
                         );
                       }}
@@ -356,10 +346,8 @@ const PageBody = function () {
                             color="grey"
                             onClick={() => {
                               setAdjustmentList(
-                                adjustmentList?.map((product) =>
-                                  product.id === record.id
-                                    ? { ...product, memo_active: false }
-                                    : product,
+                                adjustmentList?.map((item) =>
+                                  item.id === record.id ? { ...item, memo_active: false } : item,
                                 ),
                               );
                             }}
@@ -392,10 +380,8 @@ const PageBody = function () {
                           size="small"
                           onClick={() => {
                             setAdjustmentList(
-                              adjustmentList?.map((product) =>
-                                product.id === record.id
-                                  ? { ...product, memo_active: true }
-                                  : product,
+                              adjustmentList?.map((item) =>
+                                item.id === record.id ? { ...item, memo_active: true } : item,
                               ),
                             );
                           }}

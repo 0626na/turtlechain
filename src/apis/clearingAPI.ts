@@ -104,8 +104,12 @@ export interface RequestGetBalance {
   vendor_id?: number;
   start_date?: string;
   end_date?: string;
+  // 페이지 구분
+  tab?: "balance" | "balance_detail" | "adjustment";
   // 정산에서 매입차감 위해 조회할 때
   warehousing_sheet_id?: string;
+  // 매입조정 상세 조회할 때
+  original_id?: number;
 }
 
 // Response: 매입 결제대청 항목

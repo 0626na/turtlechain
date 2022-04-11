@@ -2,7 +2,7 @@ import { Divider, Form, Input, InputNumber, Row } from "antd";
 import { t } from "i18next";
 import { useCallback, useState } from "react";
 import { pricePattern } from "utils/pattern";
-import { AdjustmentProduct } from "apis/adjustmentAPI";
+import { AdjustmentItem } from "apis/adjustmentAPI";
 import {
   TurtleButton,
   TurtleInput,
@@ -16,10 +16,10 @@ import { SearchProductModal, SearchVendorModal } from "components/combine";
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: AdjustmentProduct) => boolean;
+  addItem: (item: AdjustmentItem) => boolean;
 }
 
-function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
+function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
   const [form] = Form.useForm();
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
@@ -93,7 +93,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
           onFinish={(value) => {
-            addProduct({
+            addItem({
               ...value,
               type: "reserve",
               warehousing_item_id: 0,
