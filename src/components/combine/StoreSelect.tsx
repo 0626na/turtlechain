@@ -68,9 +68,9 @@ function StoreSelect({ warningMessage }: Props) {
   // 페이지 바뀔때 마다 storeId 초기화
   useEffect(
     () => () => {
-      setStore({ id: undefined, name: "" });
+      setStore(() => ({ id: undefined, name: "" }));
     },
-    [],
+    [setStore],
   );
 
   return (
