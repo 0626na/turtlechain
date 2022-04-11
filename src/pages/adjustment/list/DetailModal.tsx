@@ -31,7 +31,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     ["getAdjustmentDetail", selectedRow],
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
-      enabled: !!searchQuery.rt_store_id,
+      enabled: visible && !!searchQuery.rt_store_id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -43,7 +43,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     ["getBalance", searchQuery], //
     () => clearingAPI.getBalance(searchQuery),
     {
-      enabled: !!searchQuery.rt_store_id,
+      enabled: visible && !!searchQuery.rt_store_id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data.msg);
       },
