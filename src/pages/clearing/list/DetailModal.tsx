@@ -1,7 +1,7 @@
 import { Card, Col, message, Row, Statistic, Table } from "antd";
 import clearingAPI, { ClearingSheetShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
-import { TurtleModal, TurtleTableTitle } from "components/common";
+import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { useQuery } from "react-query";
 
@@ -70,6 +70,18 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           </Card>
         </Col>
       </Row>
+
+      <TurtleStatistics
+        value={[
+          {
+            title: t("clearing.status.default"),
+            value: t(`clearing.status.${sheet?.status}`).toString(),
+          },
+          { title: t("clearing.request date"), value: `${sheet?.request_date}` },
+          { title: t("clearing.complete date"), value: `${sheet?.complete_date}` },
+          { title: t("clearing.total price"), value: `${sheet?.clearing_total_price}` },
+        ]}
+      />
 
       <Table
         size="small"
