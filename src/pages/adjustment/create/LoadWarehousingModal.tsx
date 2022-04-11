@@ -2,7 +2,7 @@ import moment from "moment";
 import { DatePicker, message, Row, Table, Tag } from "antd";
 import { warehousingAPI } from "apis";
 import { AdjustmentProduct } from "apis/adjustmentAPI";
-import { RequestGetSheet, WarehousingProductShow } from "apis/warehousingAPI";
+import { RequestGetSheet, WarehousingItemShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
 import { TurtleButton, TurtleModal, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
@@ -20,8 +20,8 @@ interface Props {
 
 function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   const store = useRecoilValue(storeState);
-  const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
-  const [selectedRows, selectRows] = useState<Array<WarehousingProductShow>>([]);
+  const [productList, setProductList] = useState<Array<WarehousingItemShow>>([]);
+  const [selectedRows, selectRows] = useState<Array<WarehousingItemShow>>([]);
   const [sheetId, setSheetId] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
@@ -47,7 +47,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
   // 입고장 상세내역 리스트 요청
   const getProductQuery = useQuery(
     ["getWarehousingProduct", sheetId],
-    () => warehousingAPI.getProduct({ sheet_id: sheetId }),
+    () => warehousingAPI.getItem({ sheet_id: sheetId }),
     {
       enabled: visible && sheetId !== -1,
       onError: (error: AxiosError) => {
@@ -194,7 +194,7 @@ function LoadWarehousingModal({ visible, closeModal, addProduct }: Props) {
             />
           )}
           rowSelection={{
-            onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingProductShow[]) => {
+            onChange: (selectedRowKeys: React.Key[], selectedRows: WarehousingItemShow[]) => {
               selectRows(selectedRows);
             },
             checkStrictly: true,

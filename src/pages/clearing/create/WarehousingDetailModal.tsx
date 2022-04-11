@@ -1,6 +1,6 @@
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
-import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
+import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { TurtleModal, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
 import { Card, Col, Row, Statistic, Table } from "antd";
@@ -9,13 +9,13 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheet?: WarehousingSheet;
-  onOk: (itemList: WarehousingProductShow[]) => void;
+  onOk: (itemList: WarehousingItemShow[]) => void;
 }
 
 function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
   const getProductQuery = useQuery(
-    ["getWarehousingProduct"],
-    () => warehousingAPI.getProduct({ sheet_id: sheet?.id! }),
+    ["getWarehousingItem"],
+    () => warehousingAPI.getItem({ sheet_id: sheet?.id! }),
     {
       enabled: visible && !!sheet?.id,
     },

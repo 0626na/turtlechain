@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { TurtleButton } from "components/common";
 import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
+import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import WarehousingDetailModal from "./WarehousingDetailModal";
@@ -58,7 +58,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
 
   // 입고 확정 버튼 클릭
   const checkSheet = useCallback(
-    (itemList: WarehousingProductShow[]) => {
+    (itemList: WarehousingItemShow[]) => {
       setCart({
         selectedKeys: [...cart.selectedKeys, selectedSheet?.id!],
         warehousing_item_list: [
