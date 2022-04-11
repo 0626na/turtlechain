@@ -93,15 +93,15 @@ export interface ResponseCreateItem {
 }
 
 // 입고 생성
-const create = async function (data: { sheet: RequestCreateSheet; product: RequestCreateItem }) {
+const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
   let url = "warehousing/sheet";
   const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
   url = "warehousing/item";
-  const productResponse = await v2Axios.post<ResponseCreateItem>(url, {
-    ...data.product,
+  const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
+    ...data.item,
     sheet_id: sheetResponse.data.data,
   });
-  return productResponse.data;
+  return itemResponse.data;
 };
 
 // Request: 입고장 리스트 가져오기

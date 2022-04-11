@@ -1,6 +1,6 @@
-import { Divider, Form, Input, InputNumber, Row } from "antd";
 import { t } from "i18next";
-import { useCallback, useEffect, useState } from "react";
+import { Divider, Form, Input, InputNumber, Row } from "antd";
+import { MutableRefObject, useCallback, useEffect, useState } from "react";
 import { pricePattern } from "utils/pattern";
 import { WarehousingItem } from "apis/warehousingAPI";
 import {
@@ -11,14 +11,17 @@ import {
   TurtleSearchInput,
 } from "components/common";
 import { SearchProductModal, SearchVendorModal } from "components/combine";
+import { useSetRecoilState } from "recoil";
+import { warehousingCartState } from "store/warehousingCartState";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: WarehousingItem) => boolean;
+  index: MutableRefObject<number>;
 }
 
-function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
+function AddSingleProductModal({ visible, closeModal, index }: Props) {
+  const setCart = useSetRecoilState(warehousingCartState);
   const [form] = Form.useForm();
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
@@ -59,6 +62,18 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     [form],
   );
 
+  // 상품 추가
+  const addProduct = useCallback(
+    (item: WarehousingItem) => {
+      setCart((cart) => ({
+        ...cart,
+        successList: [{ ...item, index: index.current++ }, ...cart.successList],
+      }));
+      closeModal();
+    },
+    [setCart, index, closeModal],
+  );
+
   useEffect(() => {
     form.resetFields();
   }, [visible, form]);
@@ -81,9 +96,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 12 }}
-          onFinish={(value) => {
-            addProduct(value) && closeModal();
-          }}
+          onFinish={addProduct}
         >
           <Form.Item name="vendor_id" hidden>
             <Input hidden />

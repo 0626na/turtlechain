@@ -1,5 +1,5 @@
-import moment from "moment";
 import { t } from "i18next";
+import moment from "moment";
 import { useEffect, useCallback, useState } from "react";
 import {
   Table,
@@ -65,16 +65,8 @@ function PageBody() {
 
   // 쇼핑몰 바뀔때 마다 입고서 리스트 재요청
   useEffect(() => {
-    setSearchQuery((prevState) => ({ ...prevState, rt_store_id: store.id ?? -1 }));
+    setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id ?? -1 }));
   }, [store.id]);
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
 
   // 행 선택
   const openDetailModal = useCallback((record) => {
@@ -95,7 +87,7 @@ function PageBody() {
           scroll={{ y: "auto" }}
           rowKey={(record) => record.id}
           onRow={(record) => ({
-            onClick: (e) => {
+            onClick: () => {
               openDetailModal(record);
             },
           })}
@@ -120,9 +112,7 @@ function PageBody() {
                 size="small"
                 allowClear={false}
                 value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-                onChange={(_, dateStrings) => {
-                  const start_date = dateStrings[0];
-                  const end_date = dateStrings[1];
+                onChange={(_, [start_date, end_date]) => {
                   setSearchQuery({ ...searchQuery, start_date, end_date });
                 }}
               />
@@ -135,7 +125,9 @@ function PageBody() {
                 total={getSheetQuery.data?.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
-                onChange={selectPage}
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
+                }}
               />
             </Row>
           )}
