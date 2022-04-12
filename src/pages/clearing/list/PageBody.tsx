@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import {
+  Button,
   DatePicker,
   Divider,
   message,
@@ -10,7 +11,8 @@ import {
   Table,
   Tag,
 } from "antd";
-import { clearingAPI } from "apis";
+import { DownloadOutlined } from "@ant-design/icons";
+import { clearingAPI, excelAPI } from "apis";
 import { ClearingSheetShow, RequestGetSheet } from "apis/clearingAPI";
 import { AxiosError } from "axios";
 import { TurtleCard, TurtleIcon, TurtleTableTitle } from "components/common";
@@ -20,10 +22,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { SelectDateModal } from "components/combine";
+import { useStoreExist } from "hooks";
 import DetailModal from "./DetailModal";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
+  const isStoreExist = useStoreExist();
   const [sheetList, setSheetList] = useState<ClearingSheetShow[]>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     store_id: store.id,
@@ -34,6 +39,7 @@ function PageBody() {
     status: "all",
   });
   const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [selectedRow, selectRow] = useState<ClearingSheetShow>();
 
   const getSheetQuery = useQuery(
@@ -60,6 +66,15 @@ function PageBody() {
     },
   });
 
+  const downloadExcelQuery = useMutation("downloadClearing", excelAPI.downloadClearing, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      setDownloadModalVisible(false);
+    },
+  });
+
   // 쇼핑몰 바뀔때 마다 정산 리스트 재요청
   useEffect(() => {
     setSearchQuery((searchQuery) => ({ ...searchQuery, store_id: store.id }));
@@ -72,7 +87,21 @@ function PageBody() {
 
   return (
     <>
-      <MenuBar />
+      <MenuBar>
+        <Button
+          type="default"
+          style={{ borderColor: "#CBCCD1", borderRadius: 2, color: "#5B5D63" }}
+          icon={<DownloadOutlined />}
+          onClick={() => {
+            if (!isStoreExist()) {
+              return;
+            }
+            setDownloadModalVisible(true);
+          }}
+        >
+          정산내역 다운
+        </Button>
+      </MenuBar>
 
       <TurtleCard
         value={[
@@ -211,12 +240,26 @@ function PageBody() {
           ]}
         />
       </MainContent>
+
+      {/* 상세내역 모달 */}
       <DetailModal
         visible={detailModalVisible}
         closeModal={() => {
           setDetailModalVisible(false);
         }}
         sheet={selectedRow}
+      />
+
+      {/* 엑셀 다운로드 날짜선택 모달 */}
+      <SelectDateModal
+        visible={downloadModalVisible}
+        closeModal={() => {
+          setDownloadModalVisible(false);
+        }}
+        onClick={({ start_date, end_date }) => {
+          downloadExcelQuery.mutate({ rt_store_id: store.id, start_date, end_date });
+        }}
+        loading={downloadExcelQuery.isLoading}
       />
     </>
   );

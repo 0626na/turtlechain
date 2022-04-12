@@ -1,7 +1,7 @@
 import { Button, DatePicker, Form, Modal } from "antd";
 import { t } from "i18next";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Date {
   start_date: string;
@@ -21,11 +21,18 @@ function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
     end_date: moment().format("YYYY-MM-DD"),
   });
 
+  useEffect(() => {
+    setDate({
+      start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
+      end_date: moment().format("YYYY-MM-DD"),
+    });
+  }, [visible]);
+
   return (
     <Modal
       centered
       width={350}
-      title={t("common.connect external program")}
+      title={"엑셀 다운로드"}
       visible={visible}
       onCancel={loading ? () => {} : closeModal}
       footer={false}
@@ -41,10 +48,8 @@ function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
             style={{ width: "100%" }}
             allowClear={false}
             value={[moment(date.start_date), moment(date.end_date)]}
-            onChange={(_, dateStrings) => {
-              const start_date = dateStrings[0];
-              const end_date = dateStrings[1];
-              setDate({ ...date, start_date, end_date });
+            onChange={(_, [start_date, end_date]) => {
+              setDate({ start_date, end_date });
             }}
           />
         </Form.Item>
@@ -56,7 +61,7 @@ function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
             htmlType="submit"
             loading={loading}
           >
-            {t("button.connect")}
+            {t("button.download")}
           </Button>
         </Form.Item>
       </Form>

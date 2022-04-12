@@ -1,6 +1,8 @@
 import { v2Axios } from "./index";
 import { VendorAccount, VendorPhone } from "./vendorAPI";
 import { WarehousingItem } from "./warehousingAPI";
+import { saveAs } from "file-saver";
+import moment from "moment";
 
 export interface MasterVendor {
   id: number;
@@ -177,11 +179,36 @@ const parseWarehousing = async function (data: FormData) {
   return response.data;
 };
 
+interface RequestDownload {
+  rt_store_id?: number;
+  start_date: string;
+  end_date: string;
+}
+
+// 정산내역 다운로드
+const downloadClearing = async function (query: RequestDownload) {
+  let url = `excel/download/clearing?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get(url, {
+    responseType: "arraybuffer",
+  });
+  // 파일 저장
+  saveAs(
+    new Blob([response.data], { type: "application/ms-excel" }),
+    `${moment(query.start_date).format("YYMMDD")}_${moment(query.end_date).format(
+      "YYMMDD",
+    )}_정산내역.xlsx`,
+  );
+};
+
 const excelAPI = {
   parseVendor,
   parseProduct,
   parseWarehousing,
   parseOrder,
+  downloadClearing,
 };
 
 export default excelAPI;
