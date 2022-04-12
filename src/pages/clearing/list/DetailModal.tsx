@@ -17,6 +17,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
     () =>
       clearingAPI.getItem({
         sheet_id: sheet?.id!,
+        page_size: 100,
       }),
     {
       enabled: visible && !!sheet?.id,
@@ -43,7 +44,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             value: t(`clearing.status.${sheet?.status}`).toString(),
           },
           { title: t("clearing.request date"), value: `${sheet?.request_date}` },
-          { title: t("clearing.complete date"), value: `${sheet?.complete_date}` },
+          { title: t("clearing.complete date"), value: `${sheet?.complete_date ?? " "}` },
           { title: t("clearing.total price"), value: `${sheet?.clearing_total_price}` },
         ]}
       />
@@ -54,7 +55,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
         pagination={false}
         dataSource={getItemQuery.data?.data.item_list}
         rowKey={(item) => item.id}
-        style={{ height: "60vh", paddingTop: 30 }}
         title={() => <TurtleTableTitle count={getItemQuery.data?.data.total_count ?? 0} />}
         columns={[
           {

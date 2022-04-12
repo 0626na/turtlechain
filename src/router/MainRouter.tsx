@@ -13,6 +13,7 @@ import {
   AdjustmentListPage,
   ClearingCreatePage,
   ClearingListPage,
+  ClearingBalancePage,
   ProductCreatePage,
   ProductListPage,
   VendorCreatePage,
@@ -40,6 +41,7 @@ function MainRouter() {
           <Route exact path="/adjustment/list" component={AdjustmentListPage} />
           <Route exact path="/clearing/create" component={ClearingCreatePage} />
           <Route exact path="/clearing/list" component={ClearingListPage} />
+          <Route exact path="/clearing/balance" component={ClearingBalancePage} />
           <Route exact path="/product/create" component={ProductCreatePage} />
           <Route exact path="/product/list" component={ProductListPage} />
           <Route exact path="/vendor/create" component={VendorCreatePage} />

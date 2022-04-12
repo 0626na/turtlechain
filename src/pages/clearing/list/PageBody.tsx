@@ -147,8 +147,8 @@ function PageBody() {
                 total={getSheetQuery.data?.data.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
-                onChange={(value) => {
-                  setSearchQuery({ ...searchQuery, page: value });
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
                 }}
               />
             </Row>

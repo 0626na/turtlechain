@@ -139,6 +139,10 @@ function Sider({ collapsed }: Props) {
           title: t("clearing.list"),
           pathname: "/clearing/list",
         },
+        {
+          title: t("clearing.balance"),
+          pathname: "/clearing/balance",
+        },
       ],
     },
     {

@@ -7,10 +7,12 @@ export interface BalanceShow {
   refund_amount: number;
   overpaid_amount: number;
   created_time: string;
+  process_type: string;
   memo: string;
   vendor_info: {
     id: number;
     vendor_name: string;
+    vendor_address: string;
     is_vat_included: boolean;
     ws_store_id: number;
   };
@@ -197,6 +199,7 @@ const updateSheet = async function (data: RequestUpdateSheet) {
 // Request: 정산 아이템 조회
 export interface RequestGetItem {
   sheet_id: number;
+  page_size: 100;
 }
 
 // Response: 정산 아이템 조회

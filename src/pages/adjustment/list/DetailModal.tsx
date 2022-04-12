@@ -157,7 +157,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             width: 200,
             align: "center",
             title: "처리시간",
-            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD HH:MM"),
+            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD HH:mm:ss"),
           },
           {
             ellipsis: true,

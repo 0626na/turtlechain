@@ -16,6 +16,7 @@ export const AdjustmentCreatePage = lazy(() => import("./adjustment/create"));
 export const AdjustmentListPage = lazy(() => import("./adjustment/list"));
 export const ClearingCreatePage = lazy(() => import("./clearing/create"));
 export const ClearingListPage = lazy(() => import("./clearing/list"));
+export const ClearingBalancePage = lazy(() => import("./clearing/balance"));
 export const ProductCreatePage = lazy(() => import("./product/create"));
 export const ProductListPage = lazy(() => import("./product/list"));
 export const VendorCreatePage = lazy(() => import("./vendor/create"));

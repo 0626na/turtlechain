@@ -144,7 +144,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
         pagination={false}
         dataSource={filteredList}
         rowKey={(item) => item.id}
-        style={{ height: "60vh", paddingTop: 30 }}
+        style={{ height: "60vh" }}
         title={() => <TurtleTableTitle count={filteredList.length ?? 0}></TurtleTableTitle>}
         columns={[
           {

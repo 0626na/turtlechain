@@ -205,7 +205,7 @@
     "vendor_info": "거래처 정보",
     "memo": "메모",
     "process type": {
-      "": "구분",
+      "": "처리방식",
       "default": "매입조정 처리",
       "subtract": "차감",
       "refund": "환불"
@@ -241,6 +241,8 @@
     "detail": "정산 상세내역",
     "request date": "결제 요청 일자",
     "complete date": "결제 완료 일자",
+    "recent date": "최근 정산 일자",
+    "date": "정산 일자",
     "total price": "총 결제 금액",
     "total vendor count": "총 거래처 수",
     "delete": "삭제",
@@ -249,36 +251,16 @@
     "supply price": "공급가액",
     "vat": "부가세",
     "is_vat_included": "부가세 포함 여부",
-    "date": {
-      "request": "결제 요청 일자",
-      "complete": "결제 완료 일자"
-    },
-    "vendor": {
-      "code": "거래처 코드",
-      "name": "거래처명",
-      "address": "거래처 주소"
-    },
+    "balance": "받을 돈 / 남은 돈",
+    "balance list": "받을 돈 / 남은 돈 내역",
+    "balance lists": "받을 돈 / 남은 돈 리스트",
+    "balance detail": "받을 돈 / 남은 돈 내역 상세보기",
     "status": {
       "default": "결제 상태",
       "all": "전체",
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
-    },
-    "panel": {
-      "warehousing": "입고 결제 대기",
-      "adjustment": "매입 결제 대기",
-      "clearing preview": "정산 금액 미리보기",
-      "vat": "부가세",
-      "included": "원 포함",
-      "warehousing total": "입고 총 금액",
-      "adjustment total": "매입 총 금액"
-    },
-    "preview": {
-      "warehousing": "입고",
-      "adjustment subtract": "매입차감",
-      "today reserved": "당일미송",
-      "total": "합계"
     }
   },
   "product": {
@@ -364,7 +346,8 @@
     "home": "HOME",
     "etc": "기타",
     "connect external program": "재고프로그램 연동",
-    "during": "기간"
+    "during": "기간",
+    "memo": "메모"
   },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",
