@@ -12,7 +12,6 @@ function useStoreExist() {
       message.warn(t("message.select store"));
       return false;
     }
-
     // 쇼핑몰 선택되어 있으면 return true
     return true;
   };

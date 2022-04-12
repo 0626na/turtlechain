@@ -3,7 +3,7 @@ import { warehousingAPI } from "apis";
 import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
 import { TurtleModal, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
-import { Card, Col, Row, Statistic, Table } from "antd";
+import { Table } from "antd";
 
 interface Props {
   visible: boolean;
