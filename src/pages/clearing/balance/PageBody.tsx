@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { DatePicker, Divider, Pagination, Row, Table } from "antd";
+import { DatePicker, Divider, Table } from "antd";
 import { clearingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleTableTitle } from "components/common";
@@ -66,7 +66,7 @@ function PageBody() {
             },
           })}
           title={() => (
-            <TurtleTableTitle count={0}>
+            <TurtleTableTitle count={getBalanceQuery.data?.data.total_count ?? 0}>
               <Divider type="vertical" style={{ margin: 0 }} />
               <DatePicker.RangePicker
                 size="small"
@@ -109,7 +109,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 500,
-              title: "최근 내역",
+              title: "최근 처리 내용",
               render: (_, record) => record.memo,
             },
           ]}

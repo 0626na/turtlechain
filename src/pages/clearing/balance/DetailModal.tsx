@@ -1,12 +1,12 @@
-import { Table } from "antd";
-import clearingAPI, { BalanceShow, RequestGetBalance } from "apis/clearingAPI";
-import { AxiosError } from "axios";
-import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import moment from "moment";
-import { useState } from "react";
+import { message, Table } from "antd";
+import { clearingAPI } from "apis";
+import { BalanceShow } from "apis/clearingAPI";
+import { AxiosError } from "axios";
+import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
-import { RecoilValueReadOnly, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 
 interface Props {
@@ -29,7 +29,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     {
       enabled: visible && !!selectedRow?.id,
       onError: (error: AxiosError) => {
-        console.log(error.response?.data.msg);
+        message.warn(error.response?.data.msg);
       },
     },
   );
@@ -47,8 +47,8 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       <TurtleStatistics
         value={[
           { title: t("vendor.name"), value: selectedRow?.vendor_info.vendor_name ?? " " },
-          { title: "받을 돈", value: `${selectedRow?.refund_amount.toLocaleString()}원` },
-          { title: "남은 돈", value: `${selectedRow?.overpaid_amount.toLocaleString()}원` },
+          { title: "환불 받을 금액", value: `${selectedRow?.refund_amount.toLocaleString()}원` },
+          { title: "사용 가능 금액", value: `${selectedRow?.overpaid_amount.toLocaleString()}원` },
         ]}
       />
 
@@ -76,17 +76,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           },
           {
             ellipsis: true,
-            width: 500,
-            title: "처리 내용",
-            render: (_, record) => record.memo,
-          },
-          {
-            ellipsis: true,
-            title: "종류",
-            render: (_, record) => record.process_type,
-          },
-          {
-            ellipsis: true,
             title: "환불 받을 금액",
             render: (_, record) => record.refund_amount.toLocaleString(),
           },
@@ -94,6 +83,12 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             ellipsis: true,
             title: "사용 가능 금액",
             render: (_, record) => record.overpaid_amount.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            width: 500,
+            title: "처리 내용",
+            render: (_, record) => record.memo,
           },
         ]}
       />
