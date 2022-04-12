@@ -11,8 +11,8 @@ import {
 } from "antd";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { cartState } from "store/cartState";
-import useCart from "hooks/useCart";
+import { clearingCartState } from "store/clearingCartState";
+import useClearingCart from "hooks/useClearingCart";
 import { TurtleButton } from "components/common";
 import { useMutation, useQuery } from "react-query";
 import { adjustmentAPI, clearingAPI } from "apis";
@@ -27,9 +27,9 @@ interface Props extends CollapsePanelProps {
 
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const store = useRecoilValue(storeState);
-  const [cart, setCart] = useRecoilState(cartState);
+  const [cart, setCart] = useRecoilState(clearingCartState);
   const [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice] =
-    useCart();
+    useClearingCart();
 
   const getTodayReserveListQuery = useQuery(
     ["getTodayReserveList"],

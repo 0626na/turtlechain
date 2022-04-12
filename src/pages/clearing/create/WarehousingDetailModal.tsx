@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { warehousingAPI } from "apis";
-import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
-import { TurtleModal, TurtleTableTitle } from "components/common";
+import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
+import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
 import { Table } from "antd";
 
@@ -9,13 +9,13 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheet?: WarehousingSheet;
-  onOk: (itemList: WarehousingProductShow[]) => void;
+  onOk: (itemList: WarehousingItemShow[]) => void;
 }
 
 function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
   const getProductQuery = useQuery(
-    ["getWarehousingProduct"],
-    () => warehousingAPI.getProduct({ sheet_id: sheet?.id! }),
+    ["getWarehousingItem"],
+    () => warehousingAPI.getItem({ sheet_id: sheet?.id! }),
     {
       enabled: visible && !!sheet?.id,
     },
@@ -35,32 +35,13 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
         onOk(getProductQuery.data?.data.item_list ?? []);
       }}
     >
-      <Row gutter={16}>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("warehousing.date")}
-              value={sheet?.created_date}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("warehousing.total count")}
-              value={`${sheet?.total_item_count}건`}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("total supply price")}
-              value={`${sheet?.total_price.toLocaleString()}원`}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <TurtleStatistics
+        value={[
+          { title: t("warehousing.date"), value: `${sheet?.created_date}` },
+          { title: t("warehousing.total count"), value: `${sheet?.total_item_count}건` },
+          { title: t("total supply price"), value: `${sheet?.total_price.toLocaleString()}원` },
+        ]}
+      />
 
       <Table
         size="small"

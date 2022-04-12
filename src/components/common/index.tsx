@@ -20,6 +20,7 @@ import TurtleUpload from "./TurtleUpload";
 import TurtleTableTitle from "./TurlteTableTitle";
 import TurtlePopConfirm from "./TurtlePopConfirm";
 import TurtlePanelHeader from "./TurtlePanelHeader";
+import TurtleStatistics from "./TurtleStatistics";
 
 export {
   TurtleBadge,
@@ -44,4 +45,5 @@ export {
   TurtleTableTitle,
   TurtlePopConfirm,
   TurtlePanelHeader,
+  TurtleStatistics,
 };

@@ -1,6 +1,6 @@
 import { v2Axios } from "./index";
 import { VendorAccount, VendorPhone } from "./vendorAPI";
-import { WarehousingProduct } from "./warehousingAPI";
+import { WarehousingItem } from "./warehousingAPI";
 
 export interface MasterVendor {
   id: number;
@@ -160,8 +160,8 @@ const parseOrder = async function (data: FormData) {
 export interface ResponseParseWarehousing {
   msg: string;
   data: {
-    success: Array<WarehousingProduct>;
-    fail: Array<WarehousingProduct>;
+    success: Array<WarehousingItem>;
+    fail: Array<WarehousingItem>;
     count: ParseCount;
     error: string;
   };

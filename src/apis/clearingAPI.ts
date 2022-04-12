@@ -6,6 +6,8 @@ export interface BalanceShow {
   original_id: number;
   refund_amount: number;
   overpaid_amount: number;
+  created_time: string;
+  memo: string;
   vendor_info: {
     id: number;
     vendor_name: string;
@@ -98,9 +100,16 @@ const create = async function (data: { sheet: RequestCreateSheet; item: RequestC
 // Request: 매입 결제대기 항목
 export interface RequestGetBalance {
   // 매입조정 처리내역 확인할때
-  original_id?: number;
+  rt_store_id?: number;
+  vendor_id?: number;
+  start_date?: string;
+  end_date?: string;
+  // 페이지 구분
+  tab?: "balance" | "balance_detail" | "adjustment";
   // 정산에서 매입차감 위해 조회할 때
   warehousing_sheet_id?: string;
+  // 매입조정 상세 조회할 때
+  original_id?: number;
 }
 
 // Response: 매입 결제대청 항목

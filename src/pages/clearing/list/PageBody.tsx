@@ -40,7 +40,7 @@ function PageBody() {
     ["getClearingSheet", searchQuery],
     () => clearingAPI.getSheet(searchQuery),
     {
-      enabled: store.id !== undefined,
+      enabled: !!searchQuery.store_id,
       onSuccess: (data) => {
         setSheetList(data.data.sheet_list);
       },
@@ -73,29 +73,29 @@ function PageBody() {
   return (
     <>
       <MenuBar />
-      <Row gutter={16}>
-        <TurtleCard //
-          color="green"
-          title={t("clearing.status.request")}
-          span={4}
-          count={getSheetQuery.data?.data.clearing_summary.request.count ?? 0}
-          price={getSheetQuery.data?.data.clearing_summary.request.price ?? 0}
-        />
-        <TurtleCard //
-          color="orange"
-          title={t("clearing.status.pending")}
-          span={4}
-          count={getSheetQuery.data?.data.clearing_summary.pending.count ?? 0}
-          price={getSheetQuery.data?.data.clearing_summary.pending.price ?? 0}
-        />
-        <TurtleCard //
-          color="geekblue"
-          title={t("clearing.status.complete")}
-          span={4}
-          count={getSheetQuery.data?.data.clearing_summary.complete.count ?? 0}
-          price={getSheetQuery.data?.data.clearing_summary.complete.price ?? 0}
-        />
-      </Row>
+
+      <TurtleCard
+        value={[
+          {
+            color: "green",
+            title: t("clearing.status.request"),
+            count: getSheetQuery.data?.data.clearing_summary.request.count ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.request.price ?? 0,
+          },
+          {
+            color: "orange",
+            title: t("clearing.status.pending"),
+            count: getSheetQuery.data?.data.clearing_summary.pending.count ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.pending.price ?? 0,
+          },
+          {
+            color: "geekblue",
+            title: t("clearing.status.complete"),
+            count: getSheetQuery.data?.data.clearing_summary.complete.count ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.complete.price ?? 0,
+          },
+        ]}
+      />
 
       <MainContent title={t("clearing.lists")}>
         <Table

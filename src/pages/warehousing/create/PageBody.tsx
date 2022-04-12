@@ -1,37 +1,29 @@
-import moment from "moment";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { message, Menu, notification, Tabs, Table, Popconfirm, InputNumber } from "antd";
 import { t } from "i18next";
-import { useRecoilValue } from "recoil";
+import moment from "moment";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { message, Menu, notification, Tabs, Popconfirm } from "antd";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { RcFile } from "antd/lib/upload";
-import { excelAPI, externalAPI, warehousingAPI } from "apis";
-import { pricePattern } from "utils/pattern";
 import { BottomBar, MainContent, MenuBar } from "layouts/main";
-import {
-  TurtleButton,
-  TurtleButtonSub,
-  TurtleDropdown,
-  TurtleIcon,
-  TurtleUpload,
-} from "components/common";
+import { TurtleButton, TurtleButtonSub, TurtleDropdown, TurtleUpload } from "components/common";
 import { useStoreExist } from "hooks";
+import { excelAPI, externalAPI, warehousingAPI } from "apis";
 import { ResponseParseWarehousing } from "apis/excelAPI";
 import { ResponseConnectWarehousing } from "apis/externalAPI";
-import { WarehousingProduct } from "apis/warehousingAPI";
+import { warehousingCartState } from "store/warehousingCartState";
 import AddProductModal from "./AddProductModal";
+import SuccessTab from "./SuccessTab";
+import FailTab from "./FailTab";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
-  const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<WarehousingProduct>>([]);
-  const [failList, setFailList] = useState<Array<WarehousingProduct>>([]);
+  const [cart, setCart] = useRecoilState(warehousingCartState);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
   const index = useRef(0);
-  const failIndex = useRef(0);
 
   // 엑셀파싱 요청
   const parseQuery = useMutation("parseWarehousing", excelAPI.parseWarehousing, {
@@ -39,7 +31,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      setStates(data);
+      updateStates(data);
     },
   });
 
@@ -49,7 +41,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      setStates(data);
+      updateStates(data);
     },
   });
 
@@ -69,43 +61,41 @@ function PageBody() {
 
   // 모든 상태 초기화
   const resetStates = useCallback(() => {
-    setFileList([]);
-    setSuccessList([]);
-    setFailList([]);
-  }, []);
+    setCart({ fileList: [], successList: [], failList: [] });
+    connectQuery.reset();
+  }, [setCart]);
 
   // 파싱 or 연동 후 상태 세팅
-  const setStates = useCallback(
+  const updateStates = useCallback(
     (data: ResponseParseWarehousing | ResponseConnectWarehousing) => {
       if (data.data.error) {
         message.error(data.data.error);
         resetStates();
         return;
       }
-      setSuccessList([
-        ...data.data.success.map((product) => ({
-          ...product,
-          index: index.current++,
-        })),
-        ...successList,
-      ]);
-      setFailList([...data.data.fail, ...failList]);
+      setCart((cart) => ({
+        ...cart,
+        successList: [
+          ...data.data.success.map((item) => ({
+            ...item,
+            index: index.current++,
+          })),
+          ...cart.successList,
+        ],
+        failList: [...data.data.fail, ...cart.failList],
+      }));
     },
-    [successList, failList, resetStates],
+    [resetStates, setCart],
   );
 
-  // 엑셀파일 업로드
-  const loadFile = (file: RcFile) => {
+  // 엑셀파일 파싱
+  const parseFile = (file: RcFile) => {
+    setCart((cart) => ({ ...cart, fileList: [file] }));
     const form = new FormData();
     form.append("files", file);
     form.append("rt_store_id", store.id!.toString());
     parseQuery.mutate(form);
   };
-
-  // 쇼핑몰 변경시 모든 state 초기화
-  useEffect(() => {
-    resetStates();
-  }, [store.id, resetStates]);
 
   // 재고 연동 버튼 클릭
   const onClickConnect = useCallback(() => {
@@ -113,54 +103,18 @@ function PageBody() {
     connectQuery.mutate({ rt_store_id: store.id! });
   }, [store.id, connectQuery, isStoreExist]);
 
-  // 상품 추가
-  const addProduct = useCallback(
-    (product: WarehousingProduct) => {
-      setSuccessList([{ ...product, index: index.current++ }, ...successList]);
-      return true;
-    },
-    [successList, index],
-  );
-
-  // 상품 삭제
-  const deleteProduct = useCallback(
-    (index) => {
-      setSuccessList(successList?.filter((product) => product.index !== index));
-    },
-    [successList],
-  );
-
-  // 입고 수량 합계 계산
-  const totalProductCount = useMemo(
-    () => successList.reduce((acc, cur) => acc + cur.count, 0),
-    [successList],
-  );
-
-  // 공급가 합계 계산
-  const totalProductPrice = useMemo(
-    () => successList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
-    [successList],
-  );
-
-  // successList의 index의 type값을 value로 바꿔서 return 한다.
-  const changeSuccessList = useCallback(
-    (type: string, index, value) =>
-      successList.map((product) =>
-        product.index === index ? { ...product, [type]: value } : product,
-      ),
-    [successList],
-  );
+  // 쇼핑몰 변경시 모든 state 초기화
+  useEffect(() => {
+    resetStates();
+  }, [store.id, resetStates]);
 
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <TurtleUpload
-          beforeUpload={(file) => {
-            setFileList([file]);
-            loadFile(file);
-          }}
+        <TurtleUpload //
+          beforeUpload={parseFile}
           onRemove={resetStates}
-          fileList={fileList}
+          fileList={cart.fileList}
         />
       </Menu.Item>
       <Menu.Item
@@ -174,6 +128,7 @@ function PageBody() {
       </Menu.Item>
     </Menu>
   );
+
   return (
     <>
       <MenuBar isWarning>
@@ -192,166 +147,19 @@ function PageBody() {
         </TurtleDropdown>
       </MenuBar>
 
-      <MainContent //
-        title={t("warehousing.preview")}
-        info={t("description.check confirm")}
-      >
+      <MainContent title={t("warehousing.preview")} info={t("description.check confirm")}>
+        {/* 성공 실패 탭*/}
         <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
-          <Tabs.TabPane tab={`성공(${successList.length})`} key="1">
-            <Table
-              size="small"
-              loading={connectQuery.isLoading || parseQuery.isLoading}
-              dataSource={successList}
-              rowKey={(record) => record.index!}
-              pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-              scroll={{ y: "auto" }}
-              footer={() =>
-                `입고수량 합계 : ${totalProductCount}개 | 공급가 합계 : ${totalProductPrice.toLocaleString()}원`
-              }
-              columns={[
-                {
-                  ellipsis: true,
-                  width: "10%",
-                  title: t("vendor.name"),
-                  render: (_, record) => record.vendor_name,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("vendor.address"),
-                  render: (_, record) => record.vendor_address,
-                },
-                {
-                  ellipsis: true,
-                  title: t("product.name"),
-                  render: (_, record) => record.product_name,
-                },
-                {
-                  ellipsis: true,
-                  title: t("product.vendor product name"),
-                  render: (_, record) => record.vendor_product_name,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.code"),
-                  render: (_, record) => record.product_code,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.option"),
-                  render: (_, record) => record.product_option,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.price"),
-                  render: (_, record) => (
-                    <InputNumber
-                      size="small"
-                      step={1000}
-                      value={record.price}
-                      formatter={(value) => `${value}`.replace(pricePattern, ",")}
-                      min={0}
-                      onChange={(value) => {
-                        setSuccessList(changeSuccessList("price", record.index, value));
-                      }}
-                    />
-                  ),
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("warehousing.count"),
-                  render: (_, record) => (
-                    <InputNumber
-                      size="small"
-                      min={1}
-                      value={record.count}
-                      onChange={(value) => {
-                        setSuccessList(changeSuccessList("count", record.index, value));
-                      }}
-                    />
-                  ),
-                },
-                {
-                  ellipsis: true,
-                  width: "8%",
-                  render: (_, record) => (
-                    <TurtleIcon
-                      type="delete"
-                      onClick={() => {
-                        deleteProduct(record.index);
-                      }}
-                    />
-                  ),
-                },
-              ]}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`실패(${failList.length})`} key="2">
-            <Table
-              size="small"
-              loading={connectQuery.isLoading || parseQuery.isLoading}
-              dataSource={failList}
-              rowKey={(record) => failIndex.current++}
-              pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-              scroll={{ y: "auto" }}
-              columns={[
-                {
-                  ellipsis: true,
-                  width: "'8%",
-                  title: t("vendor.name"),
-                  render: (_, record) => record.vendor_name,
-                },
-                {
-                  ellipsis: true,
-                  width: "'8%",
-                  title: t("vendor.address"),
-                  render: (_, record) => record.vendor_address,
-                },
-                {
-                  ellipsis: true,
-                  title: t("product.name"),
-                  render: (_, record) => (
-                    <span style={{ color: "red" }}>{record.product_name}</span>
-                  ),
-                },
-                {
-                  ellipsis: true,
-                  title: t("product.vendor product name"),
-                  render: (_, record) => (
-                    <span style={{ color: "red" }}>{record.vendor_product_name}</span>
-                  ),
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.code"),
-                  render: (_, record) => record.product_code,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.option"),
-                  render: (_, record) => record.product_option,
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("product.price"),
-                  render: (_, record) => record.price.toLocaleString(),
-                },
-                {
-                  ellipsis: true,
-                  width: "12%",
-                  title: t("warehousing.count"),
-                  render: (_, record) => record.count,
-                },
-              ]}
-            />
-          </Tabs.TabPane>
+          <SuccessTab
+            key="1"
+            tab={`성공(${cart.successList.length})`}
+            loading={connectQuery.isLoading || parseQuery.isLoading}
+          />
+          <FailTab
+            key="2"
+            tab={`실패(${cart.failList.length})`}
+            loading={connectQuery.isLoading || parseQuery.isLoading}
+          />
         </Tabs>
 
         {/* 상품 단건 추가 모달 */}
@@ -360,7 +168,7 @@ function PageBody() {
           closeModal={() => {
             setAddProductModalVisible(false);
           }}
-          addProduct={addProduct}
+          index={index}
         />
       </MainContent>
 
@@ -375,22 +183,24 @@ function PageBody() {
                 created_date: moment().format("YYYY-MM-DD"),
                 rt_store_id: store.id!,
               },
-              product: {
+              item: {
                 rt_store_id: store.id!,
-                item_list: successList.map((product) => ({
-                  vendor_id: product.vendor_id,
-                  product_id: product.product_id,
-                  count: product.count,
-                  price: product.price,
-                  memo: product.memo,
-                })),
+                item_list: cart.successList.map(
+                  ({ vendor_id, product_id, count, price, memo }) => ({
+                    vendor_id,
+                    product_id,
+                    count,
+                    price,
+                    memo,
+                  }),
+                ),
               },
             });
           }}
         >
           <TurtleButton
             type="primary"
-            disabled={successList.length === 0}
+            disabled={cart.successList.length === 0}
             loading={createQuery.isLoading}
           >
             {t("button.create warehousing")}

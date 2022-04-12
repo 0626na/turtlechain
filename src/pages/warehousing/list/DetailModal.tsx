@@ -1,24 +1,12 @@
+import { t } from "i18next";
+import { Modal, Table, message, InputNumber, Button, Popconfirm, notification, Space } from "antd";
+import { DeleteOutlined, SyncOutlined } from "@ant-design/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import warehousingAPI, { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
-import { DeleteOutlined, SyncOutlined } from "@ant-design/icons";
-import {
-  Modal,
-  Table,
-  message,
-  InputNumber,
-  Button,
-  Popconfirm,
-  notification,
-  Statistic,
-  Card,
-  Row,
-  Col,
-  Space,
-} from "antd";
-import { t } from "i18next";
-import { TurtleModal, TurtleTableTitle } from "components/common";
+import { warehousingAPI } from "apis";
+import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
+import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 
 interface Props {
   visible: boolean;
@@ -28,28 +16,28 @@ interface Props {
 
 function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
-  const [productList, setProductList] = useState<Array<WarehousingProductShow>>([]);
+  const [itemList, setItemList] = useState<Array<WarehousingItemShow>>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 입고장 상세내역 리스트 요청
-  const getProductQuery = useQuery(
-    ["getWarehousingProduct"],
-    () => warehousingAPI.getProduct({ sheet_id: sheet?.id! }),
+  const getItemQuery = useQuery(
+    ["getWarehousingItem"],
+    () => warehousingAPI.getItem({ sheet_id: sheet?.id! }),
     {
       enabled: visible && !!sheet?.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        setProductList(data.data.item_list);
+        setItemList(data.data.item_list);
       },
     },
   );
 
   // 입고장 상세내역 수정 요청
-  const updateProductQuery = useMutation(
-    ["updateWarehousingProduct"], //
-    warehousingAPI.updateProduct,
+  const updateItemQuery = useMutation(
+    ["updateWarehousingItem"], //
+    warehousingAPI.updateItem,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -71,46 +59,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   }, [visible]);
 
   // 필터된 리스트
-  const filteredList = useMemo(
-    () => productList.filter((product) => !product.is_inactive),
-    [productList],
-  );
-
-  // // 검색
-  // const searchProductList = useCallback(
-  //   ({ type, search_string }) => {
-  //     console.log(type, search_string);
-  //     setProductListShow(
-  //       productList.filter((product) => {
-  //         if (type === "name") {
-  //           return product.product_info.name.includes(search_string);
-  //         }
-  //         if (type === "vendor_product_name") {
-  //           return product.product_info.vendor_product_name.includes(search_string);
-  //         }
-  //         if (type === "vendor_name") {
-  //           return product.vendor_info.vendor_name.includes(search_string);
-  //         }
-  //         return (
-  //           product.product_info.name.includes(search_string) ||
-  //           product.product_info.vendor_product_name.includes(search_string) ||
-  //           product.vendor_info.vendor_name.includes(search_string)
-  //         );
-  //       }),
-  //     );
-  //   },
-  //   [productList],
-  // );
-
-  // const totalItemCount = useMemo(
-  //   () => list.reduce((sum, current) => sum + current.count, 0),
-  //   [list, searchType, searchText],
-  // );
-
-  // const totalItemAmount = useMemo(
-  //   () => list.reduce((sum, current) => sum + current.count * current.price, 0),
-  //   [list, searchType, searchText],
-  // );
+  const filteredList = useMemo(() => itemList.filter((item) => !item.is_inactive), [itemList]);
 
   // 모달창 닫기
   const confirmClose = () => {
@@ -130,30 +79,20 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   };
 
   // 수량 변경
-  const setCount = useCallback(
-    (record, value) => {
-      setProductList(
-        productList.map((product) =>
-          product.id === record.id ? { ...product, count: value } : product,
-        ),
-      );
-      setIsUpdated(true);
-    },
-    [productList],
-  );
+  const setCount = useCallback((record, count) => {
+    setItemList((itemList) =>
+      itemList.map((item) => (item.id === record.id ? { ...item, count } : item)),
+    );
+    setIsUpdated(true);
+  }, []);
 
   // 상품 삭제
-  const deleteProduct = useCallback(
-    (record) => {
-      setProductList(
-        productList?.map((product) =>
-          product.id === record.id ? { ...product, is_inactive: true } : product,
-        ),
-      );
-      setIsUpdated(true);
-    },
-    [productList],
-  );
+  const deleteProduct = useCallback((record) => {
+    setItemList((itemList) =>
+      itemList.map((item) => (item.id === record.id ? { ...item, is_inactive: true } : item)),
+    );
+    setIsUpdated(true);
+  }, []);
 
   return (
     <TurtleModal //
@@ -170,12 +109,12 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={() => {
-              updateProductQuery.mutate({
+              updateItemQuery.mutate({
                 sheet_id: sheet?.id!,
-                items: productList.map((product) => ({
-                  id: product.id,
-                  is_inactive: product.is_inactive,
-                  count: product.count,
+                items: itemList.map(({ id, is_inactive, count }) => ({
+                  id,
+                  is_inactive,
+                  count,
                 })),
               });
             }}
@@ -183,7 +122,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             <Button //
               type="primary"
               icon={<SyncOutlined />}
-              loading={updateProductQuery.isLoading}
+              loading={updateItemQuery.isLoading}
             >
               {t("reflect update")}
             </Button>
@@ -191,48 +130,22 @@ function DetailModal({ visible, onClose, sheet }: Props) {
         ]
       }
     >
-      <Row gutter={16}>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("warehousing.date")}
-              value={sheet?.created_date}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("warehousing.total count")}
-              value={`${sheet?.total_item_count}건`}
-            />
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card>
-            <Statistic //
-              title={t("total supply price")}
-              value={`${sheet?.total_price.toLocaleString()}원`}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <TurtleStatistics
+        value={[
+          { title: t("warehousing.date"), value: `${sheet?.created_date}` },
+          { title: t("warehousing.total count"), value: `${sheet?.total_item_count}건` },
+          { title: t("total supply price"), value: `${sheet?.total_price.toLocaleString()}원` },
+        ]}
+      />
 
       <Table
         size="small"
-        loading={getProductQuery.isLoading}
+        loading={getItemQuery.isLoading}
         pagination={false}
         dataSource={filteredList}
-        rowKey={(product) => product.id}
+        rowKey={(item) => item.id}
         style={{ height: "60vh", paddingTop: 30 }}
-        title={() => (
-          <TurtleTableTitle count={filteredList.length ?? 0}>
-            {/* <SearchFilter
-              type="product"
-              onSearch={({ type, search_string }) => searchProductList({ type, search_string })}
-            /> */}
-          </TurtleTableTitle>
-        )}
+        title={() => <TurtleTableTitle count={filteredList.length ?? 0}></TurtleTableTitle>}
         columns={[
           {
             ellipsis: true,

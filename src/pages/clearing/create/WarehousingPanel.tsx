@@ -3,14 +3,14 @@ import { Collapse, message, Row, Table, Typography, CollapsePanelProps, Space } 
 import { warehousingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleButton } from "components/common";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { WarehousingProductShow, WarehousingSheet } from "apis/warehousingAPI";
+import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import WarehousingDetailModal from "./WarehousingDetailModal";
-import { cartState } from "store/cartState";
-import useCart from "hooks/useCart";
+import { clearingCartState } from "store/clearingCartState";
+import useClearingCart from "hooks/useClearingCart";
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -19,8 +19,8 @@ interface Props extends CollapsePanelProps {
 
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
-  const [cart, setCart] = useRecoilState(cartState);
-  const [totalDepositPrice, totalVatPrice] = useCart();
+  const [cart, setCart] = useRecoilState(clearingCartState);
+  const [totalDepositPrice, totalVatPrice] = useClearingCart();
   const [DetailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedSheet, selectSheet] = useState<WarehousingSheet>();
 
@@ -58,7 +58,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
 
   // 입고 확정 버튼 클릭
   const checkSheet = useCallback(
-    (itemList: WarehousingProductShow[]) => {
+    (itemList: WarehousingItemShow[]) => {
       setCart({
         selectedKeys: [...cart.selectedKeys, selectedSheet?.id!],
         warehousing_item_list: [
@@ -75,12 +75,11 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             // (도매에게) 이체금액
             const deposit_price = count * price;
             // 부가세
-            const vat_price = count * (is_vat_included ? Math.floor(deposit_price / 11) : 0);
+            const vat_price = is_vat_included ? Math.floor(deposit_price / 11) : 0;
             // 공급가
-            const supply_price = count * (deposit_price - vat_price);
+            const supply_price = deposit_price - vat_price;
             // (소매가) 발행금액
-            const total_price =
-              count * (is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1));
+            const total_price = is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1);
             return {
               sheet_id,
               warehousing_item_id: id,
@@ -100,10 +99,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
     },
     [selectedSheet, cart, setCart],
   );
-
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
 
   // 입고 확정 모달 열기
   const openDetailModal = useCallback(

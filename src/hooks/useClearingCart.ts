@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
-import { cartState } from "store/cartState";
+import { clearingCartState } from "store/clearingCartState";
 
-function useCart() {
-  const cart = useRecoilValue(cartState);
+function useClearingCart() {
+  const cart = useRecoilValue(clearingCartState);
 
   const totalDepositPrice = useMemo(
     () =>
@@ -37,4 +37,4 @@ function useCart() {
   return [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice];
 }
 
-export default useCart;
+export default useClearingCart;

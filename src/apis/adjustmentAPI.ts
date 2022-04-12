@@ -1,7 +1,7 @@
 import { v2Axios } from "./index";
 
 // 매입조정 상품
-export interface AdjustmentProduct {
+export interface AdjustmentItem {
   index?: number;
 
   vendor_id: number;
@@ -26,7 +26,7 @@ export interface AdjustmentProduct {
 }
 
 // 매입조정 상품 Show
-export interface AdjustmentProductShow {
+export interface AdjustmentItemShow {
   id: number;
   ws_store_id: number;
   count: number;
@@ -80,7 +80,7 @@ export interface ResponseGetList {
       };
     };
     total_count: number;
-    adjustment_list: Array<AdjustmentProductShow>;
+    adjustment_list: Array<AdjustmentItemShow>;
   };
 }
 

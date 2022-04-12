@@ -1,30 +1,68 @@
-import { message, Row, Table } from "antd";
-import { adjustmentAPI } from "apis";
-import { AdjustmentProductShow } from "apis/adjustmentAPI";
+import { DatePicker, message, Row, Table } from "antd";
+import { adjustmentAPI, clearingAPI } from "apis";
+import { AdjustmentItemShow } from "apis/adjustmentAPI";
+import { RequestGetBalance } from "apis/clearingAPI";
 import { AxiosError } from "axios";
 import { TurtleModal, TurtleText } from "components/common";
 import { t } from "i18next";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
+import { storeState } from "store/storeState";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectedRow?: AdjustmentProductShow;
+  selectedRow?: AdjustmentItemShow;
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
+  const store = useRecoilValue(storeState);
+  const [searchQuery, setSearchQuery] = useState<RequestGetBalance>({
+    rt_store_id: store.id,
+    vendor_id: selectedRow?.vendor_info.id,
+    start_date: selectedRow?.created_date,
+    end_date: moment().add(7, "d").format("YYYY-MM-DD"),
+    tab: "adjustment",
+    original_id: selectedRow?.id,
+  });
+
   // 매입조정 상세내역 요청
   const getDetailQuery = useQuery(
-    ["getAdjustmentDetail"],
+    ["getAdjustmentDetail", selectedRow],
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
-      enabled: visible && !!selectedRow,
+      enabled: visible && !!searchQuery.original_id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
-      onSuccess: (data) => {},
     },
   );
+
+  // 잔금 내역 조회 요청 청
+  const getBalanceQuery = useQuery(
+    ["getBalance", searchQuery], //
+    () => clearingAPI.getBalance(searchQuery),
+    {
+      enabled: visible && !!searchQuery.original_id,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data.msg);
+      },
+    },
+  );
+
+  useEffect(() => {
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id,
+      vendor_id: selectedRow?.vendor_info.id,
+      start_date: selectedRow?.created_date,
+      end_date: moment().add(7, "d").format("YYYY-MM-DD"),
+      tab: "adjustment",
+      original_id: selectedRow?.id,
+    }));
+  }, [selectedRow, store.id]);
 
   return (
     <TurtleModal
@@ -34,6 +72,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       visible={visible}
       onCancel={closeModal}
       footer={false}
+      bodyStyle={{ height: "60vh", overflowY: "auto" }}
     >
       <Row style={{ marginBottom: 16 }}>
         <TurtleText>{t("adjustment.list")}</TurtleText>
@@ -92,6 +131,43 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       />
 
       <Row style={{ margin: "32px 0 16px 0" }}>
+        <TurtleText>매입조정 처리이력</TurtleText>
+      </Row>
+
+      <Row style={{ marginBottom: 16 }}>
+        <DatePicker.RangePicker
+          size="small"
+          allowClear={false}
+          value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
+          onChange={(_, [start_date, end_date]) => {
+            setSearchQuery({ ...searchQuery, start_date, end_date });
+          }}
+        />
+      </Row>
+
+      <Table
+        size="small"
+        loading={getBalanceQuery.isLoading}
+        dataSource={getBalanceQuery.data?.data.item_list}
+        rowKey={(record) => record.id}
+        pagination={false}
+        columns={[
+          {
+            ellipsis: true,
+            width: 200,
+            align: "center",
+            title: "처리시간",
+            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD HH:MM"),
+          },
+          {
+            ellipsis: true,
+            title: "처리내용",
+            render: (_, record) => record.memo,
+          },
+        ]}
+      />
+
+      {/* <Row style={{ margin: "32px 0 16px 0" }}>
         <TurtleText>{t("adjustment.clearing list")}</TurtleText>
       </Row>
 
@@ -99,7 +175,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         size="small"
         loading={getDetailQuery.isLoading}
         dataSource={
-          getDetailQuery.data?.data.clearing_info && getDetailQuery.data?.data.clearing_info
+          getDetailQuery.data?.data?.clearing_info && getDetailQuery.data?.data.clearing_info
         }
         rowKey={(record) => record.id}
         pagination={false}
@@ -153,9 +229,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             render: (_, record) => t(`adjustment.process type.${record.adjustment_process_type}`),
           },
         ]}
-      />
+      /> */}
 
-      <Row style={{ margin: "32px 0 16px 0" }}>
+      {/* <Row style={{ margin: "32px 0 16px 0" }}>
         <TurtleText>{t("adjustment.warehousing list")}</TurtleText>
       </Row>
 
@@ -164,7 +240,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         loading={getDetailQuery.isLoading}
         pagination={false}
         dataSource={
-          getDetailQuery.data?.data.warehousing_info.id
+          getDetailQuery.data?.data?.warehousing_info.id
             ? [getDetailQuery.data?.data.warehousing_info]
             : []
         }
@@ -201,7 +277,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             render: (_, record) => record.price.toLocaleString(),
           },
         ]}
-      />
+      /> */}
     </TurtleModal>
   );
 }
