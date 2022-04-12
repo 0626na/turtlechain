@@ -21,7 +21,8 @@
     "check home": "각 항목별 상세 내역은 매입조정 관리 또는 정산 관리 메뉴에서 확인 바랍니다.",
     "today reserve included": "당일 미송은 자동으로 결제금액에 포함됩니다.",
     "excel type": "대량 업로드 파일은 .CSV .XLS 또는 .XLSX 만 사용할 수 있습니다.",
-    "fail product": "실패한 상품은 거래처 또는 일부 상품 정보가 정확하지 않아 추가하지 못한 상품들입니다."
+    "fail product": "실패한 상품은 거래처 또는 일부 상품 정보가 정확하지 않아 추가하지 못한 상품들입니다.",
+    "check confirm": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다."
   },
   "message": {
     "success create warehousing": "입고를 등록하였습니다.",
@@ -112,9 +113,10 @@
     "price confirm": "금액 확정하기",
     "remove": "제외하기",
     "cancel": "취소",
+    "ok": "확인",
     "next step": "다음 단계",
     "select": "선택하기",
-    "request clearing": "결제 요청 등록",
+    "request clearing": "결제요청 등록",
     "add order": "주문 추가하기",
     "connect external program": "재고프로그램 연동",
     "upload excel": "엑셀 업로드",
@@ -186,7 +188,7 @@
     "section_title2": "입고장 미리보기",
     "btn_upload_whs_sheet": "입고장 업로드",
     "btn_prepopulate_whs": "주문내역 불러오기",
-    "price": "입고 금액 (공급가)",
+    "price": "입고 금액",
     "preview": "입고서 미리보기",
     "load": "입고내역 불러오기"
   },
@@ -203,7 +205,7 @@
     "vendor_info": "거래처 정보",
     "memo": "메모",
     "process type": {
-      "": "구분",
+      "": "처리방식",
       "default": "매입조정 처리",
       "subtract": "차감",
       "refund": "환불"
@@ -226,7 +228,7 @@
     "clearing list": "정산이력",
     "warehousing list": "입고내역",
     "clearing date": "정산 날짜",
-    "total price": "결제 금액",
+    "total price": "총 금액",
     "supply price": "공급가액",
     "vat price": "부가세"
   },
@@ -235,57 +237,30 @@
     "management": "정산 관리",
     "create": "정산 등록",
     "list": "정산 내역",
-    "detail list": "정산 상세내역",
-    "request_date": "결제 요청 일자",
-    "complete_date": "결제 완료 일자",
-    "total_price": "총 결제 금액",
-    "total_vendor_count": "총 거래처 수",
+    "lists": "정산 리스트",
+    "detail": "정산 상세내역",
+    "request date": "결제 요청 일자",
+    "complete date": "결제 완료 일자",
+    "recent date": "최근 처리 일자",
+    "date": "정산 일자",
+    "total price": "총 결제 금액",
+    "total vendor count": "총 거래처 수",
     "delete": "삭제",
     "account": "계좌정보",
     "price": "결제금액",
-    "supply_price": "공급가액",
-    "vat_price": "부가세",
+    "supply price": "공급가액",
+    "vat": "부가세",
     "is_vat_included": "부가세 포함 여부",
-    "date": {
-      "request": "결제 요청 일자",
-      "complete": "결제 완료 일자"
-    },
-    "vendor": {
-      "code": "거래처 코드",
-      "name": "거래처명",
-      "address": "거래처 주소"
-    },
+    "balance": "받을 돈 / 사용할 돈",
+    "balance list": "받을 돈 / 사용할 돈 내역",
+    "balance lists": "받을 돈 / 사용할 돈 리스트",
+    "balance detail": "받을 돈 / 사용할 돈 내역 상세보기",
     "status": {
       "default": "결제 상태",
       "all": "전체",
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
-    },
-    "panel": {
-      "warehousing": "입고 결제 대기",
-      "adjustment": "매입 결제 대기",
-      "clearing preview": "정산 금액 미리보기",
-      "vat": "부가세",
-      "included": "원 포함",
-      "warehousing total": "입고 총 금액",
-      "adjustment total": "매입 총 금액"
-    },
-    "preview": {
-      "warehousing": "입고",
-      "adjustment subtract": "매입차감",
-      "today reserved": "당일미송",
-      "total": "합계"
-    },
-    "detail": {
-      "default": "상세보기",
-      "type": {
-        "default": "구분",
-        "adjustment subtract": "매입차감",
-        "adjustment refund": "매입환불",
-        "adjustment todayreserve": "당일미송",
-        "warehousing": "입고"
-      }
     }
   },
   "product": {
@@ -371,7 +346,8 @@
     "home": "HOME",
     "etc": "기타",
     "connect external program": "재고프로그램 연동",
-    "during": "기간"
+    "during": "기간",
+    "memo": "메모"
   },
   "turtlechain": "터틀체인",
   "auth num": "인증번호",

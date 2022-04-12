@@ -1,6 +1,6 @@
 import { v2Axios } from "apis";
 import { ParseCount, Product, Vendor } from "apis/excelAPI";
-import { WarehousingProduct } from "./warehousingAPI";
+import { WarehousingItem } from "./warehousingAPI";
 
 export interface RequestQuery {
   rt_store_id: number;
@@ -34,8 +34,8 @@ const connectSellmateProduct = async function (query: RequestQuery) {
 export interface ResponseConnectWarehousing {
   msg: string;
   data: {
-    success: Array<WarehousingProduct>;
-    fail: Array<WarehousingProduct>;
+    success: Array<WarehousingItem>;
+    fail: Array<WarehousingItem>;
     count: ParseCount;
     error: string;
   };

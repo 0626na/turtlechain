@@ -1,10 +1,22 @@
+import { DeleteOutlined } from "@ant-design/icons";
+
 interface Props {
-  type: "menu" | "pageHeader";
-  name: string;
+  type: "delete";
+  onClick?: () => void;
 }
 
-function TurtleIcon({ type, name }: Props) {
-  return <img src={`${process.env.PUBLIC_URL}/assets/svg/${name}.svg`} alt={name} />;
+function TurtleIcon({ type, onClick }: Props) {
+  const style = { cursor: "pointer", color: "#A1A2A6" };
+
+  return (
+    <DeleteOutlined //
+      style={style}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick && onClick();
+      }}
+    />
+  );
 }
 
 export default TurtleIcon;

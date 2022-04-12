@@ -51,7 +51,10 @@ function TurtleButtonSub({
       type={type}
       shape={shape}
       size={size}
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick && onClick();
+      }}
       icon={icon === "download" ? <DownloadOutlined /> : icon === "file" ? <FileOutlined /> : ""}
       style={{
         borderRadius: shape === "default" ? 2 : "",

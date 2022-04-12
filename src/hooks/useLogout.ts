@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 const useLogout = function () {
   const queryClient = useQueryClient();
   const resetToken = useResetRecoilState(tokenState);
+
   const logout = () => {
     v1Axios.defaults.headers.common["Authorization"] = "";
     v2Axios.defaults.headers.common["Authorization"] = "";

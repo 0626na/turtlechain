@@ -16,8 +16,8 @@ export interface WarehousingSheet {
   is_inactive: boolean;
 }
 
-// 입고상품
-export interface WarehousingProduct {
+// 입고 상품
+export interface WarehousingItem {
   vendor_id: number;
   vendor_name: string;
   vendor_address: string;
@@ -37,12 +37,14 @@ export interface WarehousingProduct {
 }
 
 // 입고상품 가져오기
-export interface WarehousingProductShow {
+export interface WarehousingItemShow {
   id: number;
+  sheet_id: number;
   vendor_info: {
     id: number;
     vendor_name: string;
     vendor_address: string;
+    ws_store_id: number;
   };
   product_info: {
     id: number;
@@ -57,6 +59,7 @@ export interface WarehousingProductShow {
   memo: string;
   is_vat_included: boolean;
   is_inactive: boolean;
+  created_date: string;
 }
 
 // Request: 입고장 생성
@@ -70,8 +73,9 @@ export interface ResponseCreateSheet {
   msg: string;
   data: number;
 }
+
 // Request: 입고상품 생성
-export interface RequestCreateProduct {
+export interface RequestCreateItem {
   sheet_id?: number;
   rt_store_id: number;
   item_list: Array<{
@@ -84,20 +88,20 @@ export interface RequestCreateProduct {
 }
 
 // Response: 입고상품 생성
-export interface ResponseCreateProduct {
+export interface ResponseCreateItem {
   data: null;
 }
 
 // 입고 생성
-const create = async function (data: { sheet: RequestCreateSheet; product: RequestCreateProduct }) {
+const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
   let url = "warehousing/sheet";
   const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
   url = "warehousing/item";
-  const productResponse = await v2Axios.post<ResponseCreateProduct>(url, {
-    ...data.product,
+  const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
+    ...data.item,
     sheet_id: sheetResponse.data.data,
   });
-  return productResponse.data;
+  return itemResponse.data;
 };
 
 // Request: 입고장 리스트 가져오기
@@ -144,28 +148,28 @@ const updateSheet = async function (data: RequestUpdateSheet) {
 };
 
 // Request: 입고상품 리스트
-export type RequestGetProduct = {
+export type RequestGetItem = {
   sheet_id: number;
 };
 
 // Response: 입고상품 리스트
-export interface ResponseGetProduct {
+export interface ResponseGetItem {
   msg: string;
   data: {
-    item_list: Array<WarehousingProductShow>;
+    item_list: Array<WarehousingItemShow>;
     total_count: number;
   };
 }
 
 // 입고상품 리스트 가져오기
-const getProduct = async function (data: RequestGetProduct) {
+const getItem = async function (data: RequestGetItem) {
   const url = `warehousing/item?sheet_id=${data.sheet_id}`;
-  const response = await v2Axios.get<ResponseGetProduct>(url);
+  const response = await v2Axios.get<ResponseGetItem>(url);
   return response.data;
 };
 
 // Request: 입고상품 수정
-export interface RequestUpdateProduct {
+export interface RequestUpdateItem {
   sheet_id: number;
   items: Array<{
     id: number;
@@ -175,127 +179,23 @@ export interface RequestUpdateProduct {
 }
 
 // Response: 입고상품 수정
-export interface ResponseUpdateProduct {
+export interface ResponseUpdateItem {
   data: null;
 }
 
 // 입고상품 수정 요청
-const updateProduct = async function (data: RequestUpdateProduct) {
+const updateItem = async function (data: RequestUpdateItem) {
   const url = "warehousing/item/bulk_update";
-  const response = await v2Axios.put<ResponseUpdateProduct>(url, data);
+  const response = await v2Axios.put<ResponseUpdateItem>(url, data);
   return response.data;
 };
-
-/**
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- * 수정중
- */
-
-// 입고장 상세내역 대량 수정하기 타입
-// export interface RequestBulkUpdateSheetItem {
-//   sheet_id: number;
-//   items: Array<WarehousingSheetItem>;
-// }
-
-export type RequestGetSheetItem = number;
-
-export interface ResponseGetSheetItem {
-  data: {
-    item_list: Array<WarehousingItemForClearing>;
-    total_count: number;
-  };
-}
-
-// 입고장 상세내역 가져오기
-const getSheetItem = async function (sheet_id: RequestGetSheetItem) {
-  const url = `warehousing/item?sheet_id=${sheet_id}`;
-  const response = await v2Axios.get<ResponseGetSheetItem>(url);
-  return response.data;
-};
-
-export interface VendorAccount {
-  id: number;
-  account_number: string;
-  account_holder: string;
-  bank: string;
-}
-
-export interface ProductInfo {
-  id: number;
-  product_code: string;
-  name: string;
-  vendor_product_name: string;
-  price: number;
-  option: string;
-}
-
-export interface WarehousingItemForClearing {
-  id: number;
-  sheet_id: number;
-  rt_store_id: number;
-  vendor_info: VendorInfo;
-  product_info: ProductInfo;
-  count: number;
-  price: number;
-  is_vat_included: boolean;
-  memo: string | null;
-}
-
-export interface WarehousingItem2 {
-  id: number;
-  sheet_id: number;
-  rt_store_id: number;
-  vendor_info: VendorInfo;
-  product_info: ProductInfo;
-  count: number;
-  price: number;
-  is_vat_included: boolean;
-  memo: string | null;
-  is_inactive: boolean | false;
-}
-
-export interface VendorInfo {
-  id: number;
-  ws_store: WsStoreInfo;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  vendor_account: VendorAccount;
-}
-
-export interface WsStoreInfo {
-  id: number;
-  name: string;
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
-  ext: string;
-}
 
 const warehousingAPI = {
   create,
-  getSheet,
   updateSheet,
-  getProduct,
-  updateProduct,
-  // 수정예정
-  getSheetItem,
+  updateItem,
+  getSheet,
+  getItem,
 };
 
 export default warehousingAPI;
