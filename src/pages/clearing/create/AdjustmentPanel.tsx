@@ -79,7 +79,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           },
           {
             ellipsis: true,
-            title: "남은 돈",
+            title: "사용 가능 금액",
             render: (_, record) => record.overpaid_amount.toLocaleString(),
           },
           {
