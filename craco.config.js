@@ -68,7 +68,7 @@ module.exports = {
               "@tabs-horizontal-margin": "0 0 0 0",
 
               // Table
-              "@table-header-bg": "#F6F9FD",
+              "@table-header-bg": "#F7F8F9",
               "@table-footer-bg": "#FFFFFF",
             },
             javascriptEnabled: true,
