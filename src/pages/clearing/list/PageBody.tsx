@@ -68,6 +68,7 @@ function PageBody() {
 
   const downloadExcelQuery = useMutation("downloadClearing", excelAPI.downloadClearing, {
     onError: (error: AxiosError) => {
+      console.log(error.response?.data);
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {

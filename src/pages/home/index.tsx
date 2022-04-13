@@ -23,10 +23,10 @@ const HomePage = function () {
       <PageHeader //
         title={t("common.home")}
         info={t("description.check home")}
+        divider={false}
       />
-      <Row>
-        <ClearingStatusCard />
-      </Row>
+
+      <ClearingStatusCard />
       {/* <Row gutter={26}>
         <Col span={6}>
           <Card title={"미처리 환불 현황"} style={cardStyle}>
@@ -48,7 +48,7 @@ const HomePage = function () {
       </Row> */}
       <Row gutter={26}>
         <Col span={6}>
-          <Card title={"미처리 매입조정 현황"} style={cardStyle}>
+          <Card bordered={false} title={"미처리 매입조정 현황"} style={cardStyle}>
             <Typography.Title level={2}>
               <Row justify="center" align="middle">
                 {getUnprocessedStatusQuery.data?.data.adjustments.counts ?? 0}건

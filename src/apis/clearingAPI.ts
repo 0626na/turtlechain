@@ -28,8 +28,8 @@ export interface ClearingSheetShow {
   id: number;
   created_time: string;
   status: "request" | "pending" | "complete";
-  rt_store_id: number;
-  rt_store_name: string;
+  store_id: number;
+  store_name: string;
   request_date: string;
   complete_date: string | null;
   clearing_total_price: number;
@@ -139,8 +139,8 @@ export interface RequestGetSheet {
   date_filter?: "request_date" | "complete_date";
   start_date: string;
   end_date: string;
-  page: number;
-  page_size: number;
+  page?: number;
+  page_size?: number;
   status: string; // "request" | "pending" | "complete" | "all"
 }
 
@@ -251,7 +251,19 @@ interface RequestGetItemDetail {
   item_id: number;
 }
 
-interface ResponseGetItemDetail {}
+interface ResponseGetItemDetail {
+  item_list: Array<{
+    vendor_name: string;
+    vendor_address: string;
+    bank: string;
+    account_number: string;
+    account_holder: string;
+    deposit_price: number;
+    supply_price: number;
+    vat_price: number;
+    clearing_type: string;
+  }>;
+}
 
 const getItemDetail = async function (query: RequestGetItemDetail) {
   const url = `clearing/item/${query.item_id}`;

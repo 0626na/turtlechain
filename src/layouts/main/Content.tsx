@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
 // antd
 import { Layout } from "antd";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   children?: React.ReactNode;
@@ -10,13 +11,19 @@ interface Props {
 }
 
 function Content({ children, menuVisible }: Props) {
+  const location = useLocation();
+
   return (
     <StyledContent
       style={{
         marginLeft: menuVisible ? "80px" : MAIN_SIDER_WIDTH,
       }}
     >
-      <Contents>{children}</Contents>
+      {location.pathname.includes("/home") ? (
+        <HomeBox>{children}</HomeBox>
+      ) : (
+        <Contents>{children}</Contents>
+      )}
     </StyledContent>
   );
 }
@@ -27,6 +34,12 @@ const StyledContent = styled(Layout.Content)`
   min-height: calc(100vh - 60px);
   overflow: inherit;
   transition: margin 0.25s;
+`;
+
+const HomeBox = styled.div`
+  & > * {
+    margin: 12px 0px;
+  }
 `;
 
 const Contents = styled.div`

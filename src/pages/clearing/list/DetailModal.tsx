@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
 import { NewSearchFilter } from "components/combine";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Props {
   visible: boolean;
@@ -15,9 +15,11 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, sheet }: Props) {
+  const [itemId, setItemId] = useState(-1);
   const [searchQuery, setSearchQuery] = useState({
     search_string: "",
   });
+  const index = useRef(0);
 
   const getItemQuery = useQuery(
     ["getClearingItem"], //
@@ -31,6 +33,18 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
+    },
+  );
+
+  const getItemDetailQuery = useQuery(
+    ["getClearingItemDetail", itemId],
+    () => clearingAPI.getItemDetail({ item_id: itemId }),
+    {
+      enabled: visible && itemId !== -1,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {},
     },
   );
 
@@ -87,6 +101,56 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             />
           </TurtleTableTitle>
         )}
+        expandable={{
+          expandRowByClick: true,
+          onExpand: (_, record) => {
+            setItemId(record.id);
+          },
+          expandedRowRender: () => {
+            return (
+              <Table
+                loading={getItemDetailQuery.isLoading}
+                dataSource={getItemDetailQuery.data?.item_list}
+                pagination={false}
+                showHeader={false}
+                rowKey={() => index.current++}
+                columns={[
+                  {
+                    ellipsis: true,
+                    title: t("vendor.name"),
+                    render: (_, record) => record.vendor_name,
+                  },
+                  {
+                    ellipsis: true,
+                    title: t("vendor.address"),
+                    render: (_, record) => record.vendor_address,
+                  },
+                  {
+                    ellipsis: true,
+                    title: t("vendor.account"),
+                    render: (_, record) =>
+                      `${record.bank} ${record.account_number} ${record.account_holder}`,
+                  },
+                  {
+                    ellipsis: true,
+                    title: t("clearing.supply price"),
+                    render: (_, record) => record.supply_price.toLocaleString(),
+                  },
+                  {
+                    ellipsis: true,
+                    title: t("clearing.vat"),
+                    render: (_, record) => record.vat_price.toLocaleString(),
+                  },
+                  {
+                    ellipsis: true,
+                    title: t("clearing.price"),
+                    render: (_, record) => record.deposit_price.toLocaleString(),
+                  },
+                ]}
+              />
+            );
+          },
+        }}
         columns={[
           {
             ellipsis: true,

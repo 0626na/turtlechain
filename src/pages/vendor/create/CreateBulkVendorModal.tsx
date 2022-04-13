@@ -1,4 +1,5 @@
 import {
+  Button,
   Col,
   Input,
   message,
@@ -446,7 +447,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           }}
           fileList={fileList}
         >
-          <TurtleButtonSub>파일 선택하기</TurtleButtonSub>
+          <Button>파일 선택하기</Button>
         </Upload>
       </Space>
       <Tabs defaultActiveKey="1" size="large">

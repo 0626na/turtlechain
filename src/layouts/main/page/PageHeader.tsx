@@ -7,12 +7,17 @@ interface Props {
   title: string;
   breadcrumbList?: Array<string>;
   info?: string;
+  divider?: boolean;
 }
 
-function PageHeader({ title, breadcrumbList, info }: Props) {
+function PageHeader({ title, breadcrumbList, info, divider = true }: Props) {
   return (
     <>
-      <Row align="middle" justify="space-between">
+      <Row
+        align="middle"
+        justify="space-between"
+        style={{ backgroundColor: "white", borderRadius: 12, padding: "12px 24px" }}
+      >
         <Col>
           <StyledTitle level={3}>{title}</StyledTitle>
           {info && <TurtleInfo>{info}</TurtleInfo>}
@@ -23,7 +28,7 @@ function PageHeader({ title, breadcrumbList, info }: Props) {
           )}
         </Col>
       </Row>
-      <TurtleDivider />
+      {divider && <TurtleDivider />}
     </>
   );
 }

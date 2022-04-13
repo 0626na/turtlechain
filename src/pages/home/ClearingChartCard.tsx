@@ -97,6 +97,7 @@ function ClearingChartCard() {
 
   return (
     <Card
+      bordered={false}
       title={
         <Row justify="space-between">
           <Col>누적 정산</Col>
