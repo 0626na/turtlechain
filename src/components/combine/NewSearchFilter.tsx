@@ -4,11 +4,12 @@ import { t } from "i18next";
 import styled from "styled-components";
 interface Props {
   searchQuery: any; // state
-  setSearchQuery: any; // setState
+  setSearchQuery: (searchQuery: any) => void; // setState
+  select?: boolean;
   vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }
 
-function NewSearchFilter({ searchQuery, setSearchQuery, vendor = false }: Props) {
+function NewSearchFilter({ searchQuery, setSearchQuery, select = true, vendor = false }: Props) {
   const options = vendor
     ? [
         {
@@ -50,20 +51,22 @@ function NewSearchFilter({ searchQuery, setSearchQuery, vendor = false }: Props)
 
   return (
     <Space>
-      <Select
-        style={{ width: 100 }}
-        size="small"
-        value={searchQuery.type}
-        onChange={(value) => {
-          setSearchQuery({ ...searchQuery, type: value, page: 1 });
-        }}
-      >
-        {options.map(({ name, value }) => (
-          <Select.Option key={value} value={value}>
-            {name}
-          </Select.Option>
-        ))}
-      </Select>
+      {select && (
+        <Select
+          style={{ width: 100 }}
+          size="small"
+          value={searchQuery.type}
+          onChange={(value) => {
+            setSearchQuery({ ...searchQuery, type: value, page: 1 });
+          }}
+        >
+          {options.map(({ name, value }) => (
+            <Select.Option key={value} value={value}>
+              {name}
+            </Select.Option>
+          ))}
+        </Select>
+      )}
       <StyledSearch
         size="small"
         placeholder={t("placeholder.search")}

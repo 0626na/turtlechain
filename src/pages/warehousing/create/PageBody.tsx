@@ -61,7 +61,12 @@ function PageBody() {
 
   // 모든 상태 초기화
   const resetStates = useCallback(() => {
-    setCart({ fileList: [], successList: [], failList: [] });
+    setCart({
+      fileList: [],
+      successList: [],
+      failList: [],
+      searchQuery: { type: "all", search_string: "" },
+    });
     connectQuery.reset();
   }, [setCart]);
 

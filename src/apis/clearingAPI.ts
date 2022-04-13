@@ -247,12 +247,25 @@ const getItem = async function (query: RequestGetItem) {
   return response.data;
 };
 
+interface RequestGetItemDetail {
+  item_id: number;
+}
+
+interface ResponseGetItemDetail {}
+
+const getItemDetail = async function (query: RequestGetItemDetail) {
+  const url = `clearing/item/${query.item_id}`;
+  const response = await v2Axios.get<ResponseGetItemDetail>(url);
+  return response.data;
+};
+
 const clearingAPI = {
   create,
   getBalance,
   getSheet,
   updateSheet,
   getItem,
+  getItemDetail,
 };
 
 export default clearingAPI;

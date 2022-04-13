@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { warehousingAPI } from "apis";
 import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
+import { NewSearchFilter } from "components/combine";
 
 interface Props {
   visible: boolean;
@@ -17,6 +18,10 @@ interface Props {
 function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
   const [itemList, setItemList] = useState<Array<WarehousingItemShow>>([]);
+  const [searchQuery, setSearchQuery] = useState({
+    type: "all",
+    search_string: "",
+  });
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 입고장 상세내역 리스트 요청
@@ -58,9 +63,6 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     setIsUpdated(false);
   }, [visible]);
 
-  // 필터된 리스트
-  const filteredList = useMemo(() => itemList.filter((item) => !item.is_inactive), [itemList]);
-
   // 모달창 닫기
   const confirmClose = () => {
     if (!isUpdated) {
@@ -93,6 +95,38 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     );
     setIsUpdated(true);
   }, []);
+
+  // 모달 열릴때 마다 검색조건 초기화
+  useEffect(() => {
+    setSearchQuery({
+      type: "all",
+      search_string: "",
+    });
+  }, [visible]);
+
+  const filteredList = useMemo(
+    () =>
+      itemList
+        .filter((item) => !item.is_inactive)
+        .filter((item) => {
+          const { type, search_string } = searchQuery;
+          if (type === "name") {
+            return item.product_info.name.includes(search_string);
+          }
+          if (type === "vendor_product_name") {
+            return item.product_info.vendor_product_name.includes(search_string);
+          }
+          if (type === "vendor_name") {
+            return item.vendor_info.vendor_name.includes(search_string);
+          }
+          return (
+            item.product_info.name.includes(search_string) ||
+            item.product_info.vendor_product_name.includes(search_string) ||
+            item.vendor_info.vendor_name.includes(search_string)
+          );
+        }),
+    [itemList, searchQuery],
+  );
 
   return (
     <TurtleModal //
@@ -145,7 +179,14 @@ function DetailModal({ visible, onClose, sheet }: Props) {
         dataSource={filteredList}
         rowKey={(item) => item.id}
         style={{ height: "60vh" }}
-        title={() => <TurtleTableTitle count={filteredList.length ?? 0}></TurtleTableTitle>}
+        title={() => (
+          <TurtleTableTitle
+            count={itemList.filter((item) => !item.is_inactive).length}
+            searchCount={filteredList.length}
+          >
+            <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </TurtleTableTitle>
+        )}
         columns={[
           {
             ellipsis: true,

@@ -3,7 +3,7 @@ import { adjustmentAPI, clearingAPI } from "apis";
 import { AdjustmentItemShow } from "apis/adjustmentAPI";
 import { RequestGetBalance } from "apis/clearingAPI";
 import { AxiosError } from "axios";
-import { TurtleModal, TurtleText } from "components/common";
+import { TurtleModal, TurtleTableTitle, TurtleText } from "components/common";
 import { t } from "i18next";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -131,18 +131,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       />
 
       <Row style={{ margin: "32px 0 16px 0" }}>
-        <TurtleText>매입조정 처리이력</TurtleText>
-      </Row>
-
-      <Row style={{ marginBottom: 16 }}>
-        <DatePicker.RangePicker
-          size="small"
-          allowClear={false}
-          value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
-          onChange={(_, [start_date, end_date]) => {
-            setSearchQuery({ ...searchQuery, start_date, end_date });
-          }}
-        />
+        <TurtleText>입고 및 매입조정 처리이력</TurtleText>
       </Row>
 
       <Table
@@ -151,6 +140,18 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         dataSource={getBalanceQuery.data?.data.item_list}
         rowKey={(record) => record.id}
         pagination={false}
+        title={() => (
+          <TurtleTableTitle count={getBalanceQuery.data?.data.total_count ?? 0}>
+            <DatePicker.RangePicker
+              size="small"
+              allowClear={false}
+              value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
+              onChange={(_, [start_date, end_date]) => {
+                setSearchQuery({ ...searchQuery, start_date, end_date });
+              }}
+            />
+          </TurtleTableTitle>
+        )}
         columns={[
           {
             ellipsis: true,

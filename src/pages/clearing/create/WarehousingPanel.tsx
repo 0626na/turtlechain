@@ -173,7 +173,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <TurtleButton //
           children={t("button.next step")}
           onClick={clickNext}
-          disabled={cart.selectedKeys.length === 0}
         />
       </Row>
 

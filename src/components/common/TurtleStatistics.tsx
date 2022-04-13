@@ -9,7 +9,7 @@ function TurtleStatistics({ value }: Props) {
   return (
     <Row gutter={16} style={{ paddingBottom: 30 }}>
       {value.map(({ title, value }) => (
-        <Col span={5} key={title?.toString()}>
+        <Col span={4} key={title?.toString()}>
           <Card>
             <Statistic title={title} value={value} />
           </Card>

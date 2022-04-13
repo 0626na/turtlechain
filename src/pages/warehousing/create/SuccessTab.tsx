@@ -4,7 +4,8 @@ import { useCallback, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { warehousingCartState } from "store/warehousingCartState";
 import { pricePattern } from "utils/pattern";
-import { TurtleIcon } from "components/common";
+import { TurtleIcon, TurtleTableTitle } from "components/common";
+import { NewSearchFilter } from "components/combine";
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -49,15 +50,48 @@ function SuccessTab({ loading, ...props }: Props) {
     [setCart],
   );
 
+  const filteredList = useMemo(
+    () =>
+      cart.successList.filter((item) => {
+        const { type, search_string } = cart.searchQuery;
+        if (type === "name") {
+          return item.product_name.includes(search_string);
+        }
+        if (type === "vendor_product_name") {
+          return item.vendor_product_name.includes(search_string);
+        }
+        if (type === "vendor_name") {
+          return item.vendor_name.includes(search_string);
+        }
+        return (
+          item.product_name.includes(search_string) ||
+          item.vendor_product_name.includes(search_string) ||
+          item.vendor_name.includes(search_string)
+        );
+      }),
+    [cart.successList, cart.searchQuery],
+  );
+
   return (
     <Tabs.TabPane {...props}>
       <Table
         size="small"
         loading={loading}
-        dataSource={cart.successList}
+        dataSource={filteredList}
         rowKey={(record) => record.index!}
         pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
         scroll={{ y: "auto" }}
+        style={{ height: filteredList.length <= 5 ? "45vh" : "" }}
+        title={() => (
+          <TurtleTableTitle count={cart.successList.length} searchCount={filteredList.length}>
+            <NewSearchFilter
+              searchQuery={cart.searchQuery}
+              setSearchQuery={(searchQuery) => {
+                setCart((cart) => ({ ...cart, searchQuery }));
+              }}
+            />
+          </TurtleTableTitle>
+        )}
         footer={() =>
           `입고수량 합계 : ${totalProductCount}개 | 공급가 합계 : ${totalProductPrice.toLocaleString()}원`
         }
