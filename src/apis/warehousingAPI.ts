@@ -34,6 +34,7 @@ export interface WarehousingItem {
 
   // 입고 미리보기에서 index로 사용
   index?: number;
+  is_reserved?: boolean;
 }
 
 // 입고상품 가져오기
@@ -59,6 +60,7 @@ export interface WarehousingItemShow {
   memo: string;
   is_vat_included: boolean;
   is_inactive: boolean;
+  is_reserved: boolean;
   created_date: string;
 }
 
@@ -83,6 +85,7 @@ export interface RequestCreateItem {
     product_id: number;
     count: number;
     price: number;
+    is_reserved?: boolean;
     memo?: string;
   }>;
 }

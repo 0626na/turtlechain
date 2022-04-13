@@ -67,7 +67,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
     (item: WarehousingItem) => {
       setCart((cart) => ({
         ...cart,
-        successList: [{ ...item, index: index.current++ }, ...cart.successList],
+        successList: [{ ...item, is_reserved: false, index: index.current++ }, ...cart.successList],
       }));
       closeModal();
     },

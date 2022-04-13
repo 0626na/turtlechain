@@ -145,9 +145,10 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             onConfirm={() => {
               updateItemQuery.mutate({
                 sheet_id: sheet?.id!,
-                items: itemList.map(({ id, is_inactive, count }) => ({
+                items: itemList.map(({ id, is_inactive, is_reserved, count }) => ({
                   id,
                   is_inactive,
+                  is_reserved,
                   count,
                 })),
               });

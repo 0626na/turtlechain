@@ -83,6 +83,7 @@ function PageBody() {
         successList: [
           ...data.data.success.map((item) => ({
             ...item,
+            is_reserved: false,
             index: index.current++,
           })),
           ...cart.successList,
@@ -191,11 +192,12 @@ function PageBody() {
               item: {
                 rt_store_id: store.id!,
                 item_list: cart.successList.map(
-                  ({ vendor_id, product_id, count, price, memo }) => ({
+                  ({ vendor_id, product_id, count, price, is_reserved, memo }) => ({
                     vendor_id,
                     product_id,
                     count,
                     price,
+                    is_reserved,
                     memo,
                   }),
                 ),
