@@ -62,6 +62,7 @@ export interface RequestCreateItem {
     warehousing_item_id: number;
     ws_store_id: number;
     vendor_id: number;
+    is_reserved: boolean;
     total_price: number;
     deposit_price: number;
     supply_price: number;
