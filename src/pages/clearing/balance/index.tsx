@@ -10,7 +10,6 @@ function index() {
       <Helmet title={title} />
       <PageHeader
         title={t("clearing.balance list")}
-        info="안내문구"
         breadcrumbList={[t("clearing.management"), t("clearing.balance")]}
       />
       <PageBody />

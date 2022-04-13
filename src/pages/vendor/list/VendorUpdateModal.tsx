@@ -88,12 +88,7 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
         <AccountSelect accountList={accountList} setAccountList={setAccountList} />
         <Row justify="center">
           <Form.Item>
-            <TurtleButton
-              onClick={() => {
-                console.log(form.getFieldsValue());
-              }}
-              disabled={true}
-            >
+            <TurtleButton onClick={() => {}} disabled={true}>
               {t("button.request update")}
             </TurtleButton>
           </Form.Item>

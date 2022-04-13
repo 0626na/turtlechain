@@ -45,7 +45,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     {
       enabled: activeKey === "3",
       onSuccess: (data) => {
-        console.log(data.data.adjustment_list);
         setCart({
           ...cart,
           reserve_item_list: data.data.adjustment_list.map((item) => ({

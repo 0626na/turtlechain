@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { DatePicker, Divider, Table } from "antd";
+import { DatePicker, Divider, message, Table } from "antd";
 import { clearingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleTableTitle } from "components/common";
@@ -29,7 +29,7 @@ function PageBody() {
     {
       enabled: !!searchQuery.rt_store_id,
       onError: (error: AxiosError) => {
-        console.log(error.response?.data.msg);
+        message.error(error.response?.data.msg);
       },
     },
   );
