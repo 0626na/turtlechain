@@ -6,7 +6,7 @@ interface Props {
 
 function BottomBar({ children }: Props) {
   return (
-    <Row justify="end" style={{ paddingTop: 20, paddingBottom: 20, backgroundColor: "#F6F9FD" }}>
+    <Row justify="end" style={{ paddingTop: 20, paddingBottom: 20, backgroundColor: "#F8F9FB" }}>
       {children}
     </Row>
   );

@@ -34,7 +34,7 @@ function ClearingStatusCard() {
             title={() => (
               <Row justify="space-between">
                 <Col>
-                  <Typography.Title level={4}>정산처리현황</Typography.Title>
+                  <Typography.Title level={4}>정산처리 현황</Typography.Title>
                 </Col>
                 <Col>
                   <Typography.Text type="secondary">최근 1개월</Typography.Text>

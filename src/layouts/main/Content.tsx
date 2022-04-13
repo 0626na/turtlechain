@@ -22,7 +22,7 @@ function Content({ children, menuVisible }: Props) {
       {location.pathname.includes("/home") ? (
         <HomeBox>{children}</HomeBox>
       ) : (
-        <Contents>{children}</Contents>
+        <MainBox>{children}</MainBox>
       )}
     </StyledContent>
   );
@@ -42,9 +42,10 @@ const HomeBox = styled.div`
   }
 `;
 
-const Contents = styled.div`
+const MainBox = styled.div`
   background-color: white;
   border-radius: 12px;
+  box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.1);
   & > * {
     padding: 12px 24px;
   }
