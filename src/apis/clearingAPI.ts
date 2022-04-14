@@ -265,6 +265,7 @@ interface ResponseGetItemDetail {
       supply_price: number;
       vat_price: number;
       clearing_type: string;
+      memo: string;
     }>;
   };
 }

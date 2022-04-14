@@ -191,7 +191,7 @@ const downloadClearing = async function (query: RequestDownload) {
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get(url);
+  const response = await v2Axios.get(url, { responseType: "arraybuffer" });
   // 파일 저장
   saveAs(
     new Blob([response.data], { type: "application/ms-excel" }),

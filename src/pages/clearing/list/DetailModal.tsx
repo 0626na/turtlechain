@@ -117,7 +117,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
                 loading={getItemDetailQuery.isLoading}
                 dataSource={getItemDetailQuery.data?.data.item_list}
                 pagination={false}
-                // showHeader={false}
                 rowKey={() => index.current++}
                 columns={[
                   // {
@@ -138,23 +137,33 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
                   // },
                   {
                     ellipsis: true,
+                    align: "center",
                     title: t("clearing.supply price"),
                     render: (_, record) => record.supply_price.toLocaleString(),
                   },
                   {
                     ellipsis: true,
+                    align: "center",
                     title: t("clearing.vat"),
                     render: (_, record) => record.vat_price.toLocaleString(),
                   },
                   {
                     ellipsis: true,
+                    align: "center",
                     title: t("clearing.price"),
                     render: (_, record) => record.deposit_price.toLocaleString(),
                   },
                   {
                     ellipsis: true,
+                    align: "center",
                     title: "구분",
                     render: (_, record) => record.clearing_type,
+                  },
+                  {
+                    ellipsis: true,
+                    align: "center",
+                    title: t("common.memo"),
+                    render: (_, record) => record.memo,
                   },
                 ]}
               />
