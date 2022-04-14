@@ -14,7 +14,7 @@ const HomePage = function () {
   const cardStyle = {
     width: "100%",
     height: "100%",
-    borderRadius: 12,
+    borderRadius: 8,
   };
 
   // 매입조정 리스트 요청

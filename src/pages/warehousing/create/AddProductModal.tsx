@@ -82,7 +82,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
     <>
       <TurtleModal
         centered
-        width="50%"
+        width="520px"
         title={t("product.add single")}
         visible={visible}
         onCancel={closeModal}
@@ -95,7 +95,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
           form={form}
           colon={false}
           labelCol={{ span: 7 }}
-          wrapperCol={{ span: 12 }}
+          wrapperCol={{ span: 16 }}
           onFinish={addProduct}
         >
           <Form.Item name="vendor_id" hidden>
@@ -167,7 +167,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
             min={1}
           />
 
-          <Row justify="center">
+          <Row justify="end">
             <TurtleButton type="default" htmlType="submit">
               {t("button.add product")}
             </TurtleButton>

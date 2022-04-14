@@ -24,13 +24,13 @@ function ClearingStatusCard() {
   return (
     <>
       <Row>
-        <Card style={{ width: "100%", height: "100%", borderRadius: 12 }} bordered={false}>
+        <Card style={{ width: "100%", height: "300px", borderRadius: 8 }} bordered={false}>
           <Table
             size="small"
             loading={getSheetQuery.isLoading}
             dataSource={getSheetQuery.data?.data.sheet_list}
             rowKey={(record) => record.id}
-            pagination={{ position: ["bottomCenter"], showSizeChanger: false, defaultPageSize: 3 }}
+            pagination={{ position: ["bottomRight"], showSizeChanger: false, defaultPageSize: 3 }}
             title={() => (
               <Row justify="space-between">
                 <Col>

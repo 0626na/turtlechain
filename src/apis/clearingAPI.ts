@@ -253,17 +253,20 @@ interface RequestGetItemDetail {
 }
 
 interface ResponseGetItemDetail {
-  item_list: Array<{
-    vendor_name: string;
-    vendor_address: string;
-    bank: string;
-    account_number: string;
-    account_holder: string;
-    deposit_price: number;
-    supply_price: number;
-    vat_price: number;
-    clearing_type: string;
-  }>;
+  msg: string;
+  data: {
+    item_list: Array<{
+      vendor_name: string;
+      vendor_address: string;
+      bank: string;
+      account_number: string;
+      account_holder: string;
+      deposit_price: number;
+      supply_price: number;
+      vat_price: number;
+      clearing_type: string;
+    }>;
+  };
 }
 
 const getItemDetail = async function (query: RequestGetItemDetail) {

@@ -103,34 +103,39 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
         )}
         expandable={{
           expandRowByClick: true,
-          onExpand: (_, record) => {
+          expandedRowKeys: [itemId],
+          onExpand: (onExpand, record) => {
+            if (!onExpand) {
+              setItemId(-1);
+              return;
+            }
             setItemId(record.id);
           },
           expandedRowRender: () => {
             return (
               <Table
                 loading={getItemDetailQuery.isLoading}
-                dataSource={getItemDetailQuery.data?.item_list}
+                dataSource={getItemDetailQuery.data?.data.item_list}
                 pagination={false}
-                showHeader={false}
+                // showHeader={false}
                 rowKey={() => index.current++}
                 columns={[
-                  {
-                    ellipsis: true,
-                    title: t("vendor.name"),
-                    render: (_, record) => record.vendor_name,
-                  },
-                  {
-                    ellipsis: true,
-                    title: t("vendor.address"),
-                    render: (_, record) => record.vendor_address,
-                  },
-                  {
-                    ellipsis: true,
-                    title: t("vendor.account"),
-                    render: (_, record) =>
-                      `${record.bank} ${record.account_number} ${record.account_holder}`,
-                  },
+                  // {
+                  //   ellipsis: true,
+                  //   title: t("vendor.name"),
+                  //   render: (_, record) => record.vendor_name,
+                  // },
+                  // {
+                  //   ellipsis: true,
+                  //   title: t("vendor.address"),
+                  //   render: (_, record) => record.vendor_address,
+                  // },
+                  // {
+                  //   ellipsis: true,
+                  //   title: t("vendor.account"),
+                  //   render: (_, record) =>
+                  //     `${record.bank} ${record.account_number} ${record.account_holder}`,
+                  // },
                   {
                     ellipsis: true,
                     title: t("clearing.supply price"),
@@ -145,6 +150,11 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
                     ellipsis: true,
                     title: t("clearing.price"),
                     render: (_, record) => record.deposit_price.toLocaleString(),
+                  },
+                  {
+                    ellipsis: true,
+                    title: "구분",
+                    render: (_, record) => record.clearing_type,
                   },
                 ]}
               />
