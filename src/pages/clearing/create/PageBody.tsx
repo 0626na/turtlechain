@@ -50,7 +50,7 @@ function PageBody() {
           />
           <AdjustmentPanel
             key="2"
-            header={<TurtlePanelHeader count={2} activeKey={activeKey} title="매입 결제대기" />}
+            header={<TurtlePanelHeader count={2} activeKey={activeKey} title="매입조정 결제대기" />}
             activeKey={activeKey}
             clickNext={() => {
               setActiveKey("3");
@@ -58,7 +58,7 @@ function PageBody() {
           />
           <ClearingPanel
             key="3"
-            header={<TurtlePanelHeader count={3} activeKey={activeKey} title="정산 미리보기" />}
+            header={<TurtlePanelHeader count={3} activeKey={activeKey} title="정산금액 미리보기" />}
             activeKey={activeKey}
             clickCreate={() => {
               setActiveKey("1");

@@ -1,5 +1,15 @@
 import { t } from "i18next";
-import { Modal, Table, message, InputNumber, Button, Popconfirm, notification, Space } from "antd";
+import {
+  Modal,
+  Table,
+  message,
+  InputNumber,
+  Button,
+  Popconfirm,
+  notification,
+  Space,
+  Checkbox,
+} from "antd";
 import { DeleteOutlined, SyncOutlined } from "@ant-design/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
@@ -80,10 +90,10 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     });
   };
 
-  // 수량 변경
-  const setCount = useCallback((record, count) => {
+  // itemList 값 수정
+  const updateItemList = useCallback((type: string, index, value) => {
     setItemList((itemList) =>
-      itemList.map((item) => (item.id === record.id ? { ...item, count } : item)),
+      itemList.map((item) => (item.id === index ? { ...item, [type]: value } : item)),
     );
     setIsUpdated(true);
   }, []);
@@ -234,7 +244,19 @@ function DetailModal({ visible, onClose, sheet }: Props) {
                 size="small"
                 defaultValue={record.count}
                 onChange={(value) => {
-                  setCount(record, value);
+                  updateItemList("count", record.id, value);
+                }}
+              />
+            ),
+          },
+          {
+            ellipsis: true,
+            title: t("warehousing.is reserved"),
+            render: (_, record) => (
+              <Checkbox
+                checked={record.is_reserved}
+                onChange={() => {
+                  updateItemList("is_reserved", record.id, !record.is_reserved);
                 }}
               />
             ),

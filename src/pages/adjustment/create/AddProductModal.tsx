@@ -79,7 +79,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
     <>
       <TurtleModal
         centered
-        width="60%"
+        width="520px"
         title={t("adjustment.add reserve product")}
         visible={visible}
         onCancel={onCloseModal}
@@ -91,7 +91,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
           form={form}
           colon={false}
           labelCol={{ span: 7 }}
-          wrapperCol={{ span: 12 }}
+          wrapperCol={{ span: 16 }}
           onFinish={(value) => {
             addItem({
               ...value,
@@ -174,7 +174,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
 
           <TurtleTextArea name="memo" label={t("adjustment.memo")} rows={3} />
 
-          <Row justify="center">
+          <Row justify="end">
             <TurtleButton type="default" htmlType="submit">
               {t("button.add product")}
             </TurtleButton>

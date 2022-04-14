@@ -27,6 +27,11 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         font-family: "Spoqa Han Sans";
   };
+
+  /* form label 왼쪽 정렬 */
+  .ant-form-item-label {
+    text-align: left;        
+  }
 `;
 
 export default GlobalStyle;

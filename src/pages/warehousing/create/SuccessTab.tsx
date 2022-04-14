@@ -1,6 +1,6 @@
 import { t } from "i18next";
-import { InputNumber, Table, TabPaneProps, Tabs } from "antd";
-import { useCallback, useMemo } from "react";
+import { Checkbox, InputNumber, Switch, Table, TabPaneProps, Tabs } from "antd";
+import { useCallback, useEffect, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { warehousingCartState } from "store/warehousingCartState";
 import { pricePattern } from "utils/pattern";
@@ -158,6 +158,18 @@ function SuccessTab({ loading, ...props }: Props) {
                 value={record.count}
                 onChange={(value) => {
                   updateSuccessList("count", record.index, value);
+                }}
+              />
+            ),
+          },
+          {
+            ellipsis: true,
+            title: t("warehousing.is reserved"),
+            render: (_, record) => (
+              <Checkbox
+                checked={record.is_reserved}
+                onChange={() => {
+                  updateSuccessList("is_reserved", record.index, !record.is_reserved);
                 }}
               />
             ),

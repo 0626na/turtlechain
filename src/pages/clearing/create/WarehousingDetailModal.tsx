@@ -3,7 +3,7 @@ import { warehousingAPI } from "apis";
 import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
 import { TurtleModal, TurtleStatistics, TurtleTableTitle } from "components/common";
 import { useQuery } from "react-query";
-import { Table } from "antd";
+import { Checkbox, Table } from "antd";
 
 interface Props {
   visible: boolean;
@@ -91,6 +91,11 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
             ellipsis: true,
             title: t("warehousing.count"),
             render: (_, record) => record.count,
+          },
+          {
+            ellipsis: true,
+            title: t("warehousing.is reserved"),
+            render: (_, record) => <Checkbox checked={record.is_reserved} />,
           },
         ]}
       />

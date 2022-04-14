@@ -186,7 +186,8 @@
     "total count": "입고 수량 합계",
     "price": "입고 금액",
     "preview": "입고서 미리보기",
-    "load": "입고내역 불러오기"
+    "load": "입고내역 불러오기",
+    "is reserved": "미송입고 여부"
   },
   "adjustment": {
     "": "매입조정",

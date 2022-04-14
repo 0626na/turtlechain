@@ -16,10 +16,10 @@ function PageHeader({ title, breadcrumbList, info, divider = true }: Props) {
       <Row
         align="middle"
         justify="space-between"
-        style={{ backgroundColor: "white", borderRadius: divider ? 12 : 8, padding: "12px 24px" }}
+        style={{ backgroundColor: "white", borderRadius: divider ? 12 : 8, padding: "12px 36px" }}
       >
         <Col>
-          <StyledTitle level={3}>{title}</StyledTitle>
+          <StyledTitle level={4}>{title}</StyledTitle>
           {info && <TurtleInfo>{info}</TurtleInfo>}
         </Col>
         <Col>

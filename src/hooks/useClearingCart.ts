@@ -19,6 +19,15 @@ function useClearingCart() {
     [cart.warehousing_item_list],
   );
 
+  const totalReserveSubtractPrice = useMemo(
+    () =>
+      cart.warehousing_item_list
+        .filter((item) => item.is_reserved)
+        .map((item) => item.deposit_price)
+        .reduce((acc, cur) => acc + cur, 0),
+    [cart.warehousing_item_list],
+  );
+
   const totalSubtractPrice = useMemo(
     () => cart.subtract_item_list.map((item) => item.price).reduce((cur, acc) => cur + acc, 0),
     [cart.subtract_item_list],
@@ -30,11 +39,18 @@ function useClearingCart() {
   );
 
   const totalPrice = useMemo(
-    () => totalDepositPrice - totalSubtractPrice + totalReservePrice,
-    [totalDepositPrice, totalSubtractPrice, totalReservePrice],
+    () => totalDepositPrice - totalReserveSubtractPrice - totalSubtractPrice + totalReservePrice,
+    [totalDepositPrice, totalReserveSubtractPrice, totalSubtractPrice, totalReservePrice],
   );
 
-  return [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice];
+  return [
+    totalDepositPrice,
+    totalVatPrice,
+    totalReserveSubtractPrice,
+    totalSubtractPrice,
+    totalReservePrice,
+    totalPrice,
+  ];
 }
 
 export default useClearingCart;

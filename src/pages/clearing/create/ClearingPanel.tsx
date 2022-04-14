@@ -28,8 +28,14 @@ interface Props extends CollapsePanelProps {
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const [totalDepositPrice, totalVatPrice, totalSubtractPrice, totalReservePrice, totalPrice] =
-    useClearingCart();
+  const [
+    totalDepositPrice,
+    totalVatPrice,
+    totalReserveSubtractPrice,
+    totalSubtractPrice,
+    totalReservePrice,
+    totalPrice,
+  ] = useClearingCart();
 
   const getTodayReserveListQuery = useQuery(
     ["getTodayReserveList"],
@@ -76,23 +82,29 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     <Collapse.Panel {...props} style={{ border: "1px solid #e3e6ea" }}>
       <StyledCard>
         <Row>
-          <Col span={3}>입고 금액 (+)</Col>
+          <Col span={3}>입고</Col>
           <Col>
-            {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{" "}
+            + {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{" "}
             {(totalVatPrice ?? 0).toLocaleString()}원 포함)
           </Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>차감 금액 (-)</Col>
-          <Col>{(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
+          <Col span={3}>매입 차감</Col>
+          <Col>- {(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>당일 미송 (+)</Col>
-          <Col>{(totalReservePrice ?? 0).toLocaleString()} 원</Col>
+          <Col span={3}>당일 미송입고 차감</Col>
+          <Col>- {(totalReserveSubtractPrice ?? 0).toLocaleString()} 원</Col>
+        </Row>
+      </StyledCard>
+      <StyledCard>
+        <Row>
+          <Col span={3}>당일 미송</Col>
+          <Col>+ {(totalReservePrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
 
