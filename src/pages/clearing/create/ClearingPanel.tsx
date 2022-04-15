@@ -91,20 +91,20 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       </StyledCard>
       <StyledCard>
         <Row>
+          <Col span={3}>당일 미송</Col>
+          <Col>+ {(totalReservePrice ?? 0).toLocaleString()} 원</Col>
+        </Row>
+      </StyledCard>
+      <StyledCard>
+        <Row>
           <Col span={3}>매입 차감</Col>
           <Col>- {(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>당일 미송입고 차감</Col>
+          <Col span={3}>미송입고 차감</Col>
           <Col>- {(totalReserveSubtractPrice ?? 0).toLocaleString()} 원</Col>
-        </Row>
-      </StyledCard>
-      <StyledCard>
-        <Row>
-          <Col span={3}>당일 미송</Col>
-          <Col>+ {(totalReservePrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
 

@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { useEffect, useMemo, useState } from "react";
 import { BalanceShow } from "apis/clearingAPI";
 import { pricePattern } from "utils/pattern";
+import moment from "moment";
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -74,8 +75,18 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
+            title: "등록 날짜",
+            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD"),
+          },
+          {
+            ellipsis: true,
             title: t("vendor.name"),
             render: (_, record) => record.vendor_info.vendor_name,
+          },
+          {
+            ellipsis: true,
+            title: "당일 입고 금액",
+            render: (_, record) => record.warehousing_amount?.toLocaleString(),
           },
           {
             ellipsis: true,
