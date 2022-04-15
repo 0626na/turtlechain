@@ -70,6 +70,9 @@ module.exports = {
               // Table
               "@table-header-bg": "#F7F8F9",
               "@table-footer-bg": "#FFFFFF",
+
+              // Divider
+              "@divider-color": "#CBCCD1",
             },
             javascriptEnabled: true,
           },

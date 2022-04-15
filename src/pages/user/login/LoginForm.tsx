@@ -8,20 +8,21 @@ import useLogin from "hooks/useLogin";
 import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Divider, Typography, message, Space } from "antd";
+import { UserOutlined, LockOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Checkbox, Divider, Typography, message, Space, Row } from "antd";
+import { useState } from "react";
 
 function LoginForm() {
   const login = useLogin();
   const [form] = Form.useForm();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const requiredRules = [{ required: false }];
 
   // 로그인 요청
   const loginQuery = useMutation(["login"], authAPI.login, {
     onError: () => {
-      const errorMsg = t("message.error login");
-      message.error(errorMsg);
+      setErrorMsg(t("message.error login"));
     },
     onSuccess: (data) => {
       const { token } = data;
@@ -35,7 +36,7 @@ function LoginForm() {
   const onSubmit = (values: { login_id: string; password: string }) => {
     const { login_id, password } = values;
     if (!(login_id && password)) {
-      message.warn(t("message.insert id password"));
+      setErrorMsg(t("message.insert id password"));
       return;
     }
     loginQuery.mutate({ login_id, password });
@@ -73,17 +74,28 @@ function LoginForm() {
           <Checkbox>{t("auto login")}</Checkbox>
         </Form.Item>
         <Form.Item>
-          <GreyLink to="/find-id">{t("find id")}</GreyLink>
+          <Link style={{ color: "#7C7D82" }} to="/find-id">
+            {t("find id")}
+          </Link>
           <Divider type="vertical" />
-          <GreyLink to="/reset-password">{t("reset password")}</GreyLink>
+          <Link style={{ color: "#7C7D82" }} to="/reset-password">
+            {t("reset password")}
+          </Link>
         </Form.Item>
       </Space>
+      {errorMsg && (
+        <Row justify="center" style={{ marginBottom: 24 }}>
+          <Typography.Text type="danger">
+            <InfoCircleOutlined />
+            &nbsp;{errorMsg}
+          </Typography.Text>
+        </Row>
+      )}
       <Form.Item>
         <Button
           block
           type="primary"
           htmlType="submit"
-          loading={loginQuery.isLoading}
           size="large"
           style={{
             background: "linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)",
@@ -96,20 +108,18 @@ function LoginForm() {
         </Button>
       </Form.Item>
       <Divider />
-      <BottomContainer>
-        <GreyTypography>
-          {t("description.not member")}{" "}
-          <Link to="/signup">
-            <u>{t("signup")}</u>
-          </Link>
-        </GreyTypography>
-        <GreyTypography>
-          {t("description.about membership")}{" "}
-          <Link to="#">
-            <u>{t("about membership")}</u>
-          </Link>
-        </GreyTypography>
-      </BottomContainer>
+      <Row justify="center">
+        <Typography.Text type="secondary">{t("description.not member")} </Typography.Text>
+        <Link to="/signup" style={{ color: "#00B594" }}>
+          &nbsp;&nbsp;{t("signup")}
+        </Link>
+      </Row>
+      <Row>
+        <Typography.Text type="secondary">{t("description.about membership")} </Typography.Text>
+        <Link to="/membership-info" style={{ color: "#00B594" }}>
+          &nbsp;&nbsp;{t("about membership")}
+        </Link>
+      </Row>
     </Form>
   );
 }
@@ -119,18 +129,6 @@ const LogoImage = styled.img`
   display: block;
   margin: 0 auto;
   margin-bottom: 60px;
-`;
-
-const BottomContainer = styled.div`
-  text-align: center;
-`;
-
-const GreyLink = styled(Link)`
-  color: #7c7d82;
-`;
-
-const GreyTypography = styled(Typography)`
-  color: #434852;
 `;
 
 export default LoginForm;

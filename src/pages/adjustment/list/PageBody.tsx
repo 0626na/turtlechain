@@ -17,6 +17,8 @@ import {
   Popconfirm,
   Form,
   InputNumber,
+  Popover,
+  Button,
 } from "antd";
 import adjustmentAPI, { AdjustmentItemShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
@@ -230,66 +232,85 @@ const PageBody = function () {
               width: 100,
               render: (_, record) =>
                 record.count_left !== 0 && (
-                  <TurtlePopConfirm
-                    title={
-                      <Form colon={false}>
-                        <Form.Item label="처리방식">
-                          <Select
-                            size="small"
-                            style={{ width: 100, marginLeft: 62 }}
-                            value={record.adjustment_process_type}
-                            onChange={(value) => {
-                              setAdjustmentList(
-                                adjustmentList?.map((item) =>
-                                  item.id === record.id
-                                    ? { ...item, adjustment_process_type: value }
-                                    : item,
-                                ),
-                              );
-                            }}
-                          >
-                            {["subtract", "refund"].map((value) => (
-                              <Select.Option key={value} value={value}>
-                                {t(`adjustment.process type.${value}`)}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                        <Form.Item label="처리수량 / 남은수량">
-                          <InputNumber
-                            size="small"
-                            style={{ width: 75 }}
-                            min={1}
-                            max={record.count_left}
-                            value={record.process_count}
-                            onChange={(value) => {
-                              setAdjustmentList(
-                                adjustmentList?.map((item) =>
-                                  item.id === record.id ? { ...item, process_count: value } : item,
-                                ),
-                              );
-                            }}
-                          />
-                          &nbsp;&nbsp;/&nbsp;{record.count_left}
-                        </Form.Item>
-                      </Form>
-                    }
-                    onConfirm={(e) => {
-                      if (!(record.process_count && record.adjustment_process_type)) {
-                        message.warn("처리 방식, 수량을 입력해주세요.");
-                        return;
-                      }
-                      updateAdjustmentQuery.mutate({
-                        id: record.id,
-                        adjustment_process_type: record.adjustment_process_type,
-                        process_count: record.process_count,
-                      });
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
                     }}
                   >
-                    <TurtleButtonSub color="skyblue" size="small">
-                      처리
-                    </TurtleButtonSub>
-                  </TurtlePopConfirm>
+                    <Popover
+                      content={
+                        <>
+                          <Form colon={false}>
+                            <Form.Item label="처리방식" style={{ marginBottom: 12 }}>
+                              <Select
+                                size="small"
+                                style={{ width: 100, marginLeft: 53 }}
+                                value={record.adjustment_process_type}
+                                onChange={(value) => {
+                                  setAdjustmentList(
+                                    adjustmentList?.map((item) =>
+                                      item.id === record.id
+                                        ? { ...item, adjustment_process_type: value }
+                                        : item,
+                                    ),
+                                  );
+                                }}
+                              >
+                                {["subtract", "refund"].map((value) => (
+                                  <Select.Option key={value} value={value}>
+                                    {t(`adjustment.process type.${value}`)}
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+                            <Form.Item label="처리수량 / 총 수량">
+                              <InputNumber
+                                size="small"
+                                style={{ width: 75 }}
+                                min={1}
+                                max={record.count_left}
+                                value={record.process_count}
+                                onChange={(value) => {
+                                  setAdjustmentList(
+                                    adjustmentList?.map((item) =>
+                                      item.id === record.id
+                                        ? { ...item, process_count: value }
+                                        : item,
+                                    ),
+                                  );
+                                }}
+                              />
+                              &nbsp;&nbsp;/&nbsp;{record.count_left}
+                            </Form.Item>
+                          </Form>
+                          <Row justify="end">
+                            <Button
+                              size="small"
+                              htmlType="submit"
+                              onClick={() => {
+                                if (!(record.process_count && record.adjustment_process_type)) {
+                                  message.warn("처리 방식, 수량을 입력해주세요.");
+                                  return;
+                                }
+                                updateAdjustmentQuery.mutate({
+                                  id: record.id,
+                                  adjustment_process_type: record.adjustment_process_type,
+                                  process_count: record.process_count,
+                                });
+                              }}
+                            >
+                              확인
+                            </Button>
+                          </Row>
+                        </>
+                      }
+                      trigger="click"
+                    >
+                      <TurtleButtonSub color="skyblue" size="small">
+                        처리
+                      </TurtleButtonSub>
+                    </Popover>
+                  </div>
                 ),
             },
             Table.EXPAND_COLUMN,

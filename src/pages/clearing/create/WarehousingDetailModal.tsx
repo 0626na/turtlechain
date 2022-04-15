@@ -95,7 +95,7 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
           {
             ellipsis: true,
             title: t("warehousing.is reserved"),
-            render: (_, record) => <Checkbox checked={record.is_reserved} />,
+            render: (_, record) => <Checkbox disabled={true} checked={record.is_reserved} />,
           },
         ]}
       />

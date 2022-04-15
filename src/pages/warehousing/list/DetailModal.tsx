@@ -255,6 +255,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             render: (_, record) => (
               <Checkbox
                 checked={record.is_reserved}
+                disabled={sheet?.is_confirmed}
                 onChange={() => {
                   updateItemList("is_reserved", record.id, !record.is_reserved);
                 }}

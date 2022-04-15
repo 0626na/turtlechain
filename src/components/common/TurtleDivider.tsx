@@ -6,6 +6,7 @@ function TurtleDivider() {
 }
 
 const StyledDivider = styled(Divider)`
+  border-top-color: rgba(0, 0, 0, 0.06);
   padding: 0;
   margin: 0;
 `;

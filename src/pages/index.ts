@@ -4,6 +4,7 @@ export const LoginPage = lazy(() => import("./user/login"));
 export const FindIdPage = lazy(() => import("./user/find-id"));
 export const ResetPasswordPage = lazy(() => import("./user/reset-password"));
 export const SignupPage = lazy(() => import("./user/signup"));
+export const MembershipInfoPage = lazy(() => import("./user/membership-info"));
 
 export const HomePage = lazy(() => import("./home"));
 export const OrderCreatePage = lazy(() => import("./order/create"));

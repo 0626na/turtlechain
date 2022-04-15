@@ -9,18 +9,15 @@ interface Props {
 
 function MainContent({ title, info, children }: Props) {
   return (
-    <Row style={{ paddingTop: 32, paddingBottom: 32 }}>
-      <TurtleText>
-        {title && title}
-        {info && (
-          <>
-            <br />
-            <TurtleInfo>{info}</TurtleInfo>
-          </>
-        )}
-      </TurtleText>
-      {children}
-    </Row>
+    <>
+      <Row style={{ padding: "32px 32px 0px 32px" }}>
+        <TurtleText>{title && title}</TurtleText>
+      </Row>
+      <Row style={{ paddingTop: 4, paddingBottom: 32 }}>
+        {info && <TurtleInfo>{info}</TurtleInfo>}
+        {children}
+      </Row>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import { Switch, Route, Redirect } from "react-router-dom";
-import { LoginPage, FindIdPage, ResetPasswordPage, SignupPage } from "pages";
+import { LoginPage, FindIdPage, ResetPasswordPage, SignupPage, MembershipInfoPage } from "pages";
 import { Suspense } from "react";
 
 const LoginRouter = function () {
@@ -10,6 +10,7 @@ const LoginRouter = function () {
         <Route exact path="/find-id" component={FindIdPage} />
         <Route exact path="/reset-password" component={ResetPasswordPage} />
         <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/membership-info" component={MembershipInfoPage} />
         <Redirect path="*" to="/login" />
       </Switch>
     </Suspense>
