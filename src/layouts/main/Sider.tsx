@@ -5,16 +5,6 @@ import { Layout, Menu } from "antd";
 import { t } from "i18next";
 import { TurtleImg } from "components/common";
 
-type MenuType = Array<{
-  title: string;
-  pathname?: string;
-  icon?: React.ReactNode;
-  submenu?: Array<{
-    title: string;
-    pathname: string;
-  }>;
-}>;
-
 interface Props {
   collapsed: boolean;
 }
@@ -22,76 +12,26 @@ interface Props {
 function Sider({ collapsed }: Props) {
   const history = useHistory();
   const { pathname } = useLocation();
-  const [selectedKeys, setSelectedKeys] = useState(pathname);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [selectedKeys, selectKeys] = useState(pathname);
 
-  const handleMenuClick = (pathname?: string) => {
-    if (pathname && pathname !== selectedKeys) {
-      history.push(pathname);
-      setSelectedKeys(pathname);
+  // pathname 이용하여 주소 바뀔 시 메뉴 선택
+  useEffect(() => {
+    const [, firstKey, secondKey] = pathname.split("/");
+    if (firstKey === "home") {
+      setOpenKeys([]);
+      selectKeys("/home");
+      return;
     }
-  };
+    setOpenKeys([`/${firstKey}`]);
+    selectKeys(`/${firstKey}/${secondKey}`);
+  }, [pathname]);
 
-  // useEffect(() => {
-  //   setSelectedKeys(pathname);
-  // }, [pathname]);
-
-  const menu: MenuType = [
+  const menus = [
     {
-      title: t("common.home"),
-      pathname: "/home",
-      icon: (
-        <TurtleImg //
-          name="home"
-        />
-      ),
-    },
-    // {
-    //   title: t("order.management"),
-    //   icon: (
-    //     <div>
-    //       <TurtleImg //
-    //         type="menu"
-    //         name="order"
-    //       />
-    //     </div>
-    //   ),
-    //   submenu: [
-    //     {
-    //       title: t("order.create"),
-    //       pathname: "/order/create",
-    //     },
-    //     {
-    //       title: t("order.list"),
-    //       pathname: "/order/list",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: t("sample_return.management"),
-    //   icon: (
-    //     <div>
-    //       <TurtleImg type="menu" name="sample_return" />
-    //     </div>
-    //   ),
-    //   submenu: [
-    //     {
-    //       title: t("sample_return.create"),
-    //       pathname: "/sample_return/create",
-    //     },
-    //     {
-    //       title: t("sample_return.list"),
-    //       pathname: "/sample_return/list",
-    //     },
-    //   ],
-    // },
-    {
+      key: "/warehousing",
       title: t("warehousing.management"),
-      icon: (
-        <div>
-          <TurtleImg name="warehousing" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("warehousing.create"),
           pathname: "/warehousing/create",
@@ -103,13 +43,9 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/adjustment",
       title: t("adjustment.management"),
-      icon: (
-        <div>
-          <TurtleImg name="adjustment" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("adjustment.create"),
           pathname: "/adjustment/create",
@@ -121,13 +57,9 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/clearing",
       title: t("clearing.management"),
-      icon: (
-        <div>
-          <TurtleImg name="clearing" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("clearing.create"),
           pathname: "/clearing/create",
@@ -143,13 +75,9 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/product",
       title: t("product.management"),
-      icon: (
-        <div>
-          <TurtleImg name="product" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("product.create"),
           pathname: "/product/create",
@@ -161,13 +89,9 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/vendor",
       title: t("vendor.management"),
-      icon: (
-        <div>
-          <TurtleImg name="vendor" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("vendor.create"),
           pathname: "/vendor/create",
@@ -179,32 +103,28 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/setting",
       title: t("setting"),
-      icon: (
-        <div>
-          <TurtleImg name="setting" />
-        </div>
-      ),
-      submenu: [
+      submenus: [
         {
           title: t("account.my"),
-          pathname: "/my/account",
+          pathname: "/setting/account",
         },
         {
           title: t("biz.info"),
-          pathname: "/my/company",
+          pathname: "/setting/company",
         },
         {
           title: t("store.info"),
-          pathname: "/my/store",
+          pathname: "/setting/store",
         },
         {
           title: t("staff.info"),
-          pathname: "/my/staff",
+          pathname: "/setting/staff",
         },
         {
           title: t("membership.info"),
-          pathname: "/my/membership",
+          pathname: "/setting/membership",
         },
       ],
     },
@@ -212,37 +132,44 @@ function Sider({ collapsed }: Props) {
 
   return (
     <StyledSider trigger={null} collapsible collapsed={collapsed}>
-      <Menu //
+      <Menu
+        theme="dark"
         mode="inline"
+        openKeys={openKeys}
+        onOpenChange={(openKeys) => {
+          setOpenKeys([openKeys.pop() ?? ""]);
+        }}
         selectedKeys={[selectedKeys]}
+        onSelect={({ key }) => {
+          history.push(key);
+        }}
         style={{ height: "100vh" }}
       >
-        <Menu.Item key="home" icon={<TurtleImg name="home" />}>
+        <Menu.Item
+          key="/home"
+          icon={
+            <div>
+              <TurtleImg name="home" />
+            </div>
+          }
+        >
           {t("common.home")}
         </Menu.Item>
-        {menu.map((item) => {
-          const { title, icon, pathname, submenu } = item;
-          if (submenu) {
-            return (
-              <Menu.SubMenu key={title} title={title} icon={icon}>
-                {submenu.map((item) => {
-                  const { title, pathname } = item;
-                  return (
-                    <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)}>
-                      {title}
-                    </Menu.Item>
-                  );
-                })}
-              </Menu.SubMenu>
-            );
-          } else {
-            return (
-              <Menu.Item key={pathname} onClick={() => handleMenuClick(pathname)} icon={icon}>
-                {title}
-              </Menu.Item>
-            );
-          }
-        })}
+        {menus.map(({ key, title, submenus }) => (
+          <Menu.SubMenu
+            key={key}
+            title={title}
+            icon={
+              <div>
+                <TurtleImg name={key} />
+              </div>
+            }
+          >
+            {submenus?.map((submenu) => (
+              <Menu.Item key={submenu.pathname}>{submenu.title}</Menu.Item>
+            ))}
+          </Menu.SubMenu>
+        ))}
       </Menu>
     </StyledSider>
   );
@@ -252,18 +179,6 @@ const StyledSider = styled(Layout.Sider)`
   position: fixed;
   top: 60px;
   overflow: auto;
-
-  .ant-menu-submenu .ant-menu-submenu-title {
-    height: 54px;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  .ant-menu-submenu .ant-menu-item {
-    height: 54px;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 `;
 
 export default Sider;

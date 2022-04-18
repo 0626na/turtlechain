@@ -30,12 +30,14 @@ module.exports = {
               "@layout-sider-background": "#242934",
 
               // Menu
-              "@menu-bg": "#2B3140",
-              "@menu-popup-bg": "#2B3140",
-              "@menu-item-color": "#FFFFFF",
-              "@menu-inline-submenu-bg": "#1A1E28",
-              "@menu-highlight-color": "#FFFFFF",
-              "@menu-item-active-bg": "#00B594",
+              "@menu-dark-bg": "#2B3140",
+              "@menu-dark-arrow-color": "#FFFFFF",
+              "@menu-dark-item-color": "#FFFFFF",
+              "@menu-item-height": "54px",
+              "@menu-inline-toplevel-item-height": "54px",
+              "@menu-dark-inline-submenu-bg": "#1A1E28",
+              "@menu-dark-highlight-color": "#FFFFFF",
+              "@menu-dark-item-active-bg": "#00B594",
               "@border-radius-base": "4px",
 
               // Buttons
@@ -47,6 +49,8 @@ module.exports = {
               "@btn-primary-shadow": "0",
               "@btn-text-shadow": "0",
               "@btn-primary-bg": "#2174F1",
+              "@btn-disable-bg": "#C3C4C6",
+              "@btn-disable-color": "#FFFFFF",
 
               "@btn-default-color": "#2174F1",
               "@btn-default-border": "#2174F1",
