@@ -23,7 +23,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     rt_store_id: store.id,
     vendor_id: selectedRow?.vendor_info.id,
     start_date: selectedRow?.created_date,
-    end_date: moment().add(7, "d").format("YYYY-MM-DD"),
+    end_date: moment().add(1, "d").format("YYYY-MM-DD"),
     tab: "adjustment",
     original_id: selectedRow?.id,
   });
@@ -58,7 +58,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       rt_store_id: store.id,
       vendor_id: selectedRow?.vendor_info.id,
       start_date: selectedRow?.created_date,
-      end_date: moment().add(7, "d").format("YYYY-MM-DD"),
+      end_date: moment().add(1, "d").format("YYYY-MM-DD"),
       tab: "adjustment",
       original_id: selectedRow?.id,
     }));

@@ -17,7 +17,7 @@ function Header({ handleMenuVisible }: Props) {
   const logout = useLogout();
 
   return (
-    <Container>
+    <StyledHeader>
       <Row gutter={8} justify="space-between">
         <Col>
           <Button
@@ -25,7 +25,7 @@ function Header({ handleMenuVisible }: Props) {
             icon={<MenuOutlined style={{ color: "#FFFFFF" }} />}
             onClick={handleMenuVisible}
           />
-          <LogoImage
+          <StyledImage
             src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
             onClick={() => history.push("/home")}
@@ -51,30 +51,26 @@ function Header({ handleMenuVisible }: Props) {
             }
             trigger={["click"]}
           >
-            <Button type="text" style={{ color: "#FFFFFF", paddingLeft: "12px" }}>
+            <Button icon={<DownOutlined />} type="text" style={{ color: "#FFFFFF" }}>
               {t("turtlechain")}
-              <DownOutlined />
             </Button>
           </Dropdown>
         </Col>
       </Row>
-    </Container>
+    </StyledHeader>
   );
 }
 
-const Container = styled(Layout.Header)`
+const StyledHeader = styled(Layout.Header)`
   height: ${MAIN_HEADER_HEIGHT};
   position: fixed;
   z-index: 1;
   width: 100%;
   padding-left: 16px;
-  /*
-  top: 0;
-  */
 `;
 
-const LogoImage = styled.img`
-  height: 16px;
+const StyledImage = styled.img`
+  height: 14px;
   margin: 1rem;
   cursor: pointer;
 `;

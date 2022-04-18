@@ -1,6 +1,7 @@
 import { v2Axios } from "./index";
 import { VendorAccount, VendorPhone } from "./vendorAPI";
 import { WarehousingItem } from "./warehousingAPI";
+import { Product } from "./productAPI";
 import { saveAs } from "file-saver";
 import moment from "moment";
 
@@ -34,23 +35,6 @@ export interface Vendor {
   use_vendor?: MasterVendor;
   use_account?: VendorAccount;
   check_account?: boolean;
-}
-
-export interface Product {
-  vendor_id: string;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  product_code: string;
-  name: string;
-  vendor_product_name: string;
-  price: number;
-  option: string;
-  image_url: string;
-  memo: string;
-
-  memo_value?: string;
-  memo_active?: boolean;
 }
 
 export interface OrderProduct {

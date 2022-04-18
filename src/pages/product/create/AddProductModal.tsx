@@ -1,30 +1,32 @@
-import { Divider, Form, Input, message, Row, Space } from "antd";
+import { Divider, Form, Input, InputNumber, message, Row, Space } from "antd";
 import { t } from "i18next";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { productAPI } from "apis";
-import { Product } from "apis/excelAPI";
+import { Product } from "apis/productAPI";
 import {
   TurtleButton,
   TurtleButtonSub,
   TurtleInput,
-  TurtleInputNumber,
+  TurtleInputPrice,
   TurtleModal,
   TurtleSearchInput,
   TurtleTextArea,
 } from "components/common";
 import { SearchVendorModal } from "components/combine";
+import { productCartState } from "store/productCartState";
+import { pricePattern } from "utils/pattern";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addProduct: (item: Product) => boolean;
 }
 
-function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
+function AddSingleProductModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
+  const [cart, setCart] = useRecoilState(productCartState);
   const [form] = Form.useForm();
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
 
@@ -57,11 +59,6 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     [form],
   );
 
-  const onCloseModal = useCallback(() => {
-    form.resetFields();
-    closeModal();
-  }, [form, closeModal]);
-
   const createProductCode = useCallback(() => {
     if (!form.getFieldValue("vendor_id")) {
       message.warn("거래처를 선택해 주세요.");
@@ -70,6 +67,26 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
     getProductCodeQuery.refetch();
   }, []);
 
+  // 상품 추가
+  const addProduct = useCallback(
+    (addedProduct: Product) => {
+      if (cart.successList.find((product) => product.product_code === addedProduct.product_code)) {
+        message.warn(t("message.already exist product"));
+        return;
+      }
+      setCart((cart) => ({
+        ...cart,
+        successList: [addedProduct, ...cart.successList],
+      }));
+      closeModal();
+    },
+    [cart.successList, setCart, closeModal],
+  );
+
+  useEffect(() => {
+    form.resetFields();
+  }, [visible, form]);
+
   return (
     <>
       <TurtleModal
@@ -77,7 +94,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
         width="520px"
         title={t("product.add single")}
         visible={visible}
-        onCancel={onCloseModal}
+        onCancel={closeModal}
         footer={false}
       >
         <Form
@@ -87,9 +104,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 16 }}
           onFinish={(value) => {
-            if (addProduct(value)) {
-              onCloseModal();
-            }
+            addProduct(value);
           }}
         >
           <Form.Item name="rt_store_id" hidden>
@@ -140,7 +155,9 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             </Space>
           </Form.Item>
           <TurtleInput label="옵션" name="option" />
-          <TurtleInputNumber label="공급가" name="price" min={0} />
+          <Form.Item name="price" label="공급가" rules={[{ required: true }]}>
+            <TurtleInputPrice style={{ width: "100%" }} />
+          </Form.Item>
           <TurtleInput label="상품 이미지 URL" name="image_url" required={false} />
           <TurtleTextArea // 메모 TextArea
             required={false}
@@ -149,6 +166,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
             placeholder={t("placeholder.memo")}
             rows={5}
           />
+
           <Row justify="end">
             <TurtleButton type="default" htmlType="submit">
               {t("button.add product")}
@@ -156,6 +174,7 @@ function AddSingleProductModal({ visible, closeModal, addProduct }: Props) {
           </Row>
         </Form>
       </TurtleModal>
+
       {/* 거래처 검색 모달 */}
       <SearchVendorModal
         visible={vendorModalVisible}

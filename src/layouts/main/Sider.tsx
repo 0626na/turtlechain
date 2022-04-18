@@ -31,21 +31,18 @@ function Sider({ collapsed }: Props) {
     }
   };
 
-  useEffect(() => {
-    setSelectedKeys(pathname);
-  }, [pathname]);
+  // useEffect(() => {
+  //   setSelectedKeys(pathname);
+  // }, [pathname]);
 
   const menu: MenuType = [
     {
       title: t("common.home"),
       pathname: "/home",
       icon: (
-        <div>
-          <TurtleImg //
-            type="menu"
-            name="home"
-          />
-        </div>
+        <TurtleImg //
+          name="home"
+        />
       ),
     },
     // {
@@ -91,7 +88,7 @@ function Sider({ collapsed }: Props) {
       title: t("warehousing.management"),
       icon: (
         <div>
-          <TurtleImg type="menu" name="warehousing" />
+          <TurtleImg name="warehousing" />
         </div>
       ),
       submenu: [
@@ -109,7 +106,7 @@ function Sider({ collapsed }: Props) {
       title: t("adjustment.management"),
       icon: (
         <div>
-          <TurtleImg type="menu" name="adjustment" />
+          <TurtleImg name="adjustment" />
         </div>
       ),
       submenu: [
@@ -127,7 +124,7 @@ function Sider({ collapsed }: Props) {
       title: t("clearing.management"),
       icon: (
         <div>
-          <TurtleImg type="menu" name="clearing" />
+          <TurtleImg name="clearing" />
         </div>
       ),
       submenu: [
@@ -149,7 +146,7 @@ function Sider({ collapsed }: Props) {
       title: t("product.management"),
       icon: (
         <div>
-          <TurtleImg type="menu" name="product" />
+          <TurtleImg name="product" />
         </div>
       ),
       submenu: [
@@ -167,7 +164,7 @@ function Sider({ collapsed }: Props) {
       title: t("vendor.management"),
       icon: (
         <div>
-          <TurtleImg type="menu" name="vendor" />
+          <TurtleImg name="vendor" />
         </div>
       ),
       submenu: [
@@ -185,10 +182,7 @@ function Sider({ collapsed }: Props) {
       title: t("setting"),
       icon: (
         <div>
-          <TurtleImg //
-            type="menu"
-            name="setting"
-          />
+          <TurtleImg name="setting" />
         </div>
       ),
       submenu: [
@@ -221,8 +215,11 @@ function Sider({ collapsed }: Props) {
       <Menu //
         mode="inline"
         selectedKeys={[selectedKeys]}
-        style={{ height: "calc(100vh - 60px)", padding: "1.5rem 0" }}
+        style={{ height: "100vh" }}
       >
+        <Menu.Item key="home" icon={<TurtleImg name="home" />}>
+          {t("common.home")}
+        </Menu.Item>
         {menu.map((item) => {
           const { title, icon, pathname, submenu } = item;
           if (submenu) {

@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
-import ProductPreviewList from "./ProductPreviewList";
+import PageBody from "./PageBody";
 
 function ProductCreatePage() {
   const title = `${t("turtlechain")} - ${t("product.create")}`;
@@ -14,7 +14,7 @@ function ProductCreatePage() {
         breadcrumbList={[t("product.management"), t("product.create")]}
         info={t("description.excel type")}
       />
-      <ProductPreviewList />
+      <PageBody />
     </>
   );
 }

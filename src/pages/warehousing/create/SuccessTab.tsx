@@ -1,6 +1,6 @@
 import { t } from "i18next";
-import { Checkbox, InputNumber, Switch, Table, TabPaneProps, Tabs } from "antd";
-import { useCallback, useEffect, useMemo } from "react";
+import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from "antd";
+import { useCallback, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { warehousingCartState } from "store/warehousingCartState";
 import { pricePattern } from "utils/pattern";

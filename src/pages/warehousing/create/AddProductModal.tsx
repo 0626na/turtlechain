@@ -63,7 +63,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
   );
 
   // 상품 추가
-  const addProduct = useCallback(
+  const addItem = useCallback(
     (item: WarehousingItem) => {
       setCart((cart) => ({
         ...cart,
@@ -96,7 +96,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 16 }}
-          onFinish={addProduct}
+          onFinish={addItem}
         >
           <Form.Item name="vendor_id" hidden>
             <Input hidden />

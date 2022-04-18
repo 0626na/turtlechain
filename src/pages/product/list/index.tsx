@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
-import ProductList from "./ProductList";
+import PageBody from "./PageBody";
 
 function ProductListPage() {
   const title = `${t("turtlechain")} - ${t("product.list")}`;
@@ -13,7 +13,7 @@ function ProductListPage() {
         title={t("product.list")}
         breadcrumbList={[t("product.management"), t("product.list")]}
       />
-      <ProductList />
+      <PageBody />
     </>
   );
 }

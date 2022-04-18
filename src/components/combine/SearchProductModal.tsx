@@ -1,5 +1,5 @@
 import { message, Modal, Pagination, Row, Table } from "antd";
-import productAPI, { RequestGetProductList } from "apis/productAPI";
+import productAPI, { RequestGetList } from "apis/productAPI";
 import { AxiosError } from "axios";
 import { TurtleTableTitle } from "components/common";
 import { t } from "i18next";
@@ -7,8 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { NewSearchFilter } from ".";
 import styled from "styled-components";
-import { NewSearchFilter, SearchFilter } from ".";
 
 interface Props {
   visible: boolean;
@@ -27,7 +27,7 @@ interface Props {
 function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Props) {
   const store = useRecoilValue(storeState);
 
-  const [searchQuery, setSearchQuery] = useState<RequestGetProductList>({
+  const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: -1,
     vendor_id: -1,
     page: 1,
@@ -39,7 +39,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
   const getProductListQuery = useQuery(
     ["getProductList", searchQuery], //
     () =>
-      productAPI.getProductList({
+      productAPI.getList({
         ...searchQuery,
         rt_store_id: store.id ?? -1,
         vendor_id: vendorId,

@@ -1,6 +1,7 @@
 import { v2Axios } from "apis";
-import { ParseCount, Product, Vendor } from "apis/excelAPI";
+import { ParseCount, Vendor } from "apis/excelAPI";
 import { WarehousingItem } from "./warehousingAPI";
+import { Product } from "./productAPI";
 
 export interface RequestQuery {
   rt_store_id: number;
@@ -17,6 +18,7 @@ export interface ResponseConnectProduct {
       fail_count: number;
       duplicated_count: number;
     };
+    error?: string;
   };
 }
 
