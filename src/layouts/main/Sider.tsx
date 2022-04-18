@@ -166,7 +166,7 @@ function Sider({ collapsed }: Props) {
             }
           >
             {submenus?.map((submenu) => (
-              <Menu.Item key={submenu.pathname}>{submenu.title}</Menu.Item>
+              <Menu.Item key={submenu.pathname}>{submenu.title.substring(1)}</Menu.Item>
             ))}
           </Menu.SubMenu>
         ))}
