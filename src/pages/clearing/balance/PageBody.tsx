@@ -67,7 +67,6 @@ function PageBody() {
           })}
           title={() => (
             <TurtleTableTitle count={getBalanceQuery.data?.data.total_count ?? 0}>
-              <Divider type="vertical" style={{ margin: 0 }} />
               <DatePicker.RangePicker
                 size="small"
                 allowClear={false}

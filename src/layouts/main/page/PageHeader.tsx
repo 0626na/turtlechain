@@ -16,7 +16,7 @@ function PageHeader({ title, breadcrumbList, info, divider = true }: Props) {
       <Row
         align="middle"
         justify="space-between"
-        style={{ backgroundColor: "white", borderRadius: 8, padding: "12px 36px" }}
+        style={{ backgroundColor: "white", borderRadius: 8, padding: "8px 36px 12px 36px" }}
       >
         <Col>
           <StyledTitle level={4}>{title}</StyledTitle>

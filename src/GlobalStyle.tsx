@@ -32,6 +32,11 @@ const GlobalStyle = createGlobalStyle`
   .ant-form-item-label {
     text-align: left;        
   }
+
+  /* table header padding 제거 */
+  .ant-table-title {
+    padding: 8px 0px !important;
+  }
 `;
 
 export default GlobalStyle;

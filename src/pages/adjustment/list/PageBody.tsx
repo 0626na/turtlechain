@@ -128,10 +128,6 @@ const PageBody = function () {
           })}
           title={() => (
             <TurtleTableTitle count={getAdjustmentListQuery.data?.data.total_count ?? 0}>
-              {/* <SearchFilter type="product" onSearch={() => {}} /> */}
-
-              <Divider type="vertical" style={{ margin: 0 }} />
-
               <Select
                 size="small"
                 style={{ width: 100 }}

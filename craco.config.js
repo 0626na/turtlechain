@@ -39,6 +39,8 @@ module.exports = {
               "@menu-dark-highlight-color": "#FFFFFF",
               "@menu-dark-item-active-bg": "#00B594",
               "@border-radius-base": "4px",
+              "@menu-item-vertical-margin": "0px",
+              "@menu-item-boundary-margin": "0px",
 
               // Buttons
               "@btn-height-base": "36px",

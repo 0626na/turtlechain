@@ -12,7 +12,6 @@ import clearingAPI from "./clearingAPI";
 import adjustmentAPI from "./adjustmentAPI";
 import excelAPI from "./excelAPI";
 import productAPI from "./productAPI";
-import mainAPI from "./mainAPI";
 import externalAPI from "./externalAPI";
 
 export const v1Axios = axios.create({
@@ -44,6 +43,5 @@ export {
   clearingAPI,
   adjustmentAPI,
   excelAPI,
-  mainAPI,
   externalAPI,
 };

@@ -6,7 +6,7 @@ interface Props {
 }
 
 function TurtleIcon({ type, onClick }: Props) {
-  const style = { cursor: "pointer", color: "#A1A2A6" };
+  const style = { cursor: "pointer", color: "#A1A2A6", padding: 6 };
 
   return (
     <DeleteOutlined //
