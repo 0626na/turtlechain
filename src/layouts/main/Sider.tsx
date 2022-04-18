@@ -161,12 +161,12 @@ function Sider({ collapsed }: Props) {
             title={title}
             icon={
               <div>
-                <TurtleImg name={key} />
+                <TurtleImg name={key.substring(1)} />
               </div>
             }
           >
             {submenus?.map((submenu) => (
-              <Menu.Item key={submenu.pathname}>{submenu.title.substring(1)}</Menu.Item>
+              <Menu.Item key={submenu.pathname}>{submenu.title}</Menu.Item>
             ))}
           </Menu.SubMenu>
         ))}
