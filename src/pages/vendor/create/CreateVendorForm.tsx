@@ -346,8 +346,8 @@ function CreateVendorForm() {
           required={false}
         />
 
-        <Row justify="space-between" style={{ padding: "1rem 0px" }}>
-          <TurtleText>
+        <Row justify="end" style={{ padding: "1rem 0px" }}>
+          {/* <TurtleText>
             등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}
             <span
               style={{ color: "#033A88", cursor: "pointer", textDecoration: "underline" }}
@@ -357,7 +357,7 @@ function CreateVendorForm() {
             >
               신규 등록 요청하기 {">"}
             </span>
-          </TurtleText>
+          </TurtleText> */}
           <Popconfirm
             title={t("description.really register")}
             okText={t("yes")}

@@ -13,12 +13,15 @@ import {
 } from "chart.js";
 import { TurtleCardHome } from "components/common";
 import moment from "moment";
+import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "react-query";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function ClearingChartCard() {
+  const [storeList, setStoreList] = useState([]);
+
   const getSheetQuery = useQuery(
     ["getClearingSheet"],
     () =>
@@ -33,6 +36,11 @@ function ClearingChartCard() {
       },
       onSuccess: (data) => {
         console.log(data.data);
+        const set = new Set();
+        data.data.sheet_list.forEach((sheet) => {
+          set.add(sheet.store_name);
+        });
+        // setStoreList();
       },
     },
   );
@@ -76,9 +84,7 @@ function ClearingChartCard() {
           <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
         </Col>
       </Row>
-      <Row>
-        <Line options={options} data={data} />
-      </Row>
+      <Row>{/* <Line options={options} data={data} /> */}</Row>
     </TurtleCardHome>
   );
 }

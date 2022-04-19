@@ -7,9 +7,11 @@ import { AxiosError } from "axios";
 
 function Notification() {
   const getQuery = useQuery("getNotification", () => notificationAPI.get({ type: "home" }), {
-    enabled: false,
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
+    },
+    onSuccess: (data) => {
+      console.log(data);
     },
   });
 
@@ -55,7 +57,7 @@ function Notification() {
             justify="center"
             align="middle"
             onClick={() => {
-              alert("전체보기");
+              alert("준비중 입니다.");
             }}
           >
             알림 전체보기

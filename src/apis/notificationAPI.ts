@@ -1,4 +1,5 @@
 import { v2Axios } from "apis";
+import { TOKEN } from "constant";
 
 export interface RequestGet {
   type: "home" | "setting";
@@ -26,7 +27,11 @@ const get = async function (query: RequestGet) {
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGet>(url);
+  const response = await v2Axios.get<ResponseGet>(url, {
+    headers: {
+      Authorization: `JWT ${sessionStorage.getItem(TOKEN)}`,
+    },
+  });
   return response.data;
 };
 

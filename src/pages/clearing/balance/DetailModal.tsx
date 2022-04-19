@@ -66,13 +66,14 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             ellipsis: true,
             width: 200,
             align: "center",
-            title: "시간",
-            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD HH:mm:ss"),
+            title: "날짜",
+            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD"),
           },
           {
             ellipsis: true,
-            title: t("vendor.name"),
-            render: (_, record) => record.vendor_info.vendor_name,
+            width: 500,
+            title: "처리 내용",
+            render: (_, record) => record.memo,
           },
           {
             ellipsis: true,
@@ -83,12 +84,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             ellipsis: true,
             title: "사용 가능 금액",
             render: (_, record) => record.overpaid_amount.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            width: 500,
-            title: "환불반환 내용",
-            render: (_, record) => record.memo,
           },
         ]}
       />

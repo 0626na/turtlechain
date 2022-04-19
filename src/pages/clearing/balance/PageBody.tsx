@@ -108,7 +108,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 500,
-              title: "환불반환 내용",
+              title: "처리 내용",
               render: (_, record) => record.memo,
             },
           ]}
