@@ -7,6 +7,7 @@ import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { t } from "i18next";
+import { Notification } from "components/combine";
 
 interface Props {
   handleMenuVisible: () => void;
@@ -18,7 +19,7 @@ function Header({ handleMenuVisible }: Props) {
 
   return (
     <StyledHeader>
-      <Row gutter={8} justify="space-between">
+      <Row gutter={8} justify="space-between" align="middle">
         <Col>
           <Button
             type="link"
@@ -31,10 +32,11 @@ function Header({ handleMenuVisible }: Props) {
             onClick={() => history.push("/home")}
           />
         </Col>
-        <Col>
+        <Col style={{ display: "flex" }}>
+          <Notification />
           <Avatar
             icon={<UserOutlined style={{ color: "#141720" }} />}
-            style={{ background: "#AAE7DC" }}
+            style={{ background: "#AAE7DC", top: 6 }}
             size="small"
           />
           <Dropdown
@@ -71,7 +73,7 @@ const StyledHeader = styled(Layout.Header)`
 
 const StyledImage = styled.img`
   height: 14px;
-  margin: 1rem;
+  margin: 8px;
   cursor: pointer;
 `;
 

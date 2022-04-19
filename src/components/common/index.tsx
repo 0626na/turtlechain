@@ -22,6 +22,7 @@ import TurtlePopConfirm from "./TurtlePopConfirm";
 import TurtlePanelHeader from "./TurtlePanelHeader";
 import TurtleStatistics from "./TurtleStatistics";
 import TurtleInputPrice from "./TurtleInputPrice";
+import TurtleCardHome from "./TurtleCardHome";
 
 export {
   TurtleBadge,
@@ -48,4 +49,5 @@ export {
   TurtlePanelHeader,
   TurtleStatistics,
   TurtleInputPrice,
+  TurtleCardHome,
 };

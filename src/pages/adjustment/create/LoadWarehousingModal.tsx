@@ -7,10 +7,11 @@ import { RequestGetSheet, WarehousingItemShow } from "apis/warehousingAPI";
 import { AxiosError } from "axios";
 import { TurtleButton, TurtleModal, TurtleTableTitle } from "components/common";
 import { MainContent } from "layouts/main";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
+import { NewSearchFilter } from "components/combine";
 
 interface Props {
   visible: boolean;
@@ -28,6 +29,10 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page: 1,
+  });
+  const [searchState, setSearchState] = useState({
+    type: "all",
+    search_string: "",
   });
 
   // 입고장 리스트 요청
@@ -66,6 +71,10 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
       start_date: moment().subtract(1, "weeks").format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       page: 1,
+    });
+    setSearchState({
+      type: "all",
+      search_string: "",
     });
   }, [store.id]);
 
@@ -114,6 +123,28 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     });
     closeModal();
   }, [selectedItems, addItem, closeModal]);
+
+  const filteredList = useMemo(
+    () =>
+      getItemQuery.data?.data.item_list.filter((item) => {
+        const { type, search_string } = searchState;
+        if (type === "name") {
+          return item.product_info.name.includes(search_string);
+        }
+        if (type === "vendor_product_name") {
+          return item.product_info.vendor_product_name.includes(search_string);
+        }
+        if (type === "vendor_name") {
+          return item.vendor_info.vendor_name.includes(search_string);
+        }
+        return (
+          item.product_info.name.includes(search_string) ||
+          item.product_info.vendor_product_name.includes(search_string) ||
+          item.vendor_info.vendor_name.includes(search_string)
+        );
+      }),
+    [getItemQuery.data?.data.item_list, searchState],
+  );
 
   return (
     <TurtleModal
@@ -194,14 +225,16 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
           size="small"
           loading={getItemQuery.isLoading}
           pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-          dataSource={getItemQuery.data?.data.item_list}
+          dataSource={filteredList}
           rowKey={(record) => record.id}
           scroll={{ y: "auto" }}
           title={() => (
             <TurtleTableTitle
               count={getItemQuery.data?.data.total_count ?? 0}
               selectedCount={selectedItems?.length ?? 0}
-            />
+            >
+              <NewSearchFilter searchQuery={searchState} setSearchQuery={setSearchState} />
+            </TurtleTableTitle>
           )}
           rowSelection={{
             selectedRowKeys: selectedItems.map((item) => item.id),

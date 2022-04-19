@@ -1,4 +1,4 @@
-import { Card, Col, DatePicker, message, Row, Space, Typography } from "antd";
+import { Col, message, Row, Space, Typography } from "antd";
 import { clearingAPI } from "apis";
 import { AxiosError } from "axios";
 import {
@@ -11,8 +11,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { TurtleCardHome } from "components/common";
 import moment from "moment";
-import { useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "react-query";
 
@@ -23,8 +23,8 @@ function ClearingChartCard() {
     ["getClearingSheet"],
     () =>
       clearingAPI.getSheet({
-        start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
-        end_date: moment().format("YYYY-MM-DD"),
+        start_date: moment().startOf("month").format("YYYY-MM-DD"),
+        end_date: moment().endOf("month").format("YYYY-MM-DD"),
         status: "complete",
       }),
     {
@@ -44,9 +44,6 @@ function ClearingChartCard() {
         display: false,
       },
     },
-    element: {
-      point: "star",
-    },
   };
 
   const labels = Array.from({ length: moment().endOf("month").get("date") }, (v, i) => i + 1);
@@ -56,29 +53,33 @@ function ClearingChartCard() {
     datasets: [
       {
         label: "test1",
-        data: labels.map((data) => data * 100),
+        data: labels.map((data) => Math.random() * 1000),
         borderColor: "#13BC9E",
         backgroundColor: "white",
+        pointRadius: 0,
       },
     ],
   };
 
   return (
-    <Col span={18}>
-      <Card bordered={false} style={{ borderRadius: 8 }}>
-        <Row justify="space-between">
-          <Col>
-            <Typography.Title level={4}>누적 정산수</Typography.Title>
-          </Col>
-          <Col>
-            <Typography.Text type="secondary">최근 1개월</Typography.Text>
-          </Col>
-        </Row>
-        <Row>
-          <Line options={options} data={data} />
-        </Row>
-      </Card>
-    </Col>
+    <TurtleCardHome>
+      <Row justify="space-between">
+        <Col>
+          <Space direction="vertical" size={0}>
+            <Typography.Title level={5}>누적 정산금액</Typography.Title>
+            <Typography.Title level={2}>
+              {getSheetQuery.data?.data.clearing_summary.complete.price.toLocaleString()} 원
+            </Typography.Title>
+          </Space>
+        </Col>
+        <Col>
+          <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
+        </Col>
+      </Row>
+      <Row>
+        <Line options={options} data={data} />
+      </Row>
+    </TurtleCardHome>
   );
 }
 

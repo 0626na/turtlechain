@@ -11,6 +11,7 @@ import SelectDateModal from "./SelectDateModal";
 import SimplePagination from "./SimplePagination";
 import StoreSelect from "./StoreSelect";
 import NewSearchFilter from "./NewSearchFilter";
+import Notification from "./Notification";
 
 export {
   AccountSelect,
@@ -26,4 +27,5 @@ export {
   SimplePagination,
   StoreSelect,
   NewSearchFilter,
+  Notification,
 };

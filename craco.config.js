@@ -79,6 +79,9 @@ module.exports = {
 
               // Divider
               "@divider-color": "#CBCCD1",
+
+              // Message
+              "@message-notice-content-bg": "#090A0ED9",
             },
             javascriptEnabled: true,
           },

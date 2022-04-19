@@ -37,6 +37,21 @@ const GlobalStyle = createGlobalStyle`
   .ant-table-title {
     padding: 8px 0px !important;
   }
+
+  /* message 색상 변경 */
+  .ant-message {
+    color: #FFFFFF !important;
+  }
+  .ant-message-error .anticon {
+    color: #FFFFFF !important;
+  }
+  .ant-message-warning .anticon {
+    color: #FFFFFF !important;
+  }
+  .ant-message-info .anticon {
+    color: #FFFFFF !important;
+  }
+
 `;
 
 export default GlobalStyle;

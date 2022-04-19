@@ -7,10 +7,9 @@ interface Props {
   title: string;
   breadcrumbList?: Array<string>;
   info?: string;
-  divider?: boolean;
 }
 
-function PageHeader({ title, breadcrumbList, info, divider = true }: Props) {
+function PageHeader({ title, breadcrumbList, info }: Props) {
   return (
     <>
       <Row
@@ -28,7 +27,7 @@ function PageHeader({ title, breadcrumbList, info, divider = true }: Props) {
           )}
         </Col>
       </Row>
-      {divider && <TurtleDivider />}
+      <TurtleDivider />
     </>
   );
 }

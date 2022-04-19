@@ -8,7 +8,7 @@ interface Props {
 }
 function TurtleTableTitle({ count = 0, selectedCount, searchCount, children }: Props) {
   return (
-    <Row justify="space-between" style={{ paddingBottom: 6 }}>
+    <Row justify="space-between" align="middle" style={{ paddingBottom: 6 }}>
       <span>
         총 <span style={{ color: "#32ACDD" }}>{count}</span>건
         {!!selectedCount && (
