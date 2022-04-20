@@ -1,7 +1,7 @@
-import { Helmet } from "react-helmet";
-import CreateVendorForm from "./CreateVendorForm";
 import { t } from "i18next";
+import { Helmet } from "react-helmet";
 import { PageHeader } from "layouts/main";
+import PageBody from "./PageBody";
 
 function VendorCreatePage() {
   const title = `${t("turtlechain")} - ${t("vendor.create")}`;
@@ -14,7 +14,7 @@ function VendorCreatePage() {
         breadcrumbList={[t("vendor.management"), t("vendor.create")]}
         info={t("description.search vendor")}
       />
-      <CreateVendorForm />
+      <PageBody />
     </>
   );
 }

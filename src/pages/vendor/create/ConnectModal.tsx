@@ -1,9 +1,7 @@
 import {
-  Button,
   Col,
   Input,
   message,
-  Modal,
   notification,
   Popconfirm,
   Popover,
@@ -14,26 +12,24 @@ import {
   Table,
   Tabs,
   Typography,
-  Upload,
 } from "antd";
-import { useMutation } from "react-query";
-import { excelAPI, vendorAPI } from "apis";
+import { vendorAPI } from "apis";
+import { ParseCount, Vendor } from "apis/excelAPI";
+import externalAPI from "apis/externalAPI";
+import { RequestCreate, VendorAccount, WholesaleShow } from "apis/vendorAPI";
 import { AxiosError } from "axios";
-import { useCallback, useMemo, useState } from "react";
-import { MasterVendor, ParseCount, Vendor } from "apis/excelAPI";
-import { FileTextOutlined } from "@ant-design/icons";
-import { RequestCreateVendor, VendorAccount } from "apis/vendorAPI";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { t } from "i18next";
+import { useCallback, useMemo, useState } from "react";
+import { useMutation } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import { RcFile } from "antd/lib/upload";
+import { CheckOutlined, CloseOutlined, FileTextOutlined } from "@ant-design/icons";
 import {
   TurtleBadge,
   TurtleButton,
   TurtleButtonSub,
+  TurtleModal,
   TurtleQuestionTooltip,
-  TurtleInfo,
 } from "components/common";
 
 interface Props {
@@ -41,9 +37,8 @@ interface Props {
   closeModal: () => void;
 }
 
-function CreateVendorsModal({ visible, closeModal }: Props) {
+function ConnectModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
-  const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<Vendor>>([]);
   const [suggestList, setSuggestList] = useState<Array<Vendor>>([]);
   const [failList, setFailList] = useState<Array<Vendor>>([]);
@@ -54,8 +49,8 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     duplicated_count: 0,
   });
 
-  // 거래처 파싱 요청
-  const parseVendorQuery = useMutation("parseVendor", excelAPI.parseVendor, {
+  // 거래처 연동 요청
+  const connectVendorQuery = useMutation("connectVendor", externalAPI.connectSellmateVendor, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
       resetField();
@@ -99,9 +94,9 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   });
 
   // 거래처 대량 등록 요청
-  const createVendorQuery = useMutation(
+  const createQuery = useMutation(
     ["createVendor"], //
-    vendorAPI.createVendor,
+    vendorAPI.create,
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -122,7 +117,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     setSuggestList([]);
     setFailList([]);
     setCount({ success_count: 0, suggest_count: 0, fail_count: 0, duplicated_count: 0 });
-    setFileList([]);
   }, []);
 
   // 모달 닫기
@@ -130,14 +124,6 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
     closeModal();
     resetField();
   }, []);
-
-  // 파일 upload
-  const loadFile = (file: RcFile) => {
-    const form = new FormData();
-    form.append("files", file);
-    form.append("rt_store_id", store.id?.toString() ?? "");
-    parseVendorQuery.mutate(form);
-  };
 
   const setSuccessMemoValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, record: Vendor) => {
@@ -327,7 +313,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           ? {
               ...vendor,
               use_vendor: record.ws_store_info.filter(
-                (info: MasterVendor) => info.id === accountId,
+                (info: WholesaleShow) => info.id === accountId,
               )[0],
               use_account: undefined,
               check_account: false,
@@ -382,7 +368,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
   }, [suggestList]);
 
   const onClickCreate = () => {
-    const resultList: Array<RequestCreateVendor> = [];
+    const resultList: Array<RequestCreate> = [];
     successList?.forEach((vendor) => {
       resultList.push({
         rt_store_id: store.id ?? -1,
@@ -411,45 +397,32 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         });
       }
     });
-    createVendorQuery.mutate(resultList);
+    createQuery.mutate(resultList);
   };
 
   return (
-    <Modal
+    <TurtleModal
       centered
       width="80%"
-      title={
-        <>
-          <span style={{ fontSize: "18px" }}>{t("vendor.load")}</span>
-          <br />
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS 또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
-        </>
-      }
+      title={t("vendor.load")}
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
       bodyStyle={{ height: "85vh", overflowY: "auto" }}
     >
-      <Space style={{ height: 110 }}>
-        <Typography.Text>거래처 업로드 | </Typography.Text>
-        <Upload //
-          listType="picture"
-          maxCount={1}
-          accept=".csv, .xls, .xlsx"
-          beforeUpload={(file) => {
-            setFileList([file]);
-            loadFile(file);
-            return false;
+      <Space>
+        <Typography.Text>재고프로그램 연동 | </Typography.Text>
+        <TurtleButtonSub
+          onClick={() => {
+            connectVendorQuery.mutate({ rt_store_id: store.id! });
           }}
-          onRemove={() => {
-            resetField();
-            return false;
-          }}
-          fileList={fileList}
+          //loading={connectVendorQuery.isLoading}
+          //disabled={connectVendorQuery.isSuccess}
         >
-          <Button>파일 선택하기</Button>
-        </Upload>
+          {t("button.connect")}
+        </TurtleButtonSub>
       </Space>
+
       <Tabs defaultActiveKey="1" size="large">
         {/*
          *
@@ -460,10 +433,10 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
          *
          *
          */}
-        <Tabs.TabPane tab={`매칭(${count.success_count})`} key="1">
+        <Tabs.TabPane tab={`매칭(${count?.success_count})`} key="1">
           <Table
             size="small"
-            loading={parseVendorQuery.isLoading}
+            loading={connectVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -646,7 +619,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
         <Tabs.TabPane tab={`추천(${getSuggestCount}/${count.suggest_count})`} key="2">
           <Table
             size="small"
-            loading={parseVendorQuery.isLoading}
+            loading={connectVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -883,7 +856,7 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <span style={{ color: "red", textDecoration: "underline" }}>{count.fail_count}</span>건 */}
           <Table
             size="small"
-            loading={parseVendorQuery.isLoading}
+            loading={connectVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
             pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
@@ -939,14 +912,14 @@ function CreateVendorsModal({ visible, closeModal }: Props) {
           <TurtleButton
             type="primary"
             disabled={getSuggestCount === 0 && successList?.length === 0}
-            loading={createVendorQuery.isLoading}
+            loading={createQuery.isLoading}
           >
             {t("vendor.create")}
           </TurtleButton>
         </Popconfirm>
       </Row>
-    </Modal>
+    </TurtleModal>
   );
 }
 
-export default CreateVendorsModal;
+export default ConnectModal;

@@ -27,7 +27,7 @@ function PageHeader({ title, breadcrumbList, info }: Props) {
           )}
         </Col>
       </Row>
-      <TurtleDivider />
+      <TurtleDivider style={{ margin: 0 }} />
     </>
   );
 }

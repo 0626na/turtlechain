@@ -1,6 +1,6 @@
 import { message, Modal, Pagination, Row, Table } from "antd";
 import { vendorAPI } from "apis";
-import { RequestGetVendorList } from "apis/vendorAPI";
+import { RequestGet } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import { TurtleTableTitle } from "components/common";
 import { t } from "i18next";
@@ -28,7 +28,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   const store = useRecoilValue(storeState);
 
   // 거래처 목록 불러오기 query
-  const [searchQuery, setSearchQuery] = useState<RequestGetVendorList>({
+  const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
     type: "all",
     search_string: "",
@@ -36,9 +36,9 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   });
 
   // 거래처 목록 불러오기 요청
-  const getVendorListQuery = useQuery(
-    ["getVendorList", searchQuery], //
-    () => vendorAPI.getVendorList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
+  const getListQuery = useQuery(
+    ["getVendor", searchQuery], //
+    () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       enabled: visible && !!store.id,
       onError: (error: AxiosError) => {
@@ -72,12 +72,12 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       <Table
         size="small"
         scroll={{ y: "auto" }}
-        loading={getVendorListQuery.isLoading}
-        dataSource={getVendorListQuery.data?.data.vendor_list}
+        loading={getListQuery.isLoading}
+        dataSource={getListQuery.data?.data.vendor_list}
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
-          <TurtleTableTitle count={getVendorListQuery.data?.data.total_count ?? 0}>
+          <TurtleTableTitle count={getListQuery.data?.data.total_count ?? 0}>
             <NewSearchFilter vendor searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </TurtleTableTitle>
         )}
@@ -85,7 +85,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
           <Row justify="center">
             <Pagination
               size="small"
-              total={getVendorListQuery.data?.data.total_count}
+              total={getListQuery.data?.data.total_count}
               showSizeChanger={false}
               current={searchQuery.page}
               onChange={selectPage}

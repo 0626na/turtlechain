@@ -1,4 +1,4 @@
-import { Divider, Form, Input, InputNumber, message, Row, Space } from "antd";
+import { Divider, Form, Input, message, Row, Space } from "antd";
 import { t } from "i18next";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -17,7 +17,6 @@ import {
 } from "components/common";
 import { SearchVendorModal } from "components/combine";
 import { productCartState } from "store/productCartState";
-import { pricePattern } from "utils/pattern";
 
 interface Props {
   visible: boolean;
@@ -103,9 +102,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 16 }}
-          onFinish={(value) => {
-            addProduct(value);
-          }}
+          onFinish={addProduct}
         >
           <Form.Item name="rt_store_id" hidden>
             <Input hidden />

@@ -1,11 +1,11 @@
-import { Form, message, Modal, notification, Popconfirm, Row } from "antd";
+import { Form, message, notification, Popconfirm, Row } from "antd";
 import { bucketListAPI } from "apis";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import { StoreAccountView, StoreAddress } from "apis/bucketListAPI";
+import { StoreAddress } from "apis/bucketListAPI";
 import { t } from "i18next";
-import { TurtleButton, TurtleInput, TurtleQuestionTooltip, TurtleText } from "components/common";
+import { TurtleButton, TurtleDivider, TurtleInput, TurtleModal } from "components/common";
 import { AccountSelect, AddressSelect } from "components/combine";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   closeModal: () => void;
 }
 
-function CreateVendorRequestModal({ visible, closeModal }: Props) {
+function RequestModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
 
   const [selectedAddress, selectAddress] = useState<StoreAddress>({
@@ -22,10 +22,6 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
     col: undefined,
     loc: undefined,
   });
-
-  const [accountList, setAccountList] = useState<Array<StoreAccountView>>([
-    { bank: "", account_number: "", account_holder: "", is_main: true },
-  ]);
 
   const createBucketList = useMutation("createBucketList", bucketListAPI.createBucketList, {
     onError: (error: AxiosError) => {
@@ -36,59 +32,28 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
         type: "success",
         message: "성공적으로 등록하였습니다.",
       });
-      setAccountList([{ bank: "", account_number: "", account_holder: "", is_main: true }]);
       selectAddress({ building: "", floor: "", col: "", loc: "" });
       form.resetFields();
       closeModal();
     },
   });
 
-  const onClickCreate = () => {
-    if (accountList.length !== 1) {
-      const filteredAccountList: Array<StoreAccountView> = accountList;
-      const mainAccount: StoreAccountView | undefined = accountList.find(
-        (account) => account.is_main,
-      );
-      filteredAccountList.filter((account) => !account.is_main);
-      mainAccount && filteredAccountList.unshift(mainAccount);
-      setAccountList(filteredAccountList);
-    }
-
-    form.validateFields().then(() => {
-      createBucketList.mutate({
-        ...form.getFieldsValue(),
-        type: "create",
-        ws_store_id: 0,
-        store_phone: [form.getFieldValue("store_phone")],
-        building: selectedAddress.building,
-        floor: selectedAddress.floor,
-        col: selectedAddress.col,
-        loc: selectedAddress.loc,
-        banks: accountList,
-      });
-    });
-  };
-
   return (
-    <Modal
+    <TurtleModal
       centered
-      width="80%"
-      maskClosable={false}
+      width="520px"
       title={t("vendor.request create")}
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "700px", overflowY: "auto" }}
-      forceRender
     >
       <Form //
-        layout="vertical"
-        labelCol={{ span: 4, offset: 1 }}
-        wrapperCol={{ span: 10, offset: 1 }}
-        colon={false}
+        layout="horizontal"
         form={form}
+        colon={false}
+        labelCol={{ span: 7 }}
+        wrapperCol={{ span: 16 }}
       >
-        <TurtleText>{t("vendor.basic info")}</TurtleText>
         <TurtleInput // 거래처명 검색 Input
           name="name"
           label={t("vendor.name")}
@@ -114,12 +79,9 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
           placeholder={t("placeholder.ext")}
           required={false}
         />
-        <TurtleText>
-          {t("vendor.account info")}
-          <TurtleQuestionTooltip content={t("tooltip.main account info")} />
-        </TurtleText>
-        <AccountSelect accountList={accountList} setAccountList={setAccountList} />
-        <TurtleText>{t("vendor.biz info")}</TurtleText>
+
+        <TurtleDivider />
+
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
           label={t("biz.num")}
@@ -139,23 +101,37 @@ function CreateVendorRequestModal({ visible, closeModal }: Props) {
           required={false}
         />
         <Row justify="end">
-          <Form.Item>
-            <Popconfirm
-              title={t("description.really register")}
-              okText={t("yes")}
-              cancelText={t("no")}
-              onConfirm={onClickCreate}
+          <Popconfirm
+            title={t("description.really register")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            onConfirm={() => {
+              form.validateFields().then(() => {
+                createBucketList.mutate({
+                  ...form.getFieldsValue(),
+                  type: "create",
+                  ws_store_id: 0,
+                  store_phone: [form.getFieldValue("store_phone")],
+                  building: selectedAddress.building,
+                  floor: selectedAddress.floor,
+                  col: selectedAddress.col,
+                  loc: selectedAddress.loc,
+                  // banks: accountList,
+                });
+              });
+            }}
+          >
+            <TurtleButton // 등록 요청하기 Button
+              type="default"
+              htmlType="submit"
             >
-              <TurtleButton // 등록 요청하기 Button
-              >
-                {t("button.request create")}
-              </TurtleButton>
-            </Popconfirm>
-          </Form.Item>
+              {t("button.request create")}
+            </TurtleButton>
+          </Popconfirm>
         </Row>
       </Form>
-    </Modal>
+    </TurtleModal>
   );
 }
 
-export default CreateVendorRequestModal;
+export default RequestModal;

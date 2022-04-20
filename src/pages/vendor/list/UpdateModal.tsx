@@ -12,7 +12,7 @@ interface Props {
   selectedRow?: Vendor;
 }
 
-function VendorUpdateModal({ visible, closeModal }: Props) {
+function UpdateModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
 
   const [selectedAddress, selectAddress] = useState<StoreAddress>({
@@ -98,4 +98,4 @@ function VendorUpdateModal({ visible, closeModal }: Props) {
   );
 }
 
-export default VendorUpdateModal;
+export default UpdateModal;

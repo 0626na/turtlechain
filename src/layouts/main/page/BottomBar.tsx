@@ -1,13 +1,15 @@
 import { Row } from "antd";
 
 interface Props {
+  justify?: "space-between" | "end";
   children: React.ReactNode;
 }
 
-function BottomBar({ children }: Props) {
+function BottomBar({ justify = "end", children }: Props) {
   return (
     <Row
-      justify="end"
+      align="middle"
+      justify={justify}
       style={{
         paddingTop: 20,
         paddingBottom: 20,

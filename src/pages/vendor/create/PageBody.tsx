@@ -1,48 +1,58 @@
-import { Form, Input, message, notification, Popconfirm, Row, Space, Switch } from "antd";
+import {
+  Col,
+  Form,
+  Input,
+  message,
+  notification,
+  Popconfirm,
+  Space,
+  Switch,
+  Typography,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { vendorAPI } from "apis";
-import { Wholesale } from "apis/vendorAPI";
+import { WholesaleShow } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import {
   TurtleButton,
   TurtleButtonSub,
   TurtleInput,
   TurtleSearchInput,
-  TurtleText,
   TurtleTextArea,
 } from "components/common";
+import { useStoreExist } from "hooks";
 import { t } from "i18next";
-import { MenuBar } from "layouts/main";
-import { useEffect, useState } from "react";
+import { BottomBar, MenuBar } from "layouts/main";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
-import ConnectProgramModal from "./ConnectProgramModal";
-import CreateBulkVendorModal from "./CreateBulkVendorModal";
-import CreateVendorRequestModal from "./CreateVendorRequestModal";
-import SearchWholesaleModal from "./SearchWholesaleModal";
+import ConnectModal from "./ConnectModal";
+import ExcelModal from "./ExcelModal";
+import RequestModal from "./RequestModal";
+import SearchModal from "./SearchModal";
 
-function CreateVendorForm() {
+function PageBody() {
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
-  // 선택된 거래처
-  const [selectedVendor, selectVendor] = useState<Wholesale>();
-  // createVendor 요청 data 담을 객체
+  const isStoreExist = useStoreExist();
   const [form] = useForm();
+  // 선택된 거래처
+  const [selectedVendor, selectVendor] = useState<WholesaleShow>();
+  // 재고관리 연동 모달
+  const [connectModalVisible, setConnectModalVisible] = useState(false);
   // 대량등록 모달
-  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [excelModalVisible, setExcelModalVisible] = useState(false);
   // 거래처 검색 모달
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   // 거래처 신규 등록 요청 모달
   const [requestModalVisible, setRequestModalVisible] = useState(false);
-  // 재고관리 연동 모달
-  const [connectModalVisible, setConnectModalVisible] = useState(false);
 
   // 거래처 코드 생성 요청
-  const createVendorCode = useQuery(
-    "createVendorCode",
+  const getCodeQuery = useQuery(
+    "getVendorCode",
     () =>
-      vendorAPI.createVendorCode({
+      vendorAPI.getCode({
         rt_store_id: store.id ?? -1,
         ws_store_id: selectedVendor?.id ?? -1,
       }),
@@ -58,7 +68,7 @@ function CreateVendorForm() {
   );
 
   // 거래처 생성 요청
-  const createVendorQuery = useMutation(["createVendor"], vendorAPI.createVendor, {
+  const createQuery = useMutation(["createVendor"], vendorAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -79,6 +89,7 @@ function CreateVendorForm() {
         id: -1,
         name: "",
         phone: "",
+        address: "",
         store_account: [],
         store_phone: [],
         company: [],
@@ -110,19 +121,18 @@ function CreateVendorForm() {
 
   // 코드 만들기 Button 클릭
   const clickCreateVendorCode = () => {
-    if (!store.id) {
-      message.warn("쇼핑몰을 선택해 주세요");
+    if (!isStoreExist()) {
       return;
     }
     if (!selectedVendor || selectedVendor.id === -1) {
       message.warn("거래처를 선택해 주세요");
       return;
     }
-    createVendorCode.refetch();
+    getCodeQuery.refetch();
   };
 
   // 거래처 선택후 폼에 채워넣기
-  const fillVendor = (vendor: Wholesale) => {
+  const fillVendor = (vendor: WholesaleShow) => {
     selectVendor(vendor);
     form.setFieldsValue({
       ...form.getFieldsValue(),
@@ -143,42 +153,47 @@ function CreateVendorForm() {
     closeSearchModal();
   };
 
-  // 거래처 등록 버튼 클릭
-  const onClickCreate = () => {
-    if (!form.getFieldValue("ws_store_id")) {
-      message.warning("거래처를 선택해 주세요");
+  const openConnectModal = useCallback(() => {
+    if (!isStoreExist()) {
       return;
     }
-    form.validateFields().then(() => {
-      createVendorQuery.mutate([{ ...form.getFieldsValue() }]);
-    });
-  };
+    setConnectModalVisible(true);
+  }, [setConnectModalVisible, isStoreExist]);
+
+  const openExcelModal = useCallback(() => {
+    if (!isStoreExist()) {
+      return;
+    }
+    setExcelModalVisible(true);
+  }, [setExcelModalVisible, isStoreExist]);
+
+  const openSearchModal = useCallback(() => {
+    if (!isStoreExist()) {
+      return;
+    }
+    setSearchModalVisible(true);
+  }, [setSearchModalVisible, isStoreExist]);
+
+  const openRequestModal = useCallback(() => {
+    if (!isStoreExist()) {
+      return;
+    }
+    setRequestModalVisible(true);
+  }, [setRequestModalVisible, isStoreExist]);
 
   return (
     <>
-      <MenuBar>
+      <MenuBar isWarning>
         <TurtleButtonSub // 재고프로그램 연동 Button
           type="primary"
           color="skyblue"
-          onClick={() => {
-            if (!store.id) {
-              message.warn("쇼핑몰을 선택해주세요.");
-              return;
-            }
-            setConnectModalVisible(true);
-          }}
+          onClick={openConnectModal}
         >
           {t("button.connect external program")}
         </TurtleButtonSub>
         <TurtleButtonSub // 거래처 대량 등록 Button
           icon="file"
-          onClick={() => {
-            if (!store.id) {
-              message.warn("쇼핑몰을 선택해주세요.");
-              return;
-            }
-            setCreateModalVisible(true);
-          }}
+          onClick={openExcelModal}
         >
           {t("button.create bulk vendor")}
         </TurtleButtonSub>
@@ -191,7 +206,7 @@ function CreateVendorForm() {
         wrapperCol={{ span: 7 }}
         colon={false}
       >
-        <TurtleText>{t("vendor.basic info")}</TurtleText>
+        <Typography.Title level={4}>{t("vendor.basic info")}</Typography.Title>
         <Form.Item name="rt_store_id" hidden>
           <Input hidden />
         </Form.Item>
@@ -215,20 +230,14 @@ function CreateVendorForm() {
           value={selectedVendor?.name}
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
-          onClick={() => {
-            if (!store.id) {
-              message.warn("쇼핑몰을 선택해주세요.");
-              return;
-            }
-            setSearchModalVisible(true);
-          }}
+          onClick={openSearchModal}
         />
 
         <TurtleInput // 거래처 매장번호 Input
           label={t("vendor.phone")}
           disabled={true}
           value={selectedVendor?.phone}
-          required={false}
+          required={true}
         />
         <TurtleInput // 휴대번호 선택 Input
           value={selectedVendor?.store_phone[0]?.phone}
@@ -266,10 +275,10 @@ function CreateVendorForm() {
           value={selectedVendor?.ext}
           label={t("vendor.ext")}
           disabled={true}
-          required={false}
+          required={true}
         />
 
-        <TurtleText>{t("vendor.account info")}</TurtleText>
+        <Typography.Title level={4}>{t("vendor.account info")}</Typography.Title>
         <TurtleInput // 은행명 Input
           value={selectedVendor?.store_account[0]?.bank}
           label={t("vendor.account bank")}
@@ -284,10 +293,10 @@ function CreateVendorForm() {
           value={selectedVendor?.store_account[0]?.account_holder}
           label={t("vendor.account holder")}
           disabled={true}
-          required={false}
+          required={true}
         />
 
-        <TurtleText>{t("vendor.additional info")}</TurtleText>
+        <Typography.Title level={4}>{t("vendor.additional info")}</Typography.Title>
         <Form.Item // 거래처 코드 Input
           label={t("vendor.code")}
           required={true}
@@ -326,7 +335,7 @@ function CreateVendorForm() {
           rows={5}
         />
 
-        <TurtleText>{t("vendor.biz info")}</TurtleText>
+        <Typography.Title level={4}>{t("vendor.biz info")}</Typography.Title>
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
           label={t("biz.num")}
@@ -345,58 +354,60 @@ function CreateVendorForm() {
           placeholder={t("placeholder.biz owner")}
           required={false}
         />
-
-        <Row justify="end" style={{ padding: "1rem 0px" }}>
-          {/* <TurtleText>
-            등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!{" "}
-            <span
-              style={{ color: "#033A88", cursor: "pointer", textDecoration: "underline" }}
-              onClick={() => {
-                setRequestModalVisible(true);
-              }}
-            >
-              신규 등록 요청하기 {">"}
-            </span>
-          </TurtleText> */}
-          <Popconfirm
-            title={t("description.really register")}
-            okText={t("yes")}
-            cancelText={t("no")}
-            onConfirm={onClickCreate}
-          >
-            <TurtleButton // 거래처 등록 Button
-              type="primary"
-              disabled={!store.id}
-              loading={createVendorQuery.isLoading}
-            >
-              {t("vendor.create")}
-            </TurtleButton>
-          </Popconfirm>
-        </Row>
       </Form>
 
+      <BottomBar justify="space-between">
+        <Col>
+          <Typography.Text>
+            등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!&nbsp;
+          </Typography.Text>
+          <Typography.Link style={{ textDecoration: "underline" }} onClick={openRequestModal}>
+            신규 거래처 등록하기
+          </Typography.Link>
+        </Col>
+
+        <Popconfirm
+          title={t("description.really register")}
+          okText={t("yes")}
+          cancelText={t("no")}
+          onConfirm={() => {
+            form.validateFields().then(() => {
+              createQuery.mutate([{ ...form.getFieldsValue() }]);
+            });
+          }}
+        >
+          <TurtleButton // 거래처 등록 Button
+            type="primary"
+            disabled={!store.id}
+            loading={createQuery.isLoading}
+          >
+            {t("vendor.create")}
+          </TurtleButton>
+        </Popconfirm>
+      </BottomBar>
+
       {/* 거래처 재고연동 모달 */}
-      <ConnectProgramModal
+      <ConnectModal
         visible={connectModalVisible}
         closeModal={() => {
           setConnectModalVisible(false);
         }}
       />
       {/* 거래처 대량등록 모달 */}
-      <CreateBulkVendorModal
-        visible={createModalVisible}
+      <ExcelModal
+        visible={excelModalVisible}
         closeModal={() => {
-          setCreateModalVisible(false);
+          setExcelModalVisible(false);
         }}
       />
       {/* master 도매 검색 모달 */}
-      <SearchWholesaleModal //
+      <SearchModal //
         visible={searchModalVisible}
         closeModal={closeSearchModal}
         selectRow={fillVendor}
       />
       {/* 거래처 신규 등록 요청 모달 */}
-      <CreateVendorRequestModal //
+      <RequestModal //
         visible={requestModalVisible}
         closeModal={() => {
           setRequestModalVisible(false);
@@ -406,4 +417,4 @@ function CreateVendorForm() {
   );
 }
 
-export default CreateVendorForm;
+export default PageBody;
