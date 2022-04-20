@@ -135,7 +135,7 @@ function ClearingChartCard() {
     datasets: storeList.map((store, index) => ({
       label: store,
       data: labels.map((day) => {
-        if (day >= parseInt(moment().format("D"))) {
+        if (day > parseInt(moment().format("D"))) {
           return;
         }
         return getSheetQuery.data?.data.sheet_list
@@ -180,7 +180,9 @@ function ClearingChartCard() {
             ))}
           </Space>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">&nbsp;&nbsp;{moment().format("MM")}월</Typography.Text>
+          <Typography.Text type="secondary">
+            &nbsp;&nbsp;{moment().format("YYYY-MM")}
+          </Typography.Text>
         </Col>
       </Row>
       <Row>

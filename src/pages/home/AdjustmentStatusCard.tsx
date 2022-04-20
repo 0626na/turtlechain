@@ -1,8 +1,9 @@
+import React from "react";
+import { t } from "i18next";
 import { Card, Col, Divider, Row, Tag, Typography } from "antd";
 import { adjustmentAPI } from "apis";
-import { TurtleCard, TurtleCardHome, TurtleDivider } from "components/common";
+import { TurtleCardHome } from "components/common";
 import moment from "moment";
-import { t } from "i18next";
 import { useQuery } from "react-query";
 import Meta from "antd/lib/card/Meta";
 
@@ -20,7 +21,7 @@ function AdjustmentStatusCard() {
     <TurtleCardHome>
       <Row justify="space-between" style={{ paddingBottom: 24 }}>
         <Col>
-          <Typography.Title level={5}>매입조정 현황</Typography.Title>
+          <Typography.Title style={{ fontSize: 18 }}>매입조정 현황</Typography.Title>
         </Col>
         <Col>
           <Typography.Text type="secondary">{moment().format("YYYY-MM")}</Typography.Text>
@@ -42,8 +43,8 @@ function AdjustmentStatusCard() {
             price: getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0,
           },
         ].map(({ color, title, count, price }, index) => (
-          <>
-            <Col span={11} key={index}>
+          <React.Fragment key={index}>
+            <Col span={11}>
               <Card size="small" bordered={false}>
                 <Row justify="center">
                   <Tag color={color} style={{ margin: 4 }}>
@@ -63,7 +64,7 @@ function AdjustmentStatusCard() {
               </Card>
             </Col>
             {index === 0 && <Divider type="vertical" style={{ height: 50, color: "#DCE0E4" }} />}
-          </>
+          </React.Fragment>
         ))}
       </Row>
     </TurtleCardHome>

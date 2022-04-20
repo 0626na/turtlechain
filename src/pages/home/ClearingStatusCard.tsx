@@ -27,7 +27,7 @@ function ClearingStatusCard() {
     <TurtleCardHome>
       <Row justify="space-between">
         <Col>
-          <Typography.Title level={5} style={{ marginBottom: 16 }}>
+          <Typography.Title style={{ marginBottom: 16, fontSize: 18 }}>
             정산처리 현황
           </Typography.Title>
         </Col>

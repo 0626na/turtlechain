@@ -7,7 +7,12 @@ function TurtleCardHome({ ...props }: Props) {
   return (
     <StyledCard
       {...props}
-      style={{ width: "100%", height: "100%", borderRadius: 8 }}
+      style={{
+        width: "100%",
+        height: "100%",
+        borderRadius: 8,
+        boxShadow: "0px 3px 28px rgba(0, 0, 0, 0.05)",
+      }}
       bordered={false}
     />
   );
