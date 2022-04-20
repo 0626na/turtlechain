@@ -30,6 +30,7 @@ function ClearingChartCard() {
         start_date: moment().startOf("month").format("YYYY-MM-DD"),
         end_date: moment().endOf("month").format("YYYY-MM-DD"),
         status: "complete",
+        page_size: 1000,
       }),
     {
       onError: (err: AxiosError) => {

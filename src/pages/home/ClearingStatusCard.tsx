@@ -14,6 +14,7 @@ function ClearingStatusCard() {
         start_date: moment().startOf("month").format("YYYY-MM-DD"),
         end_date: moment().endOf("month").format("YYYY-MM-DD"),
         status: "all",
+        page_size: 1000,
       }),
     {
       onError: (err: AxiosError) => {
