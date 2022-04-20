@@ -1,5 +1,6 @@
-import { Col, message, Row, Space, Typography } from "antd";
+import { Badge, Col, message, Row, Space, Typography } from "antd";
 import { clearingAPI } from "apis";
+import { ClearingSheetShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
 import {
   Chart as ChartJS,
@@ -13,14 +14,14 @@ import {
 } from "chart.js";
 import { TurtleCardHome } from "components/common";
 import moment from "moment";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "react-query";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function ClearingChartCard() {
-  const [storeList, setStoreList] = useState([]);
+  const [storeList, setStoreList] = useState<string[]>([]);
 
   const getSheetQuery = useQuery(
     ["getClearingSheet"],
@@ -35,38 +36,94 @@ function ClearingChartCard() {
         message.warn(err.response?.data.msg);
       },
       onSuccess: (data) => {
-        console.log(data.data);
-        const set = new Set();
-        data.data.sheet_list.forEach((sheet) => {
-          set.add(sheet.store_name);
-        });
-        // setStoreList();
+        findStore(data.data.sheet_list);
       },
     },
   );
 
+  const findStore = useCallback((sheet_list: ClearingSheetShow[]) => {
+    const set = new Set<string>();
+    sheet_list.forEach((sheet) => {
+      set.add(sheet.store_name);
+    });
+    setStoreList(Array.from(set));
+  }, []);
+
   const options = {
+    grouped: true,
+    interaction: {
+      mode: "index" as "index",
+    },
     responsive: true,
     plugins: {
       legend: {
-        display: false,
+        usePointStyle: true,
+        padding: 10,
+        font: {
+          // 범례의 폰트 스타일도 지정할 수 있습니다.
+          family: "'Noto Sans KR', 'serif'",
+          lineHeight: 1,
+        },
+        display: true,
+      },
+      tooltip: {
+        backgroundColor: "rgba(124, 35, 35, 0.4)",
+        padding: 10,
+        bodySpacing: 5,
+        usePointStyle: true,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          tickLength: 1,
+        },
+        axis: "x" as "x",
+      },
+      y: {
+        grid: {
+          display: true,
+          drawTicks: false,
+        },
+        afterDataLimits: (scale: any) => {
+          scale.max = scale.max * 1.1;
+        },
+        display: true,
       },
     },
   };
+
+  const colors = ["#13BC9E", "#139EBC", "#4B70D0"];
 
   const labels = Array.from({ length: moment().endOf("month").get("date") }, (v, i) => i + 1);
 
   const data = {
     labels,
-    datasets: [
-      {
-        label: "test1",
-        data: labels.map((data) => Math.random() * 1000),
-        borderColor: "#13BC9E",
-        backgroundColor: "white",
-        pointRadius: 0,
-      },
-    ],
+    datasets: storeList.map((store, index) => ({
+      label: store,
+      data: labels.map((day) => {
+        if (day >= parseInt(moment().format("D"))) {
+          return;
+        }
+        return getSheetQuery.data?.data.sheet_list
+          .filter(
+            ({ complete_date, store_name }) =>
+              complete_date ===
+                moment()
+                  .startOf("month")
+                  .add(day - 1, "day")
+                  .format("YYYY-MM-DD") && store_name === store,
+          )
+          .map(({ clearing_total_price }) => clearing_total_price)
+          .reduce((cur, acc) => cur + acc, 0);
+      }),
+      borderColor: colors[index],
+      borderWidth: 2,
+      backgroundColor: colors[index],
+      pointRadius: 0,
+    })),
   };
 
   return (
@@ -81,10 +138,17 @@ function ClearingChartCard() {
           </Space>
         </Col>
         <Col>
-          <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
+          <Space size="large" align="center">
+            {storeList.map((store, index) => (
+              <Badge key={store} color={colors[index]} text={store} />
+            ))}
+            <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
+          </Space>
         </Col>
       </Row>
-      <Row>{/* <Line options={options} data={data} /> */}</Row>
+      <Row>
+        <Line options={options} data={data} height={60} />
+      </Row>
     </TurtleCardHome>
   );
 }

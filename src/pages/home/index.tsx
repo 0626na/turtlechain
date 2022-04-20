@@ -23,10 +23,10 @@ const HomePage = function () {
         <ClearingStatusCard />
       </Row>
       <Row gutter={12}>
-        <Col span={6}>
+        <Col span={7}>
           <AdjustmentStatusCard />
         </Col>
-        <Col span={18}>
+        <Col span={17}>
           <ClearingChartCard />
         </Col>
       </Row>
