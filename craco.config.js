@@ -82,6 +82,9 @@ module.exports = {
 
               // Message
               "@message-notice-content-bg": "#090A0ED9",
+
+              // Badge
+              "@badge-status-size": "8px",
             },
             javascriptEnabled: true,
           },

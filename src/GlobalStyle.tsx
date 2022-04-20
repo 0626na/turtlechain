@@ -52,6 +52,12 @@ const GlobalStyle = createGlobalStyle`
     color: #FFFFFF !important;
   }
 
+  /* badge status 마진값 제거 */
+  .ant-badge-status-text {
+    margin-left: 4px;
+    color: #5B5D63;
+  }
+
 `;
 
 export default GlobalStyle;

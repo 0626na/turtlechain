@@ -23,11 +23,11 @@ function AdjustmentStatusCard() {
           <Typography.Title level={5}>매입조정 현황</Typography.Title>
         </Col>
         <Col>
-          <Typography.Text type="secondary">{moment().format("MM")}월</Typography.Text>
+          <Typography.Text type="secondary">{moment().format("YYYY-MM")}</Typography.Text>
         </Col>
       </Row>
 
-      <Row style={{ marginTop: 35 }} align="middle">
+      <Row style={{ marginTop: 12, marginBottom: 30 }} align="middle">
         {[
           {
             color: "orange",
@@ -53,7 +53,8 @@ function AdjustmentStatusCard() {
                 <Meta
                   title={
                     <>
-                      <span style={{ fontSize: 24 }}>{count ?? 0}</span>건
+                      <span style={{ fontSize: 40 }}>{count ?? 0}</span>
+                      <span style={{ fontSize: 20, marginLeft: 4 }}>건</span>
                     </>
                   }
                   description={`${(price ?? 0).toLocaleString()}원`}

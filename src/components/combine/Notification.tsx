@@ -1,4 +1,4 @@
-import { Col, message, Popover, Row, Space, Typography } from "antd";
+import { Col, Divider, message, Popover, Row, Space, Typography } from "antd";
 import styled from "styled-components";
 import { BellOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
@@ -30,10 +30,13 @@ function Notification() {
                   <br /> 확인 후 정확한 세부 정보를 선택해주세요
                 </Col>
                 <Col>
-                  <Typography.Text style={{ color: "#00B594", cursor: "pointer" }}>
-                    거래처 정보 확인 &nbsp;
+                  <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>
+                    거래처 정보 확인
                   </Typography.Text>
-                  <Typography.Text type="secondary">| &nbsp;2021-02-21 오전 09:32</Typography.Text>
+                  <Divider type="vertical" />
+                  <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+                    2021-02-21 오전 09:32
+                  </Typography.Text>
                 </Col>
               </Space>
             </Row>
@@ -45,10 +48,13 @@ function Notification() {
                 <br /> 확인 후 정확한 세부 정보를 선택해주세요
               </Col>
               <Col>
-                <Typography.Text style={{ color: "#00B594", cursor: "pointer" }}>
-                  거래처 정보 확인 &nbsp;
+                <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>
+                  거래처 정보 확인
                 </Typography.Text>
-                <Typography.Text type="secondary">| &nbsp;2021-02-21 오전 09:32</Typography.Text>
+                <Divider type="vertical" />
+                <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+                  2021-02-21 오전 09:32
+                </Typography.Text>
               </Col>
             </Space>
           </Row>

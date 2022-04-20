@@ -14,6 +14,7 @@ function ClearingStatusCard() {
         start_date: moment().startOf("month").format("YYYY-MM-DD"),
         end_date: moment().endOf("month").format("YYYY-MM-DD"),
         status: "all",
+        page_size: 1000,
       }),
     {
       onError: (err: AxiosError) => {
@@ -24,22 +25,22 @@ function ClearingStatusCard() {
 
   return (
     <TurtleCardHome>
+      <Row justify="space-between">
+        <Col>
+          <Typography.Title level={5} style={{ marginBottom: 16 }}>
+            정산처리 현황
+          </Typography.Title>
+        </Col>
+        <Col>
+          <Typography.Text type="secondary">{moment().format("YYYY-MM")}</Typography.Text>
+        </Col>
+      </Row>
       <Table
         size="small"
         loading={getSheetQuery.isLoading}
         dataSource={getSheetQuery.data?.data.sheet_list}
         rowKey={(record) => record.id}
         pagination={{ position: ["bottomRight"], showSizeChanger: false, defaultPageSize: 3 }}
-        title={() => (
-          <Row justify="space-between">
-            <Col>
-              <Typography.Title level={5}>정산처리 현황</Typography.Title>
-            </Col>
-            <Col>
-              <Typography.Text type="secondary">{moment().format("MM")}월</Typography.Text>
-            </Col>
-          </Row>
-        )}
         columns={[
           {
             ellipsis: true,
