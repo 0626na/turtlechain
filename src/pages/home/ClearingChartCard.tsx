@@ -1,4 +1,4 @@
-import { Badge, Col, message, Row, Space, Typography } from "antd";
+import { Badge, Col, Divider, message, Row, Space, Typography } from "antd";
 import { clearingAPI } from "apis";
 import { ClearingSheetShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
@@ -57,28 +57,35 @@ function ClearingChartCard() {
     responsive: true,
     plugins: {
       legend: {
-        usePointStyle: true,
-        padding: 10,
-        font: {
-          // 범례의 폰트 스타일도 지정할 수 있습니다.
-          family: "'Noto Sans KR', 'serif'",
-          lineHeight: 1,
+        display: false,
+        labels: {
+          usePointStyle: true,
+          padding: 10,
+          font: {
+            // 범례의 폰트 스타일도 지정할 수 있습니다.
+            family: "'Noto Sans KR', 'serif'",
+            lineHeight: 1,
+          },
+          display: true,
         },
-        display: true,
       },
       tooltip: {
-        backgroundColor: "rgba(124, 35, 35, 0.4)",
+        backgroundColor: "black",
         padding: 10,
         bodySpacing: 5,
         usePointStyle: true,
+        callbacks: {
+          title: (context: any) => moment().set("date", context[0].label).format("YYYY-MM-DD"),
+        },
       },
     },
     scales: {
       x: {
         grid: {
-          display: false,
+          display: true,
           drawTicks: false,
           tickLength: 1,
+          color: "#EDEFF1",
         },
         axis: "x" as "x",
       },
@@ -86,6 +93,7 @@ function ClearingChartCard() {
         grid: {
           display: true,
           drawTicks: false,
+          color: "#EDEFF1",
         },
         afterDataLimits: (scale: any) => {
           scale.max = scale.max * 1.1;
@@ -122,7 +130,7 @@ function ClearingChartCard() {
       borderColor: colors[index],
       borderWidth: 2,
       backgroundColor: colors[index],
-      pointRadius: 0,
+      pointRadius: 2,
     })),
   };
 
@@ -138,12 +146,15 @@ function ClearingChartCard() {
           </Space>
         </Col>
         <Col>
-          <Space size="large" align="center">
+          <Space size="middle" align="center" style={{ marginRight: 20 }}>
             {storeList.map((store, index) => (
               <Badge key={store} color={colors[index]} text={store} />
             ))}
-            <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
           </Space>
+          <Divider type="vertical" />
+          <Typography.Text type="secondary">
+            &nbsp;&nbsp;&nbsp;&nbsp;{moment().format("MM")}월
+          </Typography.Text>
         </Col>
       </Row>
       <Row>

@@ -36,7 +36,7 @@ function ClearingStatusCard() {
               <Typography.Title level={5}>정산처리 현황</Typography.Title>
             </Col>
             <Col>
-              <Typography.Text type="secondary">{moment().format("MM")} 월</Typography.Text>
+              <Typography.Text type="secondary">{moment().format("MM")}월</Typography.Text>
             </Col>
           </Row>
         )}
