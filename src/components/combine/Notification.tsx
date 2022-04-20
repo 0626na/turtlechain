@@ -22,8 +22,8 @@ function Notification() {
       trigger="click"
       content={
         <>
-          <div style={{ backgroundColor: "#F1FAF8" }}>
-            <Row style={{ borderBottom: "1px solid #DCE0E4", padding: "12px 20px" }}>
+          <div style={{ backgroundColor: "#F4FEFC" }}>
+            <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
               <Space direction="vertical">
                 <Col>
                   요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
@@ -38,7 +38,7 @@ function Notification() {
               </Space>
             </Row>
           </div>
-          <Row style={{ borderBottom: "1px solid #DCE0E4", padding: "12px 20px" }}>
+          <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
             <Space direction="vertical">
               <Col>
                 요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
@@ -53,7 +53,7 @@ function Notification() {
             </Space>
           </Row>
           <Row
-            style={{ backgroundColor: "#DCE0E4", height: 40, cursor: "pointer" }}
+            style={{ backgroundColor: "#F8F9FB", height: 40, cursor: "pointer" }}
             justify="center"
             align="middle"
             onClick={() => {
