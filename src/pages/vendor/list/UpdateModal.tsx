@@ -1,10 +1,7 @@
 import { Form, Modal, Row } from "antd";
 import { Vendor } from "apis/vendorAPI";
-import { useState } from "react";
-import { StoreAccountView, StoreAddress } from "apis/bucketListAPI";
 import { t } from "i18next";
 import { TurtleButton, TurtleInput, TurtleQuestionTooltip, TurtleText } from "components/common";
-import { AccountSelect, AddressSelect, PhoneSelect } from "components/combine";
 
 interface Props {
   visible: boolean;
@@ -14,19 +11,6 @@ interface Props {
 
 function UpdateModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
-
-  const [selectedAddress, selectAddress] = useState<StoreAddress>({
-    building: "",
-    floor: "",
-    col: "",
-    loc: "",
-  });
-
-  const [accountList, setAccountList] = useState<Array<StoreAccountView>>([
-    { bank: "", account_number: "", account_holder: "", is_main: true },
-  ]);
-
-  const [storePhoneList, setStorePhoneList] = useState<Array<string>>([""]);
 
   return (
     <Modal
@@ -66,8 +50,6 @@ function UpdateModal({ visible, closeModal }: Props) {
           placeholder={t("placeholder.phone")}
           required={false}
         />
-        <PhoneSelect phoneList={storePhoneList} setPhoneList={setStorePhoneList} />
-        <AddressSelect selectedAddress={selectedAddress} selectAddress={selectAddress} />
         <TurtleInput // 기타 주소 Input
           name="ext"
           label={t("vendor.ext")}
@@ -85,7 +67,6 @@ function UpdateModal({ visible, closeModal }: Props) {
           {t("vendor.account info")}
           <TurtleQuestionTooltip content={t("tooltip.main account info")} />
         </TurtleText>
-        <AccountSelect accountList={accountList} setAccountList={setAccountList} />
         <Row justify="center">
           <Form.Item>
             <TurtleButton onClick={() => {}} disabled={true}>

@@ -1,12 +1,10 @@
-import { Form, message, notification, Popconfirm, Row } from "antd";
+import { Form, Input, message, notification, Popconfirm, Row, Select } from "antd";
 import { bucketListAPI } from "apis";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
-import { useState } from "react";
-import { StoreAddress } from "apis/bucketListAPI";
 import { t } from "i18next";
 import { TurtleButton, TurtleDivider, TurtleInput, TurtleModal } from "components/common";
-import { AccountSelect, AddressSelect } from "components/combine";
+import { RequestCreate } from "apis/bucketListAPI";
 
 interface Props {
   visible: boolean;
@@ -14,16 +12,9 @@ interface Props {
 }
 
 function RequestModal({ visible, closeModal }: Props) {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<RequestCreate>();
 
-  const [selectedAddress, selectAddress] = useState<StoreAddress>({
-    building: undefined,
-    floor: undefined,
-    col: undefined,
-    loc: undefined,
-  });
-
-  const createBucketList = useMutation("createBucketList", bucketListAPI.createBucketList, {
+  const createQuery = useMutation("createBucketList", bucketListAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -32,7 +23,6 @@ function RequestModal({ visible, closeModal }: Props) {
         type: "success",
         message: "성공적으로 등록하였습니다.",
       });
-      selectAddress({ building: "", floor: "", col: "", loc: "" });
       form.resetFields();
       closeModal();
     },
@@ -61,18 +51,32 @@ function RequestModal({ visible, closeModal }: Props) {
           required={true}
         />
         <TurtleInput // 거래처 매장번호 Input
-          name="phone"
+          name="tel"
           label={t("vendor.phone")}
           placeholder={t("placeholder.phone")}
           required={true}
         />
         <TurtleInput // 거래처 휴대번호 Input
-          name="store_phone"
+          name="mobile"
           label={t("vendor.store phone")}
           placeholder={t("placeholder.store phone")}
           required={true}
         />
-        <AddressSelect selectedAddress={selectedAddress} selectAddress={selectAddress} />
+
+        <Form.Item label={t("vendor.address")} required={true}>
+          <Input.Group compact>
+            <Form.Item noStyle>
+              <Select style={{ width: "34%" }} />
+            </Form.Item>
+            <Form.Item noStyle>
+              <Select style={{ width: "33%" }} />
+            </Form.Item>
+            <Form.Item noStyle>
+              <Select style={{ width: "33%" }} />
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
+
         <TurtleInput // 기타 주소 Input
           name="ext"
           label={t("vendor.ext")}
@@ -107,17 +111,17 @@ function RequestModal({ visible, closeModal }: Props) {
             cancelText={t("no")}
             onConfirm={() => {
               form.validateFields().then(() => {
-                createBucketList.mutate({
-                  ...form.getFieldsValue(),
-                  type: "create",
-                  ws_store_id: 0,
-                  store_phone: [form.getFieldValue("store_phone")],
-                  building: selectedAddress.building,
-                  floor: selectedAddress.floor,
-                  col: selectedAddress.col,
-                  loc: selectedAddress.loc,
-                  // banks: accountList,
-                });
+                // createBucketList.mutate({
+                //   ...form.getFieldsValue(),
+                //   type: "create",
+                //   ws_store_id: 0,
+                //   store_phone: [form.getFieldValue("store_phone")],
+                //   building: selectedAddress.building,
+                //   floor: selectedAddress.floor,
+                //   col: selectedAddress.col,
+                //   loc: selectedAddress.loc,
+                //   // banks: accountList,
+                // });
               });
             }}
           >

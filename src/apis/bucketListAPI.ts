@@ -1,35 +1,18 @@
 import { v2Axios } from "./index";
-
-export interface StoreAccount {
-  bank: string;
-  account_number: string;
-  account_holder: string;
-}
-
-export interface StoreAccountView extends StoreAccount {
-  is_main: boolean;
-}
-
-export interface StoreAddress {
-  building?: string;
-  floor?: string;
-  col?: string;
-  loc?: string;
-}
+import { VendorAccount } from "./vendorAPI";
 
 // Request: 거래처 버킷 리스트 생성
-export interface RequestCreateBucketList {
+export interface RequestCreate {
+  type: "update" | "create";
   name: string;
-  phone: string;
-  store_phone: Array<string>;
-  banks: Array<StoreAccount>;
+  tel: string;
+  mobile: string;
+  banks: Array<VendorAccount>;
   building: string;
   floor: string;
   col: string;
   loc: string;
   ext: string;
-  type: "update" | "create";
-  ws_store_id: number;
   memo: string;
   biz_name: string;
   biz_num: number;
@@ -37,20 +20,20 @@ export interface RequestCreateBucketList {
 }
 
 // Response: 거래처 버킷 리스트 생성
-export interface ResponseCreateBucketList {
+export interface ResponseCreate {
   msg: string;
   data: null;
 }
 
 // 거래처 버킷 리스트 생성
-const createBucketList = async function (data: RequestCreateBucketList) {
-  const url = `provisioning/store_bucketlist`;
-  const response = await v2Axios.post<ResponseCreateBucketList>(url, data);
+const create = async function (data: RequestCreate) {
+  const url = `provisioning/store-bucketlist`;
+  const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };
 
 const bucketListAPI = {
-  createBucketList,
+  create,
 };
 
 export default bucketListAPI;

@@ -1,5 +1,3 @@
-import AccountSelect from "./AccountSelect";
-import AddressSelect from "./AddressSelect";
 import ConnectExternalModal from "./ConnectExternalModal";
 import DaumPostcodeModal from "./DaumPostcodeModal";
 import PhoneAuthModal from "./PhoneAuthModal";
@@ -14,8 +12,6 @@ import NewSearchFilter from "./NewSearchFilter";
 import Notification from "./Notification";
 
 export {
-  AccountSelect,
-  AddressSelect,
   ConnectExternalModal,
   DaumPostcodeModal,
   PhoneAuthModal,
