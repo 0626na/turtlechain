@@ -85,7 +85,12 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
             name="address"
             value={company.address_main}
             suffix={
-              <Button type="link" onClick={() => setVisiblePostcodeModal(true)}>
+              <Button
+                size="small"
+                type="link"
+                style={{ fontSize: 13 }}
+                onClick={() => setVisiblePostcodeModal(true)}
+              >
                 {t("find address")}
               </Button>
             }
@@ -121,6 +126,7 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
             name="memo"
             value={company.memo}
             onChange={handleChangeText}
+            placeholder="운영중인 쇼핑몰 url 주소 입력해주세요."
           />
         </Form.Item>
         <ButtonContainer>
