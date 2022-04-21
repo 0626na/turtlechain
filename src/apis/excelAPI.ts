@@ -1,30 +1,16 @@
 import { v2Axios } from "./index";
-import { VendorAccount, VendorPhone } from "./vendorAPI";
+import { VendorAccount, WholesaleShow } from "./vendorAPI";
 import { WarehousingItem } from "./warehousingAPI";
 import { Product } from "./productAPI";
 import { saveAs } from "file-saver";
 import moment from "moment";
-
-export interface MasterVendor {
-  id: number;
-  name: string;
-  phone: string;
-  store_account: Array<VendorAccount>;
-  store_phone: Array<VendorPhone>;
-  address: string;
-  building: string;
-  floor: string;
-  col: string;
-  loc: string;
-  ext: string;
-}
 
 export interface Vendor {
   vendor_code: string;
   name: string;
   address: string;
   account: string;
-  ws_store_info: Array<MasterVendor>;
+  ws_store_info: Array<WholesaleShow>;
   match_type: string;
 
   memo: string;
@@ -32,7 +18,7 @@ export interface Vendor {
   memo_value: string;
   is_vat_included: boolean;
   use_vendor_name: string;
-  use_vendor?: MasterVendor;
+  use_vendor?: WholesaleShow;
   use_account?: VendorAccount;
   check_account?: boolean;
 }

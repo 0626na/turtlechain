@@ -104,7 +104,29 @@ function ClearingChartCard() {
     },
   };
 
-  const colors = ["#13BC9E", "#139EBC", "#4B70D0"];
+  const lineColor = [
+    "#6BD4C1",
+    "#93A9E3",
+    "#84CDEB",
+    "#6BD4C1",
+    "#93A9E3",
+    "#84CDEB",
+    "#6BD4C1",
+    "#93A9E3",
+    "#84CDEB",
+  ];
+
+  const pointColor = [
+    "#08B798",
+    "#5B80DF",
+    "#32ACDD",
+    "#08B798",
+    "#5B80DF",
+    "#32ACDD",
+    "#08B798",
+    "#5B80DF",
+    "#32ACDD",
+  ];
 
   const labels = Array.from({ length: moment().endOf("month").get("date") }, (v, i) => i + 1);
 
@@ -113,7 +135,7 @@ function ClearingChartCard() {
     datasets: storeList.map((store, index) => ({
       label: store,
       data: labels.map((day) => {
-        if (day >= parseInt(moment().format("D"))) {
+        if (day > parseInt(moment().format("D"))) {
           return;
         }
         return getSheetQuery.data?.data.sheet_list
@@ -128,10 +150,12 @@ function ClearingChartCard() {
           .map(({ clearing_total_price }) => clearing_total_price)
           .reduce((cur, acc) => cur + acc, 0);
       }),
-      borderColor: colors[index],
+      borderColor: lineColor[index],
       borderWidth: 2,
-      backgroundColor: colors[index],
+      backgroundColor: lineColor[index],
       pointRadius: 2,
+      pointBorderColor: pointColor[index],
+      pointBackgroundColor: pointColor[index],
     })),
   };
 
@@ -140,21 +164,24 @@ function ClearingChartCard() {
       <Row justify="space-between">
         <Col>
           <Space direction="vertical" size={0}>
-            <Typography.Title level={5}>누적 정산금액</Typography.Title>
-            <Typography.Title level={2}>
-              {getSheetQuery.data?.data.clearing_summary.complete.price.toLocaleString()} 원
+            <Typography.Title style={{ marginBottom: 4, fontWeight: 500, fontSize: 16 }}>
+              누적 정산금액
+            </Typography.Title>
+            <Typography.Title style={{ marginBottom: 20, fontSize: 28 }}>
+              {getSheetQuery.data?.data.clearing_summary.complete.price.toLocaleString()}
+              <span style={{ fontSize: 20, fontWeight: 500, marginLeft: 4 }}>원</span>
             </Typography.Title>
           </Space>
         </Col>
         <Col>
-          <Space size="middle" align="center" style={{ marginRight: 20 }}>
+          <Space size="middle" align="center" style={{ marginRight: 8 }}>
             {storeList.map((store, index) => (
-              <Badge key={store} color={colors[index]} text={store} />
+              <Badge key={store} color={pointColor[index]} text={store} />
             ))}
           </Space>
           <Divider type="vertical" />
           <Typography.Text type="secondary">
-            &nbsp;&nbsp;&nbsp;&nbsp;{moment().format("MM")}월
+            &nbsp;&nbsp;{moment().format("YYYY-MM")}
           </Typography.Text>
         </Col>
       </Row>

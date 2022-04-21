@@ -1,34 +1,33 @@
-import { message, Modal, Pagination, Popover, Radio, Row, Space, Table } from "antd";
+import { message, Pagination, Popover, Radio, Row, Space, Table } from "antd";
 import { vendorAPI } from "apis";
-import { RequestSearchWholesale, VendorAccount, Wholesale } from "apis/vendorAPI";
+import { RequestGetWholesale, VendorAccount, WholesaleShow } from "apis/vendorAPI";
 import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { t } from "i18next";
 import { phonePattern } from "utils/pattern";
-import styled from "styled-components";
-import { TurtleBadge, TurtleButtonSub } from "components/common";
-import { SearchFilter } from "components/combine";
+import { TurtleBadge, TurtleButtonSub, TurtleModal, TurtleTableTitle } from "components/common";
+import { NewSearchFilter } from "components/combine";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectRow: (wholeSaleStore: Wholesale) => void;
+  selectRow: (wholeSaleStore: WholesaleShow) => void;
 }
 
-function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
-  const [wholesaleList, setWholesaleList] = useState<Array<Wholesale>>([]);
+function SearchModal({ visible, closeModal, selectRow }: Props) {
+  const [wholesaleList, setWholesaleList] = useState<Array<WholesaleShow>>([]);
 
-  const [searchQuery, setSearchQuery] = useState<RequestSearchWholesale>({
+  const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
     page: 1,
     type: "all",
     search_string: "",
   });
 
   // master 도매 검색 요청
-  const searchWholesaleQuery = useQuery(
-    ["searchWholesale", searchQuery],
-    () => vendorAPI.searchWholesale(searchQuery),
+  const getWholesaleQuery = useQuery(
+    ["getWholesale", searchQuery],
+    () => vendorAPI.getWholesale(searchQuery),
     {
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
@@ -40,7 +39,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
   );
 
   const onClickSelect = useCallback(
-    (record: Wholesale) => {
+    (record: WholesaleShow) => {
       if (record.store_phone.length !== 1) {
         message.warning("휴대번호를 선택해주세요");
         return;
@@ -57,20 +56,6 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
       });
     },
     [selectRow],
-  );
-
-  const selectPage = useCallback(
-    (page: number) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
-
-  const searchWholesale = useCallback(
-    ({ type, search_string }: { type: string; search_string: string }) => {
-      setSearchQuery({ page: 1, type, search_string });
-    },
-    [],
   );
 
   const selectStorePhone = useCallback(
@@ -106,7 +91,7 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
   );
 
   return (
-    <StyledModal
+    <TurtleModal
       centered
       width="60%"
       maskClosable={false}
@@ -118,25 +103,26 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
     >
       <Table
         size="small"
-        loading={searchWholesaleQuery.isLoading}
+        loading={getWholesaleQuery.isLoading}
         dataSource={wholesaleList}
         rowKey={(record) => record.id}
         pagination={false}
         scroll={{ y: "auto" }}
         title={() => (
-          <Row justify="space-between">
-            {`총 ${searchWholesaleQuery.data?.data.total_count ?? 0}개`}
-            <SearchFilter type="vendor" onSearch={searchWholesale} />
-          </Row>
+          <TurtleTableTitle count={getWholesaleQuery.data?.data.total_count ?? 0}>
+            <NewSearchFilter vendor searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </TurtleTableTitle>
         )}
         footer={() => (
           <Row justify="center">
             <Pagination
               size="small"
-              total={searchWholesaleQuery.data?.data.total_count}
+              total={getWholesaleQuery.data?.data.total_count}
               showSizeChanger={false}
               current={searchQuery.page}
-              onChange={selectPage}
+              onChange={(page) => {
+                setSearchQuery({ ...searchQuery, page });
+              }}
             />
           </Row>
         )}
@@ -259,14 +245,8 @@ function SearchWholesaleModal({ visible, closeModal, selectRow }: Props) {
           },
         ]}
       />
-    </StyledModal>
+    </TurtleModal>
   );
 }
 
-const StyledModal = styled(Modal)`
-  .ant-modal-header {
-    background-color: #f3f6f9;
-  }
-`;
-
-export default SearchWholesaleModal;
+export default SearchModal;

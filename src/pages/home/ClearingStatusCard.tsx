@@ -25,22 +25,22 @@ function ClearingStatusCard() {
 
   return (
     <TurtleCardHome>
+      <Row justify="space-between">
+        <Col>
+          <Typography.Title style={{ marginBottom: 16, fontSize: 18 }}>
+            정산처리 현황
+          </Typography.Title>
+        </Col>
+        <Col>
+          <Typography.Text type="secondary">{moment().format("YYYY-MM")}</Typography.Text>
+        </Col>
+      </Row>
       <Table
         size="small"
         loading={getSheetQuery.isLoading}
         dataSource={getSheetQuery.data?.data.sheet_list}
         rowKey={(record) => record.id}
         pagination={{ position: ["bottomRight"], showSizeChanger: false, defaultPageSize: 3 }}
-        title={() => (
-          <Row justify="space-between">
-            <Col>
-              <Typography.Title level={5}>정산처리 현황</Typography.Title>
-            </Col>
-            <Col>
-              <Typography.Text type="secondary">{moment().format("MM")}월</Typography.Text>
-            </Col>
-          </Row>
-        )}
         columns={[
           {
             ellipsis: true,
