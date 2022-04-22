@@ -18,16 +18,19 @@ import { useMutation, useQuery } from "react-query";
 import { VendorShow, RequestGet, VendorAccount } from "apis/vendorAPI";
 import { useCallback, useEffect, useState } from "react";
 import { FileTextOutlined } from "@ant-design/icons";
-import { useRecoilValue } from "recoil";
+import { RecoilValueReadOnly, useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { phonePattern } from "utils/pattern";
 import { TurtleBadge, TurtleButtonSub, TurtleTableTitle } from "components/common";
 import { MainContent, MenuBar } from "layouts/main";
 import { NewSearchFilter } from "components/combine";
+import UpdateModal from "./UpdateModal";
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
+  const [selectedRow, selectRow] = useState<VendorShow>();
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
 
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
@@ -159,6 +162,14 @@ function PageBody() {
               />
             </Row>
           )}
+          onRow={(record) => {
+            return {
+              onClick: (event) => {
+                selectRow(record);
+                setUpdateModalVisible(true);
+              },
+            };
+          }}
           expandable={{
             expandedRowRender: (record) => (
               <>
@@ -224,7 +235,10 @@ function PageBody() {
               return (
                 <FileTextOutlined
                   style={record.memo ? {} : { opacity: "0.4" }}
-                  onClick={(e) => onExpand(record, e)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    return onExpand(record, e);
+                  }}
                 />
               );
             },
@@ -234,20 +248,12 @@ function PageBody() {
               ellipsis: true,
               width: "10%",
               title: t("vendor.code"),
-              render: (_, record) => (
-                <Tooltip placement="topLeft" title={record.vendor_code}>
-                  {record.vendor_code}
-                </Tooltip>
-              ),
+              render: (_, record) => record.vendor_code,
             },
             {
               ellipsis: true,
               title: t("vendor.name"),
-              render: (_, record) => (
-                <Tooltip placement="topLeft" title={record.vendor_name}>
-                  {record.vendor_name === null ? record.ws_store_info.name : record.vendor_name}
-                </Tooltip>
-              ),
+              render: (_, record) => record.vendor_name ?? record.ws_store_info.name,
             },
             {
               ellipsis: true,
@@ -256,11 +262,7 @@ function PageBody() {
                 const address = `${building} ${floor}${floor ? "층" : ""} ${col}${
                   col ? "열" : ""
                 } ${loc}${floor ? "호" : ""} ${ext}`;
-                return (
-                  <Tooltip placement="topLeft" title={address}>
-                    {address}
-                  </Tooltip>
-                );
+                return address;
               },
             },
             {
@@ -287,11 +289,7 @@ function PageBody() {
                 const makeAccount = (account: VendorAccount) =>
                   `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
-                return (
-                  <Tooltip title={makeAccount(vendor_account)}>
-                    {makeAccount(vendor_account)}
-                  </Tooltip>
-                );
+                return makeAccount(vendor_account);
               },
             },
             {
@@ -299,28 +297,41 @@ function PageBody() {
               width: 120,
               title: t("vendor.include tax"),
               render: (_, record) => (
-                <Popconfirm
-                  title={t("description.update tax included")}
-                  okText={t("yes")}
-                  cancelText={t("no")}
-                  onConfirm={() => {
-                    updateQuery.mutate({
-                      id: record.id,
-                      memo: record.memo,
-                      is_vat_included: !record.is_vat_included,
-                    });
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
                   }}
                 >
-                  <Switch
-                    checkedChildren={t("button.include")}
-                    checked={record.is_vat_included}
-                    style={{ width: "52px" }}
-                  />
-                </Popconfirm>
+                  <Popconfirm
+                    title={t("description.update tax included")}
+                    okText={t("yes")}
+                    cancelText={t("no")}
+                    onConfirm={() => {
+                      updateQuery.mutate({
+                        id: record.id,
+                        memo: record.memo,
+                        is_vat_included: !record.is_vat_included,
+                      });
+                    }}
+                  >
+                    <Switch
+                      checkedChildren={t("button.include")}
+                      checked={record.is_vat_included}
+                      style={{ width: "52px" }}
+                    />
+                  </Popconfirm>
+                </div>
               ),
             },
             Table.EXPAND_COLUMN,
           ]}
+        />
+        <UpdateModal
+          visible={updateModalVisible}
+          closeModal={() => {
+            setUpdateModalVisible(false);
+          }}
+          selectedRow={selectedRow}
         />
       </MainContent>
     </>

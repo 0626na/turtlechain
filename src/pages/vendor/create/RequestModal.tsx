@@ -158,7 +158,7 @@ function RequestModal({ visible, closeModal }: Props) {
 
         <TurtleInput // 기타 주소 Input
           name="ext"
-          label={t("vendor.ext")}
+          label=" "
           placeholder={t("placeholder.ext")}
           required={false}
         />
