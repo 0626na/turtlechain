@@ -44,6 +44,7 @@ export interface AdjustmentItemShow {
     id: number;
     name: string;
     vendor_product_name: string;
+    option: string;
   };
   memo: string;
   memo_active?: boolean;

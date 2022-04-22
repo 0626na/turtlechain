@@ -109,6 +109,11 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           },
           {
             ellipsis: true,
+            title: t("product.option"),
+            render: (_, record) => record.product_info.option,
+          },
+          {
+            ellipsis: true,
             title: t("adjustment.is vat included"),
             render: (_, record) => (record.is_vat_included ? "포함" : "미포함"),
           },

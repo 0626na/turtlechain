@@ -22,19 +22,14 @@ import {
 } from "antd";
 import adjustmentAPI, { AdjustmentItemShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import { AxiosError } from "axios";
-import {
-  TurtleButtonSub,
-  TurtleCard,
-  TurtleIcon,
-  TurtlePopConfirm,
-  TurtleTableTitle,
-} from "components/common";
+import { TurtleButtonSub, TurtleCard, TurtleIcon, TurtleTableTitle } from "components/common";
 import { MainContent, MenuBar } from "layouts/main";
 import DetailModal from "./DetailModal";
+import { NewSearchFilter } from "components/combine";
 
 const PageBody = function () {
   const store = useRecoilValue(storeState);
@@ -128,6 +123,9 @@ const PageBody = function () {
           })}
           title={() => (
             <TurtleTableTitle count={getAdjustmentListQuery.data?.data.total_count ?? 0}>
+              {/* <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <Divider type="vertical" style={{ margin: 0 }} /> */}
+
               <Select
                 size="small"
                 style={{ width: 100 }}
@@ -201,6 +199,11 @@ const PageBody = function () {
               ellipsis: true,
               title: t("product.vendor product name"),
               render: (_, record) => record.product_info.vendor_product_name,
+            },
+            {
+              ellipsis: true,
+              title: t("product.option"),
+              render: (_, record) => record.product_info.option,
             },
             {
               ellipsis: true,
