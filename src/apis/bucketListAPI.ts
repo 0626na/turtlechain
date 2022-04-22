@@ -12,6 +12,7 @@ export interface RequestCreate {
   floor: string;
   col: string;
   loc: string;
+  colLoc?: string;
   ext: string;
   memo: string;
   biz_name: string;

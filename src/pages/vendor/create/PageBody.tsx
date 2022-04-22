@@ -174,13 +174,6 @@ function PageBody() {
     setSearchModalVisible(true);
   }, [setSearchModalVisible, isStoreExist]);
 
-  const openRequestModal = useCallback(() => {
-    if (!isStoreExist()) {
-      return;
-    }
-    setRequestModalVisible(true);
-  }, [setRequestModalVisible, isStoreExist]);
-
   return (
     <>
       <MenuBar isWarning>
@@ -358,12 +351,17 @@ function PageBody() {
 
       <BottomBar justify="space-between">
         <Col>
-          {/* <Typography.Text>
+          <Typography.Text>
             등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!&nbsp;
           </Typography.Text>
-          <Typography.Link style={{ textDecoration: "underline" }} onClick={openRequestModal}>
+          <Typography.Link
+            style={{ textDecoration: "underline" }}
+            onClick={() => {
+              setRequestModalVisible(true);
+            }}
+          >
             신규 거래처 등록하기
-          </Typography.Link> */}
+          </Typography.Link>
         </Col>
 
         <Popconfirm
