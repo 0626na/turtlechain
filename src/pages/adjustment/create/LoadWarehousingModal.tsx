@@ -231,6 +231,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
           title={() => (
             <TurtleTableTitle
               count={getItemQuery.data?.data.total_count ?? 0}
+              searchCount={filteredList?.length ?? 0}
               selectedCount={selectedItems?.length ?? 0}
             >
               <NewSearchFilter searchQuery={searchState} setSearchQuery={setSearchState} />
