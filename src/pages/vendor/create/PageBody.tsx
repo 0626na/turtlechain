@@ -300,7 +300,7 @@ function PageBody() {
               name="vendor_code"
               rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
             >
-              <Input />
+              <Input disabled={true} />
             </Form.Item>
             <Form.Item>
               <TurtleButtonSub color="blue" onClick={clickCreateVendorCode}>
