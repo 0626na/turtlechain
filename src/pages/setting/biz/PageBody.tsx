@@ -9,9 +9,6 @@ function PageBody() {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
-    onSuccess: (data) => {
-      console.log(data);
-    },
   });
 
   return (
@@ -19,7 +16,7 @@ function PageBody() {
       <Card
         type="inner"
         title={t("biz.info")}
-        style={{ width: "100%" }}
+        style={{ width: "100%", marginBottom: 24 }}
         headStyle={{ backgroundColor: "#F6F9FD" }}
       >
         <Row style={{ margin: "16px 0" }}>
