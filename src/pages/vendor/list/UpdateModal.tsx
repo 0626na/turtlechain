@@ -54,12 +54,15 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
       floor: selectedRow?.ws_store_info.floor,
       col: selectedRow?.ws_store_info.col,
       loc: selectedRow?.ws_store_info.loc,
+      colLoc: `${selectedRow?.ws_store_info.col} ${selectedRow?.ws_store_info.loc}`,
       ext: selectedRow?.ws_store_info.ext,
       banks: {
         bank: selectedRow?.vendor_account.bank,
         account_number: selectedRow?.vendor_account.account_number,
         account_holder: selectedRow?.vendor_account.account_holder,
       },
+      ws_store_id: selectedRow?.ws_store_info.id,
+      rt_store_id: selectedRow?.id,
     });
     setAddress({
       building: selectedRow?.ws_store_info.building ?? "",
@@ -88,17 +91,25 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 16 }}
       >
+        <Form.Item name="ws_store_id" hidden>
+          <Input hidden />
+        </Form.Item>
+        <Form.Item name="rt_store_id" hidden>
+          <Input hidden />
+        </Form.Item>
         <TurtleInput // 거래처명 검색 Input
           name="name"
           label={t("vendor.name")}
           placeholder={t("placeholder.vendor name")}
           required={true}
+          disabled
         />
         <TurtleInput // 거래처 매장번호 Input
           name="tel"
           label={t("vendor.phone")}
           placeholder={t("placeholder.phone")}
           required={true}
+          disabled
         />
         <TurtleInput // 거래처 휴대번호 Input
           name="mobile"
@@ -207,8 +218,18 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Input.Group>
         </Form.Item>
 
-        <Form.Item label="전자영수증 사진첨부" required={true}>
-          <Upload listType="picture">
+        <Form.Item
+          name="file"
+          label="전자영수증 사진첨부"
+          required={true}
+          rules={[{ required: true }]}
+        >
+          <Upload
+            listType="picture"
+            maxCount={1}
+            accept=".jpg, .png, .jpeg, .pdf"
+            beforeUpload={() => false}
+          >
             <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
           </Upload>
         </Form.Item>
@@ -227,6 +248,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                   banks: [form.getFieldValue("banks")],
                   col,
                   loc,
+                  file: form.getFieldValue("file").fileList[0].originFileObj,
                 });
               });
             }}

@@ -218,8 +218,18 @@ function RequestModal({ visible, closeModal }: Props) {
           required={false}
         />
         <TurtleDivider />
-        <Form.Item label="전자영수증 사진첨부" required={true}>
-          <Upload listType="picture">
+        <Form.Item
+          name="file"
+          label="전자영수증 사진첨부"
+          required={true}
+          rules={[{ required: true }]}
+        >
+          <Upload
+            listType="picture"
+            maxCount={1}
+            accept=".jpg, .png, .jpeg, .pdf"
+            beforeUpload={() => false}
+          >
             <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
           </Upload>
         </Form.Item>
@@ -237,6 +247,7 @@ function RequestModal({ visible, closeModal }: Props) {
                   banks: [form.getFieldValue("banks")],
                   col,
                   loc,
+                  file: form.getFieldValue("file").fileList[0].originFileObj,
                 });
               });
             }}
