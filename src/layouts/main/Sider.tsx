@@ -107,25 +107,25 @@ function Sider({ collapsed }: Props) {
       title: t("setting"),
       submenus: [
         {
-          title: t("account.my"),
+          title: t("account.management"),
           pathname: "/setting/account",
         },
         {
-          title: t("biz.info"),
-          pathname: "/setting/company",
+          title: t("biz.management"),
+          pathname: "/setting/biz",
         },
         {
-          title: t("store.info"),
+          title: t("store.management"),
           pathname: "/setting/store",
         },
-        {
-          title: t("staff.info"),
-          pathname: "/setting/staff",
-        },
-        {
-          title: t("membership.info"),
-          pathname: "/setting/membership",
-        },
+        // {
+        //   title: t("staff.management"),
+        //   pathname: "/setting/staff",
+        // },
+        // {
+        //   title: t("membership.info"),
+        //   pathname: "/setting/membership",
+        // },
       ],
     },
   ];

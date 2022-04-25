@@ -311,10 +311,11 @@
   },
   "account": {
     "": "계정",
-    "my": "내 계정"
+    "management": "계정 관리"
   },
   "biz": {
     "": "사업자",
+    "management": "사업자 관리",
     "info": "사업자 정보",
     "num": "사업자 번호",
     "name": "상호명",
@@ -328,10 +329,12 @@
     "phone": "쇼핑몰 휴대번호",
     "create": "쇼핑몰 추가하기",
     "update": "쇼핑몰 수정하기",
-    "address": "쇼핑몰 주소"
+    "address": "쇼핑몰 주소",
+    "management": "쇼핑몰 관리"
   },
   "staff": {
-    "info": "직원 정보"
+    "info": "직원 정보",
+    "management": "직원 관리"
   },
   "membership": {
     "info": "멤버십 정보"

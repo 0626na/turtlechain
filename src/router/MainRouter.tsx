@@ -18,11 +18,11 @@ import {
   ProductListPage,
   VendorCreatePage,
   VendorListPage,
-  MyAccountPage,
-  MyCompanyPage,
-  MyStorePage,
-  MyStaffPage,
-  MyMembershipPage,
+  AccountManagementPage,
+  BizManagementPage,
+  StoreManagementPage,
+  StaffManagementPage,
+  MembershipManagementPage,
 } from "../pages";
 
 function MainRouter() {
@@ -46,11 +46,11 @@ function MainRouter() {
           <Route exact path="/product/list" component={ProductListPage} />
           <Route exact path="/vendor/create" component={VendorCreatePage} />
           <Route exact path="/vendor/list" component={VendorListPage} />
-          <Route exact path="/setting/account" component={MyAccountPage} />
-          <Route exact path="/setting/company" component={MyCompanyPage} />
-          <Route exact path="/setting/store" component={MyStorePage} />
-          <Route exact path="/setting/staff" component={MyStaffPage} />
-          <Route exact path="/setting/membership" component={MyMembershipPage} />
+          <Route exact path="/setting/account" component={AccountManagementPage} />
+          <Route exact path="/setting/biz" component={BizManagementPage} />
+          <Route exact path="/setting/store" component={StoreManagementPage} />
+          <Route exact path="/setting/staff" component={StaffManagementPage} />
+          <Route exact path="/setting/membership" component={MembershipManagementPage} />
           <Redirect path="*" to="/home" />
         </Switch>
       </Suspense>

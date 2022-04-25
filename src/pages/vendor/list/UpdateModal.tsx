@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { basicDataAPI, bucketListAPI } from "apis";
 import { AxiosError } from "axios";
+import { storeState } from "store/storeState";
+import { useRecoilValue } from "recoil";
 
 interface Props {
   visible: boolean;
@@ -15,6 +17,7 @@ interface Props {
 
 function UpdateModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
+  const store = useRecoilValue(storeState);
   const [address, setAddress] = useState({ building: "", floor: "" });
 
   const getAddressQuery = useQuery("getAdress", basicDataAPI.getAddress, {
@@ -62,13 +65,14 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
         account_holder: selectedRow?.vendor_account.account_holder,
       },
       ws_store_id: selectedRow?.ws_store_info.id,
-      rt_store_id: selectedRow?.id,
+      rt_store_id: store.id!,
+      file: undefined,
     });
     setAddress({
       building: selectedRow?.ws_store_info.building ?? "",
       floor: selectedRow?.ws_store_info.floor ?? "",
     });
-  }, [form, selectedRow]);
+  }, [form, selectedRow, store.id]);
 
   useEffect(() => {
     resetStates();
@@ -104,13 +108,13 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           required={true}
           disabled
         />
-        <TurtleInput // 거래처 매장번호 Input
+        <Form.Item // 거래처 매장번호 Input
           name="tel"
           label={t("vendor.phone")}
-          placeholder={t("placeholder.phone")}
           required={true}
-          disabled
-        />
+        >
+          <Input placeholder={t("placeholder.phone")} disabled />
+        </Form.Item>
         <TurtleInput // 거래처 휴대번호 Input
           name="mobile"
           label={t("vendor.store phone")}
@@ -229,6 +233,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             maxCount={1}
             accept=".jpg, .png, .jpeg, .pdf"
             beforeUpload={() => false}
+            fileList={form.getFieldValue("file")?.fileList}
           >
             <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
           </Upload>
@@ -240,6 +245,12 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             okText={t("yes")}
             cancelText={t("no")}
             onConfirm={() => {
+              if (form.getFieldValue("file")?.fileList.length === 0) {
+                form.setFieldsValue({
+                  ...form.getFieldsValue(),
+                  file: undefined,
+                });
+              }
               form.validateFields().then(() => {
                 const [col, loc] = form.getFieldValue("colLoc").split(" ");
                 createQuery.mutate({

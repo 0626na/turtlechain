@@ -27,7 +27,7 @@ function Notification() {
               <Space direction="vertical">
                 <Col>
                   요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
-                  <br /> 확인 후 정확한 세부 정보를 선택해주세요
+                  <br /> 확인 후 정확한 세부 정보를 선택해주세요.
                 </Col>
                 <Col>
                   <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>
@@ -45,7 +45,7 @@ function Notification() {
             <Space direction="vertical">
               <Col>
                 요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
-                <br /> 확인 후 정확한 세부 정보를 선택해주세요
+                <br /> 확인 후 정확한 세부 정보를 선택해주세요.
               </Col>
               <Col>
                 <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>

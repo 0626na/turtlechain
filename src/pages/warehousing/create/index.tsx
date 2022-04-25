@@ -12,7 +12,7 @@ function WarehousingCreatePage() {
       <PageHeader
         title={t("warehousing create")}
         breadcrumbList={[t("warehousing management"), t("warehousing create")]}
-        info={t("description.excel type")}
+        infoList={[t("description.excel type")]}
       />
       <PageBody />
     </>

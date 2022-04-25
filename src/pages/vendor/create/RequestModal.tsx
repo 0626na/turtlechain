@@ -229,6 +229,7 @@ function RequestModal({ visible, closeModal }: Props) {
             maxCount={1}
             accept=".jpg, .png, .jpeg, .pdf"
             beforeUpload={() => false}
+            fileList={form.getFieldValue("file")?.fileList}
           >
             <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
           </Upload>

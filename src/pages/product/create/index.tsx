@@ -12,7 +12,7 @@ function ProductCreatePage() {
       <PageHeader
         title={t("product.create")}
         breadcrumbList={[t("product.management"), t("product.create")]}
-        info={t("description.excel type")}
+        infoList={[t("description.excel type")]}
       />
       <PageBody />
     </>
