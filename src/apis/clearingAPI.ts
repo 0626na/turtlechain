@@ -36,7 +36,40 @@ export interface ClearingSheetShow {
 }
 
 // 정산 아이템
-export interface ClearingItemShow {}
+export interface ClearingItemShow {
+  id: number;
+  created_by: number;
+  created_time: string;
+  created_date: string;
+  sheet_id: number;
+  is_inactive: boolean;
+  type: string;
+  original_id: number;
+  adjustment_type: string;
+  adjustment_process_type: string;
+  rt_store_id: number;
+  rt_store_name: string;
+  vendor_id: number;
+  vendor_name: string;
+  vendor_address: string;
+  recipient_print: string;
+  is_vat_included: boolean;
+  bank: string;
+  account_number: string;
+  account_holder: string;
+  memo: string | null;
+  total_price: number;
+  deposit_price: number;
+  supply_price: number;
+  vat_price: number;
+  complete_date: string;
+  ws_store_id: {
+    id: number;
+    store_phone: Array<{
+      phone: string;
+    }>;
+  };
+}
 
 // Request: 정산서 생성
 export interface RequestCreateSheet {
@@ -207,33 +240,7 @@ export interface RequestGetItem {
 export interface ResponseGetItem {
   msg: string;
   data: {
-    item_list: Array<{
-      id: number;
-      created_by: number;
-      created_time: string;
-      created_date: string;
-      sheet_id: number;
-      is_inactive: boolean;
-      type: string;
-      original_id: number;
-      adjustment_type: string;
-      adjustment_process_type: string;
-      rt_store_id: number;
-      rt_store_name: string;
-      vendor_id: number;
-      vendor_name: string;
-      vendor_address: string;
-      recipient_print: string;
-      is_vat_included: boolean;
-      bank: string;
-      account_number: string;
-      account_holder: string;
-      memo: string | null;
-      total_price: number;
-      deposit_price: number;
-      supply_price: number;
-      vat_price: number;
-    }>;
+    item_list: Array<ClearingItemShow>;
     total_count: number;
   };
 }

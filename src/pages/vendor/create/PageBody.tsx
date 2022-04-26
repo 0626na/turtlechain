@@ -141,9 +141,9 @@ function PageBody() {
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
       vendor_name: vendor.name,
-      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${vendor.col}${
-        vendor.col ? "열" : ""
-      } ${vendor.loc}${vendor.floor ? "호" : ""} ${vendor.ext}`,
+      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${
+        vendor.col
+      } ${vendor.loc} ${vendor.ext}`,
       memo: "",
       is_vat_included: false,
       owner: vendor.company[0]?.owner,
@@ -255,9 +255,7 @@ function PageBody() {
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={`${selectedVendor?.col ? selectedVendor.col + "열" : ""} ${
-                  selectedVendor?.loc ? selectedVendor.loc + "호" : ""
-                }`}
+                value={`${selectedVendor?.col ?? ""} ${selectedVendor?.loc ?? ""}`}
                 disabled={true}
                 style={{ width: "33%" }}
               />

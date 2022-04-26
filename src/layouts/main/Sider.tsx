@@ -75,16 +75,16 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
-      key: "/product",
-      title: t("product.management"),
+      key: "/mistransfer",
+      title: t("mistransfer.management"),
       submenus: [
         {
-          title: t("product.create"),
-          pathname: "/product/create",
+          title: t("mistransfer.create"),
+          pathname: "/mistransfer/create",
         },
         {
-          title: t("product.list"),
-          pathname: "/product/list",
+          title: t("mistransfer.list"),
+          pathname: "/mistransfer/list",
         },
       ],
     },
@@ -99,6 +99,20 @@ function Sider({ collapsed }: Props) {
         {
           title: t("vendor.list"),
           pathname: "/vendor/list",
+        },
+      ],
+    },
+    {
+      key: "/product",
+      title: t("product.management"),
+      submenus: [
+        {
+          title: t("product.create"),
+          pathname: "/product/create",
+        },
+        {
+          title: t("product.list"),
+          pathname: "/product/list",
         },
       ],
     },

@@ -18,10 +18,12 @@ export const AdjustmentListPage = lazy(() => import("./adjustment/list"));
 export const ClearingCreatePage = lazy(() => import("./clearing/create"));
 export const ClearingListPage = lazy(() => import("./clearing/list"));
 export const ClearingBalancePage = lazy(() => import("./clearing/balance"));
-export const ProductCreatePage = lazy(() => import("./product/create"));
-export const ProductListPage = lazy(() => import("./product/list"));
+export const MistransferCreatePage = lazy(() => import("./mistransfer/create"));
+export const MistransferListPage = lazy(() => import("./mistransfer/list"));
 export const VendorCreatePage = lazy(() => import("./vendor/create"));
 export const VendorListPage = lazy(() => import("./vendor/list"));
+export const ProductCreatePage = lazy(() => import("./product/create"));
+export const ProductListPage = lazy(() => import("./product/list"));
 
 export const AccountManagementPage = lazy(() => import("./setting/account"));
 export const BizManagementPage = lazy(() => import("./setting/biz"));

@@ -160,7 +160,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                 {Object.keys(getAddressQuery.data?.data[address.building] ?? []).map(
                   (floor: string) => (
                     <Select.Option key={floor} value={floor}>
-                      {floor}층
+                      {floor}
                     </Select.Option>
                   ),
                 )}
@@ -173,7 +173,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                     const [col, loc] = colLoc.split(" ");
                     return (
                       <Select.Option key={colLoc} value={colLoc}>
-                        {col ? `${col}열 ${loc}호` : `${loc}호`}
+                        {`${col} ${loc}`}
                       </Select.Option>
                     );
                   },
@@ -259,6 +259,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                   banks: [form.getFieldValue("banks")],
                   col,
                   loc,
+                  ext: form.getFieldValue("ext") ?? "",
                   file: form.getFieldValue("file").fileList[0].originFileObj,
                 });
               });

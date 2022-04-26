@@ -8,6 +8,12 @@ export interface Store {
   alimtalk_name: string;
   is_closed: boolean;
   order_formats: number;
+  store_account: Array<{
+    id: number;
+    bank: string;
+    account_number: string;
+    account_holder: string;
+  }>;
   created_time: Date;
   updated_time: Date;
   created_by: string;

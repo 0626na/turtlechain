@@ -13,6 +13,7 @@ import adjustmentAPI from "./adjustmentAPI";
 import excelAPI from "./excelAPI";
 import productAPI from "./productAPI";
 import externalAPI from "./externalAPI";
+import mistransferAPI from "./mistransferAPI";
 
 export const v1Axios = axios.create({
   baseURL: "https://api.turtleship.io/api/v1",
@@ -44,4 +45,5 @@ export {
   adjustmentAPI,
   excelAPI,
   externalAPI,
+  mistransferAPI,
 };

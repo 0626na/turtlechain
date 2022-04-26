@@ -10,7 +10,6 @@ import {
   Row,
   Switch,
   Table,
-  Tooltip,
 } from "antd";
 import { vendorAPI } from "apis";
 import { AxiosError } from "axios";
@@ -18,7 +17,7 @@ import { useMutation, useQuery } from "react-query";
 import { VendorShow, RequestGet, VendorAccount } from "apis/vendorAPI";
 import { useCallback, useEffect, useState } from "react";
 import { FileTextOutlined } from "@ant-design/icons";
-import { RecoilValueReadOnly, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { phonePattern } from "utils/pattern";
 import { TurtleBadge, TurtleButtonSub, TurtleTableTitle } from "components/common";
@@ -258,12 +257,7 @@ function PageBody() {
             {
               ellipsis: true,
               title: t("vendor.address"),
-              render: (_, { ws_store_info: { building, floor, col, loc, ext } }) => {
-                const address = `${building} ${floor}${floor ? "층" : ""} ${col}${
-                  col ? "열" : ""
-                } ${loc}${floor ? "호" : ""} ${ext}`;
-                return address;
-              },
+              render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
