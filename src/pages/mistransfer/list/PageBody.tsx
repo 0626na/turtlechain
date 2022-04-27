@@ -1,13 +1,13 @@
-import { message, Table, Tag } from "antd";
+import { message, Popconfirm, Table, Tag } from "antd";
 import { mistransferAPI } from "apis";
 import { RequestGet } from "apis/mistransferAPI";
 import { AxiosError } from "axios";
-import { TurtleTableTitle } from "components/common";
+import { TurtleIcon, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { MainContent, MenuBar } from "layouts/main";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 
@@ -33,6 +33,16 @@ function PageBody() {
       },
     },
   );
+
+  const updateQuery = useMutation("updateMistransfer", mistransferAPI.update, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+    onSuccess: () => {
+      getQuery.refetch();
+      message.success(t("message.success delete mistransfer"));
+    },
+  });
 
   // 쇼핑몰 바뀔때 리스트 재요청
   useEffect(() => {
@@ -91,6 +101,32 @@ function PageBody() {
               ellipsis: true,
               title: t("mistransfer.recipient print"),
               render: (_, record) => record.recipient_print,
+            },
+            {
+              ellipsis: true,
+              render: (_, record) => (
+                <>
+                  {record.status === "request" && (
+                    <Popconfirm
+                      title={t("description.really delete")}
+                      okText={t("yes")}
+                      cancelText={t("no")}
+                      onCancel={(e) => {
+                        e?.stopPropagation();
+                      }}
+                      onConfirm={(e) => {
+                        e?.stopPropagation();
+                        updateQuery.mutate({
+                          item_id: record.id,
+                          is_inactive: 1,
+                        });
+                      }}
+                    >
+                      <TurtleIcon type="delete" />
+                    </Popconfirm>
+                  )}
+                </>
+              ),
             },
           ]}
         />

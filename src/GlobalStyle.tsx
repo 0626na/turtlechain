@@ -51,6 +51,9 @@ const GlobalStyle = createGlobalStyle`
   .ant-message-info .anticon {
     color: #FFFFFF !important;
   }
+  .ant-message-success .anticon {
+    color: #FFFFFF !important;
+  }
 
   /* badge status 마진값 제거 */
   .ant-badge-status-text {

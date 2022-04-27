@@ -52,9 +52,24 @@ const get = async function (query: RequestGet) {
   return response.data;
 };
 
+export interface RequestUpdate {
+  item_id: number;
+  // 삭제 요청시 1
+  is_inactive: number;
+}
+
+export interface ResponseUpdate {}
+
+const update = async function (data: RequestUpdate) {
+  const url = `mistransfer/items/${data.item_id}`;
+  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  return response.data;
+};
+
 const mistransferAPI = {
   create,
   get,
+  update,
 };
 
 export default mistransferAPI;

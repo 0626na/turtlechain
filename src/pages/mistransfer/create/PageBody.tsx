@@ -6,12 +6,14 @@ import {
   TurtleButton,
   TurtleInput,
   TurtleInputPrice,
+  TurtleQuestionTooltip,
   TurtleSearchInput,
   TurtleText,
 } from "components/common";
 import { useStoreExist } from "hooks";
 import { t } from "i18next";
 import { BottomBar, MenuBar } from "layouts/main";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
@@ -58,7 +60,10 @@ function PageBody() {
   useEffect(() => {
     form.setFieldsValue({
       ...form.getFieldsValue(),
-      vendor_name: selectedClearingItem?.vendor_name,
+      vendor_name: selectedClearingItem
+        ? `${selectedClearingItem?.vendor_name} / ${selectedClearingItem?.complete_date}`
+        : undefined,
+      recipient_print: `${moment().format("MMDD")}터틀환불`,
     });
   }, [selectedClearingItem, form]);
 
@@ -75,7 +80,7 @@ function PageBody() {
         <TurtleText>{t("vendor.basic info")}</TurtleText>
 
         <TurtleSearchInput
-          label={t("vendor.name")}
+          label="정산내역"
           name="vendor_name"
           placeholder={t("placeholder.vendor name")}
           onClick={() => {
@@ -84,12 +89,6 @@ function PageBody() {
           }}
         />
 
-        <TurtleInput
-          label={t("clearing.date")}
-          placeholder={t("placeholder.clearing date")}
-          disabled
-          value={selectedClearingItem?.complete_date}
-        />
         <TurtleInput
           label={t("vendor.address")}
           placeholder={t("placeholder.vendor address")}
@@ -178,9 +177,20 @@ function PageBody() {
             </Form.Item>
           </Input.Group>
         </Form.Item>
+        <TurtleInput
+          name="recipient_print"
+          label="받는분 통장 인쇄내용"
+          placeholder={t("placeholder.recipient print")}
+          disabled
+        />
         <Form.Item
           name="refund_amt"
-          label={t("mistransfer.deposit price")}
+          label={
+            <>
+              {t("mistransfer.deposit price")}
+              <TurtleQuestionTooltip content="입금 확인 시, 해당 내용으로 확인 바랍니다." />
+            </>
+          }
           rules={[{ required: true }]}
           required
         >
@@ -190,11 +200,6 @@ function PageBody() {
             placeholder={t("placeholder.requested deposit price")}
           />
         </Form.Item>
-        <TurtleInput
-          name="recipient_print"
-          label="받는분 통장 인쇄내용"
-          placeholder={t("placeholder.recipient print")}
-        />
       </Form>
 
       <LoadClearingModal
