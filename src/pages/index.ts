@@ -25,8 +25,8 @@ export const VendorListPage = lazy(() => import("./vendor/list"));
 export const ProductCreatePage = lazy(() => import("./product/create"));
 export const ProductListPage = lazy(() => import("./product/list"));
 
-export const AccountManagementPage = lazy(() => import("./setting/account"));
-export const BizManagementPage = lazy(() => import("./setting/biz"));
+export const UserManagementPage = lazy(() => import("./setting/user"));
+export const CompanyManagementPage = lazy(() => import("./setting/company"));
 export const StoreManagementPage = lazy(() => import("./setting/store"));
 export const StaffManagementPage = lazy(() => import("./setting/staff"));
 export const MembershipManagementPage = lazy(() => import("./setting/membership"));

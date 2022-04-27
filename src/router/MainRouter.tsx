@@ -18,8 +18,8 @@ import {
   ProductListPage,
   VendorCreatePage,
   VendorListPage,
-  AccountManagementPage,
-  BizManagementPage,
+  UserManagementPage,
+  CompanyManagementPage,
   StoreManagementPage,
   StaffManagementPage,
   MembershipManagementPage,
@@ -50,8 +50,8 @@ function MainRouter() {
           <Route exact path="/product/list" component={ProductListPage} />
           <Route exact path="/vendor/create" component={VendorCreatePage} />
           <Route exact path="/vendor/list" component={VendorListPage} />
-          <Route exact path="/setting/account" component={AccountManagementPage} />
-          <Route exact path="/setting/biz" component={BizManagementPage} />
+          <Route exact path="/setting/user" component={UserManagementPage} />
+          <Route exact path="/setting/company" component={CompanyManagementPage} />
           <Route exact path="/setting/store" component={StoreManagementPage} />
           <Route exact path="/setting/staff" component={StaffManagementPage} />
           <Route exact path="/setting/membership" component={MembershipManagementPage} />

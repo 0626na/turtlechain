@@ -21,15 +21,19 @@ function UpdateStoreModal({ visible, store_id, onClose, onSuccess }: Props) {
   const requiredRules = [{ required: true, message: t("description.required item") }];
 
   // 쇼핑몰 정보 요청
-  const { data: storeData } = useQuery(["getStore"], () => retailerStoreAPI.getStore(store_id), {
-    enabled: visible && store_id ? true : false,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const { data: storeData } = useQuery(
+    ["getStore"],
+    () => retailerStoreAPI.get({ store_id: store_id ?? -1 }),
+    {
+      enabled: visible && store_id ? true : false,
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        form.setFieldsValue(data.data);
+      },
     },
-    onSuccess: (data) => {
-      form.setFieldsValue(data.data);
-    },
-  });
+  );
 
   // 수정하기 요청
   const updateeQuery = useMutation(["updateeQuery"], retailerStoreAPI.update, {
@@ -77,65 +81,7 @@ function UpdateStoreModal({ visible, store_id, onClose, onSuccess }: Props) {
       <Form //
         form={form}
         layout="vertical"
-      >
-        <Form.Item //
-          name="is_closed"
-          label={t("biz status")}
-          rules={requiredRules}
-        >
-          <Radio.Group>
-            <Radio value={false}>{t("status.open")}</Radio>
-            <Radio value={true}>{t("status.closed")}</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item //
-          name="name"
-          label={t("store.name")}
-          rules={requiredRules}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item //
-          name="alimtalk_name"
-          label={t("alimtalk name")}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item //
-          name="mall_url"
-          label={t("store.url")}
-          rules={requiredRules}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item //
-          name="phone"
-          label={t("store.phone")}
-          rules={requiredRules}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item //
-          name="order_formats"
-          label="재고관리 프로그램"
-          rules={requiredRules}
-        >
-          <Select placeholder="제고관리 프로그램을 선택해주세요">
-            <Select.Option value={1}>셀메이트</Select.Option>
-            <Select.Option value={2}>이지어드민</Select.Option>
-            <Select.Option value={3}>터틀체인</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Typography.Text>
-            {t("created time")} : {storeData?.data.created_time}({storeData?.data.created_by})
-          </Typography.Text>
-          <br />
-          <Typography.Text>
-            {t("updated time")} : {storeData?.data.updated_time}({storeData?.data.updated_by})
-          </Typography.Text>
-        </Form.Item>
-      </Form>
+      ></Form>
     </Modal>
   );
 }

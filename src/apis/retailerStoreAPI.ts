@@ -1,6 +1,14 @@
 import { v2Axios } from "apis";
 
 export interface Store {
+  name: string;
+  mall_url: string;
+  phone: string;
+  alimtalk_name: string;
+  order_formats: number;
+}
+
+export interface StoreShow {
   id: number;
   name: string;
   mall_url: string;
@@ -21,7 +29,7 @@ export interface Store {
 }
 
 // 쇼핑몰 리스트 가져오기
-export interface RequestGetStores {
+export interface RequestGetList {
   offset: number;
   last_id: number;
   switch_type: "next" | "prev";
@@ -29,43 +37,40 @@ export interface RequestGetStores {
   search_query: string;
 }
 
-export interface ResponseGetStores {
+export interface ResponseGetList {
   data: {
     total_count: number;
-    data: Array<Store>;
+    data: Array<StoreShow>;
   };
 }
 
-const getStores = async function (query: RequestGetStores) {
+const getList = async function (query: RequestGetList) {
   let url = "/provisioning/retailer_store?";
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGetStores>(url);
+  const response = await v2Axios.get<ResponseGetList>(url);
   return response.data;
 };
 
 // 개별 쇼핑몰 가져오기
-export type RequestGetStore = number | undefined;
-
-export interface ResponseGetStore {
-  data: Store;
+export interface RequestGet {
+  store_id: number;
 }
 
-const getStore = async function (store_id: RequestGetStore) {
-  let url = `/provisioning/retailer_store/${store_id}`;
-  const response = await v2Axios.get<ResponseGetStore>(url);
+export interface ResponseGet {
+  data: StoreShow;
+}
+
+const get = async function (data: RequestGet) {
+  let url = `/provisioning/retailer_store/${data.store_id}`;
+  const response = await v2Axios.get<ResponseGet>(url);
   return response.data;
 };
 
 // 수정하기
-export interface RequestUpdate {
-  store_id: number;
-  name: string;
-  mall_url: string;
-  phone: string;
-  alimtalk_name: string;
-  order_formats: number;
+export interface RequestUpdate extends Store {
+  store_id?: number;
 }
 
 export interface ResponseUpdate {
@@ -74,18 +79,13 @@ export interface ResponseUpdate {
 
 const update = async function (data: RequestUpdate) {
   let url = `/provisioning/retailer_store/${data.store_id}`;
+  delete data.store_id;
   const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 
 // 추가하기
-export interface RequestCreate {
-  name: string;
-  mall_url: string;
-  phone: string;
-  alimtalk_name: string;
-  order_formats: number;
-}
+export interface RequestCreate extends Store {}
 
 export interface ResponseCreate {
   data: null;
@@ -98,8 +98,8 @@ const create = async function (data: RequestCreate) {
 };
 
 const retailerStoreAPI = {
-  getStores,
-  getStore,
+  getList,
+  get,
   update,
   create,
 };

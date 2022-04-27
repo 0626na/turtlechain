@@ -121,12 +121,12 @@ function Sider({ collapsed }: Props) {
       title: t("setting"),
       submenus: [
         {
-          title: t("account.management"),
-          pathname: "/setting/account",
+          title: t("user.management"),
+          pathname: "/setting/user",
         },
         {
-          title: t("biz.management"),
-          pathname: "/setting/biz",
+          title: t("company.management"),
+          pathname: "/setting/company",
         },
         {
           title: t("store.management"),

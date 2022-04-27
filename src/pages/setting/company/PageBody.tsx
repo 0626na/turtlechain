@@ -15,7 +15,7 @@ function PageBody() {
     <Row>
       <Card
         type="inner"
-        title={t("biz.info")}
+        title={t("company.info")}
         style={{ width: "100%", marginBottom: 24 }}
         headStyle={{ backgroundColor: "#F6F9FD" }}
       >

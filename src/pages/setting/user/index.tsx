@@ -3,18 +3,18 @@ import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
 import PageBody from "./PageBody";
 
-function AccountManagementPage() {
-  const title = `${t("turtlechain")} - ${t("account.management")}`;
+function UserManagementPage() {
+  const title = `${t("turtlechain")} - ${t("user.management")}`;
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        title={t("account.management")}
-        breadcrumbList={[t("setting"), t("account.management")]}
+        title={t("user.management")}
+        breadcrumbList={[t("setting"), t("user.management")]}
       />
       <PageBody />
     </>
   );
 }
 
-export default AccountManagementPage;
+export default UserManagementPage;

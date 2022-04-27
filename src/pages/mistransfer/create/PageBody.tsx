@@ -1,4 +1,4 @@
-import { Form, Input, message, notification, Popconfirm, Switch, Typography } from "antd";
+import { Form, Input, message, notification, Popconfirm, Switch } from "antd";
 import { mistransferAPI, retailerStoreAPI } from "apis";
 import { ClearingItemShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
@@ -28,7 +28,7 @@ function PageBody() {
   // 쇼핑몰 정보 요청
   const getStoreQuery = useQuery(
     ["getStore", store.id],
-    () => retailerStoreAPI.getStore(store.id),
+    () => retailerStoreAPI.get({ store_id: store.id! }),
     {
       enabled: !!store.id,
       onError: (error: AxiosError) => {
@@ -186,7 +186,7 @@ function PageBody() {
         >
           <TurtleInputPrice
             style={{ width: "100%" }}
-            max={selectedClearingItem?.total_price}
+            max={selectedClearingItem?.deposit_price}
             placeholder={t("placeholder.requested deposit price")}
           />
         </Form.Item>

@@ -19,7 +19,7 @@ function StoreSelect({ warningMessage }: Props) {
   const getStoresQuery = useQuery(
     ["getStores"],
     () =>
-      retailerStoreAPI.getStores({
+      retailerStoreAPI.getList({
         offset: 1000,
         last_id: -1,
         switch_type: "next",

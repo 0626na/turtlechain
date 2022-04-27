@@ -3,18 +3,18 @@ import { PageHeader } from "layouts/main";
 import { Helmet } from "react-helmet";
 import PageBody from "./PageBody";
 
-function BizManagementPage() {
-  const title = `${t("turtlechain")} ${t("biz.management")}`;
+function CompanyManagementPage() {
+  const title = `${t("turtlechain")} - ${t("company.management")}`;
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        title={t("biz.management")}
-        breadcrumbList={[t("setting"), t("biz.management")]}
+        title={t("company.management")}
+        breadcrumbList={[t("setting"), t("company.management")]}
       />
       <PageBody />
     </>
   );
 }
 
-export default BizManagementPage;
+export default CompanyManagementPage;

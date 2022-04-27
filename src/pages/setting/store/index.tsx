@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet";
 import { t } from "i18next";
-import MyStoreTable from "./MyStoreTable";
 import { PageHeader } from "layouts/main";
+import PageBody from "./PageBody";
 
 function StoreManagementPage() {
   const title = `${t("turtlechain")} - ${t("store.management")}`;
+
   return (
     <>
       <Helmet title={title} />
@@ -16,7 +17,7 @@ function StoreManagementPage() {
           t("description.second way to manage malls"),
         ]}
       />
-      <MyStoreTable />
+      <PageBody />
     </>
   );
 }
