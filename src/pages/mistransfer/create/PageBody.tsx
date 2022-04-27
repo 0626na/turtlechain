@@ -2,7 +2,13 @@ import { Form, Input, message, notification, Popconfirm, Switch, Typography } fr
 import { mistransferAPI, retailerStoreAPI } from "apis";
 import { ClearingItemShow } from "apis/clearingAPI";
 import { AxiosError } from "axios";
-import { TurtleButton, TurtleInput, TurtleInputPrice, TurtleSearchInput } from "components/common";
+import {
+  TurtleButton,
+  TurtleInput,
+  TurtleInputPrice,
+  TurtleSearchInput,
+  TurtleText,
+} from "components/common";
 import { useStoreExist } from "hooks";
 import { t } from "i18next";
 import { BottomBar, MenuBar } from "layouts/main";
@@ -66,7 +72,7 @@ function PageBody() {
         wrapperCol={{ span: 7 }}
         colon={false}
       >
-        <Typography.Title level={4}>{t("vendor.basic info")}</Typography.Title>
+        <TurtleText>{t("vendor.basic info")}</TurtleText>
 
         <TurtleSearchInput
           label={t("vendor.name")}
@@ -130,19 +136,7 @@ function PageBody() {
           </Input.Group>
         </Form.Item>
 
-        <Typography.Title level={4}>오입금 반환 요청정보</Typography.Title>
-        <Form.Item
-          name="refund_amt"
-          label={t("mistransfer.deposit price")}
-          rules={[{ required: true }]}
-          required
-        >
-          <TurtleInputPrice
-            style={{ width: "100%" }}
-            max={selectedClearingItem?.total_price}
-            placeholder={t("placeholder.requested deposit price")}
-          />
-        </Form.Item>
+        <TurtleText>오입금 반환 요청정보</TurtleText>
         <Form.Item label={t("vendor.is vat included")} rules={[{ required: true }]} required>
           <Switch //
             checked={selectedClearingItem?.is_vat_included}
@@ -151,7 +145,6 @@ function PageBody() {
             disabled
           />
         </Form.Item>
-        <Typography.Title level={4}>오입금 반환정보</Typography.Title>
         <Form.Item // 계좌 Input
           label={t("vendor.account")}
           required
@@ -184,6 +177,18 @@ function PageBody() {
               />
             </Form.Item>
           </Input.Group>
+        </Form.Item>
+        <Form.Item
+          name="refund_amt"
+          label={t("mistransfer.deposit price")}
+          rules={[{ required: true }]}
+          required
+        >
+          <TurtleInputPrice
+            style={{ width: "100%" }}
+            max={selectedClearingItem?.total_price}
+            placeholder={t("placeholder.requested deposit price")}
+          />
         </Form.Item>
         <TurtleInput
           name="recipient_print"

@@ -68,6 +68,8 @@
     "vendor name": "거래처명을 입력하세요.",
     "vendor address": "거래처 주소를 입력하세요.",
     "store phone": "휴대번호를 입력하세요.",
+    "tel": "매장번호를 입력하세요",
+    "mobile": "휴대번호를 입력하세요.",
     "phone": "매장번호를 입력하세요",
     "product name": "상품명을 입력하세요.",
     "memo": "메모를 입력하세요.",
@@ -86,7 +88,8 @@
     "clearing_date": "일자 검색",
     "requested deposit price": "반환 요청 금액을 입력하세요.",
     "clearing date": "정산일자를 입력하세요.",
-    "recipient print": "받는분 통장인쇄내용을 입력하세요."
+    "recipient print": "받는분 통장인쇄내용을 입력하세요.",
+    "vendor code": "거래처 코드"
   },
   "button": {
     "return": "돌아가기",
