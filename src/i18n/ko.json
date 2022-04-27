@@ -67,7 +67,7 @@
   "placeholder": {
     "vendor name": "거래처명을 입력하세요.",
     "vendor address": "거래처 주소를 입력하세요.",
-    "store phone": "휴대번호를 입력하세요",
+    "store phone": "휴대번호를 입력하세요.",
     "phone": "매장번호를 입력하세요",
     "product name": "상품명을 입력하세요.",
     "memo": "메모를 입력하세요.",
@@ -83,7 +83,10 @@
     "process_count": "처리수량",
     "process_type": "처리방식",
     "clearing_status": "결제 상태",
-    "clearing_date": "일자 검색"
+    "clearing_date": "일자 검색",
+    "requested deposit price": "반환 요청 금액을 입력하세요.",
+    "clearing date": "정산일자를 입력하세요.",
+    "recipient print": "받는분 통장인쇄내용을 입력하세요."
   },
   "button": {
     "return": "돌아가기",
@@ -239,7 +242,7 @@
     "request date": "결제 요청 일자",
     "complete date": "결제 완료 일자",
     "recent date": "최근 처리 일자",
-    "date": "정산 일자",
+    "date": "정산일자",
     "total price": "총 결제 금액",
     "total vendor count": "총 거래처 수",
     "delete": "삭제",
@@ -264,7 +267,18 @@
   "mistransfer": {
     "management": "오입금 반환 관리",
     "create": "오입금 반환요청",
-    "list": "오입금 반환내역"
+    "list": "오입금 반환내역",
+    "lists": "오입금 반환 리스트",
+    "created date": "오입금 환불 요청날짜",
+    "complete date": "오입금 환불 처리날짜",
+    "deposit price": "오입금 환불 요청금액",
+    "recipient print": "통장 인쇄내용",
+    "status": {
+      "": "진행상태",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
+    }
   },
   "product": {
     "": "상품",
@@ -313,7 +327,7 @@
     "account bank": "은행명",
     "account number": "계좌번호",
     "account holder": "예금주명",
-    "is_vat_included": "세액 포함 여부"
+    "is vat included": "부가세 포함 여부"
   },
   "account": {
     "": "계정",

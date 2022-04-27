@@ -6,7 +6,7 @@ import { TurtleButton, TurtleInput, TurtleInputPrice, TurtleSearchInput } from "
 import { useStoreExist } from "hooks";
 import { t } from "i18next";
 import { BottomBar, MenuBar } from "layouts/main";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -49,6 +49,13 @@ function PageBody() {
     selectClearingItem(undefined);
   }, [form, selectClearingItem]);
 
+  useEffect(() => {
+    form.setFieldsValue({
+      ...form.getFieldsValue(),
+      vendor_name: selectedClearingItem?.vendor_name,
+    });
+  }, [selectedClearingItem, form]);
+
   return (
     <>
       <MenuBar />
@@ -63,22 +70,30 @@ function PageBody() {
 
         <TurtleSearchInput
           label={t("vendor.name")}
-          value={selectedClearingItem?.vendor_name}
+          name="vendor_name"
+          placeholder={t("placeholder.vendor name")}
           onClick={() => {
             if (!isStoreExist()) return;
             setLoadClearingModalVisible(true);
           }}
         />
 
-        <TurtleInput label="정산일자" disabled value={selectedClearingItem?.complete_date} />
+        <TurtleInput
+          label={t("clearing.date")}
+          placeholder={t("placeholder.clearing date")}
+          disabled
+          value={selectedClearingItem?.complete_date}
+        />
         <TurtleInput
           label={t("vendor.address")}
+          placeholder={t("placeholder.vendor address")}
           disabled
           value={selectedClearingItem?.vendor_address}
         />
 
         <TurtleInput // 휴대번호 Input
           label={t("vendor.store phone")}
+          placeholder={t("placeholder.store phone")}
           disabled
           value={selectedClearingItem?.ws_store_id.store_phone[0].phone}
           required
@@ -89,13 +104,19 @@ function PageBody() {
         >
           <Input.Group compact>
             <Form.Item noStyle rules={[{ required: true }]}>
-              <Input value={selectedClearingItem?.bank} disabled={true} style={{ width: "30%" }} />
+              <Input
+                value={selectedClearingItem?.bank}
+                disabled={true}
+                style={{ width: "30%" }}
+                placeholder={t("vendor.account bank")}
+              />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedClearingItem?.account_number}
                 disabled={true}
                 style={{ width: "40%" }}
+                placeholder={t("vendor.account number")}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
@@ -103,6 +124,7 @@ function PageBody() {
                 value={selectedClearingItem?.account_holder}
                 disabled={true}
                 style={{ width: "30%" }}
+                placeholder={t("vendor.account holder")}
               />
             </Form.Item>
           </Input.Group>
@@ -111,13 +133,17 @@ function PageBody() {
         <Typography.Title level={4}>오입금 반환 요청정보</Typography.Title>
         <Form.Item
           name="refund_amt"
-          label="오입금 반환 요청금액"
+          label={t("mistransfer.deposit price")}
           rules={[{ required: true }]}
           required
         >
-          <TurtleInputPrice style={{ width: "100%" }} max={selectedClearingItem?.total_price} />
+          <TurtleInputPrice
+            style={{ width: "100%" }}
+            max={selectedClearingItem?.total_price}
+            placeholder={t("placeholder.requested deposit price")}
+          />
         </Form.Item>
-        <Form.Item label="부가세 포함여부" rules={[{ required: true }]} required>
+        <Form.Item label={t("vendor.is vat included")} rules={[{ required: true }]} required>
           <Switch //
             checked={selectedClearingItem?.is_vat_included}
             checkedChildren={t("button.include")}
@@ -136,6 +162,7 @@ function PageBody() {
                 value={getStoreQuery.data?.data.store_account?.[0]?.bank}
                 disabled={true}
                 style={{ width: "30%" }}
+                placeholder={t("vendor.account bank")}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
@@ -144,6 +171,7 @@ function PageBody() {
                 name="account_number"
                 disabled={true}
                 style={{ width: "40%" }}
+                placeholder={t("vendor.account number")}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
@@ -152,11 +180,16 @@ function PageBody() {
                 name="account_holder"
                 disabled={true}
                 style={{ width: "30%" }}
+                placeholder={t("vendor.account holder")}
               />
             </Form.Item>
           </Input.Group>
         </Form.Item>
-        <TurtleInput name="recipient_print" label="받는분 통장 인쇄내용" />
+        <TurtleInput
+          name="recipient_print"
+          label="받는분 통장 인쇄내용"
+          placeholder={t("placeholder.recipient print")}
+        />
       </Form>
 
       <LoadClearingModal
