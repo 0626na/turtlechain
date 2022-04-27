@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 
-function MyMembershipPage() {
+function MembershipManagementPage() {
   return (
     <>
       <Helmet title="터틀체인 - 멤버십 정보" />
@@ -8,4 +8,4 @@ function MyMembershipPage() {
   );
 }
 
-export default MyMembershipPage;
+export default MembershipManagementPage;

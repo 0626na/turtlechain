@@ -8,8 +8,8 @@ import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
 import { FileTextOutlined } from "@ant-design/icons";
 import { MainContent, MenuBar } from "layouts/main";
-import { TurtleTableTitle, TurtleText } from "components/common";
-import { NewSearchFilter, SearchFilter } from "components/combine";
+import { TurtleTableTitle } from "components/common";
+import { NewSearchFilter } from "components/combine";
 import UpdateProductModal from "./UpdateProductModal";
 
 function PageBody() {
@@ -39,19 +39,6 @@ function PageBody() {
   useEffect(() => {
     setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id, page: 1 }));
   }, [store.id]);
-
-  // 검색 버튼 클릭
-  const searchProductList = useCallback(
-    ({ type, search_string }) => {
-      setSearchQuery({
-        ...searchQuery,
-        page: 1,
-        type,
-        search_string,
-      });
-    },
-    [searchQuery],
-  );
 
   // 페이지 선택
   const selectPage = useCallback(

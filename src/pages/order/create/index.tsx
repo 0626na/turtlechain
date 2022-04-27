@@ -12,7 +12,7 @@ const OrderCreatePage = function () {
       <PageHeader
         title={t("order.create")}
         breadcrumbList={[t("order.management"), t("order.create")]}
-        info={t("description.excel type")}
+        infoList={[t("description.excel type")]}
       />
       <OrderPreviewList />
     </>

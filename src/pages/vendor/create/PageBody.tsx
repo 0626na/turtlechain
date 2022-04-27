@@ -18,6 +18,7 @@ import {
   TurtleButtonSub,
   TurtleInput,
   TurtleSearchInput,
+  TurtleText,
   TurtleTextArea,
 } from "components/common";
 import { useStoreExist } from "hooks";
@@ -85,20 +86,7 @@ function PageBody() {
         message: "성공적으로 등록하였습니다.",
       });
       form.resetFields();
-      selectVendor({
-        id: -1,
-        name: "",
-        phone: "",
-        address: "",
-        store_account: [],
-        store_phone: [],
-        company: [],
-        building: "",
-        floor: "",
-        col: "",
-        loc: "",
-        ext: "",
-      });
+      selectVendor(undefined);
       form.setFieldsValue({
         rt_store_id: store.id,
       });
@@ -141,9 +129,9 @@ function PageBody() {
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
       vendor_name: vendor.name,
-      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${vendor.col}${
-        vendor.col ? "열" : ""
-      } ${vendor.loc}${vendor.floor ? "호" : ""} ${vendor.ext}`,
+      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${
+        vendor.col
+      } ${vendor.loc} ${vendor.ext}`,
       memo: "",
       is_vat_included: false,
       owner: vendor.company[0]?.owner,
@@ -174,13 +162,6 @@ function PageBody() {
     setSearchModalVisible(true);
   }, [setSearchModalVisible, isStoreExist]);
 
-  const openRequestModal = useCallback(() => {
-    if (!isStoreExist()) {
-      return;
-    }
-    setRequestModalVisible(true);
-  }, [setRequestModalVisible, isStoreExist]);
-
   return (
     <>
       <MenuBar isWarning>
@@ -206,7 +187,7 @@ function PageBody() {
         wrapperCol={{ span: 7 }}
         colon={false}
       >
-        <Typography.Title level={4}>{t("vendor.basic info")}</Typography.Title>
+        <TurtleText>{t("vendor.basic info")}</TurtleText>
         <Form.Item name="rt_store_id" hidden>
           <Input hidden />
         </Form.Item>
@@ -235,6 +216,7 @@ function PageBody() {
 
         <TurtleInput // 거래처 매장번호 Input
           label={t("vendor.phone")}
+          placeholder={t("placeholder.tel")}
           disabled={true}
           value={selectedVendor?.phone}
           required={true}
@@ -242,61 +224,62 @@ function PageBody() {
         <TurtleInput // 휴대번호 선택 Input
           value={selectedVendor?.store_phone[0]?.phone}
           label={t("vendor.store phone")}
+          placeholder={t("placeholder.mobile")}
           disabled={true}
         />
 
-        <Form.Item // 거래처 주소 Input
+        <TurtleInput
           label={t("vendor.address")}
+          placeholder={t("placeholder.vendor address")}
+          disabled
+          value={
+            selectedVendor
+              ? `${selectedVendor.building} ${selectedVendor.floor} ${selectedVendor.col} ${selectedVendor.loc}`
+              : undefined
+          }
+        />
+
+        <TurtleInput // 기타 주소 Input
+          value={selectedVendor?.ext}
+          label={t("vendor.ext")}
+          placeholder={t("placeholder.ext")}
+          disabled={true}
+          required={true}
+        />
+
+        <Form.Item // 계좌 Input
+          label={t("vendor.account")}
           required={true}
         >
           <Input.Group compact>
             <Form.Item noStyle rules={[{ required: true }]}>
-              <Input value={selectedVendor?.building} disabled={true} style={{ width: "34%" }} />
-            </Form.Item>
-            <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={selectedVendor?.floor && `${selectedVendor?.floor}층`}
+                value={selectedVendor?.store_account[0]?.bank}
                 disabled={true}
-                style={{ width: "33%" }}
+                style={{ width: "30%" }}
+                placeholder={t("vendor.account bank")}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={`${selectedVendor?.col ? selectedVendor.col + "열" : ""} ${
-                  selectedVendor?.loc ? selectedVendor.loc + "호" : ""
-                }`}
+                value={selectedVendor?.store_account[0]?.account_number}
                 disabled={true}
-                style={{ width: "33%" }}
+                style={{ width: "40%" }}
+                placeholder={t("vendor.account number")}
+              />
+            </Form.Item>
+            <Form.Item noStyle rules={[{ required: true }]}>
+              <Input
+                value={selectedVendor?.store_account[0]?.account_holder}
+                disabled={true}
+                style={{ width: "30%" }}
+                placeholder={t("vendor.account holder")}
               />
             </Form.Item>
           </Input.Group>
         </Form.Item>
-        <TurtleInput // 기타 주소 Input
-          value={selectedVendor?.ext}
-          label={t("vendor.ext")}
-          disabled={true}
-          required={true}
-        />
 
-        <Typography.Title level={4}>{t("vendor.account info")}</Typography.Title>
-        <TurtleInput // 은행명 Input
-          value={selectedVendor?.store_account[0]?.bank}
-          label={t("vendor.account bank")}
-          disabled={true}
-        />
-        <TurtleInput // 계좌번호 Input
-          value={selectedVendor?.store_account[0]?.account_number}
-          label={t("vendor.account number")}
-          disabled={true}
-        />
-        <TurtleInput // 예금주명 Input
-          value={selectedVendor?.store_account[0]?.account_holder}
-          label={t("vendor.account holder")}
-          disabled={true}
-          required={true}
-        />
-
-        <Typography.Title level={4}>{t("vendor.additional info")}</Typography.Title>
+        <TurtleText>{t("vendor.additional info")}</TurtleText>
         <Form.Item // 거래처 코드 Input
           label={t("vendor.code")}
           required={true}
@@ -307,7 +290,7 @@ function PageBody() {
               name="vendor_code"
               rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
             >
-              <Input />
+              <Input placeholder={t("placeholder.vendor code")} disabled={true} />
             </Form.Item>
             <Form.Item>
               <TurtleButtonSub color="blue" onClick={clickCreateVendorCode}>
@@ -335,7 +318,7 @@ function PageBody() {
           rows={5}
         />
 
-        <Typography.Title level={4}>{t("vendor.biz info")}</Typography.Title>
+        <TurtleText>{t("vendor.biz info")}</TurtleText>
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
           label={t("biz.num")}
@@ -358,12 +341,17 @@ function PageBody() {
 
       <BottomBar justify="space-between">
         <Col>
-          {/* <Typography.Text>
+          <Typography.Text>
             등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!&nbsp;
           </Typography.Text>
-          <Typography.Link style={{ textDecoration: "underline" }} onClick={openRequestModal}>
+          <Typography.Link
+            style={{ textDecoration: "underline" }}
+            onClick={() => {
+              setRequestModalVisible(true);
+            }}
+          >
             신규 거래처 등록하기
-          </Typography.Link> */}
+          </Typography.Link>
         </Col>
 
         <Popconfirm

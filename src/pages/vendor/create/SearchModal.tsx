@@ -138,9 +138,9 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
             width: "20%",
             title: t("vendor.address"),
             render: (_, record) => {
-              return `${record.building} ${record.floor && record.floor + "층"} ${
-                record.col && record.col + "열"
-              } ${record.loc && record.loc + "호"} ${record.ext}`;
+              return `${record.building} ${record.floor && record.floor + "층"} ${record.col} ${
+                record.loc
+              } ${record.ext}`;
             },
           },
           {

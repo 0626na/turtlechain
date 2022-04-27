@@ -74,11 +74,29 @@ const create = async function (data: RequestCreate) {
   return response.data.data;
 };
 
+interface ResponseGet {
+  msg: string;
+  data: {
+    id: number;
+    login_id: string;
+    name: string;
+    email: string;
+    mobile_phone: string;
+  };
+}
+
+const get = async function () {
+  const url = `/provisioning/user`;
+  const response = await v2Axios.get<ResponseGet>(url);
+  return response.data.data;
+};
+
 const userAPI = {
   getID,
   resetPassword,
   dupCheck,
   create,
+  get,
 };
 
 export default userAPI;

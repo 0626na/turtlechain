@@ -6,10 +6,10 @@ import { TurtleBreadCrumb, TurtleDivider, TurtleInfo } from "components/common";
 interface Props {
   title: string;
   breadcrumbList?: Array<string>;
-  info?: string;
+  infoList?: Array<string>;
 }
 
-function PageHeader({ title, breadcrumbList, info }: Props) {
+function PageHeader({ title, breadcrumbList, infoList }: Props) {
   return (
     <>
       <Row
@@ -19,7 +19,12 @@ function PageHeader({ title, breadcrumbList, info }: Props) {
       >
         <Col>
           <StyledTitle level={4}>{title}</StyledTitle>
-          {info && <TurtleInfo>{info}</TurtleInfo>}
+          {infoList &&
+            infoList.map((info) => (
+              <Col key={info}>
+                <TurtleInfo>{info}</TurtleInfo>
+              </Col>
+            ))}
         </Col>
         <Col>
           {breadcrumbList && (

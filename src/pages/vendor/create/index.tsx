@@ -12,7 +12,7 @@ function VendorCreatePage() {
       <PageHeader
         title={t("vendor.create")}
         breadcrumbList={[t("vendor.management"), t("vendor.create")]}
-        info={t("description.search vendor")}
+        infoList={[t("description.search vendor")]}
       />
       <PageBody />
     </>

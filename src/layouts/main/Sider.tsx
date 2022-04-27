@@ -75,16 +75,16 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
-      key: "/product",
-      title: t("product.management"),
+      key: "/mistransfer",
+      title: t("mistransfer.management"),
       submenus: [
         {
-          title: t("product.create"),
-          pathname: "/product/create",
+          title: t("mistransfer.create"),
+          pathname: "/mistransfer/create",
         },
         {
-          title: t("product.list"),
-          pathname: "/product/list",
+          title: t("mistransfer.list"),
+          pathname: "/mistransfer/list",
         },
       ],
     },
@@ -103,29 +103,43 @@ function Sider({ collapsed }: Props) {
       ],
     },
     {
+      key: "/product",
+      title: t("product.management"),
+      submenus: [
+        {
+          title: t("product.create"),
+          pathname: "/product/create",
+        },
+        {
+          title: t("product.list"),
+          pathname: "/product/list",
+        },
+      ],
+    },
+    {
       key: "/setting",
       title: t("setting"),
       submenus: [
         {
-          title: t("account.my"),
+          title: t("account.management"),
           pathname: "/setting/account",
         },
         {
-          title: t("biz.info"),
-          pathname: "/setting/company",
+          title: t("biz.management"),
+          pathname: "/setting/biz",
         },
         {
-          title: t("store.info"),
+          title: t("store.management"),
           pathname: "/setting/store",
         },
-        {
-          title: t("staff.info"),
-          pathname: "/setting/staff",
-        },
-        {
-          title: t("membership.info"),
-          pathname: "/setting/membership",
-        },
+        // {
+        //   title: t("staff.management"),
+        //   pathname: "/setting/staff",
+        // },
+        // {
+        //   title: t("membership.info"),
+        //   pathname: "/setting/membership",
+        // },
       ],
     },
   ];
