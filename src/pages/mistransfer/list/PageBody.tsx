@@ -104,6 +104,11 @@ function PageBody() {
             },
             {
               ellipsis: true,
+              title: t("mistransfer.memo"),
+              render: (_, record) => record.memo,
+            },
+            {
+              ellipsis: true,
               render: (_, record) => (
                 <>
                   {record.status === "request" && (

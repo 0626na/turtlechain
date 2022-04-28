@@ -93,7 +93,8 @@
     "vendor code": "거래처 코드",
     "store": "쇼핑몰명을 입력하세요.",
     "store url": "쇼핑몰 url을 입력하세요.",
-    "alimtalk": "알림톡명을 입력하세요."
+    "alimtalk": "알림톡명을 입력하세요.",
+    "mistransfer memo": "오입금 반환 요청사유를 입력하세요."
   },
   "button": {
     "return": "돌아가기",
@@ -286,7 +287,8 @@
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
-    }
+    },
+    "memo": "오입금 반환 요청사유"
   },
   "product": {
     "": "상품",

@@ -200,6 +200,12 @@ function PageBody() {
             placeholder={t("placeholder.requested deposit price")}
           />
         </Form.Item>
+        <TurtleInput // 오입금 반환 요청사유 Input
+          label={t("mistransfer.memo")}
+          placeholder={t("placeholder.mistransfer memo")}
+          name="memo"
+          required
+        />
       </Form>
 
       <LoadClearingModal

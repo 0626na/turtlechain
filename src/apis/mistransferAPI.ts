@@ -7,6 +7,7 @@ export interface RequestCreate {
   recipient_print: string;
   is_vat_included: boolean;
   clearing_item_id: number;
+  memo: string;
 }
 
 export interface ResponseCreate {}
@@ -38,6 +39,7 @@ export interface ResponseGet {
       ws_account_holder: string;
       deposit_price: number;
       recipient_print: string;
+      memo: string;
     }>;
     total_count: number;
   };

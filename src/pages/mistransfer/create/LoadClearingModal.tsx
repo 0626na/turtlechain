@@ -1,11 +1,12 @@
 import { DatePicker, message, Pagination, Row, Table, Tag } from "antd";
 import clearingAPI, { ClearingItemShow, RequestGetSheet } from "apis/clearingAPI";
 import { AxiosError } from "axios";
+import { NewSearchFilter } from "components/combine";
 import { TurtleModal, TurtleTableTitle } from "components/common";
 import { t } from "i18next";
 import { MainContent } from "layouts/main";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { storeState } from "store/storeState";
@@ -27,6 +28,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     page_size: 5,
     status: "complete",
   });
+  const [searchState, setSearchState] = useState({ search_string: "" });
 
   const getSheetQuery = useQuery(
     ["getClearingSheet", searchQuery],
@@ -64,6 +66,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
       page_size: 5,
       status: "complete",
     });
+    setSearchState({ search_string: "" });
   }, [store.id]);
 
   useEffect(() => {
@@ -74,9 +77,21 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     (record: ClearingItemShow) => {
       selectClearingItem(record);
       closeModal();
-      console.log(record);
     },
     [selectClearingItem, closeModal],
+  );
+
+  const filteredList = useMemo(
+    () =>
+      getItemQuery.data?.data.item_list.filter((item) => {
+        return (
+          item.vendor_name.includes(searchState.search_string) ||
+          item.vendor_address.includes(searchState.search_string) ||
+          item.account_number.includes(searchState.search_string) ||
+          item.account_holder.includes(searchState.search_string)
+        );
+      }),
+    [getItemQuery.data, searchState],
   );
 
   return (
@@ -162,7 +177,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
       <MainContent title={t("clearing.detail")}>
         <Table
           size="small"
-          dataSource={getItemQuery.data?.data.item_list}
+          dataSource={filteredList}
           loading={getItemQuery.isLoading}
           pagination={false}
           rowKey={(record) => record.id}
@@ -172,7 +187,19 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
               onClickItemRow(record);
             },
           })}
-          title={() => <TurtleTableTitle count={getItemQuery.data?.data.total_count ?? 0} />}
+          title={() => (
+            <TurtleTableTitle
+              count={getItemQuery.data?.data.total_count ?? 0}
+              searchCount={filteredList?.length ?? 0}
+            >
+              <NewSearchFilter
+                select={false}
+                vendor
+                searchQuery={searchState}
+                setSearchQuery={setSearchState}
+              />
+            </TurtleTableTitle>
+          )}
           columns={[
             {
               ellipsis: true,
