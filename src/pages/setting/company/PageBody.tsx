@@ -1,6 +1,7 @@
-import { Card, Col, message, Row } from "antd";
+import { Form, message, Row } from "antd";
 import { retailerCompanyAPI } from "apis";
 import { AxiosError } from "axios";
+import { TurtleCardSetting } from "components/common";
 import { t } from "i18next";
 import { useQuery } from "react-query";
 
@@ -13,31 +14,22 @@ function PageBody() {
 
   return (
     <Row>
-      <Card
-        type="inner"
-        title={t("company.info")}
-        style={{ width: "100%", marginBottom: 24 }}
-        headStyle={{ backgroundColor: "#F6F9FD" }}
-      >
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>사업자 종류</Col> <Col>{getQuery.data?.biz_type}</Col>
-        </Row>
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>사업자 번호</Col> <Col>{getQuery.data?.biz_num}</Col>
-        </Row>
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>사업자명</Col> <Col>{getQuery.data?.name}</Col>
-        </Row>
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>사업자 주소</Col> <Col>{getQuery.data?.address}</Col>
-        </Row>
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>대표자명</Col> <Col>{getQuery.data?.owner}</Col>
-        </Row>
-        <Row style={{ margin: "16px 0" }}>
-          <Col span={4}>메모</Col> <Col>{getQuery.data?.memo}</Col>
-        </Row>
-      </Card>
+      <TurtleCardSetting title={t("company.info")} style={{ marginBottom: 24 }}>
+        <Form
+          layout="horizontal"
+          // form={form}
+          colon={false}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 5 }}
+        >
+          <Form.Item label="사업자 종류">{getQuery.data?.biz_type}</Form.Item>
+          <Form.Item label="사업자 번호">{getQuery.data?.biz_num}</Form.Item>
+          <Form.Item label="사업자명">{getQuery.data?.name}</Form.Item>
+          <Form.Item label="사업자 주소">{getQuery.data?.address}</Form.Item>
+          <Form.Item label="대표자명">{getQuery.data?.owner}</Form.Item>
+          <Form.Item label="메모">{getQuery.data?.memo}</Form.Item>
+        </Form>
+      </TurtleCardSetting>
     </Row>
   );
 }

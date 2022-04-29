@@ -46,6 +46,7 @@ function PageBody() {
           type="primary"
           icon={<PlusOutlined />}
           onClick={() => setCreateModalVisible(true)}
+          style={{ width: 140 }}
         >
           {t("button.add store")}
         </Button>

@@ -4,10 +4,13 @@ import useLogout from "hooks/useLogout";
 import { MAIN_HEADER_HEIGHT } from "constant";
 // antd
 import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from "antd";
+import { Layout, Button, Avatar, Menu, Dropdown, Col, Row, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { t } from "i18next";
 import { Notification } from "components/combine";
+import { useQuery } from "react-query";
+import { userAPI } from "apis";
+import { AxiosError } from "axios";
 
 interface Props {
   handleMenuVisible: () => void;
@@ -16,6 +19,12 @@ interface Props {
 function Header({ handleMenuVisible }: Props) {
   const history = useHistory();
   const logout = useLogout();
+
+  const getQuery = useQuery("getUser", userAPI.get, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
+  });
 
   return (
     <StyledHeader>
@@ -54,7 +63,7 @@ function Header({ handleMenuVisible }: Props) {
             trigger={["click"]}
           >
             <Button icon={<DownOutlined />} type="text" style={{ color: "#FFFFFF" }}>
-              {t("turtlechain")}
+              {`${getQuery.data?.login_id ?? ""} 님`}
             </Button>
           </Dropdown>
         </Col>

@@ -187,7 +187,10 @@ function PageBody() {
         wrapperCol={{ span: 7 }}
         colon={false}
       >
-        <TurtleText>{t("vendor.basic info")}</TurtleText>
+        <div style={{ marginBottom: 24 }}>
+          <TurtleText>{t("vendor.basic info")}</TurtleText>
+        </div>
+
         <Form.Item name="rt_store_id" hidden>
           <Input hidden />
         </Form.Item>
@@ -279,7 +282,9 @@ function PageBody() {
           </Input.Group>
         </Form.Item>
 
-        <TurtleText>{t("vendor.additional info")}</TurtleText>
+        <div style={{ marginTop: 24, marginBottom: 24 }}>
+          <TurtleText>{t("vendor.additional info")}</TurtleText>
+        </div>
         <Form.Item // 거래처 코드 Input
           label={t("vendor.code")}
           required={true}
@@ -318,22 +323,24 @@ function PageBody() {
           rows={5}
         />
 
-        <TurtleText>{t("vendor.biz info")}</TurtleText>
+        <div style={{ marginTop: 24, marginBottom: 24 }}>
+          <TurtleText>{t("vendor.biz info")}</TurtleText>
+        </div>
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
-          label={t("biz.num")}
+          label={t("company.num")}
           placeholder={t("placeholder.biz num")}
           required={false}
         />
         <TurtleInput // 상호명 Input
           name="biz_name"
-          label={t("biz.name")}
+          label={t("company.name")}
           placeholder={t("placeholder.biz name")}
           required={false}
         />
         <TurtleInput // 대표자명 Input
           name="owner"
-          label={t("biz.owner")}
+          label={t("company.owner")}
           placeholder={t("placeholder.biz owner")}
           required={false}
         />

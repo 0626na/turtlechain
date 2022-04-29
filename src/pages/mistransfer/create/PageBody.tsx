@@ -77,7 +77,9 @@ function PageBody() {
         wrapperCol={{ span: 7 }}
         colon={false}
       >
-        <TurtleText>{t("vendor.basic info")}</TurtleText>
+        <div style={{ marginBottom: 24 }}>
+          <TurtleText>{t("vendor.basic info")}</TurtleText>
+        </div>
 
         <TurtleSearchInput
           label="정산내역"
@@ -135,7 +137,9 @@ function PageBody() {
           </Input.Group>
         </Form.Item>
 
-        <TurtleText>오입금 반환 요청정보</TurtleText>
+        <div style={{ marginTop: 24, marginBottom: 24 }}>
+          <TurtleText>오입금 반환 요청정보</TurtleText>
+        </div>
         <Form.Item label={t("vendor.is vat included")} rules={[{ required: true }]} required>
           <Switch //
             checked={selectedClearingItem?.is_vat_included}

@@ -1,4 +1,5 @@
 import { v2Axios } from "apis";
+import { TOKEN } from "constant";
 
 // 아이디 찾기
 interface RequestGetID {
@@ -87,8 +88,25 @@ interface ResponseGet {
 
 const get = async function () {
   const url = `/provisioning/user`;
-  const response = await v2Axios.get<ResponseGet>(url);
+  const response = await v2Axios.get<ResponseGet>(url, {
+    headers: {
+      Authorization: `JWT ${sessionStorage.getItem(TOKEN)}`,
+    },
+  });
   return response.data.data;
+};
+
+interface RequestUpdate {
+  user_id?: number;
+  email: string;
+  mobile_phone: string;
+}
+
+const update = async function (data: RequestUpdate) {
+  const url = `/provisioning/user/${data.user_id}`;
+  delete data.user_id;
+  const response = await v2Axios.patch(url, data);
+  return response.data;
 };
 
 const userAPI = {
@@ -97,6 +115,7 @@ const userAPI = {
   dupCheck,
   create,
   get,
+  update,
 };
 
 export default userAPI;

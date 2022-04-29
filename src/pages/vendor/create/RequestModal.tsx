@@ -201,19 +201,19 @@ function RequestModal({ visible, closeModal }: Props) {
 
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
-          label={t("biz.num")}
+          label={t("company.num")}
           placeholder={t("placeholder.biz num")}
           required={false}
         />
         <TurtleInput // 상호명 Input
           name="biz_name"
-          label={t("biz.name")}
+          label={t("company.name")}
           placeholder={t("placeholder.biz name")}
           required={false}
         />
         <TurtleInput // 대표자명 Input
           name="biz_owner"
-          label={t("biz.owner")}
+          label={t("company.owner")}
           placeholder={t("placeholder.biz owner")}
           required={false}
         />
