@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { TurtleButton, TurtleInput, TurtleModal } from "components/common";
 import { t } from "i18next";
 import { useCallback, useEffect } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 interface Props {
   visible: boolean;
@@ -13,16 +13,15 @@ interface Props {
 
 function CreateModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
 
   const createQuery = useMutation(["createRetailerStore"], retailerStoreAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {
-      notification.open({
-        type: "success",
-        message: t("message.success create mall"),
-      });
+      message.success(t("message.success create mall"));
+      queryClient.refetchQueries(["getStoreList"]);
       closeModal();
     },
   });
