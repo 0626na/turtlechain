@@ -42,7 +42,7 @@ function Header({ handleMenuVisible }: Props) {
           />
         </Col>
         <Col style={{ display: "flex" }}>
-          {/* <Notification /> */}
+          <Notification />
           <Avatar
             icon={<UserOutlined style={{ color: "#141720" }} />}
             style={{ background: "#AAE7DC", top: 6 }}

@@ -1,17 +1,30 @@
 import { Col, Divider, message, Popover, Row, Space, Typography } from "antd";
 import styled from "styled-components";
 import { BellOutlined } from "@ant-design/icons";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import notificationAPI from "apis/notificationAPI";
 import { AxiosError } from "axios";
+import moment from "moment";
+import { useHistory } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 function Notification() {
+  const history = useHistory();
+  const [popoverVisible, setPopoverVisible] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>();
+
   const getQuery = useQuery("getNotification", () => notificationAPI.get({ type: "home" }), {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
+  });
+
+  const updateQuery = useMutation("updateNotification", notificationAPI.update, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
+    },
     onSuccess: (data) => {
-      console.log(data);
+      getQuery.refetch();
     },
   });
 
@@ -20,55 +33,67 @@ function Notification() {
       getPopupContainer={(triggerNode) => triggerNode}
       placement="bottomRight"
       trigger="click"
+      visible={popoverVisible}
+      autoAdjustOverflow={false}
+      ref={popoverRef}
       content={
-        <>
-          <div style={{ backgroundColor: "#F4FEFC" }}>
-            <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
-              <Space direction="vertical">
-                <Col>
-                  요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
-                  <br /> 확인 후 정확한 세부 정보를 선택해주세요.
-                </Col>
-                <Col>
-                  <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>
-                    거래처 정보 확인
-                  </Typography.Text>
-                  <Divider type="vertical" />
-                  <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-                    2021-02-21 오전 09:32
-                  </Typography.Text>
-                </Col>
-              </Space>
-            </Row>
-          </div>
-          <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
-            <Space direction="vertical">
-              <Col>
-                요청하신 거래처 블링블링의 계좌정보가 수정되었습니다.
-                <br /> 확인 후 정확한 세부 정보를 선택해주세요.
-              </Col>
-              <Col>
-                <Typography.Text style={{ color: "#00B594", cursor: "pointer", fontSize: 13 }}>
-                  거래처 정보 확인
-                </Typography.Text>
-                <Divider type="vertical" />
-                <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-                  2021-02-21 오전 09:32
-                </Typography.Text>
-              </Col>
-            </Space>
-          </Row>
+        <div style={{ height: 400, width: 400, overflow: "auto" }}>
+          {getQuery.data?.notification_list.map((noti) => {
+            let mainContent = "";
+            if (noti.type === "internal_change") {
+              mainContent = `거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+            }
+            if (noti.type === "creation_request") {
+              if (noti.content.status === "reject") {
+                mainContent = `요청하신 거래처 ${noti.content.name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+              } else {
+                mainContent = `요청하신 거래처 ${noti.content.name}가 신규 등록되었습니다.`;
+              }
+            }
+            if (noti.type === "modification_request") {
+              if (noti.content.status === "reject") {
+                mainContent = `요청하신 거래처 ${noti.content.name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+              } else {
+                mainContent = `요청하신 거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+              }
+            }
+            return (
+              <div style={{ backgroundColor: noti.read_at ? "#FFFFFF" : "#F4FEFC" }} key={noti.id}>
+                <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
+                  <Space direction="vertical">
+                    <Col>{mainContent}</Col>
+                    <Col>
+                      <Typography.Text
+                        style={{ color: "#00B594", fontSize: 13, cursor: "pointer" }}
+                        onClick={() => {
+                          history.push("/vendor/list");
+                          setPopoverVisible(false);
+                          !noti.read_at && updateQuery.mutate({ id: noti.id });
+                        }}
+                      >
+                        거래처 정보 확인
+                      </Typography.Text>
+                      <Divider type="vertical" />
+                      <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+                        {moment(noti.created_time).format("YYYY-MM-DD HH:mm")}
+                      </Typography.Text>
+                    </Col>
+                  </Space>
+                </Row>
+              </div>
+            );
+          })}
           <Row
             style={{ backgroundColor: "#F8F9FB", height: 40, cursor: "pointer" }}
             justify="center"
             align="middle"
             onClick={() => {
-              alert("준비중 입니다.");
+              alert("준비중입니다.");
             }}
           >
             알림 전체보기
           </Row>
-        </>
+        </div>
       }
     >
       <BellOutlined
@@ -77,6 +102,9 @@ function Notification() {
           marginRight: 12,
           fontSize: 20,
           cursor: "pointer",
+        }}
+        onClick={() => {
+          setPopoverVisible((visible) => !visible);
         }}
       />
     </StyledPopover>
