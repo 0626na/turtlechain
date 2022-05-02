@@ -257,7 +257,8 @@ function PageBody() {
             {
               ellipsis: true,
               title: t("vendor.address"),
-              render: (_, record) => record.vendor_address,
+              render: (_, record) =>
+                `${record.ws_store_info.building} ${record.ws_store_info.floor} ${record.ws_store_info.col} ${record.ws_store_info.loc} ${record.ws_store_info.ext}`,
             },
             {
               ellipsis: true,

@@ -12,6 +12,7 @@ function TurtleCardHome({ ...props }: Props) {
         height: "100%",
         borderRadius: 8,
         boxShadow: "0px 3px 28px rgba(0, 0, 0, 0.05)",
+        marginTop: 0,
       }}
       bordered={false}
     />

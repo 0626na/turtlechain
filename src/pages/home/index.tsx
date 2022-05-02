@@ -12,14 +12,13 @@ const HomePage = function () {
   return (
     <>
       <Helmet title={title} />
-      <Row>
-        <TurtleCardHome>
-          <Typography.Title level={4} style={{ marginBottom: 0 }}>
-            HOME
-          </Typography.Title>
-          <TurtleInfo>{t("description.check home")}</TurtleInfo>
-        </TurtleCardHome>
-      </Row>
+
+      <TurtleCardHome>
+        <Typography.Title level={4} style={{ marginBottom: 0 }}>
+          HOME
+        </Typography.Title>
+        <TurtleInfo>{t("description.check home")}</TurtleInfo>
+      </TurtleCardHome>
 
       <Row>
         <ClearingStatusCard />

@@ -44,7 +44,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      message.success("message.success create mistransfer");
+      message.success(t("message.success create mistransfer"));
       resetStates();
     },
   });

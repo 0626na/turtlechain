@@ -6,6 +6,7 @@ import { TurtleButton, TurtleCardSetting } from "components/common";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { phonePattern } from "utils/pattern";
+import styled from "styled-components";
 
 function PageBody() {
   const [form] = Form.useForm();
@@ -73,17 +74,17 @@ function PageBody() {
             <Form.Item name="user_id" hidden>
               <Input hidden />
             </Form.Item>
-            <Form.Item label="이름">{getQuery.data?.name}</Form.Item>
-            <Form.Item label="이메일" name="email">
+            <StyledFormItem label="이름">{getQuery.data?.name}</StyledFormItem>
+            <StyledFormItem label="이메일" name="email">
               {isUpdateMode ? <Input /> : getQuery.data?.email}
-            </Form.Item>
-            <Form.Item label="휴대번호" name="mobile_phone">
+            </StyledFormItem>
+            <StyledFormItem label="휴대번호" name="mobile_phone">
               {isUpdateMode ? (
                 <Input />
               ) : (
                 getQuery.data?.mobile_phone.replace(phonePattern, `$1-$2-$3`)
               )}
-            </Form.Item>
+            </StyledFormItem>
             <Row justify="end">
               {isUpdateMode && (
                 <TurtleButton htmlType="submit" type="default">
@@ -97,8 +98,8 @@ function PageBody() {
       <Row>
         <TurtleCardSetting title="계정 정보" style={{ marginBottom: 24 }}>
           <Form layout="horizontal" colon={false} labelCol={{ span: 4 }} wrapperCol={{ span: 5 }}>
-            <Form.Item label="아이디">{getQuery.data?.login_id}</Form.Item>
-            <Form.Item label="비밀번호">
+            <StyledFormItem label="아이디">{getQuery.data?.login_id}</StyledFormItem>
+            <StyledFormItem label="비밀번호">
               <Button
                 size="small"
                 type="primary"
@@ -109,12 +110,16 @@ function PageBody() {
               >
                 재설정
               </Button>
-            </Form.Item>
+            </StyledFormItem>
           </Form>
         </TurtleCardSetting>
       </Row>
     </>
   );
 }
+
+const StyledFormItem = styled(Form.Item)`
+  margin-bottom: 12px;
+`;
 
 export default PageBody;
