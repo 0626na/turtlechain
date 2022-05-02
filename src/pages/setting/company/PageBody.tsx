@@ -5,6 +5,7 @@ import { TurtleButton, TurtleButtonSub, TurtleCardSetting } from "components/com
 import { t } from "i18next";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { bizNumPattern } from "utils/pattern";
 
 function PageBody() {
   const [form] = Form.useForm();
@@ -92,7 +93,9 @@ function PageBody() {
               t(`company.type.${getQuery.data?.biz_type}`)
             )}
           </Form.Item>
-          <Form.Item label="사업자 번호">{getQuery.data?.biz_num}</Form.Item>
+          <Form.Item label="사업자 번호">
+            {getQuery.data?.biz_num.replace(bizNumPattern, "$1-$2-$3")}
+          </Form.Item>
           <Form.Item label="사업자명" name="name">
             {isUpdateMode ? <Input /> : getQuery.data?.name}
           </Form.Item>
