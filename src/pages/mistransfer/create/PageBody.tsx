@@ -44,10 +44,7 @@ function PageBody() {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      notification.open({
-        type: "success",
-        message: "성공적으로 등록하였습니다.",
-      });
+      message.success("message.success create mistransfer");
       resetStates();
     },
   });
@@ -195,7 +192,7 @@ function PageBody() {
               <TurtleQuestionTooltip content="입금 확인 시, 해당 내용으로 확인 바랍니다." />
             </>
           }
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "오입금 환불 요청금액 입력해주세요" }]}
           required
         >
           <TurtleInputPrice

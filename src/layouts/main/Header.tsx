@@ -62,8 +62,9 @@ function Header({ handleMenuVisible }: Props) {
             }
             trigger={["click"]}
           >
-            <Button icon={<DownOutlined />} type="text" style={{ color: "#FFFFFF" }}>
+            <Button type="text" style={{ color: "#FFFFFF", paddingLeft: 7 }}>
               {`${getQuery.data?.login_id ?? ""} 님`}
+              <DownOutlined />
             </Button>
           </Dropdown>
         </Col>
