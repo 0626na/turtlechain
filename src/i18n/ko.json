@@ -142,7 +142,8 @@
     "create adjustment": "매입조정 등록하기",
     "load warehousing": "입고내역 불러오기",
     "add reserve product": "미송상품 단건추가",
-    "add store": "쇼핑몰 추가"
+    "add store": "쇼핑몰 추가",
+    "invite staff": "직원 초대"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
@@ -372,7 +373,8 @@
   },
   "staff": {
     "info": "직원 정보",
-    "management": "직원 관리"
+    "management": "직원 관리",
+    "lists": "직원 리스트"
   },
   "membership": {
     "info": "멤버십 정보"
