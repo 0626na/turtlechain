@@ -65,7 +65,7 @@ function PageBody() {
             form={form}
             colon={false}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 5 }}
+            wrapperCol={{ span: 7 }}
             onFinish={(value) => {
               updateQuery.mutate(value);
             }}
