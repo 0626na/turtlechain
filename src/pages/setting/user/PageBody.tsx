@@ -7,10 +7,12 @@ import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { phonePattern } from "utils/pattern";
 import styled from "styled-components";
+import { PhoneAuthModal } from "components/combine";
 
 function PageBody() {
   const [form] = Form.useForm();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
 
   const getQuery = useQuery("getUser", userAPI.get, {
     onError: (error: AxiosError) => {
@@ -80,11 +82,25 @@ function PageBody() {
             </StyledFormItem>
             <StyledFormItem label="휴대번호" name="mobile_phone">
               {isUpdateMode ? (
-                <Input />
+                <Input
+                  readOnly
+                  suffix={
+                    <Button size="small" type="link" onClick={() => setPhoneAuthModalVisible(true)}>
+                      {t("auth phone")}
+                    </Button>
+                  }
+                />
               ) : (
                 getQuery.data?.mobile_phone.replace(phonePattern, `$1-$2-$3`)
               )}
             </StyledFormItem>
+            <PhoneAuthModal
+              visible={phoneAuthModalVisible}
+              onClose={() => setPhoneAuthModalVisible(false)}
+              onSuccess={(data) => {
+                form.setFieldsValue({ ...form.getFieldsValue(), mobile_phone: data.phone });
+              }}
+            />
             <Row justify="end">
               {isUpdateMode && (
                 <TurtleButton htmlType="submit" type="default">
@@ -99,7 +115,7 @@ function PageBody() {
         <TurtleCardSetting title="계정 정보" style={{ marginBottom: 24 }}>
           <Form layout="horizontal" colon={false} labelCol={{ span: 4 }} wrapperCol={{ span: 5 }}>
             <StyledFormItem label="아이디">{getQuery.data?.login_id}</StyledFormItem>
-            <StyledFormItem label="비밀번호">
+            {/* <StyledFormItem label="비밀번호">
               <Button
                 size="small"
                 type="primary"
@@ -110,7 +126,7 @@ function PageBody() {
               >
                 재설정
               </Button>
-            </StyledFormItem>
+            </StyledFormItem> */}
           </Form>
         </TurtleCardSetting>
       </Row>

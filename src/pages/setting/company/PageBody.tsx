@@ -1,6 +1,7 @@
-import { Form, Input, message, Row, Select, Typography, Upload } from "antd";
+import { Button, Form, Input, message, Row, Select, Typography, Upload } from "antd";
 import { retailerCompanyAPI } from "apis";
 import { AxiosError } from "axios";
+import { DaumPostcodeModal } from "components/combine";
 import { TurtleButton, TurtleButtonSub, TurtleCardSetting } from "components/common";
 import { t } from "i18next";
 import { useState } from "react";
@@ -10,6 +11,7 @@ import { bizNumPattern } from "utils/pattern";
 function PageBody() {
   const [form] = Form.useForm();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
   const getQuery = useQuery("getCompany", () => retailerCompanyAPI.get(), {
     onError: (error: AxiosError) => {
@@ -100,8 +102,31 @@ function PageBody() {
             {isUpdateMode ? <Input /> : getQuery.data?.name}
           </Form.Item>
           <Form.Item label="사업자 주소" name="address_main">
-            {isUpdateMode ? <Input /> : getQuery.data?.address}
+            {isUpdateMode ? (
+              <Input
+                readOnly
+                suffix={
+                  <Button
+                    size="small"
+                    type="link"
+                    style={{ fontSize: 13 }}
+                    onClick={() => setPostcodeModalVisible(true)}
+                  >
+                    {t("find address")}
+                  </Button>
+                }
+              />
+            ) : (
+              getQuery.data?.address
+            )}
           </Form.Item>
+          <DaumPostcodeModal
+            visible={postcodeModalVisible}
+            onClose={() => setPostcodeModalVisible(false)}
+            onGetAddress={(address_main) => {
+              form.setFieldsValue({ ...form.getFieldsValue, address_main });
+            }}
+          />
           {isUpdateMode && (
             <Form.Item label="상세주소" name="address_sub">
               <Input />

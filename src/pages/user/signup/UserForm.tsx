@@ -95,7 +95,7 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
             readOnly
             value={user.mobile_phone}
             suffix={
-              <Button type="link" onClick={() => setVisiblePhoneAuthModal(true)}>
+              <Button size="small" type="link" onClick={() => setVisiblePhoneAuthModal(true)}>
                 {t("auth phone")}
               </Button>
             }
@@ -107,7 +107,11 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
             value={user.login_id}
             onChange={handleChangeText}
             suffix={
-              <Button type="link" onClick={() => dupCheckQuery.mutate({ login_id: user.login_id })}>
+              <Button
+                size="small"
+                type="link"
+                onClick={() => dupCheckQuery.mutate({ login_id: user.login_id })}
+              >
                 {t("duplicate check")}
               </Button>
             }
