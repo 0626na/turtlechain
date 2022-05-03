@@ -450,7 +450,7 @@ function ExcelModal({ visible, closeModal }: Props) {
           }}
           fileList={fileList}
         >
-          <TurtleButtonSub>{t("button.connect")}</TurtleButtonSub>
+          <TurtleButtonSub>{t("button.select file")}</TurtleButtonSub>
         </Upload>
       </Space>
       <Tabs defaultActiveKey="1" size="large">
