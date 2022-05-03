@@ -77,6 +77,7 @@ function PageBody() {
             updateQuery.mutate({
               ...value,
               biz_license_file: form.getFieldValue("biz_license_file")?.fileList[0].originFileObj,
+              address_sub: form.getFieldValue("address_sub") ?? "",
             });
           }}
         >
