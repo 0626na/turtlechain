@@ -151,7 +151,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               });
             }}
           >
-            <TurtleButton disabled={totalPrice === 0}>{t("button.request clearing")}</TurtleButton>
+            <TurtleButton disabled={totalPrice === 0} loading={createClearingQuery.isLoading}>
+              {t("button.request clearing")}
+            </TurtleButton>
           </Popconfirm>
         </Col>
       </Row>
