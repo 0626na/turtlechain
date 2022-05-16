@@ -197,7 +197,7 @@ function PageBody() {
         >
           <TurtleInputPrice
             style={{ width: "100%" }}
-            max={selectedClearingItem?.deposit_price}
+            max={selectedClearingItem?.clearing_amount}
             placeholder={t("placeholder.requested deposit price")}
           />
         </Form.Item>

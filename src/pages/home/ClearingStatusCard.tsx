@@ -11,6 +11,7 @@ function ClearingStatusCard() {
     ["getClearingSheet"],
     () =>
       clearingAPI.getSheet({
+        credit_type: "general",
         start_date: moment().startOf("month").format("YYYY-MM-DD"),
         end_date: moment().endOf("month").format("YYYY-MM-DD"),
         status: "all",
@@ -73,7 +74,7 @@ function ClearingStatusCard() {
           {
             ellipsis: true,
             title: t("clearing.total price"),
-            render: (_, record) => `${record.clearing_total_price.toLocaleString()}원`,
+            render: (_, record) => `${record.total_clearing_amount.toLocaleString()}원`,
           },
         ]}
       />

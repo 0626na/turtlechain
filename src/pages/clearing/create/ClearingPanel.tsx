@@ -137,9 +137,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               createClearingQuery.mutate({
                 sheet: {
                   store_id: store.id,
+                  credit_type: "general",
                   store_name: store.name,
-                  clearing_total_price: totalPrice!,
-                  total_vat_price: totalVatPrice!,
+                  total_clearing_amount: totalPrice!,
                 },
                 item: {
                   rt_store_id: store.id,

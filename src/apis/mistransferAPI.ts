@@ -37,7 +37,7 @@ export interface ResponseGet {
       ws_bank: string;
       ws_account_number: string;
       ws_account_holder: string;
-      deposit_price: number;
+      transfer_amount: number;
       recipient_print: string;
       memo: string;
     }>;

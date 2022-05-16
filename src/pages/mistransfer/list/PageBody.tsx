@@ -95,7 +95,7 @@ function PageBody() {
             {
               ellipsis: true,
               title: t("mistransfer.deposit price"),
-              render: (_, record) => record.deposit_price.toLocaleString(),
+              render: (_, record) => record.transfer_amount.toLocaleString(),
             },
             {
               ellipsis: true,

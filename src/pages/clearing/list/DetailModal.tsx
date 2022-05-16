@@ -78,7 +78,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           },
           { title: t("clearing.request date"), value: `${sheet?.request_date}` },
           { title: t("clearing.complete date"), value: `${sheet?.complete_date ?? " "}` },
-          { title: t("clearing.total price"), value: `${sheet?.clearing_total_price}` },
+          { title: t("clearing.total price"), value: `${sheet?.total_clearing_amount}` },
           { title: "총 거래처 수", value: `${getItemQuery.data?.data.total_count}개` },
         ]}
       />
@@ -190,17 +190,17 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           {
             ellipsis: true,
             title: t("clearing.supply price"),
-            render: (_, record) => record.supply_price.toLocaleString(),
+            render: (_, record) => record.supply_amount.toLocaleString(),
           },
           {
             ellipsis: true,
             title: t("clearing.vat"),
-            render: (_, record) => record.vat_price.toLocaleString(),
+            render: (_, record) => record.vat_amount.toLocaleString(),
           },
           {
             ellipsis: true,
             title: t("clearing.price"),
-            render: (_, record) => record.deposit_price.toLocaleString(),
+            render: (_, record) => record.clearing_amount.toLocaleString(),
           },
         ]}
       />

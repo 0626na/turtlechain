@@ -29,6 +29,7 @@ function ClearingChartCard() {
       clearingAPI.getSheet({
         start_date: moment().startOf("month").format("YYYY-MM-DD"),
         end_date: moment().endOf("month").format("YYYY-MM-DD"),
+        credit_type: "general",
         status: "complete",
         page_size: 1000,
       }),
@@ -147,7 +148,7 @@ function ClearingChartCard() {
                   .add(day - 1, "day")
                   .format("YYYY-MM-DD") && store_name === store,
           )
-          .map(({ clearing_total_price }) => clearing_total_price)
+          .map(({ total_clearing_amount }) => total_clearing_amount)
           .reduce((cur, acc) => cur + acc, 0);
       }),
       borderColor: lineColor[index],
@@ -168,7 +169,7 @@ function ClearingChartCard() {
               누적 정산금액
             </Typography.Title>
             <Typography.Title style={{ marginBottom: 20, fontSize: 28 }}>
-              {getSheetQuery.data?.data.clearing_summary.complete.price.toLocaleString()}
+              {getSheetQuery.data?.data.clearing_summary.complete.amount.toLocaleString()}
               <span style={{ fontSize: 20, fontWeight: 500, marginLeft: 4 }}>원</span>
             </Typography.Title>
           </Space>

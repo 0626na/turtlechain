@@ -32,7 +32,7 @@ export interface ClearingSheetShow {
   store_name: string;
   request_date: string;
   complete_date: string | null;
-  clearing_total_price: number;
+  total_clearing_amount: number;
 }
 
 // 정산 아이템
@@ -58,10 +58,10 @@ export interface ClearingItemShow {
   account_number: string;
   account_holder: string;
   memo: string | null;
-  total_price: number;
-  deposit_price: number;
-  supply_price: number;
-  vat_price: number;
+  total_amount: number;
+  clearing_amount: number;
+  supply_amount: number;
+  vat_amount: number;
   complete_date: string;
   ws_store_id: {
     id: number;
@@ -74,9 +74,9 @@ export interface ClearingItemShow {
 // Request: 정산서 생성
 export interface RequestCreateSheet {
   store_id?: number;
+  credit_type: "general";
   store_name?: string;
-  clearing_total_price: number;
-  total_vat_price: number;
+  total_clearing_amount: number;
 }
 
 // Response: 정산서 생성
@@ -170,6 +170,7 @@ const getBalance = async function (query: RequestGetBalance) {
 // Request: 정산서 조회
 export interface RequestGetSheet {
   store_id?: number;
+  credit_type: "general";
   date_filter?: "request_date" | "complete_date";
   start_date: string;
   end_date: string;
@@ -187,15 +188,15 @@ export interface ResponseGetSheet {
     clearing_summary: {
       request: {
         count: number;
-        price: number;
+        amount: number;
       };
       pending: {
         count: number;
-        price: number;
+        amount: number;
       };
       complete: {
         count: number;
-        price: number;
+        amount: number;
       };
     };
   };

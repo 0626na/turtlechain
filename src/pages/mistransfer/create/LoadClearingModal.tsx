@@ -22,6 +22,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
   const [selectedSheetId, selectSheetId] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     store_id: store.id,
+    credit_type: "general",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page: 1,
@@ -60,6 +61,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     selectSheetId(-1);
     setSearchQuery({
       store_id: store.id,
+      credit_type: "general",
       start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       page: 1,
@@ -169,7 +171,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
           {
             ellipsis: true,
             title: t("clearing.total price"),
-            render: (_, record) => record.clearing_total_price.toLocaleString(),
+            render: (_, record) => record.total_clearing_amount.toLocaleString(),
           },
         ]}
       />
@@ -220,17 +222,17 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
             {
               ellipsis: true,
               title: t("clearing.supply price"),
-              render: (_, record) => record.supply_price.toLocaleString(),
+              render: (_, record) => record.supply_amount.toLocaleString(),
             },
             {
               ellipsis: true,
               title: t("clearing.vat"),
-              render: (_, record) => record.vat_price.toLocaleString(),
+              render: (_, record) => record.vat_amount.toLocaleString(),
             },
             {
               ellipsis: true,
               title: t("clearing.price"),
-              render: (_, record) => record.deposit_price.toLocaleString(),
+              render: (_, record) => record.clearing_amount.toLocaleString(),
             },
           ]}
         />

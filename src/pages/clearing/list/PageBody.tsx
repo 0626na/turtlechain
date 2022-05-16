@@ -32,6 +32,7 @@ function PageBody() {
   const [sheetList, setSheetList] = useState<ClearingSheetShow[]>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     store_id: store.id,
+    credit_type: "general",
     start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
     end_date: moment().format("YYYY-MM-DD"),
     page: 1,
@@ -109,19 +110,19 @@ function PageBody() {
             color: "green",
             title: t("clearing.status.request"),
             count: getSheetQuery.data?.data.clearing_summary.request.count ?? 0,
-            price: getSheetQuery.data?.data.clearing_summary.request.price ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.request.amount ?? 0,
           },
           {
             color: "orange",
             title: t("clearing.status.pending"),
             count: getSheetQuery.data?.data.clearing_summary.pending.count ?? 0,
-            price: getSheetQuery.data?.data.clearing_summary.pending.price ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.pending.amount ?? 0,
           },
           {
             color: "geekblue",
             title: t("clearing.status.complete"),
             count: getSheetQuery.data?.data.clearing_summary.complete.count ?? 0,
-            price: getSheetQuery.data?.data.clearing_summary.complete.price ?? 0,
+            price: getSheetQuery.data?.data.clearing_summary.complete.amount ?? 0,
           },
         ]}
       />
@@ -209,7 +210,7 @@ function PageBody() {
             {
               ellipsis: true,
               title: t("clearing.total price"),
-              render: (_, record) => record.clearing_total_price.toLocaleString(),
+              render: (_, record) => record.total_clearing_amount.toLocaleString(),
             },
             {
               ellipsis: true,
