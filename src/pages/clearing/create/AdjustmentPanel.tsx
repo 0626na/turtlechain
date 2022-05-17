@@ -131,7 +131,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             setCart({
               ...cart,
               subtract_item_list: balanceList
-                .filter((item) => item.subtract_price !== undefined)
+                .filter((item) => !!item.subtract_price)
                 .map((item) => ({
                   ws_store_id: item.vendor_info.ws_store_id,
                   vendor_id: item.vendor_info.id,
