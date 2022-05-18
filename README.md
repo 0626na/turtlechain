@@ -9,8 +9,8 @@ git clone https://ogkim@bitbucket.org/turtleship/turtlechain-v2.git
 # 레포지토리 이동
 cd turtlechain-v2
 
-# dev 브런치 이동
-git checkout dev
+# devel 브런치 이동
+git checkout devel
 
 # yarn이 설치되어 있지 않은 경우 yarn 설치
 npm install -g yarn
