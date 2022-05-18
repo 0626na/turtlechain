@@ -165,7 +165,8 @@ function PageBody() {
             return {
               onClick: (event) => {
                 selectRow(record);
-                setUpdateModalVisible(true);
+                // TODO: 백오피스 거래처 수정반영기능 살리고 주석 제거
+                // setUpdateModalVisible(true);
               },
             };
           }}
