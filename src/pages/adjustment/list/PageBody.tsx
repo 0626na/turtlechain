@@ -22,14 +22,13 @@ import {
 } from "antd";
 import adjustmentAPI, { AdjustmentItemShow, RequestGetList } from "apis/adjustmentAPI";
 import { useMutation, useQuery } from "react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { storeState } from "store/storeState";
 import { useRecoilValue } from "recoil";
 import { AxiosError } from "axios";
 import { TurtleButtonSub, TurtleCard, TurtleIcon, TurtleTableTitle } from "components/common";
 import { MainContent, MenuBar } from "layouts/main";
 import DetailModal from "./DetailModal";
-import { NewSearchFilter } from "components/combine";
 
 const PageBody = function () {
   const store = useRecoilValue(storeState);

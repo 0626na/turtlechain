@@ -1,4 +1,4 @@
-import { Form, message, notification, Popconfirm, Row, Select } from "antd";
+import { Form, message, Popconfirm, Row, Select } from "antd";
 import { retailerStoreAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleButton, TurtleInput, TurtleModal } from "components/common";

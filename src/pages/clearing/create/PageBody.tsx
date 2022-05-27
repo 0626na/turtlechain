@@ -1,6 +1,5 @@
 import { Collapse } from "antd";
 import { TurtlePanelHeader } from "components/common";
-import { t } from "i18next";
 import { MainContent, MenuBar } from "layouts/main";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";

@@ -1,10 +1,9 @@
 import { t } from "i18next";
-import { InputNumber, Table, TabPaneProps, Tabs } from "antd";
+import { Table, TabPaneProps, Tabs } from "antd";
 import { TurtleIcon, TurtleInputPrice, TurtleTableTitle } from "components/common";
 import { useRecoilState } from "recoil";
 import { productCartState } from "store/productCartState";
 import { useCallback } from "react";
-import { pricePattern } from "utils/pattern";
 
 interface Props extends TabPaneProps {
   loading: boolean;

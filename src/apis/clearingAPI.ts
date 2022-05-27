@@ -213,7 +213,8 @@ const getSheet = async function (query: RequestGetSheet) {
 };
 
 // Request: 정산장 수정 요청
-export interface RequestUpdateSheet extends ClearingSheetShow {
+export interface RequestUpdateSheet {
+  id: number;
   // 삭제 요청시 1
   is_inactive: number;
 }
@@ -227,7 +228,7 @@ export interface ResponseUpdateSheet {
 // 정산장 수정 요청
 const updateSheet = async function (data: RequestUpdateSheet) {
   let url = `clearing/sheet/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdateSheet>(url, data);
+  const response = await v2Axios.patch<ResponseUpdateSheet>(url, data);
   return response.data;
 };
 

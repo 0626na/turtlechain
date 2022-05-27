@@ -227,7 +227,7 @@ function PageBody() {
                       onConfirm={(e) => {
                         e?.stopPropagation();
                         updateSheetQuery.mutate({
-                          ...record,
+                          id: record.id,
                           is_inactive: 1,
                         });
                       }}

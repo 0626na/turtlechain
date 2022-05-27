@@ -1,4 +1,4 @@
-import { Badge, Col, Divider, message, Popover, Row, Space, Typography } from "antd";
+import { Col, Divider, message, Popover, Row, Space, Typography } from "antd";
 import styled from "styled-components";
 import { BellOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "react-query";
@@ -6,7 +6,7 @@ import notificationAPI from "apis/notificationAPI";
 import { AxiosError } from "axios";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 function Notification() {
   const history = useHistory();

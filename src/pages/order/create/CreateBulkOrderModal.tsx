@@ -111,7 +111,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
       });
     });
     onCloseModal();
-  }, [successList, addItem, closeModal, resetField]);
+  }, [successList, addItem, onCloseModal]);
 
   return (
     <Modal

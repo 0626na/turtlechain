@@ -9,7 +9,7 @@ import { useMutation } from "react-query";
 import { authAPI } from "apis";
 // antd
 import { UserOutlined, LockOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Divider, Typography, message, Space, Row } from "antd";
+import { Form, Input, Button, Checkbox, Divider, Typography, Space, Row } from "antd";
 import { useState } from "react";
 
 function LoginForm() {

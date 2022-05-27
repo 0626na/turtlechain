@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { Button, Card, Form, Input, message, Row, Typography } from "antd";
+import { Button, Form, Input, message, Row, Typography } from "antd";
 import { userAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleButton, TurtleCardSetting } from "components/common";

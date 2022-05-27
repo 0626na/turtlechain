@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { DatePicker, Divider, message, Table } from "antd";
+import { DatePicker, message, Table } from "antd";
 import { clearingAPI } from "apis";
 import { AxiosError } from "axios";
 import { TurtleTableTitle } from "components/common";

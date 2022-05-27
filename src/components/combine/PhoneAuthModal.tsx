@@ -93,7 +93,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
       setSessionKey("");
       setExpireTime(null);
     }
-  }, [visible]);
+  }, [visible, form]);
 
   return (
     <Modal

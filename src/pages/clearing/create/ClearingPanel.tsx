@@ -42,7 +42,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     () =>
       adjustmentAPI.getList({
         rt_store_id: store.id,
-        is_cleared: 0,
         start_date: moment().format("YYYY-MM-DD"),
         end_date: moment().format("YYYY-MM-DD"),
         type: "reserve",
