@@ -16,40 +16,29 @@ function StoreSelect({ warningMessage }: Props) {
   const [storeList, setStoreList] = useState<Array<Store>>([]);
 
   // 쇼핑몰 불러오기 요청
-  const getStoresQuery = useQuery(
-    ["getStores"],
-    () =>
-      retailerStoreAPI.getList({
-        offset: 1000,
-        last_id: -1,
-        switch_type: "next",
-        search_type: "",
-        search_query: "",
-      }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
-        if (data.data.data.length === 0) return;
-
-        // storeList 채워준다.
-        setStoreList(
-          data.data.data
-            .filter((store) => !store.is_closed)
-            .map((store) => ({
-              id: store.id,
-              name: store.name,
-            })),
-        );
-
-        // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택
-        if (data.data.data.length === 1) {
-          setStore({ id: data.data.data[0].id, name: data.data.data[0].name });
-        }
-      },
+  const getStoresQuery = useQuery(["getStoreList"], retailerStoreAPI.getList, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-  );
+    onSuccess: (data) => {
+      if (data.store_list.length === 0) return;
+
+      // storeList 채워준다.
+      setStoreList(
+        data.store_list
+          .filter((store) => !store.is_closed)
+          .map((store) => ({
+            id: store.id,
+            name: store.name,
+          })),
+      );
+
+      // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택
+      if (data.store_list.length === 1) {
+        setStore({ id: data.store_list[0].id, name: data.store_list[0].name });
+      }
+    },
+  });
 
   // 쇼핑몰 선택
   const handleChange = useCallback(

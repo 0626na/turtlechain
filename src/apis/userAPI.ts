@@ -83,6 +83,7 @@ interface ResponseGet {
     name: string;
     email: string;
     mobile_phone: string;
+    company_id: number;
   };
 }
 

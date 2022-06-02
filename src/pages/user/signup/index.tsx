@@ -65,6 +65,9 @@ function SignupPage() {
       setIsSubmitting(true);
       const { company_id } = await retailerCompanyAPI.create({
         ...company,
+        tax_type: "[]",
+        service_usage: "[]",
+        stores: "[]",
         biz_license_file: company.biz_license_file as File,
       });
       await userAPI.create({ ...user, type: "rt", company_id });

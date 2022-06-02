@@ -3,14 +3,18 @@ import { v2Axios } from "apis";
 
 // 소매 사업자 생성
 interface RequestCreate {
-  biz_type: "personal" | "entity" | "simple";
-  owner: string;
   name: string;
+  owner: string;
   biz_num: string;
+  biz_type: "personal" | "entity" | "simple";
   address_main: string;
   address_sub: string;
-  biz_license_file: File;
   memo: string;
+  biz_license_file: File;
+  // tax_type, service_usage, stores 는 백오피스 필수필드 이므로 빈배열 string 넣어줌(formdata)
+  tax_type: "[]"; // 빈배열
+  service_usage: "[]"; // 빈배열
+  stores: "[]"; // 빈배열
 }
 
 interface ResponseCreate {
@@ -20,12 +24,11 @@ interface ResponseCreate {
 }
 
 const create = async function (data: RequestCreate) {
-  const url = "/provisioning/retailer_company";
+  const url = "/provisioning/retailer/companies";
   const formData = new FormData();
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);
   }
-
   const response = await v2Axios.post<ResponseCreate>(url, formData);
   return response.data.data;
 };
@@ -33,7 +36,7 @@ const create = async function (data: RequestCreate) {
 interface ResponseGet {
   msg: string;
   data: {
-    data: Array<{
+    company_list: Array<{
       id: number;
       biz_type: string;
       biz_num: string;
@@ -47,10 +50,11 @@ interface ResponseGet {
     }>;
   };
 }
+
 const get = async function () {
-  const url = `/provisioning/retailer_company?search_type&search_query=&last_id=-1&switch_type=next&offset=100`;
+  const url = `/provisioning/retailer/companies`;
   const response = await v2Axios.get<ResponseGet>(url);
-  return response.data.data.data[0];
+  return response.data.data.company_list[0];
 };
 
 interface RequestUpdate {

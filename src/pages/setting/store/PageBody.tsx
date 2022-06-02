@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { PlusOutlined } from "@ant-design/icons";
 import CreateModal from "./CreateModal";
 import UpdateModal from "./UpdateModal";
+import { phonePattern } from "utils/pattern";
 
 function PageBody() {
   const [selectedRow, selectRow] = useState<StoreShow>();
@@ -16,22 +17,11 @@ function PageBody() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   // 쇼핑몰 리스트 요청
-  const getListQuery = useQuery(
-    ["getStoreList"],
-    () =>
-      retailerStoreAPI.getList({
-        offset: 1000,
-        last_id: -1,
-        switch_type: "next",
-        search_type: "",
-        search_query: "",
-      }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
+  const getListQuery = useQuery(["getStoreList"], retailerStoreAPI.getList, {
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data?.msg);
     },
-  );
+  });
 
   // 로우 클릭
   const onClickRow = (record: StoreShow) => {
@@ -54,7 +44,7 @@ function PageBody() {
       <MainContent title={t("store.lists")}>
         <Table
           size="small"
-          dataSource={getListQuery.data?.data.data}
+          dataSource={getListQuery.data?.store_list}
           loading={getListQuery.isLoading}
           pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
           rowKey={(record) => record.id}
@@ -65,14 +55,15 @@ function PageBody() {
             },
           })}
           title={() => (
-            <TurtleTableTitle count={getListQuery.data?.data.total_count ?? 0}></TurtleTableTitle>
+            <TurtleTableTitle count={getListQuery.data?.total_count ?? 0}></TurtleTableTitle>
           )}
           columns={[
             {
               title: t("biz status"),
               dataIndex: "is_closed",
               width: 100,
-              render: (text, record) => {
+              align: "center",
+              render: (_, record) => {
                 const { is_closed } = record;
                 const color = is_closed ? "red" : "green";
                 const str = is_closed ? t("status.closed") : t("status.open");
@@ -81,25 +72,42 @@ function PageBody() {
             },
             {
               title: t("store.name"),
-              dataIndex: "name",
-            },
-            {
-              title: t("store.url"),
-              dataIndex: "mall_url",
+              render: (_, record) => record.name,
             },
             {
               title: t("store.phone"),
-              dataIndex: "phone",
+              render: (_, record) =>
+                record.store_phone[0]?.phone.replace(phonePattern, "$1-$2-$3") ?? "",
+            },
+            {
+              title: "결제 계좌정보",
+              ellipsis: true,
+              render: (_, record) =>
+                `${record.store_account[0]?.bank ?? ""} ${
+                  record.store_account[0]?.account_number ?? ""
+                } ${record.store_account[0]?.account_holder ?? ""}`,
+            },
+            {
+              title: "WP가상계좌",
+            },
+            {
+              title: "받는분 통장인쇄내용",
+              ellipsis: true,
+              render: (_, record) => record.sender_name,
+            },
+            {
+              title: "이체내역 착신 이메일",
+              ellipsis: true,
+              render: (_, record) => record.email,
             },
             {
               title: "재고관리 프로그램",
-              dataIndex: "order_formats",
-              render: (order_formats) =>
-                order_formats === 1 ? "셀메이트" : order_formats === 2 ? "이지어드민" : "터틀체인",
-            },
-            {
-              title: t("store.alimtalk name"),
-              dataIndex: "alimtalk_name",
+              render: (_, record) =>
+                record.inventory_type === 1
+                  ? "셀메이트"
+                  : record.inventory_type === 2
+                  ? "이지어드민"
+                  : "터틀체인",
             },
           ]}
         />
