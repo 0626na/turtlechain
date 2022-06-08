@@ -512,7 +512,7 @@ function ConnectModal({ visible, closeModal }: Props) {
                 ellipsis: true,
                 width: "8%",
                 title: "거래처 코드",
-                render: (_, record) => record.ws_store_info[0]?.id,
+                render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
