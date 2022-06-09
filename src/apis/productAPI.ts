@@ -34,7 +34,8 @@ export interface ProductShow {
   product_code: string;
   name: string;
   vendor_product_name: string;
-  price: number;
+  supply_price: number;
+  vat_price: number;
   option: string;
   memo: string;
   image_url: string;
@@ -106,7 +107,8 @@ const create = async function (data: RequestCreate[]) {
 export interface RequestUpdate {
   id: number;
   name: string;
-  price: string;
+  supply_price: number;
+  vat_price: number;
   option: string;
   memo: string;
 }

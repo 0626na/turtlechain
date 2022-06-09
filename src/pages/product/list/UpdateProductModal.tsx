@@ -1,14 +1,5 @@
 import { t } from 'i18next';
-import {
-  Divider,
-  Form,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-  Row,
-} from 'antd';
-import { AxiosError } from 'axios';
+import { Divider, Form, Input, message, Popconfirm, Row } from 'antd';
 import { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import productAPI, { ProductShow } from '@apis/productAPI';
@@ -31,15 +22,9 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
 
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
-    onSuccess: (data) => {
-      notification.open({
-        type: 'success',
-        message: '성공적으로 수정하였습니다.',
-      });
+    onSuccess: () => {
+      message.success('성공적으로 수정하였습니다.');
       closeModal();
-    },
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
     },
   });
 
@@ -51,7 +36,8 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_product_name: selectedRow?.vendor_product_name,
       product_code: selectedRow?.product_code,
       option: selectedRow?.option,
-      price: selectedRow?.price,
+      supply_price: selectedRow?.supply_price,
+      vat_price: selectedRow?.vat_price,
       image_url: selectedRow?.image_url,
       memo: selectedRow?.memo,
       vendor_name: selectedRow?.vendor_info.vendor_name,
@@ -117,8 +103,15 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           name="option"
         />
         <Form.Item
-          name="price"
-          label={t('product.price')}
+          name="supply_price"
+          label={t('product.supply price')}
+          rules={[{ required: true }]}
+        >
+          <TurtleInputPrice style={{ width: '100%' }} />
+        </Form.Item>
+        <Form.Item
+          name="vat_price"
+          label={t('product.vat price')}
           rules={[{ required: true }]}
         >
           <TurtleInputPrice style={{ width: '100%' }} />

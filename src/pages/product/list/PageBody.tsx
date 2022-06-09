@@ -1,7 +1,6 @@
 import { t } from 'i18next';
-import { message, Pagination, Row, Table } from 'antd';
-import { AxiosError } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { Pagination, Row, Table } from 'antd';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
@@ -27,12 +26,6 @@ function PageBody() {
   const getListQuery = useQuery(
     ['getProductList', searchQuery], //
     () => productAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {},
-    },
   );
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
@@ -43,14 +36,6 @@ function PageBody() {
       page: 1,
     }));
   }, [store.id]);
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
 
   return (
     <>
@@ -79,7 +64,9 @@ function PageBody() {
                 total={getListQuery.data?.data.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
-                onChange={selectPage}
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
+                }}
               />
             </Row>
           )}
@@ -137,7 +124,6 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 120,
               title: t('product.code'),
               render: (_, record) => record.product_code,
             },
@@ -149,9 +135,15 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 100,
-              title: t('product.price'),
-              render: (_, record) => record.price.toLocaleString(),
+              align: 'right',
+              title: t('product.supply price'),
+              render: (_, record) => record.supply_price.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              align: 'right',
+              title: t('product.vat price'),
+              render: (_, record) => record.vat_price.toLocaleString(),
             },
             {
               ellipsis: true,
