@@ -51,7 +51,6 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
       email,
       alimtalk_name,
     } = selectedRow || {};
-    console.log(selectedRow);
     form.setFieldsValue({
       store_id: id,
       is_closed,
@@ -193,7 +192,11 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
         <Form.Item label="재고프로그램 연동키">
           <Input.Group compact>
             <Form.Item name="inventory_domain" noStyle label="도메인">
-              <Input style={{ width: "40%" }} placeholder="도메인" />
+              <Input
+                style={{ width: "40%" }}
+                placeholder="도메인"
+                disabled={selectedRow?.inventory_type === 2}
+              />
             </Form.Item>
             <Form.Item name="inventory_key" noStyle label="연동 key">
               <Input style={{ width: "60%" }} placeholder="연동키" />
