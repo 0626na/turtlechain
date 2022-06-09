@@ -36,7 +36,14 @@ function SuccessTab({ loading, ...props }: Props) {
         ...cart,
         successList: cart.successList.map((product) =>
           product.product_code === code
-            ? { ...product, [type]: value }
+            ? {
+                ...product,
+                [type]: value,
+                vat_price:
+                  type === 'supply_price'
+                    ? Math.round(value * 0.1)
+                    : product.vat_price,
+              }
             : product,
         ),
       }));
@@ -55,7 +62,6 @@ function SuccessTab({ loading, ...props }: Props) {
         scroll={{ y: 'auto' }}
         style={{ height: cart.successList.length <= 5 ? '45vh' : '' }}
         title={() => <TurtleTableTitle count={cart.successList.length} />}
-        // footer={}
         columns={[
           {
             ellipsis: true,
@@ -89,17 +95,22 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: '12%',
-            title: t('product.price'),
+            width: 150,
+            title: t('product.supply price'),
             render: (_, record) => (
               <TurtleInputPrice
                 size="small"
-                value={record.price}
+                value={record.supply_price}
                 onChange={(value) => {
-                  updateSuccessList('price', record.product_code, value);
+                  updateSuccessList('supply_price', record.product_code, value);
                 }}
               />
             ),
+          },
+          {
+            ellipsis: true,
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
           },
           {
             ellipsis: true,

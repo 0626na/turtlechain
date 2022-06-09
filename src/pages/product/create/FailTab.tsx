@@ -56,8 +56,13 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            title: t('product.price'),
-            render: (_, record) => record.price.toLocaleString(),
+            title: t('product.supply price'),
+            render: (_, record) => record.supply_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
           },
           {
             ellipsis: true,

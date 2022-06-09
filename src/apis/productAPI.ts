@@ -9,7 +9,8 @@ export interface Product {
   product_code: string;
   name: string;
   vendor_product_name: string;
-  price: number;
+  supply_price: number;
+  vat_price: number;
   option: string;
   image_url: string;
   memo: string;
@@ -77,7 +78,8 @@ export interface RequestCreate {
   vendor_id: number;
   product_code: string;
   name: string;
-  price: number;
+  supply_price: number;
+  vat_price: number;
   image_url: string;
   vendor_product_name: string;
   option: string;
@@ -92,7 +94,7 @@ export interface ResponseCreate {
   };
 }
 
-const create = async function (data: Array<RequestCreate>) {
+const create = async function (data: RequestCreate[]) {
   const url = `provisioning/product`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
@@ -182,24 +184,12 @@ export interface RequestParseExcel {
   rt_store_id: number;
 }
 
-export interface ResponseParseExcel {
-  msg: string;
-  data: {
-    success: Array<Product>;
-    fail: Array<Product>;
-    count: {
-      duplicated_count: number;
-    };
-    error?: string;
-  };
-}
-
 const parseExcel = async function (data: RequestParseExcel) {
   const url = `excel/product`;
   const formData = new FormData();
   formData.append('files', data.files);
   formData.append('rt_store_id', data.rt_store_id.toString());
-  const response = await v2Axios.post<ResponseParseExcel>(url, formData, {
+  const response = await v2Axios.post<ResponseConnectInventory>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

@@ -29,6 +29,34 @@ function Sider({ collapsed }: Props) {
 
   const menus = [
     {
+      key: '/vendor',
+      title: t('vendor.management'),
+      submenus: [
+        {
+          title: t('vendor.create'),
+          pathname: '/vendor/create',
+        },
+        {
+          title: t('vendor.list'),
+          pathname: '/vendor/list',
+        },
+      ],
+    },
+    {
+      key: '/product',
+      title: t('product.management'),
+      submenus: [
+        {
+          title: t('product.create'),
+          pathname: '/product/create',
+        },
+        {
+          title: t('product.list'),
+          pathname: '/product/list',
+        },
+      ],
+    },
+    {
       key: '/warehousing',
       title: t('warehousing.management'),
       submenus: [
@@ -85,34 +113,6 @@ function Sider({ collapsed }: Props) {
         {
           title: t('mistransfer.list'),
           pathname: '/mistransfer/list',
-        },
-      ],
-    },
-    {
-      key: '/vendor',
-      title: t('vendor.management'),
-      submenus: [
-        {
-          title: t('vendor.create'),
-          pathname: '/vendor/create',
-        },
-        {
-          title: t('vendor.list'),
-          pathname: '/vendor/list',
-        },
-      ],
-    },
-    {
-      key: '/product',
-      title: t('product.management'),
-      submenus: [
-        {
-          title: t('product.create'),
-          pathname: '/product/create',
-        },
-        {
-          title: t('product.list'),
-          pathname: '/product/list',
         },
       ],
     },
