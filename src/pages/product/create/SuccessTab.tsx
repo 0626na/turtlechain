@@ -95,6 +95,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            align: 'right',
             width: 150,
             title: t('product.supply price'),
             render: (_, record) => (
@@ -109,6 +110,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            align: 'right',
             title: t('product.vat price'),
             render: (_, record) => record.vat_price.toLocaleString(),
           },

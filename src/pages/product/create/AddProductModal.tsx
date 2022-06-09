@@ -66,7 +66,8 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
       return;
     }
     getProductCodeQuery.refetch();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]);
 
   // 상품 추가
   const addProduct = useCallback(

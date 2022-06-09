@@ -145,8 +145,8 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           okText={t('yes')}
           cancelText={t('no')}
           onConfirm={() => {
-            form.validateFields().then(() => {
-              updateProductQuery.mutate({ ...form.getFieldsValue() });
+            form.validateFields().then((value) => {
+              updateProductQuery.mutate(value);
             });
           }}
         >
