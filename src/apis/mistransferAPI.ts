@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 export interface RequestCreate {
   refund_amt: number;
@@ -13,7 +13,7 @@ export interface RequestCreate {
 export interface ResponseCreate {}
 
 const create = async function (data: RequestCreate) {
-  const url = "/mistransfer/items";
+  const url = '/mistransfer/items';
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };
@@ -22,7 +22,7 @@ export interface RequestGet {
   rt_store_id?: number;
   start_date: string;
   end_date: string;
-  type: "mistransfer";
+  type: 'mistransfer';
 }
 
 export interface ResponseGet {

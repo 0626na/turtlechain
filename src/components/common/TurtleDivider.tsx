@@ -1,5 +1,5 @@
-import { Divider, DividerProps } from "antd";
-import styled from "styled-components";
+import { Divider, DividerProps } from 'antd';
+import styled from 'styled-components';
 
 function TurtleDivider({ ...props }: DividerProps) {
   return <StyledDivider {...props} />;

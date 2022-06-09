@@ -1,10 +1,10 @@
-import { Helmet } from "react-helmet";
-import { t } from "i18next";
-import FindIdForm from "./FindIdForm";
-import { LoginPageBody } from "layouts/login";
+import { Helmet } from 'react-helmet';
+import { t } from 'i18next';
+import FindIdForm from './FindIdForm';
+import { LoginPageBody } from '@layout/login';
 
 function FindIdPage() {
-  const title = `${t("turtlechain")} - ${t("find id")}`;
+  const title = `${t('turtlechain')} - ${t('find id')}`;
 
   return (
     <>

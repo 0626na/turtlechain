@@ -1,16 +1,12 @@
-import styled from "styled-components";
-import { useState, useMemo, useEffect } from "react";
-// async
-import { AxiosError } from "axios";
-import { useMutation } from "react-query";
-import { userAPI } from "apis";
-// antd
-import { Button, Form, Input, message } from "antd";
-// lang
-import { t } from "i18next";
-// components
-import { User } from ".";
-import { PhoneAuthModal } from "components/combine";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useState, useMemo, useEffect } from 'react';
+import { Button, Form, Input, message } from 'antd';
+import { AxiosError } from 'axios';
+import { useMutation } from 'react-query';
+import { PhoneAuthModal } from '@components/combine';
+import { User } from '.';
+import userAPI from '@apis/userAPI';
 
 interface Props {
   user: User;
@@ -23,7 +19,7 @@ interface Props {
 function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
   const [visiblePhoneAuthModal, setVisiblePhoneAuthModal] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState(true);
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,12 +27,12 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
   };
 
   // 아이디 중복체크 요청
-  const dupCheckQuery = useMutation(["dupCheck"], userAPI.dupCheck, {
+  const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {
-      message.success(t("message.no duplicate values"));
+      message.success(t('message.no duplicate values'));
       setIsDuplicated(false);
     },
   });
@@ -72,14 +68,14 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
         }}
       />
       <Form layout="vertical">
-        <Form.Item label={t("user name")}>
+        <Form.Item label={t('user name')}>
           <Input //
             name="name"
             value={user.name}
             onChange={handleChangeText}
           />
         </Form.Item>
-        <Form.Item label={t("email")}>
+        <Form.Item label={t('email')}>
           <Input //
             name="email"
             value={user.email}
@@ -87,21 +83,29 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
           />
         </Form.Item>
         <Form.Item
-          label={t("phone")}
+          label={t('phone')}
           hasFeedback
-          validateStatus={user.mobile_phone ? "success" : ""}
+          validateStatus={user.mobile_phone ? 'success' : ''}
         >
           <Input
             readOnly
             value={user.mobile_phone}
             suffix={
-              <Button size="small" type="link" onClick={() => setVisiblePhoneAuthModal(true)}>
-                {t("auth phone")}
+              <Button
+                size="small"
+                type="link"
+                onClick={() => setVisiblePhoneAuthModal(true)}
+              >
+                {t('auth phone')}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={t("id")} hasFeedback validateStatus={!isDuplicated ? "success" : ""}>
+        <Form.Item
+          label={t('id')}
+          hasFeedback
+          validateStatus={!isDuplicated ? 'success' : ''}
+        >
           <Input
             name="login_id"
             value={user.login_id}
@@ -110,17 +114,23 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
               <Button
                 size="small"
                 type="link"
-                onClick={() => dupCheckQuery.mutate({ login_id: user.login_id })}
+                onClick={() =>
+                  dupCheckQuery.mutate({ login_id: user.login_id })
+                }
               >
-                {t("duplicate check")}
+                {t('duplicate check')}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={t("password")}>
-          <Input.Password name="password" value={user.password} onChange={handleChangeText} />
+        <Form.Item label={t('password')}>
+          <Input.Password
+            name="password"
+            value={user.password}
+            onChange={handleChangeText}
+          />
         </Form.Item>
-        <Form.Item label={t("confirm password")}>
+        <Form.Item label={t('confirm password')}>
           <Input.Password
             name="confirmPassword"
             value={confirmPassword}
@@ -130,7 +140,7 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
         <Form.Item>
           <ButtonContainer>
             <Button block onClick={onPrev}>
-              {t("prev")}
+              {t('prev')}
             </Button>
             <Button
               block
@@ -139,7 +149,7 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
               loading={isSubmitting}
               onClick={onSignup}
             >
-              {t("signup")}
+              {t('signup')}
             </Button>
           </ButtonContainer>
         </Form.Item>

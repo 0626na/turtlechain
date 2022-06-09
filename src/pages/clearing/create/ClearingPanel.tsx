@@ -1,4 +1,6 @@
-import { t } from "i18next";
+import moment from 'moment';
+import styled from 'styled-components';
+import { t } from 'i18next';
 import {
   Card,
   Col,
@@ -8,17 +10,16 @@ import {
   notification,
   Popconfirm,
   Row,
-} from "antd";
-import styled from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { clearingCartState } from "store/clearingCartState";
-import useClearingCart from "hooks/useClearingCart";
-import { TurtleButton } from "components/common";
-import { useMutation, useQuery } from "react-query";
-import { adjustmentAPI, clearingAPI } from "apis";
-import { AxiosError } from "axios";
-import { storeState } from "store/storeState";
-import moment from "moment";
+} from 'antd';
+import { AxiosError } from 'axios';
+import { useMutation, useQuery } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clearingCartState } from '@store/clearingCartState';
+import { useClearingCart } from '@hooks/index';
+import { TurtleButton } from '@components/common';
+import { storeState } from '@store/storeState';
+import adjustmentAPI from '@apis/adjustmentAPI';
+import clearingAPI from '@apis/clearingAPI';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -38,17 +39,17 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   ] = useClearingCart();
 
   const getTodayReserveListQuery = useQuery(
-    ["getTodayReserveList"],
+    ['getTodayReserveList'],
     () =>
       adjustmentAPI.getList({
         rt_store_id: store.id,
-        start_date: moment().format("YYYY-MM-DD"),
-        end_date: moment().format("YYYY-MM-DD"),
-        type: "reserve",
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+        type: 'reserve',
         original_id: 0,
       }),
     {
-      enabled: activeKey === "3",
+      enabled: activeKey === '3',
       onSuccess: (data) => {
         setCart({
           ...cart,
@@ -64,26 +65,30 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     },
   );
 
-  const createClearingQuery = useMutation(["createClearing"], clearingAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data.msg);
+  const createClearingQuery = useMutation(
+    ['createClearing'],
+    clearingAPI.create,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data.msg);
+      },
+      onSuccess: (data) => {
+        notification.open({
+          type: 'success',
+          message: t('message.success create clearing'),
+        });
+        clickCreate();
+      },
     },
-    onSuccess: (data) => {
-      notification.open({
-        type: "success",
-        message: t("message.success create clearing"),
-      });
-      clickCreate();
-    },
-  });
+  );
 
   return (
-    <Collapse.Panel {...props} style={{ border: "1px solid #e3e6ea" }}>
+    <Collapse.Panel {...props} style={{ border: '1px solid #e3e6ea' }}>
       <StyledCard>
         <Row>
           <Col span={3}>입고</Col>
           <Col>
-            + {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{" "}
+            + {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{' '}
             {(totalVatPrice ?? 0).toLocaleString()}원 포함)
           </Col>
         </Row>
@@ -114,8 +119,8 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           marginTop: 16,
           paddingLeft: 16,
           paddingTop: 16,
-          color: "#5b5d63",
-          borderTop: "1px solid #e3e6ea",
+          color: '#5b5d63',
+          borderTop: '1px solid #e3e6ea',
         }}
       >
         <Col span={1}>
@@ -123,20 +128,20 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         </Col>
         <Col span={17}>
           <b>
-            {(totalPrice ?? 0).toLocaleString()} 원 (부가세 {(totalVatPrice ?? 0).toLocaleString()}
-            원 포함)
+            {(totalPrice ?? 0).toLocaleString()} 원 (부가세{' '}
+            {(totalVatPrice ?? 0).toLocaleString()}원 포함)
           </b>
         </Col>
         <Col>
           <Popconfirm
-            title={t("description.really register")}
-            okText={t("yes")}
-            cancelText={t("no")}
+            title={t('description.really register')}
+            okText={t('yes')}
+            cancelText={t('no')}
             onConfirm={() => {
               createClearingQuery.mutate({
                 sheet: {
                   store_id: store.id,
-                  credit_type: "general",
+                  credit_type: 'general',
                   store_name: store.name,
                   total_clearing_amount: totalPrice!,
                 },
@@ -150,8 +155,11 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               });
             }}
           >
-            <TurtleButton disabled={totalPrice === 0} loading={createClearingQuery.isLoading}>
-              {t("button.request clearing")}
+            <TurtleButton
+              disabled={totalPrice === 0}
+              loading={createClearingQuery.isLoading}
+            >
+              {t('button.request clearing')}
             </TurtleButton>
           </Popconfirm>
         </Col>

@@ -1,5 +1,5 @@
-import { Card, Col, Row, Statistic } from "antd";
-import React from "react";
+import { Card, Col, Row, Statistic } from 'antd';
+import React from 'react';
 
 interface Props {
   value: Array<{ title: React.ReactNode; value: string }>;

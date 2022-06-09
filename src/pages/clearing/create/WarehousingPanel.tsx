@@ -1,16 +1,26 @@
-import { t } from "i18next";
-import { Collapse, message, Row, Table, Typography, CollapsePanelProps, Space } from "antd";
-import { warehousingAPI } from "apis";
-import { AxiosError } from "axios";
-import { TurtleButton } from "components/common";
-import { useCallback, useState } from "react";
-import { useQuery } from "react-query";
-import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import WarehousingDetailModal from "./WarehousingDetailModal";
-import { clearingCartState } from "store/clearingCartState";
-import useClearingCart from "hooks/useClearingCart";
+import { t } from 'i18next';
+import {
+  Collapse,
+  message,
+  Row,
+  Table,
+  Typography,
+  CollapsePanelProps,
+  Space,
+} from 'antd';
+import { AxiosError } from 'axios';
+import { useCallback, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { TurtleButton } from '@components/common';
+import warehousingAPI, {
+  WarehousingItemShow,
+  WarehousingSheet,
+} from '@apis/warehousingAPI';
+import { storeState } from '@store/storeState';
+import { clearingCartState } from '@store/clearingCartState';
+import { useClearingCart } from '@hooks/index';
+import WarehousingDetailModal from './WarehousingDetailModal';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -25,18 +35,18 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const [selectedSheet, selectSheet] = useState<WarehousingSheet>();
 
   const getWarehousingSheetQuery = useQuery(
-    ["getWarehousingSheet", activeKey, store.id], //
+    ['getWarehousingSheet', activeKey, store.id], //
     () =>
       warehousingAPI.getSheet({
         rt_store_id: store.id!,
         is_confirmed: 0,
-        start_date: "2017-01-01",
-        end_date: "9999-12-31",
+        start_date: '2017-01-01',
+        end_date: '9999-12-31',
         did_settlement: 0,
         page: 1,
       }),
     {
-      enabled: activeKey === "1" && !!store.id,
+      enabled: activeKey === '1' && !!store.id,
       onError: (error: AxiosError) => {
         message.error(error.response?.data?.msg);
       },
@@ -76,11 +86,15 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             // (도매에게) 이체금액
             const deposit_price = count * price;
             // 부가세
-            const vat_price = is_vat_included ? Math.floor(deposit_price / 11) : 0;
+            const vat_price = is_vat_included
+              ? Math.floor(deposit_price / 11)
+              : 0;
             // 공급가
             const supply_price = deposit_price - vat_price;
             // (소매가) 발행금액
-            const total_price = is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1);
+            const total_price = is_vat_included
+              ? deposit_price
+              : Math.floor(deposit_price * 1.1);
             return {
               sheet_id,
               warehousing_item_id: id,
@@ -127,10 +141,10 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       extra={
         <Space>
-          <Typography.Text style={{ color: "#5B5D63" }}>
+          <Typography.Text style={{ color: '#5B5D63' }}>
             입고 총 금액: {(totalDepositPrice ?? 0).toLocaleString()} 원
           </Typography.Text>
-          <Typography.Text style={{ color: "#5B5D63" }}>
+          <Typography.Text style={{ color: '#5B5D63' }}>
             (부가세 {(totalVatPrice ?? 0).toLocaleString()}원 포함)
           </Typography.Text>
         </Space>
@@ -156,24 +170,24 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           Table.SELECTION_COLUMN,
           {
             ellipsis: true,
-            title: t("warehousing.date"),
+            title: t('warehousing.date'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
-            title: "거래처 수",
+            title: '거래처 수',
             render: (_, record) => record.total_store_count,
           },
           {
             ellipsis: true,
-            title: t("warehousing.price"),
+            title: t('warehousing.price'),
             render: (_, record) => record.total_price.toLocaleString(),
           },
         ]}
       />
       <Row justify="end" align="middle" style={{ marginTop: 16 }}>
         <TurtleButton //
-          children={t("button.next step")}
+          children={t('button.next step')}
           onClick={clickNext}
         />
       </Row>

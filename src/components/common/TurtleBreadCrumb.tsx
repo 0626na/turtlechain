@@ -1,5 +1,5 @@
-import { Breadcrumb } from "antd";
-import styled from "styled-components";
+import { Breadcrumb } from 'antd';
+import styled from 'styled-components';
 
 interface Props {
   list: Array<string>;

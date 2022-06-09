@@ -1,4 +1,7 @@
-import { t } from "i18next";
+import { t } from 'i18next';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { FileTextOutlined } from '@ant-design/icons';
 import {
   Col,
   Input,
@@ -10,20 +13,24 @@ import {
   Row,
   Switch,
   Table,
-} from "antd";
-import { vendorAPI } from "apis";
-import { AxiosError } from "axios";
-import { useMutation, useQuery } from "react-query";
-import { VendorShow, RequestGet, VendorAccount } from "apis/vendorAPI";
-import { useCallback, useEffect, useState } from "react";
-import { FileTextOutlined } from "@ant-design/icons";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { phonePattern } from "utils/pattern";
-import { TurtleBadge, TurtleButtonSub, TurtleTableTitle } from "components/common";
-import { MainContent, MenuBar } from "layouts/main";
-import { NewSearchFilter } from "components/combine";
-import UpdateModal from "./UpdateModal";
+} from 'antd';
+import { AxiosError } from 'axios';
+import { useMutation, useQuery } from 'react-query';
+import vendorAPI, {
+  VendorShow,
+  RequestGet,
+  VendorAccount,
+} from '@apis/vendorAPI';
+import { storeState } from '@store/storeState';
+import { phonePattern } from '@utils/pattern';
+import {
+  TurtleBadge,
+  TurtleButtonSub,
+  TurtleTableTitle,
+} from '@components/common';
+import { MainContent, MenuBar } from '@layout/main';
+import { NewSearchFilter } from '@components/combine';
+import UpdateModal from './UpdateModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -34,14 +41,14 @@ function PageBody() {
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
-    type: "all",
-    search_string: "",
+    type: 'all',
+    search_string: '',
     rt_store_id: -1,
   });
 
   // 거래처 목록 불러오기 요청
   const getListQuery = useQuery(
-    ["getVendor", searchQuery], //
+    ['getVendor', searchQuery], //
     () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onError: (error: AxiosError) => {
@@ -61,7 +68,7 @@ function PageBody() {
 
   // 거래처 부가세, 메모 수정 요청
   const updateQuery = useMutation(
-    ["updateVendor"], //
+    ['updateVendor'], //
     vendorAPI.update,
     {
       onError: (error: AxiosError) => {
@@ -69,8 +76,8 @@ function PageBody() {
       },
       onSuccess: () => {
         notification.open({
-          type: "success",
-          message: t("message.success update"),
+          type: 'success',
+          message: t('message.success update'),
         });
         getListQuery.refetch();
       },
@@ -79,7 +86,11 @@ function PageBody() {
 
   // 쇼핑몰 바뀔 때 거래처 리스트 재검색
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id, page: 1 }));
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id,
+      page: 1,
+    }));
   }, [store.id]);
 
   const changeMemoValue = useCallback(
@@ -135,17 +146,21 @@ function PageBody() {
     <>
       <MenuBar />
 
-      <MainContent title={t("vendor.lists")}>
+      <MainContent title={t('vendor.lists')}>
         <Table
           size="small"
           loading={getListQuery.isLoading}
           dataSource={vendorList}
           rowKey={(record) => record.vendor_code}
           pagination={false}
-          scroll={{ y: "auto" }}
+          scroll={{ y: 'auto' }}
           title={() => (
             <TurtleTableTitle count={getListQuery.data?.data.total_count ?? 0}>
-              <NewSearchFilter vendor searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <NewSearchFilter
+                vendor
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
             </TurtleTableTitle>
           )}
           footer={() => (
@@ -181,7 +196,7 @@ function PageBody() {
                         changeMemoValue(e, record);
                       }}
                     />
-                    <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                    <Row justify="end" gutter={4} style={{ marginTop: '8px' }}>
                       <Col>
                         {record.memo && (
                           <TurtleButtonSub
@@ -201,7 +216,7 @@ function PageBody() {
                           onClick={() => {
                             updateQuery.mutate({
                               id: record.id,
-                              memo: record.memo_value ?? "",
+                              memo: record.memo_value ?? '',
                               is_vat_included: record.is_vat_included,
                             });
                           }}
@@ -214,7 +229,7 @@ function PageBody() {
                 ) : (
                   <>
                     <div>{record.memo} </div>
-                    <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                    <Row justify="end" gutter={4} style={{ marginTop: '8px' }}>
                       <Col>
                         <TurtleButtonSub
                           size="small"
@@ -234,7 +249,7 @@ function PageBody() {
             expandIcon: ({ expanded, onExpand, record }) => {
               return (
                 <FileTextOutlined
-                  style={record.memo ? {} : { opacity: "0.4" }}
+                  style={record.memo ? {} : { opacity: '0.4' }}
                   onClick={(e) => {
                     e.stopPropagation();
                     return onExpand(record, e);
@@ -246,30 +261,33 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: "10%",
-              title: t("vendor.code"),
+              width: '10%',
+              title: t('vendor.code'),
               render: (_, record) => record.vendor_code,
             },
             {
               ellipsis: true,
-              title: t("vendor.name"),
-              render: (_, record) => record.vendor_name ?? record.ws_store_info.name,
+              title: t('vendor.name'),
+              render: (_, record) =>
+                record.vendor_name ?? record.ws_store_info.name,
             },
             {
               ellipsis: true,
-              title: t("vendor.address"),
+              title: t('vendor.address'),
               render: (_, record) =>
                 `${record.ws_store_info.building} ${record.ws_store_info.floor} ${record.ws_store_info.col} ${record.ws_store_info.loc} ${record.ws_store_info.ext}`,
             },
             {
               ellipsis: true,
-              title: t("vendor.store phone"),
+              title: t('vendor.store phone'),
               render: (_, { vendor_phone, ws_store_info: { store_phone } }) => {
                 return (
                   <TurtleBadge count={store_phone.length}>
                     <Popover
                       content={store_phone.map(({ id, phone }) => (
-                        <p key={id}>{phone.replace(phonePattern, `$1-$2-$3`)}</p>
+                        <p key={id}>
+                          {phone.replace(phonePattern, `$1-$2-$3`)}
+                        </p>
                       ))}
                     >
                       {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
@@ -280,8 +298,11 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              title: t("vendor.account"),
-              render: (_, { vendor_account, ws_store_info: { store_account } }) => {
+              title: t('vendor.account'),
+              render: (
+                _,
+                { vendor_account, ws_store_info: { store_account } },
+              ) => {
                 const makeAccount = (account: VendorAccount) =>
                   `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
@@ -291,7 +312,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 120,
-              title: t("vendor.include tax"),
+              title: t('vendor.include tax'),
               render: (_, record) => (
                 <div
                   onClick={(e) => {
@@ -299,9 +320,9 @@ function PageBody() {
                   }}
                 >
                   <Popconfirm
-                    title={t("description.update tax included")}
-                    okText={t("yes")}
-                    cancelText={t("no")}
+                    title={t('description.update tax included')}
+                    okText={t('yes')}
+                    cancelText={t('no')}
                     onConfirm={() => {
                       updateQuery.mutate({
                         id: record.id,
@@ -311,9 +332,9 @@ function PageBody() {
                     }}
                   >
                     <Switch
-                      checkedChildren={t("button.include")}
+                      checkedChildren={t('button.include')}
                       checked={record.is_vat_included}
-                      style={{ width: "52px" }}
+                      style={{ width: '52px' }}
                     />
                   </Popconfirm>
                 </div>

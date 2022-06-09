@@ -1,11 +1,11 @@
-import { message, Select, Space, Typography } from "antd";
-import { useQuery } from "react-query";
-import { retailerStoreAPI } from "apis";
-import { AxiosError } from "axios";
-import { useRecoilState } from "recoil";
-import { Store, storeState } from "store/storeState";
-import { t } from "i18next";
-import { useState, useEffect, useCallback } from "react";
+import { t } from 'i18next';
+import { useState, useEffect, useCallback } from 'react';
+import { message, Select, Space, Typography } from 'antd';
+import { useQuery } from 'react-query';
+import { AxiosError } from 'axios';
+import { useRecoilState } from 'recoil';
+import { Store, storeState } from '@store/storeState';
+import retailerStoreAPI from '@apis/retailerStoreAPI';
 
 interface Props {
   warningMessage?: string;
@@ -16,7 +16,7 @@ function StoreSelect({ warningMessage }: Props) {
   const [storeList, setStoreList] = useState<Array<Store>>([]);
 
   // 쇼핑몰 불러오기 요청
-  const getStoresQuery = useQuery(["getStoreList"], retailerStoreAPI.getList, {
+  const getStoresQuery = useQuery(['getStoreList'], retailerStoreAPI.getList, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -49,7 +49,10 @@ function StoreSelect({ warningMessage }: Props) {
       }
 
       // setStore 한다.
-      setStore({ id: value, name: storeList.find((item) => item.id === value)!.name });
+      setStore({
+        id: value,
+        name: storeList.find((item) => item.id === value)!.name,
+      });
     },
     [store, storeList, setStore, warningMessage],
   );
@@ -57,18 +60,20 @@ function StoreSelect({ warningMessage }: Props) {
   // 페이지 바뀔때 마다 storeId 초기화
   useEffect(
     () => () => {
-      setStore(() => ({ id: undefined, name: "" }));
+      setStore(() => ({ id: undefined, name: '' }));
     },
     [setStore],
   );
 
   return (
     <Space size="large">
-      <Typography.Text style={{ fontSize: "16px" }}>{t("store.name")}</Typography.Text>
+      <Typography.Text style={{ fontSize: '16px' }}>
+        {t('store.name')}
+      </Typography.Text>
       <Select
-        placeholder={t("description.select mall")}
+        placeholder={t('description.select mall')}
         loading={getStoresQuery.isLoading}
-        style={{ width: "20rem" }}
+        style={{ width: '20rem' }}
         onChange={handleChange}
         value={store.id}
       >

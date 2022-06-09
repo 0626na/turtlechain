@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 export interface Vendor {
   rt_store_id: number;
@@ -84,7 +84,7 @@ export interface ResponseGet {
 
 // 거래처 리스트 요청
 const get = async function (query: RequestGet) {
-  let url = "provisioning/vendor?";
+  let url = 'provisioning/vendor?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }

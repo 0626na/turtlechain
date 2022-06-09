@@ -1,7 +1,7 @@
-import { Button, Row, Table } from "antd";
-import { t } from "i18next";
-import { UserOutlined } from "@ant-design/icons";
-import { MainContent } from "layouts/main";
+import { t } from 'i18next';
+import { Button, Row, Table } from 'antd';
+import { MainContent } from '@layout/main';
+import { UserOutlined } from '@ant-design/icons';
 
 function PageBody() {
   return (
@@ -13,10 +13,10 @@ function PageBody() {
           onClick={() => {}}
           style={{ width: 140 }}
         >
-          {t("button.invite staff")}
+          {t('button.invite staff')}
         </Button>
       </Row>
-      <MainContent title={t("staff.lists")}>
+      <MainContent title={t('staff.lists')}>
         <Table size="small" />
       </MainContent>
     </>

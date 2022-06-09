@@ -1,17 +1,24 @@
-import { t } from "i18next";
-import { Divider, Form, Input, message, notification, Popconfirm, Row } from "antd";
-import { productAPI } from "apis";
-import { ProductShow } from "apis/productAPI";
-import { AxiosError } from "axios";
-import { useEffect } from "react";
-import { useMutation } from "react-query";
+import { t } from 'i18next';
+import {
+  Divider,
+  Form,
+  Input,
+  message,
+  notification,
+  Popconfirm,
+  Row,
+} from 'antd';
+import { AxiosError } from 'axios';
+import { useEffect } from 'react';
+import { useMutation } from 'react-query';
+import productAPI, { ProductShow } from '@apis/productAPI';
 import {
   TurtleButton,
   TurtleInput,
   TurtleInputPrice,
   TurtleModal,
   TurtleTextArea,
-} from "components/common";
+} from '@components/common';
 
 interface Props {
   visible: boolean;
@@ -23,11 +30,11 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
 
   // 상품 수정 요청
-  const updateProductQuery = useMutation("updateProduct", productAPI.update, {
+  const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: (data) => {
       notification.open({
-        type: "success",
-        message: "성공적으로 수정하였습니다.",
+        type: 'success',
+        message: '성공적으로 수정하였습니다.',
       });
       closeModal();
     },
@@ -57,7 +64,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
     <TurtleModal
       centered
       width="520px"
-      title={t("product.update info")}
+      title={t('product.update info')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
@@ -75,62 +82,66 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
 
         <TurtleInput // 거래처명 Input
           name="vendor_name"
-          label={t("vendor.name")}
+          label={t('vendor.name')}
           disabled={true}
         />
         <TurtleInput // 거래처 주소 Input
           name="vendor_address"
-          label={t("vendor.address")}
+          label={t('vendor.address')}
           disabled={true}
         />
         <TurtleInput // 거래처 휴대번호 Input
           name="vendor_phone"
-          label={t("vendor.store phone")}
+          label={t('vendor.store phone')}
           disabled={true}
         />
-        <Divider style={{ borderTopColor: "rgba(0, 0, 0, 0.06)" }} />
+        <Divider style={{ borderTopColor: 'rgba(0, 0, 0, 0.06)' }} />
         <TurtleInput // 상품명 Input
-          label={t("product.name")}
+          label={t('product.name')}
           name="name"
           required={true}
         />
         <TurtleInput // 거래처 상품명 Input
-          label={t("product.vendor product name")}
+          label={t('product.vendor product name')}
           name="vendor_product_name"
           required={true}
           disabled={true}
         />
         <TurtleInput // 상품 바코드 Input
-          label={t("product.code")}
+          label={t('product.code')}
           name="product_code"
           disabled={true}
         />
         <TurtleInput // 옵션 Input
-          label={t("product.option")}
+          label={t('product.option')}
           name="option"
         />
-        <Form.Item name="price" label={t("product.price")} rules={[{ required: true }]}>
-          <TurtleInputPrice style={{ width: "100%" }} />
+        <Form.Item
+          name="price"
+          label={t('product.price')}
+          rules={[{ required: true }]}
+        >
+          <TurtleInputPrice style={{ width: '100%' }} />
         </Form.Item>
         <TurtleInput //
-          label={t("product.image url")}
+          label={t('product.image url')}
           name="image_url"
           required={false}
         />
         <TurtleTextArea // 메모 TextArea
           required={false}
-          label={t("vendor.memo")}
+          label={t('vendor.memo')}
           name="memo"
-          placeholder={t("placeholder.memo")}
+          placeholder={t('placeholder.memo')}
           rows={5}
         />
       </Form>
 
       <Row justify="end">
         <Popconfirm
-          title={t("description.really update")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really update')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then(() => {
               updateProductQuery.mutate({ ...form.getFieldsValue() });
@@ -141,7 +152,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
             type="primary"
             loading={updateProductQuery.isLoading}
           >
-            {t("button.update")}
+            {t('button.update')}
           </TurtleButton>
         </Popconfirm>
       </Row>

@@ -1,6 +1,12 @@
-import { Switch, Route, Redirect } from "react-router-dom";
-import { LoginPage, FindIdPage, ResetPasswordPage, SignupPage, MembershipInfoPage } from "pages";
-import { Suspense } from "react";
+import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+  LoginPage,
+  FindIdPage,
+  ResetPasswordPage,
+  SignupPage,
+  MembershipInfoPage,
+} from '@pages/index';
+import { Suspense } from 'react';
 
 const LoginRouter = function () {
   return (

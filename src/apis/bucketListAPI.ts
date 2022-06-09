@@ -1,10 +1,10 @@
-import { RcFile } from "antd/lib/upload";
-import { v2Axios } from "./index";
-import { VendorAccount } from "./vendorAPI";
+import { RcFile } from 'antd/lib/upload';
+import { v2Axios } from '.';
+import { VendorAccount } from './vendorAPI';
 
 // Request: 거래처 버킷 리스트 생성
 export interface RequestCreate {
-  type: "update" | "create";
+  type: 'update' | 'create';
   name: string;
   tel: string;
   mobile: string;
@@ -36,12 +36,9 @@ export interface ResponseCreate {
 const create = async function (data: RequestCreate) {
   const url = `provisioning/store-bucketlist`;
   const formData = new FormData();
-  // for (const [key, value] of Object.entries(data)) {
-  //   formData.append(key, value);
-  // }
-  formData.append("file", data.file!);
+  formData.append('file', data.file!);
   delete data.file;
-  formData.append("json", JSON.stringify(data));
+  formData.append('json', JSON.stringify(data));
   const response = await v2Axios.post<ResponseCreate>(url, formData);
   return response.data;
 };

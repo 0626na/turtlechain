@@ -1,7 +1,6 @@
-import { Select, Space } from "antd";
-import Search from "antd/lib/input/Search";
-import { t } from "i18next";
-import styled from "styled-components";
+import { Select, Space, Input } from 'antd';
+import { t } from 'i18next';
+import styled from 'styled-components';
 interface Props {
   searchQuery: any; // state
   setSearchQuery: (searchQuery: any) => void; // setState
@@ -9,43 +8,48 @@ interface Props {
   vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }
 
-function NewSearchFilter({ searchQuery, setSearchQuery, select = true, vendor = false }: Props) {
+function NewSearchFilter({
+  searchQuery,
+  setSearchQuery,
+  select = true,
+  vendor = false,
+}: Props) {
   const options = vendor
     ? [
         {
-          name: t("common.all"),
-          value: "all",
+          name: t('common.all'),
+          value: 'all',
         },
         {
-          name: t("vendor.name"),
-          value: "name",
+          name: t('vendor.name'),
+          value: 'name',
         },
         {
-          name: t("vendor.account"),
-          value: "account",
+          name: t('vendor.account'),
+          value: 'account',
         },
         {
-          name: t("vendor.store phone"),
-          value: "phone",
+          name: t('vendor.store phone'),
+          value: 'phone',
         },
       ]
     : [
         {
-          name: t("common.all"),
-          value: "all",
+          name: t('common.all'),
+          value: 'all',
         },
 
         {
-          name: t("product.name"), //
-          value: "name",
+          name: t('product.name'), //
+          value: 'name',
         },
         {
-          name: t("product.vendor product name"),
-          value: "vendor_product_name",
+          name: t('product.vendor product name'),
+          value: 'vendor_product_name',
         },
         {
-          name: t("vendor.name"),
-          value: "vendor_name",
+          name: t('vendor.name'),
+          value: 'vendor_name',
         },
       ];
 
@@ -69,18 +73,22 @@ function NewSearchFilter({ searchQuery, setSearchQuery, select = true, vendor = 
       )}
       <StyledSearch
         size="small"
-        placeholder={t("placeholder.search")}
+        placeholder={t('placeholder.search')}
         style={{ width: 200 }}
         value={searchQuery.search_string}
         onChange={(e) => {
-          setSearchQuery({ ...searchQuery, search_string: e.currentTarget.value, page: 1 });
+          setSearchQuery({
+            ...searchQuery,
+            search_string: e.currentTarget.value,
+            page: 1,
+          });
         }}
       />
     </Space>
   );
 }
 
-const StyledSearch = styled(Search)`
+const StyledSearch = styled(Input.Search)`
   .ant-input-search-button {
     border: 1px solid #d9d9d9;
     border-left: none;

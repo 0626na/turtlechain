@@ -1,32 +1,40 @@
-import { Col, Divider, message, Popover, Row, Space, Typography } from "antd";
-import styled from "styled-components";
-import { BellOutlined } from "@ant-design/icons";
-import { useMutation, useQuery } from "react-query";
-import notificationAPI from "apis/notificationAPI";
-import { AxiosError } from "axios";
-import moment from "moment";
-import { useHistory } from "react-router-dom";
-import { useRef, useState } from "react";
+import styled from 'styled-components';
+import moment from 'moment';
+import { useRef, useState } from 'react';
+import { Col, Divider, message, Popover, Row, Space, Typography } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { AxiosError } from 'axios';
+import { BellOutlined } from '@ant-design/icons';
+import notificationAPI from '@apis/notificationAPI';
 
 function Notification() {
   const history = useHistory();
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getQuery = useQuery("getNotification", () => notificationAPI.get({ type: "home" }), {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const getQuery = useQuery(
+    'getNotification',
+    () => notificationAPI.get({ type: 'home' }),
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
     },
-  });
+  );
 
-  const updateQuery = useMutation("updateNotification", notificationAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const updateQuery = useMutation(
+    'updateNotification',
+    notificationAPI.update,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        getQuery.refetch();
+      },
     },
-    onSuccess: (data) => {
-      getQuery.refetch();
-    },
-  });
+  );
 
   return (
     <StyledPopover
@@ -38,24 +46,24 @@ function Notification() {
       ref={popoverRef}
       content={
         <>
-          <div style={{ maxHeight: 400, width: 400, overflow: "auto" }}>
+          <div style={{ maxHeight: 400, width: 400, overflow: 'auto' }}>
             {getQuery.data?.notification_list.length === 0 ? (
-              <Row style={{ padding: "12px 20px" }}>알림이 없습니다.</Row>
+              <Row style={{ padding: '12px 20px' }}>알림이 없습니다.</Row>
             ) : (
               getQuery.data?.notification_list.map((noti) => {
-                let mainContent = "";
-                if (noti.type === "internal_change") {
+                let mainContent = '';
+                if (noti.type === 'internal_change') {
                   mainContent = `거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
                 }
-                if (noti.type === "creation_request") {
-                  if (noti.content.status === "reject") {
+                if (noti.type === 'creation_request') {
+                  if (noti.content.status === 'reject') {
                     mainContent = `요청하신 거래처 ${noti.content.name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
                     mainContent = `요청하신 거래처 ${noti.content.name}가 신규 등록되었습니다.`;
                   }
                 }
-                if (noti.type === "modification_request") {
-                  if (noti.content.status === "reject") {
+                if (noti.type === 'modification_request') {
+                  if (noti.content.status === 'reject') {
                     mainContent = `요청하신 거래처 ${noti.content.name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
                     mainContent = `요청하신 거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
@@ -63,26 +71,43 @@ function Notification() {
                 }
                 return (
                   <div
-                    style={{ backgroundColor: noti.read_at ? "#FFFFFF" : "#F4FEFC" }}
+                    style={{
+                      backgroundColor: noti.read_at ? '#FFFFFF' : '#F4FEFC',
+                    }}
                     key={noti.id}
                   >
-                    <Row style={{ borderBottom: "1px solid #F0F0F1", padding: "12px 20px" }}>
+                    <Row
+                      style={{
+                        borderBottom: '1px solid #F0F0F1',
+                        padding: '12px 20px',
+                      }}
+                    >
                       <Space direction="vertical">
                         <Col>{mainContent}</Col>
                         <Col>
                           <Typography.Text
-                            style={{ color: "#00B594", fontSize: 13, cursor: "pointer" }}
+                            style={{
+                              color: '#00B594',
+                              fontSize: 13,
+                              cursor: 'pointer',
+                            }}
                             onClick={() => {
-                              history.push("/vendor/list");
+                              history.push('/vendor/list');
                               setPopoverVisible(false);
-                              !noti.read_at && updateQuery.mutate({ id: noti.id });
+                              !noti.read_at &&
+                                updateQuery.mutate({ id: noti.id });
                             }}
                           >
                             거래처 정보 확인
                           </Typography.Text>
                           <Divider type="vertical" />
-                          <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-                            {moment(noti.created_time).format("YYYY-MM-DD HH:mm")}
+                          <Typography.Text
+                            type="secondary"
+                            style={{ fontSize: 13 }}
+                          >
+                            {moment(noti.created_time).format(
+                              'YYYY-MM-DD HH:mm',
+                            )}
                           </Typography.Text>
                         </Col>
                       </Space>
@@ -93,11 +118,15 @@ function Notification() {
             )}
           </div>
           <Row
-            style={{ backgroundColor: "#F8F9FB", height: 40, cursor: "pointer" }}
+            style={{
+              backgroundColor: '#F8F9FB',
+              height: 40,
+              cursor: 'pointer',
+            }}
             justify="center"
             align="middle"
             onClick={() => {
-              alert("준비중입니다.");
+              alert('준비중입니다.');
             }}
           >
             알림 전체보기
@@ -110,7 +139,7 @@ function Notification() {
           padding: 8,
           marginRight: 12,
           fontSize: 20,
-          cursor: "pointer",
+          cursor: 'pointer',
         }}
         onClick={() => {
           setPopoverVisible((visible) => !visible);

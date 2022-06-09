@@ -1,10 +1,10 @@
-import { Helmet } from "react-helmet";
-import { t } from "i18next";
-import ResetPasswordForm from "./ResetPasswordForm";
-import { LoginPageBody } from "layouts/login";
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+import { LoginPageBody } from '@layout/login';
+import ResetPasswordForm from './ResetPasswordForm';
 
 function FindIdPage() {
-  const title = `${t("turtlechain")} - ${t("reset password")}`;
+  const title = `${t('turtlechain')} - ${t('reset password')}`;
 
   return (
     <>

@@ -1,11 +1,25 @@
-import { Form, Input, message, notification, Popconfirm, Radio, Row, Select } from "antd";
-import { basicDataAPI, retailerStoreAPI } from "apis";
-import { StoreShow } from "apis/retailerStoreAPI";
-import { AxiosError } from "axios";
-import { TurtleButton, TurtleDivider, TurtleInput, TurtleModal } from "components/common";
-import { t } from "i18next";
-import { useCallback, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { t } from 'i18next';
+import { useCallback, useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  Form,
+  Input,
+  message,
+  notification,
+  Popconfirm,
+  Radio,
+  Row,
+  Select,
+} from 'antd';
+import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
+import { AxiosError } from 'axios';
+import {
+  TurtleButton,
+  TurtleDivider,
+  TurtleInput,
+  TurtleModal,
+} from '@components/common';
+import basicDataAPI from '@apis/basicDataAPI';
 
 interface Props {
   visible: boolean;
@@ -17,23 +31,23 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
-  const getBankQuery = useQuery("getBank", basicDataAPI.getBank, {
+  const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
     enabled: visible,
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
   });
 
-  const updateQuery = useMutation(["updateStore"], retailerStoreAPI.update, {
+  const updateQuery = useMutation(['updateStore'], retailerStoreAPI.update, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: () => {
       notification.open({
-        type: "success",
-        message: t("message.success update mall"),
+        type: 'success',
+        message: t('message.success update mall'),
       });
-      queryClient.refetchQueries(["getStoreList"]);
+      queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },
   });
@@ -74,13 +88,15 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
     resetStates();
   }, [visible, resetStates]);
 
-  const requiredRules = [{ required: true, message: t("description.required item") }];
+  const requiredRules = [
+    { required: true, message: t('description.required item') },
+  ];
 
   return (
     <TurtleModal
       centered
       width="600px"
-      title={t("store.update")}
+      title={t('store.update')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
@@ -98,18 +114,18 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
 
         <Form.Item //
           name="is_closed"
-          label={t("biz status")}
+          label={t('biz status')}
           rules={requiredRules}
         >
           <Radio.Group>
-            <Radio value={false}>{t("status.open")}</Radio>
-            <Radio value={true}>{t("status.closed")}</Radio>
+            <Radio value={false}>{t('status.open')}</Radio>
+            <Radio value={true}>{t('status.closed')}</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item //
           name="name"
-          label={t("store.name")}
+          label={t('store.name')}
           rules={requiredRules}
         >
           <Input />
@@ -117,48 +133,57 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
 
         <Form.Item //
           name="store_url"
-          label={t("store.url")}
+          label={t('store.url')}
           rules={requiredRules}
         >
-          <Input placeholder={t("placeholder.store url")} />
+          <Input placeholder={t('placeholder.store url')} />
         </Form.Item>
 
         <Form.Item //
           name="mobile"
-          label={t("store.phone")}
+          label={t('store.phone')}
           rules={requiredRules}
         >
-          <Input placeholder={t("placeholder.mobile")} />
+          <Input placeholder={t('placeholder.mobile')} />
         </Form.Item>
 
         <Form.Item label="결제 계좌정보" required={true}>
           <Input.Group compact>
-            <Form.Item name={"bank"} noStyle rules={[{ required: true }]} label="은행">
-              <Select style={{ width: "30%" }} placeholder="은행" loading={getBankQuery.isLoading}>
-                {Object.values(getBankQuery.data?.data.code_set.code_list ?? []).map(
-                  (bank: any) => (
-                    <Select.Option key={bank} value={bank}>
-                      {bank}
-                    </Select.Option>
-                  ),
-                )}
+            <Form.Item
+              name={'bank'}
+              noStyle
+              rules={[{ required: true }]}
+              label="은행"
+            >
+              <Select
+                style={{ width: '30%' }}
+                placeholder="은행"
+                loading={getBankQuery.isLoading}
+              >
+                {Object.values(
+                  getBankQuery.data?.data.code_set.code_list ?? [],
+                ).map((bank: any) => (
+                  <Select.Option key={bank} value={bank}>
+                    {bank}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item
-              name={"account_number"}
+              name={'account_number'}
               noStyle
               rules={[{ required: true }]}
               label="계좌번호"
             >
-              <Input style={{ width: "40%" }} placeholder="계좌번호" />
+              <Input style={{ width: '40%' }} placeholder="계좌번호" />
             </Form.Item>
             <Form.Item
-              name={"account_holder"}
+              name={'account_holder'}
               noStyle
               rules={[{ required: true }]}
               label="예금주명"
             >
-              <Input style={{ width: "30%" }} placeholder="예금주명" />
+              <Input style={{ width: '30%' }} placeholder="예금주명" />
             </Form.Item>
           </Input.Group>
         </Form.Item>
@@ -170,7 +195,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           label="재고관리 프로그램"
           rules={requiredRules}
         >
-          <Select placeholder="제고관리 프로그램을 선택해주세요" disabled>
+          <Select placeholder="재고관리 프로그램을 선택해주세요" disabled>
             <Select.Option value={1}>셀메이트</Select.Option>
             <Select.Option value={2}>이지어드민</Select.Option>
             <Select.Option value={3}>터틀체인</Select.Option>
@@ -193,13 +218,13 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           <Input.Group compact>
             <Form.Item name="inventory_domain" noStyle label="도메인">
               <Input
-                style={{ width: "40%" }}
+                style={{ width: '40%' }}
                 placeholder="도메인"
                 disabled={selectedRow?.inventory_type === 2}
               />
             </Form.Item>
             <Form.Item name="inventory_key" noStyle label="연동 key">
-              <Input style={{ width: "60%" }} placeholder="연동키" />
+              <Input style={{ width: '60%' }} placeholder="연동키" />
             </Form.Item>
           </Input.Group>
         </Form.Item>
@@ -214,17 +239,17 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
         />
         <TurtleInput
           name="alimtalk_name"
-          label={t("store.alimtalk name")}
+          label={t('store.alimtalk name')}
           required={false}
-          placeholder={t("placeholder.alimtalk")}
+          placeholder={t('placeholder.alimtalk')}
         />
       </Form>
 
       <Row justify="end">
         <Popconfirm
-          title={t("description.really update")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really update')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then((value) => {
               updateQuery.mutate({
@@ -241,7 +266,8 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                   account_holder: value.account_holder,
                 },
                 inventory_type: value.inventory_type,
-                inventory_domain: value.inventory_type === 2 ? "" : value.inventory_domain,
+                inventory_domain:
+                  value.inventory_type === 2 ? '' : value.inventory_domain,
                 inventory_key: value.inventory_key,
                 inventory_is_vat_included: value.inventory_is_vat_included,
                 email: value.email,
@@ -254,7 +280,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             type="primary"
             loading={updateQuery.isLoading}
           >
-            {t("button.update")}
+            {t('button.update')}
           </TurtleButton>
         </Popconfirm>
       </Row>

@@ -1,16 +1,16 @@
-import { t } from "i18next";
-import { PageHeader } from "layouts/main";
-import { Helmet } from "react-helmet";
-import PageBody from "./PageBody";
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+import { PageHeader } from '@layout/main';
+import PageBody from './PageBody';
 
 function StaffManagementPage() {
-  const title = `${t("turtlechain")} - ${t("staff.management")}`;
+  const title = `${t('turtlechain')} - ${t('staff.management')}`;
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        title={t("staff.management")}
-        breadcrumbList={[t("setting"), t("staff.management")]}
+        title={t('staff.management')}
+        breadcrumbList={[t('setting'), t('staff.management')]}
       />
       <PageBody />
     </>

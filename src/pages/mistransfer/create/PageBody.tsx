@@ -1,7 +1,10 @@
-import { Form, Input, message, Popconfirm, Switch } from "antd";
-import { mistransferAPI, retailerStoreAPI } from "apis";
-import { ClearingItemShow } from "apis/clearingAPI";
-import { AxiosError } from "axios";
+import moment from 'moment';
+import { t } from 'i18next';
+import { Form, Input, message, Popconfirm, Switch } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
+import { AxiosError } from 'axios';
 import {
   TurtleButton,
   TurtleInput,
@@ -9,27 +12,27 @@ import {
   TurtleQuestionTooltip,
   TurtleSearchInput,
   TurtleText,
-} from "components/common";
-import { useStoreExist } from "hooks";
-import { t } from "i18next";
-import { BottomBar, MenuBar } from "layouts/main";
-import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import LoadClearingModal from "./LoadClearingModal";
+} from '@components/common';
+import { useStoreExist } from '@hooks/index';
+import { BottomBar, MenuBar } from '@layout/main';
+import { storeState } from '@store/storeState';
+import { ClearingItemShow } from '@apis/clearingAPI';
+import mistransferAPI from '@apis/mistransferAPI';
+import retailerStoreAPI from '@apis/retailerStoreAPI';
+import LoadClearingModal from './LoadClearingModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [form] = Form.useForm();
-  const [loadClearingModalVisible, setLoadClearingModalVisible] = useState(false);
-  const [selectedClearingItem, selectClearingItem] = useState<ClearingItemShow>();
+  const [loadClearingModalVisible, setLoadClearingModalVisible] =
+    useState(false);
+  const [selectedClearingItem, selectClearingItem] =
+    useState<ClearingItemShow>();
 
   // 쇼핑몰 정보 요청
   const getStoreQuery = useQuery(
-    ["getStore", store.id],
+    ['getStore', store.id],
     () => retailerStoreAPI.get({ store_id: store.id! }),
     {
       enabled: !!store.id,
@@ -39,12 +42,12 @@ function PageBody() {
     },
   );
 
-  const createQuery = useMutation("createMistransfer", mistransferAPI.create, {
+  const createQuery = useMutation('createMistransfer', mistransferAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
-      message.success(t("message.success create mistransfer"));
+      message.success(t('message.success create mistransfer'));
       resetStates();
     },
   });
@@ -60,7 +63,7 @@ function PageBody() {
       vendor_name: selectedClearingItem
         ? `${selectedClearingItem?.vendor_name} / ${selectedClearingItem?.complete_date}`
         : undefined,
-      recipient_print: `${moment().format("MMDD")}터틀환불`,
+      recipient_print: `${moment().format('MMDD')}터틀환불`,
     });
   }, [selectedClearingItem, form]);
 
@@ -75,13 +78,13 @@ function PageBody() {
         colon={false}
       >
         <div style={{ marginBottom: 24 }}>
-          <TurtleText>{t("vendor.basic info")}</TurtleText>
+          <TurtleText>{t('vendor.basic info')}</TurtleText>
         </div>
 
         <TurtleSearchInput
           label="정산내역"
           name="vendor_name"
-          placeholder={t("placeholder.vendor name")}
+          placeholder={t('placeholder.vendor name')}
           onClick={() => {
             if (!isStoreExist()) return;
             setLoadClearingModalVisible(true);
@@ -89,21 +92,21 @@ function PageBody() {
         />
 
         <TurtleInput
-          label={t("vendor.address")}
-          placeholder={t("placeholder.vendor address")}
+          label={t('vendor.address')}
+          placeholder={t('placeholder.vendor address')}
           disabled
           value={selectedClearingItem?.vendor_address}
         />
 
         <TurtleInput // 휴대번호 Input
-          label={t("vendor.store phone")}
-          placeholder={t("placeholder.store phone")}
+          label={t('vendor.store phone')}
+          placeholder={t('placeholder.store phone')}
           disabled
           value={selectedClearingItem?.ws_store_id.store_phone[0].phone}
           required
         />
         <Form.Item // 계좌 Input
-          label={t("vendor.account")}
+          label={t('vendor.account')}
           required={true}
         >
           <Input.Group compact>
@@ -111,24 +114,24 @@ function PageBody() {
               <Input
                 value={selectedClearingItem?.bank}
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account bank")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account bank')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedClearingItem?.account_number}
                 disabled={true}
-                style={{ width: "40%" }}
-                placeholder={t("vendor.account number")}
+                style={{ width: '40%' }}
+                placeholder={t('vendor.account number')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedClearingItem?.account_holder}
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account holder")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account holder')}
               />
             </Form.Item>
           </Input.Group>
@@ -137,16 +140,20 @@ function PageBody() {
         <div style={{ marginTop: 24, marginBottom: 24 }}>
           <TurtleText>오입금 반환 요청정보</TurtleText>
         </div>
-        <Form.Item label={t("vendor.is vat included")} rules={[{ required: true }]} required>
+        <Form.Item
+          label={t('vendor.is vat included')}
+          rules={[{ required: true }]}
+          required
+        >
           <Switch //
             checked={selectedClearingItem?.is_vat_included}
-            checkedChildren={t("button.include")}
-            style={{ width: "55px" }}
+            checkedChildren={t('button.include')}
+            style={{ width: '55px' }}
             disabled
           />
         </Form.Item>
         <Form.Item // 계좌 Input
-          label={t("vendor.account")}
+          label={t('vendor.account')}
           required
         >
           <Input.Group compact>
@@ -154,26 +161,30 @@ function PageBody() {
               <Input
                 value={getStoreQuery.data?.data.store_account?.[0]?.bank}
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account bank")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account bank')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={getStoreQuery.data?.data.store_account?.[0]?.account_number}
+                value={
+                  getStoreQuery.data?.data.store_account?.[0]?.account_number
+                }
                 name="account_number"
                 disabled={true}
-                style={{ width: "40%" }}
-                placeholder={t("vendor.account number")}
+                style={{ width: '40%' }}
+                placeholder={t('vendor.account number')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
-                value={getStoreQuery.data?.data.store_account?.[0]?.account_holder}
+                value={
+                  getStoreQuery.data?.data.store_account?.[0]?.account_holder
+                }
                 name="account_holder"
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account holder")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account holder')}
               />
             </Form.Item>
           </Input.Group>
@@ -181,29 +192,31 @@ function PageBody() {
         <TurtleInput
           name="recipient_print"
           label="받는분 통장 인쇄내용"
-          placeholder={t("placeholder.recipient print")}
+          placeholder={t('placeholder.recipient print')}
           disabled
         />
         <Form.Item
           name="refund_amt"
           label={
             <>
-              {t("mistransfer.deposit price")}
+              {t('mistransfer.deposit price')}
               <TurtleQuestionTooltip content="입금 확인 시, 해당 내용으로 확인 바랍니다." />
             </>
           }
-          rules={[{ required: true, message: "오입금 환불 요청금액 입력해주세요" }]}
+          rules={[
+            { required: true, message: '오입금 환불 요청금액 입력해주세요' },
+          ]}
           required
         >
           <TurtleInputPrice
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             max={selectedClearingItem?.clearing_amount}
-            placeholder={t("placeholder.requested deposit price")}
+            placeholder={t('placeholder.requested deposit price')}
           />
         </Form.Item>
         <TurtleInput // 오입금 반환 요청사유 Input
-          label={t("mistransfer.memo")}
-          placeholder={t("placeholder.mistransfer memo")}
+          label={t('mistransfer.memo')}
+          placeholder={t('placeholder.mistransfer memo')}
           name="memo"
           required
         />
@@ -219,9 +232,9 @@ function PageBody() {
 
       <BottomBar justify="end">
         <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really register')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then(() => {
               createQuery.mutate({
@@ -234,8 +247,12 @@ function PageBody() {
             });
           }}
         >
-          <TurtleButton type="primary" disabled={!store.id} loading={createQuery.isLoading}>
-            {t("mistransfer.create")}
+          <TurtleButton
+            type="primary"
+            disabled={!store.id}
+            loading={createQuery.isLoading}
+          >
+            {t('mistransfer.create')}
           </TurtleButton>
         </Popconfirm>
       </BottomBar>

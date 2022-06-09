@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 // 입고장
 export interface WarehousingSheet {
@@ -96,10 +96,16 @@ export interface ResponseCreateItem {
 }
 
 // 입고 생성
-const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
-  let url = "warehousing/sheet";
-  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
-  url = "warehousing/item";
+const create = async function (data: {
+  sheet: RequestCreateSheet;
+  item: RequestCreateItem;
+}) {
+  let url = 'warehousing/sheet';
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
+    url,
+    data.sheet,
+  );
+  url = 'warehousing/item';
   const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
     ...data.item,
     sheet_id: sheetResponse.data.data,
@@ -110,7 +116,7 @@ const create = async function (data: { sheet: RequestCreateSheet; item: RequestC
 // Request: 입고장 리스트 가져오기
 export interface RequestGetSheet {
   rt_store_id: number;
-  is_confirmed: number | "";
+  is_confirmed: number | '';
   start_date: string;
   end_date: string;
   did_settlement?: number;
@@ -127,9 +133,9 @@ export interface ResponseGetSheet {
 
 // 입고장 리스트 가져오기 요청
 const getSheet = async function (query: RequestGetSheet) {
-  let url = "warehousing/sheet?";
+  let url = 'warehousing/sheet?';
   for (const [key, value] of Object.entries(query)) {
-    value !== "" && (url = url + `${key}=${value}&`);
+    value !== '' && (url = url + `${key}=${value}&`);
   }
   const response = await v2Axios.get<ResponseGetSheet>(url);
   return response.data.data;
@@ -188,7 +194,7 @@ export interface ResponseUpdateItem {
 
 // 입고상품 수정 요청
 const updateItem = async function (data: RequestUpdateItem) {
-  const url = "warehousing/item/bulk_update";
+  const url = 'warehousing/item/bulk_update';
   const response = await v2Axios.put<ResponseUpdateItem>(url, data);
   return response.data;
 };

@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input } from 'antd';
 
 interface Props {
   required?: boolean;
@@ -20,8 +20,18 @@ function TurtleInput({
   value,
 }: Props) {
   return (
-    <Form.Item required={required} name={name} label={label} rules={[{ required: required }]}>
-      <Input placeholder={placeholder} readOnly={readOnly} disabled={disabled} value={value} />
+    <Form.Item
+      required={required}
+      name={name}
+      label={label}
+      rules={[{ required: required }]}
+    >
+      <Input
+        placeholder={placeholder}
+        readOnly={readOnly}
+        disabled={disabled}
+        value={value}
+      />
     </Form.Item>
   );
 }

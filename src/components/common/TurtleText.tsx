@@ -1,6 +1,6 @@
-import { Typography } from "antd";
-import { TFunctionResult } from "i18next";
-import styled from "styled-components";
+import { Typography } from 'antd';
+import { TFunctionResult } from 'i18next';
+import styled from 'styled-components';
 
 interface Props {
   children: TFunctionResult;

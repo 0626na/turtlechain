@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export interface Store {
   id: number | undefined;
@@ -6,9 +6,9 @@ export interface Store {
 }
 
 export const storeState = atom<Store>({
-  key: "store",
+  key: 'store',
   default: {
     id: undefined,
-    name: "",
+    name: '',
   },
 });

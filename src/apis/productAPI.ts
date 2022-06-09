@@ -1,4 +1,5 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
+import { RcFile } from 'antd/lib/upload';
 
 export interface Product {
   vendor_id: number;
@@ -38,7 +39,10 @@ export interface ProductShow {
   image_url: string;
 }
 
-// request: 상품 목록 요청
+/*
+ *  상품 리스트
+ */
+
 export interface RequestGetList {
   rt_store_id?: number;
   page: number;
@@ -47,7 +51,6 @@ export interface RequestGetList {
   vendor_id?: number;
 }
 
-// response: 상품 목록 요청
 export interface ResponseGetList {
   msg: string;
   data: {
@@ -56,9 +59,8 @@ export interface ResponseGetList {
   };
 }
 
-// 상품 목록 요청
 const getList = async function (query: RequestGetList) {
-  let url = "provisioning/product?";
+  let url = 'provisioning/product?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -66,7 +68,10 @@ const getList = async function (query: RequestGetList) {
   return response.data;
 };
 
-// request: 상품 생성
+/*
+ * 상품 생성
+ */
+
 export interface RequestCreate {
   rt_store_id: number;
   vendor_id: number;
@@ -79,7 +84,6 @@ export interface RequestCreate {
   memo: string;
 }
 
-// response: 상품 생성
 export interface ResponseCreate {
   msg: string;
   data: {
@@ -88,14 +92,15 @@ export interface ResponseCreate {
   };
 }
 
-// 상품 생성 요청
 const create = async function (data: Array<RequestCreate>) {
   const url = `provisioning/product`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };
 
-// request: 상품 수정
+/*
+ * 상품수정
+ */
 export interface RequestUpdate {
   id: number;
   name: string;
@@ -104,38 +109,101 @@ export interface RequestUpdate {
   memo: string;
 }
 
-// response: 상품 수정
 export interface ResponseUpdate {
   msg: string;
   data: {};
 }
 
-// 상품 수정 요청
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/product/${data.id}`;
   const response = await v2Axios.put<ResponseUpdate>(url, data);
   return response.data;
 };
 
-// request: 상품 코드 생성
+/*
+ * 상품 코드 생성
+ */
 export interface RequestGetCode {
   rt_store_id: number;
   vendor_code: string;
 }
 
-// response: 상품 코드 생성
 export interface ResponseGetCode {
   msg: string;
   data: string;
 }
 
-// 상품 코드 생성 요청
 const getCode = async function (query: RequestGetCode) {
-  let url = "provisioning/create_product_code?";
+  let url = 'provisioning/create_product_code?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGetCode>(url);
+  return response.data;
+};
+
+/*
+ *  재고연동
+ */
+
+export interface RequestConnectInventory {
+  rt_store_id: number;
+}
+
+export interface ResponseConnectInventory {
+  msg: string;
+  data: {
+    success: Array<Product>;
+    fail: Array<Product>;
+    count: {
+      success_count: number;
+      fail_count: number;
+      duplicated_count: number;
+    };
+    error?: string;
+  };
+}
+
+const connectInventory = async function (query: RequestConnectInventory) {
+  let url = 'external-api/inventory/products?';
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseConnectInventory>(url);
+  return response.data;
+};
+
+/*
+ *   엑셀 파싱
+ */
+
+export interface RequestParseExcel {
+  files: RcFile;
+  rt_store_id: number;
+}
+
+export interface ResponseParseExcel {
+  msg: string;
+  data: {
+    success: Array<Product>;
+    fail: Array<Product>;
+    count: {
+      duplicated_count: number;
+    };
+    error?: string;
+  };
+}
+
+const parseExcel = async function (data: RequestParseExcel) {
+  const url = `excel/product`;
+  const formData = new FormData();
+  formData.append('files', data.files);
+  formData.append('rt_store_id', data.rt_store_id.toString());
+  const response = await v2Axios.post<ResponseParseExcel>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -144,6 +212,8 @@ const productAPI = {
   create,
   update,
   getCode,
+  connectInventory,
+  parseExcel,
 };
 
 export default productAPI;

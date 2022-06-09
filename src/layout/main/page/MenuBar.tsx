@@ -1,6 +1,6 @@
-import { Col, Row, Space } from "antd";
-import { StoreSelect } from "components/combine";
-import { t } from "i18next";
+import { Col, Row, Space } from 'antd';
+import { StoreSelect } from '@components/combine';
+import { t } from 'i18next';
 
 interface Props {
   children?: React.ReactNode;
@@ -19,7 +19,9 @@ function MenuBar({ children, isWarning }: Props) {
         }}
       >
         <Col>
-          <StoreSelect warningMessage={isWarning ? t("message.warning change mall") : ""} />
+          <StoreSelect
+            warningMessage={isWarning ? t('message.warning change mall') : ''}
+          />
         </Col>
         <Col>
           <Space>{children}</Space>

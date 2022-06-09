@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 export interface Store {
   name: string;
@@ -55,7 +55,7 @@ export interface ResponseGetList {
 }
 
 const getList = async function () {
-  let url = "/provisioning/retailer/stores";
+  let url = '/provisioning/retailer/stores';
   const response = await v2Axios.get<ResponseGetList>(url);
   return response.data.data;
 };

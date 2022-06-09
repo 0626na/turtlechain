@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
-import { emailPattern } from "utils/pattern";
-import moment from "moment";
-// async
-import { AxiosError } from "axios";
-import { useMutation } from "react-query";
-import { authAPI } from "apis";
-// antd
-import { Modal, Form, Input, Button, message } from "antd";
-// lang
-import { t } from "i18next";
+import moment from 'moment';
+import { t } from 'i18next';
+import { useState, useEffect } from 'react';
+import { Modal, Form, Input, Button, message } from 'antd';
+import { AxiosError } from 'axios';
+import { useMutation } from 'react-query';
+import { emailPattern } from '@utils/pattern';
+import authAPI from '@apis/authAPI';
 
 interface Props {
   visible: boolean;
@@ -18,7 +15,7 @@ interface Props {
 
 function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   const [form] = Form.useForm();
-  const [session_key, setSessionKey] = useState("");
+  const [session_key, setSessionKey] = useState('');
   const [expire_time, setExpireTime] = useState<null | number>(null);
 
   // 남은 시간 계산
@@ -27,31 +24,39 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   };
 
   // 인증번호 생성 요청
-  const createPhoneOTPQuery = useMutation(["createPhoneOTP"], authAPI.createPhoneOTP, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const createPhoneOTPQuery = useMutation(
+    ['createPhoneOTP'],
+    authAPI.createPhoneOTP,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        message.success(t('message.success create auth num'));
+        const { session_key, expire_time } = data;
+        setSessionKey(session_key);
+        setExpireTime(calculateExpireTime(expire_time));
+      },
     },
-    onSuccess: (data) => {
-      message.success(t("message.success create auth num"));
-      const { session_key, expire_time } = data;
-      setSessionKey(session_key);
-      setExpireTime(calculateExpireTime(expire_time));
-    },
-  });
+  );
 
   // 인증번호 확인 요청
-  const verifyPhoneOTPQuery = useMutation(["verifyPhoneOTP"], authAPI.verifyPhoneOTP, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const verifyPhoneOTPQuery = useMutation(
+    ['verifyPhoneOTP'],
+    authAPI.verifyPhoneOTP,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
+      },
+      onSuccess: (data) => {
+        message.success(t('message.success verify auth num'));
+        const token = data;
+        const phone = form.getFieldValue('phone');
+        onClose();
+        onSuccess && onSuccess({ token, phone });
+      },
     },
-    onSuccess: (data) => {
-      message.success(t("message.success verify auth num"));
-      const token = data;
-      const phone = form.getFieldValue("phone");
-      onClose();
-      onSuccess && onSuccess({ token, phone });
-    },
-  });
+  );
 
   // 인증코드 생성
   const handleCreate = () => {
@@ -76,7 +81,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
         } else {
           setExpireTime(null);
           clearTimeout(countdown);
-          message.success(t("message.expired auth time"));
+          message.success(t('message.expired auth time'));
         }
       }, 1000);
 
@@ -90,7 +95,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   useEffect(() => {
     if (!visible) {
       form.resetFields();
-      setSessionKey("");
+      setSessionKey('');
       setExpireTime(null);
     }
   }, [visible, form]);
@@ -98,27 +103,27 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   return (
     <Modal
       width={400}
-      title={t("auth phone")}
+      title={t('auth phone')}
       closable={false}
       visible={visible}
       footer={[
         <Button key="close" onClick={onClose}>
-          {t("close")}
+          {t('close')}
         </Button>,
       ]}
     >
       <Form form={form} layout="vertical">
         <Form.Item
           name="phone"
-          label={t("phone")}
+          label={t('phone')}
           rules={[
             {
               pattern: emailPattern,
-              message: t("message.error phone validation"),
+              message: t('message.error phone validation'),
             },
           ]}
         >
-          <Input placeholder={t("description.only number")} />
+          <Input placeholder={t('description.only number')} />
         </Form.Item>
         <Form.Item>
           <Button
@@ -127,11 +132,11 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
             loading={createPhoneOTPQuery.isLoading}
             onClick={handleCreate}
           >
-            {t("create auth num")}
+            {t('create auth num')}
           </Button>
         </Form.Item>
-        <Form.Item name="otp_code" label={t("auth num")}>
-          <Input suffix={expire_time && moment(expire_time).format("mm:ss")} />
+        <Form.Item name="otp_code" label={t('auth num')}>
+          <Input suffix={expire_time && moment(expire_time).format('mm:ss')} />
         </Form.Item>
         <Form.Item>
           <Button
@@ -141,7 +146,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
             loading={verifyPhoneOTPQuery.isLoading}
             onClick={handleVerify}
           >
-            {t("verify auth num")}
+            {t('verify auth num')}
           </Button>
         </Form.Item>
       </Form>

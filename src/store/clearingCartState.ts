@@ -1,5 +1,5 @@
-import { atom } from "recoil";
-import { RequestCreateItem } from "apis/clearingAPI";
+import { atom } from 'recoil';
+import { RequestCreateItem } from '@apis/clearingAPI';
 
 export interface ClearingCartState extends RequestCreateItem {
   selectedKeys: number[];
@@ -7,7 +7,7 @@ export interface ClearingCartState extends RequestCreateItem {
 
 // 정산상품 생성을 위한 장바구품
 export const clearingCartState = atom<ClearingCartState>({
-  key: "clearingCart",
+  key: 'clearingCart',
   default: {
     selectedKeys: [],
     warehousing_item_list: [],

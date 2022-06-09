@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 // 주문 등록 추가 타입
 export interface OrderItemShow {
@@ -138,8 +138,8 @@ const getItem = async function (query: RequestGetItem) {
 export interface RequestCreateSheet {
   created_date: string;
   rt_store_id: number;
-  status: "N";
-  type: "new" | "add" | "modify";
+  status: 'N';
+  type: 'new' | 'add' | 'modify';
 }
 
 export interface Item {
@@ -168,9 +168,15 @@ export interface ResponseCreateItem {
   data: null;
 }
 
-const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
+const create = async function (data: {
+  sheet: RequestCreateSheet;
+  item: RequestCreateItem;
+}) {
   let url = `order/sheet`;
-  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
+    url,
+    data.sheet,
+  );
   url = `order/item`;
   const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
     ...data.item,

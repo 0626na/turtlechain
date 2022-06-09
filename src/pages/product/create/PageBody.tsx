@@ -1,21 +1,27 @@
-import { Menu, message, notification, Popconfirm, Tabs } from "antd";
-import { t } from "i18next";
-import { storeState } from "store/storeState";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useMutation } from "react-query";
-import { AxiosError } from "axios";
-import { excelAPI, productAPI, externalAPI } from "apis";
-import { useCallback, useEffect, useState } from "react";
-import { RcFile } from "antd/lib/upload";
-import { BottomBar, MainContent, MenuBar } from "layouts/main";
-import { TurtleButton, TurtleButtonSub, TurtleDropdown, TurtleUpload } from "components/common";
-import { useStoreExist } from "hooks";
-import { productCartState } from "store/productCartState";
-import { ResponseParseProduct } from "apis/excelAPI";
-import { ResponseConnectProduct } from "apis/externalAPI";
-import AddSingleProductModal from "./AddProductModal";
-import SuccessTab from "./SuccessTab";
-import FailTab from "./FailTab";
+import { useCallback, useEffect, useState } from 'react';
+import { Menu, message, notification, Popconfirm, Tabs } from 'antd';
+import { t } from 'i18next';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useMutation } from 'react-query';
+import { AxiosError } from 'axios';
+import { RcFile } from 'antd/lib/upload';
+import { BottomBar, MainContent, MenuBar } from '@layout/main';
+import productAPI, {
+  ResponseConnectInventory,
+  ResponseParseExcel,
+} from '@apis/productAPI';
+import {
+  TurtleButton,
+  TurtleButtonSub,
+  TurtleDropdown,
+  TurtleUpload,
+} from '@components/common';
+import { storeState } from '@store/storeState';
+import { productCartState } from '@store/productCartState';
+import { useStoreExist } from '@hooks/index';
+import SuccessTab from './SuccessTab';
+import FailTab from './FailTab';
+import AddSingleProductModal from './AddProductModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -24,7 +30,7 @@ function PageBody() {
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
 
   // 엑셀파싱 요청
-  const parseQuery = useMutation("parseProduct", excelAPI.parseProduct, {
+  const parseQuery = useMutation('parseProduct', productAPI.parseExcel, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -34,17 +40,22 @@ function PageBody() {
   });
 
   // 재고관리 연동 요청
-  const connectQuery = useMutation("connectProduct", externalAPI.connectSellmateProduct, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data.message);
+  const connectQuery = useMutation(
+    'connectProduct',
+    productAPI.connectInventory,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data.message);
+      },
+      onSuccess: (data) => {
+        updateStates(data);
+      },
     },
-    onSuccess: (data) => {
-      updateStates(data);
-    },
-  });
+  );
 
+  // 상품 생성 요청
   const createQuery = useMutation(
-    ["createProduct"], //
+    ['createProduct'], //
     productAPI.create,
     {
       onError: (error: AxiosError) => {
@@ -53,7 +64,7 @@ function PageBody() {
       onSuccess: (data) => {
         resetStates();
         notification.open({
-          type: "success",
+          type: 'success',
           message: `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
         });
       },
@@ -72,13 +83,15 @@ function PageBody() {
 
   // 파싱 or 연동 후 상태 세팅
   const updateStates = useCallback(
-    (data: ResponseParseProduct | ResponseConnectProduct) => {
+    (data: ResponseParseExcel | ResponseConnectInventory) => {
       if (data.data.error) {
         message.error(data.data.error);
         resetStates();
         return;
       }
-      message.info(`이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`);
+      message.info(
+        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+      );
       setCart((cart) => ({
         ...cart,
         successList: [
@@ -98,10 +111,10 @@ function PageBody() {
   // 엑셀파일 파싱
   const parseFile = (file: RcFile) => {
     setCart((cart) => ({ ...cart, fileList: [file] }));
-    const form = new FormData();
-    form.append("files", file);
-    form.append("rt_store_id", store.id!.toString());
-    parseQuery.mutate(form);
+    parseQuery.mutate({
+      files: file,
+      rt_store_id: store.id!,
+    });
   };
 
   // 재고 연동 버튼 클릭
@@ -131,7 +144,7 @@ function PageBody() {
           setAddProductModalVisible(true);
         }}
       >
-        {t("button.add single product")}
+        {t('button.add single product')}
       </Menu.Item>
     </Menu>
   );
@@ -145,18 +158,21 @@ function PageBody() {
           onClick={onClickConnect}
           disabled={connectQuery.isSuccess}
         >
-          {t("button.connect external program")}
+          {t('button.connect external program')}
         </TurtleButtonSub>
         <TurtleDropdown //
           menu={menu}
         >
-          {t("button.add product")}
+          {t('button.add product')}
         </TurtleDropdown>
       </MenuBar>
 
-      <MainContent title={t("product.preview")} info={t("description.fail product")}>
+      <MainContent
+        title={t('product.preview')}
+        info={t('description.fail product')}
+      >
         {/* 성공 실패 탭 */}
-        <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
+        <Tabs defaultActiveKey="1" size="large" style={{ width: '100%' }}>
           <SuccessTab
             key="1"
             tab={`성공(${cart.successList.length})`}
@@ -180,9 +196,9 @@ function PageBody() {
 
       <BottomBar>
         <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really register')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={() => {
             createQuery.mutate(
               cart.successList.map(
@@ -201,10 +217,10 @@ function PageBody() {
                   product_code,
                   name,
                   price,
-                  image_url: image_url ?? "",
+                  image_url: image_url ?? '',
                   vendor_product_name,
                   option,
-                  memo: memo ?? "",
+                  memo: memo ?? '',
                 }),
               ),
             );
@@ -215,7 +231,7 @@ function PageBody() {
             disabled={cart.successList.length === 0}
             loading={createQuery.isLoading}
           >
-            {t("button.create product")}
+            {t('button.create product')}
           </TurtleButton>
         </Popconfirm>
       </BottomBar>

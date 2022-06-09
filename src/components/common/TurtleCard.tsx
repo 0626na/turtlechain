@@ -1,5 +1,5 @@
-import { Card, Col, Row, Tag } from "antd";
-import Meta from "antd/lib/card/Meta";
+import { Card, Col, Row, Tag } from 'antd';
+import Meta from 'antd/lib/card/Meta';
 
 interface Props {
   value: Array<{
@@ -28,7 +28,7 @@ function TurtleCard({ value }: Props) {
                 </>
               }
               description={`${price.toLocaleString()}원`}
-              style={{ textAlign: "center", margin: "12px 0" }}
+              style={{ textAlign: 'center', margin: '12px 0' }}
             />
           </Card>
         </Col>

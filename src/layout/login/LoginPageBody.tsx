@@ -1,5 +1,5 @@
-import { Card } from "antd";
-import styled from "styled-components";
+import { Card } from 'antd';
+import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;

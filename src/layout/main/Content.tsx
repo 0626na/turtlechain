@@ -1,9 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from "constant";
-// antd
-import { Layout } from "antd";
-import { useLocation } from "react-router-dom";
+import styled from 'styled-components';
+import { Layout } from 'antd';
+import { useLocation } from 'react-router-dom';
+import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from '@constant/index';
 
 interface Props {
   children?: React.ReactNode;
@@ -16,10 +14,10 @@ function Content({ children, menuVisible }: Props) {
   return (
     <StyledContent
       style={{
-        marginLeft: menuVisible ? "80px" : MAIN_SIDER_WIDTH,
+        marginLeft: menuVisible ? '80px' : MAIN_SIDER_WIDTH,
       }}
     >
-      {location.pathname.includes("/home") ? (
+      {location.pathname.includes('/home') ? (
         <HomeBox>{children}</HomeBox>
       ) : (
         <MainBox>{children}</MainBox>

@@ -1,14 +1,13 @@
-import styled from "styled-components";
-import { useState, useMemo } from "react";
-import { useHistory } from "react-router-dom";
-// antd
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from "antd";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useState, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from 'antd';
 // constant
-import { BIZ_TYPE_OPTIONS } from "constant";
-import { Company } from ".";
-import { t } from "i18next";
-import { DaumPostcodeModal } from "components/combine";
+import { BIZ_TYPE_OPTIONS } from '@constant/index';
+import { DaumPostcodeModal } from '@components/combine';
+import { Company } from '.';
 
 interface Props {
   company: Company;
@@ -25,7 +24,9 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
     setCompany({ ...company, [name as string]: value });
   };
 
-  const handleChangeText = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeText = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setCompany({ ...company, [name]: value });
   };
@@ -49,8 +50,12 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
         }}
       />
       <Form layout="vertical">
-        <Form.Item label={t("biz type")}>
-          <Radio.Group name="biz_type" value={company.biz_type} onChange={handleChangeRadio}>
+        <Form.Item label={t('biz type')}>
+          <Radio.Group
+            name="biz_type"
+            value={company.biz_type}
+            onChange={handleChangeRadio}
+          >
             {BIZ_TYPE_OPTIONS.map((option) => {
               const label = t(`biz ${option}`);
               return (
@@ -61,25 +66,29 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
             })}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label={t("owner")}>
-          <Input name="owner" value={company.owner} onChange={handleChangeText} />
+        <Form.Item label={t('owner')}>
+          <Input
+            name="owner"
+            value={company.owner}
+            onChange={handleChangeText}
+          />
         </Form.Item>
-        <Form.Item label={t("biz name")}>
+        <Form.Item label={t('biz name')}>
           <Input //
             name="name"
             value={company.name}
             onChange={handleChangeText}
           />
         </Form.Item>
-        <Form.Item label={t("biz num")}>
+        <Form.Item label={t('biz num')}>
           <Input
             name="biz_num"
-            placeholder={t("description.only number")}
+            placeholder={t('description.only number')}
             value={company.biz_num}
             onChange={handleChangeText}
           />
         </Form.Item>
-        <Form.Item label={t("biz address")}>
+        <Form.Item label={t('biz address')}>
           <Input //
             readOnly
             name="address"
@@ -91,18 +100,24 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
                 style={{ fontSize: 13 }}
                 onClick={() => setVisiblePostcodeModal(true)}
               >
-                {t("find address")}
+                {t('find address')}
               </Button>
             }
           />
         </Form.Item>
-        <Form.Item label={t("biz detail address")}>
-          <Input name="address_sub" value={company.address_sub} onChange={handleChangeText} />
+        <Form.Item label={t('biz detail address')}>
+          <Input
+            name="address_sub"
+            value={company.address_sub}
+            onChange={handleChangeText}
+          />
         </Form.Item>
-        <Form.Item label={t("biz license")}>
+        <Form.Item label={t('biz license')}>
           <Upload
             listType="picture"
-            fileList={company.biz_license_file ? [company.biz_license_file as any] : []}
+            fileList={
+              company.biz_license_file ? [company.biz_license_file as any] : []
+            }
             beforeUpload={(file: File) => {
               setCompany({ ...company, biz_license_file: file });
               return false;
@@ -116,11 +131,11 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
               disabled={company.biz_license_file !== null}
               icon={<UploadOutlined />}
             >
-              {t("biz license")}
+              {t('biz license')}
             </Button>
           </Upload>
         </Form.Item>
-        <Form.Item label={t("etc")}>
+        <Form.Item label={t('etc')}>
           <Input.TextArea
             style={{ height: 100 }}
             name="memo"
@@ -130,11 +145,11 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
           />
         </Form.Item>
         <ButtonContainer>
-          <Button block onClick={() => history.push("/")}>
-            {t("prev")}
+          <Button block onClick={() => history.push('/')}>
+            {t('prev')}
           </Button>
           <Button block disabled={nextDisabled} type="primary" onClick={onNext}>
-            {t("next")}
+            {t('next')}
           </Button>
         </ButtonContainer>
       </Form>

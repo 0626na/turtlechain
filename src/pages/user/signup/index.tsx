@@ -1,20 +1,17 @@
-import { useState } from "react";
-import { Helmet } from "react-helmet";
-// async
-import { retailerCompanyAPI, userAPI } from "apis";
-// antd
-import { message } from "antd";
-// lang
-import { t } from "i18next";
-// components
-import SignupSteps from "./SignupSteps";
-import CompanyForm from "./CompanyForm";
-import UserForm from "./UserForm";
-import SignupResult from "./SignupResult";
-import SignupPageBody from "layouts/login/SignupPageBody";
+import { t } from 'i18next';
+import { useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { message } from 'antd';
+import { SignupPageBody } from '@layout/login';
+import userAPI from '@apis/userAPI';
+import retailerCompanyAPI from '@apis/retailerCompanyAPI';
+import SignupSteps from './SignupSteps';
+import CompanyForm from './CompanyForm';
+import UserForm from './UserForm';
+import SignupResult from './SignupResult';
 
 export interface Company {
-  biz_type: "personal" | "entity" | "simple";
+  biz_type: 'personal' | 'entity' | 'simple';
   owner: string;
   name: string;
   biz_num: string;
@@ -33,27 +30,27 @@ export interface User {
 }
 
 function SignupPage() {
-  const title = `${t("turtlechain")} - ${t("signup")}`;
+  const title = `${t('turtlechain')} - ${t('signup')}`;
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [company, setCompany] = useState<Company>({
-    biz_type: "entity",
-    owner: "",
-    name: "",
-    biz_num: "",
-    address_main: "",
-    address_sub: "",
+    biz_type: 'entity',
+    owner: '',
+    name: '',
+    biz_num: '',
+    address_main: '',
+    address_sub: '',
     biz_license_file: null,
-    memo: "",
+    memo: '',
   });
   const [user, setUser] = useState<User>({
-    name: "",
-    email: "",
-    mobile_phone: "",
-    login_id: "",
-    password: "",
+    name: '',
+    email: '',
+    mobile_phone: '',
+    login_id: '',
+    password: '',
   });
 
   // 서비스 가입 신청
@@ -65,12 +62,12 @@ function SignupPage() {
       setIsSubmitting(true);
       const { company_id } = await retailerCompanyAPI.create({
         ...company,
-        tax_type: "[]",
-        service_usage: "[]",
-        stores: "[]",
+        tax_type: '[]',
+        service_usage: '[]',
+        stores: '[]',
         biz_license_file: company.biz_license_file as File,
       });
-      await userAPI.create({ ...user, type: "rt", company_id });
+      await userAPI.create({ ...user, type: 'rt', company_id });
       setCurrentStep((prevStep) => prevStep + 1);
     } catch (error: any) {
       message.error(error.response?.data?.msg);

@@ -1,11 +1,11 @@
-import { t } from "i18next";
-import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from "antd";
-import { useCallback, useMemo } from "react";
-import { useRecoilState } from "recoil";
-import { warehousingCartState } from "store/warehousingCartState";
-import { pricePattern } from "utils/pattern";
-import { TurtleIcon, TurtleTableTitle } from "components/common";
-import { NewSearchFilter } from "components/combine";
+import { t } from 'i18next';
+import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from 'antd';
+import { useCallback, useMemo } from 'react';
+import { useRecoilState } from 'recoil';
+import { warehousingCartState } from '@store/warehousingCartState';
+import { pricePattern } from '@utils/pattern';
+import { TurtleIcon, TurtleTableTitle } from '@components/common';
+import { NewSearchFilter } from '@components/combine';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -54,13 +54,13 @@ function SuccessTab({ loading, ...props }: Props) {
     () =>
       cart.successList.filter((item) => {
         const { type, search_string } = cart.searchQuery;
-        if (type === "name") {
+        if (type === 'name') {
           return item.product_name.includes(search_string);
         }
-        if (type === "vendor_product_name") {
+        if (type === 'vendor_product_name') {
           return item.vendor_product_name.includes(search_string);
         }
-        if (type === "vendor_name") {
+        if (type === 'vendor_name') {
           return item.vendor_name.includes(search_string);
         }
         return (
@@ -79,11 +79,14 @@ function SuccessTab({ loading, ...props }: Props) {
         loading={loading}
         dataSource={filteredList}
         rowKey={(record) => record.index!}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-        scroll={{ y: "auto" }}
-        style={{ height: filteredList.length <= 5 ? "45vh" : "" }}
+        pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+        scroll={{ y: 'auto' }}
+        style={{ height: filteredList.length <= 5 ? '45vh' : '' }}
         title={() => (
-          <TurtleTableTitle count={cart.successList.length} searchCount={filteredList.length}>
+          <TurtleTableTitle
+            count={cart.successList.length}
+            searchCount={filteredList.length}
+          >
             <NewSearchFilter
               searchQuery={cart.searchQuery}
               setSearchQuery={(searchQuery) => {
@@ -98,85 +101,89 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: "10%",
-            title: t("vendor.name"),
+            width: '10%',
+            title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            width: "12%",
-            title: t("vendor.address"),
+            width: '12%',
+            title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
-            title: t("product.name"),
+            title: t('product.name'),
             render: (_, record) => record.product_name,
           },
           {
             ellipsis: true,
-            title: t("product.vendor product name"),
+            title: t('product.vendor product name'),
             render: (_, record) => record.vendor_product_name,
           },
           {
             ellipsis: true,
-            width: "12%",
-            title: t("product.code"),
+            width: '12%',
+            title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            width: "12%",
-            title: t("product.option"),
+            width: '12%',
+            title: t('product.option'),
             render: (_, record) => record.product_option,
           },
           {
             ellipsis: true,
-            width: "12%",
-            title: t("product.price"),
+            width: '12%',
+            title: t('product.price'),
             render: (_, record) => (
               <InputNumber
                 size="small"
                 step={1000}
                 value={record.price}
-                formatter={(value) => `${value}`.replace(pricePattern, ",")}
+                formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 min={0}
                 onChange={(value) => {
-                  updateSuccessList("price", record.index, value);
+                  updateSuccessList('price', record.index, value);
                 }}
               />
             ),
           },
           {
             ellipsis: true,
-            width: "12%",
-            title: t("warehousing.count"),
+            width: '12%',
+            title: t('warehousing.count'),
             render: (_, record) => (
               <InputNumber
                 size="small"
                 min={1}
                 value={record.count}
                 onChange={(value) => {
-                  updateSuccessList("count", record.index, value);
+                  updateSuccessList('count', record.index, value);
                 }}
               />
             ),
           },
           {
             ellipsis: true,
-            title: t("warehousing.is reserved"),
+            title: t('warehousing.is reserved'),
             render: (_, record) => (
               <Checkbox
                 checked={record.is_reserved}
                 onChange={() => {
-                  updateSuccessList("is_reserved", record.index, !record.is_reserved);
+                  updateSuccessList(
+                    'is_reserved',
+                    record.index,
+                    !record.is_reserved,
+                  );
                 }}
               />
             ),
           },
           {
             ellipsis: true,
-            width: "8%",
+            width: '8%',
             render: (_, record) => (
               <TurtleIcon
                 type="delete"

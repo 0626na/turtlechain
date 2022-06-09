@@ -1,8 +1,8 @@
-import { Divider, Form, Input, InputNumber, Row } from "antd";
-import { t } from "i18next";
-import { useCallback, useState } from "react";
-import { pricePattern } from "utils/pattern";
-import { AdjustmentItem } from "apis/adjustmentAPI";
+import { t } from 'i18next';
+import { Divider, Form, Input, InputNumber, Row } from 'antd';
+import { useCallback, useState } from 'react';
+import { pricePattern } from '@utils/pattern';
+import { AdjustmentItem } from '@apis/adjustmentAPI';
 import {
   TurtleButton,
   TurtleInput,
@@ -10,8 +10,8 @@ import {
   TurtleModal,
   TurtleSearchInput,
   TurtleTextArea,
-} from "components/common";
-import { SearchProductModal, SearchVendorModal } from "components/combine";
+} from '@components/common';
+import { SearchProductModal, SearchVendorModal } from '@components/combine';
 
 interface Props {
   visible: boolean;
@@ -80,7 +80,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
       <TurtleModal
         centered
         width="520px"
-        title={t("adjustment.add reserve product")}
+        title={t('adjustment.add reserve product')}
         visible={visible}
         onCancel={onCloseModal}
         footer={false}
@@ -95,7 +95,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
           onFinish={(value) => {
             addItem({
               ...value,
-              type: "reserve",
+              type: 'reserve',
               warehousing_item_id: 0,
             }) && onCloseModal();
           }}
@@ -112,20 +112,20 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
 
           <TurtleSearchInput // 거래처명 검색 Input
             name="vendor_name"
-            label={t("vendor.name")}
-            placeholder={t("placeholder.vendor name")}
+            label={t('vendor.name')}
+            placeholder={t('placeholder.vendor name')}
             onClick={() => {
               setVendorModalVisible(true);
             }}
           />
           <TurtleInput // 거래처 주소 Input
             name="vendor_address"
-            label={t("vendor.address")}
+            label={t('vendor.address')}
             disabled
           />
           <TurtleInput // 거래처 휴대번호 Input
             name="vendor_phone"
-            label={t("vendor.store phone")}
+            label={t('vendor.store phone')}
             disabled
           />
 
@@ -133,50 +133,50 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
 
           <TurtleSearchInput // 상품 검색 Input
             name="product_name"
-            label={t("product.name")}
-            placeholder={t("placeholder.product name")}
+            label={t('product.name')}
+            placeholder={t('placeholder.product name')}
             onClick={() => {
               setProductModalVisible(true);
             }}
           />
           <TurtleInput // 거래처 상품명 Input
-            label={t("product.vendor product name")}
+            label={t('product.vendor product name')}
             name="vendor_product_name"
             disabled
           />
           <TurtleInput // 상품 바코드 Input
-            label={t("product.code")}
+            label={t('product.code')}
             name="product_code"
             disabled
           />
           <TurtleInput // 상품 옵션 Input
-            label={t("product.option")}
+            label={t('product.option')}
             name="product_option"
             disabled
           />
           <Form.Item // 상품 공급가 Input
-            label={t("product.price")}
+            label={t('product.price')}
             name="product_price"
             rules={[{ required: true }]}
           >
             <InputNumber
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               step={1000}
               min={0}
-              formatter={(value) => `${value}`.replace(pricePattern, ",")}
+              formatter={(value) => `${value}`.replace(pricePattern, ',')}
             />
           </Form.Item>
           <TurtleInputNumber // 상품 수량 Input
-            label={t("product.count")}
+            label={t('product.count')}
             name="product_count"
             min={1}
           />
 
-          <TurtleTextArea name="memo" label={t("adjustment.memo")} rows={3} />
+          <TurtleTextArea name="memo" label={t('adjustment.memo')} rows={3} />
 
           <Row justify="end">
             <TurtleButton type="default" htmlType="submit">
-              {t("button.add product")}
+              {t('button.add product')}
             </TurtleButton>
           </Row>
         </Form>
@@ -197,7 +197,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
         closeModal={() => {
           setProductModalVisible(false);
         }}
-        vendorId={form.getFieldValue("vendor_id")}
+        vendorId={form.getFieldValue('vendor_id')}
         onClickSelect={selectProduct}
       />
     </>

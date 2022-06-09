@@ -1,15 +1,14 @@
-import { DatePicker, message, Row, Table } from "antd";
-import { adjustmentAPI, clearingAPI } from "apis";
-import { AdjustmentItemShow } from "apis/adjustmentAPI";
-import { RequestGetBalance } from "apis/clearingAPI";
-import { AxiosError } from "axios";
-import { TurtleModal, TurtleTableTitle, TurtleText } from "components/common";
-import { t } from "i18next";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
+import moment from 'moment';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { useQuery } from 'react-query';
+import { DatePicker, message, Row, Table } from 'antd';
+import { AxiosError } from 'axios';
+import adjustmentAPI, { AdjustmentItemShow } from '@apis/adjustmentAPI';
+import clearingAPI, { RequestGetBalance } from '@apis/clearingAPI';
+import { TurtleModal, TurtleTableTitle, TurtleText } from '@components/common';
+import { storeState } from '@store/storeState';
 
 interface Props {
   visible: boolean;
@@ -23,14 +22,14 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     rt_store_id: store.id,
     vendor_id: selectedRow?.vendor_info.id,
     start_date: selectedRow?.created_date,
-    end_date: moment().add(1, "d").format("YYYY-MM-DD"),
-    tab: "adjustment",
+    end_date: moment().add(1, 'd').format('YYYY-MM-DD'),
+    tab: 'adjustment',
     original_id: selectedRow?.id,
   });
 
   // 매입조정 상세내역 요청
   const getDetailQuery = useQuery(
-    ["getAdjustmentDetail", selectedRow],
+    ['getAdjustmentDetail', selectedRow],
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
       enabled: visible && !!searchQuery.original_id,
@@ -42,7 +41,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
   // 잔금 내역 조회 요청 청
   const getBalanceQuery = useQuery(
-    ["getBalance", searchQuery], //
+    ['getBalance', searchQuery], //
     () => clearingAPI.getBalance(searchQuery),
     {
       enabled: visible && !!searchQuery.original_id,
@@ -58,8 +57,8 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       rt_store_id: store.id,
       vendor_id: selectedRow?.vendor_info.id,
       start_date: selectedRow?.created_date,
-      end_date: moment().add(1, "d").format("YYYY-MM-DD"),
-      tab: "adjustment",
+      end_date: moment().add(1, 'd').format('YYYY-MM-DD'),
+      tab: 'adjustment',
       original_id: selectedRow?.id,
     }));
   }, [selectedRow, store.id]);
@@ -68,14 +67,14 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     <TurtleModal
       centered
       width="90%"
-      title={t("adjustment.detail")}
+      title={t('adjustment.detail')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "60vh", overflowY: "auto" }}
+      bodyStyle={{ height: '60vh', overflowY: 'auto' }}
     >
       <Row style={{ marginBottom: 16 }}>
-        <TurtleText>{t("adjustment.list")}</TurtleText>
+        <TurtleText>{t('adjustment.list')}</TurtleText>
       </Row>
 
       <Table
@@ -87,55 +86,56 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         columns={[
           {
             ellipsis: true,
-            align: "center",
+            align: 'center',
             width: 120,
-            title: t("adjustment date"),
+            title: t('adjustment date'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
-            title: t("vendor.name"),
+            title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: t("product.name"),
+            title: t('product.name'),
             render: (_, record) => record.product_info.name,
           },
           {
             ellipsis: true,
-            title: t("product.vendor product name"),
+            title: t('product.vendor product name'),
             render: (_, record) => record.product_info.vendor_product_name,
           },
           {
             ellipsis: true,
-            title: t("product.option"),
+            title: t('product.option'),
             render: (_, record) => record.product_info.option,
           },
           {
             ellipsis: true,
-            title: t("adjustment.is vat included"),
-            render: (_, record) => (record.is_vat_included ? "포함" : "미포함"),
+            title: t('adjustment.is vat included'),
+            render: (_, record) => (record.is_vat_included ? '포함' : '미포함'),
           },
           {
             ellipsis: true,
-            title: t("product.price"),
+            title: t('product.price'),
             render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,
-            title: t("adjustment.count all"),
-            render: (_, record) => `${record.count - record.count_left} / ${record.count}`,
+            title: t('adjustment.count all'),
+            render: (_, record) =>
+              `${record.count - record.count_left} / ${record.count}`,
           },
           {
             ellipsis: true,
-            title: t("adjustment.type."),
+            title: t('adjustment.type.'),
             render: (_, record) => t(`adjustment.type.${record.type}`),
           },
         ]}
       />
 
-      <Row style={{ margin: "32px 0 16px 0" }}>
+      <Row style={{ margin: '32px 0 16px 0' }}>
         <TurtleText>입고 및 매입조정 처리이력</TurtleText>
       </Row>
 
@@ -150,7 +150,10 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             <DatePicker.RangePicker
               size="small"
               allowClear={false}
-              value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
+              value={[
+                moment(searchQuery.start_date),
+                moment(searchQuery.end_date),
+              ]}
               onChange={(_, [start_date, end_date]) => {
                 setSearchQuery({ ...searchQuery, start_date, end_date });
               }}
@@ -161,13 +164,14 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           {
             ellipsis: true,
             width: 200,
-            align: "center",
-            title: "처리시간",
-            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD HH:mm:ss"),
+            align: 'center',
+            title: '처리시간',
+            render: (_, record) =>
+              moment(record.created_time).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
             ellipsis: true,
-            title: "처리내용",
+            title: '처리내용',
             render: (_, record) => record.memo,
           },
         ]}

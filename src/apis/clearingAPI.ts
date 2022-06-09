@@ -1,4 +1,4 @@
-import { v2Axios } from "./index";
+import { v2Axios } from '.';
 
 // 잔여 매입조정 금액
 export interface BalanceShow {
@@ -27,7 +27,7 @@ export interface BalanceShow {
 export interface ClearingSheetShow {
   id: number;
   created_time: string;
-  status: "request" | "pending" | "complete";
+  status: 'request' | 'pending' | 'complete';
   store_id: number;
   store_name: string;
   request_date: string;
@@ -74,7 +74,7 @@ export interface ClearingItemShow {
 // Request: 정산서 생성
 export interface RequestCreateSheet {
   store_id?: number;
-  credit_type: "general";
+  credit_type: 'general';
   store_name?: string;
   total_clearing_amount: number;
 }
@@ -122,10 +122,16 @@ export interface ResponseCreateItem {
 }
 
 // 정산서 생성 요청
-const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
-  let url = "clearing/sheet";
-  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
-  url = "clearing/item";
+const create = async function (data: {
+  sheet: RequestCreateSheet;
+  item: RequestCreateItem;
+}) {
+  let url = 'clearing/sheet';
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
+    url,
+    data.sheet,
+  );
+  url = 'clearing/item';
   const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
     ...data.item,
     sheet_id: sheetResponse.data.data,
@@ -141,7 +147,7 @@ export interface RequestGetBalance {
   start_date?: string;
   end_date?: string;
   // 페이지 구분
-  tab?: "balance" | "balance_detail" | "adjustment";
+  tab?: 'balance' | 'balance_detail' | 'adjustment';
   // 정산에서 매입차감 위해 조회할 때
   warehousing_sheet_id?: string;
   // 매입조정 상세 조회할 때
@@ -159,7 +165,7 @@ export interface ResponseGetBalance {
 
 // 매입 결제대기 항목 요청
 const getBalance = async function (query: RequestGetBalance) {
-  let url = "clearing/balance?";
+  let url = 'clearing/balance?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -170,8 +176,8 @@ const getBalance = async function (query: RequestGetBalance) {
 // Request: 정산서 조회
 export interface RequestGetSheet {
   store_id?: number;
-  credit_type: "general";
-  date_filter?: "request_date" | "complete_date";
+  credit_type: 'general';
+  date_filter?: 'request_date' | 'complete_date';
   start_date: string;
   end_date: string;
   page?: number;
@@ -204,7 +210,7 @@ export interface ResponseGetSheet {
 
 // 정산서 조회 요청
 const getSheet = async function (query: RequestGetSheet) {
-  let url = "clearing/sheet?";
+  let url = 'clearing/sheet?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -249,7 +255,7 @@ export interface ResponseGetItem {
 
 // 정산 아이템 조회 요청
 const getItem = async function (query: RequestGetItem) {
-  let url = "clearing/item?";
+  let url = 'clearing/item?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }

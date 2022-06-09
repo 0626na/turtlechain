@@ -1,14 +1,21 @@
-import { t } from "i18next";
-import { Collapse, CollapsePanelProps, InputNumber, Row, Space, Table, Typography } from "antd";
-import { TurtleButton, TurtleQuestionTooltip } from "components/common";
-import { clearingAPI } from "apis";
-import { useQuery } from "react-query";
-import { clearingCartState } from "store/clearingCartState";
-import { useRecoilState } from "recoil";
-import { useEffect, useMemo, useState } from "react";
-import { BalanceShow } from "apis/clearingAPI";
-import { pricePattern } from "utils/pattern";
-import moment from "moment";
+import moment from 'moment';
+import { t } from 'i18next';
+import {
+  Collapse,
+  CollapsePanelProps,
+  InputNumber,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from 'antd';
+import { useQuery } from 'react-query';
+import { useRecoilState } from 'recoil';
+import { useEffect, useMemo, useState } from 'react';
+import { TurtleButton, TurtleQuestionTooltip } from '@components/common';
+import { clearingCartState } from '@store/clearingCartState';
+import clearingAPI, { BalanceShow } from '@apis/clearingAPI';
+import { pricePattern } from '@utils/pattern';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -20,22 +27,25 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const [balanceList, setBalanceList] = useState<BalanceShow[]>([]);
 
   const getBalanceQuery = useQuery(
-    ["getBalance"],
+    ['getBalance'],
     () =>
       clearingAPI.getBalance({
         warehousing_sheet_id: cart.selectedKeys
           .map((id) => String(id))
-          .reduce((cur, acc) => cur + acc + "@", "")
+          .reduce((cur, acc) => cur + acc + '@', '')
           .slice(0, -1),
       }),
     {
-      enabled: activeKey === "2",
+      enabled: activeKey === '2',
       onSuccess: (data) => {
         setBalanceList(
           data.data.item_list.map((balanceItem) => ({
             ...balanceItem,
             warehousing_amount: cart.warehousing_item_list
-              .filter((warehousingItem) => balanceItem.vendor_info.id === warehousingItem.vendor_id)
+              .filter(
+                (warehousingItem) =>
+                  balanceItem.vendor_info.id === warehousingItem.vendor_id,
+              )
               .map((warehousingItem) => warehousingItem.deposit_price)
               .reduce((cur, acc) => cur + acc, 0),
           })),
@@ -46,7 +56,10 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
 
   // 차감 총 금액 판넬안에서 바뀌게 하기위함
   const totalBalance = useMemo(
-    () => balanceList.map((item) => item.subtract_price ?? 0).reduce((cur, acc) => cur + acc, 0),
+    () =>
+      balanceList
+        .map((item) => item.subtract_price ?? 0)
+        .reduce((cur, acc) => cur + acc, 0),
     [balanceList],
   );
 
@@ -61,7 +74,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
     <Collapse.Panel
       {...props}
       extra={
-        <Typography.Text style={{ color: "#5B5D63" }}>
+        <Typography.Text style={{ color: '#5B5D63' }}>
           차감 총 금액: {totalBalance.toLocaleString()} 원
         </Typography.Text>
       }
@@ -75,22 +88,23 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
-            title: "등록 날짜",
-            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD"),
+            title: '등록 날짜',
+            render: (_, record) =>
+              moment(record.created_time).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,
-            title: t("vendor.name"),
+            title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: "당일 입고 금액",
+            title: '당일 입고 금액',
             render: (_, record) => record.warehousing_amount?.toLocaleString(),
           },
           {
             ellipsis: true,
-            title: "사용 가능 금액",
+            title: '사용 가능 금액',
             render: (_, record) => record.overpaid_amount.toLocaleString(),
           },
           {
@@ -105,16 +119,21 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               <Space>
                 <InputNumber
                   size="small"
-                  formatter={(value) => `${value}`.replace(pricePattern, ",")}
+                  formatter={(value) => `${value}`.replace(pricePattern, ',')}
                   placeholder="금액 입력"
                   step={1000}
                   min={0}
-                  max={Math.min(record.overpaid_amount, record.warehousing_amount ?? 0)}
+                  max={Math.min(
+                    record.overpaid_amount,
+                    record.warehousing_amount ?? 0,
+                  )}
                   value={record.subtract_price}
                   onChange={(value) => {
                     setBalanceList(
                       balanceList.map((item) =>
-                        item.id === record.id ? { ...item, subtract_price: value } : item,
+                        item.id === record.id
+                          ? { ...item, subtract_price: value }
+                          : item,
                       ),
                     );
                   }}
@@ -126,7 +145,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       />
       <Row justify="end" align="middle" style={{ marginTop: 16 }}>
         <TurtleButton //
-          children={t("button.next step")}
+          children={t('button.next step')}
           onClick={() => {
             setCart({
               ...cart,

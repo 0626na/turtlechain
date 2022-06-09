@@ -1,20 +1,20 @@
-import { RcFile } from "antd/lib/upload";
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
+import { RcFile } from 'antd/lib/upload';
 
 // 소매 사업자 생성
 interface RequestCreate {
   name: string;
   owner: string;
   biz_num: string;
-  biz_type: "personal" | "entity" | "simple";
+  biz_type: 'personal' | 'entity' | 'simple';
   address_main: string;
   address_sub: string;
   memo: string;
   biz_license_file: File;
   // tax_type, service_usage, stores 는 백오피스 필수필드 이므로 빈배열 string 넣어줌(formdata)
-  tax_type: "[]"; // 빈배열
-  service_usage: "[]"; // 빈배열
-  stores: "[]"; // 빈배열
+  tax_type: '[]'; // 빈배열
+  service_usage: '[]'; // 빈배열
+  stores: '[]'; // 빈배열
 }
 
 interface ResponseCreate {
@@ -24,7 +24,7 @@ interface ResponseCreate {
 }
 
 const create = async function (data: RequestCreate) {
-  const url = "/provisioning/retailer/companies";
+  const url = '/provisioning/retailer/companies';
   const formData = new FormData();
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);
@@ -78,7 +78,7 @@ const update = async function (data: RequestUpdate) {
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);
   }
-  !data.biz_license_file && formData.delete("biz_license_file");
+  !data.biz_license_file && formData.delete('biz_license_file');
   const response = await v2Axios.patch<ResponseUpdate>(url, formData);
   return response.data;
 };

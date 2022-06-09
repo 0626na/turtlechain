@@ -1,11 +1,11 @@
-import { Select, Typography } from "antd";
+import { Select, Typography } from 'antd';
 
 interface Props {
   label?: string;
   options?: Array<{ name: string; value: number | string }>;
   loading?: boolean;
   placeholder?: string;
-  width?: "long" | "short";
+  width?: 'long' | 'short';
   value: string;
   onSelect: (value: string) => void;
 }
@@ -15,17 +15,21 @@ function TurtleSelect({
   options,
   loading,
   placeholder,
-  width = "long",
+  width = 'long',
   value,
   onSelect,
 }: Props) {
   return (
     <>
-      {label && <Typography.Text style={{ marginRight: "1rem" }}>{label}</Typography.Text>}
+      {label && (
+        <Typography.Text style={{ marginRight: '1rem' }}>
+          {label}
+        </Typography.Text>
+      )}
       <Select
         placeholder={placeholder}
         loading={loading}
-        style={{ width: width === "long" ? "12rem" : "8rem" }}
+        style={{ width: width === 'long' ? '12rem' : '8rem' }}
         value={value}
         onSelect={onSelect}
       >

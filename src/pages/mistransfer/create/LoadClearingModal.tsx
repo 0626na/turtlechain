@@ -1,20 +1,25 @@
-import { DatePicker, message, Pagination, Row, Table, Tag } from "antd";
-import clearingAPI, { ClearingItemShow, RequestGetSheet } from "apis/clearingAPI";
-import { AxiosError } from "axios";
-import { NewSearchFilter } from "components/combine";
-import { TurtleModal, TurtleTableTitle } from "components/common";
-import { t } from "i18next";
-import { MainContent } from "layouts/main";
-import moment from "moment";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
+import moment from 'moment';
+import { t } from 'i18next';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { DatePicker, message, Pagination, Row, Table, Tag } from 'antd';
+import { AxiosError } from 'axios';
+import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
+import clearingAPI, {
+  ClearingItemShow,
+  RequestGetSheet,
+} from '@apis/clearingAPI';
+import { NewSearchFilter } from '@components/combine';
+import { TurtleModal, TurtleTableTitle } from '@components/common';
+import { MainContent } from '@layout/main';
+import { storeState } from '@store/storeState';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectClearingItem: React.Dispatch<React.SetStateAction<ClearingItemShow | undefined>>;
+  selectClearingItem: React.Dispatch<
+    React.SetStateAction<ClearingItemShow | undefined>
+  >;
 }
 
 function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
@@ -22,17 +27,17 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
   const [selectedSheetId, selectSheetId] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     store_id: store.id,
-    credit_type: "general",
-    start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
-    end_date: moment().format("YYYY-MM-DD"),
+    credit_type: 'general',
+    start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+    end_date: moment().format('YYYY-MM-DD'),
     page: 1,
     page_size: 5,
-    status: "complete",
+    status: 'complete',
   });
-  const [searchState, setSearchState] = useState({ search_string: "" });
+  const [searchState, setSearchState] = useState({ search_string: '' });
 
   const getSheetQuery = useQuery(
-    ["getClearingSheet", searchQuery],
+    ['getClearingSheet', searchQuery],
     () => clearingAPI.getSheet(searchQuery),
     {
       enabled: visible,
@@ -43,7 +48,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
   );
 
   const getItemQuery = useQuery(
-    ["getClearingItem", selectedSheetId], //
+    ['getClearingItem', selectedSheetId], //
     () =>
       clearingAPI.getItem({
         sheet_id: selectedSheetId,
@@ -61,14 +66,14 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     selectSheetId(-1);
     setSearchQuery({
       store_id: store.id,
-      credit_type: "general",
-      start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
-      end_date: moment().format("YYYY-MM-DD"),
+      credit_type: 'general',
+      start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
       page: 1,
       page_size: 5,
-      status: "complete",
+      status: 'complete',
     });
-    setSearchState({ search_string: "" });
+    setSearchState({ search_string: '' });
   }, [store.id]);
 
   useEffect(() => {
@@ -100,12 +105,12 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     <TurtleModal
       centered
       width="90%"
-      title={t("clearing.search")}
+      title={t('clearing.search')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
       getContainer={false}
-      bodyStyle={{ height: "90vh", overflowY: "auto" }}
+      bodyStyle={{ height: '90vh', overflowY: 'auto' }}
     >
       <Row style={{ marginBottom: 16 }}>
         <DatePicker.RangePicker
@@ -123,7 +128,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
         dataSource={getSheetQuery.data?.data.sheet_list}
         loading={getSheetQuery.isLoading}
         pagination={false}
-        scroll={{ y: "auto" }}
+        scroll={{ y: 'auto' }}
         rowKey={(record) => record.id}
         onRow={(record) => ({
           onClick: () => {
@@ -148,42 +153,47 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
           {
             ellipsis: true,
             width: 100,
-            align: "center",
-            title: t("clearing.status.default"),
+            align: 'center',
+            title: t('clearing.status.default'),
             render: (_, record) => {
               const { status } = record;
               const color =
-                status === "request" ? "green" : status === "pending" ? "orange" : "geekblue";
+                status === 'request'
+                  ? 'green'
+                  : status === 'pending'
+                  ? 'orange'
+                  : 'geekblue';
               const text = t(`clearing.status.${status}`);
               return <Tag color={color}>{text}</Tag>;
             },
           },
           {
             ellipsis: true,
-            title: t("clearing.request date"),
+            title: t('clearing.request date'),
             render: (_, record) => record.request_date,
           },
           {
             ellipsis: true,
-            title: t("clearing.complete date"),
+            title: t('clearing.complete date'),
             render: (_, record) => record.complete_date,
           },
           {
             ellipsis: true,
-            title: t("clearing.total price"),
-            render: (_, record) => record.total_clearing_amount.toLocaleString(),
+            title: t('clearing.total price'),
+            render: (_, record) =>
+              record.total_clearing_amount.toLocaleString(),
           },
         ]}
       />
 
-      <MainContent title={t("clearing.detail")}>
+      <MainContent title={t('clearing.detail')}>
         <Table
           size="small"
           dataSource={filteredList}
           loading={getItemQuery.isLoading}
           pagination={false}
           rowKey={(record) => record.id}
-          scroll={{ y: "auto" }}
+          scroll={{ y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
               onClickItemRow(record);
@@ -205,33 +215,33 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: t("vendor.name"),
+              title: t('vendor.name'),
               render: (_, record) => record.vendor_name,
             },
             {
               ellipsis: true,
-              title: t("vendor.address"),
+              title: t('vendor.address'),
               render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
-              title: t("vendor.account"),
+              title: t('vendor.account'),
               render: (_, record) =>
                 `${record.bank} ${record.account_number} ${record.account_holder}`,
             },
             {
               ellipsis: true,
-              title: t("clearing.supply price"),
+              title: t('clearing.supply price'),
               render: (_, record) => record.supply_amount.toLocaleString(),
             },
             {
               ellipsis: true,
-              title: t("clearing.vat"),
+              title: t('clearing.vat'),
               render: (_, record) => record.vat_amount.toLocaleString(),
             },
             {
               ellipsis: true,
-              title: t("clearing.price"),
+              title: t('clearing.price'),
               render: (_, record) => record.clearing_amount.toLocaleString(),
             },
           ]}

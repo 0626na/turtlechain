@@ -1,3 +1,7 @@
+import { t } from 'i18next';
+import { useCallback, useMemo, useState } from 'react';
+import { useMutation } from 'react-query';
+import { useRecoilValue } from 'recoil';
 import {
   Col,
   Input,
@@ -12,25 +16,28 @@ import {
   Table,
   Tabs,
   Typography,
-} from "antd";
-import { vendorAPI } from "apis";
-import { ParseCount, Vendor } from "apis/excelAPI";
-import externalAPI from "apis/externalAPI";
-import { RequestCreate, VendorAccount, WholesaleShow } from "apis/vendorAPI";
-import { AxiosError } from "axios";
-import { t } from "i18next";
-import { useCallback, useMemo, useState } from "react";
-import { useMutation } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { CheckOutlined, CloseOutlined, FileTextOutlined } from "@ant-design/icons";
+} from 'antd';
+import { AxiosError } from 'axios';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  FileTextOutlined,
+} from '@ant-design/icons';
+import { ParseCount, Vendor } from '@apis/excelAPI';
+import externalAPI from '@apis/externalAPI';
+import vendorAPI, {
+  RequestCreate,
+  VendorAccount,
+  WholesaleShow,
+} from '@apis/vendorAPI';
+import { storeState } from '@store/storeState';
 import {
   TurtleBadge,
   TurtleButton,
   TurtleButtonSub,
   TurtleModal,
   TurtleQuestionTooltip,
-} from "components/common";
+} from '@components/common';
 
 interface Props {
   visible: boolean;
@@ -50,52 +57,62 @@ function ConnectModal({ visible, closeModal }: Props) {
   });
 
   // 거래처 연동 요청
-  const connectVendorQuery = useMutation("connectVendor", externalAPI.connectSellmateVendor, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-      resetField();
-    },
-    onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
+  const connectVendorQuery = useMutation(
+    'connectVendor',
+    externalAPI.connectSellmateVendor,
+    {
+      onError: (error: AxiosError) => {
+        message.error(error.response?.data?.msg);
         resetField();
-        return;
-      }
-      message.info(`이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`);
-      setSuccessList(
-        data.data.success.map((vendor) => ({
-          ...vendor,
-          memo: "",
-          memo_value: "",
-          memo_active: true,
-          is_vat_included: false,
-          use_vendor_name: vendor.name,
-        })),
-      );
-      setSuggestList(
-        data.data.suggest.map((vendor) => ({
-          ...vendor,
-          memo: "",
-          memo_value: "",
-          memo_active: true,
-          is_vat_included: false,
-          use_vendor_name: vendor.name,
-          use_vendor: vendor.ws_store_info.length === 1 ? vendor.ws_store_info[0] : undefined,
-          use_account:
-            vendor.ws_store_info.length === 1 && vendor.ws_store_info[0].store_account.length === 1
-              ? vendor.ws_store_info[0].store_account[0]
-              : undefined,
-          check_account: false,
-        })),
-      );
-      setFailList(data.data.fail);
-      setCount(data.data.count);
+      },
+      onSuccess: (data) => {
+        if (data.data.error) {
+          message.error(data.data.error);
+          resetField();
+          return;
+        }
+        message.info(
+          `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
+        );
+        setSuccessList(
+          data.data.success.map((vendor) => ({
+            ...vendor,
+            memo: '',
+            memo_value: '',
+            memo_active: true,
+            is_vat_included: false,
+            use_vendor_name: vendor.name,
+          })),
+        );
+        setSuggestList(
+          data.data.suggest.map((vendor) => ({
+            ...vendor,
+            memo: '',
+            memo_value: '',
+            memo_active: true,
+            is_vat_included: false,
+            use_vendor_name: vendor.name,
+            use_vendor:
+              vendor.ws_store_info.length === 1
+                ? vendor.ws_store_info[0]
+                : undefined,
+            use_account:
+              vendor.ws_store_info.length === 1 &&
+              vendor.ws_store_info[0].store_account.length === 1
+                ? vendor.ws_store_info[0].store_account[0]
+                : undefined,
+            check_account: false,
+          })),
+        );
+        setFailList(data.data.fail);
+        setCount(data.data.count);
+      },
     },
-  });
+  );
 
   // 거래처 대량 등록 요청
   const createQuery = useMutation(
-    ["createVendor"], //
+    ['createVendor'], //
     vendorAPI.create,
     {
       onError: (error: AxiosError) => {
@@ -103,7 +120,7 @@ function ConnectModal({ visible, closeModal }: Props) {
       },
       onSuccess: (data) => {
         notification.open({
-          type: "success",
+          type: 'success',
           message: `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         });
         onCloseModal();
@@ -116,7 +133,12 @@ function ConnectModal({ visible, closeModal }: Props) {
     setSuccessList([]);
     setSuggestList([]);
     setFailList([]);
-    setCount({ success_count: 0, suggest_count: 0, fail_count: 0, duplicated_count: 0 });
+    setCount({
+      success_count: 0,
+      suggest_count: 0,
+      fail_count: 0,
+      duplicated_count: 0,
+    });
   }, []);
 
   // 모달 닫기
@@ -143,7 +165,7 @@ function ConnectModal({ visible, closeModal }: Props) {
 
   const setSuccessMemo = useCallback(
     (record) => {
-      if (record.memo_value === "") return;
+      if (record.memo_value === '') return;
       setSuccessList(
         successList?.map((vendor) =>
           vendor.vendor_code === record.vendor_code
@@ -404,11 +426,11 @@ function ConnectModal({ visible, closeModal }: Props) {
     <TurtleModal
       centered
       width="80%"
-      title={t("vendor.load")}
+      title={t('vendor.load')}
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "85vh", overflowY: "auto" }}
+      bodyStyle={{ height: '85vh', overflowY: 'auto' }}
     >
       <Space>
         <Typography.Text>재고프로그램 연동 | </Typography.Text>
@@ -419,7 +441,7 @@ function ConnectModal({ visible, closeModal }: Props) {
           //loading={connectVendorQuery.isLoading}
           //disabled={connectVendorQuery.isSuccess}
         >
-          {t("button.connect")}
+          {t('button.connect')}
         </TurtleButtonSub>
       </Space>
 
@@ -439,20 +461,28 @@ function ConnectModal({ visible, closeModal }: Props) {
             loading={connectVendorQuery.isLoading}
             dataSource={successList}
             rowKey={(record) => record.vendor_code}
-            pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            scroll={{ y: "auto" }}
+            pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+            scroll={{ y: 'auto' }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
                   {record.memo_active ? (
                     <>
                       <Input
-                        value={record.memo_value === "" ? record.memo : record.memo_value}
+                        value={
+                          record.memo_value === ''
+                            ? record.memo
+                            : record.memo_value
+                        }
                         onChange={(e) => {
                           setSuccessMemoValue(e, record);
                         }}
                       />
-                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                      <Row
+                        justify="end"
+                        gutter={4}
+                        style={{ marginTop: '8px' }}
+                      >
                         <Col>
                           {record.memo && (
                             <TurtleButtonSub
@@ -481,7 +511,11 @@ function ConnectModal({ visible, closeModal }: Props) {
                   ) : (
                     <>
                       <div>{record.memo} </div>
-                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                      <Row
+                        justify="end"
+                        gutter={4}
+                        style={{ marginTop: '8px' }}
+                      >
                         <Col>
                           <TurtleButtonSub
                             size="small"
@@ -501,7 +535,7 @@ function ConnectModal({ visible, closeModal }: Props) {
               expandIcon: ({ expanded, onExpand, record }) => {
                 return (
                   <FileTextOutlined
-                    style={record.memo ? {} : { opacity: "0.4" }}
+                    style={record.memo ? {} : { opacity: '0.4' }}
                     onClick={(e) => onExpand(record, e)}
                   />
                 );
@@ -510,45 +544,45 @@ function ConnectModal({ visible, closeModal }: Props) {
             columns={[
               {
                 ellipsis: true,
-                width: "8%",
-                title: "거래처 코드",
+                width: '8%',
+                title: '거래처 코드',
                 render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
-                width: "15%",
-                title: "쇼핑몰 입력 값",
+                width: '15%',
+                title: '쇼핑몰 입력 값',
                 render: (_, record) => {
                   return `${record.name}  ${record.address}`;
                 },
               },
               {
                 ellipsis: true,
-                title: "추천 거래처명",
+                title: '추천 거래처명',
                 render: (_, record) => record.ws_store_info[0]?.name,
               },
               {
                 ellipsis: true,
-                title: "거래처 주소",
+                title: '거래처 주소',
                 render: (_, record) => record.ws_store_info[0]?.address,
               },
               {
                 ellipsis: true,
-                title: "휴대번호",
-                width: "10%",
+                title: '휴대번호',
+                width: '10%',
                 render: (_, record) =>
                   record.ws_store_info[0]?.store_phone[0]?.phone
-                    .replace(/[^0-9]/, "")
+                    .replace(/[^0-9]/, '')
                     .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
               },
               {
                 ellipsis: true,
-                title: "계좌정보",
+                title: '계좌정보',
                 render: (_, record) => {
                   const {
-                    bank = "",
-                    account_number = "",
-                    account_holder = "",
+                    bank = '',
+                    account_number = '',
+                    account_holder = '',
                   } = record.ws_store_info[0]?.store_account[0] || {};
 
                   return `${bank} ${account_number} ${account_holder}`;
@@ -557,33 +591,33 @@ function ConnectModal({ visible, closeModal }: Props) {
               Table.EXPAND_COLUMN,
               {
                 ellipsis: true,
-                title: "부가세 포함 여부",
+                title: '부가세 포함 여부',
                 render: (_, record) => {
                   return (
                     <Switch
-                      checkedChildren={t("button.include")}
+                      checkedChildren={t('button.include')}
                       checked={record.is_vat_included}
                       onClick={() => {
                         setSuccessIsTaxed(record);
                       }}
-                      style={{ width: "52px" }}
+                      style={{ width: '52px' }}
                     />
                   );
                 },
               },
               {
                 ellipsis: true,
-                align: "center",
-                width: "6%",
-                title: "(체크)",
+                align: 'center',
+                width: '6%',
+                title: '(체크)',
                 render: (_, record) => {
                   if (
                     record.ws_store_info.length === 1 &&
                     record.ws_store_info[0]?.store_account.length === 1
                   ) {
-                    return <CheckOutlined style={{ color: "green" }} />;
+                    return <CheckOutlined style={{ color: 'green' }} />;
                   }
-                  return <CloseOutlined style={{ color: "red" }} />;
+                  return <CloseOutlined style={{ color: 'red' }} />;
                 },
               },
               {
@@ -616,26 +650,37 @@ function ConnectModal({ visible, closeModal }: Props) {
          *
          *
          */}
-        <Tabs.TabPane tab={`추천(${getSuggestCount}/${count.suggest_count})`} key="2">
+        <Tabs.TabPane
+          tab={`추천(${getSuggestCount}/${count.suggest_count})`}
+          key="2"
+        >
           <Table
             size="small"
             loading={connectVendorQuery.isLoading}
             dataSource={suggestList}
             rowKey={(record) => record.vendor_code}
-            pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            scroll={{ y: "auto" }}
+            pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+            scroll={{ y: 'auto' }}
             expandable={{
               expandedRowRender: (record) => (
                 <>
                   {record.memo_active ? (
                     <>
                       <Input
-                        value={record.memo_value === "" ? record.memo : record.memo_value}
+                        value={
+                          record.memo_value === ''
+                            ? record.memo
+                            : record.memo_value
+                        }
                         onChange={(e) => {
                           setSuggestMemoValue(e, record);
                         }}
                       />
-                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                      <Row
+                        justify="end"
+                        gutter={4}
+                        style={{ marginTop: '8px' }}
+                      >
                         <Col>
                           {record.memo && (
                             <TurtleButtonSub
@@ -664,7 +709,11 @@ function ConnectModal({ visible, closeModal }: Props) {
                   ) : (
                     <>
                       <div>{record.memo} </div>
-                      <Row justify="end" gutter={4} style={{ marginTop: "8px" }}>
+                      <Row
+                        justify="end"
+                        gutter={4}
+                        style={{ marginTop: '8px' }}
+                      >
                         <Col>
                           <TurtleButtonSub
                             size="small"
@@ -684,7 +733,7 @@ function ConnectModal({ visible, closeModal }: Props) {
               expandIcon: ({ expanded, onExpand, record }) => {
                 return (
                   <FileTextOutlined
-                    style={record.memo ? {} : { opacity: "0.4" }}
+                    style={record.memo ? {} : { opacity: '0.4' }}
                     onClick={(e) => onExpand(record, e)}
                   />
                 );
@@ -694,43 +743,48 @@ function ConnectModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 width: 100,
-                title: "거래처 코드",
+                title: '거래처 코드',
                 render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
-                width: "12%",
-                title: "쇼핑몰 입력 값",
+                width: '12%',
+                title: '쇼핑몰 입력 값',
                 render: (_, record) => {
                   return `${record.name} | ${record.address}`;
                 },
               },
               {
                 ellipsis: true,
-                title: "추천 거래처명",
+                title: '추천 거래처명',
                 render: (_, record) => {
                   return (
-                    <TurtleBadge count={record.ws_store_info.length} color="red">
+                    <TurtleBadge
+                      count={record.ws_store_info.length}
+                      color="red"
+                    >
                       <Popover
                         content={
                           <Radio.Group value={record.use_vendor?.id}>
                             <Space direction="vertical">
-                              {record.ws_store_info.map(({ name, address, id }) => (
-                                <Radio
-                                  key={id}
-                                  value={id}
-                                  onClick={() => {
-                                    setSuggestVendor(record, id);
-                                  }}
-                                >
-                                  {name} | {address}
-                                </Radio>
-                              ))}
+                              {record.ws_store_info.map(
+                                ({ name, address, id }) => (
+                                  <Radio
+                                    key={id}
+                                    value={id}
+                                    onClick={() => {
+                                      setSuggestVendor(record, id);
+                                    }}
+                                  >
+                                    {name} | {address}
+                                  </Radio>
+                                ),
+                              )}
                             </Space>
                           </Radio.Group>
                         }
                       >
-                        <div style={{ color: record.use_vendor ? "" : "red" }}>
+                        <div style={{ color: record.use_vendor ? '' : 'red' }}>
                           {record.use_vendor
                             ? record.use_vendor.name
                             : record.ws_store_info[0]?.name}
@@ -742,30 +796,40 @@ function ConnectModal({ visible, closeModal }: Props) {
               },
               {
                 ellipsis: true,
-                title: "거래처 주소",
+                title: '거래처 주소',
                 render: (_, record) =>
-                  record.use_vendor ? record.use_vendor.address : record.ws_store_info[0]?.address,
+                  record.use_vendor
+                    ? record.use_vendor.address
+                    : record.ws_store_info[0]?.address,
               },
               {
                 ellipsis: true,
-                title: "휴대번호",
+                title: '휴대번호',
                 render: (_, record) => record.use_vendor?.store_phone[0]?.phone,
               },
               {
                 ellipsis: true,
-                title: "계좌정보",
-                width: "20%",
+                title: '계좌정보',
+                width: '20%',
                 render: (_, record) => {
                   if (!record.use_vendor) return;
 
                   return (
-                    <TurtleBadge count={record.use_vendor?.store_account.length} color="red">
+                    <TurtleBadge
+                      count={record.use_vendor?.store_account.length}
+                      color="red"
+                    >
                       <Popover
                         content={
                           <Radio.Group value={record.use_account?.id}>
                             <Space direction="vertical">
                               {record.use_vendor?.store_account.map(
-                                ({ id, bank, account_number, account_holder }) => (
+                                ({
+                                  id,
+                                  bank,
+                                  account_number,
+                                  account_holder,
+                                }) => (
                                   <Radio
                                     value={id}
                                     key={id}
@@ -781,10 +845,14 @@ function ConnectModal({ visible, closeModal }: Props) {
                           </Radio.Group>
                         }
                       >
-                        <div style={{ color: record.check_account ? "" : "red" }}>
-                          {record.use_account?.bank ?? record.use_vendor.store_account[0]?.bank}{" "}
+                        <div
+                          style={{ color: record.check_account ? '' : 'red' }}
+                        >
+                          {record.use_account?.bank ??
+                            record.use_vendor.store_account[0]?.bank}{' '}
                           {record.use_account?.account_number ??
-                            record.use_vendor.store_account[0]?.account_number}{" "}
+                            record.use_vendor.store_account[0]
+                              ?.account_number}{' '}
                           {record.use_account?.account_holder ??
                             record.use_vendor.store_account[0]?.account_holder}
                         </div>
@@ -795,30 +863,30 @@ function ConnectModal({ visible, closeModal }: Props) {
               },
               Table.EXPAND_COLUMN,
               {
-                title: "부가세 포함 여부",
+                title: '부가세 포함 여부',
                 width: 130,
                 ellipsis: true,
                 render: (_, record) => {
                   return (
                     <Switch
-                      checkedChildren={t("button.include")}
+                      checkedChildren={t('button.include')}
                       checked={record.is_vat_included}
                       onClick={() => {
                         setSuggestIsTaxed(record);
                       }}
-                      style={{ width: "52px" }}
+                      style={{ width: '52px' }}
                     />
                   );
                 },
               },
               {
-                align: "center",
+                align: 'center',
                 width: 50,
                 render: (_, record) => {
                   if (record.use_vendor && record.check_account) {
-                    return <CheckOutlined style={{ color: "green" }} />;
+                    return <CheckOutlined style={{ color: 'green' }} />;
                   }
-                  return <CloseOutlined style={{ color: "red" }} />;
+                  return <CloseOutlined style={{ color: 'red' }} />;
                 },
               },
               {
@@ -859,42 +927,42 @@ function ConnectModal({ visible, closeModal }: Props) {
             loading={connectVendorQuery.isLoading}
             dataSource={failList}
             rowKey={(record) => record.vendor_code}
-            pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-            scroll={{ y: "auto" }}
+            pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+            scroll={{ y: 'auto' }}
             columns={[
               {
                 ellipsis: true,
-                width: "8%",
-                title: "거래처 코드",
+                width: '8%',
+                title: '거래처 코드',
                 render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
-                width: "12%",
-                title: "쇼핑몰 입력 값",
+                width: '12%',
+                title: '쇼핑몰 입력 값',
                 render: (_, record) => {
                   return `${record.name} | ${record.address}`;
                 },
               },
               {
                 ellipsis: true,
-                title: "거래처명",
+                title: '거래처명',
                 render: (_, record) => <>(정보없음)</>,
               },
               {
                 ellipsis: true,
-                title: "거래처 주소",
+                title: '거래처 주소',
                 render: (_, record) => <>(정보없음)</>,
               },
               {
                 ellipsis: true,
-                title: "휴대번호",
+                title: '휴대번호',
                 render: (_, record) => <>(정보없음)</>,
               },
               {
                 ellipsis: true,
-                title: "계좌정보",
-                width: "20%",
+                title: '계좌정보',
+                width: '20%',
                 render: (_, record) => <>(정보없음)</>,
               },
             ]}
@@ -904,9 +972,9 @@ function ConnectModal({ visible, closeModal }: Props) {
 
       <Row justify="end" style={{ paddingTop: 20 }}>
         <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really register')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={onClickCreate}
         >
           <TurtleButton
@@ -914,7 +982,7 @@ function ConnectModal({ visible, closeModal }: Props) {
             disabled={getSuggestCount === 0 && successList?.length === 0}
             loading={createQuery.isLoading}
           >
-            {t("vendor.create")}
+            {t('vendor.create')}
           </TurtleButton>
         </Popconfirm>
       </Row>

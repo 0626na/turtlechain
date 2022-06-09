@@ -1,3 +1,7 @@
+import { t } from 'i18next';
+import { useCallback, useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
 import {
   Col,
   Form,
@@ -7,12 +11,10 @@ import {
   Popconfirm,
   Space,
   Switch,
-  Typography,
-} from "antd";
-import { useForm } from "antd/es/form/Form";
-import { vendorAPI } from "apis";
-import { WholesaleShow } from "apis/vendorAPI";
-import { AxiosError } from "axios";
+} from 'antd';
+import { AxiosError } from 'axios';
+import { useForm } from 'antd/es/form/Form';
+import vendorAPI, { WholesaleShow } from '@apis/vendorAPI';
 import {
   TurtleButton,
   TurtleButtonSub,
@@ -20,18 +22,14 @@ import {
   TurtleSearchInput,
   TurtleText,
   TurtleTextArea,
-} from "components/common";
-import { useStoreExist } from "hooks";
-import { t } from "i18next";
-import { BottomBar, MenuBar } from "layouts/main";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import ConnectModal from "./ConnectModal";
-import ExcelModal from "./ExcelModal";
-import RequestModal from "./RequestModal";
-import SearchModal from "./SearchModal";
+} from '@components/common';
+import { useStoreExist } from '@hooks/index';
+import { BottomBar, MenuBar } from '@layout/main';
+import { storeState } from '@store/storeState';
+import ConnectModal from './ConnectModal';
+import ExcelModal from './ExcelModal';
+import RequestModal from './RequestModal';
+import SearchModal from './SearchModal';
 
 function PageBody() {
   // 쇼핑몰 id
@@ -51,7 +49,7 @@ function PageBody() {
 
   // 거래처 코드 생성 요청
   const getCodeQuery = useQuery(
-    "getVendorCode",
+    'getVendorCode',
     () =>
       vendorAPI.getCode({
         rt_store_id: store.id ?? -1,
@@ -63,27 +61,30 @@ function PageBody() {
         message.error(error.response?.data?.msg);
       },
       onSuccess: (data) => {
-        form.setFieldsValue({ ...form.getFieldsValue(), vendor_code: data.data });
+        form.setFieldsValue({
+          ...form.getFieldsValue(),
+          vendor_code: data.data,
+        });
       },
     },
   );
 
   // 거래처 생성 요청
-  const createQuery = useMutation(["createVendor"], vendorAPI.create, {
+  const createQuery = useMutation(['createVendor'], vendorAPI.create, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
     onSuccess: (data) => {
       if (data.data.fail_count > 0) {
         notification.open({
-          type: "error",
-          message: "이미 등록된 거래처입니다.",
+          type: 'error',
+          message: '이미 등록된 거래처입니다.',
         });
         return;
       }
       notification.open({
-        type: "success",
-        message: "성공적으로 등록하였습니다.",
+        type: 'success',
+        message: '성공적으로 등록하였습니다.',
       });
       form.resetFields();
       selectVendor(undefined);
@@ -113,7 +114,7 @@ function PageBody() {
       return;
     }
     if (!selectedVendor || selectedVendor.id === -1) {
-      message.warn("거래처를 선택해 주세요");
+      message.warn('거래처를 선택해 주세요');
       return;
     }
     getCodeQuery.refetch();
@@ -129,10 +130,10 @@ function PageBody() {
       vendor_phone_id: vendor.store_phone[0].id,
       ws_store_id: vendor.id,
       vendor_name: vendor.name,
-      vendor_address: `${vendor.building} ${vendor.floor}${vendor.floor ? "층" : ""} ${
-        vendor.col
-      } ${vendor.loc} ${vendor.ext}`,
-      memo: "",
+      vendor_address: `${vendor.building} ${vendor.floor}${
+        vendor.floor ? '층' : ''
+      } ${vendor.col} ${vendor.loc} ${vendor.ext}`,
+      memo: '',
       is_vat_included: false,
       owner: vendor.company[0]?.owner,
       biz_num: vendor.company[0]?.biz_num,
@@ -170,13 +171,13 @@ function PageBody() {
           color="skyblue"
           onClick={openConnectModal}
         >
-          {t("button.connect external program")}
+          {t('button.connect external program')}
         </TurtleButtonSub>
         <TurtleButtonSub // 거래처 대량 등록 Button
           icon="file"
           onClick={openExcelModal}
         >
-          {t("button.create bulk vendor")}
+          {t('button.create bulk vendor')}
         </TurtleButtonSub>
       </MenuBar>
 
@@ -188,7 +189,7 @@ function PageBody() {
         colon={false}
       >
         <div style={{ marginBottom: 24 }}>
-          <TurtleText>{t("vendor.basic info")}</TurtleText>
+          <TurtleText>{t('vendor.basic info')}</TurtleText>
         </div>
 
         <Form.Item name="rt_store_id" hidden>
@@ -212,28 +213,28 @@ function PageBody() {
 
         <TurtleSearchInput //
           value={selectedVendor?.name}
-          label={t("vendor.name")}
-          placeholder={t("placeholder.vendor name")}
+          label={t('vendor.name')}
+          placeholder={t('placeholder.vendor name')}
           onClick={openSearchModal}
         />
 
         <TurtleInput // 거래처 매장번호 Input
-          label={t("vendor.phone")}
-          placeholder={t("placeholder.tel")}
+          label={t('vendor.phone')}
+          placeholder={t('placeholder.tel')}
           disabled={true}
           value={selectedVendor?.phone}
           required={true}
         />
         <TurtleInput // 휴대번호 선택 Input
           value={selectedVendor?.store_phone[0]?.phone}
-          label={t("vendor.store phone")}
-          placeholder={t("placeholder.mobile")}
+          label={t('vendor.store phone')}
+          placeholder={t('placeholder.mobile')}
           disabled={true}
         />
 
         <TurtleInput
-          label={t("vendor.address")}
-          placeholder={t("placeholder.vendor address")}
+          label={t('vendor.address')}
+          placeholder={t('placeholder.vendor address')}
           disabled
           value={
             selectedVendor
@@ -244,14 +245,14 @@ function PageBody() {
 
         <TurtleInput // 기타 주소 Input
           value={selectedVendor?.ext}
-          label={t("vendor.ext")}
-          placeholder={t("placeholder.ext")}
+          label={t('vendor.ext')}
+          placeholder={t('placeholder.ext')}
           disabled={true}
           required={true}
         />
 
         <Form.Item // 계좌 Input
-          label={t("vendor.account")}
+          label={t('vendor.account')}
           required={true}
         >
           <Input.Group compact>
@@ -259,43 +260,48 @@ function PageBody() {
               <Input
                 value={selectedVendor?.store_account[0]?.bank}
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account bank")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account bank')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedVendor?.store_account[0]?.account_number}
                 disabled={true}
-                style={{ width: "40%" }}
-                placeholder={t("vendor.account number")}
+                style={{ width: '40%' }}
+                placeholder={t('vendor.account number')}
               />
             </Form.Item>
             <Form.Item noStyle rules={[{ required: true }]}>
               <Input
                 value={selectedVendor?.store_account[0]?.account_holder}
                 disabled={true}
-                style={{ width: "30%" }}
-                placeholder={t("vendor.account holder")}
+                style={{ width: '30%' }}
+                placeholder={t('vendor.account holder')}
               />
             </Form.Item>
           </Input.Group>
         </Form.Item>
 
         <div style={{ marginTop: 24, marginBottom: 24 }}>
-          <TurtleText>{t("vendor.additional info")}</TurtleText>
+          <TurtleText>{t('vendor.additional info')}</TurtleText>
         </div>
         <Form.Item // 거래처 코드 Input
-          label={t("vendor.code")}
+          label={t('vendor.code')}
           required={true}
           style={{ marginBottom: 0 }}
         >
           <Space>
             <Form.Item
               name="vendor_code"
-              rules={[{ required: true, message: "거래처 코드를 만들어주세요." }]}
+              rules={[
+                { required: true, message: '거래처 코드를 만들어주세요.' },
+              ]}
             >
-              <Input placeholder={t("placeholder.vendor code")} disabled={true} />
+              <Input
+                placeholder={t('placeholder.vendor code')}
+                disabled={true}
+              />
             </Form.Item>
             <Form.Item>
               <TurtleButtonSub color="blue" onClick={clickCreateVendorCode}>
@@ -311,37 +317,37 @@ function PageBody() {
           required={false}
         >
           <Switch //
-            checkedChildren={t("button.include")}
-            style={{ width: "55px" }}
+            checkedChildren={t('button.include')}
+            style={{ width: '55px' }}
           />
         </Form.Item>
         <TurtleTextArea // 주문 메모 TextArea
           required={false}
           name="memo"
-          label={t("vendor.memo")}
-          placeholder={t("placeholder.memo")}
+          label={t('vendor.memo')}
+          placeholder={t('placeholder.memo')}
           rows={5}
         />
 
         <div style={{ marginTop: 24, marginBottom: 24 }}>
-          <TurtleText>{t("vendor.biz info")}</TurtleText>
+          <TurtleText>{t('vendor.biz info')}</TurtleText>
         </div>
         <TurtleInput // 사업자 번호 Input
           name="biz_num"
-          label={t("company.num")}
-          placeholder={t("placeholder.biz num")}
+          label={t('company.num')}
+          placeholder={t('placeholder.biz num')}
           required={false}
         />
         <TurtleInput // 상호명 Input
           name="biz_name"
-          label={t("company.name")}
-          placeholder={t("placeholder.biz name")}
+          label={t('company.name')}
+          placeholder={t('placeholder.biz name')}
           required={false}
         />
         <TurtleInput // 대표자명 Input
           name="owner"
-          label={t("company.owner")}
-          placeholder={t("placeholder.biz owner")}
+          label={t('company.owner')}
+          placeholder={t('placeholder.biz owner')}
           required={false}
         />
       </Form>
@@ -363,9 +369,9 @@ function PageBody() {
         </Col>
 
         <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really register')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then(() => {
               createQuery.mutate([{ ...form.getFieldsValue() }]);
@@ -377,7 +383,7 @@ function PageBody() {
             disabled={!store.id}
             loading={createQuery.isLoading}
           >
-            {t("vendor.create")}
+            {t('vendor.create')}
           </TurtleButton>
         </Popconfirm>
       </BottomBar>

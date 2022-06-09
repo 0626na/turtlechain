@@ -1,16 +1,24 @@
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import useLogout from "hooks/useLogout";
-import { MAIN_HEADER_HEIGHT } from "constant";
-// antd
-import { MenuOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Layout, Button, Avatar, Menu, Dropdown, Col, Row, message } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { t } from "i18next";
-import { Notification } from "components/combine";
-import { useQuery } from "react-query";
-import { userAPI } from "apis";
-import { AxiosError } from "axios";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
+import {
+  Layout,
+  Button,
+  Avatar,
+  Menu,
+  Dropdown,
+  Col,
+  Row,
+  message,
+} from 'antd';
+import { useHistory } from 'react-router-dom';
+import { MAIN_HEADER_HEIGHT } from '@constant/index';
+import { useLogout } from '@hooks/index';
+import { UserOutlined } from '@ant-design/icons';
+import { Notification } from '@components/combine';
+import { useQuery } from 'react-query';
+import userAPI from '@apis/userAPI';
+import { AxiosError } from 'axios';
 
 interface Props {
   handleMenuVisible: () => void;
@@ -20,7 +28,7 @@ function Header({ handleMenuVisible }: Props) {
   const history = useHistory();
   const logout = useLogout();
 
-  const getQuery = useQuery("getUser", userAPI.get, {
+  const getQuery = useQuery('getUser', userAPI.get, {
     onError: (error: AxiosError) => {
       message.error(error.response?.data?.msg);
     },
@@ -32,20 +40,20 @@ function Header({ handleMenuVisible }: Props) {
         <Col>
           <Button
             type="link"
-            icon={<MenuOutlined style={{ color: "#FFFFFF" }} />}
+            icon={<MenuOutlined style={{ color: '#FFFFFF' }} />}
             onClick={handleMenuVisible}
           />
           <StyledImage
             src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
-            onClick={() => history.push("/home")}
+            onClick={() => history.push('/home')}
           />
         </Col>
-        <Col style={{ display: "flex" }}>
+        <Col style={{ display: 'flex' }}>
           <Notification />
           <Avatar
-            icon={<UserOutlined style={{ color: "#141720" }} />}
-            style={{ background: "#AAE7DC", top: 6 }}
+            icon={<UserOutlined style={{ color: '#141720' }} />}
+            style={{ background: '#AAE7DC', top: 6 }}
             size="small"
           />
           <Dropdown
@@ -56,14 +64,14 @@ function Header({ handleMenuVisible }: Props) {
                   onClick={logout}
                   icon={<LogoutOutlined />}
                 >
-                  {t("logout")}
+                  {t('logout')}
                 </Button>
               </Menu>
             }
-            trigger={["click"]}
+            trigger={['click']}
           >
-            <Button type="text" style={{ color: "#FFFFFF", paddingLeft: 7 }}>
-              {`${getQuery.data?.login_id ?? ""} 님`}
+            <Button type="text" style={{ color: '#FFFFFF', paddingLeft: 7 }}>
+              {`${getQuery.data?.login_id ?? ''} 님`}
               <DownOutlined />
             </Button>
           </Dropdown>

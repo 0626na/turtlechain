@@ -1,26 +1,24 @@
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-// antd
-import { Result, Button } from "antd";
-// lang
-import { t } from "i18next";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useHistory } from 'react-router-dom';
+import { Result, Button } from 'antd';
 
 function SignupResult() {
   const history = useHistory();
 
   const onClickGoHome = () => {
-    history.push("/");
+    history.push('/');
   };
 
   return (
     <Container>
       <Result
         status="success"
-        title={t("message.success signup")}
-        subTitle={t("description.signup completed")}
+        title={t('message.success signup')}
+        subTitle={t('description.signup completed')}
       />
       <Button type="primary" onClick={onClickGoHome}>
-        {t("go home")}
+        {t('go home')}
       </Button>
     </Container>
   );

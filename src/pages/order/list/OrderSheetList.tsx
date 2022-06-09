@@ -1,14 +1,14 @@
-import moment from "moment";
-import { Table, Popconfirm, Row, message } from "antd";
-import orderAPI, { RequestGetList } from "apis/orderAPI";
-import { t } from "i18next";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { useQuery } from "react-query";
-import { AxiosError } from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { TurtleButtonSub, TurtleText } from "components/common";
-import OrderSheetModal from "./OrderSheetModal";
+import moment from 'moment';
+import { t } from 'i18next';
+import { Table, Popconfirm, Row, message } from 'antd';
+import { useQuery } from 'react-query';
+import { AxiosError } from 'axios';
+import { useRecoilValue } from 'recoil';
+import { useCallback, useEffect, useState } from 'react';
+import orderAPI, { RequestGetList } from '@apis/orderAPI';
+import { storeState } from '@store/storeState';
+import { TurtleButtonSub, TurtleText } from '@components/common';
+import OrderSheetModal from './OrderSheetModal';
 
 interface Props {
   searchQuery: RequestGetList;
@@ -20,7 +20,7 @@ function OrderSheetList({ searchQuery, setSearchQuery }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const getOrderListQuery = useQuery(
-    ["getOrderList", searchQuery],
+    ['getOrderList', searchQuery],
     () => orderAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onError: (error: AxiosError) => {
@@ -42,55 +42,65 @@ function OrderSheetList({ searchQuery, setSearchQuery }: Props) {
   return (
     <Row>
       <TurtleText>
-        {t("order.sheet.list")}({getOrderListQuery.data?.data.total_count})
+        {t('order.sheet.list')}({getOrderListQuery.data?.data.total_count})
       </TurtleText>
       <Table
         size="small"
         loading={getOrderListQuery.isLoading}
         dataSource={getOrderListQuery.data?.data.order_sheet_list}
         rowKey={(record) => record.id}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false, pageSize: 13 }}
-        style={{ height: "630px" }}
+        pagination={{
+          position: ['bottomCenter'],
+          showSizeChanger: false,
+          pageSize: 13,
+        }}
+        style={{ height: '630px' }}
         scroll={{ y: 630 }}
         columns={[
           {
             ellipsis: true,
-            width: "8%",
-            title: t("order.status"),
+            width: '8%',
+            title: t('order.status'),
             render: (_, record) =>
-              record.status === "Y" ? "처리" : record.status === "N" ? "미처리" : "취소",
+              record.status === 'Y'
+                ? '처리'
+                : record.status === 'N'
+                ? '미처리'
+                : '취소',
           },
           {
             ellipsis: true,
-            width: "8%",
-            title: t("order.time"),
-            render: (_, record) => moment(record.created_date).format("YYYY.MM.DD"),
+            width: '8%',
+            title: t('order.time'),
+            render: (_, record) =>
+              moment(record.created_date).format('YYYY.MM.DD'),
           },
           {
             ellipsis: true,
-            title: t("order.content"),
+            title: t('order.content'),
             render: (_, record) =>
               `주문${record.order_count} / 미송${record.reserve_count} / 반품${record.takeback_count} / 교환${record.exchange_count} / 샘플${record.sample_case_count} / 픽업${record.pickup_case_count} / 기타${record.extra_count}`,
           },
           {
             ellipsis: true,
-            title: t("order.sheet.status"),
-            render: (_, record) => `알림톡${record.kakao} / SMS${record.sms} / 실패${record.fail}`,
+            title: t('order.sheet.status'),
+            render: (_, record) =>
+              `알림톡${record.kakao} / SMS${record.sms} / 실패${record.fail}`,
           },
           {
             ellipsis: true,
-            width: "8%",
-            title: t("order.sheet.resend"),
+            width: '8%',
+            title: t('order.sheet.resend'),
             render: (_, record) => {
               return (
                 <Popconfirm
-                  title={t("description.really resend")}
-                  okText={t("yes")}
-                  cancelText={t("no")}
+                  title={t('description.really resend')}
+                  okText={t('yes')}
+                  cancelText={t('no')}
                   onConfirm={() => {}}
                 >
                   <TurtleButtonSub size="small" disabled={true}>
-                    {t("button.resend")}
+                    {t('button.resend')}
                   </TurtleButtonSub>
                 </Popconfirm>
               );
@@ -98,8 +108,8 @@ function OrderSheetList({ searchQuery, setSearchQuery }: Props) {
           },
           {
             ellipsis: true,
-            width: "8%",
-            title: t("view details"),
+            width: '8%',
+            title: t('view details'),
             render: (_, record) => (
               <TurtleButtonSub
                 size="small"
@@ -108,7 +118,7 @@ function OrderSheetList({ searchQuery, setSearchQuery }: Props) {
                   openModal(record.id);
                 }}
               >
-                {t("button.details")}
+                {t('button.details')}
               </TurtleButtonSub>
             ),
           },
