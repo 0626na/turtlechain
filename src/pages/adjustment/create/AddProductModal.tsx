@@ -155,7 +155,7 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
             disabled
           />
           <Form.Item // 상품 공급가 Input
-            label={t('product.price')}
+            label={t('product.supply price')}
             name="product_price"
             rules={[{ required: true }]}
           >

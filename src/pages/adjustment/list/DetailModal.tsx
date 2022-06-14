@@ -86,6 +86,11 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           },
           {
             ellipsis: true,
+            title: t('adjustment.type.'),
+            render: (_, record) => t(`adjustment.type.${record.type}`),
+          },
+          {
+            ellipsis: true,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
@@ -106,24 +111,24 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           },
           {
             ellipsis: true,
-            title: t('adjustment.is vat included'),
-            render: (_, record) => (record.is_vat_included ? '포함' : '미포함'),
+            align: 'right',
+            title: t('product.supply amount'),
+            render: (_, record) =>
+              (record.price * record.count).toLocaleString(),
           },
           {
             ellipsis: true,
-            title: t('product.price'),
-            render: (_, record) => record.price.toLocaleString(),
+            align: 'right',
+            title: t('product.vat amount'),
+            render: (_, record) =>
+              (Math.round(record.price * 0.1) * record.count).toLocaleString(),
           },
           {
             ellipsis: true,
+            align: 'right',
             title: t('adjustment.count all'),
             render: (_, record) =>
               `${record.count - record.count_left} / ${record.count}`,
-          },
-          {
-            ellipsis: true,
-            title: t('adjustment.type.'),
-            render: (_, record) => t(`adjustment.type.${record.type}`),
           },
         ]}
       />
@@ -169,118 +174,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           },
         ]}
       />
-
-      {/* <Row style={{ margin: "32px 0 16px 0" }}>
-        <TurtleText>{t("adjustment.clearing list")}</TurtleText>
-      </Row>
-
-      <Table
-        size="small"
-        loading={getDetailQuery.isLoading}
-        dataSource={
-          getDetailQuery.data?.data?.clearing_info && getDetailQuery.data?.data.clearing_info
-        }
-        rowKey={(record) => record.id}
-        pagination={false}
-        columns={[
-          {
-            ellipsis: true,
-            align: "center",
-            width: 120,
-            title: t("adjustment.clearing date"),
-            render: (_, record) => record.created_date,
-          },
-          {
-            ellipsis: true,
-            title: t("vendor.name"),
-            render: (_, record) => record.vendor_name,
-          },
-          {
-            ellipsis: true,
-            title: t("vendor.address"),
-            render: (_, record) => record.vendor_address,
-          },
-          {
-            ellipsis: true,
-            title: t("vendor.account"),
-            render: (_, record) =>
-              `${record.bank} ${record.account_number} ${record.account_holder}`,
-          },
-          {
-            ellipsis: true,
-            title: t("adjustment.total price"),
-            render: (_, record) => record.total_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t("adjustment.supply price"),
-            render: (_, record) => record.supply_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t("adjustment.vat price"),
-            render: (_, record) => record.vat_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t("adjustment.is vat included"),
-            render: (_, record) => (record.is_vat_included ? "포함" : "미포함"),
-          },
-          {
-            ellipsis: true,
-            title: t("adjustment.process type."),
-            render: (_, record) => t(`adjustment.process type.${record.adjustment_process_type}`),
-          },
-        ]}
-      /> */}
-
-      {/* <Row style={{ margin: "32px 0 16px 0" }}>
-        <TurtleText>{t("adjustment.warehousing list")}</TurtleText>
-      </Row>
-
-      <Table
-        size="small"
-        loading={getDetailQuery.isLoading}
-        pagination={false}
-        dataSource={
-          getDetailQuery.data?.data?.warehousing_info.id
-            ? [getDetailQuery.data?.data.warehousing_info]
-            : []
-        }
-        rowKey={(product) => product.id}
-        columns={[
-          {
-            ellipsis: true,
-            title: t("vendor.name"),
-            render: (_, record) => record.vendor_info.vendor_name,
-          },
-          {
-            ellipsis: true,
-            title: t("product.name"),
-            render: (_, record) => record.product_info.name,
-          },
-          {
-            ellipsis: true,
-            title: t("product.vendor product name"),
-            render: (_, record) => record.product_info.vendor_product_name,
-          },
-          {
-            ellipsis: true,
-            title: t("product.option"),
-            render: (_, record) => record.product_info.option,
-          },
-          {
-            ellipsis: true,
-            title: t("warehousing.count"),
-            render: (_, record) => record.count,
-          },
-          {
-            ellipsis: true,
-            title: t("product.price"),
-            render: (_, record) => record.price.toLocaleString(),
-          },
-        ]}
-      /> */}
     </TurtleModal>
   );
 }

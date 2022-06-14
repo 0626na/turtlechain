@@ -105,8 +105,8 @@ function SuccessTab({ ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 110,
-            title: t('product.price'),
+            align: 'right',
+            title: t('product.supply price'),
             render: (_, record) => (
               <InputNumber
                 size="small"
@@ -122,7 +122,14 @@ function SuccessTab({ ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 110,
+            align: 'right',
+            title: t('product.vat price'),
+            render: (_, record) =>
+              Math.round(record.product_price * 0.1).toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            align: 'right',
             title: t('adjustment.count'),
             render: (_, record) => (
               <InputNumber
@@ -139,7 +146,7 @@ function SuccessTab({ ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 100,
+            align: 'right',
             title: t('adjustment.type.'),
             render: (_, record) =>
               record.type === 'reserve' ? (

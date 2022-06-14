@@ -111,8 +111,8 @@ const PageBody = function () {
               getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
                 .count ?? 0,
             price:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
-                .price ?? 0,
+              (getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
+                .price ?? 0) * 1.1,
           },
           {
             color: 'geekblue',
@@ -121,8 +121,8 @@ const PageBody = function () {
               getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
                 .count ?? 0,
             price:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                .price ?? 0,
+              (getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                .price ?? 0) * 1.1,
           },
         ]}
       />
@@ -211,6 +211,11 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
+              title: t('adjustment.type.'),
+              render: (_, record) => t(`adjustment.type.${record.type}`),
+            },
+            {
+              ellipsis: true,
               title: t('vendor.name'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
@@ -231,26 +236,26 @@ const PageBody = function () {
             },
             {
               ellipsis: true,
-              title: t('adjustment.is vat included'),
-              render: (_, record) =>
-                record.is_vat_included ? '포함' : '미포함',
-            },
-            {
-              ellipsis: true,
-              title: t('adjustment.total price'),
+              align: 'right',
+              title: t('product.supply amount'),
               render: (_, record) =>
                 (record.price * record.count).toLocaleString(),
             },
             {
               ellipsis: true,
-              title: t('adjustment.count all'),
+              align: 'right',
+              title: t('product.vat amount'),
               render: (_, record) =>
-                `${record.count - record.count_left} / ${record.count}`,
+                (
+                  Math.round(record.price * 0.1) * record.count
+                ).toLocaleString(),
             },
             {
               ellipsis: true,
-              title: t('adjustment.type.'),
-              render: (_, record) => t(`adjustment.type.${record.type}`),
+              align: 'right',
+              title: t('adjustment.count all'),
+              render: (_, record) =>
+                `${record.count - record.count_left} / ${record.count}`,
             },
             {
               ellipsis: true,
@@ -356,6 +361,7 @@ const PageBody = function () {
             Table.EXPAND_COLUMN,
             {
               ellipsis: true,
+              width: 50,
               render: (_, record) => (
                 <Space>
                   {record.count === record.count_left && (

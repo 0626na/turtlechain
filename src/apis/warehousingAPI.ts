@@ -53,7 +53,8 @@ export interface WarehousingItem {
     id: number;
     name: string;
     vendor_product_name: string;
-    price: number;
+    supply_price: number;
+    vat_price: number;
     option: string;
     product_code: string;
   };

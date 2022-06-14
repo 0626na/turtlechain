@@ -36,7 +36,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     page: 1,
   });
   const [searchState, setSearchState] = useState({
-    type: 'all',
+    type: 'name',
     search_string: '',
   });
 
@@ -46,7 +46,6 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     () => warehousingAPI.getSheet(searchQuery),
     {
       enabled: visible && !!store.id,
-      onSuccess: (data) => {},
     },
   );
 
@@ -56,12 +55,12 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     () => warehousingAPI.getItem({ sheet_id: selectedSheetId }),
     {
       enabled: visible && selectedSheetId !== -1,
-      onSuccess: (data) => {},
     },
   );
 
   // 상태 초기화
   const resetStates = useCallback(() => {
+    if (visible) return;
     selectItems([]);
     selectSheetId(-1);
     setSearchQuery({
@@ -72,10 +71,10 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
       page: 1,
     });
     setSearchState({
-      type: 'all',
+      type: 'name',
       search_string: '',
     });
-  }, [store.id]);
+  }, [store.id, visible]);
 
   const onClickItemRow = useCallback(
     (record: WarehousingItem) => {
@@ -102,7 +101,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
       return;
     }
 
-    // WarehousingProductShow -> AdjustmentProduct 타입 변환해서 넣어줌
+    // WarehousingItem -> AdjustmentProduct 타입 변환해서 넣어줌
     selectedItems.forEach((item) => {
       addItem({
         vendor_id: item.vendor_info.id,
@@ -113,7 +112,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
         product_name: item.product_info.name,
         vendor_product_name: item.product_info.vendor_product_name,
         product_option: item.product_info.option,
-        product_price: item.product_info.price,
+        product_price: item.product_info.supply_price,
         product_count: 0,
         product_count_max: item.count,
         product_code: item.product_info.product_code,
@@ -130,19 +129,19 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
       getItemQuery.data?.data.item_list.filter((item) => {
         const { type, search_string } = searchState;
         if (type === 'name') {
-          return item.product_info.name.includes(search_string);
+          return item.product_info.name.toLowerCase().includes(search_string);
         }
         if (type === 'vendor_product_name') {
-          return item.product_info.vendor_product_name.includes(search_string);
+          return item.product_info.vendor_product_name
+            .toLowerCase()
+            .includes(search_string);
         }
         if (type === 'vendor_name') {
-          return item.vendor_info.vendor_name.includes(search_string);
+          return item.vendor_info.vendor_name
+            .toLowerCase()
+            .includes(search_string);
         }
-        return (
-          item.product_info.name.includes(search_string) ||
-          item.product_info.vendor_product_name.includes(search_string) ||
-          item.vendor_info.vendor_name.includes(search_string)
-        );
+        return true;
       }),
     [getItemQuery.data?.data.item_list, searchState],
   );
@@ -205,15 +204,21 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
           },
           {
             ellipsis: true,
-            align: 'center',
+            align: 'right',
             title: t('warehousing.total count'),
             render: (_, record) => record.total_item_count.toLocaleString(),
           },
           {
             ellipsis: true,
-            align: 'center',
-            title: t('total supply price'),
+            align: 'right',
+            title: t('product.supply amount'),
             render: (_, record) => record.total_amount.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            align: 'right',
+            title: t('product.vat amount'),
+            render: (_, record) => record.total_vat_amount.toLocaleString(),
           },
         ]}
       />
@@ -284,11 +289,19 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
             },
             {
               ellipsis: true,
+              align: 'right',
               title: t('product.supply price'),
               render: (_, record) => record.supply_price.toLocaleString(),
             },
             {
               ellipsis: true,
+              align: 'right',
+              title: t('product.vat price'),
+              render: (_, record) => record.vat_price.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              align: 'right',
               title: t('product.count'),
               render: (_, record) => record.count,
             },
