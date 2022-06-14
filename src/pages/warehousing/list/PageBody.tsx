@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import { useEffect, useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useMutation, useQuery } from 'react-query';
-import { AxiosError } from 'axios';
 import {
   Table,
   Tag,
@@ -15,7 +14,6 @@ import {
   DatePicker,
   Divider,
   message,
-  notification,
 } from 'antd';
 import { storeState } from '@store/storeState';
 import { MainContent, MenuBar } from '@layout/main';
@@ -44,9 +42,6 @@ function PageBody() {
     () => warehousingAPI.getSheet(searchQuery),
     {
       enabled: searchQuery.rt_store_id !== -1,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 
@@ -55,14 +50,8 @@ function PageBody() {
     ['updateWarehousingSheet'],
     warehousingAPI.updateSheet,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
-        notification.open({
-          type: 'success',
-          message: t('message.success delete warehousing'),
-        });
+        message.success(t('message.success delete warehousing'));
         setSearchQuery({ ...searchQuery, page: 1 });
         getSheetQuery.refetch();
       },

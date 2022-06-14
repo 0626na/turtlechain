@@ -2,7 +2,6 @@ import moment from 'moment';
 import { t } from 'i18next';
 import { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
-import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { emailPattern } from '@utils/pattern';
 import authAPI from '@apis/authAPI';
@@ -28,9 +27,6 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
     ['createPhoneOTP'],
     authAPI.createPhoneOTP,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         message.success(t('message.success create auth num'));
         const { session_key, expire_time } = data;
@@ -45,9 +41,6 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
     ['verifyPhoneOTP'],
     authAPI.verifyPhoneOTP,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         message.success(t('message.success verify auth num'));
         const token = data;

@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import moment from 'moment';
 import { useRef, useState } from 'react';
-import { Col, Divider, message, Popover, Row, Space, Typography } from 'antd';
+import { Col, Divider, Popover, Row, Space, Typography } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
-import { AxiosError } from 'axios';
 import { BellOutlined } from '@ant-design/icons';
 import notificationAPI from '@apis/notificationAPI';
 
@@ -13,24 +12,15 @@ function Notification() {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getQuery = useQuery(
-    'getNotification',
-    () => notificationAPI.get({ type: 'home' }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-    },
+  const getQuery = useQuery('getNotification', () =>
+    notificationAPI.get({ type: 'home' }),
   );
 
   const updateQuery = useMutation(
     'updateNotification',
     notificationAPI.update,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {
+      onSuccess: () => {
         getQuery.refetch();
       },
     },

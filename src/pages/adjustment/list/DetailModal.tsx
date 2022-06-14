@@ -3,8 +3,7 @@ import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useQuery } from 'react-query';
-import { DatePicker, message, Row, Table } from 'antd';
-import { AxiosError } from 'axios';
+import { DatePicker, Row, Table } from 'antd';
 import adjustmentAPI, { AdjustmentItemShow } from '@apis/adjustmentAPI';
 import clearingAPI, { RequestGetBalance } from '@apis/clearingAPI';
 import { TurtleModal, TurtleTableTitle, TurtleText } from '@components/common';
@@ -33,9 +32,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     () => adjustmentAPI.get({ id: selectedRow?.id! }),
     {
       enabled: visible && !!searchQuery.original_id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 
@@ -45,9 +41,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     () => clearingAPI.getBalance(searchQuery),
     {
       enabled: visible && !!searchQuery.original_id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data.msg);
-      },
     },
   );
 

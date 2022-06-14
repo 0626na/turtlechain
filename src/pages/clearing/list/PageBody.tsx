@@ -54,9 +54,6 @@ function PageBody() {
       onSuccess: (data) => {
         setSheetList(data.data.sheet_list);
       },
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
     },
   );
 
@@ -64,9 +61,6 @@ function PageBody() {
     ['updateClearingSheet'],
     clearingAPI.updateSheet,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
         getSheetQuery.refetch();
         message.success(t('message.success delete clearing'));

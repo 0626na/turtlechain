@@ -1,17 +1,7 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import {
-  Form,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-  Row,
-  Select,
-  Upload,
-} from 'antd';
-import { AxiosError } from 'axios';
+import { Form, Input, message, Popconfirm, Row, Select, Upload } from 'antd';
 import {
   TurtleButton,
   TurtleButtonSub,
@@ -32,14 +22,8 @@ function RequestModal({ visible, closeModal }: Props) {
   const [address, setAddress] = useState({ building: '', floor: '' });
 
   const createQuery = useMutation('createBucketList', bucketListAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: () => {
-      notification.open({
-        type: 'success',
-        message: '성공적으로 등록하였습니다.',
-      });
+      message.success('성공적으로 등록하였습니다.');
       resetStates();
       closeModal();
     },
@@ -47,16 +31,10 @@ function RequestModal({ visible, closeModal }: Props) {
 
   const getAddressQuery = useQuery('getAdress', basicDataAPI.getAddress, {
     enabled: visible,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
   });
 
   const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
     enabled: visible,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
   });
 
   const resetStates = useCallback(() => {

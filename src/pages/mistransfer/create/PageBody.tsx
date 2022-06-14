@@ -4,7 +4,6 @@ import { Form, Input, message, Popconfirm, Switch } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import { AxiosError } from 'axios';
 import {
   TurtleButton,
   TurtleInput,
@@ -36,16 +35,10 @@ function PageBody() {
     () => retailerStoreAPI.get({ store_id: store.id! }),
     {
       enabled: !!store.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 
   const createQuery = useMutation('createMistransfer', mistransferAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       message.success(t('message.success create mistransfer'));
       resetStates();

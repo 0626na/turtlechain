@@ -1,16 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
 import { MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
-import {
-  Layout,
-  Button,
-  Avatar,
-  Menu,
-  Dropdown,
-  Col,
-  Row,
-  message,
-} from 'antd';
+import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { MAIN_HEADER_HEIGHT } from '@constant/index';
 import { useLogout } from '@hooks/index';
@@ -18,7 +9,6 @@ import { UserOutlined } from '@ant-design/icons';
 import { Notification } from '@components/combine';
 import { useQuery } from 'react-query';
 import userAPI from '@apis/userAPI';
-import { AxiosError } from 'axios';
 
 interface Props {
   handleMenuVisible: () => void;
@@ -28,11 +18,7 @@ function Header({ handleMenuVisible }: Props) {
   const history = useHistory();
   const logout = useLogout();
 
-  const getQuery = useQuery('getUser', userAPI.get, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getQuery = useQuery('getUser', userAPI.get, {});
 
   return (
     <StyledHeader>

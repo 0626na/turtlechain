@@ -2,8 +2,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Row, Table, Tag } from 'antd';
-import { AxiosError } from 'axios';
+import { Button, Row, Table, Tag } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
 import { MainContent } from '@layout/main';
@@ -17,11 +16,7 @@ function PageBody() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   // 쇼핑몰 리스트 요청
-  const getListQuery = useQuery(['getStoreList'], retailerStoreAPI.getList, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getListQuery = useQuery(['getStoreList'], retailerStoreAPI.getList);
 
   // 로우 클릭
   const onClickRow = (record: StoreShow) => {

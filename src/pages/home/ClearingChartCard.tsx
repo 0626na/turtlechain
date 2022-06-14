@@ -2,8 +2,7 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { Badge, Col, Divider, message, Row, Space, Typography } from 'antd';
-import { AxiosError } from 'axios';
+import { Badge, Col, Divider, Row, Space, Typography } from 'antd';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,9 +40,6 @@ function ClearingChartCard() {
         page_size: 1000,
       }),
     {
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
       onSuccess: (data) => {
         findStore(data.data.sheet_list);
       },
@@ -148,6 +144,7 @@ function ClearingChartCard() {
       label: store,
       data: labels.map((day) => {
         if (day > parseInt(moment().format('D'))) {
+          // eslint-disable-next-line array-callback-return
           return;
         }
         return getSheetQuery.data?.data.sheet_list

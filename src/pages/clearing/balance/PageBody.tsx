@@ -1,8 +1,7 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { DatePicker, message, Table } from 'antd';
-import { AxiosError } from 'axios';
+import { DatePicker, Table } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import { MainContent, MenuBar } from '@layout/main';
 import { useQuery } from 'react-query';
@@ -27,9 +26,6 @@ function PageBody() {
     () => clearingAPI.getBalance(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data.msg);
-      },
     },
   );
 

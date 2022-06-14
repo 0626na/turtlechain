@@ -6,7 +6,6 @@ import {
   Col,
   Input,
   message,
-  notification,
   Popconfirm,
   Popover,
   Radio,
@@ -17,7 +16,6 @@ import {
   Tabs,
   Typography,
 } from 'antd';
-import { AxiosError } from 'axios';
 import {
   CheckOutlined,
   CloseOutlined,
@@ -61,8 +59,7 @@ function ConnectModal({ visible, closeModal }: Props) {
     'connectVendor',
     externalAPI.connectSellmateVendor,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
+      onError: () => {
         resetField();
       },
       onSuccess: (data) => {
@@ -115,14 +112,10 @@ function ConnectModal({ visible, closeModal }: Props) {
     ['createVendor'], //
     vendorAPI.create,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
-        notification.open({
-          type: 'success',
-          message: `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
-        });
+        message.success(
+          `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+        );
         onCloseModal();
       },
     },
@@ -145,7 +138,7 @@ function ConnectModal({ visible, closeModal }: Props) {
   const onCloseModal = useCallback(() => {
     closeModal();
     resetField();
-  }, []);
+  }, [closeModal, resetField]);
 
   const setSuccessMemoValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, record: Vendor) => {

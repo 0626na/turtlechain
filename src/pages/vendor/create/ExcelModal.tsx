@@ -8,7 +8,6 @@ import {
   Col,
   Input,
   message,
-  notification,
   Popconfirm,
   Popover,
   Radio,
@@ -21,7 +20,6 @@ import {
   Upload,
 } from 'antd';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { RcFile } from 'antd/lib/upload';
@@ -61,8 +59,7 @@ function ExcelModal({ visible, closeModal }: Props) {
 
   // 거래처 파싱 요청
   const parseVendorQuery = useMutation('parseVendor', excelAPI.parseVendor, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+    onError: () => {
       resetField();
     },
     onSuccess: (data) => {
@@ -114,14 +111,10 @@ function ExcelModal({ visible, closeModal }: Props) {
     ['createVendor'], //
     vendorAPI.create,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
-        notification.open({
-          type: 'success',
-          message: `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
-        });
+        message.success(
+          `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+        );
         onCloseModal();
       },
     },
@@ -145,7 +138,7 @@ function ExcelModal({ visible, closeModal }: Props) {
   const onCloseModal = useCallback(() => {
     closeModal();
     resetField();
-  }, []);
+  }, [closeModal, resetField]);
 
   // 파일 upload
   const loadFile = (file: RcFile) => {

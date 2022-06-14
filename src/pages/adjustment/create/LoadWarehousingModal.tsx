@@ -2,7 +2,6 @@ import moment from 'moment';
 import { t } from 'i18next';
 import { DatePicker, message, Row, Table, Tag } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { MainContent } from '@layout/main';
@@ -47,9 +46,6 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     () => warehousingAPI.getSheet(searchQuery),
     {
       enabled: visible && !!store.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {},
     },
   );
@@ -60,9 +56,6 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
     () => warehousingAPI.getItem({ sheet_id: selectedSheetId }),
     {
       enabled: visible && selectedSheetId !== -1,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {},
     },
   );

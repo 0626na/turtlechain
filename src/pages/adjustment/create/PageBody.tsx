@@ -1,8 +1,7 @@
 import { t } from 'i18next';
-import { Popconfirm, message, notification, Menu, Tabs } from 'antd';
+import { Popconfirm, message, Menu, Tabs } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MainContent, MenuBar, BottomBar } from '@layout/main';
 import adjustmentAPI, { AdjustmentItem } from '@apis/adjustmentAPI';
@@ -25,15 +24,9 @@ const PageBody = function () {
 
   // 매입조정 생성 요성
   const createQuery = useMutation(['createAdjustment'], adjustmentAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data.msg);
-    },
-    onSuccess: (data) => {
+    onSuccess: () => {
       resetStates();
-      notification.open({
-        type: 'success',
-        message: t('message.success create adjustment'),
-      });
+      message.success(t('message.success create adjustment'));
     },
   });
 

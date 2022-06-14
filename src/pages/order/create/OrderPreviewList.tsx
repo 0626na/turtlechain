@@ -2,7 +2,6 @@ import moment from 'moment';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
-import { AxiosError } from 'axios';
 import { useRecoilValue } from 'recoil';
 import { RcFile } from 'antd/lib/upload';
 import {
@@ -10,7 +9,6 @@ import {
   Dropdown,
   Menu,
   message,
-  notification,
   Popconfirm,
   Row,
   Table,
@@ -33,9 +31,9 @@ function OrderPreviewList() {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [itemList, setItemList] = useState<Array<OrderItemShow>>([]);
-  const [allList, setAllList] = useState<Array<OrderProduct>>([]);
+  // const [allList, setAllList] = useState<Array<OrderProduct>>([]);
   const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
-  const [failList, setFailList] = useState<Array<OrderProduct>>([]);
+  // const [failList, setFailList] = useState<Array<OrderProduct>>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
   const makeType = (type: string) => {
@@ -49,18 +47,15 @@ function OrderPreviewList() {
   };
 
   const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       if (data.data.error) {
         message.error(data.data.error);
         resetField();
         return;
       }
-      setAllList([...data.data.success, ...data.data.fail]);
+      // setAllList([...data.data.success, ...data.data.fail]);
       setSuccessList(data.data.success);
-      setFailList(data.data.fail);
+      // setFailList(data.data.fail);
     },
   });
 
@@ -73,23 +68,17 @@ function OrderPreviewList() {
 
   const resetField = useCallback(() => {
     setFileList([]);
-    setAllList([]);
+    // setAllList([]);
     setSuccessList([]);
-    setFailList([]);
+    // setFailList([]);
   }, []);
 
   const createOrderQuery = useMutation(
     'createOrder', //
     orderAPI.create,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
-        notification.open({
-          type: 'success',
-          message: `성공적으로 등록하였습니다.`,
-        });
+        message.success(`성공적으로 등록하였습니다.`);
         resetItemList();
       },
     },
@@ -137,6 +126,7 @@ function OrderPreviewList() {
         })),
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemList, store.id]);
 
   const menu = (

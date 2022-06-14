@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { t } from 'i18next';
 import { useState, useMemo, useEffect } from 'react';
 import { Button, Form, Input, message } from 'antd';
-import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { PhoneAuthModal } from '@components/combine';
 import { User } from '.';
@@ -28,9 +27,6 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
 
   // 아이디 중복체크 요청
   const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: () => {
       message.success(t('message.no duplicate values'));
       setIsDuplicated(false);
@@ -56,7 +52,7 @@ function UserForm({ user, isSubmitting, setUser, onPrev, onSignup }: Props) {
     } else {
       return false;
     }
-  }, [user, confirmPassword]);
+  }, [user, confirmPassword, isDuplicated]);
 
   return (
     <>

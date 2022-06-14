@@ -1,27 +1,19 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { Col, message, Row, Table, Tag, Typography } from 'antd';
-import { AxiosError } from 'axios';
+import { Col, Row, Table, Tag, Typography } from 'antd';
 import { useQuery } from 'react-query';
 import { TurtleCardHome } from '@components/common';
 import clearingAPI from '@apis/clearingAPI';
 
 function ClearingStatusCard() {
-  const getSheetQuery = useQuery(
-    ['getClearingSheet'],
-    () =>
-      clearingAPI.getSheet({
-        credit_type: 'general',
-        start_date: moment().startOf('month').format('YYYY-MM-DD'),
-        end_date: moment().endOf('month').format('YYYY-MM-DD'),
-        status: 'all',
-        page_size: 1000,
-      }),
-    {
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
-    },
+  const getSheetQuery = useQuery(['getClearingSheet'], () =>
+    clearingAPI.getSheet({
+      credit_type: 'general',
+      start_date: moment().startOf('month').format('YYYY-MM-DD'),
+      end_date: moment().endOf('month').format('YYYY-MM-DD'),
+      status: 'all',
+      page_size: 1000,
+    }),
   );
 
   return (

@@ -2,7 +2,6 @@ import { message, Pagination, Popover, Radio, Row, Space, Table } from 'antd';
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { t } from 'i18next';
-import { AxiosError } from 'axios';
 import vendorAPI, {
   RequestGetWholesale,
   VendorAccount,
@@ -37,9 +36,6 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
     ['getWholesale', searchQuery],
     () => vendorAPI.getWholesale(searchQuery),
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         setWholesaleList(data.data.vendor_list);
       },

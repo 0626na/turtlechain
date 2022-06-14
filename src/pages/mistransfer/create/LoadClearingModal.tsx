@@ -1,8 +1,7 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DatePicker, message, Pagination, Row, Table, Tag } from 'antd';
-import { AxiosError } from 'axios';
+import { DatePicker, Pagination, Row, Table, Tag } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import clearingAPI, {
@@ -41,9 +40,6 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
     () => clearingAPI.getSheet(searchQuery),
     {
       enabled: visible,
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
     },
   );
 
@@ -56,9 +52,6 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
       }),
     {
       enabled: visible && selectedSheetId !== -1,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 

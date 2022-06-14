@@ -1,9 +1,8 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { useQuery, useQueryClient } from 'react-query';
-import { Form, Button, Divider, Typography, message, List } from 'antd';
+import { Form, Button, Divider, Typography, List } from 'antd';
 import { PhoneAuthModal } from '@components/combine';
 import userAPI from '@apis/userAPI';
 
@@ -20,9 +19,6 @@ function FindIdForm() {
     () => userAPI.getID({ phone, token }),
     {
       enabled: phone && token ? true : false,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 

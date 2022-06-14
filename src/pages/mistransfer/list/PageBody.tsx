@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
@@ -24,17 +23,10 @@ function PageBody() {
     () => mistransferAPI.get(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
-      onSuccess: (data) => {},
     },
   );
 
   const updateQuery = useMutation('updateMistransfer', mistransferAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: () => {
       getQuery.refetch();
       message.success(t('message.success delete mistransfer'));

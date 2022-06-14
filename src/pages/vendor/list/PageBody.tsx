@@ -6,7 +6,6 @@ import {
   Col,
   Input,
   message,
-  notification,
   Pagination,
   Popconfirm,
   Popover,
@@ -14,7 +13,6 @@ import {
   Switch,
   Table,
 } from 'antd';
-import { AxiosError } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import vendorAPI, {
   VendorShow,
@@ -51,9 +49,6 @@ function PageBody() {
     ['getVendor', searchQuery], //
     () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         setVendorList(
           data.data.vendor_list.map((vendor) => ({
@@ -71,14 +66,8 @@ function PageBody() {
     ['updateVendor'], //
     vendorAPI.update,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
-        notification.open({
-          type: 'success',
-          message: t('message.success update'),
-        });
+        message.success(t('message.success update'));
         getListQuery.refetch();
       },
     },

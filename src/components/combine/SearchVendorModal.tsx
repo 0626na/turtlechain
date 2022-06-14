@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
-import { message, Modal, Pagination, Row, Table } from 'antd';
+import { Modal, Pagination, Row, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { TurtleTableTitle } from '@components/common';
@@ -40,10 +39,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
     () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       enabled: visible && !!store.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {},
     },
   );
 

@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { Button, Form, Input, message, Row, Typography } from 'antd';
-import { AxiosError } from 'axios';
 import { TurtleButton, TurtleCardSetting } from '@components/common';
 import { phonePattern } from '@utils/pattern';
 import { PhoneAuthModal } from '@components/combine';
@@ -14,16 +13,9 @@ function PageBody() {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
 
-  const getQuery = useQuery('getUser', userAPI.get, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getQuery = useQuery('getUser', userAPI.get);
 
   const updateQuery = useMutation('updateUser', userAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       message.success(t('message.success update'));
       setIsUpdateMode(false);

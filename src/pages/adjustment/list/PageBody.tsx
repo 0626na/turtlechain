@@ -13,7 +13,6 @@ import {
   Input,
   Col,
   message,
-  notification,
   Popconfirm,
   Form,
   InputNumber,
@@ -23,7 +22,6 @@ import {
 import { useMutation, useQuery } from 'react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { AxiosError } from 'axios';
 import { MainContent, MenuBar } from '@layout/main';
 import adjustmentAPI, {
   AdjustmentItemShow,
@@ -75,16 +73,12 @@ const PageBody = function () {
     'deleteAdjustment',
     adjustmentAPI.update,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
-        notification.open({
-          type: 'success',
-          message: data.is_inactive
+        message.success(
+          data.is_inactive
             ? t('message.success delete')
             : t('message.success update'),
-        });
+        );
         setSearchQuery({ ...searchQuery, page: 1 });
         getAdjustmentListQuery.refetch();
       },

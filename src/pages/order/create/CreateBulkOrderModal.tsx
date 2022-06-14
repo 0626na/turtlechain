@@ -11,7 +11,6 @@ import {
   Table,
   Typography,
 } from 'antd';
-import { AxiosError } from 'axios';
 import Upload, { RcFile } from 'antd/lib/upload';
 import excelAPI, { OrderProduct } from '@apis/excelAPI';
 import { OrderItemShow } from '@apis/orderAPI';
@@ -38,9 +37,6 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
   const [failList, setFailList] = useState<Array<OrderProduct>>([]);
 
   const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       if (data.data.error) {
         message.error(data.data.error);

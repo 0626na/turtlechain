@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { message, Table } from 'antd';
-import { AxiosError } from 'axios';
+import { Table } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import clearingAPI, { BalanceShow } from '@apis/clearingAPI';
@@ -31,9 +30,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
       }),
     {
       enabled: visible && !!selectedRow?.id,
-      onError: (error: AxiosError) => {
-        message.warn(error.response?.data.msg);
-      },
     },
   );
 

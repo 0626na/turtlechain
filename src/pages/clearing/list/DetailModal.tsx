@@ -1,6 +1,5 @@
 import { t } from 'i18next';
-import { message, Table } from 'antd';
-import { AxiosError } from 'axios';
+import { Table } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import clearingAPI, { ClearingSheetShow } from '@apis/clearingAPI';
@@ -33,9 +32,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
       }),
     {
       enabled: visible && !!sheet?.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 
@@ -44,10 +40,6 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
     () => clearingAPI.getItemDetail({ item_id: itemId }),
     {
       enabled: visible && itemId !== -1,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {},
     },
   );
 

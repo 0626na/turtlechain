@@ -1,8 +1,7 @@
 import { t } from 'i18next';
 import { useState, useEffect, useCallback } from 'react';
-import { message, Select, Space, Typography } from 'antd';
+import { Select, Space, Typography } from 'antd';
 import { useQuery } from 'react-query';
-import { AxiosError } from 'axios';
 import { useRecoilState } from 'recoil';
 import { Store, storeState } from '@store/storeState';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
@@ -17,9 +16,6 @@ function StoreSelect({ warningMessage }: Props) {
 
   // 쇼핑몰 불러오기 요청
   const getStoresQuery = useQuery(['getStoreList'], retailerStoreAPI.getList, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       if (data.store_list.length === 0) return;
 

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
-import { message, Modal, Pagination, Row, Table } from 'antd';
-import { AxiosError } from 'axios';
+import { useEffect, useState } from 'react';
+import { Modal, Pagination, Row, Table } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
@@ -52,10 +51,6 @@ function SearchProductModal({
       }),
     {
       enabled: visible && !!vendorId,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {},
     },
   );
 

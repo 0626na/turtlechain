@@ -11,7 +11,6 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { AxiosError } from 'axios';
 import retailerCompanyAPI from '@apis/retailerCompanyAPI';
 import { DaumPostcodeModal } from '@components/combine';
 import {
@@ -26,16 +25,9 @@ function PageBody() {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
-  const getQuery = useQuery('getCompany', () => retailerCompanyAPI.get(), {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getQuery = useQuery('getCompany', () => retailerCompanyAPI.get());
 
   const updateQuery = useMutation('updateCompany', retailerCompanyAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       message.success(t('message.success update'));
       setIsUpdateMode(false);

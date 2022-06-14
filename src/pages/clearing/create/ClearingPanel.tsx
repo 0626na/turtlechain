@@ -7,11 +7,9 @@ import {
   Collapse,
   CollapsePanelProps,
   message,
-  notification,
   Popconfirm,
   Row,
 } from 'antd';
-import { AxiosError } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { clearingCartState } from '@store/clearingCartState';
@@ -69,14 +67,8 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     ['createClearing'],
     clearingAPI.create,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data.msg);
-      },
-      onSuccess: (data) => {
-        notification.open({
-          type: 'success',
-          message: t('message.success create clearing'),
-        });
+      onSuccess: () => {
+        message.success(t('message.success create clearing'));
         clickCreate();
       },
     },

@@ -2,7 +2,6 @@ import { t } from 'i18next';
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Form, Input, message, Popconfirm, Radio, Row, Select } from 'antd';
-import { AxiosError } from 'axios';
 import {
   TurtleButton,
   TurtleDivider,
@@ -23,18 +22,12 @@ function CreateModal({ visible, closeModal }: Props) {
 
   const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
     enabled: visible,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
   });
 
   const createQuery = useMutation(
     ['createRetailerStore'],
     retailerStoreAPI.create,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
         message.success(t('message.success create mall'));
         queryClient.refetchQueries(['getStoreList']);

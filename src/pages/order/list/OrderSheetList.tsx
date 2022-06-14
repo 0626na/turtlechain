@@ -1,8 +1,7 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { Table, Popconfirm, Row, message } from 'antd';
+import { Table, Popconfirm, Row } from 'antd';
 import { useQuery } from 'react-query';
-import { AxiosError } from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useCallback, useEffect, useState } from 'react';
 import orderAPI, { RequestGetList } from '@apis/orderAPI';
@@ -19,20 +18,16 @@ function OrderSheetList({ searchQuery, setSearchQuery }: Props) {
   const [sheetId, setSheetId] = useState<number>();
   const [modalVisible, setModalVisible] = useState(false);
 
-  const getOrderListQuery = useQuery(
-    ['getOrderList', searchQuery],
-    () => orderAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: (data) => {},
-    },
+  const getOrderListQuery = useQuery(['getOrderList', searchQuery], () =>
+    orderAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
   );
 
   useEffect(() => {
-    setSearchQuery({ ...searchQuery, rt_store_id: store.id ?? -1 });
-  }, [store.id]);
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id ?? -1,
+    }));
+  }, [store.id, setSearchQuery]);
 
   const openModal = useCallback((id) => {
     setSheetId(id);

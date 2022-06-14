@@ -1,14 +1,12 @@
 import { t } from 'i18next';
 import {
   Collapse,
-  message,
   Row,
   Table,
   Typography,
   CollapsePanelProps,
   Space,
 } from 'antd';
-import { AxiosError } from 'axios';
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -47,9 +45,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       }),
     {
       enabled: activeKey === '1' && !!store.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
         resetStates();
       },

@@ -2,9 +2,8 @@ import moment from 'moment';
 import { t } from 'i18next';
 import { useMutation } from 'react-query';
 import { RcFile } from 'antd/lib/upload';
-import { AxiosError } from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { message, Menu, notification, Tabs, Popconfirm } from 'antd';
+import { message, Menu, Tabs, Popconfirm } from 'antd';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { storeState } from '@store/storeState';
 import { BottomBar, MainContent, MenuBar } from '@layout/main';
@@ -35,9 +34,6 @@ function PageBody() {
     'parseWarehousing',
     excelAPI.parseWarehousing,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         updateStates(data);
       },
@@ -49,9 +45,6 @@ function PageBody() {
     'connectWarehousing',
     externalAPI.connectSellmateWarehousing,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         updateStates(data);
       },
@@ -60,15 +53,9 @@ function PageBody() {
 
   // 입고장 생성 요청
   const createQuery = useMutation('createWarehousing', warehousingAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: () => {
       resetStates();
-      notification.open({
-        type: 'success',
-        message: t('message.success create warehousing'),
-      });
+      message.success(t('message.success create warehousing'));
     },
   });
 

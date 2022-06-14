@@ -6,13 +6,11 @@ import {
   InputNumber,
   Button,
   Popconfirm,
-  notification,
   Space,
   Checkbox,
 } from 'antd';
 import { DeleteOutlined, SyncOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AxiosError } from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import warehousingAPI, {
   WarehousingItemShow,
@@ -46,9 +44,6 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     () => warehousingAPI.getItem({ sheet_id: sheet?.id! }),
     {
       enabled: visible && !!sheet?.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         setItemList(data.data.item_list);
       },
@@ -60,14 +55,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     ['updateWarehousingItem'], //
     warehousingAPI.updateItem,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
-        notification.open({
-          type: 'success',
-          message: t('message.success update warehousing detail list'),
-        });
+        message.success(t('message.success update warehousing detail list'));
         queryClient.refetchQueries('getWarehousingSheet');
         onClose();
       },

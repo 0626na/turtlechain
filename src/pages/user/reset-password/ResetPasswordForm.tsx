@@ -1,7 +1,6 @@
 import { t } from 'i18next';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { Form, Button, Divider, Typography, message, Input } from 'antd';
 import { PhoneAuthModal } from '@components/combine';
@@ -22,9 +21,6 @@ function ResetPasswordForm() {
     ['resetPassword'],
     userAPI.resetPassword,
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: () => {
         form.resetFields();
         setPhone('');

@@ -1,18 +1,8 @@
 import { t } from 'i18next';
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  Form,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-  Radio,
-  Row,
-  Select,
-} from 'antd';
+import { Form, Input, message, Popconfirm, Radio, Row, Select } from 'antd';
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
-import { AxiosError } from 'axios';
 import {
   TurtleButton,
   TurtleDivider,
@@ -33,20 +23,11 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
 
   const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
     enabled: visible,
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
   });
 
   const updateQuery = useMutation(['updateStore'], retailerStoreAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: () => {
-      notification.open({
-        type: 'success',
-        message: t('message.success update mall'),
-      });
+      message.success(t('message.success update mall'));
       queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },

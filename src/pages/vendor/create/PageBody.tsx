@@ -2,17 +2,7 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import {
-  Col,
-  Form,
-  Input,
-  message,
-  notification,
-  Popconfirm,
-  Space,
-  Switch,
-} from 'antd';
-import { AxiosError } from 'axios';
+import { Col, Form, Input, message, Popconfirm, Space, Switch } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import vendorAPI, { WholesaleShow } from '@apis/vendorAPI';
 import {
@@ -57,9 +47,6 @@ function PageBody() {
       }),
     {
       enabled: false,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         form.setFieldsValue({
           ...form.getFieldsValue(),
@@ -71,21 +58,12 @@ function PageBody() {
 
   // 거래처 생성 요청
   const createQuery = useMutation(['createVendor'], vendorAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
     onSuccess: (data) => {
       if (data.data.fail_count > 0) {
-        notification.open({
-          type: 'error',
-          message: '이미 등록된 거래처입니다.',
-        });
+        message.error('이미 등록된 거래처입니다.');
         return;
       }
-      notification.open({
-        type: 'success',
-        message: '성공적으로 등록하였습니다.',
-      });
+      message.success('성공적으로 등록하였습니다.');
       form.resetFields();
       selectVendor(undefined);
       form.setFieldsValue({
