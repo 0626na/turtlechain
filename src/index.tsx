@@ -8,6 +8,7 @@ import 'antd/dist/antd.less';
 import './i18n';
 import Router from './router';
 import GlobalStyle from './GlobalStyle';
+import ChannelService from './ChannelService';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
@@ -16,6 +17,10 @@ const queryClient = new QueryClient({
 message.config({
   top: 60,
   maxCount: 1,
+});
+
+ChannelService.boot({
+  pluginKey: '8da7a859-56dc-473a-b576-50a826e5a5db',
 });
 
 ReactDOM.render(
