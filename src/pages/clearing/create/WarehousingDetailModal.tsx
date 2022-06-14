@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import { Checkbox, Table } from 'antd';
 import warehousingAPI, {
-  WarehousingItemShow,
+  WarehousingItem,
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import {
@@ -15,7 +15,7 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheet?: WarehousingSheet;
-  onOk: (itemList: WarehousingItemShow[]) => void;
+  onOk: (itemList: WarehousingItem[]) => void;
 }
 
 function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
@@ -50,7 +50,7 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
           },
           {
             title: t('total supply price'),
-            value: `${sheet?.total_price.toLocaleString()}원`,
+            value: `${sheet?.total_amount.toLocaleString()}원`,
           },
         ]}
       />
@@ -101,7 +101,7 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
           {
             ellipsis: true,
             title: t('product.price'),
-            render: (_, record) => record.price.toLocaleString(),
+            render: (_, record) => record.supply_price.toLocaleString(),
           },
           {
             ellipsis: true,

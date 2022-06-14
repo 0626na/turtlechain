@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Pagination, Row, Table } from 'antd';
+import { Pagination, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
@@ -19,7 +19,7 @@ function PageBody() {
     rt_store_id: -1,
     page: 1,
     search_string: '',
-    type: 'all',
+    type: 'name',
   });
 
   // 상품 리스트 불러오기 요청
@@ -148,7 +148,17 @@ function PageBody() {
             {
               ellipsis: true,
               title: t('product.image url'),
-              render: (_, record) => record.image_url,
+              render: (_, record) => (
+                <Typography.Link
+                  href={record.image_url}
+                  target="_blank"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {record.image_url}
+                </Typography.Link>
+              ),
             },
             Table.EXPAND_COLUMN,
           ]}

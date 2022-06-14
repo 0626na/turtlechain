@@ -28,7 +28,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
-    type: 'all',
+    type: 'name',
     search_string: '',
     rt_store_id: store.id,
   });
@@ -50,9 +50,10 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   );
 
   useEffect(() => {
+    if (visible) return;
     setSearchQuery({
       page: 1,
-      type: 'all',
+      type: 'name',
       search_string: '',
       rt_store_id: store.id,
     });

@@ -24,13 +24,11 @@ function FailTab({ loading, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: "'8%",
             title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            width: "'8%",
             title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
@@ -54,25 +52,28 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: '12%',
             title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            width: '12%',
             title: t('product.option'),
             render: (_, record) => record.product_option,
           },
           {
             ellipsis: true,
-            width: '12%',
-            title: t('product.price'),
-            render: (_, record) => record.price.toLocaleString(),
+            align: 'right',
+            title: t('product.supply price'),
+            render: (_, record) => record.supply_price.toLocaleString(),
           },
           {
             ellipsis: true,
-            width: '12%',
+            align: 'right',
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
             title: t('warehousing.count'),
             render: (_, record) => record.count,
           },

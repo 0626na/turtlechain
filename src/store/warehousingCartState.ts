@@ -1,11 +1,11 @@
 import { RcFile } from 'antd/lib/upload';
 import { atom } from 'recoil';
-import { WarehousingItem } from '@apis/warehousingAPI';
+import { WarehousingItemConnect } from '@apis/warehousingAPI';
 
 export interface WarehousingCartState {
   fileList: RcFile[];
-  successList: WarehousingItem[];
-  failList: WarehousingItem[];
+  successList: WarehousingItemConnect[];
+  failList: WarehousingItemConnect[];
   searchQuery: {
     type: string;
     search_string: string;

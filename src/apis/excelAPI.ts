@@ -1,6 +1,5 @@
 import { v2Axios } from '.';
 import { VendorAccount, WholesaleShow } from './vendorAPI';
-import { WarehousingItem } from './warehousingAPI';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 
@@ -98,30 +97,6 @@ const parseOrder = async function (data: FormData) {
   return response.data;
 };
 
-/*
- *   입고 파싱
- */
-
-export interface ResponseParseWarehousing {
-  msg: string;
-  data: {
-    success: Array<WarehousingItem>;
-    fail: Array<WarehousingItem>;
-    count: ParseCount;
-    error: string;
-  };
-}
-
-const parseWarehousing = async function (data: FormData) {
-  const url = `excel/warehousing`;
-  const response = await v2Axios.post<ResponseParseWarehousing>(url, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
 interface RequestDownload {
   rt_store_id?: number;
   start_date: string;
@@ -146,7 +121,6 @@ const downloadClearing = async function (query: RequestDownload) {
 
 const excelAPI = {
   parseVendor,
-  parseWarehousing,
   parseOrder,
   downloadClearing,
 };

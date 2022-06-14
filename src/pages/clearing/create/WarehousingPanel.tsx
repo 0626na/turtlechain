@@ -11,10 +11,7 @@ import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { TurtleButton } from '@components/common';
-import warehousingAPI, {
-  WarehousingItemShow,
-  WarehousingSheet,
-} from '@apis/warehousingAPI';
+import warehousingAPI, { WarehousingSheet } from '@apis/warehousingAPI';
 import { storeState } from '@store/storeState';
 import { clearingCartState } from '@store/clearingCartState';
 import { useClearingCart } from '@hooks/index';
@@ -62,54 +59,54 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   }, [setCart]);
 
   // 입고 확정 버튼 클릭
-  const checkSheet = useCallback(
-    (itemList: WarehousingItemShow[]) => {
-      setCart({
-        selectedKeys: [...cart.selectedKeys, selectedSheet?.id!],
-        warehousing_item_list: [
-          ...cart.warehousing_item_list,
-          ...itemList.map((item) => {
-            const {
-              id,
-              sheet_id,
-              is_vat_included,
-              is_reserved,
-              price,
-              count,
-              vendor_info: { id: vendor_id, ws_store_id },
-            } = item;
-            // (도매에게) 이체금액
-            const deposit_price = count * price;
-            // 부가세
-            const vat_price = is_vat_included
-              ? Math.floor(deposit_price / 11)
-              : 0;
-            // 공급가
-            const supply_price = deposit_price - vat_price;
-            // (소매가) 발행금액
-            const total_price = is_vat_included
-              ? deposit_price
-              : Math.floor(deposit_price * 1.1);
-            return {
-              sheet_id,
-              warehousing_item_id: id,
-              ws_store_id,
-              vendor_id,
-              is_reserved,
-              vat_price,
-              supply_price,
-              deposit_price,
-              total_price,
-            };
-          }),
-        ],
-        subtract_item_list: [],
-        reserve_item_list: [],
-      });
-      setDetailModalVisible(false);
-    },
-    [selectedSheet, cart, setCart],
-  );
+  // const checkSheet = useCallback(
+  //   (itemList: WarehousingItemShow[]) => {
+  // setCart({
+  // selectedKeys: [...cart.selectedKeys, selectedSheet?.id!],
+  // warehousing_item_list: [
+  //   ...cart.warehousing_item_list,
+  //   ...itemList.map((item) => {
+  // const {
+  //   id,
+  //   sheet_id,
+  //   is_vat_included,
+  //   is_reserved,
+  //   supply_price,
+  //   count,
+  //   vendor_info: { id: vendor_id, ws_store_id },
+  // } = item;
+  // // (도매에게) 이체금액
+  // const deposit_price = count * price;
+  // // 부가세
+  // const vat_price = is_vat_included
+  //   ? Math.floor(deposit_price / 11)
+  //   : 0;
+  // // 공급가
+  // const supply_price = deposit_price - vat_price;
+  // // (소매가) 발행금액
+  // const total_price = is_vat_included
+  //   ? deposit_price
+  //   : Math.floor(deposit_price * 1.1);
+  // return {
+  //   sheet_id,
+  //   warehousing_item_id: id,
+  //   ws_store_id,
+  //   vendor_id,
+  //   is_reserved,
+  //   vat_price,
+  //   supply_price,
+  //   deposit_price,
+  //   total_price,
+  // };
+  // }),
+  // ],
+  // subtract_item_list: [],
+  // reserve_item_list: [],
+  // });
+  //     setDetailModalVisible(false);
+  //   },
+  //   [selectedSheet, cart, setCart],
+  // );
 
   // 입고 확정 모달 열기
   const openDetailModal = useCallback(
@@ -176,7 +173,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             title: t('warehousing.price'),
-            render: (_, record) => record.total_price.toLocaleString(),
+            render: (_, record) => record.total_amount.toLocaleString(),
           },
         ]}
       />
@@ -194,7 +191,10 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           setDetailModalVisible(false);
         }}
         sheet={selectedSheet}
-        onOk={checkSheet}
+        onOk={
+          () => {}
+          // checkSheet
+        }
       />
     </Collapse.Panel>
   );

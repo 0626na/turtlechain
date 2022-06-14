@@ -8,7 +8,7 @@ import { MainContent } from '@layout/main';
 import { AdjustmentItem } from '@apis/adjustmentAPI';
 import warehousingAPI, {
   RequestGetSheet,
-  WarehousingItemShow,
+  WarehousingItem,
 } from '@apis/warehousingAPI';
 import {
   TurtleButton,
@@ -27,7 +27,7 @@ interface Props {
 function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [selectedSheetId, selectSheetId] = useState<number>(-1);
-  const [selectedItems, selectItems] = useState<Array<WarehousingItemShow>>([]);
+  const [selectedItems, selectItems] = useState<Array<WarehousingItem>>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
     is_confirmed: '',
@@ -78,7 +78,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
   }, [store.id]);
 
   const onClickItemRow = useCallback(
-    (record: WarehousingItemShow) => {
+    (record: WarehousingItem) => {
       if (selectedItems.find((item) => item.id === record.id)) {
         selectItems((selectedItems) =>
           selectedItems.filter((item) => item.id !== record.id),
@@ -213,7 +213,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
             ellipsis: true,
             align: 'center',
             title: t('total supply price'),
-            render: (_, record) => record.total_price.toLocaleString(),
+            render: (_, record) => record.total_amount.toLocaleString(),
           },
         ]}
       />
@@ -284,8 +284,8 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
             },
             {
               ellipsis: true,
-              title: t('product.price'),
-              render: (_, record) => record.price.toLocaleString(),
+              title: t('product.supply price'),
+              render: (_, record) => record.supply_price.toLocaleString(),
             },
             {
               ellipsis: true,

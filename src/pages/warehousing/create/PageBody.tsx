@@ -14,10 +14,8 @@ import {
   TurtleUpload,
 } from '@components/common';
 import { useStoreExist } from '@hooks/index';
-import excelAPI, { ResponseParseWarehousing } from '@apis/excelAPI';
-import externalAPI, { ResponseConnectWarehousing } from '@apis/externalAPI';
 import { warehousingCartState } from '@store/warehousingCartState';
-import warehousingAPI from '@apis/warehousingAPI';
+import warehousingAPI, { ResponseConnectInventory } from '@apis/warehousingAPI';
 import AddProductModal from './AddProductModal';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
@@ -32,7 +30,7 @@ function PageBody() {
   // 엑셀파싱 요청
   const parseQuery = useMutation(
     'parseWarehousing',
-    excelAPI.parseWarehousing,
+    warehousingAPI.parseExcel,
     {
       onSuccess: (data) => {
         updateStates(data);
@@ -43,7 +41,7 @@ function PageBody() {
   // 재고관리 연동 요청
   const connectQuery = useMutation(
     'connectWarehousing',
-    externalAPI.connectSellmateWarehousing,
+    warehousingAPI.connectInventory,
     {
       onSuccess: (data) => {
         updateStates(data);
@@ -65,7 +63,7 @@ function PageBody() {
       fileList: [],
       successList: [],
       failList: [],
-      searchQuery: { type: 'all', search_string: '' },
+      searchQuery: { type: 'name', search_string: '' },
     });
     connectQuery.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +71,7 @@ function PageBody() {
 
   // 파싱 or 연동 후 상태 세팅
   const updateStates = useCallback(
-    (data: ResponseParseWarehousing | ResponseConnectWarehousing) => {
+    (data: ResponseConnectInventory) => {
       if (data.data.error) {
         message.error(data.data.error);
         resetStates();
@@ -147,9 +145,7 @@ function PageBody() {
         >
           {t('button.connect external program')}
         </TurtleButtonSub>
-        <TurtleDropdown //
-          menu={menu}
-        >
+        <TurtleDropdown menu={menu}>
           {t('button.add warehousing')}
         </TurtleDropdown>
       </MenuBar>
@@ -195,23 +191,15 @@ function PageBody() {
               },
               item: {
                 rt_store_id: store.id!,
-                item_list: cart.successList.map(
-                  ({
-                    vendor_id,
-                    product_id,
-                    count,
-                    price,
-                    is_reserved,
-                    memo,
-                  }) => ({
-                    vendor_id,
-                    product_id,
-                    count,
-                    price,
-                    is_reserved,
-                    memo,
-                  }),
-                ),
+                item_list: cart.successList.map((record) => ({
+                  vendor_id: record.vendor_id,
+                  product_id: record.product_id,
+                  count: record.count,
+                  supply_price: record.supply_price,
+                  vat_price: record.vat_price,
+                  is_reserved: record.is_reserved,
+                  memo: record.memo,
+                })),
               },
             });
           }}

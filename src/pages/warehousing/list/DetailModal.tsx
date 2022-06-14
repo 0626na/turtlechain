@@ -13,7 +13,7 @@ import { DeleteOutlined, SyncOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import warehousingAPI, {
-  WarehousingItemShow,
+  WarehousingItem,
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import {
@@ -31,9 +31,9 @@ interface Props {
 
 function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
-  const [itemList, setItemList] = useState<Array<WarehousingItemShow>>([]);
+  const [itemList, setItemList] = useState<Array<WarehousingItem>>([]);
   const [searchQuery, setSearchQuery] = useState({
-    type: 'all',
+    type: 'name',
     search_string: '',
   });
   const [isUpdated, setIsUpdated] = useState(false);
@@ -52,7 +52,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
 
   // 입고장 상세내역 수정 요청
   const updateItemQuery = useMutation(
-    ['updateWarehousingItem'], //
+    ['updateWarehousingItem'],
     warehousingAPI.updateItem,
     {
       onSuccess: () => {
@@ -65,6 +65,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
 
   // 모달 열릴때마다 변경사항 여부 초기화
   useEffect(() => {
+    if (visible) return;
     setIsUpdated(false);
   }, [visible]);
 
@@ -107,8 +108,9 @@ function DetailModal({ visible, onClose, sheet }: Props) {
 
   // 모달 열릴때 마다 검색조건 초기화
   useEffect(() => {
+    if (visible) return;
     setSearchQuery({
-      type: 'all',
+      type: 'name',
       search_string: '',
     });
   }, [visible]);
@@ -120,21 +122,17 @@ function DetailModal({ visible, onClose, sheet }: Props) {
         .filter((item) => {
           const { type, search_string } = searchQuery;
           if (type === 'name') {
-            return item.product_info.name.includes(search_string);
+            return item.product_info.name.toLowerCase().includes(search_string);
           }
           if (type === 'vendor_product_name') {
-            return item.product_info.vendor_product_name.includes(
-              search_string,
-            );
+            return item.product_info.vendor_product_name
+              .toLowerCase()
+              .includes(search_string);
           }
           if (type === 'vendor_name') {
             return item.vendor_info.vendor_name.includes(search_string);
           }
-          return (
-            item.product_info.name.includes(search_string) ||
-            item.product_info.vendor_product_name.includes(search_string) ||
-            item.vendor_info.vendor_name.includes(search_string)
-          );
+          return true;
         }),
     [itemList, searchQuery],
   );
@@ -148,7 +146,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
       visible={visible}
       onCancel={confirmClose}
       footer={
-        !sheet?.is_confirmed && [
+        !sheet?.is_confirmed && (
           <Popconfirm
             title={t('description.really update')}
             okText={t('yes')}
@@ -174,8 +172,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             >
               {t('reflect update')}
             </Button>
-          </Popconfirm>,
-        ]
+          </Popconfirm>
+        )
       }
     >
       <TurtleStatistics
@@ -186,8 +184,12 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             value: `${sheet?.total_item_count}건`,
           },
           {
-            title: t('total supply price'),
-            value: `${sheet?.total_price.toLocaleString()}원`,
+            title: t('product.supply amount'),
+            value: `${sheet?.total_amount.toLocaleString()}원`,
+          },
+          {
+            title: t('product.vat amount'),
+            value: `${sheet?.total_vat_amount.toLocaleString()}원`,
           },
         ]}
       />
@@ -228,6 +230,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           },
           {
             ellipsis: true,
+            width: '15%',
             title: t('product.name'),
             render: (_, record) => record.product_info.name,
           },
@@ -243,14 +246,22 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           },
           {
             ellipsis: true,
-            title: t('product.price'),
-            render: (_, record) => record.price.toLocaleString(),
+            align: 'right',
+            title: t('product.supply price'),
+            render: (_, record) => record.supply_price.toLocaleString(),
           },
           {
             ellipsis: true,
+            align: 'right',
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            align: 'right',
             title: t('warehousing.count'),
             render: (_, record) => (
-              <InputNumber //
+              <InputNumber
                 disabled={sheet?.is_confirmed}
                 min={1}
                 size="small"
@@ -263,6 +274,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           },
           {
             ellipsis: true,
+            width: 100,
+            align: 'right',
             title: t('warehousing.is reserved'),
             render: (_, record) => (
               <Checkbox
@@ -275,10 +288,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             ),
           },
           {
-            width: 100,
+            width: 80,
             align: 'center',
-            title: '',
-            dataIndex: 'action',
             render: (_, record) => (
               <Space>
                 {!sheet?.is_confirmed && (

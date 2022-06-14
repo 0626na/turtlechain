@@ -153,15 +153,21 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              align: 'center',
+              align: 'right',
               title: t('warehousing.total count'),
               render: (_, record) => record.total_item_count.toLocaleString(),
             },
             {
               ellipsis: true,
-              align: 'center',
-              title: t('total supply price'),
-              render: (_, record) => record.total_price.toLocaleString(),
+              align: 'right',
+              title: t('product.supply amount'),
+              render: (_, record) => record.total_amount.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              align: 'right',
+              title: t('product.vat amount'),
+              render: (_, record) => record.total_vat_amount.toLocaleString(),
             },
             {
               ellipsis: true,
@@ -176,7 +182,7 @@ function PageBody() {
                       onConfirm={(e) => {
                         e?.stopPropagation();
                         updateSheetQuery.mutate({
-                          ...record,
+                          id: record.id,
                           is_inactive: true,
                         });
                       }}

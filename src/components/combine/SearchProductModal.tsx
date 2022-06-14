@@ -37,7 +37,7 @@ function SearchProductModal({
     vendor_id: -1,
     page: 1,
     search_string: '',
-    type: 'all',
+    type: 'name',
   });
 
   // 상품 리스트 요청
@@ -56,11 +56,12 @@ function SearchProductModal({
 
   // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
+    if (visible) return;
     setSearchQuery(() => ({
       rt_store_id: store.id,
       vendor_id: vendorId,
       search_string: '',
-      type: 'all',
+      type: 'name',
       page: 1,
     }));
   }, [visible, store.id, vendorId]);

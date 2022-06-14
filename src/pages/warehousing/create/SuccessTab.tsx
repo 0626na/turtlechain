@@ -33,7 +33,11 @@ function SuccessTab({ loading, ...props }: Props) {
 
   // 공급가 합계 계산
   const totalProductPrice = useMemo(
-    () => cart.successList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
+    () =>
+      cart.successList.reduce(
+        (acc, cur) => acc + cur.count * cur.supply_price,
+        0,
+      ),
     [cart.successList],
   );
 
@@ -43,7 +47,16 @@ function SuccessTab({ loading, ...props }: Props) {
       setCart((cart) => ({
         ...cart,
         successList: cart.successList.map((item) =>
-          item.index === index ? { ...item, [type]: value } : item,
+          item.index === index
+            ? {
+                ...item,
+                [type]: value,
+                vat_price:
+                  type === 'supply_price'
+                    ? Math.round(value * 0.1)
+                    : item.vat_price,
+              }
+            : item,
         ),
       }));
     },
@@ -55,19 +68,15 @@ function SuccessTab({ loading, ...props }: Props) {
       cart.successList.filter((item) => {
         const { type, search_string } = cart.searchQuery;
         if (type === 'name') {
-          return item.product_name.includes(search_string);
+          return item.product_name.toLowerCase().includes(search_string);
         }
         if (type === 'vendor_product_name') {
-          return item.vendor_product_name.includes(search_string);
+          return item.vendor_product_name.toLowerCase().includes(search_string);
         }
         if (type === 'vendor_name') {
-          return item.vendor_name.includes(search_string);
+          return item.vendor_name.toLowerCase().includes(search_string);
         }
-        return (
-          item.product_name.includes(search_string) ||
-          item.vendor_product_name.includes(search_string) ||
-          item.vendor_name.includes(search_string)
-        );
+        return true;
       }),
     [cart.successList, cart.searchQuery],
   );
@@ -101,18 +110,18 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: '10%',
             title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            width: '12%',
+            width: 150,
             title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
+            width: 250,
             title: t('product.name'),
             render: (_, record) => record.product_name,
           },
@@ -129,29 +138,35 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: '12%',
             title: t('product.option'),
             render: (_, record) => record.product_option,
           },
           {
             ellipsis: true,
-            width: '12%',
-            title: t('product.price'),
+            align: 'right',
+            title: t('product.supply price'),
             render: (_, record) => (
               <InputNumber
                 size="small"
                 step={1000}
-                value={record.price}
+                value={record.supply_price}
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 min={0}
                 onChange={(value) => {
-                  updateSuccessList('price', record.index, value);
+                  updateSuccessList('supply_price', record.index, value);
                 }}
               />
             ),
           },
           {
             ellipsis: true,
+            align: 'right',
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            align: 'right',
             width: '12%',
             title: t('warehousing.count'),
             render: (_, record) => (
@@ -167,6 +182,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            align: 'right',
             title: t('warehousing.is reserved'),
             render: (_, record) => (
               <Checkbox
@@ -183,7 +199,6 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: '8%',
             render: (_, record) => (
               <TurtleIcon
                 type="delete"

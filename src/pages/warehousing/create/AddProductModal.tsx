@@ -3,7 +3,7 @@ import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 import { Divider, Form, Input, InputNumber, Row } from 'antd';
 import { useSetRecoilState } from 'recoil';
 import { pricePattern } from '@utils/pattern';
-import { WarehousingItem } from '@apis/warehousingAPI';
+import { WarehousingItemConnect } from '@apis/warehousingAPI';
 import {
   TurtleButton,
   TurtleInput,
@@ -38,7 +38,8 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         product_code: undefined,
         vendor_product_name: undefined,
         product_option: undefined,
-        price: undefined,
+        supply_price: undefined,
+        vat_price: undefined,
         count: undefined,
       });
       setVendorModalVisible(false);
@@ -53,7 +54,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
       product_code,
       vendor_product_name,
       product_option,
-      price,
+      supply_price,
     ) => {
       form.setFieldsValue({
         product_id,
@@ -61,7 +62,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         vendor_product_name,
         product_code,
         product_option,
-        price,
+        supply_price,
         count: 1,
       });
       setProductModalVisible(false);
@@ -71,11 +72,16 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
 
   // 상품 추가
   const addItem = useCallback(
-    (item: WarehousingItem) => {
+    (item: WarehousingItemConnect) => {
       setCart((cart) => ({
         ...cart,
         successList: [
-          { ...item, is_reserved: false, index: index.current++ },
+          {
+            ...item,
+            vat_price: Math.round(item.supply_price * 0.1),
+            is_reserved: false,
+            index: index.current++,
+          },
           ...cart.successList,
         ],
       }));
@@ -160,8 +166,8 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
             disabled
           />
           <Form.Item // 상품 공급가 Input
-            label={t('product.price')}
-            name="price"
+            label={t('product.supply price')}
+            name="supply_price"
             rules={[{ required: true }]}
           >
             <InputNumber

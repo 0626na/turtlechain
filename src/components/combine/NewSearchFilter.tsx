@@ -17,10 +17,6 @@ function NewSearchFilter({
   const options = vendor
     ? [
         {
-          name: t('common.all'),
-          value: 'all',
-        },
-        {
           name: t('vendor.name'),
           value: 'name',
         },
@@ -34,11 +30,6 @@ function NewSearchFilter({
         },
       ]
     : [
-        {
-          name: t('common.all'),
-          value: 'all',
-        },
-
         {
           name: t('product.name'), //
           value: 'name',
@@ -57,7 +48,7 @@ function NewSearchFilter({
     <Space>
       {select && (
         <Select
-          style={{ width: 100 }}
+          style={{ width: 120 }}
           size="small"
           value={searchQuery.type}
           onChange={(value) => {
