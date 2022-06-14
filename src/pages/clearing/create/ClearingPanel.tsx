@@ -36,6 +36,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     totalPrice,
   ] = useClearingCart();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getTodayReserveListQuery = useQuery(
     ['getTodayReserveList'],
     () =>

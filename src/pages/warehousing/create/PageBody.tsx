@@ -68,6 +68,7 @@ function PageBody() {
       searchQuery: { type: 'all', search_string: '' },
     });
     connectQuery.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCart]);
 
   // 파싱 or 연동 후 상태 세팅

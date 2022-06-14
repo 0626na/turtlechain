@@ -83,6 +83,7 @@ const PageBody = function () {
         memo: item.memo,
       })),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store.id, cart, validateSuccessList]);
 
   const menu = (
