@@ -30,7 +30,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const [selectedSheet, selectSheet] = useState<WarehousingSheet>();
 
   const getWarehousingSheetQuery = useQuery(
-    ['getWarehousingSheet', activeKey, store.id], //
+    ['getWarehousingSheet', activeKey, store.id],
     () =>
       warehousingAPI.getSheet({
         rt_store_id: store.id!,

@@ -111,8 +111,8 @@ const PageBody = function () {
               getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
                 .count ?? 0,
             price:
-              (getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
-                .price ?? 0) * 1.1,
+              getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
+                .price ?? 0,
           },
           {
             color: 'geekblue',
@@ -121,8 +121,8 @@ const PageBody = function () {
               getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
                 .count ?? 0,
             price:
-              (getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                .price ?? 0) * 1.1,
+              getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                .price ?? 0,
           },
         ]}
       />
