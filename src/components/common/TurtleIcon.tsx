@@ -1,7 +1,7 @@
-import { DeleteOutlined, BellOutlined } from '@ant-design/icons';
+import { DeleteOutlined, BellOutlined, CheckOutlined } from '@ant-design/icons';
 
 interface Props {
-  type: 'delete' | 'bell';
+  type: 'delete' | 'bell' | 'check';
   onClick?: () => void;
 }
 
@@ -14,6 +14,8 @@ function TurtleIcon({ type, onClick }: Props) {
 
   if (type === 'bell') {
     return <BellOutlined style={style} onClick={handleClick} />;
+  } else if (type === 'check') {
+    return <CheckOutlined style={style} onClick={handleClick} />;
   } else {
     return <DeleteOutlined style={style} onClick={handleClick} />;
   }

@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useHistory } from 'react-router-dom';
 import { clearingCartState } from '@store/clearingCartState';
 import { useClearingCart } from '@hooks/index';
 import { TurtleButton } from '@components/common';
@@ -25,16 +26,15 @@ interface Props extends CollapsePanelProps {
 }
 
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const [
-    totalDepositPrice,
-    totalVatPrice,
-    totalReserveSubtractPrice,
-    totalSubtractPrice,
-    totalReservePrice,
-    totalPrice,
-  ] = useClearingCart();
+  const {
+    warehousingSupplyAmount,
+    adjustmentSupplyAmount,
+    reserveSupplyAmount,
+    reserveSubtractAmount,
+  } = useClearingCart();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getTodayReserveListQuery = useQuery(
@@ -52,13 +52,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       onSuccess: (data) => {
         setCart({
           ...cart,
-          reserve_item_list: data.data.adjustment_list.map((item) => ({
-            adjustment_item_id: item.id,
-            ws_store_id: item.ws_store_id,
-            vendor_id: item.vendor_info.id,
-            price: item.price * item.count,
-            is_vat_included: item.is_vat_included,
-          })),
+          reserveBalanceList: data.data.adjustment_list,
         });
       },
     },
@@ -71,6 +65,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       onSuccess: () => {
         message.success(t('message.success create clearing'));
         clickCreate();
+        history.push('/clearing/list');
       },
     },
   );
@@ -80,28 +75,44 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       <StyledCard>
         <Row>
           <Col span={3}>입고</Col>
+          <Col>{`+ ${Math.round(
+            warehousingSupplyAmount * 1.1,
+          ).toLocaleString()}원 (부가세 ${Math.round(
+            warehousingSupplyAmount * 0.1,
+          ).toLocaleString()}원 포함)`}</Col>
+        </Row>
+      </StyledCard>
+      <StyledCard>
+        <Row>
+          <Col span={3}>당일 미송 추가</Col>
+          <Col>{`+ ${Math.round(
+            reserveSupplyAmount * 1.1,
+          ).toLocaleString()}원 (부가세 ${Math.round(
+            reserveSupplyAmount * 0.1,
+          ).toLocaleString()}원 포함)`}</Col>
+        </Row>
+      </StyledCard>
+      <StyledCard>
+        <Row>
+          <Col span={3}>미송 입고 차감</Col>
+          <Col>{`- ${Math.round(
+            reserveSubtractAmount * 1.1,
+          ).toLocaleString()}원 (부가세 ${Math.round(
+            reserveSubtractAmount * 0.1,
+          ).toLocaleString()}원 포함)`}</Col>
+        </Row>
+      </StyledCard>
+      <StyledCard>
+        <Row>
+          <Col span={3}>매입 조정 차감</Col>
           <Col>
-            + {(totalDepositPrice ?? 0).toLocaleString()} 원 (부가세{' '}
-            {(totalVatPrice ?? 0).toLocaleString()}원 포함)
+            {`- ${Math.round(
+              adjustmentSupplyAmount * 1.1,
+            ).toLocaleString()}원 (부가세 
+            ${Math.round(
+              adjustmentSupplyAmount * 0.1,
+            ).toLocaleString()}원 포함)`}
           </Col>
-        </Row>
-      </StyledCard>
-      <StyledCard>
-        <Row>
-          <Col span={3}>당일 미송</Col>
-          <Col>+ {(totalReservePrice ?? 0).toLocaleString()} 원</Col>
-        </Row>
-      </StyledCard>
-      <StyledCard>
-        <Row>
-          <Col span={3}>매입 차감</Col>
-          <Col>- {(totalSubtractPrice ?? 0).toLocaleString()} 원</Col>
-        </Row>
-      </StyledCard>
-      <StyledCard>
-        <Row>
-          <Col span={3}>미송입고 차감</Col>
-          <Col>- {(totalReserveSubtractPrice ?? 0).toLocaleString()} 원</Col>
         </Row>
       </StyledCard>
 
@@ -121,8 +132,13 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         </Col>
         <Col span={17}>
           <b>
-            {(totalPrice ?? 0).toLocaleString()} 원 (부가세{' '}
-            {(totalVatPrice ?? 0).toLocaleString()}원 포함)
+            {`${Math.round(
+              (warehousingSupplyAmount - adjustmentSupplyAmount) * 1.1,
+            ).toLocaleString()}
+            원 (부가세 ${Math.round(
+              Math.round(warehousingSupplyAmount - adjustmentSupplyAmount) *
+                0.1,
+            ).toLocaleString()}원 포함)`}
           </b>
         </Col>
         <Col>
@@ -136,20 +152,32 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   store_id: store.id,
                   credit_type: 'general',
                   store_name: store.name,
-                  total_clearing_amount: totalPrice!,
                 },
                 item: {
                   rt_store_id: store.id,
                   rt_store_name: store.name,
-                  warehousing_item_list: cart.warehousing_item_list,
-                  subtract_item_list: cart.subtract_item_list,
-                  reserve_item_list: cart.reserve_item_list,
+                  clearing_amount_list: cart.warehousingBalanceList.map(
+                    (item) => ({
+                      vendor_id: item.vendor_info.id,
+                      clearing_amount: item.clearing_amount,
+                    }),
+                  ),
+                  reserve_amount_list: cart.reserveSubtractList.map((item) => ({
+                    vendor_id: item.vendor_info.id,
+                    reserve_amount: item.reserve_amount,
+                  })),
+                  subtract_amount_list: cart.adjustmentBalanceList
+                    .filter((item) => item.clearing_amount > 0)
+                    .map((item) => ({
+                      vendor_id: item.vendor_info.id,
+                      subtract_amount: item.clearing_amount,
+                    })),
                 },
               });
             }}
           >
             <TurtleButton
-              disabled={totalPrice === 0}
+              disabled={warehousingSupplyAmount - adjustmentSupplyAmount === 0}
               loading={createClearingQuery.isLoading}
             >
               {t('button.request clearing')}

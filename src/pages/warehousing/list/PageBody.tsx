@@ -51,7 +51,7 @@ function PageBody() {
     warehousingAPI.updateSheet,
     {
       onSuccess: () => {
-        message.success(t('message.success delete warehousing'));
+        message.success(t('message.success update'));
         setSearchQuery({ ...searchQuery, page: 1 });
         getSheetQuery.refetch();
       },
@@ -175,23 +175,42 @@ function PageBody() {
               render: (_, record) => (
                 <Space>
                   {!record.is_confirmed && (
-                    <Popconfirm
-                      title={t('description.really delete')}
-                      okText={t('yes')}
-                      cancelText={t('no')}
-                      onConfirm={(e) => {
-                        e?.stopPropagation();
-                        updateSheetQuery.mutate({
-                          id: record.id,
-                          is_inactive: true,
-                        });
-                      }}
-                      onCancel={(e) => {
-                        e?.stopPropagation();
-                      }}
-                    >
-                      <TurtleIcon type="delete" />
-                    </Popconfirm>
+                    <>
+                      <Popconfirm
+                        title={t('description.really confirmed')}
+                        okText={t('yes')}
+                        cancelText={t('no')}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          updateSheetQuery.mutate({
+                            id: record.id,
+                            is_confirmed: true,
+                          });
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                      >
+                        <TurtleIcon type="check" />
+                      </Popconfirm>
+                      <Popconfirm
+                        title={t('description.really delete')}
+                        okText={t('yes')}
+                        cancelText={t('no')}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          updateSheetQuery.mutate({
+                            id: record.id,
+                            is_inactive: true,
+                          });
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                      >
+                        <TurtleIcon type="delete" />
+                      </Popconfirm>
+                    </>
                   )}
                 </Space>
               ),

@@ -17,11 +17,11 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, sheet }: Props) {
-  const [itemId, setItemId] = useState(-1);
+  // const [itemId, setItemId] = useState(-1);
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
-  const index = useRef(0);
+  // const index = useRef(0);
 
   const getItemQuery = useQuery(
     ['getClearingItem'], //
@@ -35,13 +35,13 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
     },
   );
 
-  const getItemDetailQuery = useQuery(
-    ['getClearingItemDetail', itemId],
-    () => clearingAPI.getItemDetail({ item_id: itemId }),
-    {
-      enabled: visible && itemId !== -1,
-    },
-  );
+  // const getItemDetailQuery = useQuery(
+  //   ['getClearingItemDetail', itemId],
+  //   () => clearingAPI.getItemDetail({ item_id: itemId }),
+  //   {
+  //     enabled: visible && itemId !== -1,
+  //   },
+  // );
 
   const filteredList = useMemo(
     () =>
@@ -81,7 +81,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           },
           {
             title: t('clearing.total price'),
-            value: `${sheet?.total_clearing_amount}`,
+            value: `${sheet?.total_deposit_amount}`,
           },
           {
             title: '총 거래처 수',
@@ -108,76 +108,76 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             />
           </TurtleTableTitle>
         )}
-        expandable={{
-          expandRowByClick: true,
-          expandedRowKeys: [itemId],
-          onExpand: (onExpand, record) => {
-            if (!onExpand) {
-              setItemId(-1);
-              return;
-            }
-            setItemId(record.id);
-          },
-          expandedRowRender: () => {
-            return (
-              <Table
-                loading={getItemDetailQuery.isLoading}
-                dataSource={getItemDetailQuery.data?.data.item_list}
-                pagination={false}
-                rowKey={() => index.current++}
-                columns={[
-                  // {
-                  //   ellipsis: true,
-                  //   title: t("vendor.name"),
-                  //   render: (_, record) => record.vendor_name,
-                  // },
-                  // {
-                  //   ellipsis: true,
-                  //   title: t("vendor.address"),
-                  //   render: (_, record) => record.vendor_address,
-                  // },
-                  // {
-                  //   ellipsis: true,
-                  //   title: t("vendor.account"),
-                  //   render: (_, record) =>
-                  //     `${record.bank} ${record.account_number} ${record.account_holder}`,
-                  // },
-                  {
-                    ellipsis: true,
-                    align: 'center',
-                    title: t('clearing.supply price'),
-                    render: (_, record) => record.supply_price.toLocaleString(),
-                  },
-                  {
-                    ellipsis: true,
-                    align: 'center',
-                    title: t('clearing.vat'),
-                    render: (_, record) => record.vat_price.toLocaleString(),
-                  },
-                  {
-                    ellipsis: true,
-                    align: 'center',
-                    title: t('clearing.price'),
-                    render: (_, record) =>
-                      record.deposit_price.toLocaleString(),
-                  },
-                  {
-                    ellipsis: true,
-                    align: 'center',
-                    title: '구분',
-                    render: (_, record) => record.clearing_type,
-                  },
-                  {
-                    ellipsis: true,
-                    align: 'center',
-                    title: t('common.memo'),
-                    render: (_, record) => record.memo,
-                  },
-                ]}
-              />
-            );
-          },
-        }}
+        // expandable={{
+        //   expandRowByClick: true,
+        //   expandedRowKeys: [itemId],
+        //   onExpand: (onExpand, record) => {
+        //     if (!onExpand) {
+        //       setItemId(-1);
+        //       return;
+        //     }
+        //     setItemId(record.id);
+        //   },
+        //   expandedRowRender: () => {
+        //     return (
+        //       <Table
+        //         loading={getItemDetailQuery.isLoading}
+        //         dataSource={getItemDetailQuery.data?.data.item_list}
+        //         pagination={false}
+        //         rowKey={() => index.current++}
+        //         columns={[
+        //           // {
+        //           //   ellipsis: true,
+        //           //   title: t("vendor.name"),
+        //           //   render: (_, record) => record.vendor_name,
+        //           // },
+        //           // {
+        //           //   ellipsis: true,
+        //           //   title: t("vendor.address"),
+        //           //   render: (_, record) => record.vendor_address,
+        //           // },
+        //           // {
+        //           //   ellipsis: true,
+        //           //   title: t("vendor.account"),
+        //           //   render: (_, record) =>
+        //           //     `${record.bank} ${record.account_number} ${record.account_holder}`,
+        //           // },
+        //           {
+        //             ellipsis: true,
+        //             align: 'center',
+        //             title: t('product.supply price'),
+        //             render: (_, record) => record.supply_price.toLocaleString(),
+        //           },
+        //           {
+        //             ellipsis: true,
+        //             align: 'center',
+        //             title: t('product.vat price'),
+        //             render: (_, record) => record.vat_price.toLocaleString(),
+        //           },
+        //           {
+        //             ellipsis: true,
+        //             align: 'center',
+        //             title: t('clearing.price'),
+        //             render: (_, record) =>
+        //               record.deposit_price.toLocaleString(),
+        //           },
+        //           {
+        //             ellipsis: true,
+        //             align: 'center',
+        //             title: '구분',
+        //             render: (_, record) => record.clearing_type,
+        //           },
+        //           {
+        //             ellipsis: true,
+        //             align: 'center',
+        //             title: t('common.memo'),
+        //             render: (_, record) => record.memo,
+        //           },
+        //         ]}
+        //       />
+        //     );
+        //   },
+        // }}
         columns={[
           {
             ellipsis: true,
@@ -197,18 +197,19 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           },
           {
             ellipsis: true,
-            title: t('clearing.supply price'),
+            title: t('product.supply price'),
             render: (_, record) => record.supply_amount.toLocaleString(),
           },
           {
             ellipsis: true,
-            title: t('clearing.vat'),
-            render: (_, record) => record.vat_amount.toLocaleString(),
+            title: t('product.vat price'),
+            render: (_, record) =>
+              (record.total_amount - record.supply_amount).toLocaleString(),
           },
           {
             ellipsis: true,
             title: t('clearing.price'),
-            render: (_, record) => record.clearing_amount.toLocaleString(),
+            render: (_, record) => record.total_amount.toLocaleString(),
           },
         ]}
       />

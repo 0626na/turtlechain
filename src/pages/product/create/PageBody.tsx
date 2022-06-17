@@ -17,8 +17,10 @@ import { useStoreExist } from '@hooks/index';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
 import AddSingleProductModal from './AddProductModal';
+import { useHistory } from 'react-router-dom';
 
 function PageBody() {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(productCartState);
@@ -52,6 +54,7 @@ function PageBody() {
         message.success(
           `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
         );
+        history.push('/product/list');
       },
     },
   );

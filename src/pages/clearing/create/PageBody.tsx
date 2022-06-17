@@ -45,7 +45,7 @@ function PageBody() {
               <TurtlePanelHeader
                 count={1}
                 activeKey={activeKey}
-                title="입고 결제대기"
+                title="거래처별 결제대기"
               />
             }
             activeKey={activeKey}

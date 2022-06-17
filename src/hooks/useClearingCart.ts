@@ -5,69 +5,95 @@ import { clearingCartState } from '@store/clearingCartState';
 function useClearingCart() {
   const cart = useRecoilValue(clearingCartState);
 
-  const totalDepositPrice = useMemo(
+  const warehousingSupplyAmount = useMemo(
     () =>
-      cart.warehousing_item_list
-        .map((item) => item.deposit_price)
+      cart.warehousingBalanceList
+        .filter((item) => item.clearing_amount)
+        .map((item) => item.clearing_amount)
         .reduce((acc, cur) => acc + cur, 0),
-    [cart.warehousing_item_list],
+    [cart.warehousingBalanceList],
   );
 
-  const totalVatPrice = useMemo(
+  const reserveSubtractAmount = useMemo(
     () =>
-      cart.warehousing_item_list
-        .map((item) => item.vat_price)
+      cart.warehousingBalanceList
+        .filter((item) => item.clearing_amount && item.reserve_amount > 0)
+        .map((item) => item.reserve_amount)
         .reduce((acc, cur) => acc + cur, 0),
-    [cart.warehousing_item_list],
+    [cart.warehousingBalanceList],
   );
 
-  const totalReserveSubtractPrice = useMemo(
+  const adjustmentSupplyAmount = useMemo(
     () =>
-      cart.warehousing_item_list
-        .filter((item) => item.is_reserved)
-        .map((item) => item.deposit_price)
+      cart.adjustmentBalanceList
+        .filter((item) => item.clearing_amount)
+        .map((item) => item.clearing_amount)
         .reduce((acc, cur) => acc + cur, 0),
-    [cart.warehousing_item_list],
+    [cart.adjustmentBalanceList],
   );
 
-  const totalSubtractPrice = useMemo(
+  const reserveSupplyAmount = useMemo(
     () =>
-      cart.subtract_item_list
-        .map((item) => item.price)
-        .reduce((cur, acc) => cur + acc, 0),
-    [cart.subtract_item_list],
+      cart.reserveBalanceList.reduce(
+        (acc, cur) => acc + cur.price * cur.count,
+        0,
+      ),
+    [cart.reserveBalanceList],
   );
 
-  const totalReservePrice = useMemo(
-    () =>
-      cart.reserve_item_list
-        .map((item) => item.price)
-        .reduce((cur, acc) => cur + acc, 0),
-    [cart.reserve_item_list],
-  );
+  // const totalVatPrice = useMemo(
+  //   () =>
+  //     cart.warehousing_item_list
+  //       .map((item) => item.vat_price)
+  //       .reduce((acc, cur) => acc + cur, 0),
+  //   [cart.warehousing_item_list],
+  // );
 
-  const totalPrice = useMemo(
-    () =>
-      totalDepositPrice -
-      totalReserveSubtractPrice -
-      totalSubtractPrice +
-      totalReservePrice,
-    [
-      totalDepositPrice,
-      totalReserveSubtractPrice,
-      totalSubtractPrice,
-      totalReservePrice,
-    ],
-  );
+  // const totalReserveSubtractPrice = useMemo(
+  //   () =>
+  //     cart.warehousing_item_list
+  //       .filter((item) => item.is_reserved)
+  //       .map((item) => item.deposit_price)
+  //       .reduce((acc, cur) => acc + cur, 0),
+  //   [cart.warehousing_item_list],
+  // );
 
-  return [
-    totalDepositPrice,
-    totalVatPrice,
-    totalReserveSubtractPrice,
-    totalSubtractPrice,
-    totalReservePrice,
-    totalPrice,
-  ];
+  // const totalSubtractPrice = useMemo(
+  //   () =>
+  //     cart.subtract_item_list
+  //       .map((item) => item.price)
+  //       .reduce((cur, acc) => cur + acc, 0),
+  //   [cart.subtract_item_list],
+  // );
+
+  // const totalReservePrice = useMemo(
+  //   () =>
+  //     cart.reserve_item_list
+  //       .map((item) => item.price)
+  //       .reduce((cur, acc) => cur + acc, 0),
+  //   [cart.reserve_item_list],
+  // );
+
+  // const totalPrice = useMemo(
+  //   () =>
+  //     totalDepositPrice -
+  //     totalReserveSubtractPrice -
+  //     totalSubtractPrice +
+  //     totalReservePrice,
+  //   [
+  //     totalDepositPrice,
+  //     totalReserveSubtractPrice,
+  //     totalSubtractPrice,
+  //     totalReservePrice,
+  //   ],
+  // );
+
+  return {
+    warehousingSupplyAmount,
+    reserveSubtractAmount,
+    adjustmentSupplyAmount,
+    reserveSupplyAmount,
+  };
 }
 
 export default useClearingCart;

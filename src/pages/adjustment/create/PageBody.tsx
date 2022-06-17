@@ -12,8 +12,10 @@ import { useStoreExist } from '@hooks/index';
 import LoadWarehousingModal from './LoadWarehousingModal';
 import SuccessTab from './SuccessTab';
 import AddProductModal from './AddProductModal';
+import { useHistory } from 'react-router-dom';
 
 const PageBody = function () {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(adjustmentCartState);
@@ -27,6 +29,7 @@ const PageBody = function () {
     onSuccess: () => {
       resetStates();
       message.success(t('message.success create adjustment'));
+      history.push('/adjustment/list');
     },
   });
 

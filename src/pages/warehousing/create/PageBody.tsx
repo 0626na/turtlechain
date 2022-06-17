@@ -5,6 +5,7 @@ import { RcFile } from 'antd/lib/upload';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { message, Menu, Tabs, Popconfirm } from 'antd';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useHistory } from 'react-router-dom';
 import { storeState } from '@store/storeState';
 import { BottomBar, MainContent, MenuBar } from '@layout/main';
 import {
@@ -21,6 +22,7 @@ import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
 
 function PageBody() {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(warehousingCartState);
@@ -54,6 +56,7 @@ function PageBody() {
     onSuccess: () => {
       resetStates();
       message.success(t('message.success create warehousing'));
+      history.push('/warehousing/list');
     },
   });
 

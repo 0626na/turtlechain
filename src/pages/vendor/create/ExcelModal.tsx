@@ -38,6 +38,7 @@ import {
   TurtleQuestionTooltip,
   TurtleModal,
 } from '@components/common';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -45,6 +46,7 @@ interface Props {
 }
 
 function ExcelModal({ visible, closeModal }: Props) {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<Vendor>>([]);
@@ -116,6 +118,7 @@ function ExcelModal({ visible, closeModal }: Props) {
           `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         );
         onCloseModal();
+        history.push('/vendor/list');
       },
     },
   );

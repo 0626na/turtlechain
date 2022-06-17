@@ -235,7 +235,7 @@ function PageBody() {
               ellipsis: true,
               title: t('clearing.total price'),
               render: (_, record) =>
-                record.total_clearing_amount.toLocaleString(),
+                record.total_deposit_amount.toLocaleString(),
             },
             {
               ellipsis: true,

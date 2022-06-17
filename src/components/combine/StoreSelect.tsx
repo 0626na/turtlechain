@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Select, Space, Typography } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
@@ -54,12 +54,12 @@ function StoreSelect({ warningMessage }: Props) {
   );
 
   // 페이지 바뀔때 마다 storeId 초기화
-  useEffect(
-    () => () => {
-      setStore(() => ({ id: undefined, name: '' }));
-    },
-    [setStore],
-  );
+  // useEffect(
+  //   () => () => {
+  //     setStore(() => ({ id: undefined, name: '' }));
+  //   },
+  //   [setStore],
+  // );
 
   return (
     <Space size="large">
