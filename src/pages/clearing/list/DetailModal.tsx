@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Table } from 'antd';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import clearingAPI, { ClearingSheetShow } from '@apis/clearingAPI';
 import {

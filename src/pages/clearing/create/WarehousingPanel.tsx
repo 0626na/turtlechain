@@ -30,7 +30,7 @@ interface Props extends CollapsePanelProps {
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { warehousingSupplyAmount, reserveSubtractAmount } = useClearingCart();
+  const { warehousingSupplyAmount } = useClearingCart();
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
