@@ -1,31 +1,23 @@
-import { t } from "i18next";
-import { Button, Form, Input, message, Row, Typography } from "antd";
-import { userAPI } from "apis";
-import { AxiosError } from "axios";
-import { TurtleButton, TurtleCardSetting } from "components/common";
-import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { phonePattern } from "utils/pattern";
-import styled from "styled-components";
-import { PhoneAuthModal } from "components/combine";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import { Button, Form, Input, message, Row, Typography } from 'antd';
+import { TurtleButton, TurtleCardSetting } from '@components/common';
+import { phonePattern } from '@utils/pattern';
+import { PhoneAuthModal } from '@components/combine';
+import userAPI from '@apis/userAPI';
 
 function PageBody() {
   const [form] = Form.useForm();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
 
-  const getQuery = useQuery("getUser", userAPI.get, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getQuery = useQuery('getUser', userAPI.get);
 
-  const updateQuery = useMutation("updateUser", userAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
+  const updateQuery = useMutation('updateUser', userAPI.update, {
     onSuccess: (data) => {
-      message.success(t("message.success update"));
+      message.success(t('message.success update'));
       setIsUpdateMode(false);
       getQuery.refetch();
     },
@@ -85,8 +77,12 @@ function PageBody() {
                 <Input
                   readOnly
                   suffix={
-                    <Button size="small" type="link" onClick={() => setPhoneAuthModalVisible(true)}>
-                      {t("auth phone")}
+                    <Button
+                      size="small"
+                      type="link"
+                      onClick={() => setPhoneAuthModalVisible(true)}
+                    >
+                      {t('auth phone')}
                     </Button>
                   }
                 />
@@ -98,7 +94,10 @@ function PageBody() {
               visible={phoneAuthModalVisible}
               onClose={() => setPhoneAuthModalVisible(false)}
               onSuccess={(data) => {
-                form.setFieldsValue({ ...form.getFieldsValue(), mobile_phone: data.phone });
+                form.setFieldsValue({
+                  ...form.getFieldsValue(),
+                  mobile_phone: data.phone,
+                });
               }}
             />
             <Row justify="end">
@@ -113,8 +112,15 @@ function PageBody() {
       </Row>
       <Row>
         <TurtleCardSetting title="계정 정보" style={{ marginBottom: 24 }}>
-          <Form layout="horizontal" colon={false} labelCol={{ span: 4 }} wrapperCol={{ span: 5 }}>
-            <StyledFormItem label="아이디">{getQuery.data?.login_id}</StyledFormItem>
+          <Form
+            layout="horizontal"
+            colon={false}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 5 }}
+          >
+            <StyledFormItem label="아이디">
+              {getQuery.data?.login_id}
+            </StyledFormItem>
             {/* <StyledFormItem label="비밀번호">
               <Button
                 size="small"

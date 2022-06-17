@@ -1,8 +1,8 @@
-import { v2Axios } from "apis";
-import { TOKEN } from "constant";
+import { v2Axios } from '.';
+import { TOKEN } from '@constant/index';
 
 export interface RequestGet {
-  type: "home" | "setting";
+  type: 'home' | 'setting';
   page?: number;
 }
 
@@ -29,7 +29,7 @@ export interface ResponseGet {
 
 // 알림 조회
 const get = async function (query: RequestGet) {
-  let url = "notification?";
+  let url = 'notification?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }

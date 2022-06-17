@@ -1,5 +1,5 @@
-import { Row } from "antd";
-import { TurtleInfo, TurtleText } from "components/common";
+import { Row } from 'antd';
+import { TurtleInfo, TurtleText } from '@components/common';
 
 interface Props {
   children: React.ReactNode;

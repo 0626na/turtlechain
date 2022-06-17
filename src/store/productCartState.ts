@@ -1,6 +1,6 @@
-import { RcFile } from "antd/lib/upload";
-import { Product } from "apis/productAPI";
-import { atom } from "recoil";
+import { RcFile } from 'antd/lib/upload';
+import { atom } from 'recoil';
+import { Product } from '@apis/productAPI';
 
 export interface ProductCartState {
   fileList: RcFile[];
@@ -9,7 +9,7 @@ export interface ProductCartState {
 }
 
 export const productCartState = atom<ProductCartState>({
-  key: "productCart",
+  key: 'productCart',
   default: {
     fileList: [],
     successList: [],

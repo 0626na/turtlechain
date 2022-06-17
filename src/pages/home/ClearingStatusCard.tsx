@@ -1,27 +1,19 @@
-import { Col, message, Row, Table, Tag, Typography } from "antd";
-import { clearingAPI } from "apis";
-import { AxiosError } from "axios";
-import moment from "moment";
-import { useQuery } from "react-query";
-import { t } from "i18next";
-import { TurtleCardHome } from "components/common";
+import moment from 'moment';
+import { t } from 'i18next';
+import { Col, Row, Table, Tag, Typography } from 'antd';
+import { useQuery } from 'react-query';
+import { TurtleCardHome } from '@components/common';
+import clearingAPI from '@apis/clearingAPI';
 
 function ClearingStatusCard() {
-  const getSheetQuery = useQuery(
-    ["getClearingSheet"],
-    () =>
-      clearingAPI.getSheet({
-        credit_type: "general",
-        start_date: moment().startOf("month").format("YYYY-MM-DD"),
-        end_date: moment().endOf("month").format("YYYY-MM-DD"),
-        status: "all",
-        page_size: 1000,
-      }),
-    {
-      onError: (err: AxiosError) => {
-        message.warn(err.response?.data.msg);
-      },
-    },
+  const getSheetQuery = useQuery(['getClearingSheet'], () =>
+    clearingAPI.getSheet({
+      credit_type: 'general',
+      start_date: moment().startOf('month').format('YYYY-MM-DD'),
+      end_date: moment().endOf('month').format('YYYY-MM-DD'),
+      status: 'all',
+      page_size: 1000,
+    }),
   );
 
   return (
@@ -33,7 +25,9 @@ function ClearingStatusCard() {
           </Typography.Title>
         </Col>
         <Col>
-          <Typography.Text type="secondary">{moment().format("YYYY-MM")}</Typography.Text>
+          <Typography.Text type="secondary">
+            {moment().format('YYYY-MM')}
+          </Typography.Text>
         </Col>
       </Row>
       <Table
@@ -41,40 +35,49 @@ function ClearingStatusCard() {
         loading={getSheetQuery.isLoading}
         dataSource={getSheetQuery.data?.data.sheet_list}
         rowKey={(record) => record.id}
-        pagination={{ position: ["bottomRight"], showSizeChanger: false, defaultPageSize: 3 }}
+        pagination={{
+          position: ['bottomRight'],
+          showSizeChanger: false,
+          defaultPageSize: 3,
+        }}
         columns={[
           {
             ellipsis: true,
             width: 100,
-            align: "center",
-            title: t("clearing.status.default"),
+            align: 'center',
+            title: t('clearing.status.default'),
             render: (_, record) => {
               const { status } = record;
               const color =
-                status === "request" ? "green" : status === "pending" ? "orange" : "geekblue";
+                status === 'request'
+                  ? 'green'
+                  : status === 'pending'
+                  ? 'orange'
+                  : 'geekblue';
               const text = t(`clearing.status.${status}`);
               return <Tag color={color}>{text}</Tag>;
             },
           },
           {
             ellipsis: true,
-            title: t("clearing.request date"),
+            title: t('clearing.request date'),
             render: (_, record) => record.request_date,
           },
           {
             ellipsis: true,
-            title: t("clearing.complete date"),
+            title: t('clearing.complete date'),
             render: (_, record) => record.complete_date,
           },
           {
             ellipsis: true,
-            title: t("store.name"),
+            title: t('store.name'),
             render: (_, record) => record.store_name,
           },
           {
             ellipsis: true,
-            title: t("clearing.total price"),
-            render: (_, record) => `${record.total_clearing_amount.toLocaleString()}원`,
+            title: t('clearing.total price'),
+            render: (_, record) =>
+              `${record.total_clearing_amount.toLocaleString()}원`,
           },
         ]}
       />

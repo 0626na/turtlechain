@@ -1,7 +1,11 @@
-import styled from "styled-components";
-import { Col, Row, Typography } from "antd";
-import { t } from "i18next";
-import { TurtleBreadCrumb, TurtleDivider, TurtleInfo } from "components/common";
+import styled from 'styled-components';
+import { Col, Row, Typography } from 'antd';
+import { t } from 'i18next';
+import {
+  TurtleBreadCrumb,
+  TurtleDivider,
+  TurtleInfo,
+} from '@components/common';
 
 interface Props {
   title: string;
@@ -15,7 +19,11 @@ function PageHeader({ title, breadcrumbList, infoList }: Props) {
       <Row
         align="middle"
         justify="space-between"
-        style={{ backgroundColor: "white", borderRadius: 8, padding: "8px 36px 12px 36px" }}
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 8,
+          padding: '8px 36px 12px 36px',
+        }}
       >
         <Col>
           <StyledTitle level={4}>{title}</StyledTitle>
@@ -28,7 +36,9 @@ function PageHeader({ title, breadcrumbList, infoList }: Props) {
         </Col>
         <Col>
           {breadcrumbList && (
-            <TurtleBreadCrumb list={[t("HOME"), ...breadcrumbList]}></TurtleBreadCrumb>
+            <TurtleBreadCrumb
+              list={[t('HOME'), ...breadcrumbList]}
+            ></TurtleBreadCrumb>
           )}
         </Col>
       </Row>

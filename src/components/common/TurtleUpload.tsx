@@ -1,7 +1,7 @@
-import { t } from "i18next";
-import { Upload } from "antd";
-import { RcFile } from "antd/lib/upload";
-import { useStoreExist } from "hooks";
+import { t } from 'i18next';
+import { Upload } from 'antd';
+import { RcFile } from 'antd/lib/upload';
+import { useStoreExist } from '@hooks/index';
 
 interface Props {
   beforeUpload: (file: RcFile) => void;
@@ -27,7 +27,7 @@ function TurtleUpload({ beforeUpload, onRemove, fileList }: Props) {
       }}
       fileList={fileList}
     >
-      {t("button.upload excel")}
+      {t('button.upload excel')}
     </Upload>
   );
 }

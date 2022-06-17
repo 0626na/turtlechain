@@ -4,7 +4,7 @@
 
 ```shell
 # 레포지토리 클론
-git clone https://ogkim@bitbucket.org/turtleship/turtlechain-v2.git
+git clone https://bitbucket.org/turtleship/turtlechain-v2.git
 
 # 레포지토리 이동
 cd turtlechain-v2
@@ -46,6 +46,7 @@ src
   constant        # 상수 값이 있는 디렉토리
   hooks           # custom hooks가 있는 디렉토리
   i18n            # 문자열 처리 관련 디렉토리
+  layouts         # 레이아웃 컴포넌트가 있는 디렉토리
   pages           # 페이지에서 사용되는 컴포넌트를 모아둔 디렉토리
   router          # 페이지 라우트 처리관련 디렉토리
   store           # 전역 스토어 디렉토리

@@ -1,4 +1,4 @@
-import { v1Axios } from "apis";
+import { v1Axios } from '.';
 
 const getAddress = async function () {
   const url = `/building/v2`;

@@ -1,6 +1,6 @@
-import { Form } from "antd";
-import Search from "antd/lib/input/Search";
-import styled from "styled-components";
+import { Form } from 'antd';
+import Search from 'antd/lib/input/Search';
+import styled from 'styled-components';
 
 interface Props {
   name?: string;
@@ -10,9 +10,20 @@ interface Props {
   onClick?: () => void;
 }
 
-function TurtleSearchInput({ name, value, label, placeholder, onClick }: Props) {
+function TurtleSearchInput({
+  name,
+  value,
+  label,
+  placeholder,
+  onClick,
+}: Props) {
   return (
-    <Form.Item name={name} label={label} rules={[{ required: true }]} required={true}>
+    <Form.Item
+      name={name}
+      label={label}
+      rules={[{ required: true }]}
+      required={true}
+    >
       <StyledSearch //
         placeholder={placeholder}
         value={value}

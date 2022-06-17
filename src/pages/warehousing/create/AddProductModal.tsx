@@ -1,18 +1,18 @@
-import { t } from "i18next";
-import { Divider, Form, Input, InputNumber, Row } from "antd";
-import { MutableRefObject, useCallback, useEffect, useState } from "react";
-import { pricePattern } from "utils/pattern";
-import { WarehousingItem } from "apis/warehousingAPI";
+import { t } from 'i18next';
+import { MutableRefObject, useCallback, useEffect, useState } from 'react';
+import { Divider, Form, Input, InputNumber, Row } from 'antd';
+import { useSetRecoilState } from 'recoil';
+import { pricePattern } from '@utils/pattern';
+import { WarehousingItemConnect } from '@apis/warehousingAPI';
 import {
   TurtleButton,
   TurtleInput,
   TurtleInputNumber,
   TurtleModal,
   TurtleSearchInput,
-} from "components/common";
-import { SearchProductModal, SearchVendorModal } from "components/combine";
-import { useSetRecoilState } from "recoil";
-import { warehousingCartState } from "store/warehousingCartState";
+} from '@components/common';
+import { SearchProductModal, SearchVendorModal } from '@components/combine';
+import { warehousingCartState } from '@store/warehousingCartState';
 
 interface Props {
   visible: boolean;
@@ -38,7 +38,8 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         product_code: undefined,
         vendor_product_name: undefined,
         product_option: undefined,
-        price: undefined,
+        supply_price: undefined,
+        vat_price: undefined,
         count: undefined,
       });
       setVendorModalVisible(false);
@@ -47,14 +48,21 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
   );
 
   const selectProduct = useCallback(
-    (product_id, product_name, product_code, vendor_product_name, product_option, price) => {
+    (
+      product_id,
+      product_name,
+      product_code,
+      vendor_product_name,
+      product_option,
+      supply_price,
+    ) => {
       form.setFieldsValue({
         product_id,
         product_name,
         vendor_product_name,
         product_code,
         product_option,
-        price,
+        supply_price,
         count: 1,
       });
       setProductModalVisible(false);
@@ -64,10 +72,18 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
 
   // 상품 추가
   const addItem = useCallback(
-    (item: WarehousingItem) => {
+    (item: WarehousingItemConnect) => {
       setCart((cart) => ({
         ...cart,
-        successList: [{ ...item, is_reserved: false, index: index.current++ }, ...cart.successList],
+        successList: [
+          {
+            ...item,
+            vat_price: Math.round(item.supply_price * 0.1),
+            is_reserved: false,
+            index: index.current++,
+          },
+          ...cart.successList,
+        ],
       }));
       closeModal();
     },
@@ -83,7 +99,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
       <TurtleModal
         centered
         width="520px"
-        title={t("product.add single")}
+        title={t('product.add single')}
         visible={visible}
         onCancel={closeModal}
         footer={false}
@@ -107,20 +123,20 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
 
           <TurtleSearchInput // 거래처명 검색 Input
             name="vendor_name"
-            label={t("vendor.name")}
-            placeholder={t("placeholder.vendor name")}
+            label={t('vendor.name')}
+            placeholder={t('placeholder.vendor name')}
             onClick={() => {
               setVendorModalVisible(true);
             }}
           />
           <TurtleInput // 거래처 주소 Input
             name="vendor_address"
-            label={t("vendor.address")}
+            label={t('vendor.address')}
             disabled
           />
           <TurtleInput // 거래처 휴대번호 Input
             name="vendor_phone"
-            label={t("vendor.store phone")}
+            label={t('vendor.store phone')}
             disabled
           />
 
@@ -128,48 +144,48 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
 
           <TurtleSearchInput // 상품 검색 Input
             name="product_name"
-            label={t("product.name")}
-            placeholder={t("placeholder.product name")}
+            label={t('product.name')}
+            placeholder={t('placeholder.product name')}
             onClick={() => {
               setProductModalVisible(true);
             }}
           />
           <TurtleInput // 거래처 상품명 Input
-            label={t("product.vendor product name")}
+            label={t('product.vendor product name')}
             name="vendor_product_name"
             disabled
           />
           <TurtleInput // 상품 바코드 Input
-            label={t("product.code")}
+            label={t('product.code')}
             name="product_code"
             disabled
           />
           <TurtleInput // 상품 옵션 Input
-            label={t("product.option")}
+            label={t('product.option')}
             name="product_option"
             disabled
           />
           <Form.Item // 상품 공급가 Input
-            label={t("product.price")}
-            name="price"
+            label={t('product.supply price')}
+            name="supply_price"
             rules={[{ required: true }]}
           >
             <InputNumber
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               step={1000}
               min={0}
-              formatter={(value) => `${value}`.replace(pricePattern, ",")}
+              formatter={(value) => `${value}`.replace(pricePattern, ',')}
             />
           </Form.Item>
           <TurtleInputNumber // 상품 수량 Input
-            label={t("product.count")}
+            label={t('product.count')}
             name="count"
             min={1}
           />
 
           <Row justify="end">
             <TurtleButton type="default" htmlType="submit">
-              {t("button.add product")}
+              {t('button.add product')}
             </TurtleButton>
           </Row>
         </Form>
@@ -190,7 +206,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         closeModal={() => {
           setProductModalVisible(false);
         }}
-        vendorId={form.getFieldValue("vendor_id")}
+        vendorId={form.getFieldValue('vendor_id')}
         onClickSelect={selectProduct}
       />
     </>

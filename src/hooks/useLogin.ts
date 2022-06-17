@@ -1,10 +1,10 @@
-import { tokenState } from "store/tokenState";
-import { v1Axios, v2Axios } from "apis";
-import { useSetRecoilState } from "recoil";
-import useLogout from "./useLogout";
-import { message } from "antd";
-import { t } from "i18next";
-import { TOKEN } from "constant";
+import { t } from 'i18next';
+import { message } from 'antd';
+import { useSetRecoilState } from 'recoil';
+import { TOKEN } from '@constant/index';
+import { tokenState } from '@store/tokenState';
+import { v1Axios, v2Axios } from '@apis/index';
+import useLogout from './useLogout';
 
 const useLogin = function () {
   const logout = useLogout();
@@ -20,7 +20,7 @@ const useLogin = function () {
 
     // headers 토큰 설정 및 401 에러 처리
     axiosList.forEach((axios) => {
-      axios.defaults.headers.common["Authorization"] = `JWT ${token}`;
+      axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
       axios.interceptors.response.use(
         (response) => {
           return response;
@@ -29,7 +29,9 @@ const useLogin = function () {
           const { status } = error.response;
           if (status === 401) {
             logout();
-            message.info(t("message.expired token"));
+            message.info(t('message.expired token'));
+          } else {
+            message.error(error.response?.data.msg);
           }
           return Promise.reject(error);
         },

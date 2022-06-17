@@ -1,17 +1,21 @@
-import { atom } from "recoil";
-import { RequestCreateItem } from "apis/clearingAPI";
+import { atom } from 'recoil';
+import { Balance } from '@apis/clearingAPI';
+import { AdjustmentItemShow } from '@apis/adjustmentAPI';
 
-export interface ClearingCartState extends RequestCreateItem {
-  selectedKeys: number[];
+export interface ClearingCartState {
+  warehousingBalanceList: Balance[];
+  adjustmentBalanceList: Balance[];
+  reserveSubtractList: Balance[];
+  reserveBalanceList: AdjustmentItemShow[];
 }
 
 // 정산상품 생성을 위한 장바구품
 export const clearingCartState = atom<ClearingCartState>({
-  key: "clearingCart",
+  key: 'clearingCart',
   default: {
-    selectedKeys: [],
-    warehousing_item_list: [],
-    subtract_item_list: [],
-    reserve_item_list: [],
+    warehousingBalanceList: [],
+    adjustmentBalanceList: [],
+    reserveSubtractList: [],
+    reserveBalanceList: [],
   },
 });

@@ -1,4 +1,4 @@
-import { v2Axios } from "./index";
+import { v2Axios } from '.';
 
 // 매입조정 상품
 export interface AdjustmentItem {
@@ -19,7 +19,7 @@ export interface AdjustmentItem {
   is_vat_included: boolean;
 
   product_count: number;
-  type: "reserve" | "takeback" | "exchange" | "refund" | "";
+  type: 'reserve' | 'takeback' | 'exchange' | 'refund' | '';
   memo?: string | undefined;
   // 매입조정 상품 등록 최대개수
   product_count_max?: number;
@@ -35,7 +35,7 @@ export interface AdjustmentItemShow {
   is_vat_included: boolean;
   created_date: string;
   price: number;
-  type: "reserve" | "takeback" | "exchange";
+  type: 'reserve' | 'takeback' | 'exchange';
   vendor_info: {
     id: number;
     vendor_name: string;
@@ -51,7 +51,7 @@ export interface AdjustmentItemShow {
   memo_value?: string;
   // for 매입조정 처리
   process_count?: number;
-  adjustment_process_type?: "substract" | "refund";
+  adjustment_process_type?: 'substract' | 'refund';
 }
 
 // Request: 매입조정 리스트 조회
@@ -61,7 +61,7 @@ export interface RequestGetList {
   end_date: string;
   is_cleared?: number;
   page?: number;
-  type?: "reserve" | "takeback" | "exchange" | "refund";
+  type?: 'reserve' | 'takeback' | 'exchange' | 'refund';
   // 당일 미송 조회시 넣어준다.
   original_id?: 0;
 }
@@ -87,7 +87,7 @@ export interface ResponseGetList {
 
 // 매입조정 리스트 조회 요청
 const getList = async function (query: RequestGetList) {
-  let url = "adjustment/item?";
+  let url = 'adjustment/item?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -118,7 +118,7 @@ export interface ResponseCreate {
 
 // 매입조정 생성 요청
 const create = async function (data: RequestCreate) {
-  const url = "adjustment/item";
+  const url = 'adjustment/item';
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };
@@ -131,7 +131,7 @@ export interface RequestUpdate {
 
   // for 매입조정 처리
   process_count?: number;
-  adjustment_process_type?: "substract" | "refund";
+  adjustment_process_type?: 'substract' | 'refund';
 }
 
 // Response: 매입조정 상품 수정
@@ -171,8 +171,8 @@ export interface ResponseGet {
       supply_price: number;
       vat_price: number;
       is_vat_included: boolean;
-      adjustment_process_type: "subtract" | "refund" | "";
-      adjustment_type: "reserve" | "takeback" | "exchange" | "refund";
+      adjustment_process_type: 'subtract' | 'refund' | '';
+      adjustment_type: 'reserve' | 'takeback' | 'exchange' | 'refund';
     }>;
     warehousing_info: {
       id: number;

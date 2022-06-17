@@ -1,8 +1,7 @@
-import { Select, Space } from "antd";
-import Search from "antd/lib/input/Search";
-import React, { useMemo, useState } from "react";
-import styled from "styled-components";
-import { t } from "i18next";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useMemo, useState } from 'react';
+import { Select, Space, Input } from 'antd';
 
 export interface SearchState {
   type: string;
@@ -10,14 +9,14 @@ export interface SearchState {
 }
 
 interface Props {
-  type: "vendor" | "product";
+  type: 'vendor' | 'product';
   onSearch: (searchState: SearchState) => void;
 }
 
 function SearchFilter({ type, onSearch }: Props) {
   const [searchState, setSearchState] = useState<SearchState>({
-    type: "all",
-    search_string: "",
+    type: 'all',
+    search_string: '',
   });
 
   const onSelectSearchType = (value: string) => {
@@ -31,48 +30,48 @@ function SearchFilter({ type, onSearch }: Props) {
 
   // 엔터키 눌렀을 때 검색
   const onEnterPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") onSearch({ ...searchState });
+    if (e.key === 'Enter') onSearch({ ...searchState });
   };
 
   // Select Box 옵션 선택
   const options = useMemo(() => {
-    if (type === "vendor")
+    if (type === 'vendor')
       return [
         {
-          name: t("common.all"),
-          value: "all",
+          name: t('common.all'),
+          value: 'all',
         },
         {
-          name: t("vendor.name"),
-          value: "name",
+          name: t('vendor.name'),
+          value: 'name',
         },
         {
-          name: t("vendor.account"),
-          value: "account",
+          name: t('vendor.account'),
+          value: 'account',
         },
         {
-          name: t("vendor.store phone"),
-          value: "phone",
+          name: t('vendor.store phone'),
+          value: 'phone',
         },
       ];
-    if (type === "product")
+    if (type === 'product')
       return [
         {
-          name: t("common.all"),
-          value: "all",
+          name: t('common.all'),
+          value: 'all',
         },
 
         {
-          name: t("product.name"), //
-          value: "name",
+          name: t('product.name'), //
+          value: 'name',
         },
         {
-          name: t("product.vendor product name"),
-          value: "vendor_product_name",
+          name: t('product.vendor product name'),
+          value: 'vendor_product_name',
         },
         {
-          name: t("vendor.name"),
-          value: "vendor_name",
+          name: t('vendor.name'),
+          value: 'vendor_name',
         },
       ];
   }, [type]);
@@ -93,7 +92,7 @@ function SearchFilter({ type, onSearch }: Props) {
       </Select>
       <StyledSearch //
         size="small"
-        placeholder={t("placeholder.search")}
+        placeholder={t('placeholder.search')}
         style={{ width: 200 }}
         value={searchState.search_string}
         onChange={onChangeSearchString}
@@ -106,7 +105,7 @@ function SearchFilter({ type, onSearch }: Props) {
   );
 }
 
-const StyledSearch = styled(Search)`
+const StyledSearch = styled(Input.Search)`
   .ant-input-search-button {
     border: 1px solid #d9d9d9;
     border-left: none;

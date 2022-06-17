@@ -1,5 +1,5 @@
-import { Card, CardProps } from "antd";
-import styled from "styled-components";
+import { Card, CardProps } from 'antd';
+import styled from 'styled-components';
 
 interface Props extends CardProps {}
 
@@ -8,8 +8,8 @@ function TurtleCardSetting({ ...props }: Props) {
     <StyledCard
       {...props}
       type="inner"
-      headStyle={{ backgroundColor: "#F7F8F9", minHeight: 40, height: 40 }}
-      style={{ width: "100%", ...props.style }}
+      headStyle={{ backgroundColor: '#F7F8F9', minHeight: 40, height: 40 }}
+      style={{ width: '100%', ...props.style }}
     />
   );
 }

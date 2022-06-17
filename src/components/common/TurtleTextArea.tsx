@@ -1,5 +1,5 @@
-import { Form } from "antd";
-import TextArea from "antd/lib/input/TextArea";
+import { Form } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 
 interface Props {
   name: string;
@@ -8,7 +8,13 @@ interface Props {
   rows?: number;
   required?: boolean;
 }
-function TurtleTextArea({ name, label, placeholder, rows = 14, required = false }: Props) {
+function TurtleTextArea({
+  name,
+  label,
+  placeholder,
+  rows = 14,
+  required = false,
+}: Props) {
   return (
     <Form.Item name={name} label={label}>
       <TextArea placeholder={placeholder} allowClear rows={rows} />

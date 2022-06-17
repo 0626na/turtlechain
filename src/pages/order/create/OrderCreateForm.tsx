@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-// antd
-import { Form, Col, Row, Input, message, Radio } from "antd";
-// api
-import { OrderItemShow } from "apis/orderAPI";
-import { t } from "i18next";
-import { storeState } from "store/storeState";
-import { useRecoilValue } from "recoil";
+import { t } from 'i18next';
+import { useCallback, useEffect, useState } from 'react';
+import { Form, Col, Row, Input, message, Radio } from 'antd';
+import { useRecoilValue } from 'recoil';
+import { OrderItemShow } from '@apis/orderAPI';
+import { storeState } from '@store/storeState';
 import {
   TurtleButton,
   TurtleDivider,
@@ -14,8 +12,8 @@ import {
   TurtleSearchInput,
   TurtleText,
   TurtleTextArea,
-} from "components/common";
-import { SearchProductModal, SearchVendorModal } from "components/combine";
+} from '@components/common';
+import { SearchProductModal, SearchVendorModal } from '@components/combine';
 
 interface Props {
   addItem: (item: OrderItemShow) => void;
@@ -78,7 +76,7 @@ function OrderCreateForm({ addItem }: Props) {
   return (
     <>
       <Form layout="vertical" form={form}>
-        <TurtleText>{t("order.enter info")}</TurtleText>
+        <TurtleText>{t('order.enter info')}</TurtleText>
         <Row gutter={32}>
           <Col span={7}>
             <Form.Item name="vendor_id" hidden>
@@ -90,11 +88,11 @@ function OrderCreateForm({ addItem }: Props) {
 
             <TurtleSearchInput // 거래처명 검색 Input
               name="vendor_name"
-              label={t("vendor.name")}
-              placeholder={t("placeholder.vendor name")}
+              label={t('vendor.name')}
+              placeholder={t('placeholder.vendor name')}
               onClick={() => {
                 if (!store.id) {
-                  message.warn("쇼핑몰을 선택해주세요.");
+                  message.warn('쇼핑몰을 선택해주세요.');
                   return;
                 }
                 setVendorModalVisible(true);
@@ -102,27 +100,27 @@ function OrderCreateForm({ addItem }: Props) {
             />
             <TurtleInput // 거래처 주소 Input
               name="vendor_address"
-              label={t("vendor.address")}
+              label={t('vendor.address')}
               disabled={true}
             />
             <TurtleInput // 거래처 휴대번호 Input
               name="vendor_phone"
-              label={t("vendor.phone")}
+              label={t('vendor.phone')}
               disabled={true}
             />
           </Col>
           <Col span={7}>
             <TurtleSearchInput
               name="product_name"
-              label={t("product.name")}
-              placeholder={t("placeholder.product name")}
+              label={t('product.name')}
+              placeholder={t('placeholder.product name')}
               onClick={() => {
                 if (!store.id) {
-                  message.warn("쇼핑몰을 선택해주세요.");
+                  message.warn('쇼핑몰을 선택해주세요.');
                   return;
                 }
-                if (!form.getFieldValue("vendor_id")) {
-                  message.warn("거래처를 선택해주세요.");
+                if (!form.getFieldValue('vendor_id')) {
+                  message.warn('거래처를 선택해주세요.');
                   return;
                 }
                 setProductModalVisible(true);
@@ -130,41 +128,45 @@ function OrderCreateForm({ addItem }: Props) {
             />
             <TurtleInput // 상품 바코드 Input
               name="product_code"
-              label={t("product.code")}
+              label={t('product.code')}
               disabled={true}
             />
             <TurtleInput // 상품 옵션 Input
               name="product_option"
-              label={t("product.option")}
+              label={t('product.option')}
               disabled={true}
             />
             <TurtleInput // 상품 공급가 Input
               name="price"
-              label={t("product.price")}
+              label={t('product.price')}
               disabled={true}
             />
             <TurtleInputNumber // 상품 발주수량 Input
               name="count"
-              label={t("product.count")}
+              label={t('product.count')}
               min={1}
             />
           </Col>
           <Col span={10}>
-            <Form.Item name="type" label={t("order.type.")} rules={[{ required: true }]}>
+            <Form.Item
+              name="type"
+              label={t('order.type.')}
+              rules={[{ required: true }]}
+            >
               <Radio.Group>
-                <Radio value="order">{t("order.type.order")}</Radio>
-                <Radio value="reserve">{t("order.type.reserved")}</Radio>
-                <Radio value="takeback">{t("order.type.take back")}</Radio>
-                <Radio value="exchange">{t("order.type.exchange")}</Radio>
-                <Radio value="sample">{t("order.type.sample")}</Radio>
-                <Radio value="pickup">{t("order.type.pickup")}</Radio>
-                <Radio value="extra">{t("order.type.etc")}</Radio>
+                <Radio value="order">{t('order.type.order')}</Radio>
+                <Radio value="reserve">{t('order.type.reserved')}</Radio>
+                <Radio value="takeback">{t('order.type.take back')}</Radio>
+                <Radio value="exchange">{t('order.type.exchange')}</Radio>
+                <Radio value="sample">{t('order.type.sample')}</Radio>
+                <Radio value="pickup">{t('order.type.pickup')}</Radio>
+                <Radio value="extra">{t('order.type.etc')}</Radio>
               </Radio.Group>
             </Form.Item>
             <TurtleTextArea // 주문 메모 TextArea
               name="memo"
-              label={t("order.memo")}
-              placeholder={t("placeholder.memo")}
+              label={t('order.memo')}
+              placeholder={t('placeholder.memo')}
             />
           </Col>
         </Row>
@@ -178,7 +180,7 @@ function OrderCreateForm({ addItem }: Props) {
               });
             }}
           >
-            {t("button.add")}
+            {t('button.add')}
           </TurtleButton>
         </Row>
       </Form>
@@ -197,7 +199,7 @@ function OrderCreateForm({ addItem }: Props) {
         closeModal={() => {
           setProductModalVisible(false);
         }}
-        vendorId={form.getFieldValue("vendor_id")}
+        vendorId={form.getFieldValue('vendor_id')}
         onClickSelect={selectProduct}
       />
     </>

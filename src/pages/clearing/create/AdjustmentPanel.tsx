@@ -1,14 +1,22 @@
-import { t } from "i18next";
-import { Collapse, CollapsePanelProps, InputNumber, Row, Space, Table, Typography } from "antd";
-import { TurtleButton, TurtleQuestionTooltip } from "components/common";
-import { clearingAPI } from "apis";
-import { useQuery } from "react-query";
-import { clearingCartState } from "store/clearingCartState";
-import { useRecoilState } from "recoil";
-import { useEffect, useMemo, useState } from "react";
-import { BalanceShow } from "apis/clearingAPI";
-import { pricePattern } from "utils/pattern";
-import moment from "moment";
+import moment from 'moment';
+import { t } from 'i18next';
+import {
+  Collapse,
+  CollapsePanelProps,
+  InputNumber,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from 'antd';
+import { useQuery } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { TurtleButton, TurtleQuestionTooltip } from '@components/common';
+import { clearingCartState } from '@store/clearingCartState';
+import clearingAPI from '@apis/clearingAPI';
+import { pricePattern } from '@utils/pattern';
+import { storeState } from '@store/storeState';
+import useClearingCart from '@hooks/useClearingCart';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -16,81 +24,74 @@ interface Props extends CollapsePanelProps {
 }
 
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
+  const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const [balanceList, setBalanceList] = useState<BalanceShow[]>([]);
+  const { adjustmentSupplyAmount } = useClearingCart();
 
-  const getBalanceQuery = useQuery(
-    ["getBalance"],
+  const getAdjustmentBalanceQuery = useQuery(
+    ['getAdjustmentBalance'],
     () =>
-      clearingAPI.getBalance({
-        warehousing_sheet_id: cart.selectedKeys
-          .map((id) => String(id))
-          .reduce((cur, acc) => cur + acc + "@", "")
-          .slice(0, -1),
+      clearingAPI.getAdjustmentBalance({
+        rt_store_id: store.id!,
+        vendor_id_list: cart.warehousingBalanceList
+          .filter((item) => item.clearing_amount !== 0)
+          .map((item) => item.vendor_info.id),
       }),
     {
-      enabled: activeKey === "2",
+      enabled: activeKey === '2',
       onSuccess: (data) => {
-        setBalanceList(
-          data.data.item_list.map((balanceItem) => ({
-            ...balanceItem,
-            warehousing_amount: cart.warehousing_item_list
-              .filter((warehousingItem) => balanceItem.vendor_info.id === warehousingItem.vendor_id)
-              .map((warehousingItem) => warehousingItem.deposit_price)
+        setCart((cart) => ({
+          ...cart,
+          adjustmentBalanceList: data.item_list.map((adjustmentItem) => ({
+            ...adjustmentItem,
+            max_clearing_amount: cart.warehousingBalanceList
+              .filter(
+                (warehousingItem) =>
+                  warehousingItem.vendor_info.id ===
+                  adjustmentItem.vendor_info.id,
+              )
+              .map((warehousingItem) => warehousingItem.clearing_amount)
               .reduce((cur, acc) => cur + acc, 0),
           })),
-        );
+        }));
       },
     },
   );
-
-  // 차감 총 금액 판넬안에서 바뀌게 하기위함
-  const totalBalance = useMemo(
-    () => balanceList.map((item) => item.subtract_price ?? 0).reduce((cur, acc) => cur + acc, 0),
-    [balanceList],
-  );
-
-  // cart에 차감금액이 없을 시 balanceList 초기화 (totalBalance 초기화 위함)
-  useEffect(() => {
-    if (cart.subtract_item_list.length === 0) {
-      setBalanceList([]);
-    }
-  }, [cart.subtract_item_list]);
 
   return (
     <Collapse.Panel
       {...props}
       extra={
-        <Typography.Text style={{ color: "#5B5D63" }}>
-          차감 총 금액: {totalBalance.toLocaleString()} 원
+        <Typography.Text style={{ color: '#5B5D63' }}>
+          {`차감 총 금액: ${Math.round(
+            adjustmentSupplyAmount * 1.1,
+          ).toLocaleString()} 원 (부가세 ${Math.round(
+            adjustmentSupplyAmount * 0.1,
+          ).toLocaleString()}원 포함)`}
         </Typography.Text>
       }
     >
       <Table
         size="small"
         pagination={false}
-        loading={getBalanceQuery.isLoading}
-        dataSource={balanceList}
+        loading={getAdjustmentBalanceQuery.isLoading}
+        dataSource={cart.adjustmentBalanceList}
         rowKey="id"
         columns={[
           {
             ellipsis: true,
-            title: "등록 날짜",
-            render: (_, record) => moment(record.created_time).format("YYYY-MM-DD"),
+            title: '등록 날짜',
+            render: (_, record) =>
+              moment(record.created_time).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,
-            title: t("vendor.name"),
+            title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: "당일 입고 금액",
-            render: (_, record) => record.warehousing_amount?.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: "사용 가능 금액",
+            title: '사용 가능 금액',
             render: (_, record) => record.overpaid_amount.toLocaleString(),
           },
           {
@@ -105,18 +106,28 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               <Space>
                 <InputNumber
                   size="small"
-                  formatter={(value) => `${value}`.replace(pricePattern, ",")}
+                  formatter={(value) => `${value}`.replace(pricePattern, ',')}
                   placeholder="금액 입력"
                   step={1000}
                   min={0}
-                  max={Math.min(record.overpaid_amount, record.warehousing_amount ?? 0)}
-                  value={record.subtract_price}
+                  max={Math.min(
+                    record.overpaid_amount,
+                    record.max_clearing_amount ?? 0,
+                  )}
+                  value={record.clearing_amount}
                   onChange={(value) => {
-                    setBalanceList(
-                      balanceList.map((item) =>
-                        item.id === record.id ? { ...item, subtract_price: value } : item,
+                    setCart((cart) => ({
+                      ...cart,
+                      adjustmentBalanceList: cart.adjustmentBalanceList.map(
+                        (item) =>
+                          item.id === record.id
+                            ? {
+                                ...item,
+                                clearing_amount: value,
+                              }
+                            : item,
                       ),
-                    );
+                    }));
                   }}
                 />
               </Space>
@@ -126,19 +137,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       />
       <Row justify="end" align="middle" style={{ marginTop: 16 }}>
         <TurtleButton //
-          children={t("button.next step")}
+          children={t('button.next step')}
           onClick={() => {
-            setCart({
-              ...cart,
-              subtract_item_list: balanceList
-                .filter((item) => !!item.subtract_price)
-                .map((item) => ({
-                  ws_store_id: item.vendor_info.ws_store_id,
-                  vendor_id: item.vendor_info.id,
-                  price: item.subtract_price!,
-                  is_vat_included: item.vendor_info.is_vat_included,
-                })),
-            });
             clickNext();
           }}
         />

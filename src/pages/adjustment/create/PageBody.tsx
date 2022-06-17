@@ -1,39 +1,35 @@
-import { t } from "i18next";
-import { Popconfirm, message, notification, Menu, Tabs } from "antd";
-import { adjustmentAPI } from "apis";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useMutation } from "react-query";
-import { AxiosError } from "axios";
-import { storeState } from "store/storeState";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { MainContent, MenuBar, BottomBar } from "layouts/main";
-import { TurtleButton, TurtleDropdown } from "components/common";
-import { useStoreExist } from "hooks";
-import { adjustmentCartState } from "store/adjustmentCartState";
-import AddProductModal from "./AddProductModal";
-import LoadWarehousingModal from "./LoadWarehousingModal";
-import SuccessTab from "./SuccessTab";
-import { AdjustmentItem } from "apis/adjustmentAPI";
+import { t } from 'i18next';
+import { Popconfirm, message, Menu, Tabs } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMutation } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { MainContent, MenuBar, BottomBar } from '@layout/main';
+import adjustmentAPI, { AdjustmentItem } from '@apis/adjustmentAPI';
+import { storeState } from '@store/storeState';
+import { adjustmentCartState } from '@store/adjustmentCartState';
+import { TurtleButton, TurtleDropdown } from '@components/common';
+import { useStoreExist } from '@hooks/index';
+import LoadWarehousingModal from './LoadWarehousingModal';
+import SuccessTab from './SuccessTab';
+import AddProductModal from './AddProductModal';
+import { useHistory } from 'react-router-dom';
 
 const PageBody = function () {
+  const history = useHistory();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(adjustmentCartState);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
-  const [loadWarehousingModalVisible, setLoadWarehousingModalVisible] = useState(false);
+  const [loadWarehousingModalVisible, setLoadWarehousingModalVisible] =
+    useState(false);
   const index = useRef(0);
 
   // 매입조정 생성 요성
-  const createQuery = useMutation(["createAdjustment"], adjustmentAPI.create, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data.msg);
-    },
-    onSuccess: (data) => {
+  const createQuery = useMutation(['createAdjustment'], adjustmentAPI.create, {
+    onSuccess: () => {
       resetStates();
-      notification.open({
-        type: "success",
-        message: t("message.success create adjustment"),
-      });
+      message.success(t('message.success create adjustment'));
+      history.push('/adjustment/list');
     },
   });
 
@@ -63,7 +59,7 @@ const PageBody = function () {
   const validateSuccessList = useCallback(() => {
     let isValid = true;
     cart.successList.forEach((item) => {
-      if (item.type === "" || item.product_count === 0) {
+      if (item.type === '' || item.product_count === 0) {
         isValid = false;
         return;
       }
@@ -74,7 +70,7 @@ const PageBody = function () {
   // 매입조정 등록하기 버튼 클릭
   const onClickCreate = useCallback(() => {
     if (!validateSuccessList()) {
-      message.warn("매입조정 수량, 종류를 확인해주세요.");
+      message.warn('매입조정 수량, 종류를 확인해주세요.');
       return;
     }
     createQuery.mutate({
@@ -90,6 +86,7 @@ const PageBody = function () {
         memo: item.memo,
       })),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store.id, cart, validateSuccessList]);
 
   const menu = (
@@ -101,7 +98,7 @@ const PageBody = function () {
           setLoadWarehousingModalVisible(true);
         }}
       >
-        {t("button.load warehousing")}
+        {t('button.load warehousing')}
       </Menu.Item>
       <Menu.Item
         key="2"
@@ -110,7 +107,7 @@ const PageBody = function () {
           setAddProductModalVisible(true);
         }}
       >
-        {t("button.add reserve product")}
+        {t('button.add reserve product')}
       </Menu.Item>
     </Menu>
   );
@@ -121,13 +118,13 @@ const PageBody = function () {
         <TurtleDropdown
           menu={menu} //
         >
-          {t("button.add adjustment")}
+          {t('button.add adjustment')}
         </TurtleDropdown>
       </MenuBar>
 
-      <MainContent title={t("adjustment.preview")}>
+      <MainContent title={t('adjustment.preview')}>
         {/* 성공 탭 */}
-        <Tabs defaultActiveKey="1" size="large" style={{ width: "100%" }}>
+        <Tabs defaultActiveKey="1" size="large" style={{ width: '100%' }}>
           <SuccessTab tab={`성공(${cart.successList.length})`} key="1" />
         </Tabs>
 
@@ -152,9 +149,9 @@ const PageBody = function () {
 
       <BottomBar>
         <Popconfirm
-          title={t("description.really register")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really register')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={onClickCreate}
         >
           <TurtleButton
@@ -162,7 +159,7 @@ const PageBody = function () {
             disabled={cart.successList.length === 0}
             loading={createQuery.isLoading}
           >
-            {t("button.create adjustment")}
+            {t('button.create adjustment')}
           </TurtleButton>
         </Popconfirm>
       </BottomBar>

@@ -1,8 +1,8 @@
-import DaumPostcode, { Address } from "react-daum-postcode";
+import DaumPostcode, { Address } from 'react-daum-postcode';
 // antd
-import { Modal, Button } from "antd";
+import { Modal, Button } from 'antd';
 // lang
-import { t } from "i18next";
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -13,16 +13,17 @@ interface Props {
 function DaumPostcodeModal({ visible, onClose, onGetAddress }: Props) {
   const handleComplete = (data: Address) => {
     let fullAddress = data.address;
-    let extraAddress = "";
+    let extraAddress = '';
 
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
         extraAddress += data.bname;
       }
-      if (data.buildingName !== "") {
-        extraAddress += extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      if (data.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
       }
-      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
     }
 
     onGetAddress && onGetAddress(fullAddress);
@@ -34,10 +35,10 @@ function DaumPostcodeModal({ visible, onClose, onGetAddress }: Props) {
       closable={false}
       visible={visible}
       destroyOnClose={true}
-      title={t("find address")}
+      title={t('find address')}
       footer={[
         <Button key="close" onClick={onClose}>
-          {t("close")}
+          {t('close')}
         </Button>,
       ]}
     >

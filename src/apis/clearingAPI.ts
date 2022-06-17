@@ -1,4 +1,4 @@
-import { v2Axios } from "./index";
+import { v2Axios } from '.';
 
 // 잔여 매입조정 금액
 export interface BalanceShow {
@@ -23,16 +23,36 @@ export interface BalanceShow {
   subtract_price?: number;
 }
 
+export interface Balance {
+  id: number;
+  original_id: number;
+  rt_store_id: number;
+  process_type: 'warehousing' | 'adjustment' | 'reserve_payment';
+  created_time: string;
+  unpaid_amount: number;
+  overpaid_amount: number;
+  reserve_amount: number;
+  vendor_info: {
+    id: number;
+    vendor_name: string;
+  };
+  // 당일 결제 공급가 합계
+  clearing_amount: number;
+  // 매입 결제 대기 최대 결제 가능 금액
+  max_clearing_amount: number;
+}
+
 // 정산서
 export interface ClearingSheetShow {
   id: number;
   created_time: string;
-  status: "request" | "pending" | "complete";
+  status: 'request' | 'pending' | 'complete';
   store_id: number;
   store_name: string;
   request_date: string;
   complete_date: string | null;
   total_clearing_amount: number;
+  total_deposit_amount: number;
 }
 
 // 정산 아이템
@@ -71,12 +91,66 @@ export interface ClearingItemShow {
   };
 }
 
+/*
+ *   입고 결제 대기 거래처별 잔액 요청
+ */
+
+export interface RequestGetWarehousingBalance {
+  tab: 'unpaid_vendor';
+  rt_store_id: number;
+}
+
+export interface ResponseGetWarehousingBalance {
+  msg: string;
+  data: {
+    item_list: Balance[];
+    total_count: number;
+  };
+}
+
+const getWarehousingBalance = async function (
+  query: RequestGetWarehousingBalance,
+) {
+  let url = 'clearing/balance?';
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetWarehousingBalance>(url);
+  return response.data.data;
+};
+
+/*
+ *  매입조정 결제대기 거래처별 잔액 요청
+ */
+export interface RequestGetAdjustmentBalance {
+  rt_store_id: number;
+  vendor_id_list: number[];
+}
+
+export interface ResponseGetAdjustmentBalance {
+  msg: string;
+  data: {
+    item_list: Balance[];
+    total_count: number;
+  };
+}
+
+const getAdjustmentBalance = async function (
+  query: RequestGetAdjustmentBalance,
+) {
+  let url = `clearing/balance?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseGetAdjustmentBalance>(url);
+  return response.data.data;
+};
+
 // Request: 정산서 생성
 export interface RequestCreateSheet {
   store_id?: number;
-  credit_type: "general";
+  credit_type: 'general';
   store_name?: string;
-  total_clearing_amount: number;
 }
 
 // Response: 정산서 생성
@@ -90,30 +164,18 @@ export interface RequestCreateItem {
   sheet_id?: number;
   rt_store_id?: number;
   rt_store_name?: string;
-  warehousing_item_list: Array<{
-    sheet_id: number;
-    warehousing_item_id: number;
-    ws_store_id: number;
+  clearing_amount_list: {
     vendor_id: number;
-    is_reserved: boolean;
-    total_price: number;
-    deposit_price: number;
-    supply_price: number;
-    vat_price: number;
-  }>;
-  subtract_item_list: Array<{
-    ws_store_id: number;
+    clearing_amount: number;
+  }[];
+  subtract_amount_list: {
     vendor_id: number;
-    price: number;
-    is_vat_included: boolean;
-  }>;
-  reserve_item_list: Array<{
-    adjustment_item_id: number;
-    ws_store_id: number;
+    subtract_amount: number;
+  }[];
+  reserve_amount_list: {
     vendor_id: number;
-    price: number;
-    is_vat_included: boolean;
-  }>;
+    reserve_amount: number;
+  }[];
 }
 
 // Response: 정산 상품 생성
@@ -122,10 +184,16 @@ export interface ResponseCreateItem {
 }
 
 // 정산서 생성 요청
-const create = async function (data: { sheet: RequestCreateSheet; item: RequestCreateItem }) {
-  let url = "clearing/sheet";
-  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(url, data.sheet);
-  url = "clearing/item";
+const create = async function (data: {
+  sheet: RequestCreateSheet;
+  item: RequestCreateItem;
+}) {
+  let url = 'clearing/sheet';
+  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
+    url,
+    data.sheet,
+  );
+  url = 'clearing/item';
   const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
     ...data.item,
     sheet_id: sheetResponse.data.data,
@@ -141,7 +209,7 @@ export interface RequestGetBalance {
   start_date?: string;
   end_date?: string;
   // 페이지 구분
-  tab?: "balance" | "balance_detail" | "adjustment";
+  tab?: 'balance' | 'balance_detail' | 'adjustment';
   // 정산에서 매입차감 위해 조회할 때
   warehousing_sheet_id?: string;
   // 매입조정 상세 조회할 때
@@ -159,7 +227,7 @@ export interface ResponseGetBalance {
 
 // 매입 결제대기 항목 요청
 const getBalance = async function (query: RequestGetBalance) {
-  let url = "clearing/balance?";
+  let url = 'clearing/balance?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -170,8 +238,8 @@ const getBalance = async function (query: RequestGetBalance) {
 // Request: 정산서 조회
 export interface RequestGetSheet {
   store_id?: number;
-  credit_type: "general";
-  date_filter?: "request_date" | "complete_date";
+  credit_type: 'general';
+  date_filter?: 'request_date' | 'complete_date';
   start_date: string;
   end_date: string;
   page?: number;
@@ -204,7 +272,7 @@ export interface ResponseGetSheet {
 
 // 정산서 조회 요청
 const getSheet = async function (query: RequestGetSheet) {
-  let url = "clearing/sheet?";
+  let url = 'clearing/sheet?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -249,7 +317,7 @@ export interface ResponseGetItem {
 
 // 정산 아이템 조회 요청
 const getItem = async function (query: RequestGetItem) {
-  let url = "clearing/item?";
+  let url = 'clearing/item?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
@@ -286,8 +354,10 @@ const getItemDetail = async function (query: RequestGetItemDetail) {
 };
 
 const clearingAPI = {
-  create,
+  getWarehousingBalance,
+  getAdjustmentBalance,
   getBalance,
+  create,
   getSheet,
   updateSheet,
   getItem,

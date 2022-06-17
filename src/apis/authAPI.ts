@@ -1,4 +1,4 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 // 로그인
 interface RequestLogin {
@@ -11,7 +11,7 @@ interface ResponseLogin {
 }
 
 const login = async function (data: RequestLogin) {
-  const url = "auth/login";
+  const url = 'auth/login';
   const response = await v2Axios.post<ResponseLogin>(url, data);
   return response.data;
 };
@@ -29,7 +29,7 @@ interface ResponseCreatePhoneOTP {
 }
 
 const createPhoneOTP = async function (data: RequestCreatePhoneOTP) {
-  const url = "/auth/phone_otp";
+  const url = '/auth/phone_otp';
   const response = await v2Axios.post<ResponseCreatePhoneOTP>(url, data);
   return response.data.data;
 };
@@ -45,7 +45,7 @@ interface ResponseVerifyPhoneOTP {
 }
 
 const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
-  const url = "/auth/phone_otp/verify";
+  const url = '/auth/phone_otp/verify';
   const response = await v2Axios.post<ResponseVerifyPhoneOTP>(url, data);
   return response.data.data;
 };

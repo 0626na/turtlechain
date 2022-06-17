@@ -1,4 +1,4 @@
-import { Badge, Typography } from "antd";
+import { Badge, Typography } from 'antd';
 
 interface Props {
   count: number;
@@ -12,13 +12,15 @@ function TurtlePanelHeader({ count, activeKey, title }: Props) {
       <Badge
         count={count}
         style={{
-          backgroundColor: Number(activeKey) >= count ? "#32ACDD" : "#E2E5E9",
-          color: Number(activeKey) >= count ? "" : "#A1A2A6",
+          backgroundColor: Number(activeKey) >= count ? '#32ACDD' : '#E2E5E9',
+          color: Number(activeKey) >= count ? '' : '#A1A2A6',
           fontWeight: 500,
-          marginTop: "1.5px",
+          marginTop: '1.5px',
         }}
       />
-      <Typography.Text style={{ marginLeft: 8, fontSize: 16 }}>{title}</Typography.Text>
+      <Typography.Text style={{ marginLeft: 8, fontSize: 16 }}>
+        {title}
+      </Typography.Text>
     </>
   );
 }

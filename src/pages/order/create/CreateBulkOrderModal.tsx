@@ -1,16 +1,22 @@
-import { message, Modal, Popconfirm, Row, Space, Table, Typography } from "antd";
-import Upload, { RcFile } from "antd/lib/upload";
-import { excelAPI } from "apis";
-import { OrderProduct } from "apis/excelAPI";
-import { OrderItemShow } from "apis/orderAPI";
-import { AxiosError } from "axios";
-import { SearchFilter } from "components/combine";
-import { TurtleButton, TurtleButtonSub, TurtleInfo } from "components/common";
-import { t } from "i18next";
-import { useCallback, useState } from "react";
-import { useMutation } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
+import { t } from 'i18next';
+import { useCallback, useState } from 'react';
+import { useMutation } from 'react-query';
+import { useRecoilValue } from 'recoil';
+import {
+  message,
+  Modal,
+  Popconfirm,
+  Row,
+  Space,
+  Table,
+  Typography,
+} from 'antd';
+import Upload, { RcFile } from 'antd/lib/upload';
+import excelAPI, { OrderProduct } from '@apis/excelAPI';
+import { OrderItemShow } from '@apis/orderAPI';
+import { SearchFilter } from '@components/combine';
+import { TurtleButton, TurtleButtonSub, TurtleInfo } from '@components/common';
+import { storeState } from '@store/storeState';
 
 interface Props {
   visible: boolean;
@@ -30,10 +36,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
   const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
   const [failList, setFailList] = useState<Array<OrderProduct>>([]);
 
-  const parseOrderQuery = useMutation("parseOrder", excelAPI.parseOrder, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
+  const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
     onSuccess: (data) => {
       if (data.data.error) {
         message.error(data.data.error);
@@ -48,8 +51,8 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
 
   const loadFile = (file: RcFile) => {
     const form = new FormData();
-    form.append("files", file);
-    form.append("rt_store_id", store.id?.toString() ?? "");
+    form.append('files', file);
+    form.append('rt_store_id', store.id?.toString() ?? '');
     parseOrderQuery.mutate(form);
   };
 
@@ -69,13 +72,13 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
     ({ type, search_string }: SearchState) => {
       setAllList(
         [...successList, ...failList].filter((item) => {
-          if (type === "name") {
+          if (type === 'name') {
             return item.product_name.includes(search_string);
           }
-          if (type === "vendor_product_name") {
+          if (type === 'vendor_product_name') {
             return item.vendor_product_name.includes(search_string);
           }
-          if (type === "vendor_name") {
+          if (type === 'vendor_name') {
             return item.vendor_name.includes(search_string);
           }
           return (
@@ -91,7 +94,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
 
   const onClickAdd = useCallback(() => {
     if (successList.length === 0) {
-      message.warn("추가할 상품이 없습니다.");
+      message.warn('추가할 상품이 없습니다.');
     }
     successList.forEach((item) => {
       addItem({
@@ -119,14 +122,16 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
       width="80%"
       title={
         <>
-          <span style={{ fontSize: "18px" }}>{t("order.upload")}</span>
-          <TurtleInfo>대량 업로드 파일은 .CSV .XLS 또는 .XLSX만 사용할 수 있습니다.</TurtleInfo>
+          <span style={{ fontSize: '18px' }}>{t('order.upload')}</span>
+          <TurtleInfo>
+            대량 업로드 파일은 .CSV .XLS 또는 .XLSX만 사용할 수 있습니다.
+          </TurtleInfo>
         </>
       }
       visible={visible}
       onCancel={onCloseModal}
       footer={false}
-      bodyStyle={{ height: "750px", overflowY: "auto" }}
+      bodyStyle={{ height: '750px', overflowY: 'auto' }}
     >
       <Space>
         <Typography.Text>주문서 업로드 | </Typography.Text>
@@ -147,12 +152,13 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
           <TurtleButtonSub>파일 선택하기</TurtleButtonSub>
         </Upload>
       </Space>
-      <Row style={{ padding: "1rem 0" }}>
+      <Row style={{ padding: '1rem 0' }}>
         <SearchFilter type="product" onSearch={searchAllList} />
       </Row>
       <Row>
         <TurtleInfo>
-          붉은 색으로 표시된 "주문 불가" 상품은 등록되지 않은 상품으로 오늘 주문에서 제외됩니다.
+          붉은 색으로 표시된 "주문 불가" 상품은 등록되지 않은 상품으로 오늘
+          주문에서 제외됩니다.
         </TurtleInfo>
       </Row>
       <Table
@@ -160,111 +166,119 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
         loading={parseOrderQuery.isLoading}
         dataSource={allList}
         rowKey={(record) => record.product_code}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
-        style={{ height: "485px" }}
+        pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+        style={{ height: '485px' }}
         columns={[
           {
             ellipsis: true,
-            title: "거래처명",
+            title: '거래처명',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.vendor_name}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "거래처 주소",
+            title: '거래처 주소',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.vendor_address}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "휴대번호",
+            title: '휴대번호',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.vendor_phone}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "상품 바코드",
+            title: '상품 바코드',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.product_code}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "상품명",
+            title: '상품명',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.product_name}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "거래처 상품명",
+            title: '거래처 상품명',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.vendor_product_name}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "옵션",
+            title: '옵션',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>{record.option}</span>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
+                {record.option}
+              </span>
             ),
           },
           {
             ellipsis: true,
-            title: "발주수량",
+            title: '발주수량',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>{record.count}</span>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
+                {record.count}
+              </span>
             ),
           },
           {
             ellipsis: true,
-            title: "공급가",
+            title: '공급가',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
                 {record.product_price}
               </span>
             ),
           },
           {
             ellipsis: true,
-            title: "주문종류",
+            title: '주문종류',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>{record.type}</span>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
+                {record.type}
+              </span>
             ),
           },
           {
             ellipsis: true,
-            title: "메모",
+            title: '메모',
             render: (_, record) => (
-              <span style={record.product_id === 0 ? { color: "red" } : {}}>{record.memo}</span>
+              <span style={record.product_id === 0 ? { color: 'red' } : {}}>
+                {record.memo}
+              </span>
             ),
           },
         ]}
       />
-      <Row justify="end" style={{ padding: "1rem 0px" }}>
+      <Row justify="end" style={{ padding: '1rem 0px' }}>
         <Popconfirm
-          title={t("description.really add")}
-          okText={t("yes")}
-          cancelText={t("no")}
+          title={t('description.really add')}
+          okText={t('yes')}
+          cancelText={t('no')}
           onConfirm={onClickAdd}
         >
           <TurtleButton type="primary" disabled={fileList.length === 0}>
-            {t("button.add order")}
+            {t('button.add order')}
           </TurtleButton>
         </Popconfirm>
       </Row>

@@ -1,6 +1,8 @@
-import { t } from "i18next";
-import moment from "moment";
-import { useEffect, useCallback, useState } from "react";
+import moment from 'moment';
+import { t } from 'i18next';
+import { useEffect, useCallback, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { useMutation, useQuery } from 'react-query';
 import {
   Table,
   Tag,
@@ -12,17 +14,15 @@ import {
   DatePicker,
   Divider,
   message,
-  notification,
-} from "antd";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { useMutation, useQuery } from "react-query";
-import { AxiosError } from "axios";
-import { MainContent, MenuBar } from "layouts/main";
-import { TurtleIcon, TurtleTableTitle } from "components/common";
-import { warehousingAPI } from "apis";
-import { RequestGetSheet, WarehousingSheet } from "apis/warehousingAPI";
-import WarehousingDetailModal from "./DetailModal";
+} from 'antd';
+import { storeState } from '@store/storeState';
+import { MainContent, MenuBar } from '@layout/main';
+import { TurtleIcon, TurtleTableTitle } from '@components/common';
+import warehousingAPI, {
+  RequestGetSheet,
+  WarehousingSheet,
+} from '@apis/warehousingAPI';
+import WarehousingDetailModal from './DetailModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -30,42 +30,40 @@ function PageBody() {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     rt_store_id: -1,
-    is_confirmed: "",
-    start_date: moment().subtract(1, "months").format("YYYY-MM-DD"),
-    end_date: moment().format("YYYY-MM-DD"),
+    is_confirmed: '',
+    start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+    end_date: moment().format('YYYY-MM-DD'),
     page: 1,
   });
 
   // 입고장 리스트 요청
   const getSheetQuery = useQuery(
-    ["getWarehousingSheet", searchQuery],
+    ['getWarehousingSheet', searchQuery],
     () => warehousingAPI.getSheet(searchQuery),
     {
       enabled: searchQuery.rt_store_id !== -1,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
     },
   );
 
   // 입고장 수정, 삭제 요청
-  const updateSheetQuery = useMutation(["updateWarehousingSheet"], warehousingAPI.updateSheet, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
+  const updateSheetQuery = useMutation(
+    ['updateWarehousingSheet'],
+    warehousingAPI.updateSheet,
+    {
+      onSuccess: () => {
+        message.success(t('message.success update'));
+        setSearchQuery({ ...searchQuery, page: 1 });
+        getSheetQuery.refetch();
+      },
     },
-    onSuccess: () => {
-      notification.open({
-        type: "success",
-        message: t("message.success delete warehousing"),
-      });
-      setSearchQuery({ ...searchQuery, page: 1 });
-      getSheetQuery.refetch();
-    },
-  });
+  );
 
   // 쇼핑몰 바뀔때 마다 입고서 리스트 재요청
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id ?? -1 }));
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id ?? -1,
+    }));
   }, [store.id]);
 
   // 행 선택
@@ -78,13 +76,13 @@ function PageBody() {
     <>
       <MenuBar />
 
-      <MainContent title={t("warehousing.lists")}>
+      <MainContent title={t('warehousing.lists')}>
         <Table
           size="small"
           dataSource={getSheetQuery.data?.sheet_list}
           loading={getSheetQuery.isLoading}
           pagination={false}
-          scroll={{ y: "auto" }}
+          scroll={{ y: 'auto' }}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
@@ -101,9 +99,9 @@ function PageBody() {
                   setSearchQuery({ ...searchQuery, is_confirmed });
                 }}
               >
-                <Select.Option value="">{t("all")}</Select.Option>
-                <Select.Option value={0}>{t("waiting")}</Select.Option>
-                <Select.Option value={1}>{t("confirmed")}</Select.Option>
+                <Select.Option value="">{t('all')}</Select.Option>
+                <Select.Option value={0}>{t('waiting')}</Select.Option>
+                <Select.Option value={1}>{t('confirmed')}</Select.Option>
               </Select>
 
               <Divider type="vertical" style={{ margin: 0 }} />
@@ -111,7 +109,10 @@ function PageBody() {
               <DatePicker.RangePicker
                 size="small"
                 allowClear={false}
-                value={[moment(searchQuery.start_date), moment(searchQuery.end_date)]}
+                value={[
+                  moment(searchQuery.start_date),
+                  moment(searchQuery.end_date),
+                ]}
                 onChange={(_, [start_date, end_date]) => {
                   setSearchQuery({ ...searchQuery, start_date, end_date });
                 }}
@@ -135,56 +136,81 @@ function PageBody() {
             {
               ellipsis: true,
               width: 100,
-              align: "center",
-              title: t("progress"),
+              align: 'center',
+              title: t('progress'),
               render: (_, record) => {
                 const { is_confirmed } = record;
-                const color = is_confirmed ? "geekblue" : "orange";
-                const text = is_confirmed ? t("confirmed") : t("waiting");
+                const color = is_confirmed ? 'geekblue' : 'orange';
+                const text = is_confirmed ? t('confirmed') : t('waiting');
                 return <Tag color={color}>{text}</Tag>;
               },
             },
             {
               ellipsis: true,
-              align: "center",
-              title: t("warehousing.date"),
+              align: 'center',
+              title: t('warehousing.date'),
               render: (_, record) => record.created_date,
             },
             {
               ellipsis: true,
-              align: "center",
-              title: t("warehousing.total count"),
+              align: 'right',
+              title: t('warehousing.total count'),
               render: (_, record) => record.total_item_count.toLocaleString(),
             },
             {
               ellipsis: true,
-              align: "center",
-              title: t("total supply price"),
-              render: (_, record) => record.total_price.toLocaleString(),
+              align: 'right',
+              title: t('product.supply amount'),
+              render: (_, record) => record.total_amount.toLocaleString(),
             },
             {
               ellipsis: true,
-              align: "center",
+              align: 'right',
+              title: t('product.vat amount'),
+              render: (_, record) => record.total_vat_amount.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              align: 'center',
               render: (_, record) => (
                 <Space>
                   {!record.is_confirmed && (
-                    <Popconfirm
-                      title={t("description.really delete")}
-                      okText={t("yes")}
-                      cancelText={t("no")}
-                      onConfirm={(e) => {
-                        e?.stopPropagation();
-                        updateSheetQuery.mutate({
-                          ...record,
-                          is_inactive: true,
-                        });
-                      }}
-                      onCancel={(e) => {
-                        e?.stopPropagation();
-                      }}
-                    >
-                      <TurtleIcon type="delete" />
-                    </Popconfirm>
+                    <>
+                      <Popconfirm
+                        title={t('description.really confirmed')}
+                        okText={t('yes')}
+                        cancelText={t('no')}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          updateSheetQuery.mutate({
+                            id: record.id,
+                            is_confirmed: true,
+                          });
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                      >
+                        <TurtleIcon type="check" />
+                      </Popconfirm>
+                      <Popconfirm
+                        title={t('description.really delete')}
+                        okText={t('yes')}
+                        cancelText={t('no')}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          updateSheetQuery.mutate({
+                            id: record.id,
+                            is_inactive: true,
+                          });
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                      >
+                        <TurtleIcon type="delete" />
+                      </Popconfirm>
+                    </>
                   )}
                 </Space>
               ),

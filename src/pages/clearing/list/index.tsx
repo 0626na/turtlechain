@@ -1,17 +1,17 @@
-import { Helmet } from "react-helmet";
-import { t } from "i18next";
-import { PageHeader } from "layouts/main";
-import PageBody from "./PageBody";
+import { Helmet } from 'react-helmet';
+import { t } from 'i18next';
+import { PageHeader } from '@layout/main';
+import PageBody from './PageBody';
 
 function ClearingListPage() {
-  const title = `${t("turtlechain")} - ${t("clearing.list")}`;
+  const title = `${t('turtlechain')} - ${t('clearing.list')}`;
 
   return (
     <>
       <Helmet title={title} />
       <PageHeader
-        title={t("clearing.list")}
-        breadcrumbList={[t("clearing.management"), t("clearing.list")]}
+        title={t('clearing.list')}
+        breadcrumbList={[t('clearing.management'), t('clearing.list')]}
       />
       <PageBody />
     </>

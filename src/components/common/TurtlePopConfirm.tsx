@@ -1,5 +1,5 @@
-import { t } from "i18next";
-import { Popconfirm } from "antd";
+import { t } from 'i18next';
+import { Popconfirm } from 'antd';
 
 interface Props {
   title: React.ReactNode;
@@ -17,8 +17,8 @@ function TurtlePopConfirm({ title, onConfirm, children }: Props) {
       <Popconfirm
         title={<div style={{ paddingRight: 22 }}>{title}</div>}
         icon=""
-        okText={t("button.ok")}
-        cancelText={t("button.cancel")}
+        okText={t('button.ok')}
+        cancelText={t('button.cancel')}
         onConfirm={onConfirm}
       >
         {children}

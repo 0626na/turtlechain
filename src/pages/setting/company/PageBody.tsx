@@ -1,30 +1,35 @@
-import { Button, Form, Input, message, Row, Select, Typography, Upload } from "antd";
-import { retailerCompanyAPI } from "apis";
-import { AxiosError } from "axios";
-import { DaumPostcodeModal } from "components/combine";
-import { TurtleButton, TurtleButtonSub, TurtleCardSetting } from "components/common";
-import { t } from "i18next";
-import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { bizNumPattern } from "utils/pattern";
+import { t } from 'i18next';
+import { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Typography,
+  Upload,
+} from 'antd';
+import retailerCompanyAPI from '@apis/retailerCompanyAPI';
+import { DaumPostcodeModal } from '@components/combine';
+import {
+  TurtleButton,
+  TurtleButtonSub,
+  TurtleCardSetting,
+} from '@components/common';
+import { bizNumPattern } from '@utils/pattern';
 
 function PageBody() {
   const [form] = Form.useForm();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
-  const getQuery = useQuery("getCompany", () => retailerCompanyAPI.get(), {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
-  });
+  const getQuery = useQuery('getCompany', () => retailerCompanyAPI.get());
 
-  const updateQuery = useMutation("updateCompany", retailerCompanyAPI.update, {
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data?.msg);
-    },
+  const updateQuery = useMutation('updateCompany', retailerCompanyAPI.update, {
     onSuccess: (data) => {
-      message.success(t("message.success update"));
+      message.success(t('message.success update'));
       setIsUpdateMode(false);
       getQuery.refetch();
     },
@@ -33,7 +38,7 @@ function PageBody() {
   return (
     <Row>
       <TurtleCardSetting
-        title={t("company.info")}
+        title={t('company.info')}
         style={{ marginBottom: 24 }}
         extra={
           isUpdateMode ? (
@@ -55,8 +60,8 @@ function PageBody() {
                   company_id: getQuery.data?.id,
                   biz_type: getQuery.data?.biz_type,
                   name: getQuery.data?.name,
-                  address_main: getQuery.data?.address.split("::")[0],
-                  address_sub: getQuery.data?.address.split("::")[1],
+                  address_main: getQuery.data?.address.split('::')[0],
+                  address_sub: getQuery.data?.address.split('::')[1],
                   email: getQuery.data?.email,
                   memo: getQuery.data?.memo,
                 });
@@ -76,8 +81,10 @@ function PageBody() {
           onFinish={(value) => {
             updateQuery.mutate({
               ...value,
-              biz_license_file: form.getFieldValue("biz_license_file")?.fileList[0].originFileObj,
-              address_sub: form.getFieldValue("address_sub") ?? "",
+              biz_license_file:
+                form.getFieldValue('biz_license_file')?.fileList[0]
+                  .originFileObj,
+              address_sub: form.getFieldValue('address_sub') ?? '',
             });
           }}
         >
@@ -85,19 +92,25 @@ function PageBody() {
             <Input hidden />
           </Form.Item>
 
-          <Form.Item label={t("company.type.")} name="biz_type">
+          <Form.Item label={t('company.type.')} name="biz_type">
             {isUpdateMode ? (
               <Select>
-                <Select.Option value="personal">{t(`company.type.personal`)}</Select.Option>
-                <Select.Option value="entity">{t(`company.type.entity`)}</Select.Option>
-                <Select.Option value="simple">{t(`company.type.simple`)}</Select.Option>
+                <Select.Option value="personal">
+                  {t(`company.type.personal`)}
+                </Select.Option>
+                <Select.Option value="entity">
+                  {t(`company.type.entity`)}
+                </Select.Option>
+                <Select.Option value="simple">
+                  {t(`company.type.simple`)}
+                </Select.Option>
               </Select>
             ) : (
               t(`company.type.${getQuery.data?.biz_type}`)
             )}
           </Form.Item>
           <Form.Item label="사업자 번호">
-            {getQuery.data?.biz_num.replace(bizNumPattern, "$1-$2-$3")}
+            {getQuery.data?.biz_num.replace(bizNumPattern, '$1-$2-$3')}
           </Form.Item>
           <Form.Item label="사업자명" name="name">
             {isUpdateMode ? <Input /> : getQuery.data?.name}
@@ -113,7 +126,7 @@ function PageBody() {
                     style={{ fontSize: 13 }}
                     onClick={() => setPostcodeModalVisible(true)}
                   >
-                    {t("find address")}
+                    {t('find address')}
                   </Button>
                 }
               />
@@ -149,9 +162,9 @@ function PageBody() {
                 onRemove={() => false}
                 defaultFileList={[
                   {
-                    uid: "1",
-                    name: getQuery.data?.biz_license_path.split("/").pop()!,
-                    status: "done",
+                    uid: '1',
+                    name: getQuery.data?.biz_license_path.split('/').pop()!,
+                    status: 'done',
                     url: getQuery.data?.biz_license_path,
                   },
                 ]}
@@ -159,8 +172,11 @@ function PageBody() {
                 <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
               </Upload>
             ) : (
-              <Typography.Link target="_self" href={getQuery.data?.biz_license_path}>
-                {getQuery.data?.biz_license_path.split("/").pop()}
+              <Typography.Link
+                target="_self"
+                href={getQuery.data?.biz_license_path}
+              >
+                {getQuery.data?.biz_license_path.split('/').pop()}
               </Typography.Link>
             )}
           </Form.Item>

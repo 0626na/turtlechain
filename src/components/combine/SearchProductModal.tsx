@@ -1,14 +1,13 @@
-import { message, Modal, Pagination, Row, Table } from "antd";
-import productAPI, { RequestGetList } from "apis/productAPI";
-import { AxiosError } from "axios";
-import { TurtleTableTitle } from "components/common";
-import { t } from "i18next";
-import { useCallback, useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { NewSearchFilter } from ".";
-import styled from "styled-components";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+import { Modal, Pagination, Row, Table } from 'antd';
+import { TurtleTableTitle } from '@components/common';
+import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
+import { storeState } from '@store/storeState';
+import productAPI, { RequestGetList } from '@apis/productAPI';
+import { NewSearchFilter } from '.';
 
 interface Props {
   visible: boolean;
@@ -19,25 +18,31 @@ interface Props {
     vendor_product_name: string,
     product_code: string,
     product_option: string,
-    product_price: number,
+    product_supply_price: number,
+    product_vat_price: number,
   ) => void;
   vendorId?: number;
 }
 
-function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Props) {
+function SearchProductModal({
+  visible,
+  closeModal,
+  onClickSelect,
+  vendorId,
+}: Props) {
   const store = useRecoilValue(storeState);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: -1,
     vendor_id: -1,
     page: 1,
-    search_string: "",
-    type: "all",
+    search_string: '',
+    type: 'name',
   });
 
   // 상품 리스트 요청
   const getProductListQuery = useQuery(
-    ["getProductList", searchQuery], //
+    ['getProductList', searchQuery],
     () =>
       productAPI.getList({
         ...searchQuery,
@@ -46,52 +51,46 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
       }),
     {
       enabled: visible && !!vendorId,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {},
     },
   );
 
   // 쇼핑몰, 거래처 바뀔때 상품 리스트 재검색
   useEffect(() => {
+    if (visible) return;
     setSearchQuery(() => ({
       rt_store_id: store.id,
       vendor_id: vendorId,
-      search_string: "",
-      type: "all",
+      search_string: '',
+      type: 'name',
       page: 1,
     }));
   }, [visible, store.id, vendorId]);
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
 
   return (
     <StyledModal
       centered
       width="55%"
-      title={t("product.search")}
+      title={t('product.search')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "60vh" }}
+      bodyStyle={{ height: '60vh' }}
     >
       <Table
         size="small"
-        scroll={{ y: "auto" }}
+        scroll={{ y: 'auto' }}
         loading={getProductListQuery.isLoading}
         dataSource={getProductListQuery.data?.data.product_list}
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
-          <TurtleTableTitle count={getProductListQuery.data?.data.total_count ?? 0}>
-            <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <TurtleTableTitle
+            count={getProductListQuery.data?.data.total_count ?? 0}
+          >
+            <NewSearchFilter
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
           </TurtleTableTitle>
         )}
         footer={() => (
@@ -101,7 +100,9 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
               total={getProductListQuery.data?.data.total_count}
               showSizeChanger={false}
               current={searchQuery.page}
-              onChange={selectPage}
+              onChange={(page) => {
+                setSearchQuery({ ...searchQuery, page });
+              }}
             />
           </Row>
         )}
@@ -114,14 +115,15 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
                 record.product_code,
                 record.vendor_product_name,
                 record.option,
-                record.price,
+                record.supply_price,
+                record.vat_price,
               );
               setSearchQuery({
                 rt_store_id: -1,
                 vendor_id: -1,
                 page: 1,
-                search_string: "",
-                type: "all",
+                search_string: '',
+                type: 'all',
               });
             },
           };
@@ -129,28 +131,33 @@ function SearchProductModal({ visible, closeModal, onClickSelect, vendorId }: Pr
         columns={[
           {
             ellipsis: true,
-            title: t("product.code"),
+            title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            title: t("product.name"),
+            title: t('product.name'),
             render: (_, record) => record.name,
           },
           {
             ellipsis: true,
-            title: t("product.vendor product name"),
+            title: t('product.vendor product name'),
             render: (_, record) => record.vendor_product_name,
           },
           {
             ellipsis: true,
-            title: t("product.option"),
+            title: t('product.option'),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
-            title: t("product.price"),
-            render: (_, record) => record.price.toLocaleString(),
+            title: t('product.supply price'),
+            render: (_, record) => record.supply_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
           },
         ]}
       />

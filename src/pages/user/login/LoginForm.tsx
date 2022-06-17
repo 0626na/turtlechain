@@ -1,28 +1,38 @@
-import { t } from "i18next";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { TOKEN } from "constant";
-// custom hooks
-import useLogin from "hooks/useLogin";
-// async
-import { useMutation } from "react-query";
-import { authAPI } from "apis";
-// antd
-import { UserOutlined, LockOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Divider, Typography, Space, Row } from "antd";
-import { useState } from "react";
+import styled from 'styled-components';
+import { t } from 'i18next';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Divider,
+  Typography,
+  Space,
+  Row,
+} from 'antd';
+import { useMutation } from 'react-query';
+import {
+  UserOutlined,
+  LockOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
+import { TOKEN } from '@constant/index';
+import { useLogin } from '@hooks/index';
+import authAPI from '@apis/authAPI';
 
 function LoginForm() {
   const login = useLogin();
   const [form] = Form.useForm();
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   const requiredRules = [{ required: false }];
 
   // 로그인 요청
-  const loginQuery = useMutation(["login"], authAPI.login, {
+  const loginQuery = useMutation(['login'], authAPI.login, {
     onError: () => {
-      setErrorMsg(t("message.error login"));
+      setErrorMsg(t('message.error login'));
     },
     onSuccess: (data) => {
       const { token } = data;
@@ -36,7 +46,7 @@ function LoginForm() {
   const onSubmit = (values: { login_id: string; password: string }) => {
     const { login_id, password } = values;
     if (!(login_id && password)) {
-      setErrorMsg(t("message.insert id password"));
+      setErrorMsg(t('message.insert id password'));
       return;
     }
     loginQuery.mutate({ login_id, password });
@@ -44,16 +54,19 @@ function LoginForm() {
 
   return (
     <Form form={form} onFinish={onSubmit}>
-      <LogoImage src={`${process.env.PUBLIC_URL}/assets/img/new_logo_login.png`} alt="logo" />
+      <LogoImage
+        src={`${process.env.PUBLIC_URL}/assets/img/new_logo_login.png`}
+        alt="logo"
+      />
       <Form.Item //
         name="login_id"
         rules={requiredRules}
-        style={{ marginBottom: "12px" }}
+        style={{ marginBottom: '12px' }}
       >
         <Input //
-          placeholder={t("id")}
+          placeholder={t('id')}
           prefix={<UserOutlined />}
-          style={{ height: "44px" }}
+          style={{ height: '44px' }}
         />
       </Form.Item>
       <Form.Item //
@@ -61,9 +74,9 @@ function LoginForm() {
         rules={requiredRules}
       >
         <Input.Password //
-          placeholder={t("password")}
+          placeholder={t('password')}
           prefix={<LockOutlined />}
-          style={{ height: "44px" }}
+          style={{ height: '44px' }}
         />
       </Form.Item>
       <Space>
@@ -71,15 +84,15 @@ function LoginForm() {
           name="autoLogin"
           valuePropName="checked"
         >
-          <Checkbox>{t("auto login")}</Checkbox>
+          <Checkbox>{t('auto login')}</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Link style={{ color: "#7C7D82" }} to="/find-id">
-            {t("find id")}
+          <Link style={{ color: '#7C7D82' }} to="/find-id">
+            {t('find id')}
           </Link>
           <Divider type="vertical" />
-          <Link style={{ color: "#7C7D82" }} to="/reset-password">
-            {t("reset password")}
+          <Link style={{ color: '#7C7D82' }} to="/reset-password">
+            {t('reset password')}
           </Link>
         </Form.Item>
       </Space>
@@ -98,26 +111,30 @@ function LoginForm() {
           htmlType="submit"
           size="large"
           style={{
-            background: "linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)",
-            border: "none",
-            borderRadius: "4px",
-            height: "46px",
+            background: 'linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)',
+            border: 'none',
+            borderRadius: '4px',
+            height: '46px',
           }}
         >
-          {t("login")}
+          {t('login')}
         </Button>
       </Form.Item>
       <Divider />
       <Row justify="center">
-        <Typography.Text type="secondary">{t("description.not member")} </Typography.Text>
-        <Link to="/signup" style={{ color: "#00B594" }}>
-          &nbsp;&nbsp;{t("signup")}
+        <Typography.Text type="secondary">
+          {t('description.not member')}{' '}
+        </Typography.Text>
+        <Link to="/signup" style={{ color: '#00B594' }}>
+          &nbsp;&nbsp;{t('signup')}
         </Link>
       </Row>
       <Row>
-        <Typography.Text type="secondary">{t("description.about membership")} </Typography.Text>
-        <Link to="/membership-info" style={{ color: "#00B594" }}>
-          &nbsp;&nbsp;{t("about membership")}
+        <Typography.Text type="secondary">
+          {t('description.about membership')}{' '}
+        </Typography.Text>
+        <Link to="/membership-info" style={{ color: '#00B594' }}>
+          &nbsp;&nbsp;{t('about membership')}
         </Link>
       </Row>
     </Form>

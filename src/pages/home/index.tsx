@@ -1,13 +1,13 @@
-import { Helmet } from "react-helmet";
-import { t } from "i18next";
-import { Col, Row, Typography } from "antd";
-import ClearingStatusCard from "./ClearingStatusCard";
-import ClearingChartCard from "./ClearingChartCard";
-import { TurtleCardHome, TurtleInfo } from "components/common";
-import AdjustmentStatusCard from "./AdjustmentStatusCard";
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+import { Col, Row, Typography } from 'antd';
+import { TurtleCardHome, TurtleInfo } from '@components/common';
+import ClearingStatusCard from './ClearingStatusCard';
+import ClearingChartCard from './ClearingChartCard';
+import AdjustmentStatusCard from './AdjustmentStatusCard';
 
 const HomePage = function () {
-  const title = `${t("turtlechain")} - ${t("common.home")}`;
+  const title = `${t('turtlechain')} - ${t('common.home')}`;
 
   return (
     <>
@@ -17,7 +17,7 @@ const HomePage = function () {
         <Typography.Title level={4} style={{ marginBottom: 0 }}>
           HOME
         </Typography.Title>
-        <TurtleInfo>{t("description.check home")}</TurtleInfo>
+        <TurtleInfo>{t('description.check home')}</TurtleInfo>
       </TurtleCardHome>
 
       <Row>

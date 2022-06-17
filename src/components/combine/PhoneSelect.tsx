@@ -1,7 +1,7 @@
-import { Button, Form } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { t } from "i18next";
-import { TurtleInput } from "components/common";
+import { t } from 'i18next';
+import { Button, Form } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { TurtleInput } from '@components/common';
 
 interface Props {
   phoneList: Array<string>;
@@ -13,14 +13,14 @@ function PhoneSelect({ phoneList, setPhoneList }: Props) {
     <>
       {phoneList.map((phone, index) => (
         <Form.Item
-          label={index === 0 ? t("vendor.store phone") : ""}
+          label={index === 0 ? t('vendor.store phone') : ''}
           key={index}
-          style={{ marginBottom: "0" }}
+          style={{ marginBottom: '0' }}
         >
           <Form.Item>
             <TurtleInput //
               value={phone}
-              placeholder={t("placeholder.store phone")}
+              placeholder={t('placeholder.store phone')}
             />
           </Form.Item>
         </Form.Item>
@@ -29,10 +29,10 @@ function PhoneSelect({ phoneList, setPhoneList }: Props) {
         <Button
           type="dashed"
           //onClick={() => add()}
-          style={{ width: "96%" }}
+          style={{ width: '96%' }}
           icon={<PlusOutlined />}
         >
-          {t("button.add phone")}
+          {t('button.add phone')}
         </Button>
       </Form.Item>
     </>

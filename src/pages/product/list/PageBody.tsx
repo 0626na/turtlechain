@@ -1,16 +1,15 @@
-import { message, Pagination, Row, Table } from "antd";
-import productAPI, { ProductShow, RequestGetList } from "apis/productAPI";
-import { AxiosError } from "axios";
-import { t } from "i18next";
-import { useCallback, useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import { FileTextOutlined } from "@ant-design/icons";
-import { MainContent, MenuBar } from "layouts/main";
-import { TurtleTableTitle } from "components/common";
-import { NewSearchFilter } from "components/combine";
-import UpdateProductModal from "./UpdateProductModal";
+import { t } from 'i18next';
+import { Pagination, Row, Table, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
+import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
+import { storeState } from '@store/storeState';
+import { FileTextOutlined } from '@ant-design/icons';
+import { MainContent, MenuBar } from '@layout/main';
+import { TurtleTableTitle } from '@components/common';
+import { NewSearchFilter } from '@components/combine';
+import UpdateProductModal from './UpdateProductModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -19,50 +18,43 @@ function PageBody() {
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: -1,
     page: 1,
-    search_string: "",
-    type: "all",
+    search_string: '',
+    type: 'name',
   });
 
   // 상품 리스트 불러오기 요청
   const getListQuery = useQuery(
-    ["getProductList", searchQuery], //
+    ['getProductList', searchQuery], //
     () => productAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
-    {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {},
-    },
   );
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({ ...searchQuery, rt_store_id: store.id, page: 1 }));
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id,
+      page: 1,
+    }));
   }, [store.id]);
-
-  // 페이지 선택
-  const selectPage = useCallback(
-    (page) => {
-      setSearchQuery({ ...searchQuery, page });
-    },
-    [searchQuery],
-  );
 
   return (
     <>
       <MenuBar />
 
-      <MainContent title={t("product.lists")}>
+      <MainContent title={t('product.lists')}>
         <Table
           size="small"
           loading={getListQuery.isLoading}
           dataSource={getListQuery.data?.data.product_list}
           rowKey={(record) => record.id}
           pagination={false}
-          scroll={{ y: "auto" }}
+          scroll={{ y: 'auto' }}
           title={() => (
             <TurtleTableTitle count={getListQuery.data?.data.total_count ?? 0}>
-              <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <NewSearchFilter
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
             </TurtleTableTitle>
           )}
           footer={() => (
@@ -72,7 +64,9 @@ function PageBody() {
                 total={getListQuery.data?.data.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
-                onChange={selectPage}
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
+                }}
               />
             </Row>
           )}
@@ -90,7 +84,7 @@ function PageBody() {
             expandIcon: ({ expanded, onExpand, record }) => {
               return (
                 <FileTextOutlined
-                  style={record.memo ? {} : { opacity: "0.4", cursor: "auto" }}
+                  style={record.memo ? {} : { opacity: '0.4', cursor: 'auto' }}
                   onClick={(e) => {
                     e.stopPropagation();
                     record.memo && onExpand(record, e);
@@ -103,53 +97,68 @@ function PageBody() {
             {
               ellipsis: true,
               width: 90,
-              title: t("vendor.code"),
+              title: t('vendor.code'),
               render: (_, record) => record.vendor_info.vendor_code,
             },
             {
               ellipsis: true,
-              width: "8%",
-              title: t("vendor.name"),
+              width: '8%',
+              title: t('vendor.name'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              width: "10%",
-              title: t("vendor.address"),
+              width: '10%',
+              title: t('vendor.address'),
               render: (_, record) => record.vendor_info.vendor_address,
             },
             {
               ellipsis: true,
-              title: t("product.name"),
+              title: t('product.name'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              title: t("product.vendor product name"),
+              title: t('product.vendor product name'),
               render: (_, record) => record.vendor_product_name,
             },
             {
               ellipsis: true,
-              width: 120,
-              title: t("product.code"),
+              title: t('product.code'),
               render: (_, record) => record.product_code,
             },
             {
               ellipsis: true,
-              width: "10%",
-              title: t("product.option"),
+              width: '10%',
+              title: t('product.option'),
               render: (_, record) => record.option,
             },
             {
               ellipsis: true,
-              width: 100,
-              title: t("product.price"),
-              render: (_, record) => record.price.toLocaleString(),
+              align: 'right',
+              title: t('product.supply price'),
+              render: (_, record) => record.supply_price.toLocaleString(),
             },
             {
               ellipsis: true,
-              title: t("product.image url"),
-              render: (_, record) => record.image_url,
+              align: 'right',
+              title: t('product.vat price'),
+              render: (_, record) => record.vat_price.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              title: t('product.image url'),
+              render: (_, record) => (
+                <Typography.Link
+                  href={record.image_url}
+                  target="_blank"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {record.image_url}
+                </Typography.Link>
+              ),
             },
             Table.EXPAND_COLUMN,
           ]}

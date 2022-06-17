@@ -1,6 +1,6 @@
-import Modal, { ModalProps } from "antd/lib/modal/Modal";
-import styled from "styled-components";
-import { CloseOutlined } from "@ant-design/icons";
+import Modal, { ModalProps } from 'antd/lib/modal/Modal';
+import styled from 'styled-components';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface Props extends ModalProps {
   children: React.ReactNode;
@@ -8,7 +8,10 @@ interface Props extends ModalProps {
 
 function TurtleModal({ children, ...props }: Props) {
   return (
-    <StyledModal {...props} closeIcon={<CloseOutlined style={{ color: "#ffffff" }} />}>
+    <StyledModal
+      {...props}
+      closeIcon={<CloseOutlined style={{ color: '#ffffff' }} />}
+    >
       {children}
     </StyledModal>
   );

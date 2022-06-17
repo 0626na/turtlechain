@@ -1,13 +1,20 @@
-import { message, Pagination, Popover, Radio, Row, Space, Table } from "antd";
-import { vendorAPI } from "apis";
-import { RequestGetWholesale, VendorAccount, WholesaleShow } from "apis/vendorAPI";
-import { AxiosError } from "axios";
-import { useCallback, useState } from "react";
-import { useQuery } from "react-query";
-import { t } from "i18next";
-import { phonePattern } from "utils/pattern";
-import { TurtleBadge, TurtleButtonSub, TurtleModal, TurtleTableTitle } from "components/common";
-import { NewSearchFilter } from "components/combine";
+import { message, Pagination, Popover, Radio, Row, Space, Table } from 'antd';
+import { useCallback, useState } from 'react';
+import { useQuery } from 'react-query';
+import { t } from 'i18next';
+import vendorAPI, {
+  RequestGetWholesale,
+  VendorAccount,
+  WholesaleShow,
+} from '@apis/vendorAPI';
+import { phonePattern } from '@utils/pattern';
+import {
+  TurtleBadge,
+  TurtleButtonSub,
+  TurtleModal,
+  TurtleTableTitle,
+} from '@components/common';
+import { NewSearchFilter } from '@components/combine';
 
 interface Props {
   visible: boolean;
@@ -20,18 +27,15 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
     page: 1,
-    type: "all",
-    search_string: "",
+    type: 'all',
+    search_string: '',
   });
 
   // master 도매 검색 요청
   const getWholesaleQuery = useQuery(
-    ["getWholesale", searchQuery],
+    ['getWholesale', searchQuery],
     () => vendorAPI.getWholesale(searchQuery),
     {
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
       onSuccess: (data) => {
         setWholesaleList(data.data.vendor_list);
       },
@@ -41,18 +45,18 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
   const onClickSelect = useCallback(
     (record: WholesaleShow) => {
       if (record.store_phone.length !== 1) {
-        message.warning("휴대번호를 선택해주세요");
+        message.warning('휴대번호를 선택해주세요');
         return;
       }
       if (record.store_account.length !== 1) {
-        message.warning("계좌번호를 선택해주세요");
+        message.warning('계좌번호를 선택해주세요');
         return;
       }
       selectRow(record);
       setSearchQuery({
         page: 1,
-        type: "all",
-        search_string: "",
+        type: 'all',
+        search_string: '',
       });
     },
     [selectRow],
@@ -95,11 +99,11 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
       centered
       width="60%"
       maskClosable={false}
-      title={t("vendor.search")}
+      title={t('vendor.search')}
       visible={visible}
       onCancel={closeModal}
       footer={false}
-      bodyStyle={{ height: "75vh", overflowY: "auto" }}
+      bodyStyle={{ height: '75vh', overflowY: 'auto' }}
     >
       <Table
         size="small"
@@ -107,10 +111,16 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
         dataSource={wholesaleList}
         rowKey={(record) => record.id}
         pagination={false}
-        scroll={{ y: "auto" }}
+        scroll={{ y: 'auto' }}
         title={() => (
-          <TurtleTableTitle count={getWholesaleQuery.data?.data.total_count ?? 0}>
-            <NewSearchFilter vendor searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <TurtleTableTitle
+            count={getWholesaleQuery.data?.data.total_count ?? 0}
+          >
+            <NewSearchFilter
+              vendor
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
           </TurtleTableTitle>
         )}
         footer={() => (
@@ -129,27 +139,30 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: "20%",
-            title: t("vendor.name"),
+            width: '20%',
+            title: t('vendor.name'),
             render: (_, record) => record.name,
           },
           {
             ellipsis: true,
-            width: "20%",
-            title: t("vendor.address"),
+            width: '20%',
+            title: t('vendor.address'),
             render: (_, record) => {
-              return `${record.building} ${record.floor && record.floor + "층"} ${record.col} ${
-                record.loc
-              } ${record.ext}`;
+              return `${record.building} ${
+                record.floor && record.floor + '층'
+              } ${record.col} ${record.loc} ${record.ext}`;
             },
           },
           {
             ellipsis: true,
-            width: "20%",
-            title: t("vendor.store phone"),
+            width: '20%',
+            title: t('vendor.store phone'),
             render: (_, record) => {
               if (record.store_phone.length === 1) {
-                return record.store_phone[0].phone.replace(phonePattern, `$1-$2-$3`);
+                return record.store_phone[0].phone.replace(
+                  phonePattern,
+                  `$1-$2-$3`,
+                );
               }
 
               return (
@@ -167,7 +180,10 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
                                   selectStorePhone(record, storePhone);
                                 }}
                               >
-                                {storePhone.phone.replace(phonePattern, `$1-$2-$3`)}
+                                {storePhone.phone.replace(
+                                  phonePattern,
+                                  `$1-$2-$3`,
+                                )}
                               </Radio>
                             ))}
                           </Space>
@@ -175,8 +191,11 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
                       </>
                     }
                   >
-                    <span style={{ color: "red", cursor: "pointer" }}>
-                      {record.store_phone[0]?.phone.replace(phonePattern, `$1-$2-$3`)}
+                    <span style={{ color: 'red', cursor: 'pointer' }}>
+                      {record.store_phone[0]?.phone.replace(
+                        phonePattern,
+                        `$1-$2-$3`,
+                      )}
                     </span>
                   </Popover>
                 </TurtleBadge>
@@ -185,9 +204,13 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
           },
           {
             ellipsis: true,
-            title: t("vendor.account"),
+            title: t('vendor.account'),
             render: (_, record) => {
-              const makeAddress = ({ bank, account_number, account_holder }: VendorAccount) => {
+              const makeAddress = ({
+                bank,
+                account_number,
+                account_holder,
+              }: VendorAccount) => {
                 return `${bank} ${account_number} ${account_holder}`;
               };
 
@@ -221,7 +244,7 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
                       </>
                     }
                   >
-                    <span style={{ color: "red", cursor: "pointer" }}>
+                    <span style={{ color: 'red', cursor: 'pointer' }}>
                       {makeAddress(record.store_account[0])}
                     </span>
                   </Popover>
@@ -231,15 +254,15 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
           },
           {
             width: 100,
-            align: "center",
-            title: "",
+            align: 'center',
+            title: '',
             render: (_, record) => (
               <TurtleButtonSub //
                 size="small"
                 color="green"
                 onClick={() => onClickSelect(record)}
               >
-                {t("button.select")}
+                {t('button.select')}
               </TurtleButtonSub>
             ),
           },

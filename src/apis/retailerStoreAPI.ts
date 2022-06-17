@@ -1,56 +1,63 @@
-import { v2Axios } from "apis";
+import { v2Axios } from '.';
 
 export interface Store {
   name: string;
-  mall_url: string;
-  phone: string;
+  email: string;
+  store_url: string;
   alimtalk_name: string;
-  order_formats: number;
+  store_account: {
+    bank: string;
+    account_number: string;
+    account_holder: string;
+  };
+  store_mobile: {
+    send_alimtalk: boolean;
+    mobile: string;
+    tag: string;
+  };
+  // 1: 셀메이트, 2: 이지어드민, 3: 터틀체인
+  inventory_type: number;
+  inventory_domain: string;
+  inventory_key: string;
+  inventory_is_vat_included: boolean;
 }
 
 export interface StoreShow {
   id: number;
   name: string;
-  mall_url: string;
-  phone: string;
+  store_url: string;
+  inventory_type: number;
+  inventory_domain: string;
+  inventory_key: string;
+  inventory_is_vat_included: boolean;
   alimtalk_name: string;
   is_closed: boolean;
   order_formats: number;
+  email: string;
+  sender_name: string;
   store_account: Array<{
     id: number;
     bank: string;
     account_number: string;
     account_holder: string;
   }>;
-  created_time: Date;
-  updated_time: Date;
-  created_by: string;
-  updated_by: string;
+  store_phone: {
+    phone: string;
+  }[];
 }
 
 // 쇼핑몰 리스트 가져오기
-export interface RequestGetList {
-  offset: number;
-  last_id: number;
-  switch_type: "next" | "prev";
-  search_type: "is_closed" | "";
-  search_query: string;
-}
-
 export interface ResponseGetList {
   data: {
     total_count: number;
-    data: Array<StoreShow>;
+    store_list: Array<StoreShow>;
   };
 }
 
-const getList = async function (query: RequestGetList) {
-  let url = "/provisioning/retailer_store?";
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
+const getList = async function () {
+  let url = '/provisioning/retailer/stores';
   const response = await v2Axios.get<ResponseGetList>(url);
-  return response.data;
+  return response.data.data;
 };
 
 // 개별 쇼핑몰 가져오기
@@ -69,8 +76,25 @@ const get = async function (data: RequestGet) {
 };
 
 // 수정하기
-export interface RequestUpdate extends Store {
+export interface RequestUpdate {
   store_id?: number;
+  name: string;
+  email: string;
+  store_url: string;
+  alimtalk_name: string;
+  inventory_is_vat_included: boolean;
+  is_closed: boolean;
+  store_account: {
+    bank: string;
+    account_number: string;
+    account_holder: string;
+  };
+  store_mobile: {
+    mobile: string;
+  };
+  inventory_type: number;
+  inventory_domain: string;
+  inventory_key: string;
 }
 
 export interface ResponseUpdate {
@@ -92,7 +116,7 @@ export interface ResponseCreate {
 }
 
 const create = async function (data: RequestCreate) {
-  let url = `/provisioning/retailer_store`;
+  let url = `/provisioning/retailer/stores`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
 };

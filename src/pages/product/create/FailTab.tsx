@@ -1,7 +1,7 @@
-import { Table, TabPaneProps, Tabs } from "antd";
-import { t } from "i18next";
-import { useRecoilValue } from "recoil";
-import { productCartState } from "store/productCartState";
+import { t } from 'i18next';
+import { Table, TabPaneProps, Tabs } from 'antd';
+import { useRecoilValue } from 'recoil';
+import { productCartState } from '@store/productCartState';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -15,56 +15,65 @@ function FailTab({ loading, ...props }: Props) {
       <Table
         size="small"
         loading={loading}
-        pagination={{ position: ["bottomCenter"], showSizeChanger: false }}
+        pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         dataSource={cart.failList}
         rowKey={(record) => record.product_code}
-        scroll={{ y: "auto" }}
+        scroll={{ y: 'auto' }}
         columns={[
           {
             ellipsis: true,
-            title: t("vendor.name"),
+            title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            title: t("vendor.address"),
+            title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
-            title: t("product.name"),
-            render: (_, record) => <span style={{ color: "red" }}>{record.name}</span>,
-          },
-          {
-            ellipsis: true,
-            title: t("product.vendor product name"),
+            title: t('product.name'),
             render: (_, record) => (
-              <span style={{ color: "red" }}>{record.vendor_product_name}</span>
+              <span style={{ color: 'red' }}>{record.name}</span>
             ),
           },
           {
             ellipsis: true,
-            title: t("product.code"),
+            title: t('product.vendor product name'),
+            render: (_, record) => (
+              <span style={{ color: 'red' }}>{record.vendor_product_name}</span>
+            ),
+          },
+          {
+            ellipsis: true,
+            title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            title: t("product.option"),
+            title: t('product.option'),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
-            title: t("product.price"),
-            render: (_, record) => record.price.toLocaleString(),
+            align: 'right',
+            title: t('product.supply price'),
+            render: (_, record) => record.supply_price.toLocaleString(),
           },
           {
             ellipsis: true,
-            title: t("product.image url"),
+            align: 'right',
+            title: t('product.vat price'),
+            render: (_, record) => record.vat_price.toLocaleString(),
+          },
+          {
+            ellipsis: true,
+            title: t('product.image url'),
             render: (_, record) => record.image_url,
           },
           {
             ellipsis: true,
-            title: t("product.memo"),
+            title: t('product.memo'),
             render: (_, record) => record.memo,
           },
         ]}

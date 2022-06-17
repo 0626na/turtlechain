@@ -1,5 +1,5 @@
-import { v2Axios } from "apis";
-import { TOKEN } from "constant";
+import { v2Axios } from '.';
+import { TOKEN } from '@constant/index';
 
 // 아이디 찾기
 interface RequestGetID {
@@ -33,7 +33,7 @@ interface ResponseResetPassword {
 
 const resetPassword = async function (data: RequestResetPassword) {
   const { token } = data;
-  const url = "/provisioning/user/password";
+  const url = '/provisioning/user/password';
   const config = { headers: { Authorization: `Api-Key ${token}` } };
   const response = await v2Axios.put<ResponseResetPassword>(url, data, config);
   return response.data.data;
@@ -49,7 +49,7 @@ interface ResponseDupCheck {
 }
 
 const dupCheck = async function (data: RequestDupCheck) {
-  const url = "/provisioning/user/dup_check";
+  const url = '/provisioning/user/dup_check';
   const response = await v2Axios.post<ResponseDupCheck>(url, data);
   return response.data.data;
 };
@@ -62,7 +62,7 @@ interface RequestCreate {
   login_id: string;
   password: string;
   company_id: number;
-  type: "rt" | "ws" | "st" | "pi";
+  type: 'rt' | 'ws' | 'st' | 'pi';
 }
 
 interface ResponseCreate {
@@ -70,7 +70,7 @@ interface ResponseCreate {
 }
 
 const create = async function (data: RequestCreate) {
-  const url = "/provisioning/user";
+  const url = '/provisioning/user';
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data.data;
 };
@@ -83,6 +83,7 @@ interface ResponseGet {
     name: string;
     email: string;
     mobile_phone: string;
+    company_id: number;
   };
 }
 

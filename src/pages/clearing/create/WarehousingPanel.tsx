@@ -1,16 +1,26 @@
-import { t } from "i18next";
-import { Collapse, message, Row, Table, Typography, CollapsePanelProps, Space } from "antd";
-import { warehousingAPI } from "apis";
-import { AxiosError } from "axios";
-import { TurtleButton } from "components/common";
-import { useCallback, useState } from "react";
-import { useQuery } from "react-query";
-import { WarehousingItemShow, WarehousingSheet } from "apis/warehousingAPI";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { storeState } from "store/storeState";
-import WarehousingDetailModal from "./WarehousingDetailModal";
-import { clearingCartState } from "store/clearingCartState";
-import useClearingCart from "hooks/useClearingCart";
+import { t } from 'i18next';
+import {
+  Collapse,
+  Row,
+  Table,
+  Typography,
+  CollapsePanelProps,
+  Space,
+} from 'antd';
+import { useMemo, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  TurtleButton,
+  TurtleButtonSub,
+  TurtleInputPrice,
+  TurtleTableTitle,
+} from '@components/common';
+import { storeState } from '@store/storeState';
+import { clearingCartState } from '@store/clearingCartState';
+import clearingAPI from '@apis/clearingAPI';
+import { NewSearchFilter } from '@components/combine';
+import useClearingCart from '@hooks/useClearingCart';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -20,173 +30,156 @@ interface Props extends CollapsePanelProps {
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const [totalDepositPrice, totalVatPrice] = useClearingCart();
-  const [DetailModalVisible, setDetailModalVisible] = useState(false);
-  const [selectedSheet, selectSheet] = useState<WarehousingSheet>();
+  const { warehousingSupplyAmount } = useClearingCart();
+  const [searchQuery, setSearchQuery] = useState({
+    search_string: '',
+  });
 
-  const getWarehousingSheetQuery = useQuery(
-    ["getWarehousingSheet", activeKey, store.id], //
+  const getWarehousingBalanceQuery = useQuery(
+    ['getWarehousingBalance', store.id],
     () =>
-      warehousingAPI.getSheet({
+      clearingAPI.getWarehousingBalance({
         rt_store_id: store.id!,
-        is_confirmed: 0,
-        start_date: "2017-01-01",
-        end_date: "9999-12-31",
-        did_settlement: 0,
-        page: 1,
+        tab: 'unpaid_vendor',
       }),
     {
-      enabled: activeKey === "1" && !!store.id,
-      onError: (error: AxiosError) => {
-        message.error(error.response?.data?.msg);
-      },
-      onSuccess: () => {
-        resetStates();
-      },
-    },
-  );
-
-  const resetStates = useCallback(() => {
-    setCart({
-      selectedKeys: [],
-      warehousing_item_list: [],
-      subtract_item_list: [],
-      reserve_item_list: [],
-    });
-    selectSheet(undefined);
-  }, [setCart]);
-
-  // 입고 확정 버튼 클릭
-  const checkSheet = useCallback(
-    (itemList: WarehousingItemShow[]) => {
-      setCart({
-        selectedKeys: [...cart.selectedKeys, selectedSheet?.id!],
-        warehousing_item_list: [
-          ...cart.warehousing_item_list,
-          ...itemList.map((item) => {
-            const {
-              id,
-              sheet_id,
-              is_vat_included,
-              is_reserved,
-              price,
-              count,
-              vendor_info: { id: vendor_id, ws_store_id },
-            } = item;
-            // (도매에게) 이체금액
-            const deposit_price = count * price;
-            // 부가세
-            const vat_price = is_vat_included ? Math.floor(deposit_price / 11) : 0;
-            // 공급가
-            const supply_price = deposit_price - vat_price;
-            // (소매가) 발행금액
-            const total_price = is_vat_included ? deposit_price : Math.floor(deposit_price * 1.1);
-            return {
-              sheet_id,
-              warehousing_item_id: id,
-              ws_store_id,
-              vendor_id,
-              is_reserved,
-              vat_price,
-              supply_price,
-              deposit_price,
-              total_price,
-            };
-          }),
-        ],
-        subtract_item_list: [],
-        reserve_item_list: [],
-      });
-      setDetailModalVisible(false);
-    },
-    [selectedSheet, cart, setCart],
-  );
-
-  // 입고 확정 모달 열기
-  const openDetailModal = useCallback(
-    (record) => {
-      // 이미 체크되어 있다면 체크 해제, 장바구니 제거
-      if (cart.selectedKeys.includes(record.id)) {
+      enabled: !!store.id,
+      onSuccess: (data) => {
         setCart({
-          ...cart,
-          selectedKeys: cart.selectedKeys.filter((key) => key !== record.id),
-          warehousing_item_list: cart.warehousing_item_list.filter(
-            (item) => item.sheet_id !== record.id,
+          warehousingBalanceList: data.item_list,
+          adjustmentBalanceList: [],
+          reserveSubtractList: data.item_list.filter(
+            (item) => item.reserve_amount > 0,
           ),
+          reserveBalanceList: [],
         });
-        return;
-      }
-      selectSheet(record);
-      setDetailModalVisible(true);
+      },
     },
-    [cart, setCart],
+  );
+
+  const filteredList = useMemo(
+    () =>
+      cart.warehousingBalanceList.filter((item) =>
+        item.vendor_info.vendor_name.includes(searchQuery.search_string),
+      ),
+    [cart.warehousingBalanceList, searchQuery],
   );
 
   return (
     <Collapse.Panel
       {...props}
       extra={
-        <Space>
-          <Typography.Text style={{ color: "#5B5D63" }}>
-            입고 총 금액: {(totalDepositPrice ?? 0).toLocaleString()} 원
-          </Typography.Text>
-          <Typography.Text style={{ color: "#5B5D63" }}>
-            (부가세 {(totalVatPrice ?? 0).toLocaleString()}원 포함)
-          </Typography.Text>
-        </Space>
+        <Typography.Text style={{ color: '#5B5D63' }}>
+          {`거래처 총 결제금액 : ${Math.round(
+            warehousingSupplyAmount * 1.1,
+          ).toLocaleString()}원 (부가세 ${Math.round(
+            warehousingSupplyAmount * 0.1,
+          ).toLocaleString()}원 포함)`}
+        </Typography.Text>
       }
     >
       <Table
         size="small"
+        scroll={{ x: 'auto', y: 490 }}
+        loading={getWarehousingBalanceQuery.isLoading}
+        dataSource={filteredList}
         pagination={false}
-        loading={getWarehousingSheetQuery.isLoading}
-        dataSource={getWarehousingSheetQuery.data?.sheet_list}
-        rowKey="id"
-        rowSelection={{
-          selectedRowKeys: cart.selectedKeys,
-          onSelect: openDetailModal,
-          hideSelectAll: true,
-        }}
-        onRow={(record) => ({
-          onClick: () => {
-            openDetailModal(record);
-          },
-        })}
+        rowKey={(record) => record.id}
+        title={() => (
+          <TurtleTableTitle
+            count={getWarehousingBalanceQuery.data?.total_count ?? 0}
+          >
+            <Space size="large">
+              <TurtleButtonSub
+                size="small"
+                type="primary"
+                onClick={() => {
+                  setCart((cart) => ({
+                    ...cart,
+                    warehousingBalanceList: cart.warehousingBalanceList.map(
+                      (item) => ({
+                        ...item,
+                        clearing_amount:
+                          item.unpaid_amount - item.reserve_amount,
+                      }),
+                    ),
+                  }));
+                }}
+              >
+                전액 결제하기
+              </TurtleButtonSub>
+              <NewSearchFilter
+                select={false}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
+            </Space>
+          </TurtleTableTitle>
+        )}
         columns={[
-          Table.SELECTION_COLUMN,
           {
             ellipsis: true,
-            title: t("warehousing.date"),
-            render: (_, record) => record.created_date,
+            title: t('warehousing.date'),
+            render: (_, record) => record.created_time.substring(0, 10),
           },
           {
             ellipsis: true,
-            title: "거래처 수",
-            render: (_, record) => record.total_store_count,
+            title: t('vendor.name'),
+            render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: t("warehousing.price"),
-            render: (_, record) => record.total_price.toLocaleString(),
+            align: 'right',
+            title: t('product.supply amount'),
+            render: (_, record) =>
+              `${
+                record.reserve_amount > 0
+                  ? `(미송입고 ${record.reserve_amount.toLocaleString()}원 차감)`
+                  : ``
+              }
+              ${(
+                record.unpaid_amount - record.reserve_amount
+              ).toLocaleString()} `,
+          },
+          {
+            ellipsis: true,
+            align: 'right',
+            title: '당일 결제 공급가',
+            render: (_, record) => (
+              <TurtleInputPrice
+                size="small"
+                placeholder="금액 입력"
+                value={record.clearing_amount}
+                max={record.unpaid_amount - record.reserve_amount}
+                onChange={(value) => {
+                  setCart((cart) => ({
+                    ...cart,
+                    warehousingBalanceList: cart.warehousingBalanceList.map(
+                      (item) =>
+                        item.id === record.id
+                          ? { ...item, clearing_amount: Number(value) }
+                          : item,
+                    ),
+                  }));
+                }}
+              />
+            ),
+          },
+          {
+            ellipsis: true,
+            width: 180,
+            align: 'right',
+            title: '당일 결제 부가세',
+            render: (_, record) =>
+              record.clearing_amount
+                ? Math.round(record.clearing_amount * 0.1).toLocaleString()
+                : 0,
           },
         ]}
       />
       <Row justify="end" align="middle" style={{ marginTop: 16 }}>
-        <TurtleButton //
-          children={t("button.next step")}
-          onClick={clickNext}
-        />
+        <TurtleButton children={t('button.next step')} onClick={clickNext} />
       </Row>
-
-      {/* 입고 상세보기 모달 */}
-      <WarehousingDetailModal
-        visible={DetailModalVisible}
-        onClose={() => {
-          setDetailModalVisible(false);
-        }}
-        sheet={selectedSheet}
-        onOk={checkSheet}
-      />
     </Collapse.Panel>
   );
 }

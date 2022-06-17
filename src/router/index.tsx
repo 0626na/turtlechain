@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-import useLogin from "hooks/useLogin";
-import { TOKEN } from "constant";
-import LoginRouter from "./LoginRouter";
-import MainRouter from "./MainRouter";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "store/tokenState";
+import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { tokenState } from '@store/tokenState';
+import { useLogin } from '@hooks/index';
+import { TOKEN } from '@constant/index';
+import LoginRouter from './LoginRouter';
+import MainRouter from './MainRouter';
 
 function Router() {
   const login = useLogin();
