@@ -81,7 +81,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           },
           {
             title: t('clearing.total price'),
-            value: `${sheet?.total_deposit_amount}`,
+            value: `${sheet?.total_payment_amount}`,
           },
           {
             title: '총 거래처 수',

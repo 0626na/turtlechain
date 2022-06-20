@@ -156,7 +156,7 @@ function ClearingChartCard() {
                   .add(day - 1, 'day')
                   .format('YYYY-MM-DD') && store_name === store,
           )
-          .map(({ total_clearing_amount }) => total_clearing_amount)
+          .map(({ total_payment_amount }) => total_payment_amount)
           .reduce((cur, acc) => cur + acc, 0);
       }),
       borderColor: lineColor[index],
@@ -176,7 +176,7 @@ function ClearingChartCard() {
             <Typography.Title
               style={{ marginBottom: 4, fontWeight: 500, fontSize: 16 }}
             >
-              누적 정산금액
+              누적 정산 완료 금액
             </Typography.Title>
             <Typography.Title style={{ marginBottom: 20, fontSize: 28 }}>
               {getSheetQuery.data?.data.clearing_summary.complete.amount.toLocaleString()}
