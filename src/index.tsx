@@ -9,7 +9,7 @@ import './i18n';
 import Router from './router';
 import GlobalStyle from './GlobalStyle';
 import ChannelService from './ChannelService';
-import ReactGA from 'react-ga';
+import GA4React from 'ga-4-react';
 
 // Antd Message
 message.config({
@@ -28,16 +28,26 @@ ChannelService.boot({
 });
 
 // Google Analytics
-ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID ?? '');
-
-ReactDOM.render(
-  <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={koKR}>
-        <GlobalStyle />
-        <Router />
-      </ConfigProvider>
-    </QueryClientProvider>
-  </RecoilRoot>,
-  document.getElementById('root'),
+const ga4react = new GA4React(
+  process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID ?? '',
 );
+
+(async () => {
+  await ga4react
+    .initialize()
+    .then((res) => console.log('Analytics Success.'))
+    .catch((err) => console.log('Analytics Failure'))
+    .finally(() => {
+      ReactDOM.render(
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <ConfigProvider locale={koKR}>
+              <GlobalStyle />
+              <Router />
+            </ConfigProvider>
+          </QueryClientProvider>
+        </RecoilRoot>,
+        document.getElementById('root'),
+      );
+    });
+})();
