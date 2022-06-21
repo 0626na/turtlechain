@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { TurtleImg } from '@components/common';
+import RouteChangeTracker from './RouteChangeTracker';
 
 interface Props {
   collapsed: boolean;
@@ -14,6 +15,9 @@ function Sider({ collapsed }: Props) {
   const { pathname } = useLocation();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, selectKeys] = useState(pathname);
+
+  // Google Analytics
+  RouteChangeTracker();
 
   // pathname 이용하여 주소 바뀔 시 메뉴 선택
   useEffect(() => {
