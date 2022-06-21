@@ -35,8 +35,8 @@ const ga4react = new GA4React(
 (async () => {
   await ga4react
     .initialize()
-    .then((res) => console.log('Analytics Success.'))
-    .catch((err) => console.log('Analytics Failure'))
+    .then(() => console.log('Google Analytics Success.'))
+    .catch(() => console.log('Google Analytics Failure'))
     .finally(() => {
       ReactDOM.render(
         <RecoilRoot>

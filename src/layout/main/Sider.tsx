@@ -15,9 +15,6 @@ function Sider({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, selectKeys] = useState(pathname);
 
-  // Google Analytics
-  // RouteChangeTracker();
-
   // pathname 이용하여 주소 바뀔 시 메뉴 선택
   useEffect(() => {
     const [, firstKey, secondKey] = pathname.split('/');
