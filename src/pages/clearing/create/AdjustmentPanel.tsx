@@ -26,7 +26,7 @@ interface Props extends CollapsePanelProps {
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { adjustmentSupplyAmount } = useClearingCart();
+  const { adjustmentAmount } = useClearingCart();
 
   const getAdjustmentBalanceQuery = useQuery(
     ['getAdjustmentBalance'],
@@ -63,11 +63,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       extra={
         <Typography.Text style={{ color: '#5B5D63' }}>
-          {`차감 총 금액: ${Math.round(
-            adjustmentSupplyAmount * 1.1,
-          ).toLocaleString()} 원 (부가세 포함 ${Math.round(
-            adjustmentSupplyAmount * 0.1,
-          ).toLocaleString()}원)`}
+          {`차감 총 금액: ${adjustmentAmount.toLocaleString()}원`}
         </Typography.Text>
       }
     >

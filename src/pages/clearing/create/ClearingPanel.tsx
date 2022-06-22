@@ -30,10 +30,12 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
   const {
-    warehousingSupplyAmount,
-    adjustmentSupplyAmount,
-    reserveSupplyAmount,
+    warehousingAmount,
+    adjustmentAmount,
+    reserveAmount,
     reserveSubtractAmount,
+    paymentSupplyAmount,
+    paymentVatAmount,
   } = useClearingCart();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,42 +77,25 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       <StyledCard>
         <Row>
           <Col span={3}>입고</Col>
-          <Col>{`+ ${Math.round(
-            warehousingSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 포함 ${Math.round(
-            warehousingSupplyAmount * 0.1,
-          ).toLocaleString()}원)`}</Col>
+          <Col>{`+ ${warehousingAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
           <Col span={3}>당일 미송 추가</Col>
-          <Col>{`+ ${Math.round(
-            reserveSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 포함 ${Math.round(
-            reserveSupplyAmount * 0.1,
-          ).toLocaleString()}원)`}</Col>
+          <Col>{`+ ${reserveAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
           <Col span={3}>미송 입고 차감</Col>
-          <Col>{`- ${Math.round(
-            reserveSubtractAmount * 1.1,
-          ).toLocaleString()}원 (부가세 포함${Math.round(
-            reserveSubtractAmount * 0.1,
-          ).toLocaleString()}원)`}</Col>
+          <Col>{`- ${reserveSubtractAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
           <Col span={3}>매입 조정 차감</Col>
-          <Col>
-            {`- ${Math.round(
-              adjustmentSupplyAmount * 1.1,
-            ).toLocaleString()}원 (부가세 포함
-            ${Math.round(adjustmentSupplyAmount * 0.1).toLocaleString()}원)`}
-          </Col>
+          <Col>{`- ${adjustmentAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
 
@@ -130,13 +115,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         </Col>
         <Col span={17}>
           <b>
-            {`${Math.round(
-              (warehousingSupplyAmount - adjustmentSupplyAmount) * 1.1,
-            ).toLocaleString()}
-            원 (부가세 포함${Math.round(
-              Math.round(warehousingSupplyAmount - adjustmentSupplyAmount) *
-                0.1,
-            ).toLocaleString()}원)`}
+            {`${(
+              paymentSupplyAmount + paymentVatAmount
+            ).toLocaleString()}원 (부가세 포함 ${paymentVatAmount.toLocaleString()}원)`}
           </b>
         </Col>
         <Col>
@@ -175,7 +156,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             }}
           >
             <TurtleButton
-              disabled={warehousingSupplyAmount - adjustmentSupplyAmount === 0}
+              disabled={warehousingAmount - adjustmentAmount === 0}
               loading={createClearingQuery.isLoading}
             >
               {t('button.request clearing')}

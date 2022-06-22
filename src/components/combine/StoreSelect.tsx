@@ -26,12 +26,18 @@ function StoreSelect({ warningMessage }: Props) {
           .map((store) => ({
             id: store.id,
             name: store.name,
+            inventory_is_vat_included: store.inventory_is_vat_included,
           })),
       );
 
       // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택
       if (data.store_list.length === 1) {
-        setStore({ id: data.store_list[0].id, name: data.store_list[0].name });
+        setStore({
+          id: data.store_list[0].id,
+          name: data.store_list[0].name,
+          inventory_is_vat_included:
+            data.store_list[0].inventory_is_vat_included,
+        });
       }
     },
   });
@@ -48,18 +54,12 @@ function StoreSelect({ warningMessage }: Props) {
       setStore({
         id: value,
         name: storeList.find((item) => item.id === value)!.name,
+        inventory_is_vat_included: storeList.find((item) => item.id === value)!
+          .inventory_is_vat_included,
       });
     },
     [store, storeList, setStore, warningMessage],
   );
-
-  // 페이지 바뀔때 마다 storeId 초기화
-  // useEffect(
-  //   () => () => {
-  //     setStore(() => ({ id: undefined, name: '' }));
-  //   },
-  //   [setStore],
-  // );
 
   return (
     <Space size="large">

@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { clearingCartState } from '@store/clearingCartState';
+import { storeState } from '@store/storeState';
 
 function useClearingCart() {
   const cart = useRecoilValue(clearingCartState);
+  const store = useRecoilValue(storeState);
 
-  const warehousingSupplyAmount = useMemo(
+  const warehousingAmount = useMemo(
     () =>
       cart.warehousingBalanceList
         .filter((item) => item.clearing_amount)
@@ -23,7 +25,7 @@ function useClearingCart() {
     [cart.warehousingBalanceList],
   );
 
-  const adjustmentSupplyAmount = useMemo(
+  const adjustmentAmount = useMemo(
     () =>
       cart.adjustmentBalanceList
         .filter((item) => item.clearing_amount)
@@ -32,7 +34,7 @@ function useClearingCart() {
     [cart.adjustmentBalanceList],
   );
 
-  const reserveSupplyAmount = useMemo(
+  const reserveAmount = useMemo(
     () =>
       cart.reserveBalanceList.reduce(
         (acc, cur) => acc + cur.price * cur.count,
@@ -41,58 +43,34 @@ function useClearingCart() {
     [cart.reserveBalanceList],
   );
 
-  // const totalVatPrice = useMemo(
-  //   () =>
-  //     cart.warehousing_item_list
-  //       .map((item) => item.vat_price)
-  //       .reduce((acc, cur) => acc + cur, 0),
-  //   [cart.warehousing_item_list],
-  // );
+  const paymentVatAmount = useMemo(
+    () =>
+      store.inventory_is_vat_included
+        ? Math.round((warehousingAmount - adjustmentAmount) / 11)
+        : (warehousingAmount - adjustmentAmount) * 0.1,
+    [warehousingAmount, adjustmentAmount, store.inventory_is_vat_included],
+  );
 
-  // const totalReserveSubtractPrice = useMemo(
-  //   () =>
-  //     cart.warehousing_item_list
-  //       .filter((item) => item.is_reserved)
-  //       .map((item) => item.deposit_price)
-  //       .reduce((acc, cur) => acc + cur, 0),
-  //   [cart.warehousing_item_list],
-  // );
-
-  // const totalSubtractPrice = useMemo(
-  //   () =>
-  //     cart.subtract_item_list
-  //       .map((item) => item.price)
-  //       .reduce((cur, acc) => cur + acc, 0),
-  //   [cart.subtract_item_list],
-  // );
-
-  // const totalReservePrice = useMemo(
-  //   () =>
-  //     cart.reserve_item_list
-  //       .map((item) => item.price)
-  //       .reduce((cur, acc) => cur + acc, 0),
-  //   [cart.reserve_item_list],
-  // );
-
-  // const totalPrice = useMemo(
-  //   () =>
-  //     totalDepositPrice -
-  //     totalReserveSubtractPrice -
-  //     totalSubtractPrice +
-  //     totalReservePrice,
-  //   [
-  //     totalDepositPrice,
-  //     totalReserveSubtractPrice,
-  //     totalSubtractPrice,
-  //     totalReservePrice,
-  //   ],
-  // );
+  const paymentSupplyAmount = useMemo(
+    () =>
+      store.inventory_is_vat_included
+        ? warehousingAmount - adjustmentAmount - paymentVatAmount
+        : warehousingAmount - adjustmentAmount,
+    [
+      warehousingAmount,
+      adjustmentAmount,
+      paymentVatAmount,
+      store.inventory_is_vat_included,
+    ],
+  );
 
   return {
-    warehousingSupplyAmount,
+    warehousingAmount,
     reserveSubtractAmount,
-    adjustmentSupplyAmount,
-    reserveSupplyAmount,
+    adjustmentAmount,
+    reserveAmount,
+    paymentSupplyAmount,
+    paymentVatAmount,
   };
 }
 

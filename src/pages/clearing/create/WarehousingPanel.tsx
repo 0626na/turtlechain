@@ -30,7 +30,7 @@ interface Props extends CollapsePanelProps {
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { warehousingSupplyAmount } = useClearingCart();
+  const { warehousingAmount } = useClearingCart();
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
@@ -70,11 +70,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       extra={
         <Typography.Text style={{ color: '#5B5D63' }}>
-          {`거래처 총 결제금액 : ${Math.round(
-            warehousingSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 포함 ${Math.round(
-            warehousingSupplyAmount * 0.1,
-          ).toLocaleString()}원)`}
+          {`거래처 총 결제금액 : ${warehousingAmount.toLocaleString()}원`}
         </Typography.Text>
       }
     >
