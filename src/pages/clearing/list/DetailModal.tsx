@@ -80,7 +80,7 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             value: `${sheet?.complete_date ?? ' '}`,
           },
           {
-            title: t('clearing.total price'),
+            title: t('clearing.total payment'),
             value: `${sheet?.total_payment_amount}`,
           },
           {
@@ -197,19 +197,11 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
           },
           {
             ellipsis: true,
-            title: t('product.supply price'),
-            render: (_, record) => record.supply_amount.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t('product.vat price'),
+            title: t('clearing.total payment'),
             render: (_, record) =>
-              (record.total_amount - record.supply_amount).toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t('clearing.price'),
-            render: (_, record) => record.total_amount.toLocaleString(),
+              `${record.total_amount.toLocaleString()} (부가세 포함 ${(
+                record.total_amount - record.supply_amount
+              ).toLocaleString()}원)`,
           },
         ]}
       />

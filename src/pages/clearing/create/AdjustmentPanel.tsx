@@ -65,9 +65,9 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         <Typography.Text style={{ color: '#5B5D63' }}>
           {`차감 총 금액: ${Math.round(
             adjustmentSupplyAmount * 1.1,
-          ).toLocaleString()} 원 (부가세 ${Math.round(
+          ).toLocaleString()} 원 (부가세 포함 ${Math.round(
             adjustmentSupplyAmount * 0.1,
-          ).toLocaleString()}원 포함)`}
+          ).toLocaleString()}원)`}
         </Typography.Text>
       }
     >

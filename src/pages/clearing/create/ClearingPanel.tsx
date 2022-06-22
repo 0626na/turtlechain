@@ -77,9 +77,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           <Col span={3}>입고</Col>
           <Col>{`+ ${Math.round(
             warehousingSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 ${Math.round(
+          ).toLocaleString()}원 (부가세 포함 ${Math.round(
             warehousingSupplyAmount * 0.1,
-          ).toLocaleString()}원 포함)`}</Col>
+          ).toLocaleString()}원)`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
@@ -87,9 +87,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           <Col span={3}>당일 미송 추가</Col>
           <Col>{`+ ${Math.round(
             reserveSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 ${Math.round(
+          ).toLocaleString()}원 (부가세 포함 ${Math.round(
             reserveSupplyAmount * 0.1,
-          ).toLocaleString()}원 포함)`}</Col>
+          ).toLocaleString()}원)`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
@@ -97,9 +97,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           <Col span={3}>미송 입고 차감</Col>
           <Col>{`- ${Math.round(
             reserveSubtractAmount * 1.1,
-          ).toLocaleString()}원 (부가세 ${Math.round(
+          ).toLocaleString()}원 (부가세 포함${Math.round(
             reserveSubtractAmount * 0.1,
-          ).toLocaleString()}원 포함)`}</Col>
+          ).toLocaleString()}원)`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
@@ -108,10 +108,8 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           <Col>
             {`- ${Math.round(
               adjustmentSupplyAmount * 1.1,
-            ).toLocaleString()}원 (부가세 
-            ${Math.round(
-              adjustmentSupplyAmount * 0.1,
-            ).toLocaleString()}원 포함)`}
+            ).toLocaleString()}원 (부가세 포함
+            ${Math.round(adjustmentSupplyAmount * 0.1).toLocaleString()}원)`}
           </Col>
         </Row>
       </StyledCard>
@@ -135,10 +133,10 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             {`${Math.round(
               (warehousingSupplyAmount - adjustmentSupplyAmount) * 1.1,
             ).toLocaleString()}
-            원 (부가세 ${Math.round(
+            원 (부가세 포함${Math.round(
               Math.round(warehousingSupplyAmount - adjustmentSupplyAmount) *
                 0.1,
-            ).toLocaleString()}원 포함)`}
+            ).toLocaleString()}원)`}
           </b>
         </Col>
         <Col>

@@ -72,9 +72,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <Typography.Text style={{ color: '#5B5D63' }}>
           {`거래처 총 결제금액 : ${Math.round(
             warehousingSupplyAmount * 1.1,
-          ).toLocaleString()}원 (부가세 ${Math.round(
+          ).toLocaleString()}원 (부가세 포함 ${Math.round(
             warehousingSupplyAmount * 0.1,
-          ).toLocaleString()}원 포함)`}
+          ).toLocaleString()}원)`}
         </Typography.Text>
       }
     >
@@ -130,7 +130,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply amount'),
+            title: t('clearing.total amount'),
             render: (_, record) =>
               `${
                 record.reserve_amount > 0
@@ -144,7 +144,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: '당일 결제 공급가',
+            title: '당일 결제 금액',
             render: (_, record) => (
               <TurtleInputPrice
                 size="small"
@@ -164,16 +164,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 }}
               />
             ),
-          },
-          {
-            ellipsis: true,
-            width: 180,
-            align: 'right',
-            title: '당일 결제 부가세',
-            render: (_, record) =>
-              record.clearing_amount
-                ? Math.round(record.clearing_amount * 0.1).toLocaleString()
-                : 0,
           },
         ]}
       />
