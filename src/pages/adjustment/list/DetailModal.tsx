@@ -112,16 +112,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply amount'),
+            title: t('warehousing.amount'),
             render: (_, record) =>
               (record.price * record.count).toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat amount'),
-            render: (_, record) =>
-              (Math.round(record.price * 0.1) * record.count).toLocaleString(),
           },
           {
             ellipsis: true,

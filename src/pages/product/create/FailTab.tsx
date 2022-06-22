@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Table, TabPaneProps, Tabs } from 'antd';
+import { Table, TabPaneProps, Tabs, Typography } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { productCartState } from '@store/productCartState';
 
@@ -57,19 +57,17 @@ function FailTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply price'),
-            render: (_, record) => record.supply_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat price'),
-            render: (_, record) => record.vat_price.toLocaleString(),
+            title: t('product.price'),
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,
             title: t('product.image url'),
-            render: (_, record) => record.image_url,
+            render: (_, record) => (
+              <Typography.Link href={record.image_url} target="_blank">
+                {record.image_url}
+              </Typography.Link>
+            ),
           },
           {
             ellipsis: true,

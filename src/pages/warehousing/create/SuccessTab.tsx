@@ -31,13 +31,9 @@ function SuccessTab({ loading, ...props }: Props) {
     [cart.successList],
   );
 
-  // 공급가 합계 계산
+  // 금액 합계 계산
   const totalProductPrice = useMemo(
-    () =>
-      cart.successList.reduce(
-        (acc, cur) => acc + cur.count * cur.supply_price,
-        0,
-      ),
+    () => cart.successList.reduce((acc, cur) => acc + cur.count * cur.price, 0),
     [cart.successList],
   );
 
@@ -51,10 +47,6 @@ function SuccessTab({ loading, ...props }: Props) {
             ? {
                 ...item,
                 [type]: value,
-                vat_price:
-                  type === 'supply_price'
-                    ? Math.round(value * 0.1)
-                    : item.vat_price,
               }
             : item,
         ),
@@ -105,7 +97,7 @@ function SuccessTab({ loading, ...props }: Props) {
           </TurtleTableTitle>
         )}
         footer={() =>
-          `입고수량 합계 : ${totalProductCount}개 | 공급가 합계 : ${totalProductPrice.toLocaleString()}원`
+          `입고수량 합계 : ${totalProductCount}개 | 입고금액 합계 : ${totalProductPrice.toLocaleString()}원`
         }
         columns={[
           {
@@ -144,25 +136,19 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply price'),
+            title: t('product.price'),
             render: (_, record) => (
               <InputNumber
                 size="small"
                 step={1000}
-                value={record.supply_price}
+                value={record.price}
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 min={0}
                 onChange={(value) => {
-                  updateSuccessList('supply_price', record.index, value);
+                  updateSuccessList('price', record.index, value);
                 }}
               />
             ),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat price'),
-            render: (_, record) => record.vat_price.toLocaleString(),
           },
           {
             ellipsis: true,

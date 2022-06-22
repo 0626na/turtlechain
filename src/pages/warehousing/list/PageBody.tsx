@@ -160,14 +160,8 @@ function PageBody() {
             {
               ellipsis: true,
               align: 'right',
-              title: t('product.supply amount'),
+              title: t('warehousing.total amount'),
               render: (_, record) => record.total_amount.toLocaleString(),
-            },
-            {
-              ellipsis: true,
-              align: 'right',
-              title: t('product.vat amount'),
-              render: (_, record) => record.total_vat_amount.toLocaleString(),
             },
             {
               ellipsis: true,

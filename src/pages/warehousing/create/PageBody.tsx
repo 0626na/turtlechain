@@ -66,7 +66,7 @@ function PageBody() {
       fileList: [],
       successList: [],
       failList: [],
-      searchQuery: { type: 'name', search_string: '' },
+      searchQuery: { type: 'vendor_name', search_string: '' },
     });
     connectQuery.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,12 +105,6 @@ function PageBody() {
     parseQuery.mutate(form);
   };
 
-  // 재고 연동 버튼 클릭
-  const onClickConnect = useCallback(() => {
-    if (!isStoreExist()) return;
-    connectQuery.mutate({ rt_store_id: store.id! });
-  }, [store.id, connectQuery, isStoreExist]);
-
   // 쇼핑몰 변경시 모든 state 초기화
   useEffect(() => {
     resetStates();
@@ -143,7 +137,10 @@ function PageBody() {
         <TurtleButtonSub
           type="primary"
           color="skyblue"
-          onClick={onClickConnect}
+          onClick={() => {
+            if (!isStoreExist()) return;
+            connectQuery.mutate({ rt_store_id: store.id! });
+          }}
           disabled={connectQuery.isSuccess}
         >
           {t('button.connect external program')}
@@ -198,8 +195,7 @@ function PageBody() {
                   vendor_id: record.vendor_id,
                   product_id: record.product_id,
                   count: record.count,
-                  supply_price: record.supply_price,
-                  vat_price: record.vat_price,
+                  price: record.price,
                   is_reserved: record.is_reserved,
                   memo: record.memo,
                 })),

@@ -18,8 +18,7 @@ interface Props {
     vendor_product_name: string,
     product_code: string,
     product_option: string,
-    product_supply_price: number,
-    product_vat_price: number,
+    product_price: number,
   ) => void;
   vendorId?: number;
 }
@@ -115,8 +114,7 @@ function SearchProductModal({
                 record.product_code,
                 record.vendor_product_name,
                 record.option,
-                record.supply_price,
-                record.vat_price,
+                record.price,
               );
               setSearchQuery({
                 rt_store_id: -1,
@@ -151,13 +149,8 @@ function SearchProductModal({
           },
           {
             ellipsis: true,
-            title: t('product.supply price'),
-            render: (_, record) => record.supply_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            title: t('product.vat price'),
-            render: (_, record) => record.vat_price.toLocaleString(),
+            title: t('product.price'),
+            render: (_, record) => record.price.toLocaleString(),
           },
         ]}
       />

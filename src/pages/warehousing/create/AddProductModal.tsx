@@ -38,8 +38,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         product_code: undefined,
         vendor_product_name: undefined,
         product_option: undefined,
-        supply_price: undefined,
-        vat_price: undefined,
+        price: undefined,
         count: undefined,
       });
       setVendorModalVisible(false);
@@ -54,7 +53,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
       product_code,
       vendor_product_name,
       product_option,
-      supply_price,
+      price,
     ) => {
       form.setFieldsValue({
         product_id,
@@ -62,7 +61,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         vendor_product_name,
         product_code,
         product_option,
-        supply_price,
+        price,
         count: 1,
       });
       setProductModalVisible(false);
@@ -78,7 +77,6 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
         successList: [
           {
             ...item,
-            vat_price: Math.round(item.supply_price * 0.1),
             is_reserved: false,
             index: index.current++,
           },
@@ -91,6 +89,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
   );
 
   useEffect(() => {
+    if (visible) return;
     form.resetFields();
   }, [visible, form]);
 
@@ -166,8 +165,8 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
             disabled
           />
           <Form.Item // 상품 공급가 Input
-            label={t('product.supply price')}
-            name="supply_price"
+            label={t('product.price')}
+            name="price"
             rules={[{ required: true }]}
           >
             <InputNumber

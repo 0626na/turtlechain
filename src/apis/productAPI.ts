@@ -9,8 +9,7 @@ export interface Product {
   product_code: string;
   name: string;
   vendor_product_name: string;
-  supply_price: number;
-  vat_price: number;
+  price: number;
   option: string;
   image_url: string;
   memo: string;
@@ -34,12 +33,64 @@ export interface ProductShow {
   product_code: string;
   name: string;
   vendor_product_name: string;
-  supply_price: number;
-  vat_price: number;
+  price: number;
   option: string;
   memo: string;
   image_url: string;
 }
+
+/*
+ *  재고연동
+ */
+
+export interface RequestConnectInventory {
+  rt_store_id: number;
+}
+
+export interface ResponseConnectInventory {
+  msg: string;
+  data: {
+    success: Array<Product>;
+    fail: Array<Product>;
+    count: {
+      success_count: number;
+      fail_count: number;
+      duplicated_count: number;
+    };
+    error?: string;
+  };
+}
+
+const connectInventory = async function (query: RequestConnectInventory) {
+  let url = 'external-api/inventory/products?';
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get<ResponseConnectInventory>(url);
+  return response.data;
+};
+
+/*
+ *   엑셀 파싱
+ */
+
+export interface RequestParseExcel {
+  files: RcFile;
+  rt_store_id: number;
+}
+
+const parseExcel = async function (data: RequestParseExcel) {
+  const url = `excel/product`;
+  const formData = new FormData();
+  formData.append('files', data.files);
+  formData.append('rt_store_id', data.rt_store_id.toString());
+  const response = await v2Axios.post<ResponseConnectInventory>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
 
 /*
  *  상품 리스트
@@ -79,8 +130,7 @@ export interface RequestCreate {
   vendor_id: number;
   product_code: string;
   name: string;
-  supply_price: number;
-  vat_price: number;
+  price: number;
   image_url: string;
   vendor_product_name: string;
   option: string;
@@ -146,66 +196,13 @@ const getCode = async function (query: RequestGetCode) {
   return response.data;
 };
 
-/*
- *  재고연동
- */
-
-export interface RequestConnectInventory {
-  rt_store_id: number;
-}
-
-export interface ResponseConnectInventory {
-  msg: string;
-  data: {
-    success: Array<Product>;
-    fail: Array<Product>;
-    count: {
-      success_count: number;
-      fail_count: number;
-      duplicated_count: number;
-    };
-    error?: string;
-  };
-}
-
-const connectInventory = async function (query: RequestConnectInventory) {
-  let url = 'external-api/inventory/products?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseConnectInventory>(url);
-  return response.data;
-};
-
-/*
- *   엑셀 파싱
- */
-
-export interface RequestParseExcel {
-  files: RcFile;
-  rt_store_id: number;
-}
-
-const parseExcel = async function (data: RequestParseExcel) {
-  const url = `excel/product`;
-  const formData = new FormData();
-  formData.append('files', data.files);
-  formData.append('rt_store_id', data.rt_store_id.toString());
-  const response = await v2Axios.post<ResponseConnectInventory>(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
 const productAPI = {
+  connectInventory,
+  parseExcel,
   getList,
   create,
   update,
   getCode,
-  connectInventory,
-  parseExcel,
 };
 
 export default productAPI;

@@ -101,7 +101,7 @@ function WarehousingDetailModal({ visible, onClose, sheet, onOk }: Props) {
           {
             ellipsis: true,
             title: t('product.price'),
-            render: (_, record) => record.supply_price.toLocaleString(),
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,

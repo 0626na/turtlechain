@@ -12,8 +12,7 @@ export interface WarehousingItemConnect {
   product_option: string;
   product_code: number;
 
-  supply_price: number;
-  vat_price: number;
+  price: number;
   count: number;
   memo?: string;
 
@@ -30,7 +29,6 @@ export interface WarehousingSheet {
   created_time: string;
   clearing_sheet_id: number;
   total_amount: number;
-  total_vat_amount: number;
   total_row_count: number;
   total_store_count: number;
   total_item_count: number;
@@ -53,14 +51,12 @@ export interface WarehousingItem {
     id: number;
     name: string;
     vendor_product_name: string;
-    supply_price: number;
-    vat_price: number;
+    price: number;
     option: string;
     product_code: string;
   };
   count: number;
-  supply_price: number;
-  vat_price: number;
+  price: number;
   memo: string;
   is_vat_included: boolean;
   is_inactive: boolean;
@@ -135,8 +131,7 @@ export interface RequestCreateItem {
     vendor_id: number;
     product_id: number;
     count: number;
-    supply_price: number;
-    vat_price: number;
+    price: number;
     is_reserved?: boolean;
     memo?: string;
   }>;

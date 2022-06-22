@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import { Table, TabPaneProps, Tabs } from 'antd';
+import { Table, TabPaneProps, Tabs, Typography } from 'antd';
 import {
   TurtleIcon,
   TurtleInputPrice,
@@ -39,10 +39,6 @@ function SuccessTab({ loading, ...props }: Props) {
             ? {
                 ...product,
                 [type]: value,
-                vat_price:
-                  type === 'supply_price'
-                    ? Math.round(value * 0.1)
-                    : product.vat_price,
               }
             : product,
         ),
@@ -97,27 +93,25 @@ function SuccessTab({ loading, ...props }: Props) {
             ellipsis: true,
             align: 'right',
             width: 150,
-            title: t('product.supply price'),
+            title: t('product.price'),
             render: (_, record) => (
               <TurtleInputPrice
                 size="small"
-                value={record.supply_price}
+                value={record.price}
                 onChange={(value) => {
-                  updateSuccessList('supply_price', record.product_code, value);
+                  updateSuccessList('price', record.product_code, value);
                 }}
               />
             ),
           },
           {
             ellipsis: true,
-            align: 'right',
-            title: t('product.vat price'),
-            render: (_, record) => record.vat_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
             title: t('product.image url'),
-            render: (_, record) => record.image_url,
+            render: (_, record) => (
+              <Typography.Link href={record.image_url} target="_blank">
+                {record.image_url}
+              </Typography.Link>
+            ),
           },
           {
             ellipsis: true,

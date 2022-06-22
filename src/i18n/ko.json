@@ -199,7 +199,8 @@
     "count": "입고 수량",
     "date": "입고 날짜",
     "total count": "입고 수량 합계",
-    "price": "입고 금액",
+    "amount": "금액",
+    "total amount": "금액 합계",
     "preview": "입고서 미리보기",
     "load": "입고내역 불러오기",
     "is reserved": "미송입고 여부"
@@ -240,9 +241,7 @@
     "clearing list": "정산이력",
     "warehousing list": "입고내역",
     "clearing date": "정산 날짜",
-    "total price": "총 금액",
-    "supply price": "공급가액",
-    "vat price": "부가세"
+    "amount": "금액"
   },
   "clearing": {
     "": "정산",
@@ -305,10 +304,7 @@
     "code": "상품 바코드",
     "name": "상품명",
     "option": "옵션",
-    "supply price": "공급가",
-    "supply amount": "공급가 합계",
-    "vat price": "부가세",
-    "vat amount": "부가세 합계",
+    "price": "가격",
     "count": "수량",
     "vendor product name": "거래처 상품명",
     "memo": "메모",

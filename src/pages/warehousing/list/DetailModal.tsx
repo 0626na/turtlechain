@@ -33,7 +33,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   const queryClient = useQueryClient();
   const [itemList, setItemList] = useState<Array<WarehousingItem>>([]);
   const [searchQuery, setSearchQuery] = useState({
-    type: 'name',
+    type: 'vendor_name',
     search_string: '',
   });
   const [isUpdated, setIsUpdated] = useState(false);
@@ -110,7 +110,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   useEffect(() => {
     if (visible) return;
     setSearchQuery({
-      type: 'name',
+      type: 'vendor_name',
       search_string: '',
     });
   }, [visible]);
@@ -138,7 +138,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
   );
 
   return (
-    <TurtleModal //
+    <TurtleModal
       centered
       width="90%"
       bodyStyle={{ height: '80vh', overflow: 'auto' }}
@@ -184,12 +184,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
             value: `${sheet?.total_item_count}건`,
           },
           {
-            title: t('product.supply amount'),
+            title: t('warehousing.total amount'),
             value: `${sheet?.total_amount.toLocaleString()}원`,
-          },
-          {
-            title: t('product.vat amount'),
-            value: `${sheet?.total_vat_amount.toLocaleString()}원`,
           },
         ]}
       />
@@ -205,6 +201,10 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           <TurtleTableTitle
             count={itemList.filter((item) => !item.is_inactive).length}
             searchCount={filteredList.length}
+            totalAmount={filteredList.reduce(
+              (cur, acc) => cur + acc.price * acc.count,
+              0,
+            )}
           >
             <NewSearchFilter
               searchQuery={searchQuery}
@@ -247,14 +247,8 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply price'),
-            render: (_, record) => record.supply_price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat price'),
-            render: (_, record) => record.vat_price.toLocaleString(),
+            title: t('product.price'),
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             ellipsis: true,

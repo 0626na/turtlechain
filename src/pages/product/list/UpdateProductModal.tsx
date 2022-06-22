@@ -19,7 +19,6 @@ interface Props {
 
 function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
-  const supplyPrice = Form.useWatch('supply_price', form);
 
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
@@ -37,8 +36,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_product_name: selectedRow?.vendor_product_name,
       product_code: selectedRow?.product_code,
       option: selectedRow?.option,
-      supply_price: selectedRow?.supply_price,
-      vat_price: selectedRow?.vat_price,
+      price: selectedRow?.price,
       image_url: selectedRow?.image_url,
       memo: selectedRow?.memo,
       vendor_name: selectedRow?.vendor_info.vendor_name,
@@ -46,14 +44,6 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_phone: selectedRow?.vendor_info.vendor_phone.phone,
     });
   }, [selectedRow, form]);
-
-  // supply_price 바꿀때 vat_price 바꿔줌
-  useEffect(() => {
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      vat_price: Math.round(supplyPrice * 0.1),
-    });
-  }, [supplyPrice, form]);
 
   return (
     <TurtleModal
@@ -112,25 +102,18 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           name="option"
         />
         <Form.Item
-          name="supply_price"
-          label={t('product.supply price')}
+          name="price"
+          label={t('product.price')}
           rules={[{ required: true }]}
         >
           <TurtleInputPrice style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item
-          name="vat_price"
-          label={t('product.vat price')}
-          rules={[{ required: true }]}
-        >
-          <TurtleInputPrice style={{ width: '100%' }} disabled />
-        </Form.Item>
-        <TurtleInput //
+        <TurtleInput
           label={t('product.image url')}
           name="image_url"
           required={false}
         />
-        <TurtleTextArea // 메모 TextArea
+        <TurtleTextArea
           required={false}
           label={t('vendor.memo')}
           name="memo"

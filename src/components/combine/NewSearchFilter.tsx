@@ -31,16 +31,16 @@ function NewSearchFilter({
       ]
     : [
         {
+          name: t('vendor.name'),
+          value: 'vendor_name',
+        },
+        {
           name: t('product.name'), //
           value: 'name',
         },
         {
           name: t('product.vendor product name'),
           value: 'vendor_product_name',
-        },
-        {
-          name: t('vendor.name'),
-          value: 'vendor_name',
         },
       ];
 

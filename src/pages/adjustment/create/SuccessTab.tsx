@@ -54,7 +54,7 @@ function SuccessTab({ ...props }: Props) {
         rowKey={(record) => record.index!}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         scroll={{ y: 'auto' }}
-        footer={() => `공급가 합계 : ${totalPrice.toLocaleString()}원`}
+        footer={() => `금액 합계 : ${totalPrice.toLocaleString()}원`}
         expandable={{
           columnWidth: 25,
           expandIcon: ({ expanded, onExpand, record }) => (
@@ -106,7 +106,7 @@ function SuccessTab({ ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply price'),
+            title: t('product.price'),
             render: (_, record) => (
               <InputNumber
                 size="small"
@@ -119,13 +119,6 @@ function SuccessTab({ ...props }: Props) {
                 }}
               />
             ),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat price'),
-            render: (_, record) =>
-              Math.round(record.product_price * 0.1).toLocaleString(),
           },
           {
             ellipsis: true,

@@ -168,8 +168,6 @@ export interface ResponseGet {
       account_number: string;
 
       total_price: number;
-      supply_price: number;
-      vat_price: number;
       is_vat_included: boolean;
       adjustment_process_type: 'subtract' | 'refund' | '';
       adjustment_type: 'reserve' | 'takeback' | 'exchange' | 'refund';

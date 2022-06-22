@@ -112,7 +112,7 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
         product_name: item.product_info.name,
         vendor_product_name: item.product_info.vendor_product_name,
         product_option: item.product_info.option,
-        product_price: item.product_info.supply_price,
+        product_price: item.product_info.price,
         product_count: 0,
         product_count_max: item.count,
         product_code: item.product_info.product_code,
@@ -211,14 +211,8 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('product.supply amount'),
+            title: t('warehousing.amount'),
             render: (_, record) => record.total_amount.toLocaleString(),
-          },
-          {
-            ellipsis: true,
-            align: 'right',
-            title: t('product.vat amount'),
-            render: (_, record) => record.total_vat_amount.toLocaleString(),
           },
         ]}
       />
@@ -290,14 +284,8 @@ function LoadWarehousingModal({ visible, closeModal, addItem }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              title: t('product.supply price'),
-              render: (_, record) => record.supply_price.toLocaleString(),
-            },
-            {
-              ellipsis: true,
-              align: 'right',
-              title: t('product.vat price'),
-              render: (_, record) => record.vat_price.toLocaleString(),
+              title: t('product.price'),
+              render: (_, record) => record.price.toLocaleString(),
             },
             {
               ellipsis: true,

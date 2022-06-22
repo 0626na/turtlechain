@@ -85,7 +85,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         successList: [
           {
             ...addedProduct,
-            vat_price: Math.round(addedProduct.supply_price * 0.1),
+            price: addedProduct.price,
           },
           ...cart.successList,
         ],
@@ -96,6 +96,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   );
 
   useEffect(() => {
+    if (visible) return;
     form.resetFields();
   }, [visible, form]);
 
@@ -171,11 +172,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             </Space>
           </Form.Item>
           <TurtleInput label="옵션" name="option" />
-          <Form.Item
-            name="supply_price"
-            label="공급가"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="price" label="가격" rules={[{ required: true }]}>
             <TurtleInputPrice style={{ width: '100%' }} />
           </Form.Item>
           <TurtleInput
