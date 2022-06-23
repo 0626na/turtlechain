@@ -21,11 +21,11 @@ import {
   CloseOutlined,
   FileTextOutlined,
 } from '@ant-design/icons';
-import { ParseCount, Vendor } from '@apis/excelAPI';
-import externalAPI from '@apis/externalAPI';
 import vendorAPI, {
+  ConnectCount,
   RequestCreate,
   VendorAccount,
+  VendorConnect,
   WholesaleShow,
 } from '@apis/vendorAPI';
 import { storeState } from '@store/storeState';
@@ -46,10 +46,10 @@ interface Props {
 function ConnectModal({ visible, closeModal }: Props) {
   const history = useHistory();
   const store = useRecoilValue(storeState);
-  const [successList, setSuccessList] = useState<Array<Vendor>>([]);
-  const [suggestList, setSuggestList] = useState<Array<Vendor>>([]);
-  const [failList, setFailList] = useState<Array<Vendor>>([]);
-  const [count, setCount] = useState<ParseCount>({
+  const [successList, setSuccessList] = useState<Array<VendorConnect>>([]);
+  const [suggestList, setSuggestList] = useState<Array<VendorConnect>>([]);
+  const [failList, setFailList] = useState<Array<VendorConnect>>([]);
+  const [count, setCount] = useState<ConnectCount>({
     success_count: 0,
     suggest_count: 0,
     fail_count: 0,
@@ -59,7 +59,7 @@ function ConnectModal({ visible, closeModal }: Props) {
   // 거래처 연동 요청
   const connectVendorQuery = useMutation(
     'connectVendor',
-    externalAPI.connectSellmateVendor,
+    vendorAPI.connectInventory,
     {
       onError: () => {
         resetField();
@@ -144,7 +144,7 @@ function ConnectModal({ visible, closeModal }: Props) {
   }, [closeModal, resetField]);
 
   const setSuccessMemoValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, record: Vendor) => {
+    (e: React.ChangeEvent<HTMLInputElement>, record: VendorConnect) => {
       setSuccessList(
         successList?.map((vendor) =>
           vendor.vendor_code === record.vendor_code
@@ -379,7 +379,7 @@ function ConnectModal({ visible, closeModal }: Props) {
 
   const getSuggestCount = useMemo((): number => {
     let count = 0;
-    suggestList?.forEach((vendor: Vendor) => {
+    suggestList?.forEach((vendor: VendorConnect) => {
       if (vendor.use_vendor && vendor.check_account) count++;
     });
     return count;

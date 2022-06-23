@@ -93,7 +93,7 @@ function PageBody() {
             {
               title: '받는분 통장인쇄내용',
               ellipsis: true,
-              render: (_, record) => record.sender_name,
+              render: (_, record) => record.recipient_print,
             },
             {
               title: '이체내역 착신 이메일',

@@ -27,7 +27,6 @@ import { storeState } from '@store/storeState';
 import { SelectDateModal } from '@components/combine';
 import { useStoreExist } from '@hooks/index';
 import DetailModal from './DetailModal';
-import excelAPI from '@apis/excelAPI';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -70,7 +69,7 @@ function PageBody() {
 
   const downloadExcelQuery = useMutation(
     'downloadClearing',
-    excelAPI.downloadClearing,
+    clearingAPI.download,
     {
       onError: (error: AxiosError) => {
         message.error(

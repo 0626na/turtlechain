@@ -25,11 +25,12 @@ import { useRecoilValue } from 'recoil';
 import { RcFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
 import vendorAPI, {
+  ConnectCount,
   RequestCreate,
   VendorAccount,
+  VendorConnect,
   WholesaleShow,
 } from '@apis/vendorAPI';
-import excelAPI, { ParseCount, Vendor } from '@apis/excelAPI';
 import { storeState } from '@store/storeState';
 import {
   TurtleBadge,
@@ -49,10 +50,10 @@ function ExcelModal({ visible, closeModal }: Props) {
   const history = useHistory();
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [successList, setSuccessList] = useState<Array<Vendor>>([]);
-  const [suggestList, setSuggestList] = useState<Array<Vendor>>([]);
-  const [failList, setFailList] = useState<Array<Vendor>>([]);
-  const [count, setCount] = useState<ParseCount>({
+  const [successList, setSuccessList] = useState<Array<VendorConnect>>([]);
+  const [suggestList, setSuggestList] = useState<Array<VendorConnect>>([]);
+  const [failList, setFailList] = useState<Array<VendorConnect>>([]);
+  const [count, setCount] = useState<ConnectCount>({
     success_count: 0,
     suggest_count: 0,
     fail_count: 0,
@@ -60,7 +61,7 @@ function ExcelModal({ visible, closeModal }: Props) {
   });
 
   // 거래처 파싱 요청
-  const parseVendorQuery = useMutation('parseVendor', excelAPI.parseVendor, {
+  const parseVendorQuery = useMutation('parseVendor', vendorAPI.parseExcel, {
     onError: () => {
       resetField();
     },
@@ -152,7 +153,7 @@ function ExcelModal({ visible, closeModal }: Props) {
   };
 
   const setSuccessMemoValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, record: Vendor) => {
+    (e: React.ChangeEvent<HTMLInputElement>, record: VendorConnect) => {
       setSuccessList(
         successList?.map((vendor) =>
           vendor.vendor_code === record.vendor_code
@@ -387,7 +388,7 @@ function ExcelModal({ visible, closeModal }: Props) {
 
   const getSuggestCount = useMemo((): number => {
     let count = 0;
-    suggestList?.forEach((vendor: Vendor) => {
+    suggestList?.forEach((vendor: VendorConnect) => {
       if (vendor.use_vendor && vendor.check_account) count++;
     });
     return count;

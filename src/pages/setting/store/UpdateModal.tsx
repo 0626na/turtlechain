@@ -9,7 +9,7 @@ import {
   TurtleInput,
   TurtleModal,
 } from '@components/common';
-import basicDataAPI from '@apis/basicDataAPI';
+import presetAPI from '@apis/presetAPI';
 
 interface Props {
   visible: boolean;
@@ -21,7 +21,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
-  const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
+  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
     enabled: visible,
   });
 
@@ -141,13 +141,13 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                 placeholder="은행"
                 loading={getBankQuery.isLoading}
               >
-                {Object.values(
-                  getBankQuery.data?.data.code_set.code_list ?? [],
-                ).map((bank: any) => (
-                  <Select.Option key={bank} value={bank}>
-                    {bank}
-                  </Select.Option>
-                ))}
+                {Object.values(getBankQuery.data?.data ?? []).map(
+                  (bank: any) => (
+                    <Select.Option key={bank} value={bank}>
+                      {bank}
+                    </Select.Option>
+                  ),
+                )}
               </Select>
             </Form.Item>
             <Form.Item

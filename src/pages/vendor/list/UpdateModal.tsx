@@ -11,8 +11,8 @@ import {
 } from '@components/common';
 import { useMutation, useQuery } from 'react-query';
 import { storeState } from '@store/storeState';
-import basicDataAPI from '@apis/basicDataAPI';
 import bucketListAPI from '@apis/bucketListAPI';
+import presetAPI from '@apis/presetAPI';
 
 interface Props {
   visible: boolean;
@@ -25,11 +25,11 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
   const store = useRecoilValue(storeState);
   const [address, setAddress] = useState({ building: '', floor: '' });
 
-  const getAddressQuery = useQuery('getAdress', basicDataAPI.getAddress, {
+  const getBuildingQuery = useQuery('getAdress', presetAPI.getBuilding, {
     enabled: visible,
   });
 
-  const getBankQuery = useQuery('getBank', basicDataAPI.getBank, {
+  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
     enabled: visible,
   });
 
@@ -126,7 +126,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
               <Select
                 placeholder="상가명"
                 style={{ width: '40%' }}
-                loading={getAddressQuery.isLoading}
+                loading={getBuildingQuery.isLoading}
                 onChange={(building) => {
                   setAddress({ building, floor: '' });
                   form.setFieldsValue({
@@ -136,7 +136,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                   });
                 }}
               >
-                {Object.keys(getAddressQuery.data?.data ?? []).map(
+                {Object.keys(getBuildingQuery.data?.data ?? []).map(
                   (building) => (
                     <Select.Option key={building} value={building}>
                       {building}
@@ -163,7 +163,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                 }}
               >
                 {Object.keys(
-                  getAddressQuery.data?.data[address.building] ?? [],
+                  getBuildingQuery.data?.data[address.building] ?? [],
                 ).map((floor: string) => (
                   <Select.Option key={floor} value={floor}>
                     {floor}
@@ -179,7 +179,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             >
               <Select placeholder="열/호" style={{ width: '35%' }}>
                 {(
-                  getAddressQuery.data?.data[address.building]?.[
+                  getBuildingQuery.data?.data[address.building]?.[
                     address.floor
                   ] ?? []
                 ).map((colLoc: string) => {
@@ -215,13 +215,13 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                 placeholder="은행"
                 loading={getBankQuery.isLoading}
               >
-                {Object.values(
-                  getBankQuery.data?.data.code_set.code_list ?? [],
-                ).map((bank: any) => (
-                  <Select.Option key={bank} value={bank}>
-                    {bank}
-                  </Select.Option>
-                ))}
+                {Object.values(getBankQuery.data?.data ?? []).map(
+                  (bank: any) => (
+                    <Select.Option key={bank} value={bank}>
+                      {bank}
+                    </Select.Option>
+                  ),
+                )}
               </Select>
             </Form.Item>
             <Form.Item

@@ -10,6 +10,7 @@ import {
   Select,
   Typography,
   Upload,
+  Image,
 } from 'antd';
 import retailerCompanyAPI from '@apis/retailerCompanyAPI';
 import { DaumPostcodeModal } from '@components/combine';
@@ -172,12 +173,7 @@ function PageBody() {
                 <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
               </Upload>
             ) : (
-              <Typography.Link
-                target="_self"
-                href={getQuery.data?.biz_license_path}
-              >
-                {getQuery.data?.biz_license_path.split('/').pop()}
-              </Typography.Link>
+              <Image width={300} src={getQuery.data?.biz_license_path} />
             )}
           </Form.Item>
           <Row justify="end">

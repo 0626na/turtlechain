@@ -1,3 +1,5 @@
+import saveAs from 'file-saver';
+import moment from 'moment';
 import { v2Axios } from '.';
 
 // 잔여 매입조정 금액
@@ -355,6 +357,31 @@ const getItemDetail = async function (query: RequestGetItemDetail) {
   return response.data;
 };
 
+/*
+ * 정산내역 다운로드
+ */
+
+interface RequestDownload {
+  rt_store_id?: number;
+  start_date: string;
+  end_date: string;
+}
+
+const download = async function (query: RequestDownload) {
+  let url = `excel/download/clearing?`;
+  for (const [key, value] of Object.entries(query)) {
+    url = url + `${key}=${value}&`;
+  }
+  const response = await v2Axios.get(url, { responseType: 'arraybuffer' });
+  // 파일 저장
+  saveAs(
+    new Blob([response.data], { type: 'application/ms-excel' }),
+    `${moment(query.start_date).format('YYMMDD')}_${moment(
+      query.end_date,
+    ).format('YYMMDD')}_정산내역.xlsx`,
+  );
+};
+
 const clearingAPI = {
   getWarehousingBalance,
   getAdjustmentBalance,
@@ -364,6 +391,7 @@ const clearingAPI = {
   updateSheet,
   getItem,
   getItemDetail,
+  download,
 };
 
 export default clearingAPI;

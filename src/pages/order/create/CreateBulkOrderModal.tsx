@@ -1,20 +1,9 @@
 import { t } from 'i18next';
 import { useCallback, useState } from 'react';
-import { useMutation } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import {
-  message,
-  Modal,
-  Popconfirm,
-  Row,
-  Space,
-  Table,
-  Typography,
-} from 'antd';
+import { Modal, Popconfirm, Row, Space, Table, Typography } from 'antd';
 import Upload, { RcFile } from 'antd/lib/upload';
-import excelAPI, { OrderProduct } from '@apis/excelAPI';
 import { OrderItemShow } from '@apis/orderAPI';
-import { SearchFilter } from '@components/combine';
 import { TurtleButton, TurtleButtonSub, TurtleInfo } from '@components/common';
 import { storeState } from '@store/storeState';
 
@@ -24,43 +13,38 @@ interface Props {
   addItem: (item: OrderItemShow) => void;
 }
 
-interface SearchState {
-  type: string;
-  search_string: string;
-}
-
 function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
-  const [allList, setAllList] = useState<Array<OrderProduct>>([]);
-  const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
-  const [failList, setFailList] = useState<Array<OrderProduct>>([]);
+  // const [allList, setAllList] = useState<Array<OrderProduct>>([]);
+  // const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
+  // const [failList, setFailList] = useState<Array<OrderProduct>>([]);
 
-  const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
-    onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetField();
-        return;
-      }
-      setAllList([...data.data.success, ...data.data.fail]);
-      setSuccessList(data.data.success);
-      setFailList(data.data.fail);
-    },
-  });
+  // const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
+  //   onSuccess: (data) => {
+  //     if (data.data.error) {
+  //       message.error(data.data.error);
+  //       resetField();
+  //       return;
+  //     }
+  //     setAllList([...data.data.success, ...data.data.fail]);
+  //     setSuccessList(data.data.success);
+  //     setFailList(data.data.fail);
+  //   },
+  // });
 
   const loadFile = (file: RcFile) => {
     const form = new FormData();
     form.append('files', file);
     form.append('rt_store_id', store.id?.toString() ?? '');
-    parseOrderQuery.mutate(form);
+    // parseOrderQuery.mutate(form);
   };
 
   const resetField = useCallback(() => {
     setFileList([]);
-    setAllList([]);
-    setSuccessList([]);
-    setFailList([]);
+    // setAllList([]);
+    // setSuccessList([]);
+    // setFailList([]);
   }, []);
 
   const onCloseModal = useCallback(() => {
@@ -68,53 +52,53 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
     closeModal();
   }, [resetField, closeModal]);
 
-  const searchAllList = useCallback(
-    ({ type, search_string }: SearchState) => {
-      setAllList(
-        [...successList, ...failList].filter((item) => {
-          if (type === 'name') {
-            return item.product_name.includes(search_string);
-          }
-          if (type === 'vendor_product_name') {
-            return item.vendor_product_name.includes(search_string);
-          }
-          if (type === 'vendor_name') {
-            return item.vendor_name.includes(search_string);
-          }
-          return (
-            item.product_name.includes(search_string) ||
-            item.vendor_product_name.includes(search_string) ||
-            item.vendor_name.includes(search_string)
-          );
-        }),
-      );
-    },
-    [failList, successList],
-  );
+  // const searchAllList = useCallback(
+  //   ({ type, search_string }: SearchState) => {
+  //     setAllList(
+  //       [...successList, ...failList].filter((item) => {
+  //         if (type === 'name') {
+  //           return item.product_name.includes(search_string);
+  //         }
+  //         if (type === 'vendor_product_name') {
+  //           return item.vendor_product_name.includes(search_string);
+  //         }
+  //         if (type === 'vendor_name') {
+  //           return item.vendor_name.includes(search_string);
+  //         }
+  //         return (
+  //           item.product_name.includes(search_string) ||
+  //           item.vendor_product_name.includes(search_string) ||
+  //           item.vendor_name.includes(search_string)
+  //         );
+  //       }),
+  //     );
+  //   },
+  //   [failList, successList],
+  // );
 
-  const onClickAdd = useCallback(() => {
-    if (successList.length === 0) {
-      message.warn('추가할 상품이 없습니다.');
-    }
-    successList.forEach((item) => {
-      addItem({
-        vendor_id: item.vendor_id,
-        product_id: item.product_id,
-        vendor_name: item.vendor_name,
-        vendor_address: item.vendor_address,
-        vendor_phone: item.vendor_phone,
-        product_name: item.product_name,
-        product_code: item.product_code,
-        product_option: item.option,
-        count: item.count,
-        price: item.order_price,
-        type: item.type,
-        image_url: item.image_url,
-        memo: item.memo,
-      });
-    });
-    onCloseModal();
-  }, [successList, addItem, onCloseModal]);
+  // const onClickAdd = useCallback(() => {
+  //   if (successList.length === 0) {
+  //     message.warn('추가할 상품이 없습니다.');
+  //   }
+  //   successList.forEach((item) => {
+  //     addItem({
+  //       vendor_id: item.vendor_id,
+  //       product_id: item.product_id,
+  //       vendor_name: item.vendor_name,
+  //       vendor_address: item.vendor_address,
+  //       vendor_phone: item.vendor_phone,
+  //       product_name: item.product_name,
+  //       product_code: item.product_code,
+  //       product_option: item.option,
+  //       count: item.count,
+  //       price: item.order_price,
+  //       type: item.type,
+  //       image_url: item.image_url,
+  //       memo: item.memo,
+  //     });
+  //   });
+  //   onCloseModal();
+  // }, [successList, addItem, onCloseModal]);
 
   return (
     <Modal
@@ -153,7 +137,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
         </Upload>
       </Space>
       <Row style={{ padding: '1rem 0' }}>
-        <SearchFilter type="product" onSearch={searchAllList} />
+        {/* <SearchFilter type="product" onSearch={searchAllList} /> */}
       </Row>
       <Row>
         <TurtleInfo>
@@ -163,8 +147,8 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
       </Row>
       <Table
         size="small"
-        loading={parseOrderQuery.isLoading}
-        dataSource={allList}
+        // loading={parseOrderQuery.isLoading}
+        // dataSource={allList}
         rowKey={(record) => record.product_code}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         style={{ height: '485px' }}
@@ -275,7 +259,7 @@ function CreateBulkOrderModal({ visible, closeModal, addItem }: Props) {
           title={t('description.really add')}
           okText={t('yes')}
           cancelText={t('no')}
-          onConfirm={onClickAdd}
+          // onConfirm={onClickAdd}
         >
           <TurtleButton type="primary" disabled={fileList.length === 0}>
             {t('button.add order')}

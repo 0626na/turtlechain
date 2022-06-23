@@ -34,7 +34,7 @@ export interface StoreShow {
   is_closed: boolean;
   order_formats: number;
   email: string;
-  sender_name: string;
+  recipient_print: string;
   store_account: Array<{
     id: number;
     bank: string;

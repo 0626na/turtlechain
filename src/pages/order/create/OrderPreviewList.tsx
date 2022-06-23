@@ -17,7 +17,6 @@ import {
 import orderAPI, { OrderItemShow } from '@apis/orderAPI';
 import { storeState } from '@store/storeState';
 import { FileOutlined } from '@ant-design/icons';
-import excelAPI, { OrderProduct } from '@apis/excelAPI';
 import { MenuBar } from '@layout/main';
 import {
   TurtleButton,
@@ -32,7 +31,7 @@ function OrderPreviewList() {
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [itemList, setItemList] = useState<Array<OrderItemShow>>([]);
   // const [allList, setAllList] = useState<Array<OrderProduct>>([]);
-  const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
+  // const [successList, setSuccessList] = useState<Array<OrderProduct>>([]);
   // const [failList, setFailList] = useState<Array<OrderProduct>>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
 
@@ -46,30 +45,30 @@ function OrderPreviewList() {
     return '주문';
   };
 
-  const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
-    onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetField();
-        return;
-      }
-      // setAllList([...data.data.success, ...data.data.fail]);
-      setSuccessList(data.data.success);
-      // setFailList(data.data.fail);
-    },
-  });
+  // const parseOrderQuery = useMutation('parseOrder', excelAPI.parseOrder, {
+  //   onSuccess: (data) => {
+  //     if (data.data.error) {
+  //       message.error(data.data.error);
+  //       resetField();
+  //       return;
+  //     }
+  //     // setAllList([...data.data.success, ...data.data.fail]);
+  //     setSuccessList(data.data.success);
+  //     // setFailList(data.data.fail);
+  //   },
+  // });
 
   const loadFile = (file: RcFile) => {
     const form = new FormData();
     form.append('files', file);
     form.append('rt_store_id', store.id?.toString() ?? '');
-    parseOrderQuery.mutate(form);
+    // parseOrderQuery.mutate(form);
   };
 
   const resetField = useCallback(() => {
     setFileList([]);
     // setAllList([]);
-    setSuccessList([]);
+    // setSuccessList([]);
     // setFailList([]);
   }, []);
 
@@ -189,9 +188,9 @@ function OrderPreviewList() {
         <Table
           size="small"
           scroll={{ y: 800 }}
-          loading={parseOrderQuery.isLoading}
+          // loading={parseOrderQuery.isLoading}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          dataSource={successList}
+          // dataSource={successList}
           rowKey={(record) => record.product_id}
           style={{ height: '510px' }}
           columns={[

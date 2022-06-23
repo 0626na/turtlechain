@@ -27,7 +27,7 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
     page: 1,
-    type: 'all',
+    type: 'name',
     search_string: '',
   });
 
