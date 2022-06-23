@@ -56,7 +56,6 @@ export interface ClearingSheetShow {
   total_clearing_amount: number;
   total_deposit_amount: number;
   included_vat_amount: number;
-  total_payment_amount: number;
 }
 
 // 정산 아이템

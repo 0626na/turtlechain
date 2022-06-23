@@ -156,7 +156,7 @@ function ClearingChartCard() {
                   .add(day - 1, 'day')
                   .format('YYYY-MM-DD') && store_name === store,
           )
-          .map(({ total_payment_amount }) => total_payment_amount)
+          .map(({ total_deposit_amount }) => total_deposit_amount)
           .reduce((cur, acc) => cur + acc, 0);
       }),
       borderColor: lineColor[index],

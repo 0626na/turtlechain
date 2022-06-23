@@ -77,7 +77,7 @@ function ClearingStatusCard() {
             ellipsis: true,
             title: t('clearing.total payment'),
             render: (_, record) =>
-              `${record.total_payment_amount.toLocaleString()}원`,
+              `${record.total_deposit_amount.toLocaleString()}원`,
           },
         ]}
       />
