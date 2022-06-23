@@ -11,7 +11,12 @@ import {
 } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { TurtleButton, TurtleQuestionTooltip } from '@components/common';
+import {
+  TurtleButton,
+  TurtleButtonSub,
+  TurtleQuestionTooltip,
+  TurtleTableTitle,
+} from '@components/common';
 import { clearingCartState } from '@store/clearingCartState';
 import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
@@ -73,6 +78,34 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         loading={getAdjustmentBalanceQuery.isLoading}
         dataSource={cart.adjustmentBalanceList}
         rowKey="id"
+        title={() => (
+          <TurtleTableTitle
+            count={getAdjustmentBalanceQuery.data?.total_count ?? 0}
+          >
+            <Space size="large">
+              <TurtleButtonSub
+                size="small"
+                type="primary"
+                onClick={() => {
+                  setCart((cart) => ({
+                    ...cart,
+                    adjustmentBalanceList: cart.adjustmentBalanceList.map(
+                      (item) => ({
+                        ...item,
+                        clearing_amount: Math.min(
+                          item.overpaid_amount,
+                          item.max_clearing_amount ?? 0,
+                        ),
+                      }),
+                    ),
+                  }));
+                }}
+              >
+                전액 입력하기
+              </TurtleButtonSub>
+            </Space>
+          </TurtleTableTitle>
+        )}
         columns={[
           {
             ellipsis: true,

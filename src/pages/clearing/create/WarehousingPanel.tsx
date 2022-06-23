@@ -102,7 +102,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                   }));
                 }}
               >
-                전액 결제하기
+                전액 입력하기
               </TurtleButtonSub>
               <NewSearchFilter
                 select={false}
