@@ -87,9 +87,9 @@ function PageBody() {
                   record.store_account[0]?.account_number ?? ''
                 } ${record.store_account[0]?.account_holder ?? ''}`,
             },
-            {
-              title: 'WP가상계좌',
-            },
+            // {
+            //   title: 'WP가상계좌',
+            // },
             {
               title: '받는분 통장인쇄내용',
               ellipsis: true,
