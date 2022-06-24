@@ -68,7 +68,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       extra={
         <Typography.Text style={{ color: '#5B5D63' }}>
-          {`차감 총 금액: ${adjustmentAmount.toLocaleString()}원`}
+          {`총 차감 금액 : ${adjustmentAmount.toLocaleString()}원`}
         </Typography.Text>
       }
     >

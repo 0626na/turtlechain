@@ -70,7 +70,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       extra={
         <Typography.Text style={{ color: '#5B5D63' }}>
-          {`거래처 총 결제금액 : ${warehousingAmount.toLocaleString()}원`}
+          {`총 합계 금액 : ${warehousingAmount.toLocaleString()}원`}
         </Typography.Text>
       }
     >
