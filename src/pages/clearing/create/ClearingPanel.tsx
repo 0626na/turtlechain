@@ -76,25 +76,29 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     <Collapse.Panel {...props} style={{ border: '1px solid #e3e6ea' }}>
       <StyledCard>
         <Row>
-          <Col span={3}>거래처별 결제대기</Col>
-          <Col>{`+ ${warehousingAmount.toLocaleString()}원 (당일미송 ${reserveAmount.toLocaleString()}원 추가, 미송입고 ${reserveSubtractAmount.toLocaleString()}원 차감)`}</Col>
+          <Col span={3}>입고</Col>
+          <Col>{`+ ${(
+            warehousingAmount -
+            reserveAmount +
+            reserveSubtractAmount
+          ).toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
-      {/* <StyledCard> */}
-      {/* <Row>
-          <Col span={3}>당일 미송 추가</Col>
+      <StyledCard>
+        <Row>
+          <Col span={3}>당일미송 추가</Col>
           <Col>{`+ ${reserveAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>미송 입고 차감</Col>
+          <Col span={3}>미송입고 차감</Col>
           <Col>{`- ${reserveSubtractAmount.toLocaleString()}원`}</Col>
-        </Row> */}
-      {/* </StyledCard> */}
+        </Row>
+      </StyledCard>
       <StyledCard>
         <Row>
-          <Col span={3}>매입조정 결제대기</Col>
+          <Col span={3}>매입조정 차감</Col>
           <Col>{`- ${adjustmentAmount.toLocaleString()}원`}</Col>
         </Row>
       </StyledCard>
