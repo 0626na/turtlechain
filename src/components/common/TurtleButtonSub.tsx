@@ -10,7 +10,7 @@ interface Props {
   color?: 'skyblue' | 'blue' | 'red' | 'green' | 'grey' | 'gray';
   disabled?: boolean;
   loading?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }
 
 function TurtleButtonSub({
@@ -52,7 +52,7 @@ function TurtleButtonSub({
       shape={shape}
       size={size}
       onClick={(e) => {
-        onClick && onClick();
+        onClick && onClick(e);
       }}
       icon={
         icon === 'download' ? (

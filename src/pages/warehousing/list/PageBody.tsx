@@ -17,7 +17,11 @@ import {
 } from 'antd';
 import { storeState } from '@store/storeState';
 import { MainContent, MenuBar } from '@layout/main';
-import { TurtleIcon, TurtleTableTitle } from '@components/common';
+import {
+  TurtleButtonSub,
+  TurtleIcon,
+  TurtleTableTitle,
+} from '@components/common';
 import warehousingAPI, {
   RequestGetSheet,
   WarehousingSheet,
@@ -185,7 +189,14 @@ function PageBody() {
                           e?.stopPropagation();
                         }}
                       >
-                        <TurtleIcon type="check" />
+                        <TurtleButtonSub
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          마감
+                        </TurtleButtonSub>
                       </Popconfirm>
                       <Popconfirm
                         title={t('description.really delete')}
