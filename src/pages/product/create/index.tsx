@@ -11,7 +11,6 @@ function ProductCreatePage() {
       <Helmet title={title} />
       <PageHeader
         title={t('product.create')}
-        breadcrumbList={[t('product.management'), t('product.create')]}
         infoList={[t('description.excel type')]}
       />
       <PageBody />

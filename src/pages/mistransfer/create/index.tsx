@@ -8,10 +8,7 @@ function MistransferCreatePage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('mistransfer.create')}
-        breadcrumbList={[t('mistransfer.management'), t('mistransfer.create')]}
-      />
+      <PageHeader title={t('mistransfer.create')} />
       <PageBody />
     </>
   );

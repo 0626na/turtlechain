@@ -9,10 +9,7 @@ function WarehousingListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('warehousing list')}
-        breadcrumbList={[t('warehousing management'), t('warehousing list')]}
-      />
+      <PageHeader title={t('warehousing list')} />
       <PageBody />
     </>
   );

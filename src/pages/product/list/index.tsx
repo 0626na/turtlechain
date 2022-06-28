@@ -9,10 +9,7 @@ function ProductListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('product.list')}
-        breadcrumbList={[t('product.management'), t('product.list')]}
-      />
+      <PageHeader title={t('product.list')} />
       <PageBody />
     </>
   );

@@ -8,10 +8,7 @@ function index() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('clearing.balance list')}
-        breadcrumbList={[t('clearing.management'), t('clearing.balance')]}
-      />
+      <PageHeader title={t('clearing.balance list')} />
       <PageBody />
     </>
   );

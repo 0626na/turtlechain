@@ -11,7 +11,6 @@ function WarehousingCreatePage() {
       <Helmet title={title} />
       <PageHeader
         title={t('warehousing create')}
-        breadcrumbList={[t('warehousing management'), t('warehousing create')]}
         infoList={[t('description.excel type')]}
       />
       <PageBody />

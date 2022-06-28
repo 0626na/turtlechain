@@ -8,10 +8,7 @@ function CompanyManagementPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('company.management')}
-        breadcrumbList={[t('setting'), t('company.management')]}
-      />
+      <PageHeader title={t('company.management')} />
       <PageBody />
     </>
   );

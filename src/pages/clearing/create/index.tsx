@@ -8,10 +8,7 @@ function ClearingCreatePage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('clearing.create')}
-        breadcrumbList={[t('clearing.management'), t('clearing.create')]}
-      />
+      <PageHeader title={t('clearing.create')} />
       <PageBody />
     </>
   );

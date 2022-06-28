@@ -8,10 +8,7 @@ function MistransferListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('mistransfer.list')}
-        breadcrumbList={[t('mistransfer.management'), t('mistransfer.list')]}
-      />
+      <PageHeader title={t('mistransfer.list')} />
       <PageBody />
     </>
   );

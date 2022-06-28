@@ -11,7 +11,6 @@ function StoreManagementPage() {
       <Helmet title={title} />
       <PageHeader
         title={t('store.management')}
-        breadcrumbList={[t('setting'), t('store.management')]}
         infoList={[
           t('description.first way to manage malls'),
           t('description.second way to manage malls'),

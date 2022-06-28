@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 import { Col, Row, Typography } from 'antd';
-import { t } from 'i18next';
-import {
-  TurtleBreadCrumb,
-  TurtleDivider,
-  TurtleInfo,
-} from '@components/common';
+import { TurtleDivider, TurtleInfo } from '@components/common';
 
 interface Props {
   title: string;
-  breadcrumbList?: Array<string>;
   infoList?: Array<string>;
 }
 
-function PageHeader({ title, breadcrumbList, infoList }: Props) {
+function PageHeader({ title, infoList }: Props) {
   return (
     <>
       <Row
@@ -33,13 +27,6 @@ function PageHeader({ title, breadcrumbList, infoList }: Props) {
                 <TurtleInfo>{info}</TurtleInfo>
               </Col>
             ))}
-        </Col>
-        <Col>
-          {breadcrumbList && (
-            <TurtleBreadCrumb
-              list={[t('HOME'), ...breadcrumbList]}
-            ></TurtleBreadCrumb>
-          )}
         </Col>
       </Row>
       <TurtleDivider style={{ margin: 0 }} />

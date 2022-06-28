@@ -13,7 +13,12 @@ function SignupResult() {
   return (
     <Container>
       <Result
-        status="success"
+        icon={
+          <img
+            src={`${process.env.PUBLIC_URL}/assets/svg/approve.svg`}
+            alt="approve"
+          />
+        }
         title={t('message.success signup')}
         subTitle={t('description.signup completed')}
       />

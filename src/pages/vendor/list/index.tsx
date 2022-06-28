@@ -9,10 +9,7 @@ function VendorListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('vendor.list')}
-        breadcrumbList={[t('vendor.management'), t('vendor.list')]}
-      />
+      <PageHeader title={t('vendor.list')} />
       <PageBody />
     </>
   );

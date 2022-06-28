@@ -8,13 +8,7 @@ function SampleReturnListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('sample_return.list')}
-        breadcrumbList={[
-          t('sample_return.management'),
-          t('sample_return.list'),
-        ]}
-      />
+      <PageHeader title={t('sample_return.list')} />
     </>
   );
 }

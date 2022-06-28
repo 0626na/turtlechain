@@ -18,14 +18,7 @@ function OrderListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('order.list')}
-        breadcrumbList={[
-          t('common.home'),
-          t('order.management'),
-          t('order.list'),
-        ]}
-      />
+      <PageHeader title={t('order.list')} />
       <MenuBar />
       <OrderSheetList
         searchQuery={searchQuery}

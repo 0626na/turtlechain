@@ -9,10 +9,7 @@ const AdjustmentCreatePage = function () {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('adjustment create')}
-        breadcrumbList={[t('adjustment management'), t('adjustment create')]}
-      />
+      <PageHeader title={t('adjustment create')} />
       <PageBody />
     </>
   );

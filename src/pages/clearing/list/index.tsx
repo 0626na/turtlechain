@@ -9,10 +9,7 @@ function ClearingListPage() {
   return (
     <>
       <Helmet title={title} />
-      <PageHeader
-        title={t('clearing.list')}
-        breadcrumbList={[t('clearing.management'), t('clearing.list')]}
-      />
+      <PageHeader title={t('clearing.list')} />
       <PageBody />
     </>
   );

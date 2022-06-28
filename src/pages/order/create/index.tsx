@@ -11,7 +11,6 @@ const OrderCreatePage = function () {
       <Helmet title={title} />
       <PageHeader
         title={t('order.create')}
-        breadcrumbList={[t('order.management'), t('order.create')]}
         infoList={[t('description.excel type')]}
       />
       <OrderPreviewList />
