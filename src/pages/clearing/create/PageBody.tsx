@@ -2,15 +2,19 @@ import styled from 'styled-components';
 import { Collapse } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { TurtlePanelHeader } from '@components/common';
+import { TurtleButtonSub, TurtlePanelHeader } from '@components/common';
 import { MainContent, MenuBar } from '@layout/main';
 import { storeState } from '@store/storeState';
+import useStoreExist from '@hooks/useStoreExist';
 import AdjustmentPanel from './AdjustmentPanel';
 import ClearingPanel from './ClearingPanel';
 import WarehousingPanel from './WarehousingPanel';
+import ExcelModal from './ExcelModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
+  const isStoreExist = useStoreExist();
+  const [excelModalVisible, setExcelModalVisible] = useState(false);
   const [activeKey, setActiveKey] = useState('0');
 
   // 쇼핑몰 선택되면 입고판넬 활성화
@@ -24,7 +28,26 @@ function PageBody() {
 
   return (
     <>
-      <MenuBar isWarning />
+      <ExcelModal
+        visible={excelModalVisible}
+        closeModal={() => {
+          setExcelModalVisible(false);
+        }}
+      />
+      <MenuBar isWarning>
+        <TurtleButtonSub
+          type="primary"
+          color="skyblue"
+          onClick={() => {
+            if (!isStoreExist()) {
+              return;
+            }
+            setExcelModalVisible(true);
+          }}
+        >
+          정산서 업로드
+        </TurtleButtonSub>
+      </MenuBar>
       <MainContent>
         <StyledCollapse
           accordion

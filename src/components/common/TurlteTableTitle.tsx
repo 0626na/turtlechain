@@ -5,26 +5,29 @@ interface Props {
   selectedCount?: number;
   searchCount?: number;
   totalAmount?: number;
+  totalPrice?: number;
   children?: React.ReactNode;
 }
+
 function TurtleTableTitle({
   count = 0,
   selectedCount,
   searchCount,
   totalAmount,
+  totalPrice,
   children,
 }: Props) {
   return (
     <Row justify="space-between" align="middle" style={{ paddingBottom: 6 }}>
       <span>
         총 <span style={{ color: '#32ACDD' }}>{count}</span>건
-        {searchCount! >= 0 && (
+        {!!searchCount && searchCount >= 0 && (
           <>
             <Divider type="vertical" />
             검색결과 <span style={{ color: '#32ACDD' }}>{searchCount}</span>건
           </>
         )}
-        {totalAmount! >= 0 && (
+        {!!totalAmount && totalAmount >= 0 && (
           <>
             <Divider type="vertical" />
             검색금액 합계{' '}
@@ -38,6 +41,15 @@ function TurtleTableTitle({
           <>
             <Divider type="vertical" />
             선택 <span style={{ color: '#32ACDD' }}>{selectedCount}</span>건
+          </>
+        )}
+        {!!totalPrice && totalPrice >= 0 && (
+          <>
+            <Divider type="vertical" />총 금액{' '}
+            <span style={{ color: '#32ACDD' }}>
+              {totalPrice?.toLocaleString()}
+            </span>
+            원
           </>
         )}
       </span>

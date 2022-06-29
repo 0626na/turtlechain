@@ -1,6 +1,7 @@
 import saveAs from 'file-saver';
 import moment from 'moment';
 import { v2Axios } from '.';
+import { RcFile } from 'antd/lib/upload';
 
 // 잔여 매입조정 금액
 export interface BalanceShow {
@@ -238,7 +239,10 @@ const getBalance = async function (query: RequestGetBalance) {
   return response.data;
 };
 
-// Request: 정산서 조회
+/*
+ *  정산서 조회
+ */
+
 export interface RequestGetSheet {
   store_id?: number;
   credit_type: 'general';
@@ -250,7 +254,6 @@ export interface RequestGetSheet {
   status: string; // "request" | "pending" | "complete" | "all"
 }
 
-// Response: 정산서 조회
 export interface ResponseGetSheet {
   msg: string;
   data: {
@@ -273,7 +276,6 @@ export interface ResponseGetSheet {
   };
 }
 
-// 정산서 조회 요청
 const getSheet = async function (query: RequestGetSheet) {
   let url = 'clearing/sheet?';
   for (const [key, value] of Object.entries(query)) {
@@ -283,33 +285,36 @@ const getSheet = async function (query: RequestGetSheet) {
   return response.data;
 };
 
-// Request: 정산장 수정 요청
+/*
+ *  정산장 수정 요청
+ */
+
 export interface RequestUpdateSheet {
   id: number;
   // 삭제 요청시 1
   is_inactive: number;
 }
 
-// Response: 정산장 수정
 export interface ResponseUpdateSheet {
   msg: string;
   data: number;
 }
 
-// 정산장 수정 요청
 const updateSheet = async function (data: RequestUpdateSheet) {
   let url = `clearing/sheet/${data.id}`;
   const response = await v2Axios.patch<ResponseUpdateSheet>(url, data);
   return response.data;
 };
 
-// Request: 정산 아이템 조회
+/*
+ * 정산 아이템 조회
+ */
+
 export interface RequestGetItem {
   sheet_id: number;
   page_size: 100;
 }
 
-// Response: 정산 아이템 조회
 export interface ResponseGetItem {
   msg: string;
   data: {
@@ -318,15 +323,19 @@ export interface ResponseGetItem {
   };
 }
 
-// 정산 아이템 조회 요청
 const getItem = async function (query: RequestGetItem) {
   let url = 'clearing/item?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGetItem>(url);
+
   return response.data;
 };
+
+/*
+ *  정산 아이템 상세 조회
+ */
 
 interface RequestGetItemDetail {
   item_id: number;
@@ -381,6 +390,78 @@ const download = async function (query: RequestDownload) {
   );
 };
 
+/*
+ *  정산서 파싱
+ */
+
+export interface ClearingItemParse {
+  ws_store_name: string;
+  vendor_address: string;
+  bank: string;
+  account_number: string;
+  account_holder: string;
+  credit_amount: number;
+  recipient_print: string;
+
+  is_vat_included: false;
+}
+
+export interface RequestParseExcel {
+  files: RcFile;
+  rt_store_id: number;
+}
+
+export interface ResponseParseExcel {
+  msg: string;
+  data: {
+    success: ClearingItemParse[];
+    fail: ClearingItemParse[];
+    count: {
+      success_count: number;
+      fail_count: number;
+    };
+  };
+}
+
+const parseExcel = async (data: RequestParseExcel) => {
+  const url = `excel/clearing`;
+  const formData = new FormData();
+  formData.append('files', data.files);
+  formData.append('rt_store_id', `${data.rt_store_id}`);
+  const response = await v2Axios.post<ResponseParseExcel>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data.data;
+};
+
+/*
+ * 정산서 엑셀등록
+ */
+
+export interface RequestCreateParse {
+  store_id: number;
+  store_name: string;
+  total_clearing_amount: number;
+  credit_type: 'general';
+  request_date: string;
+  clearing_add_request: ClearingItemParse[];
+}
+
+export interface ResponseCreateParse {
+  msg: string;
+  data: {};
+}
+
+const createParse = async (data: RequestCreateParse) => {
+  const url = `clearing/credit_group`;
+  const response = await v2Axios.post<ResponseCreateParse>(url, data);
+
+  return response.data.data;
+};
+
 const clearingAPI = {
   getWarehousingBalance,
   getAdjustmentBalance,
@@ -391,6 +472,8 @@ const clearingAPI = {
   getItem,
   getItemDetail,
   download,
+  parseExcel,
+  createParse,
 };
 
 export default clearingAPI;
