@@ -36,6 +36,7 @@ function PageBody() {
     {
       onSuccess: (data) => {
         updateStates(data);
+        data.msg && message.info(data.msg);
       },
     },
   );
@@ -47,6 +48,7 @@ function PageBody() {
     {
       onSuccess: (data) => {
         updateStates(data);
+        data.msg && message.info(data.msg);
       },
     },
   );
