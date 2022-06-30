@@ -33,21 +33,16 @@ const ga4react = new GA4React(
 );
 
 (async () => {
-  await ga4react
-    .initialize()
-    .then(() => console.log('Google Analytics Success.'))
-    .catch(() => console.log('Google Analytics Failure'))
-    .finally(() => {
-      ReactDOM.render(
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            <ConfigProvider locale={koKR}>
-              <GlobalStyle />
-              <Router />
-            </ConfigProvider>
-          </QueryClientProvider>
-        </RecoilRoot>,
-        document.getElementById('root'),
-      );
-    });
+  await ga4react.initialize();
+  ReactDOM.render(
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider locale={koKR}>
+          <GlobalStyle />
+          <Router />
+        </ConfigProvider>
+      </QueryClientProvider>
+    </RecoilRoot>,
+    document.getElementById('root'),
+  );
 })();

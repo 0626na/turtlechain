@@ -26,7 +26,7 @@ function Router() {
 
   return (
     <BrowserRouter>
-      {localStorageToken || sessionStorageToken ? ( //
+      {localStorageToken || sessionStorageToken ? (
         <MainRouter />
       ) : (
         <LoginRouter />
