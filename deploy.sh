@@ -113,6 +113,12 @@ function remove_cache() {
   aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
 }
 
+function send_teams_message() {
+  title="터틀체인2.0 ${ENV} 배포"
+  text="링크 : ${ENV}.turtlechain.io"
+  curl -d "{"@context":"https://schema.org/extensions","@type":"MessageCard","themeColor":"0072C6","title":"${title}","text":"${text}"}" -H "Content-Type: Application/JSON" -X POST https://turtleship.webhook.office.com/webhookb2/45c662af-63fc-4c15-af9a-dca5284cea67@357b41ce-1065-4820-bd19-b4750106b292/IncomingWebhook/f0006126b3bd43c38ccc3ee61f627328/b2dfea25-f801-4f8e-8bf5-8412247daafc
+}
+
 function send_deploymail() {
   if [ $ENV == 'production' ]; then
     ./deploymail.py production
@@ -149,9 +155,14 @@ remove_cache
 echo Remove cache: OK.
 
 ### 6. Send mail ###
-echo Send deploy mail...
-send_deploymail
-echo Mail OK.
+# echo Send deploy mail...
+# send_deploymail
+# echo Mail : OK.
+
+### 6. Send teams message ###
+echo Send teams message...
+send_teams_message
+echo Teams Message: success.
 
 ### 7. Deploy complete ###
 echo
