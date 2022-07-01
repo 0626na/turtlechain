@@ -120,7 +120,7 @@ function send_teams_message() {
     URL="https://${ENV}.turtlechain.io"
   fi
 
-  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"summary\": \"터틀체인 2.0 배포\",\"sections\": [{
+  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"title\": \"터틀체인 2.0 ${ENV} 배포\",\"summary\": \"터틀체인 2.0 ${ENV} 배포\",\"sections\": [{
         \"facts\": [{
             \"name\": \"프로젝트\",
             \"value\": \"터틀체인 2.0\"
