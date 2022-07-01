@@ -115,9 +115,9 @@ function remove_cache() {
 
 function send_teams_message() {
   if [ $ENV == 'production' ]; then
-    URL="product.turtlechain.io"
+    URL="https://product.turtlechain.io"
   else
-    URL="${ENV}.turtlechain.io"
+    URL="https://${ENV}.turtlechain.io"
   fi
 
   curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"summary\": \"터틀체인2.0 배포\",\"sections\": [{
