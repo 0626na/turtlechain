@@ -114,9 +114,27 @@ function remove_cache() {
 }
 
 function send_teams_message() {
-  title="터틀체인2.0 ${ENV} 배포"
-  text="링크 : ${ENV}.turtlechain.io"
-  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"title\":\"${title}\",\"text\":\"${text}\"}" -H "Content-Type: Application/JSON" -X POST YOUR_TEAMS_HOOK_URL https://turtleship.webhook.office.com/webhookb2/45c662af-63fc-4c15-af9a-dca5284cea67@357b41ce-1065-4820-bd19-b4750106b292/IncomingWebhook/f0006126b3bd43c38ccc3ee61f627328/b2dfea25-f801-4f8e-8bf5-8412247daafc
+  if [ $ENV == 'production' ]; then
+    URL="www.${ENV}.turtlechain.io"
+  else
+    URL="www.production.turtlechain.io"
+  fi
+
+  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"summary\": \"터틀체인2.0 배포\",\"sections\": [{
+        \"facts\": [{
+            \"name\": \"프로젝트\",
+            \"value\": \"터틀체인 2.0\"
+        }, {
+            \"name\": \"버전\",
+            \"value\": \"${ENV}\"
+        }, {
+            \"name\": \"접속링크\",
+            \"value\": \"${URL}\"
+        }],
+        \"markdown\": true
+    }],}" -H "Content-Type: Application/JSON" -X POST YOUR_TEAMS_HOOK_URL https://turtleship.webhook.office.com/webhookb2/45c662af-63fc-4c15-af9a-dca5284cea67@357b41ce-1065-4820-bd19-b4750106b292/IncomingWebhook/f0006126b3bd43c38ccc3ee61f627328/b2dfea25-f801-4f8e-8bf5-8412247daafc
+
+  exit_if_fail "Can't send teams message."
 }
 
 function send_deploymail() {
