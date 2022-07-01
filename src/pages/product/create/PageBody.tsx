@@ -3,7 +3,8 @@ import { Menu, message, Popconfirm, Tabs } from 'antd';
 import { t } from 'i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useMutation } from 'react-query';
-import { BottomBar, MainContent, MenuBar } from '@layout/main';
+import { useNavigate } from 'react-router-dom';
+import { BottomBar, MainContent, MenuBar } from '@layout/page';
 import productAPI, { ResponseConnectInventory } from '@apis/productAPI';
 import {
   TurtleButton,
@@ -17,10 +18,9 @@ import { useStoreExist } from '@hooks/index';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
 import AddSingleProductModal from './AddProductModal';
-import { useHistory } from 'react-router-dom';
 
 function PageBody() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(productCartState);
@@ -54,7 +54,7 @@ function PageBody() {
         message.success(
           `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
         );
-        history.push('/product/list');
+        navigate('/product/list');
       },
     },
   );

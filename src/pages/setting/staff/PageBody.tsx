@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Button, Row, Table } from 'antd';
-import { MainContent } from '@layout/main';
+import { MainContent } from '@layout/page';
 import { UserOutlined } from '@ant-design/icons';
 
 function PageBody() {

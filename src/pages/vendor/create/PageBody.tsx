@@ -4,7 +4,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { Col, Form, Input, message, Popconfirm, Space, Switch } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import vendorAPI, { WholesaleShow } from '@apis/vendorAPI';
 import {
   TurtleButton,
@@ -15,7 +15,7 @@ import {
   TurtleTextArea,
 } from '@components/common';
 import { useStoreExist } from '@hooks/index';
-import { BottomBar, MenuBar } from '@layout/main';
+import { BottomBar, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
 import ConnectModal from './ConnectModal';
 import ExcelModal from './ExcelModal';
@@ -23,7 +23,7 @@ import RequestModal from './RequestModal';
 import SearchModal from './SearchModal';
 
 function PageBody() {
-  const history = useHistory();
+  const navigate = useNavigate();
   // 쇼핑몰 id
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
@@ -71,7 +71,7 @@ function PageBody() {
       form.setFieldsValue({
         rt_store_id: store.id,
       });
-      history.push('/vendor/list');
+      navigate('/vendor/list');
     },
   });
 

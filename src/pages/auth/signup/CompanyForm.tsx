@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
 import { useState, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from 'antd';
 // constant
@@ -16,7 +16,7 @@ interface Props {
 }
 
 function CompanyForm({ company, setCompany, onNext }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [visiblePostcodeModal, setVisiblePostcodeModal] = useState(false);
 
   const handleChangeRadio = (e: RadioChangeEvent) => {
@@ -145,7 +145,7 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
           />
         </Form.Item>
         <ButtonContainer>
-          <Button block onClick={() => history.push('/')}>
+          <Button block onClick={() => navigate('/')}>
             {t('prev')}
           </Button>
           <Button block disabled={nextDisabled} type="primary" onClick={onNext}>

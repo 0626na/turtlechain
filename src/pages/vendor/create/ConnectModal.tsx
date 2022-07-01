@@ -2,6 +2,7 @@ import { t } from 'i18next';
 import { useCallback, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import {
   Col,
   Input,
@@ -36,7 +37,6 @@ import {
   TurtleModal,
   TurtleQuestionTooltip,
 } from '@components/common';
-import { useHistory } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -44,7 +44,7 @@ interface Props {
 }
 
 function ConnectModal({ visible, closeModal }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const [successList, setSuccessList] = useState<Array<VendorConnect>>([]);
   const [suggestList, setSuggestList] = useState<Array<VendorConnect>>([]);
@@ -119,7 +119,7 @@ function ConnectModal({ visible, closeModal }: Props) {
           `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         );
         onCloseModal();
-        history.push('/vendor/list');
+        navigate('/vendor/list');
       },
     },
   );

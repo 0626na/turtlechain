@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import { PageHeader } from '@layout/main/index';
+import { PageHeader } from '@layout/page';
 import PageBody from './PageBody';
 
 function ProductCreatePage() {

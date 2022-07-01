@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { TurtleImg } from '@components/common';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 function Sider({ collapsed }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, selectKeys] = useState(pathname);
@@ -155,7 +155,7 @@ function Sider({ collapsed }: Props) {
         }}
         selectedKeys={[selectedKeys]}
         onSelect={({ key }) => {
-          history.push(key);
+          navigate(key);
         }}
         style={{ height: '100vh' }}
       >

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet';
 import { t } from 'i18next';
 import PageBody from './PageBody';
-import { PageHeader } from '@layout/main';
+import { PageHeader } from '@layout/page';
 
 function StoreManagementPage() {
   const title = `${t('turtlechain')} - ${t('store.management')}`;

@@ -5,7 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Row, Table, Tag } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
-import { MainContent } from '@layout/main';
+import { MainContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
 import CreateModal from './CreateModal';
 import UpdateModal from './UpdateModal';

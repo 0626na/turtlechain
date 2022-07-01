@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Result, Button } from 'antd';
 
 function SignupResult() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onClickGoHome = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

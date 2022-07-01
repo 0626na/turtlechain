@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { DatePicker, Table } from 'antd';
 import { TurtleTableTitle } from '@components/common';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { storeState } from '@store/storeState';

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { t } from 'i18next';
 import { MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MAIN_HEADER_HEIGHT } from '@constant/index';
 import { useLogout } from '@hooks/index';
 import { UserOutlined } from '@ant-design/icons';
@@ -15,7 +15,7 @@ interface Props {
 }
 
 function Header({ handleMenuVisible }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const logout = useLogout();
 
   const getQuery = useQuery('getUser', userAPI.get, {});
@@ -32,7 +32,7 @@ function Header({ handleMenuVisible }: Props) {
           <StyledImage
             src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
-            onClick={() => history.push('/home')}
+            onClick={() => navigate('/home')}
           />
         </Col>
         <Col style={{ display: 'flex' }}>

@@ -10,7 +10,7 @@ import clearingAPI, {
 } from '@apis/clearingAPI';
 import { NewSearchFilter } from '@components/combine';
 import { TurtleModal, TurtleTableTitle } from '@components/common';
-import { MainContent } from '@layout/main';
+import { MainContent } from '@layout/page';
 import { storeState } from '@store/storeState';
 
 interface Props {
