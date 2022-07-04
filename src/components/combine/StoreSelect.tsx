@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Select, Space, Typography } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
@@ -27,6 +27,7 @@ function StoreSelect({ warningMessage }: Props) {
             id: store.id,
             name: store.name,
             inventory_is_vat_included: store.inventory_is_vat_included,
+            use_service: store.companies[0].use_service,
           })),
       );
 
@@ -37,6 +38,7 @@ function StoreSelect({ warningMessage }: Props) {
           name: data.store_list[0].name,
           inventory_is_vat_included:
             data.store_list[0].inventory_is_vat_included,
+          use_service: data.store_list[0].companies[0].use_service,
         });
       }
     },
@@ -56,10 +58,15 @@ function StoreSelect({ warningMessage }: Props) {
         name: storeList.find((item) => item.id === value)!.name,
         inventory_is_vat_included: storeList.find((item) => item.id === value)!
           .inventory_is_vat_included,
+        use_service: storeList.find((item) => item.id === value)?.use_service!,
       });
     },
     [store, storeList, setStore, warningMessage],
   );
+
+  useEffect(() => {
+    console.log(store);
+  }, [store]);
 
   return (
     <Space size="large">

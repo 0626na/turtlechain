@@ -77,11 +77,6 @@ function PageBody() {
   // 파싱 or 연동 후 상태 세팅
   const updateStates = useCallback(
     (data: ResponseConnectInventory) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetStates();
-        return;
-      }
       setCart((cart) => ({
         ...cart,
         successList: [
@@ -95,7 +90,7 @@ function PageBody() {
         failList: [...data.data.fail, ...cart.failList],
       }));
     },
-    [resetStates, setCart],
+    [setCart],
   );
 
   // 엑셀파일 파싱

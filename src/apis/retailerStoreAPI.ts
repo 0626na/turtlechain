@@ -44,6 +44,10 @@ export interface StoreShow {
   store_phone: {
     phone: string;
   }[];
+  companies: {
+    // 0: v2.0, 1: v1.5
+    use_service: 0 | 1;
+  }[];
 }
 
 // 쇼핑몰 리스트 가져오기

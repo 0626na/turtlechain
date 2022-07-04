@@ -73,11 +73,6 @@ function PageBody() {
   // 파싱 or 연동 후 상태 세팅
   const updateStates = useCallback(
     (data: ResponseConnectInventory) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetStates();
-        return;
-      }
       setCart((cart) => ({
         ...cart,
         successList: [
@@ -94,7 +89,7 @@ function PageBody() {
         `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
       );
     },
-    [resetStates, setCart],
+    [setCart],
   );
 
   // 쇼핑몰 변경시 모든 state 초기화
