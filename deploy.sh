@@ -114,7 +114,7 @@ function remove_cache() {
 }
 
 function send_teams_message() {
-  if [ $ENV == 'production' ]; then
+  if [ $ENV == 'prod' ]; then
     URL="https://product.turtlechain.io"
   else
     URL="https://${ENV}.turtlechain.io"
