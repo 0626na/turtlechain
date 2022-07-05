@@ -55,7 +55,7 @@ function SearchModal({ visible, closeModal, selectRow }: Props) {
       selectRow(record);
       setSearchQuery({
         page: 1,
-        type: 'all',
+        type: 'name',
         search_string: '',
       });
     },

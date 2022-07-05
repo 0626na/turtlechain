@@ -121,7 +121,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           <b>
             {`${(
               paymentSupplyAmount + paymentVatAmount
-            ).toLocaleString()}원 (부가세 포함 ${paymentVatAmount.toLocaleString()}원)`}
+            ).toLocaleString()}원 (부가세 ${paymentVatAmount.toLocaleString()}원 포함)`}
           </b>
         </Col>
         <Col>
