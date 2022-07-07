@@ -19,7 +19,7 @@ function SignupPageBody({ children }: Props) {
 const Container = styled.div`
   width: 400px;
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 30px 0;
 `;
 
 export default SignupPageBody;

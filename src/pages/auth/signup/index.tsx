@@ -35,69 +35,23 @@ function SignupPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [company, setCompany] = useState<Company>({
-    biz_type: 'entity',
-    owner: '',
-    name: '',
-    biz_num: '',
-    address_main: '',
-    address_sub: '',
-    biz_license_file: null,
-    memo: '',
-  });
-  const [user, setUser] = useState<User>({
-    name: '',
-    email: '',
-    mobile_phone: '',
-    login_id: '',
-    password: '',
-  });
-
-  // 서비스 가입 신청
-  // 1. 사업자 생성 완료
-  // 2. 유저 생성 완료
-  // 3. 가입 신청 완료
-  const submit = async () => {
-    try {
-      setIsSubmitting(true);
-      const { company_id } = await retailerCompanyAPI.create({
-        ...company,
-        tax_type: '[]',
-        service_usage: '[]',
-        stores: '[]',
-        biz_license_file: company.biz_license_file as File,
-      });
-      await userAPI.create({ ...user, type: 'rt', company_id });
-      setCurrentStep((prevStep) => prevStep + 1);
-    } catch (error: any) {
-      message.error(error.response?.data?.msg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const steps = [
-    <CompanyForm
-      company={company}
-      setCompany={setCompany}
-      onNext={() => setCurrentStep(currentStep + 1)}
-    />,
-    <UserForm
-      user={user}
-      isSubmitting={isSubmitting}
-      setUser={setUser}
-      onPrev={() => setCurrentStep(currentStep - 1)}
-      onSignup={submit}
-    />,
+    // <CompanyForm onNext={() => setCurrentStep(currentStep + 1)} />,
+    // <UserForm
+    //   isSubmitting={isSubmitting}
+    //   onPrev={() => setCurrentStep(currentStep - 1)}
+    // />,
     <SignupResult />,
   ];
 
   return (
-    <SignupPageBody>
+    <>
       <Helmet title={title} />
-      <SignupSteps current={currentStep} />
-      {steps[currentStep]}
-    </SignupPageBody>
+      <SignupPageBody>
+        <SignupSteps current={currentStep} />
+        {steps[currentStep]}
+      </SignupPageBody>
+    </>
   );
 }
 

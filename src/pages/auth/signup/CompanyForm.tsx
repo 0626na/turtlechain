@@ -8,6 +8,7 @@ import { Button, Form, Input, Radio, Upload, RadioChangeEvent } from 'antd';
 import { BIZ_TYPE_OPTIONS } from '@constant/index';
 import { DaumPostcodeModal } from '@components/combine';
 import { Company } from '.';
+import { bizNumPattern } from '@utils/pattern';
 
 interface Props {
   company: Company;
@@ -74,22 +75,18 @@ function CompanyForm({ company, setCompany, onNext }: Props) {
           />
         </Form.Item>
         <Form.Item label={t('biz name')}>
-          <Input //
-            name="name"
-            value={company.name}
-            onChange={handleChangeText}
-          />
+          <Input name="name" value={company.name} onChange={handleChangeText} />
         </Form.Item>
         <Form.Item label={t('biz num')}>
           <Input
             name="biz_num"
-            placeholder={t('description.only number')}
-            value={company.biz_num}
+            value={company.biz_num.replace(bizNumPattern, '$1-$2-$3')}
+            maxLength={10}
             onChange={handleChangeText}
           />
         </Form.Item>
         <Form.Item label={t('biz address')}>
-          <Input //
+          <Input
             readOnly
             name="address"
             value={company.address_main}
