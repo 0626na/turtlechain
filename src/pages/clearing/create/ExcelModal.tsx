@@ -9,7 +9,7 @@ import clearingAPI from '@apis/clearingAPI';
 import FailTab from './FailTab';
 import { storeState } from '@store/storeState';
 import { useRecoilValue } from 'recoil';
-import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -18,13 +18,10 @@ interface Props {
 
 function ExcelModal({ visible, closeModal }: Props) {
   const store = useRecoilValue(storeState);
+  const history = useHistory();
   const [form] = Form.useForm();
 
-  const parseQuery = useMutation('parseClearingExcel', clearingAPI.parseExcel, {
-    onError: (error: AxiosError) => {
-      message.warn(error.response?.data.data.error);
-    },
-  });
+  const parseQuery = useMutation('parseClearingExcel', clearingAPI.parseExcel);
 
   const createQuery = useMutation(
     'createClearingParse',
@@ -33,6 +30,7 @@ function ExcelModal({ visible, closeModal }: Props) {
       onSuccess: () => {
         message.success(t('message.success create clearing'));
         closeModal();
+        history.push('/clearing/list');
       },
     },
   );

@@ -35,77 +35,81 @@ function PageBody() {
         }}
       />
       <MenuBar isWarning>
-        <TurtleButtonSub
-          type="primary"
-          color="skyblue"
-          onClick={() => {
-            if (!isStoreExist()) {
-              return;
-            }
-            setExcelModalVisible(true);
-          }}
-        >
-          정산서 업로드
-        </TurtleButtonSub>
+        {store.use_service === 1 && (
+          <TurtleButtonSub
+            type="primary"
+            color="skyblue"
+            onClick={() => {
+              if (!isStoreExist()) {
+                return;
+              }
+              setExcelModalVisible(true);
+            }}
+          >
+            정산서 업로드
+          </TurtleButtonSub>
+        )}
       </MenuBar>
-      <MainContent>
-        <StyledCollapse
-          accordion
-          bordered={false}
-          style={{ width: '100%' }}
-          onChange={(key) => {
-            // 전단계로만 이동할 수 있고 다음단계는 Panel 내부 버튼으로만 이동할 수 있다.
-            if (!key || Number(key) > Number(activeKey)) {
-              return;
-            }
-            setActiveKey(key[0]);
-          }}
-          activeKey={activeKey}
-        >
-          <WarehousingPanel
-            key="1"
-            header={
-              <TurtlePanelHeader
-                count={1}
-                activeKey={activeKey}
-                title="거래처별 결제대기"
-              />
-            }
-            activeKey={activeKey}
-            clickNext={() => {
-              setActiveKey('2');
+      {store.use_service === 0 && (
+        <MainContent>
+          <StyledCollapse
+            accordion
+            bordered={false}
+            style={{ width: '100%' }}
+            onChange={(key) => {
+              // 전단계로만 이동할 수 있고 다음단계는 Panel 내부 버튼으로만 이동할 수 있다.
+              if (!key || Number(key) > Number(activeKey)) {
+                return;
+              }
+              setActiveKey(key[0]);
             }}
-          />
-          <AdjustmentPanel
-            key="2"
-            header={
-              <TurtlePanelHeader
-                count={2}
-                activeKey={activeKey}
-                title="매입조정 결제대기"
-              />
-            }
             activeKey={activeKey}
-            clickNext={() => {
-              setActiveKey('3');
-            }}
-          />
-          <ClearingPanel
-            key="3"
-            header={
-              <TurtlePanelHeader
-                count={3}
-                activeKey={activeKey}
-                title="정산금액 미리보기"
-              />
-            }
-            activeKey={activeKey}
-            clickCreate={() => {
-              setActiveKey('1');
-            }}
-          />
-        </StyledCollapse>
-      </MainContent>
+          >
+            <WarehousingPanel
+              key="1"
+              header={
+                <TurtlePanelHeader
+                  count={1}
+                  activeKey={activeKey}
+                  title="거래처별 결제대기"
+                />
+              }
+              activeKey={activeKey}
+              clickNext={() => {
+                setActiveKey('2');
+              }}
+            />
+            <AdjustmentPanel
+              key="2"
+              header={
+                <TurtlePanelHeader
+                  count={2}
+                  activeKey={activeKey}
+                  title="매입조정 결제대기"
+                />
+              }
+              activeKey={activeKey}
+              clickNext={() => {
+                setActiveKey('3');
+              }}
+            />
+            <ClearingPanel
+              key="3"
+              header={
+                <TurtlePanelHeader
+                  count={3}
+                  activeKey={activeKey}
+                  title="정산금액 미리보기"
+                />
+              }
+              activeKey={activeKey}
+              clickCreate={() => {
+                setActiveKey('1');
+              }}
+            />
+          </StyledCollapse>
+        </MainContent>
+      )}
     </>
   );
 }

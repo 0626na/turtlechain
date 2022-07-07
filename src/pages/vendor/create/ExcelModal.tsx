@@ -66,11 +66,6 @@ function ExcelModal({ visible, closeModal }: Props) {
       resetField();
     },
     onSuccess: (data) => {
-      if (data.data.error) {
-        message.error(data.data.error);
-        resetField();
-        return;
-      }
       message.info(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
       );
