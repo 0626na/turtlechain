@@ -5,7 +5,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { message, Popconfirm, Table, Tag } from 'antd';
 import { TurtleIcon, TurtleTableTitle } from '@components/common';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import mistransferAPI, { RequestGet } from '@apis/mistransferAPI';
 import { storeState } from '@store/storeState';
 

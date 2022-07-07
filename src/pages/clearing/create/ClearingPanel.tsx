@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { clearingCartState } from '@store/clearingCartState';
 import { useClearingCart } from '@hooks/index';
 import { TurtleButton } from '@components/common';
@@ -26,7 +26,7 @@ interface Props extends CollapsePanelProps {
 }
 
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
   const {
@@ -67,7 +67,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       onSuccess: () => {
         message.success(t('message.success create clearing'));
         clickCreate();
-        history.push('/clearing/list');
+        navigate('/clearing/list');
       },
     },
   );

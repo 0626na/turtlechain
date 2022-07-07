@@ -16,7 +16,7 @@ import {
   message,
 } from 'antd';
 import { storeState } from '@store/storeState';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import {
   TurtleButtonSub,
   TurtleIcon,

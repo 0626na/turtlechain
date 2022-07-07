@@ -48,6 +48,9 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
         onClose();
         onSuccess && onSuccess({ token, phone });
       },
+      onError: () => {
+        message.warn('인증번호가 일치하지 않습니다.');
+      },
     },
   );
 

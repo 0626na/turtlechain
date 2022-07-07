@@ -7,16 +7,17 @@ import { TurtleButton, TurtleCardSetting } from '@components/common';
 import { phonePattern } from '@utils/pattern';
 import { PhoneAuthModal } from '@components/combine';
 import userAPI from '@apis/userAPI';
+import authAPI from '@apis/authAPI';
 
 function PageBody() {
   const [form] = Form.useForm();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
 
-  const getQuery = useQuery('getUser', userAPI.get);
+  const getQuery = useQuery('getUser', authAPI.verify);
 
   const updateQuery = useMutation('updateUser', userAPI.update, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       message.success(t('message.success update'));
       setIsUpdateMode(false);
       getQuery.refetch();

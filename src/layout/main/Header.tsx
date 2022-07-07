@@ -2,23 +2,23 @@ import styled from 'styled-components';
 import { t } from 'i18next';
 import { MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MAIN_HEADER_HEIGHT } from '@constant/index';
-import { useLogout } from '@hooks/index';
+import { useLogin } from '@hooks/index';
 import { UserOutlined } from '@ant-design/icons';
 import { Notification } from '@components/combine';
 import { useQuery } from 'react-query';
-import userAPI from '@apis/userAPI';
+import authAPI from '@apis/authAPI';
 
 interface Props {
   handleMenuVisible: () => void;
 }
 
 function Header({ handleMenuVisible }: Props) {
-  const history = useHistory();
-  const logout = useLogout();
+  const navigate = useNavigate();
+  const { logout } = useLogin();
 
-  const getQuery = useQuery('getUser', userAPI.get, {});
+  const getUserQuery = useQuery('getUser', authAPI.verify);
 
   return (
     <StyledHeader>
@@ -32,7 +32,7 @@ function Header({ handleMenuVisible }: Props) {
           <StyledImage
             src={`${process.env.PUBLIC_URL}/assets/img/new_logo_main.png`}
             alt="logo"
-            onClick={() => history.push('/home')}
+            onClick={() => navigate('/home')}
           />
         </Col>
         <Col style={{ display: 'flex' }}>
@@ -57,7 +57,7 @@ function Header({ handleMenuVisible }: Props) {
             trigger={['click']}
           >
             <Button type="text" style={{ color: '#FFFFFF', paddingLeft: 7 }}>
-              {`${getQuery.data?.login_id ?? ''} 님`}
+              {`${getUserQuery.data?.name}님`}
               <DownOutlined />
             </Button>
           </Dropdown>

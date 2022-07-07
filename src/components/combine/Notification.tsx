@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { Col, Divider, Popover, Row, Space, Typography } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { BellOutlined } from '@ant-design/icons';
 import notificationAPI from '@apis/notificationAPI';
 
 function Notification() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
@@ -82,7 +82,7 @@ function Notification() {
                               cursor: 'pointer',
                             }}
                             onClick={() => {
-                              history.push('/vendor/list');
+                              navigate('/vendor/list');
                               setPopoverVisible(false);
                               !noti.read_at &&
                                 updateQuery.mutate({ id: noti.id });

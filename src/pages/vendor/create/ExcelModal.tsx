@@ -22,6 +22,7 @@ import {
 import { useMutation } from 'react-query';
 import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import { RcFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
 import vendorAPI, {
@@ -39,7 +40,6 @@ import {
   TurtleQuestionTooltip,
   TurtleModal,
 } from '@components/common';
-import { useHistory } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -47,7 +47,7 @@ interface Props {
 }
 
 function ExcelModal({ visible, closeModal }: Props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const [fileList, setFileList] = useState<Array<RcFile>>([]);
   const [successList, setSuccessList] = useState<Array<VendorConnect>>([]);
@@ -114,7 +114,7 @@ function ExcelModal({ visible, closeModal }: Props) {
           `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
         );
         onCloseModal();
-        history.push('/vendor/list');
+        navigate('/vendor/list');
       },
     },
   );

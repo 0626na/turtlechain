@@ -17,7 +17,7 @@ import {
 import orderAPI, { OrderItemShow } from '@apis/orderAPI';
 import { storeState } from '@store/storeState';
 import { FileOutlined } from '@ant-design/icons';
-import { MenuBar } from '@layout/main';
+import { MenuBar } from '@layout/page';
 import {
   TurtleButton,
   TurtleButtonSub,

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { t } from 'i18next';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -18,72 +18,86 @@ import {
   LockOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import { TOKEN } from '@constant/index';
 import { useLogin } from '@hooks/index';
-import authAPI from '@apis/authAPI';
+import authAPI, { RequestLogin } from '@apis/authAPI';
+import { AxiosError } from 'axios';
 
 function LoginForm() {
-  const login = useLogin();
+  const navigate = useNavigate();
+  const { login, autoLogin } = useLogin();
   const [form] = Form.useForm();
   const [errorMsg, setErrorMsg] = useState('');
 
-  const requiredRules = [{ required: false }];
-
   // 로그인 요청
-  const loginQuery = useMutation(['login'], authAPI.login, {
-    onError: () => {
-      setErrorMsg(t('message.error login'));
-    },
-    onSuccess: (data) => {
-      const { token } = data;
-      const { autoLogin } = form.getFieldsValue();
-      if (autoLogin) localStorage.setItem(TOKEN, token);
-      login(token);
-    },
-  });
+  const loginQuery = useMutation(
+    ['login'],
+    (variables: RequestLogin) => {
+      if (!variables.login_id) {
+        setErrorMsg(t('message.enter id'));
+        return Promise.reject(t('message.enter id'));
+      }
+      if (!variables.password) {
+        setErrorMsg(t('message.enter password'));
+        return Promise.reject(t('message.enter password'));
+      }
 
-  // 로그인
-  const onSubmit = (values: { login_id: string; password: string }) => {
-    const { login_id, password } = values;
-    if (!(login_id && password)) {
-      setErrorMsg(t('message.insert id password'));
-      return;
-    }
-    loginQuery.mutate({ login_id, password });
-  };
+      return authAPI.login(variables);
+    },
+    {
+      onError: (data: AxiosError) => {
+        if (data.response?.status === 400) {
+          setErrorMsg(`${t('message.incorrect user')}`);
+          return;
+        }
+
+        if (data.response) {
+          setErrorMsg(`${t('message.network error')}`);
+          return;
+        }
+      },
+      onSuccess: ({ token }) => {
+        if (form.getFieldValue('autoLogin')) {
+          autoLogin(token);
+          navigate('/home');
+          return;
+        }
+        login(token);
+        navigate('/home');
+      },
+    },
+  );
 
   return (
-    <Form form={form} onFinish={onSubmit}>
+    <Form
+      form={form}
+      onFinish={({ login_id, password }) => {
+        loginQuery.mutate({ login_id, password });
+      }}
+    >
       <LogoImage
         src={`${process.env.PUBLIC_URL}/assets/img/new_logo_login.png`}
         alt="logo"
       />
-      <Form.Item //
+      <Form.Item
         name="login_id"
-        rules={requiredRules}
+        rules={[{ required: false }]}
         style={{ marginBottom: '12px' }}
       >
-        <Input //
+        <Input
           placeholder={t('id')}
           prefix={<UserOutlined />}
           style={{ height: '44px' }}
         />
       </Form.Item>
-      <Form.Item //
-        name="password"
-        rules={requiredRules}
-      >
-        <Input.Password //
+      <Form.Item name="password" rules={[{ required: false }]}>
+        <Input.Password
           placeholder={t('password')}
           prefix={<LockOutlined />}
           style={{ height: '44px' }}
         />
       </Form.Item>
       <Space>
-        <Form.Item //
-          name="autoLogin"
-          valuePropName="checked"
-        >
+        <Form.Item name="autoLogin" valuePropName="checked">
           <Checkbox>{t('auto login')}</Checkbox>
         </Form.Item>
         <Form.Item>

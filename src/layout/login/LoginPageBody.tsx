@@ -1,4 +1,6 @@
+import { useLogin } from '@hooks/index';
 import { Card } from 'antd';
+import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
@@ -6,6 +8,12 @@ interface Props {
 }
 
 function LoginPageBody({ children }: Props) {
+  const { isLogin } = useLogin();
+
+  if (isLogin) {
+    return <Navigate to="/home" replace={true} />;
+  }
+
   return (
     <Container>
       <StyledCard>{children}</StyledCard>

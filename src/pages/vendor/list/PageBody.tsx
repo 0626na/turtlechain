@@ -26,7 +26,7 @@ import {
   TurtleButtonSub,
   TurtleTableTitle,
 } from '@components/common';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import { NewSearchFilter } from '@components/combine';
 import UpdateModal from './UpdateModal';
 

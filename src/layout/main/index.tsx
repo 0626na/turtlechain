@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Layout } from 'antd';
 import Header from './Header';
 import Sider from './Sider';
 import Content from './Content';
-import PageHeader from './page/PageHeader';
-import MenuBar from './page/MenuBar';
-import MainContent from './page/MainContent';
-import BottomBar from './page/BottomBar';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useLogin } from '@hooks/index';
 
-interface Props {
-  children: React.ReactNode;
-}
-
-function MainLayout({ children }: Props) {
+function MainLayout() {
+  const { isLogin } = useLogin();
   const [menuVisible, setMenuVisible] = useState(false);
+
+  if (!isLogin) {
+    return <Navigate to="/" replace={true} />;
+  }
 
   const handleMenuVisible = () => {
     setMenuVisible(!menuVisible);
@@ -24,10 +23,12 @@ function MainLayout({ children }: Props) {
       <Header handleMenuVisible={handleMenuVisible} />
       <Layout>
         <Sider collapsed={menuVisible} />
-        <Content menuVisible={menuVisible}>{children}</Content>
+        <Content menuVisible={menuVisible}>
+          <Outlet />
+        </Content>
       </Layout>
     </Layout>
   );
 }
 
-export { MainLayout, PageHeader, MenuBar, MainContent, BottomBar };
+export default MainLayout;

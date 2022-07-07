@@ -1,10 +1,10 @@
 import { lazy } from 'react';
 
-export const LoginPage = lazy(() => import('./user/login'));
-export const FindIdPage = lazy(() => import('./user/find-id'));
-export const ResetPasswordPage = lazy(() => import('./user/reset-password'));
-export const SignupPage = lazy(() => import('./user/signup'));
-export const MembershipInfoPage = lazy(() => import('./user/membership-info'));
+export const LoginPage = lazy(() => import('./auth/login'));
+export const FindIdPage = lazy(() => import('./auth/find-id'));
+export const ResetPasswordPage = lazy(() => import('./auth/reset-password'));
+export const SignupPage = lazy(() => import('./auth/signup'));
+export const MembershipInfoPage = lazy(() => import('./auth/membership-info'));
 
 export const HomePage = lazy(() => import('./home'));
 export const OrderCreatePage = lazy(() => import('./order/create'));
@@ -34,3 +34,5 @@ export const StaffManagementPage = lazy(() => import('./setting/staff'));
 export const MembershipManagementPage = lazy(
   () => import('./setting/membership'),
 );
+
+export const NotFoundPage = lazy(() => import('./notFound'));

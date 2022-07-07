@@ -1,37 +1,9 @@
 import { v2Axios } from '.';
 import { RcFile } from 'antd/lib/upload';
 
-// 소매 사업자 생성
-interface RequestCreate {
-  name: string;
-  owner: string;
-  biz_num: string;
-  biz_type: 'personal' | 'entity' | 'simple';
-  address_main: string;
-  address_sub: string;
-  memo: string;
-  biz_license_file: File;
-  // tax_type, service_usage, stores 는 백오피스 필수필드 이므로 빈배열 string 넣어줌(formdata)
-  tax_type: '[]'; // 빈배열
-  service_usage: '[]'; // 빈배열
-  stores: '[]'; // 빈배열
-}
-
-interface ResponseCreate {
-  data: {
-    company_id: number;
-  };
-}
-
-const create = async function (data: RequestCreate) {
-  const url = '/provisioning/retailer/companies';
-  const formData = new FormData();
-  for (const [key, value] of Object.entries(data)) {
-    formData.append(key, value);
-  }
-  const response = await v2Axios.post<ResponseCreate>(url, formData);
-  return response.data.data;
-};
+/*
+ *  사업자 정보
+ */
 
 interface ResponseGet {
   msg: string;
@@ -56,6 +28,10 @@ const get = async function () {
   const response = await v2Axios.get<ResponseGet>(url);
   return response.data.data.company_list[0];
 };
+
+/*
+ * 사업자 정보 수정
+ */
 
 interface RequestUpdate {
   company_id?: number;
@@ -84,7 +60,6 @@ const update = async function (data: RequestUpdate) {
 };
 
 const retailerCompanyAPI = {
-  create,
   get,
   update,
 };

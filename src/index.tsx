@@ -6,10 +6,11 @@ import koKR from 'antd/es/locale/ko_KR';
 import 'moment/locale/ko';
 import 'antd/dist/antd.less';
 import './i18n';
-import Router from './router';
 import GlobalStyle from './GlobalStyle';
 import ChannelService from './ChannelService';
 import GA4React from 'ga-4-react';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
 
 // Antd Message
 message.config({
@@ -33,21 +34,18 @@ const ga4react = new GA4React(
 );
 
 (async () => {
-  await ga4react
-    .initialize()
-    .then(() => console.log('Google Analytics Success.'))
-    .catch(() => console.log('Google Analytics Failure'))
-    .finally(() => {
-      ReactDOM.render(
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            <ConfigProvider locale={koKR}>
-              <GlobalStyle />
-              <Router />
-            </ConfigProvider>
-          </QueryClientProvider>
-        </RecoilRoot>,
-        document.getElementById('root'),
-      );
-    });
+  await ga4react.initialize();
+  ReactDOM.render(
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider locale={koKR}>
+          <GlobalStyle />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ConfigProvider>
+      </QueryClientProvider>
+    </RecoilRoot>,
+    document.getElementById('root'),
+  );
 })();

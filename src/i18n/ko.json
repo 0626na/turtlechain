@@ -26,6 +26,12 @@
     "check confirm": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다."
   },
   "message": {
+    "login expired": "로그인이 만료되었습니다. 다시 로그인해주세요.",
+    "page not found": "존재하지 않는 페이지입니다. 뒤로가기를 눌러주세요.",
+    "enter id": "아이디를 입력해주세요.",
+    "enter password": "비밀번호를 입력해주세요.",
+    "network error": "네트워크가 불안정합니다. 잠시후 다시 시도해주세요.",
+    "incorrect user": "아이디 또는 비밀번호를 다시 확인해주세요.",
     "success create warehousing": "입고를 등록하였습니다.",
     "success create adjustment": "매입조정내역을 등록하였습니다.",
     "success update warehousing": "입고 내역을 수정하였습니다.",
