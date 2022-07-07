@@ -4,11 +4,11 @@ import { MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, Button, Avatar, Menu, Dropdown, Col, Row } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_HEADER_HEIGHT } from '@constant/index';
-import { useLogout } from '@hooks/index';
+import { useLogin } from '@hooks/index';
 import { UserOutlined } from '@ant-design/icons';
 import { Notification } from '@components/combine';
 import { useQuery } from 'react-query';
-import userAPI from '@apis/userAPI';
+import authAPI from '@apis/authAPI';
 
 interface Props {
   handleMenuVisible: () => void;
@@ -16,9 +16,9 @@ interface Props {
 
 function Header({ handleMenuVisible }: Props) {
   const navigate = useNavigate();
-  const logout = useLogout();
+  const { logout } = useLogin();
 
-  const getQuery = useQuery('getUser', userAPI.get, {});
+  const getUserQuery = useQuery('getUser', authAPI.verify);
 
   return (
     <StyledHeader>
@@ -57,7 +57,7 @@ function Header({ handleMenuVisible }: Props) {
             trigger={['click']}
           >
             <Button type="text" style={{ color: '#FFFFFF', paddingLeft: 7 }}>
-              {`${getQuery.data?.login_id ?? ''} 님`}
+              {`${getUserQuery.data?.name}님`}
               <DownOutlined />
             </Button>
           </Dropdown>

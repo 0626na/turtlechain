@@ -114,7 +114,7 @@ function ResetPasswordForm() {
         )}
         <Divider />
         <Form.Item style={{ float: 'right' }}>
-          <Link to="/login">{t('login')}</Link>
+          <Link to="/">{t('login')}</Link>
           <Divider type="vertical" />
           <Link to="/find-id">{t('find id')}</Link>
         </Form.Item>

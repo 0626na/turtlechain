@@ -34,3 +34,5 @@ export const StaffManagementPage = lazy(() => import('./setting/staff'));
 export const MembershipManagementPage = lazy(
   () => import('./setting/membership'),
 );
+
+export const NotFoundPage = lazy(() => import('./notFound'));

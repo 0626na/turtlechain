@@ -1,5 +1,4 @@
 import { v2Axios } from '.';
-import { TOKEN } from '@constant/index';
 
 // 아이디 찾기
 interface RequestGetID {
@@ -89,11 +88,7 @@ interface ResponseGet {
 
 const get = async function () {
   const url = `/provisioning/user`;
-  const response = await v2Axios.get<ResponseGet>(url, {
-    headers: {
-      Authorization: `JWT ${sessionStorage.getItem(TOKEN)}`,
-    },
-  });
+  const response = await v2Axios.get<ResponseGet>(url);
   return response.data.data;
 };
 
