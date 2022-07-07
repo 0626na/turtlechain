@@ -24,7 +24,7 @@ const dupCheck = async function (params: RequestDupCheck) {
  *  회원가입
  */
 
-interface RequestCreate {
+export interface RequestCreate {
   user_name: string;
   user_email: string;
   user_mobile: string;
@@ -48,7 +48,11 @@ interface ResponseCreate {
 
 const create = async function (data: RequestCreate) {
   const url = '/provisioning/registration';
-  const response = await v2Axios.post<ResponseCreate>(url, data);
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+  }
+  const response = await v2Axios.post<ResponseCreate>(url, formData);
   return response.data;
 };
 
