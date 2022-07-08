@@ -11,6 +11,7 @@ export interface WarehousingItemConnect {
   vendor_product_name: string;
   product_option: string;
   product_code: number;
+  store_house: string;
 
   price: number;
   count: number;
