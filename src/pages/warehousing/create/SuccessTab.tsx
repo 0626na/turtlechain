@@ -135,6 +135,11 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            title: '창고명',
+            render: (_, record) => record.store_house,
+          },
+          {
+            ellipsis: true,
             align: 'right',
             title: t('product.price'),
             render: (_, record) => (
