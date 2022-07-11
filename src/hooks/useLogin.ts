@@ -29,6 +29,8 @@ const useLogin = function () {
         if (error.response?.status === 401) {
           logout();
           message.info(`${t('message.login expired')}`);
+        } else if (error.response?.status === 400) {
+          message.error(error.response.data.msg);
         } else {
           message.error(`${t('message.network error')}`);
         }

@@ -60,9 +60,6 @@ function PageBody() {
         setSearchQuery({ ...searchQuery, page: 1 });
         getSheetQuery.refetch();
       },
-      onError: (error: AxiosError) => {
-        message.warn(error.response?.data.msg);
-      },
     },
   );
 

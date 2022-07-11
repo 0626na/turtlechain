@@ -61,9 +61,6 @@ function PageBody() {
       message.success(t('message.success create warehousing'));
       navigate('/warehousing/list');
     },
-    onError: (error: AxiosError) => {
-      message.warn(error.response?.data.msg);
-    },
   });
 
   // 모든 상태 초기화
