@@ -20,6 +20,7 @@ import warehousingAPI, { ResponseConnectInventory } from '@apis/warehousingAPI';
 import AddProductModal from './AddProductModal';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
+import { AxiosError } from 'axios';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -59,6 +60,9 @@ function PageBody() {
       resetStates();
       message.success(t('message.success create warehousing'));
       navigate('/warehousing/list');
+    },
+    onError: (error: AxiosError) => {
+      message.warn(error.response?.data.msg);
     },
   });
 

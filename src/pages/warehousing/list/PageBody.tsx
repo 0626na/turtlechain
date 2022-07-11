@@ -27,6 +27,7 @@ import warehousingAPI, {
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import WarehousingDetailModal from './DetailModal';
+import { AxiosError } from 'axios';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -58,6 +59,9 @@ function PageBody() {
         message.success(t('message.success update'));
         setSearchQuery({ ...searchQuery, page: 1 });
         getSheetQuery.refetch();
+      },
+      onError: (error: AxiosError) => {
+        message.warn(error.response?.data.msg);
       },
     },
   );
