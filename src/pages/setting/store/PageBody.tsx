@@ -103,9 +103,9 @@ function PageBody() {
             {
               title: '재고관리 프로그램',
               render: (_, record) =>
-                record.inventory_type === 1
+                record.inventory_type === 'sellmate'
                   ? '셀메이트'
-                  : record.inventory_type === 2
+                  : record.inventory_type === 'ezadmin'
                   ? '이지어드민'
                   : '터틀체인',
             },

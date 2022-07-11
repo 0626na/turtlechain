@@ -27,7 +27,6 @@ import warehousingAPI, {
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import WarehousingDetailModal from './DetailModal';
-import { AxiosError } from 'axios';
 
 function PageBody() {
   const store = useRecoilValue(storeState);

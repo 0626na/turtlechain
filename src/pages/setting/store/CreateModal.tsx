@@ -127,9 +127,9 @@ function CreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
         >
           <Select placeholder="재고관리 프로그램을 선택하세요.">
-            <Select.Option value={1}>셀메이트</Select.Option>
-            <Select.Option value={2}>이지어드민</Select.Option>
-            <Select.Option value={3}>터틀체인</Select.Option>
+            <Select.Option value="sellmate">셀메이트</Select.Option>
+            <Select.Option value="ezadmin">이지어드민</Select.Option>
+            <Select.Option value={'turtlechain'}>터틀체인</Select.Option>
           </Select>
         </Form.Item>
 

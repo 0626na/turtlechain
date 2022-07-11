@@ -20,7 +20,6 @@ import warehousingAPI, { ResponseConnectInventory } from '@apis/warehousingAPI';
 import AddProductModal from './AddProductModal';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
-import { AxiosError } from 'axios';
 
 function PageBody() {
   const navigate = useNavigate();
