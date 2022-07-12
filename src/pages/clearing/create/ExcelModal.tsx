@@ -115,7 +115,6 @@ function ExcelModal({ visible, closeModal }: Props) {
               clearing_add_request:
                 parseQuery.data?.success.map((item) => ({
                   ...item,
-                  is_vat_included: false,
                 })) ?? [],
             });
           }}

@@ -402,8 +402,7 @@ export interface ClearingItemParse {
   account_holder: string;
   credit_amount: number;
   recipient_print: string;
-
-  is_vat_included: false;
+  is_vat_included: boolean;
 }
 
 export interface RequestParseExcel {
