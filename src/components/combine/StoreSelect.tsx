@@ -64,10 +64,6 @@ function StoreSelect({ warningMessage }: Props) {
     [store, storeList, setStore, warningMessage],
   );
 
-  useEffect(() => {
-    console.log(store);
-  }, [store]);
-
   return (
     <Space size="large">
       <Typography.Text style={{ fontSize: '16px' }}>
