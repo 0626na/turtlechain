@@ -172,7 +172,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
           },
           {
             ellipsis: true,
-            title: t('clearing.total price'),
+            title: t('clearing.total payment'),
             render: (_, record) =>
               record.total_clearing_amount.toLocaleString(),
           },
