@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Select, Space, Typography } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
