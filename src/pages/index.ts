@@ -4,6 +4,7 @@ export const LoginPage = lazy(() => import('./auth/login'));
 export const FindIdPage = lazy(() => import('./auth/find-id'));
 export const ResetPasswordPage = lazy(() => import('./auth/reset-password'));
 export const SignupPage = lazy(() => import('./auth/signup'));
+export const RegistrationPage = lazy(() => import('./auth/registration'));
 export const MembershipInfoPage = lazy(() => import('./auth/membership-info'));
 
 export const HomePage = lazy(() => import('./home'));
