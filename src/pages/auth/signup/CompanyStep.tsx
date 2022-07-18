@@ -68,7 +68,7 @@ function CompanyStep({ visible, onClickNext }: Props) {
         label={t('biz num')}
         rules={[{ required: true }]}
       >
-        <Input maxLength={10} />
+        <Input />
       </Form.Item>
       <Form.Item
         name="company_main_address"
