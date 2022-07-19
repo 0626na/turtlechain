@@ -31,7 +31,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       setCheckDuplicated(true);
       form.setFields([
         {
-          name: 'biz_num',
+          name: 'company_biz_num',
           errors: [],
         },
       ]);
