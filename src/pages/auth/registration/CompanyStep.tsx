@@ -186,7 +186,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       <Form.Item
         name="company_sub_address"
         label={t('biz detail address')}
-        rules={[{ required: true }]}
+        initialValue=""
       >
         <Input />
       </Form.Item>
@@ -233,7 +233,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                 'company_name',
                 'company_biz_num',
                 'company_main_address',
-                'company_sub_address',
                 'company_biz_license_file',
                 'company_store_url',
               ]);
