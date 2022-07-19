@@ -2,11 +2,12 @@ import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 /*
- * 아이디 중복 체크
+ * 아이디,사업자정보 중복 체크
  */
 
 interface RequestDupCheck {
-  login_id: string;
+  login_id?: string;
+  biz_num?: string;
   encrypted_text?: string;
 }
 
@@ -18,6 +19,7 @@ interface ResponseDupCheck {
 const dupCheck = async function (params: RequestDupCheck) {
   const url = '/provisioning/registration/duplication-check';
   const response = await v2Axios.get<ResponseDupCheck>(url, { params });
+
   return response.data;
 };
 

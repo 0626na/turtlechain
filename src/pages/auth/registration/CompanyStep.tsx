@@ -1,13 +1,16 @@
 import { UploadOutlined } from '@ant-design/icons';
+import userAPI from '@apis/userAPI';
 
 import { DaumPostcodeModal } from '@components/combine';
-import { Button, Form, Input, Radio, Row, Upload } from 'antd';
+import { Button, Form, Input, message, Radio, Row, Space, Upload } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
+import { AxiosError } from 'axios';
 
 import { t } from 'i18next';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -17,8 +20,27 @@ interface Props {
 
 function CompanyStep({ visible, onClickNext, form }: Props) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
+  const [checkDuplicated, setCheckDuplicated] = useState(false);
+
+  const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
+    onSuccess: () => {
+      message.success(t('message.no duplicate values'));
+      setCheckDuplicated(true);
+      form.setFields([
+        {
+          name: 'company_biz_num',
+          errors: [],
+        },
+      ]);
+    },
+    onError: (data: AxiosError) => {
+      message.warn(data.response?.data.msg);
+      setCheckDuplicated(false);
+    },
+  });
 
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -68,32 +90,98 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        name="company_biz_num"
-        label={t('biz num')}
-        rules={[{ required: true }]}
-      >
-        <Input maxLength={10} />
+
+      <Form.Item label={t('biz num')} required={true}>
+        <Space>
+          <Form.Item
+            noStyle
+            name="company_biz_num"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(
+                      new Error('사업자 번호 입력해주세요'),
+                    );
+                  }
+
+                  if (!checkDuplicated && getFieldValue('company_biz_num')) {
+                    return Promise.reject(
+                      new Error('사업자 번호 중복확인을 해주세요'),
+                    );
+                  }
+
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Input
+              style={{ width: 400 }}
+              onChange={() => {
+                setCheckDuplicated(false);
+              }}
+            />
+          </Form.Item>
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldError, getFieldValue }) => (
+              <Button
+                style={{ fontSize: 13 }}
+                size="middle"
+                type="primary"
+                disabled={
+                  !getFieldValue('company_biz_num') ||
+                  getFieldError('company_biz_num').includes(
+                    '사업자번호 입력해 주세요',
+                  ) ||
+                  checkDuplicated
+                }
+                onClick={() => {
+                  dupCheckQuery.mutate({
+                    biz_num: form.getFieldValue('company_biz_num'),
+                    encrypted_text: searchParams.get('encrypted_text')!,
+                  });
+                }}
+              >
+                {t('duplicate check')}
+              </Button>
+            )}
+          </Form.Item>
+        </Space>
       </Form.Item>
-      <Form.Item
-        name="company_main_address"
-        label={t('biz address')}
-        rules={[{ required: true }]}
-      >
-        <Input
-          readOnly
-          onClick={() => setPostcodeModalVisible(true)}
-          suffix={
-            <Button
-              size="small"
-              type="link"
-              style={{ fontSize: 13 }}
+
+      <Form.Item label={t('biz address')} required={true}>
+        <Space>
+          <Form.Item
+            noStyle
+            name="company_main_address"
+            rules={[
+              () => ({
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(new Error('사업자주소 입력해주세요'));
+                  }
+
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Input
+              style={{ width: 400 }}
+              readOnly
               onClick={() => setPostcodeModalVisible(true)}
-            >
-              {t('find address')}
-            </Button>
-          }
-        />
+            />
+          </Form.Item>
+          <Button
+            style={{ fontSize: 13 }}
+            size="middle"
+            type="primary"
+            onClick={() => setPostcodeModalVisible(true)}
+          >
+            {t('find address')}
+          </Button>
+        </Space>
       </Form.Item>
       <Form.Item
         name="company_sub_address"
@@ -108,9 +196,14 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         label={t('biz license')}
         valuePropName="fileList"
         getValueFromEvent={normFile}
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: '사업자 등록증을 업로드해 주세요' }]}
       >
-        <Upload listType="picture" maxCount={1} beforeUpload={() => false}>
+        <Upload
+          listType="picture"
+          accept=".jpg, .png, .jpeg, .pdf"
+          maxCount={1}
+          beforeUpload={() => false}
+        >
           <Button type="primary" icon={<UploadOutlined />}>
             {t('biz license')}
           </Button>
@@ -119,10 +212,10 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
 
       <Form.Item
         name="company_store_url"
-        label={t('etc')}
+        label={t('store.url')}
         rules={[{ required: true }]}
       >
-        <Input.TextArea placeholder="운영중인 쇼핑몰 url을 입력해주세요." />
+        <Input placeholder="운영중인 쇼핑몰 url을 입력해주세요." />
       </Form.Item>
 
       <Row justify="space-between">

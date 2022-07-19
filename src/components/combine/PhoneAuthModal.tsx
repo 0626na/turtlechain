@@ -57,9 +57,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   // 인증코드 생성
   const handleCreate = () => {
     const { phone } = form.getFieldsValue();
-    if (emailPattern.test(phone)) {
-      createPhoneOTPQuery.mutate({ phone });
-    }
+    createPhoneOTPQuery.mutate({ phone });
   };
 
   // 인증코드 확인
@@ -114,12 +112,11 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
           label={t('phone')}
           rules={[
             {
-              pattern: emailPattern,
-              message: t('message.error phone validation'),
+              required: true,
             },
           ]}
         >
-          <Input placeholder={t('description.only number')} />
+          <Input placeholder="휴대 전화번호를 입력해주세요." />
         </Form.Item>
         <Form.Item>
           <Button
