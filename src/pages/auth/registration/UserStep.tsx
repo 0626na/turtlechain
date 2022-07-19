@@ -1,6 +1,6 @@
 import userAPI from '@apis/userAPI';
 import { PhoneAuthModal } from '@components/combine';
-import { Button, Form, Input, message, Row } from 'antd';
+import { Button, Form, Input, message, Row, Space } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
@@ -19,13 +19,13 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
   const [searchParams] = useSearchParams();
 
   const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
-  const [isDuplicated, setIsDuplicated] = useState(true);
+  const [checkDuplicated, setCheckDuplicated] = useState(false);
 
   // 아이디 중복체크 요청
   const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
     onSuccess: () => {
       message.success(t('message.no duplicate values'));
-      setIsDuplicated(false);
+      setCheckDuplicated(true);
       form.setFields([
         {
           name: 'user_login_id',
@@ -35,7 +35,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
     },
     onError: (data: AxiosError) => {
       message.warn(data.response?.data.msg);
-      setIsDuplicated(true);
+      setCheckDuplicated(false);
     },
   });
 
@@ -65,64 +65,84 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        name="user_mobile"
-        label={t('phone')}
-        hasFeedback
-        validateStatus="success"
-        rules={[{ required: true }]}
-      >
-        <Input
-          readOnly
-          suffix={
-            <Button
-              size="small"
-              type="link"
+      <Form.Item label={t('phone')} required={true}>
+        <Space>
+          <Form.Item
+            noStyle
+            name="user_mobile"
+            rules={[{ required: true, message: '휴대번호를 인증해주세요' }]}
+          >
+            <Input
+              style={{ width: 400 }}
+              readOnly
               onClick={() => setPhoneAuthModalVisible(true)}
-            >
-              {t('auth phone')}
-            </Button>
-          }
-        />
+            />
+          </Form.Item>
+          <Button
+            style={{ fontSize: 13 }}
+            onClick={() => setPhoneAuthModalVisible(true)}
+            size="middle"
+            type="primary"
+          >
+            휴대 전화번호 인증하기
+          </Button>
+        </Space>
       </Form.Item>
+      <Form.Item label={t('id')} required={true}>
+        <Space>
+          <Form.Item
+            noStyle
+            name="user_login_id"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(new Error('아이디를 입력해주세요.'));
+                  }
 
-      <Form.Item
-        name="user_login_id"
-        label={t('id')}
-        hasFeedback
-        validateStatus={isDuplicated ? '' : 'success'}
-        rules={[
-          { required: true },
-          () => ({
-            validator() {
-              if (isDuplicated) {
-                return Promise.reject(new Error('아이디 중복확인을 해주세요'));
-              }
+                  if (!checkDuplicated && getFieldValue('user_login_id')) {
+                    return Promise.reject(
+                      new Error('아이디 중복확인을 해주세요'),
+                    );
+                  }
 
-              return Promise.resolve();
-            },
-          }),
-        ]}
-      >
-        <Input
-          onChange={() => {
-            setIsDuplicated(true);
-          }}
-          suffix={
-            <Button
-              size="small"
-              type="link"
-              onClick={() => {
-                dupCheckQuery.mutate({
-                  login_id: form.getFieldValue('user_login_id'),
-                  encrypted_text: searchParams.get('encrypted_text')!,
-                });
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Input
+              style={{ width: 400 }}
+              onChange={() => {
+                setCheckDuplicated(false);
               }}
-            >
-              {t('duplicate check')}
-            </Button>
-          }
-        />
+            />
+          </Form.Item>
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldError, getFieldValue }) => (
+              <Button
+                style={{ fontSize: 13 }}
+                size="middle"
+                type="primary"
+                disabled={
+                  !getFieldValue('user_login_id') ||
+                  getFieldError('user_login_id').includes(
+                    '아아디를 입력해 주세요.',
+                  ) ||
+                  checkDuplicated
+                }
+                onClick={() => {
+                  dupCheckQuery.mutate({
+                    login_id: getFieldValue('user_login_id'),
+                    encrypted_text: searchParams.get('encrypted_text')!,
+                  });
+                }}
+              >
+                {t('duplicate check')}
+              </Button>
+            )}
+          </Form.Item>
+        </Space>
       </Form.Item>
 
       <Form.Item
@@ -136,12 +156,11 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
         name="confirm_password"
         label={t('confirm password')}
         dependencies={['user_password']}
-        hasFeedback
         rules={[
-          { required: true },
+          { required: true, message: '비밀번호 입력해 주세요' },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (value !== getFieldValue('user_password')) {
+              if (value && value !== getFieldValue('user_password')) {
                 return Promise.reject(
                   new Error('비밀번호가 일치하지 않습니다.'),
                 );
