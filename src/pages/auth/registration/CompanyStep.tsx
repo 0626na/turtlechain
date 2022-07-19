@@ -101,7 +101,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                 validator(_, value) {
                   if (!value) {
                     return Promise.reject(
-                      new Error('사업자 번호를 입력해주세요.'),
+                      new Error('사업자 번호 입력해주세요'),
                     );
                   }
 
@@ -132,7 +132,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                 disabled={
                   !getFieldValue('company_biz_num') ||
                   getFieldError('company_biz_num').includes(
-                    '사업자번호를 입력해 주세요.',
+                    '사업자번호 입력해 주세요',
                   ) ||
                   checkDuplicated
                 }
@@ -152,7 +152,21 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
 
       <Form.Item label={t('biz address')} required={true}>
         <Space>
-          <Form.Item noStyle name="company_main_address">
+          <Form.Item
+            noStyle
+            name="company_main_address"
+            rules={[
+              () => ({
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(new Error('사업자주소 입력해주세요'));
+                  }
+
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
             <Input
               style={{ width: 400 }}
               readOnly
@@ -182,7 +196,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         label={t('biz license')}
         valuePropName="fileList"
         getValueFromEvent={normFile}
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: '사업자 등록증을 업로드해 주세요' }]}
       >
         <Upload listType="picture" maxCount={1} beforeUpload={() => false}>
           <Button type="primary" icon={<UploadOutlined />}>
