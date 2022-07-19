@@ -150,7 +150,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
         label={t('password')}
         rules={[{ required: true }]}
       >
-        <Input.Password name="password" />
+        <Input.Password />
       </Form.Item>
       <Form.Item
         name="confirm_password"
