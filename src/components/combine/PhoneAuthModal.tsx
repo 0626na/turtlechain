@@ -57,9 +57,7 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
   // 인증코드 생성
   const handleCreate = () => {
     const { phone } = form.getFieldsValue();
-    if (emailPattern.test(phone)) {
-      createPhoneOTPQuery.mutate({ phone });
-    }
+    createPhoneOTPQuery.mutate({ phone });
   };
 
   // 인증코드 확인
