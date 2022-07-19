@@ -200,7 +200,12 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         getValueFromEvent={normFile}
         rules={[{ required: true, message: '사업자 등록증 업로드해 주세요' }]}
       >
-        <Upload listType="picture" maxCount={1} beforeUpload={() => false}>
+        <Upload
+          listType="picture"
+          accept=".jpg, .png, .jpeg, .pdf"
+          maxCount={1}
+          beforeUpload={() => false}
+        >
           <Button type="primary" icon={<UploadOutlined />}>
             {t('biz license')}
           </Button>
