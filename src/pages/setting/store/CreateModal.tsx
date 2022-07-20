@@ -90,6 +90,7 @@ function CreateModal({ visible, closeModal }: Props) {
                 style={{ width: '30%' }}
                 placeholder="은행"
                 loading={getBankQuery.isLoading}
+                showSearch
               >
                 {Object.values(getBankQuery.data?.data ?? []).map(
                   (bank: any) => (
@@ -129,7 +130,9 @@ function CreateModal({ visible, closeModal }: Props) {
           <Select placeholder="재고관리 프로그램을 선택하세요.">
             <Select.Option value="sellmate">셀메이트</Select.Option>
             <Select.Option value="ezadmin">이지어드민</Select.Option>
-            <Select.Option value={'turtlechain'}>터틀체인</Select.Option>
+            <Select.Option value="turtlechain">터틀체인</Select.Option>
+            <Select.Option value="etc">기타</Select.Option>
+            <Select.Option value="none">사용안함</Select.Option>
           </Select>
         </Form.Item>
 
