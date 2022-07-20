@@ -26,7 +26,7 @@ function PageBody() {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
-  const getQuery = useQuery('getCompany', () => retailerCompanyAPI.get());
+  const getQuery = useQuery('getCompany', retailerCompanyAPI.get);
 
   const updateQuery = useMutation('updateCompany', retailerCompanyAPI.update, {
     onSuccess: (data) => {
@@ -173,7 +173,10 @@ function PageBody() {
                 <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
               </Upload>
             ) : (
-              <Image width={300} src={getQuery.data?.biz_license_path} />
+              <Image
+                width={300}
+                src={`${getQuery.data?.biz_license_path}?_=${+new Date()}`}
+              />
             )}
           </Form.Item>
           <Row justify="end">
