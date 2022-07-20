@@ -25,9 +25,10 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
+  // 사업자번호 중복체크 요청
   const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
-    onSuccess: () => {
-      message.success(t('message.no duplicate values'));
+    onSuccess: (data) => {
+      message.success(data.msg);
       setCheckDuplicated(true);
       form.setFields([
         {
