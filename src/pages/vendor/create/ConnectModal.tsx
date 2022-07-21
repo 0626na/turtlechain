@@ -540,13 +540,13 @@ function ConnectModal({ visible, closeModal }: Props) {
             columns={[
               {
                 ellipsis: true,
-                width: '8%',
+                width: 100,
                 title: '거래처 코드',
                 render: (_, record) => record.vendor_code,
               },
               {
                 ellipsis: true,
-                width: '15%',
+                width: '12%',
                 title: '쇼핑몰 입력 값',
                 render: (_, record) => {
                   return `${record.name}  ${record.address}`;
@@ -574,6 +574,7 @@ function ConnectModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 title: '계좌정보',
+                width: '20%',
                 render: (_, record) => {
                   const {
                     bank = '',
@@ -588,6 +589,7 @@ function ConnectModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 title: '부가세 포함 여부',
+                width: 120,
                 render: (_, record) => {
                   return (
                     <Switch
@@ -604,7 +606,7 @@ function ConnectModal({ visible, closeModal }: Props) {
               {
                 ellipsis: true,
                 align: 'center',
-                width: '6%',
+                width: '4%',
                 title: '(체크)',
                 render: (_, record) => {
                   if (

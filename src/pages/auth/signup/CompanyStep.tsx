@@ -30,13 +30,14 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
+  // 사업자번호 중복체크 요청
   const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
-    onSuccess: () => {
-      message.success(t('message.no duplicate values'));
+    onSuccess: (data) => {
+      message.success(data.msg);
       setCheckDuplicated(true);
       form.setFields([
         {
-          name: 'biz_num',
+          name: 'company_biz_num',
           errors: [],
         },
       ]);
@@ -189,7 +190,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       <Form.Item
         name="company_sub_address"
         label={t('biz detail address')}
-        rules={[{ required: true }]}
+        initialValue=""
       >
         <Input />
       </Form.Item>
@@ -234,7 +235,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                 'company_name',
                 'company_biz_num',
                 'company_main_address',
-                'company_sub_address',
                 'company_biz_license_file',
                 'company_store_url',
               ]);
