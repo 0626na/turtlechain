@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { useMutation } from 'react-query';
-import { emailPattern } from '@utils/pattern';
 import authAPI from '@apis/authAPI';
 
 interface Props {
