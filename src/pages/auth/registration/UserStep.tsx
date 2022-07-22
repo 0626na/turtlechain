@@ -1,10 +1,12 @@
 import userAPI from '@apis/userAPI';
 import { PhoneAuthModal } from '@components/combine';
-import { Button, Form, FormInstance, Input, message, Row, Space } from 'antd';
+import { Button, Form, Input, message, Row, Space } from 'antd';
+import { FormInstance } from 'antd/es/form/Form';
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -14,6 +16,8 @@ interface Props {
 }
 
 function UserStep({ visible, loading, onClickPrev, form }: Props) {
+  const [searchParams] = useSearchParams();
+
   const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
@@ -130,6 +134,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
                 onClick={() => {
                   dupCheckQuery.mutate({
                     login_id: getFieldValue('user_login_id'),
+                    encrypted_text: searchParams.get('encrypted_text')!,
                   });
                 }}
               >
@@ -139,6 +144,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
           </Form.Item>
         </Space>
       </Form.Item>
+
       <Form.Item
         name="user_password"
         label={t('password')}

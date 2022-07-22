@@ -45,12 +45,14 @@ function SignupPage() {
           }}
         >
           <CompanyStep
+            form={form}
             visible={currentStep === 0}
             onClickNext={() => {
               setCurrentStep((currentStep) => currentStep + 1);
             }}
           />
           <UserStep
+            form={form}
             visible={currentStep === 1}
             onClickPrev={() => {
               setCurrentStep((currentStep) => currentStep - 1);

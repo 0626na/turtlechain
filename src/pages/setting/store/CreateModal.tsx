@@ -10,6 +10,7 @@ import {
 } from '@components/common';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import presetAPI from '@apis/presetAPI';
+import { numPattern } from '@utils/pattern';
 
 interface Props {
   visible: boolean;
@@ -39,6 +40,18 @@ function CreateModal({ visible, closeModal }: Props) {
   const resetFields = useCallback(() => {
     form.resetFields();
   }, [form]);
+
+  const handleAccountValidation = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('계좌번호를 입력해주세요'));
+    }
+
+    if (!numPattern.test(value)) {
+      return Promise.reject(new Error('숫자만 입력해주세요'));
+    }
+
+    return Promise.resolve();
+  };
 
   useEffect(() => {
     resetFields();
@@ -90,6 +103,7 @@ function CreateModal({ visible, closeModal }: Props) {
                 style={{ width: '30%' }}
                 placeholder="은행"
                 loading={getBankQuery.isLoading}
+                showSearch
               >
                 {Object.values(getBankQuery.data?.data ?? []).map(
                   (bank: any) => (
@@ -103,7 +117,11 @@ function CreateModal({ visible, closeModal }: Props) {
             <Form.Item
               name={['store_account', 'account_number']}
               noStyle
-              rules={[{ required: true }]}
+              rules={[
+                () => ({
+                  validator: handleAccountValidation,
+                }),
+              ]}
               label="계좌번호"
             >
               <Input style={{ width: '40%' }} placeholder="계좌번호" />
@@ -129,7 +147,9 @@ function CreateModal({ visible, closeModal }: Props) {
           <Select placeholder="재고관리 프로그램을 선택하세요.">
             <Select.Option value="sellmate">셀메이트</Select.Option>
             <Select.Option value="ezadmin">이지어드민</Select.Option>
-            <Select.Option value={'turtlechain'}>터틀체인</Select.Option>
+            <Select.Option value="turtlechain">터틀체인</Select.Option>
+            <Select.Option value="etc">기타</Select.Option>
+            <Select.Option value="none">사용안함</Select.Option>
           </Select>
         </Form.Item>
 

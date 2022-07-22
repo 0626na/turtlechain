@@ -20,6 +20,7 @@ import {
   ProductListPage,
   ResetPasswordPage,
   SignupPage,
+  RegistrationPage,
   StaffManagementPage,
   StoreManagementPage,
   UserManagementPage,
@@ -37,6 +38,7 @@ function App() {
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/membership-info" element={<MembershipInfoPage />} />
         <Route path="*" element={<NotFoundPage />} />
 

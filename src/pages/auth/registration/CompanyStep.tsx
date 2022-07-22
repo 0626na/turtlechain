@@ -1,22 +1,16 @@
 import { UploadOutlined } from '@ant-design/icons';
 import userAPI from '@apis/userAPI';
+
 import { DaumPostcodeModal } from '@components/combine';
-import {
-  Button,
-  Form,
-  FormInstance,
-  Input,
-  message,
-  Radio,
-  Row,
-  Space,
-  Upload,
-} from 'antd';
+import { Button, Form, Input, message, Radio, Row, Space, Upload } from 'antd';
+import { FormInstance } from 'antd/es/form/Form';
 import { AxiosError } from 'axios';
+
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -26,6 +20,7 @@ interface Props {
 
 function CompanyStep({ visible, onClickNext, form }: Props) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
@@ -96,6 +91,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       >
         <Input />
       </Form.Item>
+
       <Form.Item label={t('biz num')} required={true}>
         <Space>
           <Form.Item
@@ -137,13 +133,14 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                 disabled={
                   !getFieldValue('company_biz_num') ||
                   getFieldError('company_biz_num').includes(
-                    '사업자번호 입력해 주세요.',
+                    '사업자번호 입력해 주세요',
                   ) ||
                   checkDuplicated
                 }
                 onClick={() => {
                   dupCheckQuery.mutate({
-                    biz_num: getFieldValue('company_biz_num'),
+                    biz_num: form.getFieldValue('company_biz_num'),
+                    encrypted_text: searchParams.get('encrypted_text')!,
                   });
                 }}
               >
@@ -194,12 +191,13 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       >
         <Input />
       </Form.Item>
+
       <Form.Item
         name="company_biz_license_file"
         label={t('biz license')}
         valuePropName="fileList"
         getValueFromEvent={normFile}
-        rules={[{ required: true, message: '사업자 등록증 업로드해 주세요' }]}
+        rules={[{ required: true, message: '사업자 등록증을 업로드해 주세요' }]}
       >
         <Upload
           listType="picture"
@@ -212,6 +210,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
           </Button>
         </Upload>
       </Form.Item>
+
       <Form.Item
         name="company_store_url"
         label={t('store.url')}
