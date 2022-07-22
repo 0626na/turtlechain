@@ -119,7 +119,7 @@ export interface ResponseCreate {
   data: null;
 }
 
-const create = async function (data: RequestCreate) {
+const create = async (data: RequestCreate) => {
   let url = `/provisioning/retailer/stores`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;
