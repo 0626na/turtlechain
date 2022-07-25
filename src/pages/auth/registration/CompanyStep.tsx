@@ -231,7 +231,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
               ]);
               onClickNext();
             } catch (error) {
-              console.log(error);
               return;
             }
           }}

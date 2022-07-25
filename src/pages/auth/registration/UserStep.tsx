@@ -191,7 +191,6 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
                 'confirm_password',
               ]);
             } catch (error) {
-              console.log(error);
               return;
             }
           }}
