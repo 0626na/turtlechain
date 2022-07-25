@@ -113,7 +113,7 @@ function remove_cache() {
   aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
 }
 
-function send_teams_message() {
+function send_alert_bot() {
   if [ $ENV == 'prod' ]; then
     URL="https://product.turtlechain.io"
   else
@@ -176,15 +176,10 @@ echo Remove cache...
 remove_cache
 echo Remove cache: OK.
 
-### 6. Send mail ###
-# echo Send deploy mail...
-# send_deploymail
-# echo Mail : OK.
-
-### 6. Send teams message ###
-echo Send teams message...
-send_teams_message
-echo Teams Message: success.
+### 6. Send alert bot ###
+echo Send alert bot...
+send_alert_bot
+echo Send alert bot : success.
 
 ### 7. Deploy complete ###
 echo
