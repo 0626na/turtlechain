@@ -39,6 +39,32 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
     },
   });
 
+  // 아이디 유효성 검사
+  const handleUserLoginIdValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('아이디를 입력해주세요.'));
+    }
+
+    if (!checkDuplicated && form.getFieldValue('user_login_id')) {
+      return Promise.reject(new Error('아이디 중복확인을 해주세요'));
+    }
+
+    return Promise.resolve();
+  };
+
+  // 비밀번호 확인 유효성 검사
+  const handleConfirmPasswordValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('비밀번호 입력해주세요.'));
+    }
+
+    if (value && value !== form.getFieldValue('user_password')) {
+      return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
+    }
+
+    return Promise.resolve();
+  };
+
   return (
     <div style={{ display: visible ? '' : 'none' }}>
       <PhoneAuthModal
@@ -93,23 +119,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
           <Form.Item
             noStyle
             name="user_login_id"
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value) {
-                    return Promise.reject(new Error('아이디를 입력해주세요.'));
-                  }
-
-                  if (!checkDuplicated && getFieldValue('user_login_id')) {
-                    return Promise.reject(
-                      new Error('아이디 중복확인을 해주세요'),
-                    );
-                  }
-
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+            rules={[{ validator: handleUserLoginIdValidationCheck }]}
           >
             <Input
               style={{ width: 400 }}
@@ -156,20 +166,8 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
         name="confirm_password"
         label={t('confirm password')}
         dependencies={['user_password']}
-        rules={[
-          { required: true, message: '비밀번호 입력해 주세요' },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (value && value !== getFieldValue('user_password')) {
-                return Promise.reject(
-                  new Error('비밀번호가 일치하지 않습니다.'),
-                );
-              }
-
-              return Promise.resolve();
-            },
-          }),
-        ]}
+        required={true}
+        rules={[{ validator: handleConfirmPasswordValidationCheck }]}
       >
         <Input.Password />
       </Form.Item>
