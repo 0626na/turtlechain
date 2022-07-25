@@ -127,7 +127,7 @@ function send_teams_message() {
 			\"block_id\": \"section567\",
 			\"text\": {
 				\"type\": \"mrkdwn\",
-				\"text\": \"*터틀체인 배포알림* \n ${ENV} :star: \n <${URL}|${URL}>\"
+				\"text\": \"*터틀체인 배포알림* \n :star: ${ENV} \n <${URL}|${URL}>\"
 			},
 			\"accessory\": {
 				\"type\": \"image\",
