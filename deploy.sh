@@ -123,23 +123,15 @@ function send_teams_message() {
   curl -X POST -H 'Content-type: application/json' --data "{
 	\"blocks\": [
 		{
-			\"type\": \"header\",
-			\"text\": {
-				\"type\": \"plain_text\",
-				\"text\": \"백오피스 배포알림\",
-        \"emoji\": true
-			}
-		},
-		{
 			\"type\": \"section\",
 			\"block_id\": \"section567\",
 			\"text\": {
 				\"type\": \"mrkdwn\",
-				\"text\": \":star: ${ENV} \n <${URL}|${URL}>\"
+				\"text\": \"*터틀체인 배포알림* \n ${ENV} :star: \n <${URL}|${URL}>\"
 			},
 			\"accessory\": {
 				\"type\": \"image\",
-				\"image_url\": \"${URL}/assets/img/new_logo_login.png\",
+				\"image_url\": \"${URL}/assets/img/favicon.png\",
 				\"alt_text\": \"logo\"
 			}
 		},
