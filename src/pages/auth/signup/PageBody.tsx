@@ -12,7 +12,7 @@ import UserStep from './UserStep';
 
 function Pagebody() {
   const [form] = Form.useForm();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const createUserQuery = useMutation('createUser', userAPI.create, {
     onSuccess: () => {
