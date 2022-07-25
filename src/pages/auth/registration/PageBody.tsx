@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { Form, message, Steps } from 'antd';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import CompanyStep from './CompanyStep';
 import UserStep from './UserStep';
@@ -16,6 +16,8 @@ import { phonePattern } from '@utils/pattern';
 function PageBody() {
   const [form] = Form.useForm();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState(0);
 
   const registrationQuery = useQuery(
@@ -60,7 +62,13 @@ function PageBody() {
         });
       },
       onError: (error: AxiosError) => {
-        message.warn(error.response?.data.msg);
+        if (error.response?.data.msg) {
+          message.warn(error.response?.data.msg);
+          return;
+        }
+
+        // 404
+        navigate('/not-found');
       },
     },
   );
