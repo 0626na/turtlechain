@@ -120,21 +120,33 @@ function send_teams_message() {
     URL="https://${ENV}.turtlechain.io"
   fi
 
-  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"title\": \"터틀체인 2.0 ${ENV} 배포\",\"summary\": \"터틀체인 2.0 ${ENV} 배포\",\"sections\": [{
-        \"facts\": [{
-            \"name\": \"프로젝트\",
-            \"value\": \"터틀체인 2.0\"
-        }, {
-            \"name\": \"버전\",
-            \"value\": \"${ENV}\"
-        }, {
-            \"name\": \"접속링크\",
-            \"value\": \"${URL}\"
-        }],
-        \"markdown\": true
-    }],}" -H "Content-Type: Application/JSON" -X POST YOUR_TEAMS_HOOK_URL https://turtleship.webhook.office.com/webhookb2/45c662af-63fc-4c15-af9a-dca5284cea67@357b41ce-1065-4820-bd19-b4750106b292/IncomingWebhook/f0006126b3bd43c38ccc3ee61f627328/b2dfea25-f801-4f8e-8bf5-8412247daafc
+  curl -X POST -H 'Content-type: application/json' --data "{
+	\"blocks\": [
+		{
+			\"type\": \"header\",
+			\"text\": {
+				\"type\": \"plain_text\",
+				\"text\": \"백오피스 배포알림\",
+        \"emoji\": true
+			}
+		},
+		{
+			\"type\": \"section\",
+			\"block_id\": \"section567\",
+			\"text\": {
+				\"type\": \"mrkdwn\",
+				\"text\": \":star: ${ENV} \n <${URL}|${URL}>\"
+			},
+			\"accessory\": {
+				\"type\": \"image\",
+				\"image_url\": \"${URL}/assets/img/new_logo_login.png\",
+				\"alt_text\": \"logo\"
+			}
+		},
+	]
+  }" https://hooks.slack.com/services/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
 
-  exit_if_fail "Can't send teams message."
+  exit_if_fail "Can't send alert."
 }
 
 function send_deploymail() {
