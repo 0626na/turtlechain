@@ -177,9 +177,9 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           rules={requiredRules}
         >
           <Select placeholder="재고관리 프로그램을 선택해주세요" disabled>
-            <Select.Option value={1}>셀메이트</Select.Option>
-            <Select.Option value={2}>이지어드민</Select.Option>
-            <Select.Option value={3}>터틀체인</Select.Option>
+            <Select.Option value={'sellmate'}>셀메이트</Select.Option>
+            <Select.Option value={'ezadmin'}>이지어드민</Select.Option>
+            <Select.Option value={'turtlechain'}>터틀체인</Select.Option>
           </Select>
         </Form.Item>
 
@@ -201,7 +201,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
               <Input
                 style={{ width: '40%' }}
                 placeholder="도메인"
-                disabled={selectedRow?.inventory_type === 2}
+                disabled={selectedRow?.inventory_type === 'ezadmin'}
               />
             </Form.Item>
             <Form.Item name="inventory_key" noStyle label="연동 key">

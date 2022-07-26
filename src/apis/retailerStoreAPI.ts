@@ -16,7 +16,7 @@ export interface Store {
     tag: string;
   };
   // 1: 셀메이트, 2: 이지어드민, 3: 터틀체인
-  inventory_type: number;
+  inventory_type: 'sellmate' | 'ezadmin' | 'turtlechain';
   inventory_domain: string;
   inventory_key: string;
   inventory_is_vat_included: boolean;
@@ -26,7 +26,7 @@ export interface StoreShow {
   id: number;
   name: string;
   store_url: string;
-  inventory_type: number;
+  inventory_type: 'sellmate' | 'ezadmin' | 'turtlechain';
   inventory_domain: string;
   inventory_key: string;
   inventory_is_vat_included: boolean;
@@ -96,7 +96,7 @@ export interface RequestUpdate {
   store_mobile: {
     mobile: string;
   };
-  inventory_type: number;
+  inventory_type: 'sellmate' | 'ezadmin' | 'turtlechain';
   inventory_domain: string;
   inventory_key: string;
 }
@@ -119,7 +119,7 @@ export interface ResponseCreate {
   data: null;
 }
 
-const create = async function (data: RequestCreate) {
+const create = async (data: RequestCreate) => {
   let url = `/provisioning/retailer/stores`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
   return response.data;

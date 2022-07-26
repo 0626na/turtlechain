@@ -67,7 +67,7 @@ function FindIdForm() {
         )}
         <Divider />
         <Form.Item style={{ float: 'right' }}>
-          <Link to="/login">{t('login')}</Link>
+          <Link to="/">{t('login')}</Link>
           <Divider type="vertical" />
           <Link to="/reset-password">{t('reset password')}</Link>
         </Form.Item>

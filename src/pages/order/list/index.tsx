@@ -2,7 +2,7 @@ import moment from 'moment';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 import { useState } from 'react';
-import { PageHeader, MenuBar } from '@layout/main';
+import { PageHeader, MenuBar } from '@layout/page';
 import { RequestGetList } from '@apis/orderAPI';
 import OrderSheetList from './OrderSheetList';
 

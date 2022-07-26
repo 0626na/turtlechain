@@ -10,7 +10,7 @@ import clearingAPI, {
 } from '@apis/clearingAPI';
 import { NewSearchFilter } from '@components/combine';
 import { TurtleModal, TurtleTableTitle } from '@components/common';
-import { MainContent } from '@layout/main';
+import { MainContent } from '@layout/page';
 import { storeState } from '@store/storeState';
 
 interface Props {
@@ -172,7 +172,7 @@ function LoadClearingModal({ visible, closeModal, selectClearingItem }: Props) {
           },
           {
             ellipsis: true,
-            title: t('clearing.total price'),
+            title: t('clearing.total payment'),
             render: (_, record) =>
               record.total_clearing_amount.toLocaleString(),
           },

@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { PageHeader } from '@layout/main';
+import { PageHeader } from '@layout/page';
 import { Helmet } from 'react-helmet';
 import PageBody from './PageBody';
 

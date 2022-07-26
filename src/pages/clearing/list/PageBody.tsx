@@ -22,7 +22,7 @@ import clearingAPI, {
   RequestGetSheet,
 } from '@apis/clearingAPI';
 import { TurtleCard, TurtleIcon, TurtleTableTitle } from '@components/common';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
 import { SelectDateModal } from '@components/combine';
 import { useStoreExist } from '@hooks/index';

@@ -1,37 +1,9 @@
 import { v2Axios } from '.';
 import { RcFile } from 'antd/lib/upload';
 
-// 소매 사업자 생성
-interface RequestCreate {
-  name: string;
-  owner: string;
-  biz_num: string;
-  biz_type: 'personal' | 'entity' | 'simple';
-  address_main: string;
-  address_sub: string;
-  memo: string;
-  biz_license_file: File;
-  // tax_type, service_usage, stores 는 백오피스 필수필드 이므로 빈배열 string 넣어줌(formdata)
-  tax_type: '[]'; // 빈배열
-  service_usage: '[]'; // 빈배열
-  stores: '[]'; // 빈배열
-}
-
-interface ResponseCreate {
-  data: {
-    company_id: number;
-  };
-}
-
-const create = async function (data: RequestCreate) {
-  const url = '/provisioning/retailer/companies';
-  const formData = new FormData();
-  for (const [key, value] of Object.entries(data)) {
-    formData.append(key, value);
-  }
-  const response = await v2Axios.post<ResponseCreate>(url, formData);
-  return response.data.data;
-};
+/*
+ *  사업자 정보
+ */
 
 interface ResponseGet {
   msg: string;
@@ -42,7 +14,7 @@ interface ResponseGet {
       biz_num: string;
       name: string;
       type: number;
-      email: string;
+      email: string[];
       address: string;
       memo: string;
       owner: string;
@@ -51,14 +23,19 @@ interface ResponseGet {
   };
 }
 
-const get = async function () {
+const get = async () => {
   const url = `/provisioning/retailer/companies`;
   const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data.data.company_list[0];
 };
 
+/*
+ * 사업자 정보 수정
+ */
+
 interface RequestUpdate {
-  company_id?: number;
+  company_id?: string;
   biz_type: string;
   name: string;
   address_main: string;
@@ -80,13 +57,34 @@ const update = async function (data: RequestUpdate) {
   }
   !data.biz_license_file && formData.delete('biz_license_file');
   const response = await v2Axios.patch<ResponseUpdate>(url, formData);
+
+  return response.data;
+};
+
+// 사업자 정보 이메일 유효성 검사
+
+interface requestCheckEmailValidity {
+  email: string;
+}
+
+interface ResponseCheckEmailValidity {
+  msg: string;
+  data: null;
+}
+
+const checkEmailValidity = async (params: requestCheckEmailValidity) => {
+  const url = `/provisioning/retailer/companies/email-validation`;
+  const response = await v2Axios.get<ResponseCheckEmailValidity>(url, {
+    params,
+  });
+
   return response.data;
 };
 
 const retailerCompanyAPI = {
-  create,
   get,
   update,
+  checkEmailValidity,
 };
 
 export default retailerCompanyAPI;

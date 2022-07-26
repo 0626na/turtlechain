@@ -4,7 +4,6 @@ import { DatePicker, message, Row, Table, Tag } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import { MainContent } from '@layout/main';
 import { AdjustmentItem } from '@apis/adjustmentAPI';
 import warehousingAPI, {
   RequestGetSheet,
@@ -17,6 +16,7 @@ import {
 } from '@components/common';
 import { storeState } from '@store/storeState';
 import { NewSearchFilter } from '@components/combine';
+import { MainContent } from '@layout/page';
 
 interface Props {
   visible: boolean;

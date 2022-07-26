@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import { storeState } from '@store/storeState';
 import { FileTextOutlined } from '@ant-design/icons';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import { TurtleTableTitle } from '@components/common';
 import { NewSearchFilter } from '@components/combine';
 import UpdateProductModal from './UpdateProductModal';

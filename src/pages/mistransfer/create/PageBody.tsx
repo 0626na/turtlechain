@@ -13,7 +13,7 @@ import {
   TurtleText,
 } from '@components/common';
 import { useStoreExist } from '@hooks/index';
-import { BottomBar, MenuBar } from '@layout/main';
+import { BottomBar, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
 import { ClearingItemShow } from '@apis/clearingAPI';
 import mistransferAPI from '@apis/mistransferAPI';

@@ -113,28 +113,32 @@ function remove_cache() {
   aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
 }
 
-function send_teams_message() {
+function send_alert_bot() {
   if [ $ENV == 'prod' ]; then
     URL="https://product.turtlechain.io"
   else
     URL="https://${ENV}.turtlechain.io"
   fi
 
-  curl -d "{\"@context\":\"https://schema.org/extensions\",\"@type\":\"MessageCard\",\"themeColor\":\"0072C6\",\"title\": \"터틀체인 2.0 ${ENV} 배포\",\"summary\": \"터틀체인 2.0 ${ENV} 배포\",\"sections\": [{
-        \"facts\": [{
-            \"name\": \"프로젝트\",
-            \"value\": \"터틀체인 2.0\"
-        }, {
-            \"name\": \"버전\",
-            \"value\": \"${ENV}\"
-        }, {
-            \"name\": \"접속링크\",
-            \"value\": \"${URL}\"
-        }],
-        \"markdown\": true
-    }],}" -H "Content-Type: Application/JSON" -X POST YOUR_TEAMS_HOOK_URL https://turtleship.webhook.office.com/webhookb2/45c662af-63fc-4c15-af9a-dca5284cea67@357b41ce-1065-4820-bd19-b4750106b292/IncomingWebhook/f0006126b3bd43c38ccc3ee61f627328/b2dfea25-f801-4f8e-8bf5-8412247daafc
+  curl -X POST -H 'Content-type: application/json' --data "{
+	\"blocks\": [
+		{
+			\"type\": \"section\",
+			\"block_id\": \"section567\",
+			\"text\": {
+				\"type\": \"mrkdwn\",
+				\"text\": \"*터틀체인 배포알림* \n :star: ${ENV} :star: \n <${URL}|${URL}>\"
+			},
+			\"accessory\": {
+				\"type\": \"image\",
+				\"image_url\": \"${URL}/assets/img/favicon.png\",
+				\"alt_text\": \"logo\"
+			}
+		},
+	]
+  }" https://hooks.slack.com/services/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
 
-  exit_if_fail "Can't send teams message."
+  exit_if_fail "Can't send alert."
 }
 
 function send_deploymail() {
@@ -172,15 +176,10 @@ echo Remove cache...
 remove_cache
 echo Remove cache: OK.
 
-### 6. Send mail ###
-# echo Send deploy mail...
-# send_deploymail
-# echo Mail : OK.
-
-### 6. Send teams message ###
-echo Send teams message...
-send_teams_message
-echo Teams Message: success.
+### 6. Send alert bot ###
+echo Send alert bot...
+send_alert_bot
+echo Send alert bot : success.
 
 ### 7. Deploy complete ###
 echo

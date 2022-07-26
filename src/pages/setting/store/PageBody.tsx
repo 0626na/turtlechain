@@ -5,7 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Row, Table, Tag } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
-import { MainContent } from '@layout/main';
+import { MainContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
 import CreateModal from './CreateModal';
 import UpdateModal from './UpdateModal';
@@ -103,9 +103,9 @@ function PageBody() {
             {
               title: '재고관리 프로그램',
               render: (_, record) =>
-                record.inventory_type === 1
+                record.inventory_type === 'sellmate'
                   ? '셀메이트'
-                  : record.inventory_type === 2
+                  : record.inventory_type === 'ezadmin'
                   ? '이지어드민'
                   : '터틀체인',
             },

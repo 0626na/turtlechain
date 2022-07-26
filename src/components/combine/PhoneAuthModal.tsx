@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { useMutation } from 'react-query';
-import { emailPattern } from '@utils/pattern';
 import authAPI from '@apis/authAPI';
 
 interface Props {
@@ -48,15 +47,16 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
         onClose();
         onSuccess && onSuccess({ token, phone });
       },
+      onError: () => {
+        message.warn('인증번호가 일치하지 않습니다.');
+      },
     },
   );
 
   // 인증코드 생성
   const handleCreate = () => {
     const { phone } = form.getFieldsValue();
-    if (emailPattern.test(phone)) {
-      createPhoneOTPQuery.mutate({ phone });
-    }
+    createPhoneOTPQuery.mutate({ phone });
   };
 
   // 인증코드 확인
@@ -111,12 +111,11 @@ function PhoneAuthModal({ visible, onClose, onSuccess }: Props) {
           label={t('phone')}
           rules={[
             {
-              pattern: emailPattern,
-              message: t('message.error phone validation'),
+              required: true,
             },
           ]}
         >
-          <Input placeholder={t('description.only number')} />
+          <Input placeholder="휴대 전화번호를 입력해주세요." />
         </Form.Item>
         <Form.Item>
           <Button

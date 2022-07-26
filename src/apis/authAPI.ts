@@ -1,12 +1,14 @@
 import { v2Axios } from '.';
 
-// 로그인
-interface RequestLogin {
+/*
+ *  로그인
+ */
+export interface RequestLogin {
   login_id: string;
   password: string;
 }
 
-interface ResponseLogin {
+export interface ResponseLogin {
   token: string;
 }
 
@@ -16,7 +18,34 @@ const login = async function (data: RequestLogin) {
   return response.data;
 };
 
-// OTP 생성
+/*
+ *  유저 유효여부
+ */
+
+export interface ResponseVerify {
+  token: string;
+  user_info: {
+    id: number;
+    login_id: string;
+    name: string;
+    email: string;
+    mobile_phone: string;
+    company_id: number;
+  };
+}
+
+const verify = async () => {
+  const url = `auth/login/verify`;
+  const response = await v2Axios.post<ResponseVerify>(url, {
+    token: v2Axios.defaults.headers.common['Authorization'].substring(4),
+  });
+  return response.data.user_info;
+};
+
+/*
+ * OTP 생성
+ */
+
 interface RequestCreatePhoneOTP {
   phone: string;
 }
@@ -34,7 +63,10 @@ const createPhoneOTP = async function (data: RequestCreatePhoneOTP) {
   return response.data.data;
 };
 
-// OTP 확인
+/*
+ * OTP 확인
+ */
+
 interface RequestVerifyPhoneOTP {
   session_key: string;
   otp_code: string;
@@ -52,6 +84,7 @@ const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
 
 const authAPI = {
   login,
+  verify,
   createPhoneOTP,
   verifyPhoneOTP,
 };

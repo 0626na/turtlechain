@@ -22,7 +22,7 @@ import {
 import { useMutation, useQuery } from 'react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import adjustmentAPI, {
   AdjustmentItemShow,
   RequestGetList,

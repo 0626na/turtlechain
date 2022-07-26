@@ -3,7 +3,8 @@ import { Popconfirm, message, Menu, Tabs } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { MainContent, MenuBar, BottomBar } from '@layout/main';
+import { useNavigate } from 'react-router-dom';
+import { MainContent, MenuBar, BottomBar } from '@layout/page';
 import adjustmentAPI, { AdjustmentItem } from '@apis/adjustmentAPI';
 import { storeState } from '@store/storeState';
 import { adjustmentCartState } from '@store/adjustmentCartState';
@@ -12,10 +13,9 @@ import { useStoreExist } from '@hooks/index';
 import LoadWarehousingModal from './LoadWarehousingModal';
 import SuccessTab from './SuccessTab';
 import AddProductModal from './AddProductModal';
-import { useHistory } from 'react-router-dom';
 
 const PageBody = function () {
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(adjustmentCartState);
@@ -29,7 +29,7 @@ const PageBody = function () {
     onSuccess: () => {
       resetStates();
       message.success(t('message.success create adjustment'));
-      history.push('/adjustment/list');
+      navigate('/adjustment/list');
     },
   });
 

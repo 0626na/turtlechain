@@ -3,7 +3,7 @@ import { Collapse } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { TurtleButtonSub, TurtlePanelHeader } from '@components/common';
-import { MainContent, MenuBar } from '@layout/main';
+import { MainContent, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
 import useStoreExist from '@hooks/useStoreExist';
 import AdjustmentPanel from './AdjustmentPanel';
