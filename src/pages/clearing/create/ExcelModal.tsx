@@ -111,7 +111,9 @@ function ExcelModal({ visible, closeModal }: Props) {
                   0,
                 ) ?? 0,
               credit_type: 'general',
-              request_date: form.getFieldValue('request_date'),
+              request_date: moment(form.getFieldValue('request_date')).format(
+                'YYYY-MM-DD',
+              ),
               clearing_add_request:
                 parseQuery.data?.success.map((item) => ({
                   ...item,
