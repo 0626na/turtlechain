@@ -155,6 +155,7 @@ export interface RequestCreateSheet {
   store_id?: number;
   credit_type: 'general';
   store_name?: string;
+  request_date: string;
 }
 
 // Response: 정산서 생성
