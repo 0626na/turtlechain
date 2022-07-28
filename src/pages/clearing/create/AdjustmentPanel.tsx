@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import {
+  Col,
   Collapse,
   CollapsePanelProps,
   InputNumber,
@@ -31,87 +32,212 @@ interface Props extends CollapsePanelProps {
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { adjustmentAmount } = useClearingCart();
+  const { handleReservePaymentAmountTotal, handleSubtractAmountTotal } =
+    useClearingCart();
 
-  const getAdjustmentBalanceQuery = useQuery(
-    ['getAdjustmentBalance'],
+  const getRetailerStoreClearingQuery = useQuery(
+    ['getRetailerStoreClearing', store.id!],
     () =>
-      clearingAPI.getAdjustmentBalance({
+      clearingAPI.getClearing({
         rt_store_id: store.id!,
-        vendor_id_list: cart.warehousingBalanceList
-          .filter((item) => item.clearing_amount !== 0)
-          .map((item) => item.vendor_info.id),
+        balance_type: 'clearing',
       }),
     {
-      enabled: activeKey === '2',
+      enabled: activeKey === '1',
       onSuccess: (data) => {
-        setCart((cart) => ({
-          ...cart,
-          adjustmentBalanceList: data.item_list.map((adjustmentItem) => ({
-            ...adjustmentItem,
-            max_clearing_amount: cart.warehousingBalanceList
-              .filter(
-                (warehousingItem) =>
-                  warehousingItem.vendor_info.id ===
-                  adjustmentItem.vendor_info.id,
-              )
-              .map((warehousingItem) => warehousingItem.clearing_amount)
-              .reduce((cur, acc) => cur + acc, 0),
+        setCart({
+          warehousingBalanceList: data.item_list.map((item) => ({
+            ...item,
+            type: 'warehousing',
           })),
-        }));
+
+          adjustmentSubtractList: data.item_list
+            .filter(
+              (item) =>
+                item.warehousing_amount + item.unpaid_amount > 0 &&
+                item.overpaid_amount > 0,
+            )
+            .map((item) => ({
+              ...item,
+              type: 'adjustment_subtract',
+            })),
+
+          reserveSubtractList: data.item_list
+            .filter((item) => item.reserve_subtract_amount > 0)
+            .map((item) => ({ ...item, type: 'reserve_subtract' })),
+
+          reservePaymentList: data.item_list
+            .filter((item) => item.reserve_payment_amount > 0)
+            .map((item) => ({ ...item, type: 'reserve_payment' })),
+        });
       },
     },
   );
 
+  const handlePaymentInputFiilIn = () => {
+    setCart((cart) => ({
+      ...cart,
+      adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => {
+        return {
+          ...item,
+          overpaid_payment_amount: item.overpaid_amount,
+        };
+      }),
+    }));
+
+    return;
+  };
+
   return (
     <Collapse.Panel
       {...props}
+      showArrow={false}
       extra={
-        <Typography.Text style={{ color: '#5B5D63' }}>
-          {`총 차감 금액 : ${adjustmentAmount.toLocaleString()}원`}
+        <Typography.Text style={{ color: '#242934' }}>
+          {activeKey === '1' ? 'v' : '>'}
         </Typography.Text>
       }
     >
+      {/*
+       *  차감
+       */}
+
       <Table
         size="small"
         pagination={false}
-        loading={getAdjustmentBalanceQuery.isLoading}
-        dataSource={cart.adjustmentBalanceList}
+        loading={getRetailerStoreClearingQuery.isLoading}
+        dataSource={[
+          ...cart.adjustmentSubtractList,
+          ...cart.reserveSubtractList,
+        ]}
         rowKey="id"
         title={() => (
-          <TurtleTableTitle
-            count={getAdjustmentBalanceQuery.data?.total_count ?? 0}
-          >
-            <Space size="large">
-              <TurtleButtonSub
-                size="small"
-                type="primary"
-                onClick={() => {
-                  setCart((cart) => ({
-                    ...cart,
-                    adjustmentBalanceList: cart.adjustmentBalanceList.map(
-                      (item) => ({
-                        ...item,
-                        clearing_amount: Math.min(
-                          item.overpaid_amount,
-                          item.max_clearing_amount ?? 0,
-                        ),
-                      }),
-                    ),
-                  }));
-                }}
-              >
-                전액 입력하기
-              </TurtleButtonSub>
-            </Space>
-          </TurtleTableTitle>
+          <>
+            <TurtleTableTitle
+              label="차감"
+              count={
+                cart.adjustmentSubtractList.length +
+                cart.reserveSubtractList.length
+              }
+            >
+              <Space size="large">
+                <TurtleButtonSub
+                  size="small"
+                  type="primary"
+                  onClick={() => {
+                    handlePaymentInputFiilIn();
+                  }}
+                >
+                  전액 입력하기
+                </TurtleButtonSub>
+              </Space>
+            </TurtleTableTitle>
+          </>
         )}
         columns={[
           {
             ellipsis: true,
             title: '등록 날짜',
             render: (_, record) =>
-              moment(record.created_time).format('YYYY-MM-DD'),
+              moment(record.created_date).format('YYYY-MM-DD'),
+          },
+          {
+            ellipsis: true,
+            title: '매입조정 종류',
+            render: (_, record) => {
+              // i18
+              if (record.type === 'adjustment_subtract') return '매입 차감';
+              if (record.type === 'reserve_subtract') return '미송 차감';
+            },
+          },
+          {
+            ellipsis: true,
+            title: t('vendor.name'),
+            render: (_, record) => record.vendor_info.vendor_name,
+          },
+          {
+            ellipsis: true,
+            align: 'right',
+            title: '사용 가능 금액',
+            render: (_, record) => {
+              if (record.type === 'adjustment_subtract') {
+                return record.overpaid_amount.toLocaleString();
+              }
+
+              if (record.type === 'reserve_subtract') {
+                return record.reserve_subtract_amount.toLocaleString();
+              }
+            },
+          },
+          {
+            ellipsis: true,
+            align: 'right',
+            title: (
+              <>
+                사용할 금액
+                <TurtleQuestionTooltip content="사용할 금액은 당일 입고 금액을 초과할 수 없습니다." />
+              </>
+            ),
+            render: (_, record) => (
+              <Space>
+                {record.type === 'reserve_subtract' ? (
+                  <InputNumber
+                    value={record.reserve_subtract_amount}
+                    disabled={true}
+                  />
+                ) : (
+                  <InputNumber
+                    size="small"
+                    formatter={(value) => `${value}`.replace(pricePattern, ',')}
+                    placeholder="금액 입력"
+                    value={record.overpaid_payment_amount}
+                    step={1000}
+                    max={record.overpaid_amount}
+                    min={0}
+                    onChange={(value) => {
+                      setCart((cart) => ({
+                        ...cart,
+                        adjustmentSubtractList: cart.adjustmentSubtractList.map(
+                          (item) =>
+                            item.vendor_info.id === record.vendor_info.id
+                              ? {
+                                  ...item,
+                                  overpaid_payment_amount: value,
+                                }
+                              : item,
+                        ),
+                      }));
+                    }}
+                  />
+                )}
+              </Space>
+            ),
+          },
+        ]}
+      />
+
+      {/*
+       *  미송
+       */}
+
+      <Table
+        size="small"
+        pagination={false}
+        loading={getRetailerStoreClearingQuery.isLoading}
+        dataSource={[...cart.reservePaymentList]}
+        rowKey="id"
+        title={() => (
+          <TurtleTableTitle
+            label="미송"
+            count={cart.reservePaymentList.length}
+          ></TurtleTableTitle>
+        )}
+        columns={[
+          {
+            ellipsis: true,
+            title: '등록 날짜',
+            render: (_, record) =>
+              moment(record.created_date).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,
@@ -121,56 +247,86 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             title: '사용 가능 금액',
-            render: (_, record) => record.overpaid_amount.toLocaleString(),
+            align: 'right',
+            render: (_, record) => record.reserve_payment_amount,
           },
           {
             ellipsis: true,
-            title: (
-              <>
-                사용할 금액
-                <TurtleQuestionTooltip content="사용할 금액은 당일 입고 금액을 초과할 수 없습니다." />
-              </>
-            ),
-            render: (_, record) => (
-              <Space>
-                <InputNumber
-                  size="small"
-                  formatter={(value) => `${value}`.replace(pricePattern, ',')}
-                  placeholder="금액 입력"
-                  step={1000}
-                  min={0}
-                  max={Math.min(
-                    record.overpaid_amount,
-                    record.max_clearing_amount ?? 0,
-                  )}
-                  value={record.clearing_amount}
-                  onChange={(value) => {
-                    setCart((cart) => ({
-                      ...cart,
-                      adjustmentBalanceList: cart.adjustmentBalanceList.map(
-                        (item) =>
-                          item.id === record.id
-                            ? {
-                                ...item,
-                                clearing_amount: value,
-                              }
-                            : item,
-                      ),
-                    }));
-                  }}
-                />
-              </Space>
-            ),
+            align: 'right',
+          },
+          {
+            ellipsis: true,
+            align: 'right',
           },
         ]}
       />
+
       <Row justify="end" align="middle" style={{ marginTop: 16 }}>
-        <TurtleButton //
-          children={t('button.next step')}
-          onClick={() => {
-            clickNext();
-          }}
-        />
+        <Col>
+          <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
+            총 차감 합계
+          </Typography.Text>
+          <Typography.Text style={{ fontWeight: 700 }}>
+            {handleSubtractAmountTotal.toLocaleString()}원
+          </Typography.Text>
+        </Col>
+        <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
+        <Col style={{ marginRight: 24 }}>
+          <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
+            총 미송 합계
+          </Typography.Text>
+          <Typography.Text style={{ fontWeight: 700 }}>
+            {handleReservePaymentAmountTotal.toLocaleString()}원
+          </Typography.Text>
+        </Col>
+        <Col>
+          <TurtleButton
+            width="180px"
+            children={t('button.next step')}
+            onClick={() => {
+              setCart((cart) => ({
+                ...cart,
+                warehousingBalanceList: cart.warehousingBalanceList
+                  .map((warehousingBalanceItem) => {
+                    // 입고 + 미결제 + 미송 결제
+                    return {
+                      ...warehousingBalanceItem,
+                      clearing_amount:
+                        warehousingBalanceItem.warehousing_amount +
+                        warehousingBalanceItem.unpaid_amount +
+                        warehousingBalanceItem.reserve_payment_amount,
+                      // 당일 결제예정 금액 최소금액은 미송결제금액.
+                      clearing_payment_amount:
+                        warehousingBalanceItem.reserve_payment_amount,
+                    };
+                  })
+                  .map((warehousingBalanceItem) => {
+                    const newWarehousingBalanceItem = {
+                      ...warehousingBalanceItem,
+                    };
+
+                    // 매입 차감.
+                    cart.adjustmentSubtractList.forEach(
+                      (adjustmentSubtractItem) => {
+                        if (
+                          adjustmentSubtractItem.vendor_info.id ===
+                          newWarehousingBalanceItem.vendor_info.id
+                        ) {
+                          newWarehousingBalanceItem.clearing_amount =
+                            newWarehousingBalanceItem.clearing_amount -
+                            (adjustmentSubtractItem.overpaid_payment_amount! ??
+                              0);
+                        }
+                      },
+                    );
+
+                    return newWarehousingBalanceItem;
+                  }),
+              }));
+              clickNext();
+            }}
+          />
+        </Col>
       </Row>
     </Collapse.Panel>
   );

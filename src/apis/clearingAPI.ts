@@ -26,25 +26,6 @@ export interface BalanceShow {
   subtract_price?: number;
 }
 
-export interface Balance {
-  id: number;
-  original_id: number;
-  rt_store_id: number;
-  process_type: 'warehousing' | 'adjustment' | 'reserve_payment';
-  created_time: string;
-  unpaid_amount: number;
-  overpaid_amount: number;
-  reserve_amount: number;
-  vendor_info: {
-    id: number;
-    vendor_name: string;
-  };
-  // 당일 결제 공급가 합계
-  clearing_amount: number;
-  // 매입 결제 대기 최대 결제 가능 금액
-  max_clearing_amount: number;
-}
-
 // 정산서
 export interface ClearingSheetShow {
   id: number;
@@ -95,58 +76,51 @@ export interface ClearingItemShow {
   };
 }
 
-/*
- *   입고 결제 대기 거래처별 잔액 요청
- */
-
-export interface RequestGetWarehousingBalance {
-  tab: 'unpaid_vendor';
+export interface ClearingInfo {
+  vendor_info: {
+    id: number;
+    created_time: string;
+    vendor_name: string;
+  };
   rt_store_id: number;
+  created_date: string;
+
+  warehousing_amount: number; // 당일 입고 금액
+  unpaid_amount: number; // 미결제 잔액
+  overpaid_amount: number; // 남은돈 | 사용 가능 금액 | 차감가능 금액
+
+  refund_amount: number; // 받을 돈 | 환불 금액
+  reserve_payment_amount: number; // 미송 결제 금액(미송 등록 시 생성)
+  reserve_subtract_amount: number; // 미송 차감 금액 (미송 입고 시 생성)
+
+  // client State
+  type:
+    | 'warehousing'
+    | 'adjustment_subtract'
+    | 'reserve_subtract'
+    | 'reserve_payment';
+  overpaid_payment_amount?: number; // 남은돈 | 사용 가능 금액 | 차감가능 금액 중 사용할 금액 입력
+  clearing_amount?: number; // 당일 결제요청 금액 : 미결제 금액 + 입고금액  + 미송결제금액 - 사용할 금액(사용자 입력시 or 전액결제 버튼누를시 overpaid_mount로 대체)
+  clearing_payment_amount?: number; // 당일 결제예정 금액(사용자 입력)
 }
 
-export interface ResponseGetWarehousingBalance {
+export interface RequestGetClearing {
+  rt_store_id: number;
+  balance_type: 'clearing';
+}
+
+export interface ResponseGetClearing {
   msg: string;
   data: {
-    item_list: Balance[];
-    total_count: number;
+    item_list: ClearingInfo[];
   };
 }
 
-const getWarehousingBalance = async function (
-  query: RequestGetWarehousingBalance,
-) {
-  let url = 'clearing/balance?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetWarehousingBalance>(url);
-  return response.data.data;
-};
+const getClearing = async (params: RequestGetClearing) => {
+  const url = `clearing/balance`;
 
-/*
- *  매입조정 결제대기 거래처별 잔액 요청
- */
-export interface RequestGetAdjustmentBalance {
-  rt_store_id: number;
-  vendor_id_list: number[];
-}
+  const response = await v2Axios.get<ResponseGetClearing>(url, { params });
 
-export interface ResponseGetAdjustmentBalance {
-  msg: string;
-  data: {
-    item_list: Balance[];
-    total_count: number;
-  };
-}
-
-const getAdjustmentBalance = async function (
-  query: RequestGetAdjustmentBalance,
-) {
-  let url = `clearing/balance?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetAdjustmentBalance>(url);
   return response.data.data;
 };
 
@@ -177,10 +151,6 @@ export interface RequestCreateItem {
     vendor_id: number;
     subtract_amount: number;
   }[];
-  reserve_amount_list: {
-    vendor_id: number;
-    reserve_amount: number;
-  }[];
 }
 
 // Response: 정산 상품 생성
@@ -203,6 +173,7 @@ const create = async function (data: {
     ...data.item,
     sheet_id: sheetResponse.data.data,
   });
+
   return itemResponse.data;
 };
 
@@ -463,8 +434,7 @@ const createParse = async (data: RequestCreateParse) => {
 };
 
 const clearingAPI = {
-  getWarehousingBalance,
-  getAdjustmentBalance,
+  getClearing,
   getBalance,
   create,
   getSheet,

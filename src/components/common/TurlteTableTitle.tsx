@@ -1,6 +1,8 @@
 import { Divider, Row, Space } from 'antd';
 
 interface Props {
+  label?: string;
+  fontSize?: string;
   count: number;
   selectedCount?: number;
   searchCount?: number;
@@ -10,6 +12,7 @@ interface Props {
 }
 
 function TurtleTableTitle({
+  label,
   count = 0,
   selectedCount,
   searchCount,
@@ -20,7 +23,12 @@ function TurtleTableTitle({
   return (
     <Row justify="space-between" align="middle" style={{ paddingBottom: 6 }}>
       <span>
-        총 <span style={{ color: '#32ACDD' }}>{count}</span>건
+        {label && (
+          <span style={{ fontSize: 18, fontWeight: 500, marginRight: 8 }}>
+            {label}
+          </span>
+        )}
+        총<span style={{ color: '#32ACDD' }}>{count}</span>건
         {!!searchCount && searchCount >= 0 && (
           <>
             <Divider type="vertical" />
