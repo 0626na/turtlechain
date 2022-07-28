@@ -55,6 +55,28 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
     return e && e.fileList;
   };
 
+  // 사업자번호 유효성 검사
+  const handleBizNumValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('사업자 번호 입력해주세요'));
+    }
+
+    if (!checkDuplicated && form.getFieldValue('company_biz_num')) {
+      return Promise.reject(new Error('사업자 번호 중복확인을 해주세요'));
+    }
+
+    return Promise.resolve();
+  };
+
+  // 사업자 주소 유효성 검사
+  const handleBizAddressValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('사업자주소 입력해주세요'));
+    }
+
+    return Promise.resolve();
+  };
+
   return (
     <div style={{ display: visible ? '' : 'none' }}>
       <DaumPostcodeModal
@@ -101,25 +123,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
           <Form.Item
             noStyle
             name="company_biz_num"
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value) {
-                    return Promise.reject(
-                      new Error('사업자 번호 입력해주세요'),
-                    );
-                  }
-
-                  if (!checkDuplicated && getFieldValue('company_biz_num')) {
-                    return Promise.reject(
-                      new Error('사업자 번호 중복확인을 해주세요'),
-                    );
-                  }
-
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+            rules={[{ validator: handleBizNumValidationCheck }]}
           >
             <Input
               style={{ width: 400 }}
@@ -159,17 +163,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
           <Form.Item
             noStyle
             name="company_main_address"
-            rules={[
-              () => ({
-                validator(_, value) {
-                  if (!value) {
-                    return Promise.reject(new Error('사업자주소 입력해주세요'));
-                  }
-
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+            rules={[{ validator: handleBizAddressValidationCheck }]}
           >
             <Input
               style={{ width: 400 }}
@@ -240,7 +234,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
               ]);
               onClickNext();
             } catch (error) {
-              console.log(error);
               return;
             }
           }}

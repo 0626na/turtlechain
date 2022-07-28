@@ -135,6 +135,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   store_id: store.id,
                   credit_type: 'general',
                   store_name: store.name,
+                  request_date: moment().format('YYYY-MM-DD'),
                 },
                 item: {
                   rt_store_id: store.id,

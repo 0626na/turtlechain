@@ -155,6 +155,7 @@ export interface RequestCreateSheet {
   store_id?: number;
   credit_type: 'general';
   store_name?: string;
+  request_date: string;
 }
 
 // Response: 정산서 생성
@@ -402,8 +403,7 @@ export interface ClearingItemParse {
   account_holder: string;
   credit_amount: number;
   recipient_print: string;
-
-  is_vat_included: false;
+  is_vat_included: boolean;
 }
 
 export interface RequestParseExcel {

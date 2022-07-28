@@ -63,6 +63,11 @@ function SuccessTab({ loading, successList, ...props }: Props) {
             title: '받는분통장인쇄내용',
             render: (_, record) => record.recipient_print,
           },
+          {
+            ellipsis: true,
+            title: '부가세 포함여부',
+            render: (_, record) => (record.is_vat_included ? '포함' : '미포함'),
+          },
         ]}
       />
     </Tabs.TabPane>
