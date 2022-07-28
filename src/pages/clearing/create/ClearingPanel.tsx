@@ -102,7 +102,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         rowKey="id"
         title={() => (
           <>
-            <TurtleTableTitle count={searchedClearingList.length}>
+            <TurtleTableTitle count={cart.warehousingBalanceList.length}>
               <Row>
                 <Col style={{ marginRight: 10 }}>
                   <TurtleButtonSub
@@ -152,10 +152,10 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 size="small"
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 placeholder="금액 입력"
-                value={record.clearing_payment_amount}
+                value={record.clearing_payment_amount!}
                 step={1000}
-                min={0}
                 max={record.clearing_amount}
+                min={record.reserve_payment_amount}
                 onChange={(value) => {
                   setCart((cart) => ({
                     ...cart,
