@@ -2,14 +2,18 @@ import styled from 'styled-components';
 import { Collapse } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { t } from 'i18next';
+
 import { TurtleButtonSub, TurtlePanelHeader } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
-import { storeState } from '@store/storeState';
-import useStoreExist from '@hooks/useStoreExist';
-import AdjustmentPanel from './AdjustmentPanel';
+
 import ClearingPanel from './ClearingPanel';
-import WarehousingPanel from './WarehousingPanel';
+import AdjustmentPanel from './AdjustmentPanel';
 import ExcelModal from './ExcelModal';
+
+import { storeState } from '@store/storeState';
+
+import useStoreExist from '@hooks/useStoreExist';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -51,7 +55,7 @@ function PageBody() {
         )}
       </MenuBar>
       {store.use_service === 0 && (
-        <MainContent>
+        <MainContent info={t('description.today reserve included')}>
           <StyledCollapse
             accordion
             bordered={false}
@@ -65,13 +69,13 @@ function PageBody() {
             }}
             activeKey={activeKey}
           >
-            <WarehousingPanel
+            <AdjustmentPanel
               key="1"
               header={
                 <TurtlePanelHeader
                   count={1}
                   activeKey={activeKey}
-                  title="거래처별 결제대기"
+                  title="매입조정 결제대기"
                 />
               }
               activeKey={activeKey}
@@ -79,32 +83,18 @@ function PageBody() {
                 setActiveKey('2');
               }}
             />
-            <AdjustmentPanel
+            <ClearingPanel
               key="2"
               header={
                 <TurtlePanelHeader
                   count={2}
                   activeKey={activeKey}
-                  title="매입조정 결제대기"
-                />
-              }
-              activeKey={activeKey}
-              clickNext={() => {
-                setActiveKey('3');
-              }}
-            />
-            <ClearingPanel
-              key="3"
-              header={
-                <TurtlePanelHeader
-                  count={3}
-                  activeKey={activeKey}
-                  title="정산금액 미리보기"
+                  title="결제금액 미리보기"
                 />
               }
               activeKey={activeKey}
               clickCreate={() => {
-                setActiveKey('1');
+                setActiveKey('0');
               }}
             />
           </StyledCollapse>
@@ -116,9 +106,11 @@ function PageBody() {
 
 const StyledCollapse = styled(Collapse)`
   background-color: white;
+  margin-top: 20px;
+
   .ant-collapse-item {
-    background-color: #fbfcfe;
-    border: 1px solid #e3e6ea;
+    background-color: #f3f5f8;
+    border: none;
     margin-bottom: 12px;
     border-radius: 4px;
   }
