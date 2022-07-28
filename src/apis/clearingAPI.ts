@@ -101,7 +101,7 @@ export interface ClearingInfo {
     | 'reserve_payment';
   overpaid_payment_amount?: number; // 남은돈 | 사용 가능 금액 | 차감가능 금액 중 사용할 금액 입력
   clearing_amount?: number; // 당일 결제요청 금액 : 미결제 금액 + 입고금액  + 미송결제금액 - 사용할 금액(사용자 입력시 or 전액결제 버튼누를시 overpaid_mount로 대체)
-  clearing_payment_amount?: number; // 당일 결제요청 금액 중 지불할 금액 입력
+  clearing_payment_amount?: number; // 당일 결제예정 금액(사용자 입력)
 }
 
 export interface RequestGetClearing {
