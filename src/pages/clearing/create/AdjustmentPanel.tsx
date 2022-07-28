@@ -46,17 +46,16 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       enabled: activeKey === '1',
       onSuccess: (data) => {
         setCart({
-          warehousingBalanceList: data.item_list
-            .filter((item) => item.warehousing_amount > 0)
-            .map((item) => ({ ...item, type: 'warehousing' })),
+          warehousingBalanceList: data.item_list.map((item) => ({
+            ...item,
+            type: 'warehousing',
+          })),
 
           adjustmentSubtractList: data.item_list
             .filter(
               (item) =>
-                item.warehousing_amount +
-                  item.unpaid_amount -
-                  item.reserve_subtract_amount >
-                  0 && item.overpaid_amount > 0,
+                item.warehousing_amount + item.unpaid_amount > 0 &&
+                item.overpaid_amount > 0,
             )
             .map((item) => ({
               ...item,
@@ -183,7 +182,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               <Space>
                 {record.type === 'reserve_subtract' ? (
                   <InputNumber
-                    value={record.reserve_subtract_amount ?? 0}
+                    value={record.reserve_subtract_amount}
                     disabled={true}
                   />
                 ) : (
@@ -193,8 +192,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                     placeholder="금액 입력"
                     value={record.overpaid_payment_amount}
                     step={1000}
-                    min={0}
                     max={record.overpaid_amount}
+                    min={0}
                     onChange={(value) => {
                       setCart((cart) => ({
                         ...cart,
@@ -289,24 +288,22 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                 ...cart,
                 warehousingBalanceList: cart.warehousingBalanceList
                   .map((warehousingBalanceItem) => {
-                    // 입고 + 미결제 + 미송결제 합계.
+                    // 입고 + 미결제 + 미송 결제
                     return {
                       ...warehousingBalanceItem,
                       clearing_amount:
                         warehousingBalanceItem.warehousing_amount +
                         warehousingBalanceItem.unpaid_amount +
-                        (warehousingBalanceItem.reserve_payment_amount ?? 0),
+                        warehousingBalanceItem.reserve_payment_amount,
+                      // 당일 결제예정 금액 최소금액은 미송결제금액.
+                      clearing_payment_amount:
+                        warehousingBalanceItem.reserve_payment_amount,
                     };
                   })
                   .map((warehousingBalanceItem) => {
                     const newWarehousingBalanceItem = {
                       ...warehousingBalanceItem,
                     };
-
-                    // 미송 차감.
-                    newWarehousingBalanceItem.clearing_amount =
-                      newWarehousingBalanceItem.clearing_amount -
-                      (newWarehousingBalanceItem.reserve_subtract_amount! ?? 0);
 
                     // 매입 차감.
                     cart.adjustmentSubtractList.forEach(
