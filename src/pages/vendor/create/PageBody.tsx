@@ -2,7 +2,16 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import { Col, Form, Input, message, Popconfirm, Space, Switch } from 'antd';
+import {
+  Col,
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Space,
+  Switch,
+  Typography,
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useNavigate } from 'react-router-dom';
 import vendorAPI, { WholesaleShow } from '@apis/vendorAPI';
@@ -335,18 +344,17 @@ function PageBody() {
 
       <BottomBar justify="space-between">
         <Col>
-          {/* TODO: 신규거래처등록 기능 백오피스 추가 후 주석 제거 */}
-          {/* <Typography.Text>
+          <Typography.Text>
             등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!&nbsp;
           </Typography.Text>
           <Typography.Link
-            style={{ textDecoration: "underline" }}
+            style={{ textDecoration: 'underline' }}
             onClick={() => {
               setRequestModalVisible(true);
             }}
           >
             신규 거래처 등록하기
-          </Typography.Link> */}
+          </Typography.Link>
         </Col>
 
         <Popconfirm
