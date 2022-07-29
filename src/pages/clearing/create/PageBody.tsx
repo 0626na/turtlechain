@@ -39,7 +39,7 @@ function PageBody() {
         }}
       />
       <MenuBar isWarning>
-        {store.use_service === 1 && (
+        {store.version === 'agency_services' && (
           <TurtleButtonSub
             type="primary"
             color="skyblue"
@@ -54,7 +54,7 @@ function PageBody() {
           </TurtleButtonSub>
         )}
       </MenuBar>
-      {store.use_service === 0 && (
+      {store.version === '2.0' && (
         <MainContent info={t('description.today reserve included')}>
           <StyledCollapse
             accordion

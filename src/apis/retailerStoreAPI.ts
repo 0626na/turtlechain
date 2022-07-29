@@ -45,8 +45,7 @@ export interface StoreShow {
     phone: string;
   }[];
   companies: {
-    // 0: v2.0, 1: v1.5
-    use_service: 0 | 1;
+    version: '2.0' | 'agency_services';
   }[];
 }
 
