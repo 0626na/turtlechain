@@ -184,7 +184,7 @@ interface RequestGetID {
 }
 
 interface ResponseGetID {
-  data: Array<{ id: number; user_id: string }>;
+  data: Array<{ id: number; login_id: string }>;
 }
 
 const getID = async function (data: RequestGetID) {
@@ -212,7 +212,7 @@ interface ResponseResetPassword {
 
 const resetPassword = async function (data: RequestResetPassword) {
   const { token } = data;
-  const url = '/provisioning/users/password';
+  const url = '/provisioning/user/password';
   const config = { headers: { Authorization: `Api-Key ${token}` } };
   const response = await v2Axios.put<ResponseResetPassword>(url, data, config);
   return response.data.data;

@@ -61,7 +61,7 @@ function FindIdForm() {
               style={{ maxHeight: 200, overflowY: 'scroll' }}
               size="small"
               dataSource={getIDQuery.data}
-              renderItem={(item) => <List.Item>{item.user_id}</List.Item>}
+              renderItem={(item) => <List.Item>{item.login_id}</List.Item>}
             />
           </Form.Item>
         )}
