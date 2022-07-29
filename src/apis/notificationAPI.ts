@@ -14,7 +14,7 @@ export interface ResponseGet {
       read_at?: string;
       type: string;
       content: {
-        name: string;
+        vendor_name: string;
         store_id: number;
         component: string;
         before: string;

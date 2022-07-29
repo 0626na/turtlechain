@@ -43,20 +43,20 @@ function Notification() {
               getQuery.data?.notification_list.map((noti) => {
                 let mainContent = '';
                 if (noti.type === 'internal_change') {
-                  mainContent = `거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+                  mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
                 }
                 if (noti.type === 'creation_request') {
                   if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
-                    mainContent = `요청하신 거래처 ${noti.content.name}가 신규 등록되었습니다.`;
+                    mainContent = `거래처 ${noti.content.vendor_name}가 신규 등록되었습니다.`;
                   }
                 }
                 if (noti.type === 'modification_request') {
                   if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+                    mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
                   }
                 }
                 return (
