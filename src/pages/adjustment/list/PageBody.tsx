@@ -137,7 +137,7 @@ const PageBody = function () {
           scroll={{ y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
-              openDetailModal(record);
+              // openDetailModal(record);
             },
           })}
           title={() => (

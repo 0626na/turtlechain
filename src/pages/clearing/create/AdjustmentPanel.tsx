@@ -240,23 +240,22 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               moment(record.created_date).format('YYYY-MM-DD'),
           },
           {
+            title: '',
+          },
+          {
             ellipsis: true,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: '사용 가능 금액',
+            title: '당일 미송 금액',
             align: 'right',
             render: (_, record) => record.reserve_payment_amount,
           },
+
           {
-            ellipsis: true,
-            align: 'right',
-          },
-          {
-            ellipsis: true,
-            align: 'right',
+            title: '',
           },
         ]}
       />
@@ -281,47 +280,53 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         </Col>
         <Col>
           <TurtleButton
-            width="180px"
             children={t('button.next step')}
+            disabled={
+              handleReservePaymentAmountTotal === 0 &&
+              handleSubtractAmountTotal === 0
+            }
             onClick={() => {
               setCart((cart) => ({
                 ...cart,
                 warehousingBalanceList: cart.warehousingBalanceList
                   .map((warehousingBalanceItem) => {
-                    // 입고 + 미결제 + 미송 결제
-                    return {
-                      ...warehousingBalanceItem,
-                      clearing_amount:
-                        warehousingBalanceItem.warehousing_amount +
-                        warehousingBalanceItem.unpaid_amount +
-                        warehousingBalanceItem.reserve_payment_amount,
-                      // 당일 결제예정 금액 최소금액은 미송결제금액.
-                      clearing_payment_amount:
-                        warehousingBalanceItem.reserve_payment_amount,
-                    };
-                  })
-                  .map((warehousingBalanceItem) => {
                     const newWarehousingBalanceItem = {
                       ...warehousingBalanceItem,
                     };
-
-                    // 매입 차감.
+                    // 매입 차감을 warehousing으로 넘겨준다.
                     cart.adjustmentSubtractList.forEach(
                       (adjustmentSubtractItem) => {
                         if (
                           adjustmentSubtractItem.vendor_info.id ===
                           newWarehousingBalanceItem.vendor_info.id
                         ) {
-                          newWarehousingBalanceItem.clearing_amount =
-                            newWarehousingBalanceItem.clearing_amount -
-                            (adjustmentSubtractItem.overpaid_payment_amount! ??
-                              0);
+                          newWarehousingBalanceItem.overpaid_payment_amount =
+                            adjustmentSubtractItem.overpaid_payment_amount! ??
+                            0;
                         }
                       },
                     );
 
                     return newWarehousingBalanceItem;
-                  }),
+                  })
+                  .map((warehousingBalanceItem) => {
+                    // 입고 + 미결제 + 미송 결제 - 매입 차감
+                    return {
+                      ...warehousingBalanceItem,
+                      clearing_amount:
+                        warehousingBalanceItem.warehousing_amount +
+                        warehousingBalanceItem.unpaid_amount +
+                        warehousingBalanceItem.reserve_payment_amount -
+                        (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
+                      // 당일 결제예정 금액 최소금액은 미송결제금액.
+                      clearing_payment_amount:
+                        warehousingBalanceItem.reserve_payment_amount,
+                    };
+                  })
+                  .filter(
+                    (warehousingBalanceItem) =>
+                      warehousingBalanceItem.clearing_amount! > 0,
+                  ),
               }));
               clickNext();
             }}
