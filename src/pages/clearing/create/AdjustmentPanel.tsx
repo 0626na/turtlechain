@@ -240,23 +240,22 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               moment(record.created_date).format('YYYY-MM-DD'),
           },
           {
+            title: '',
+          },
+          {
             ellipsis: true,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
-            title: '사용 가능 금액',
+            title: '당일 미송 금액',
             align: 'right',
             render: (_, record) => record.reserve_payment_amount,
           },
+
           {
-            ellipsis: true,
-            align: 'right',
-          },
-          {
-            ellipsis: true,
-            align: 'right',
+            title: '',
           },
         ]}
       />
@@ -281,8 +280,11 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         </Col>
         <Col>
           <TurtleButton
-            width="180px"
             children={t('button.next step')}
+            disabled={
+              handleReservePaymentAmountTotal === 0 &&
+              handleSubtractAmountTotal === 0
+            }
             onClick={() => {
               setCart((cart) => ({
                 ...cart,
@@ -321,7 +323,11 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                     );
 
                     return newWarehousingBalanceItem;
-                  }),
+                  })
+                  .filter(
+                    (warehousingBalanceItem) =>
+                      warehousingBalanceItem.clearing_amount! > 0,
+                  ),
               }));
               clickNext();
             }}
