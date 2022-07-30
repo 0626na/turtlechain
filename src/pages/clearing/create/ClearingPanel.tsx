@@ -9,7 +9,12 @@ import {
   Row,
   Table,
   Typography,
+  Tooltip,
+  Divider,
+  Space,
 } from 'antd';
+
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 import { useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -132,7 +137,59 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             ellipsis: true,
             align: 'right',
             title: '당일 결제요청 금액',
-            render: (_, record) => record.clearing_amount ?? 0,
+            render: (_, record) => {
+              return (
+                <Tooltip
+                  title={
+                    <Space direction="vertical" size={2}>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미결제</Col>
+                        <Col>{record.unpaid_amount.toLocaleString()}</Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 입고</Col>
+                        <Col>
+                          {(
+                            record.warehousing_amount +
+                            record.reserve_subtract_amount
+                          ).toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 미송</Col>
+                        <Col>
+                          {record.reserve_payment_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Divider
+                        style={{
+                          marginTop: 10,
+                          marginBottom: 10,
+                        }}
+                      />
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>매입 차감</Col>
+                        <Col>
+                          -{' '}
+                          {record.overpaid_payment_amount?.toLocaleString() ??
+                            0}
+                        </Col>
+                      </Row>
+
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미송 차감</Col>
+                        <Col>
+                          - {record.reserve_subtract_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                    </Space>
+                  }
+                >
+                  {record.clearing_amount?.toLocaleString() ?? 0}
+                  <QuestionCircleOutlined style={{ marginLeft: '0.5rem' }} />
+                </Tooltip>
+              );
+            },
           },
           { title: '' },
           {
