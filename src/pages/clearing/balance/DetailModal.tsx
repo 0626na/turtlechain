@@ -29,7 +29,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         end_date: moment().format('YYYY-MM-DD'),
 
         vendor_id: selectedRow?.vendor_info.id!,
-        subtract_amount: selectedRow?.reserve_subtract_amount!,
+        subtract_amount: selectedRow?.overpaid_amount!,
         refund_amount: selectedRow?.refund_amount!,
       }),
     {

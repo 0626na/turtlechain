@@ -253,7 +253,9 @@ export interface RequestGetOverpaidBalance {
   end_date: string; // YYYY-MM-DD
 
   vendor_id: number;
+
   subtract_amount: number; // 남은돈
+  //overpaid_amount: number;
   refund_amount: number; // 받을돈
 }
 
