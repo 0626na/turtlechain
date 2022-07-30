@@ -186,7 +186,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   }
                 >
                   {record.clearing_amount?.toLocaleString() ?? 0}
-                  <QuestionCircleOutlined style={{ marginLeft: '0.5rem' }} />
                 </Tooltip>
               );
             },
