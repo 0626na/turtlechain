@@ -47,6 +47,15 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     search_string: '',
   });
 
+  // 거래처 검색(default : 전체)
+  const filteredList = useMemo(
+    () =>
+      cart.warehousingBalanceList.filter((item) =>
+        item.vendor_info.vendor_name.includes(searchQuery.search_string),
+      ),
+    [cart.warehousingBalanceList, searchQuery],
+  );
+
   // 정산서 생성 및 정산 상품추가
   const createClearingQuery = useMutation(
     ['createClearing'],
@@ -60,15 +69,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     },
   );
 
-  // 거래처 검색(default : 전체)
-  const searchedClearingList = useMemo(
-    () =>
-      cart.warehousingBalanceList.filter((item) =>
-        item.vendor_info.vendor_name.includes(searchQuery.search_string),
-      ),
-    [cart.warehousingBalanceList, searchQuery],
-  );
-
   // 전액 체우기
   const handlePaymentInputFiilIn = () => {
     setCart((cart) => ({
@@ -80,8 +80,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         };
       }),
     }));
-
-    return;
   };
 
   return (
@@ -98,7 +96,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         size="small"
         pagination={false}
         loading={activeKey !== '2'}
-        dataSource={searchedClearingList}
+        dataSource={filteredList}
         rowKey="id"
         title={() => (
           <>
@@ -108,9 +106,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   <TurtleButtonSub
                     size="small"
                     type="primary"
-                    onClick={() => {
-                      handlePaymentInputFiilIn();
-                    }}
+                    onClick={handlePaymentInputFiilIn}
                   >
                     전액 입력하기
                   </TurtleButtonSub>
@@ -134,15 +130,11 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           },
           {
             ellipsis: true,
-            title: '미결제 금액',
-            render: (_, record) => record.unpaid_amount,
-          },
-          {
-            ellipsis: true,
             align: 'right',
             title: '당일 결제요청 금액',
             render: (_, record) => record.clearing_amount ?? 0,
           },
+          { title: '' },
           {
             ellipsis: true,
             align: 'right',
@@ -152,7 +144,11 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 size="small"
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 placeholder="금액 입력"
-                value={record.clearing_payment_amount!}
+                value={
+                  record.clearing_payment_amount! > 0
+                    ? record.clearing_payment_amount!
+                    : undefined
+                }
                 step={1000}
                 max={record.clearing_amount}
                 min={record.reserve_payment_amount}
@@ -231,7 +227,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             }}
           >
             <TurtleButton
-              width="180px"
+              disabled={handleClearingPaymentTotal === 0}
               children={t('button.request clearing')}
               loading={createClearingQuery.isLoading}
             />
