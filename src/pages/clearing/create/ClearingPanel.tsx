@@ -14,7 +14,7 @@ import {
   Space,
 } from 'antd';
 
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
 import { useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -90,10 +90,15 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   return (
     <Collapse.Panel
       {...props}
+      style={{
+        border: `${
+          activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
+        }`,
+      }} // #E3E6EA
       showArrow={false}
       extra={
         <Typography.Text style={{ color: '#242934' }}>
-          {activeKey === '2' ? 'v' : '>'}
+          {activeKey === '2' ? <DownOutlined /> : <RightOutlined />}
         </Typography.Text>
       }
     >
