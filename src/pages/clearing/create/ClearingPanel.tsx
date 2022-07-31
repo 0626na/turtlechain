@@ -46,7 +46,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
 
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { handleClearingPaymentTotal } = useClearingCart();
+  const { clearingPaymentTotal } = useClearingCart();
 
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
@@ -145,8 +145,15 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             render: (_, record) => {
               return (
                 <Tooltip
+                  color="#141720"
                   title={
-                    <Space direction="vertical" size={2}>
+                    <Space
+                      direction="vertical"
+                      size={2}
+                      style={{
+                        color: '#DCE0E4',
+                      }}
+                    >
                       <Row justify="space-between">
                         <Col style={{ marginRight: 59 }}>미결제</Col>
                         <Col>{record.unpaid_amount.toLocaleString()}</Col>
@@ -168,6 +175,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                       </Row>
                       <Divider
                         style={{
+                          borderTopColor: '#5B5D63',
                           marginTop: 10,
                           marginBottom: 10,
                         }}
@@ -195,10 +203,10 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               );
             },
           },
-          { title: '' },
           {
+            width: '48%',
             ellipsis: true,
-            align: 'right',
+            align: 'center',
             title: '당일 결제예정 금액',
             render: (_, record) => (
               <InputNumber
@@ -230,9 +238,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               />
             ),
           },
-          {
-            title: '',
-          },
         ]}
       />
 
@@ -242,14 +247,28 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
        *
        */}
 
-      <Row justify="end" align="middle" style={{ marginTop: 16 }}>
-        <Col>
-          <Typography.Text style={{ color: ' #6B6D73' }}>
+      <Row
+        style={{ marginTop: 40, marginBottom: 8, height: 40 }}
+        justify="end"
+        align="middle"
+      >
+        <Col
+          style={{
+            height: '100%',
+            lineHeight: 1,
+            marginRight: 24,
+
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'end',
+          }}
+        >
+          <Typography.Text style={{ color: ' #6B6D73', fontSize: 13 }}>
             총 당일 결제 합계
           </Typography.Text>
-
-          <Typography.Text style={{ fontWeight: 700 }}>
-            {handleClearingPaymentTotal.toLocaleString()}원
+          <Typography.Text style={{ fontWeight: 700, fontSize: 20 }}>
+            {clearingPaymentTotal.toLocaleString()}원
           </Typography.Text>
         </Col>
 
@@ -288,7 +307,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             }}
           >
             <TurtleButton
-              disabled={handleClearingPaymentTotal === 0}
+              disabled={clearingPaymentTotal === 0}
               children={t('button.request clearing')}
               loading={createClearingQuery.isLoading}
             />
