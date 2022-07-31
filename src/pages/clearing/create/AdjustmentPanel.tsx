@@ -4,6 +4,7 @@ import {
   Col,
   Collapse,
   CollapsePanelProps,
+  // Divider,
   InputNumber,
   Row,
   Space,
@@ -23,6 +24,7 @@ import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
 import useClearingCart from '@hooks/useClearingCart';
+import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -91,10 +93,15 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   return (
     <Collapse.Panel
       {...props}
+      style={{
+        border: `${
+          activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
+        }`,
+      }} // #E3E6EA
       showArrow={false}
       extra={
         <Typography.Text style={{ color: '#242934' }}>
-          {activeKey === '1' ? 'v' : '>'}
+          {activeKey === '1' ? <DownOutlined /> : <RightOutlined />}
         </Typography.Text>
       }
     >
