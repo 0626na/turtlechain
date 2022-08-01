@@ -247,7 +247,6 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             align: 'right',
             render: (_, record) => record.reserve_payment_amount,
           },
-
           {
             title: '',
           },
@@ -275,9 +274,6 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         <Col>
           <TurtleButton
             children={t('button.next step')}
-            disabled={
-              reservePaymentAmountTotal === 0 && subtractAmountTotal === 0
-            }
             onClick={() => {
               setCart((cart) => ({
                 ...cart,
