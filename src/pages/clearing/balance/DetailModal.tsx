@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import { Table } from 'antd';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
-import clearingAPI, { BalanceShow } from '@apis/clearingAPI';
+import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
 import {
   TurtleModal,
   TurtleStatistics,
@@ -14,22 +14,26 @@ import { storeState } from '@store/storeState';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectedRow?: BalanceShow;
+  selectedRow?: ClearingInfo;
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
   const store = useRecoilValue(storeState);
 
-  const getBalanceQuery = useQuery(
-    ['getBalance', selectedRow],
+  const getRetailerStoreOverpaidBalanceQuery = useQuery(
+    ['getRetailerStoreOverpaidBalanceQuery', selectedRow],
     () =>
-      clearingAPI.getBalance({
-        rt_store_id: store.id,
-        vendor_id: selectedRow?.vendor_info.id,
-        tab: 'balance_detail',
+      clearingAPI.getOverpaidBalance({
+        rt_store_id: store.id!,
+        start_date: moment().subtract('1', 'month').format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+
+        vendor_id: selectedRow?.vendor_info.id!,
+        subtract_amount: selectedRow?.overpaid_amount!,
+        refund_amount: selectedRow?.refund_amount!,
       }),
     {
-      enabled: visible && !!selectedRow?.id,
+      enabled: visible && !!selectedRow?.rt_store_id,
     },
   );
 
@@ -62,13 +66,15 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={getBalanceQuery.isLoading}
+        loading={getRetailerStoreOverpaidBalanceQuery.isLoading}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        dataSource={getBalanceQuery.data?.data.item_list}
-        rowKey={(item) => item.id}
+        dataSource={getRetailerStoreOverpaidBalanceQuery.data?.item_list}
+        rowKey={(item) => item.rt_store_id}
         title={() => (
           <TurtleTableTitle
-            count={getBalanceQuery.data?.data.total_count ?? 0}
+            count={
+              getRetailerStoreOverpaidBalanceQuery.data?.item_list.length ?? 0
+            }
           ></TurtleTableTitle>
         )}
         columns={[
@@ -78,7 +84,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             align: 'center',
             title: '날짜',
             render: (_, record) =>
-              moment(record.created_time).format('YYYY-MM-DD'),
+              moment(record.created_date).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,

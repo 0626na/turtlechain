@@ -24,7 +24,7 @@ function TurtleTableTitle({
     <Row justify="space-between" align="middle" style={{ paddingBottom: 6 }}>
       <span>
         {label && (
-          <span style={{ fontSize: 18, fontWeight: 500, marginRight: 8 }}>
+          <span style={{ paddingRight: 8, fontWeight: 500, fontSize: 16 }}>
             {label}
           </span>
         )}

@@ -81,9 +81,11 @@ export interface ClearingInfo {
     id: number;
     created_time: string;
     vendor_name: string;
+    vendor_address?: string;
   };
   rt_store_id: number;
   created_date: string;
+  memo?: string;
 
   warehousing_amount: number; // 당일 입고 금액
   unpaid_amount: number; // 미결제 잔액
@@ -116,9 +118,9 @@ export interface ResponseGetClearing {
   };
 }
 
+// 결제하기
 const getClearing = async (params: RequestGetClearing) => {
   const url = `clearing/balance`;
-
   const response = await v2Axios.get<ResponseGetClearing>(url, { params });
 
   return response.data.data;
@@ -185,7 +187,7 @@ export interface RequestGetBalance {
   start_date?: string;
   end_date?: string;
   // 페이지 구분
-  tab?: 'balance' | 'balance_detail' | 'adjustment';
+  tab?: 'adjustment';
   // 정산에서 매입차감 위해 조회할 때
   warehousing_sheet_id?: string;
   // 매입조정 상세 조회할 때
@@ -209,6 +211,66 @@ const getBalance = async function (query: RequestGetBalance) {
   }
   const response = await v2Axios.get<ResponseGetBalance>(url);
   return response.data;
+};
+
+/*
+ * 받을돈 / 사용할돈
+ */
+
+// 리스트
+export interface RequestGetOverpaidBalanceList {
+  rt_store_id: number;
+  balance_type: 'balance';
+
+  start_date?: string;
+  end_date?: string;
+
+  vendor_id?: number;
+  subtract_amount?: number;
+  refund_amount?: number;
+}
+
+export interface ResponseGetOverpaidBalanceList {
+  msg: string;
+  data: {
+    item_list: ClearingInfo[];
+  };
+}
+
+const getOverpaidBalanceList = async (
+  params: RequestGetOverpaidBalanceList,
+) => {
+  const url = `clearing/balance`;
+  const response = await v2Axios.get<ResponseGetClearing>(url, { params });
+
+  return response.data.data;
+};
+
+// 상세
+export interface RequestGetOverpaidBalance {
+  rt_store_id: number;
+  start_date: string; // YYYY-MM-DD
+  end_date: string; // YYYY-MM-DD
+
+  vendor_id: number;
+
+  subtract_amount: number; // 남은돈
+  //overpaid_amount: number;
+  refund_amount: number; // 받을돈
+}
+
+export interface ResponseGetOverpaidBalance {
+  msg: string;
+  data: {
+    item_list: ClearingInfo[];
+  };
+}
+
+const getOverpaidBalance = async (params: RequestGetOverpaidBalance) => {
+  const url = `clearing/balance/${params.vendor_id}`;
+  const response = await v2Axios.get<ResponseGetClearing>(url, { params });
+
+  return response.data.data;
 };
 
 /*
@@ -436,6 +498,8 @@ const createParse = async (data: RequestCreateParse) => {
 const clearingAPI = {
   getClearing,
   getBalance,
+  getOverpaidBalanceList,
+  getOverpaidBalance,
   create,
   getSheet,
   updateSheet,

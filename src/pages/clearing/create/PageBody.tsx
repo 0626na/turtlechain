@@ -105,7 +105,7 @@ function PageBody() {
 }
 
 const StyledCollapse = styled(Collapse)`
-  background-color: white;
+  background-color: #fff;
   margin-top: 20px;
 
   .ant-collapse-item {
@@ -113,6 +113,14 @@ const StyledCollapse = styled(Collapse)`
     border: none;
     margin-bottom: 12px;
     border-radius: 4px;
+  }
+
+  .ant-collapse-content-box {
+    background-color: #fff;
+  }
+
+  .ant-table-wrapper {
+    margin-top: 12px;
   }
 `;
 

@@ -8,7 +8,6 @@ interface Props {
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
-  width?: string;
 }
 
 function TurtleButton({
@@ -18,7 +17,6 @@ function TurtleButton({
   loading,
   htmlType,
   onClick,
-  width = '160px',
 }: Props) {
   return (
     <Button
@@ -28,7 +26,7 @@ function TurtleButton({
       loading={loading}
       onClick={onClick}
       style={{
-        width: width,
+        width: '160px',
         backgroundColor: type === 'secondary' ? '#13BC9E' : '',
         borderColor: type === 'secondary' ? '#13BC9E' : '',
         border: disabled ? 'none' : '',

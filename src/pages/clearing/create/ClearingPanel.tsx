@@ -9,7 +9,12 @@ import {
   Row,
   Table,
   Typography,
+  Tooltip,
+  Divider,
+  Space,
 } from 'antd';
+
+import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
 import { useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -41,11 +46,20 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
 
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { handleClearingPaymentTotal } = useClearingCart();
+  const { clearingPaymentTotal } = useClearingCart();
 
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
+
+  // 거래처 검색(default : 전체)
+  const filteredList = useMemo(
+    () =>
+      cart.warehousingBalanceList.filter((item) =>
+        item.vendor_info.vendor_name.includes(searchQuery.search_string),
+      ),
+    [cart.warehousingBalanceList, searchQuery],
+  );
 
   // 정산서 생성 및 정산 상품추가
   const createClearingQuery = useMutation(
@@ -60,15 +74,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     },
   );
 
-  // 거래처 검색(default : 전체)
-  const searchedClearingList = useMemo(
-    () =>
-      cart.warehousingBalanceList.filter((item) =>
-        item.vendor_info.vendor_name.includes(searchQuery.search_string),
-      ),
-    [cart.warehousingBalanceList, searchQuery],
-  );
-
   // 전액 체우기
   const handlePaymentInputFiilIn = () => {
     setCart((cart) => ({
@@ -80,17 +85,20 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         };
       }),
     }));
-
-    return;
   };
 
   return (
     <Collapse.Panel
       {...props}
+      style={{
+        border: `${
+          activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
+        }`,
+      }} // #E3E6EA
       showArrow={false}
       extra={
         <Typography.Text style={{ color: '#242934' }}>
-          {activeKey === '2' ? 'v' : '>'}
+          {activeKey === '2' ? <DownOutlined /> : <RightOutlined />}
         </Typography.Text>
       }
     >
@@ -98,7 +106,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         size="small"
         pagination={false}
         loading={activeKey !== '2'}
-        dataSource={searchedClearingList}
+        dataSource={filteredList}
         rowKey="id"
         title={() => (
           <>
@@ -108,9 +116,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   <TurtleButtonSub
                     size="small"
                     type="primary"
-                    onClick={() => {
-                      handlePaymentInputFiilIn();
-                    }}
+                    onClick={handlePaymentInputFiilIn}
                   >
                     전액 입력하기
                   </TurtleButtonSub>
@@ -134,25 +140,84 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           },
           {
             ellipsis: true,
-            title: '미결제 금액',
-            render: (_, record) => record.unpaid_amount,
-          },
-          {
-            ellipsis: true,
             align: 'right',
             title: '당일 결제요청 금액',
-            render: (_, record) => record.clearing_amount ?? 0,
+            render: (_, record) => {
+              return (
+                <Tooltip
+                  color="#141720"
+                  title={
+                    <Space
+                      direction="vertical"
+                      size={2}
+                      style={{
+                        color: '#DCE0E4',
+                      }}
+                    >
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미결제</Col>
+                        <Col>{record.unpaid_amount.toLocaleString()}</Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 입고</Col>
+                        <Col>
+                          {(
+                            record.warehousing_amount +
+                            record.reserve_subtract_amount
+                          ).toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 미송</Col>
+                        <Col>
+                          {record.reserve_payment_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Divider
+                        style={{
+                          borderTopColor: '#5B5D63',
+                          marginTop: 10,
+                          marginBottom: 10,
+                        }}
+                      />
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>매입 차감</Col>
+                        <Col>
+                          -{' '}
+                          {record.overpaid_payment_amount?.toLocaleString() ??
+                            0}
+                        </Col>
+                      </Row>
+
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미송 차감</Col>
+                        <Col>
+                          - {record.reserve_subtract_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                    </Space>
+                  }
+                >
+                  {record.clearing_amount?.toLocaleString() ?? 0}
+                </Tooltip>
+              );
+            },
           },
           {
+            width: '48%',
             ellipsis: true,
-            align: 'right',
+            align: 'center',
             title: '당일 결제예정 금액',
             render: (_, record) => (
               <InputNumber
                 size="small"
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 placeholder="금액 입력"
-                value={record.clearing_payment_amount!}
+                value={
+                  record.clearing_payment_amount! > 0
+                    ? record.clearing_payment_amount!
+                    : undefined
+                }
                 step={1000}
                 max={record.clearing_amount}
                 min={record.reserve_payment_amount}
@@ -173,9 +238,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               />
             ),
           },
-          {
-            title: '',
-          },
         ]}
       />
 
@@ -185,14 +247,28 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
        *
        */}
 
-      <Row justify="end" align="middle" style={{ marginTop: 16 }}>
-        <Col>
-          <Typography.Text style={{ color: ' #6B6D73' }}>
+      <Row
+        style={{ marginTop: 40, marginBottom: 8, height: 40 }}
+        justify="end"
+        align="middle"
+      >
+        <Col
+          style={{
+            height: '100%',
+            lineHeight: 1,
+            marginRight: 24,
+
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'end',
+          }}
+        >
+          <Typography.Text style={{ color: ' #6B6D73', fontSize: 13 }}>
             총 당일 결제 합계
           </Typography.Text>
-
-          <Typography.Text style={{ fontWeight: 700 }}>
-            {handleClearingPaymentTotal.toLocaleString()}원
+          <Typography.Text style={{ fontWeight: 700, fontSize: 20 }}>
+            {clearingPaymentTotal.toLocaleString()}원
           </Typography.Text>
         </Col>
 
@@ -231,7 +307,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             }}
           >
             <TurtleButton
-              width="180px"
+              disabled={clearingPaymentTotal === 0}
               children={t('button.request clearing')}
               loading={createClearingQuery.isLoading}
             />
