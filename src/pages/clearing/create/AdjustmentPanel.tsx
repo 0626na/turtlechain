@@ -222,10 +222,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         title={() => (
           <TurtleTableTitle
             label="미송"
-            count={
-              cart.adjustmentSubtractList.length +
-              cart.reserveSubtractList.length
-            }
+            count={cart.reservePaymentList.length}
           ></TurtleTableTitle>
         )}
         columns={[
