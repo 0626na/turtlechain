@@ -6,7 +6,7 @@ function useClearingCart() {
   const cart = useRecoilValue(clearingCartState);
 
   // 미송 결제 합계
-  const handleReservePaymentAmountTotal = useMemo(
+  const reservePaymentAmountTotal = useMemo(
     () =>
       cart.reservePaymentList.reduce(
         (acc, cur) => acc + (cur.reserve_payment_amount ?? 0),
@@ -16,7 +16,7 @@ function useClearingCart() {
   );
 
   //총 차감 합계(미송차감 + 매입차감)
-  const handleSubtractAmountTotal = useMemo(
+  const subtractAmountTotal = useMemo(
     () =>
       cart.reserveSubtractList.reduce(
         (acc, cur) => acc + cur.reserve_subtract_amount,
@@ -30,7 +30,7 @@ function useClearingCart() {
   );
 
   //총 당일 결제 합계
-  const handleClearingPaymentTotal = useMemo(
+  const clearingPaymentTotal = useMemo(
     () =>
       cart.warehousingBalanceList.reduce(
         (acc, cur) => acc + (cur.clearing_payment_amount! ?? 0),
@@ -40,9 +40,9 @@ function useClearingCart() {
   );
 
   return {
-    handleReservePaymentAmountTotal,
-    handleSubtractAmountTotal,
-    handleClearingPaymentTotal,
+    reservePaymentAmountTotal,
+    subtractAmountTotal,
+    clearingPaymentTotal,
   };
 }
 

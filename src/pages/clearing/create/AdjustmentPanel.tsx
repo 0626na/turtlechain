@@ -15,7 +15,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   TurtleButton,
   TurtleButtonSub,
-  TurtleQuestionTooltip,
   TurtleTableTitle,
 } from '@components/common';
 import { clearingCartState } from '@store/clearingCartState';
@@ -23,6 +22,7 @@ import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
 import useClearingCart from '@hooks/useClearingCart';
+import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -32,8 +32,7 @@ interface Props extends CollapsePanelProps {
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const { handleReservePaymentAmountTotal, handleSubtractAmountTotal } =
-    useClearingCart();
+  const { reservePaymentAmountTotal, subtractAmountTotal } = useClearingCart();
 
   const getRetailerStoreClearingQuery = useQuery(
     ['getRetailerStoreClearing', store.id!],
@@ -77,12 +76,10 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const handlePaymentInputFiilIn = () => {
     setCart((cart) => ({
       ...cart,
-      adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => {
-        return {
-          ...item,
-          overpaid_payment_amount: item.overpaid_amount,
-        };
-      }),
+      adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => ({
+        ...item,
+        overpaid_payment_amount: item.overpaid_amount,
+      })),
     }));
 
     return;
@@ -91,10 +88,15 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   return (
     <Collapse.Panel
       {...props}
+      style={{
+        border: `${
+          activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
+        }`,
+      }} // #E3E6EA
       showArrow={false}
       extra={
         <Typography.Text style={{ color: '#242934' }}>
-          {activeKey === '1' ? 'v' : '>'}
+          {activeKey === '1' ? <DownOutlined /> : <RightOutlined />}
         </Typography.Text>
       }
     >
@@ -112,15 +114,17 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         ]}
         rowKey="id"
         title={() => (
-          <>
-            <TurtleTableTitle
-              label="차감"
-              count={
-                cart.adjustmentSubtractList.length +
-                cart.reserveSubtractList.length
-              }
-            >
-              <Space size="large">
+          <Row align="middle">
+            <Col span={1}>
+              <span style={{ fontSize: 18, fontWeight: 500 }}>차감</span>
+            </Col>
+            <Col span={23}>
+              <TurtleTableTitle
+                count={
+                  cart.adjustmentSubtractList.length +
+                  cart.reserveSubtractList.length
+                }
+              >
                 <TurtleButtonSub
                   size="small"
                   type="primary"
@@ -130,9 +134,9 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                 >
                   전액 입력하기
                 </TurtleButtonSub>
-              </Space>
-            </TurtleTableTitle>
-          </>
+              </TurtleTableTitle>
+            </Col>
+          </Row>
         )}
         columns={[
           {
@@ -172,12 +176,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: (
-              <>
-                사용할 금액
-                <TurtleQuestionTooltip content="사용할 금액은 당일 입고 금액을 초과할 수 없습니다." />
-              </>
-            ),
+            title: '사용할 금액',
             render: (_, record) => (
               <Space>
                 {record.type === 'reserve_subtract' ? (
@@ -227,20 +226,29 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         dataSource={[...cart.reservePaymentList]}
         rowKey="id"
         title={() => (
-          <TurtleTableTitle
-            label="미송"
-            count={cart.reservePaymentList.length}
-          ></TurtleTableTitle>
+          <Row>
+            <Col span={1}>
+              <span style={{ fontSize: 18, fontWeight: 500, marginRight: 8 }}>
+                미송
+              </span>
+            </Col>
+            <Col span={23}>
+              <TurtleTableTitle
+                count={
+                  cart.adjustmentSubtractList.length +
+                  cart.reserveSubtractList.length
+                }
+              ></TurtleTableTitle>
+            </Col>
+          </Row>
         )}
         columns={[
           {
+            width: '40%',
             ellipsis: true,
             title: '등록 날짜',
             render: (_, record) =>
               moment(record.created_date).format('YYYY-MM-DD'),
-          },
-          {
-            title: '',
           },
           {
             ellipsis: true,
@@ -260,13 +268,13 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         ]}
       />
 
-      <Row justify="end" align="middle" style={{ marginTop: 16 }}>
+      <Row justify="end" align="middle" style={{ marginTop: 40 }}>
         <Col>
           <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
             총 차감 합계
           </Typography.Text>
           <Typography.Text style={{ fontWeight: 700 }}>
-            {handleSubtractAmountTotal.toLocaleString()}원
+            {subtractAmountTotal.toLocaleString()}원
           </Typography.Text>
         </Col>
         <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
@@ -275,15 +283,14 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             총 미송 합계
           </Typography.Text>
           <Typography.Text style={{ fontWeight: 700 }}>
-            {handleReservePaymentAmountTotal.toLocaleString()}원
+            {reservePaymentAmountTotal.toLocaleString()}원
           </Typography.Text>
         </Col>
         <Col>
           <TurtleButton
             children={t('button.next step')}
             disabled={
-              handleReservePaymentAmountTotal === 0 &&
-              handleSubtractAmountTotal === 0
+              reservePaymentAmountTotal === 0 && subtractAmountTotal === 0
             }
             onClick={() => {
               setCart((cart) => ({
@@ -309,20 +316,18 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
 
                     return newWarehousingBalanceItem;
                   })
-                  .map((warehousingBalanceItem) => {
+                  .map((warehousingBalanceItem) => ({
                     // 입고 + 미결제 + 미송 결제 - 매입 차감
-                    return {
-                      ...warehousingBalanceItem,
-                      clearing_amount:
-                        warehousingBalanceItem.warehousing_amount +
-                        warehousingBalanceItem.unpaid_amount +
-                        warehousingBalanceItem.reserve_payment_amount -
-                        (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
-                      // 당일 결제예정 금액 최소금액은 미송결제금액.
-                      clearing_payment_amount:
-                        warehousingBalanceItem.reserve_payment_amount,
-                    };
-                  })
+                    ...warehousingBalanceItem,
+                    clearing_amount:
+                      warehousingBalanceItem.warehousing_amount +
+                      warehousingBalanceItem.unpaid_amount +
+                      warehousingBalanceItem.reserve_payment_amount -
+                      (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
+                    // 당일 결제예정 금액 최소금액은 미송결제금액.
+                    clearing_payment_amount:
+                      warehousingBalanceItem.reserve_payment_amount,
+                  }))
                   .filter(
                     (warehousingBalanceItem) =>
                       warehousingBalanceItem.clearing_amount! > 0,
