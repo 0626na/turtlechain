@@ -350,6 +350,9 @@ function PageBody() {
           <Typography.Link
             style={{ textDecoration: 'underline' }}
             onClick={() => {
+              if (!isStoreExist()) {
+                return;
+              }
               setRequestModalVisible(true);
             }}
           >
