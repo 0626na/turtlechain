@@ -114,29 +114,23 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         ]}
         rowKey="id"
         title={() => (
-          <Row align="middle">
-            <Col span={1}>
-              <span style={{ fontSize: 18, fontWeight: 500 }}>차감</span>
-            </Col>
-            <Col span={23}>
-              <TurtleTableTitle
-                count={
-                  cart.adjustmentSubtractList.length +
-                  cart.reserveSubtractList.length
-                }
-              >
-                <TurtleButtonSub
-                  size="small"
-                  type="primary"
-                  onClick={() => {
-                    handlePaymentInputFiilIn();
-                  }}
-                >
-                  전액 입력하기
-                </TurtleButtonSub>
-              </TurtleTableTitle>
-            </Col>
-          </Row>
+          <TurtleTableTitle
+            label="차감"
+            count={
+              cart.adjustmentSubtractList.length +
+              cart.reserveSubtractList.length
+            }
+          >
+            <TurtleButtonSub
+              size="small"
+              type="primary"
+              onClick={() => {
+                handlePaymentInputFiilIn();
+              }}
+            >
+              전액 입력하기
+            </TurtleButtonSub>
+          </TurtleTableTitle>
         )}
         columns={[
           {
@@ -226,21 +220,13 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         dataSource={[...cart.reservePaymentList]}
         rowKey="id"
         title={() => (
-          <Row>
-            <Col span={1}>
-              <span style={{ fontSize: 18, fontWeight: 500, marginRight: 8 }}>
-                미송
-              </span>
-            </Col>
-            <Col span={23}>
-              <TurtleTableTitle
-                count={
-                  cart.adjustmentSubtractList.length +
-                  cart.reserveSubtractList.length
-                }
-              ></TurtleTableTitle>
-            </Col>
-          </Row>
+          <TurtleTableTitle
+            label="미송"
+            count={
+              cart.adjustmentSubtractList.length +
+              cart.reserveSubtractList.length
+            }
+          ></TurtleTableTitle>
         )}
         columns={[
           {
