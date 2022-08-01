@@ -11,6 +11,8 @@ import {
 } from '@components/common';
 import bucketListAPI, { RequestCreate } from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
+import { storeState } from '@store/storeState';
+import { useRecoilValue } from 'recoil';
 
 interface Props {
   visible: boolean;
@@ -20,7 +22,7 @@ interface Props {
 function RequestModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm<RequestCreate>();
   const [address, setAddress] = useState({ building: '', floor: '' });
-
+  const store = useRecoilValue(storeState);
   const createQuery = useMutation('createBucketList', bucketListAPI.create, {
     onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
@@ -265,6 +267,7 @@ function RequestModal({ visible, closeModal }: Props) {
                   loc,
                   ext: form.getFieldValue('ext') ?? '',
                   file: form.getFieldValue('file').fileList[0].originFileObj,
+                  rt_store_id: store.id,
                 });
               });
             }}
