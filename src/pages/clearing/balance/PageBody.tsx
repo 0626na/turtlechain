@@ -26,7 +26,7 @@ function PageBody() {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
   const getRetailerStoreOverpaidBalanceListQuery = useQuery(
-    ['getRetailerStoreOverpaidBalanceListQuery', searchQuery],
+    ['getRetailerStoreOverpaidBalanceList', searchQuery],
     () => clearingAPI.getOverpaidBalanceList(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
