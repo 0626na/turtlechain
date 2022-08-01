@@ -21,7 +21,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
   const store = useRecoilValue(storeState);
 
   const getRetailerStoreOverpaidBalanceQuery = useQuery(
-    ['getRetailerStoreOverpaidBalanceQuery', selectedRow],
+    ['getRetailerStoreOverpaidBalance', selectedRow],
     () =>
       clearingAPI.getOverpaidBalance({
         rt_store_id: store.id!,
