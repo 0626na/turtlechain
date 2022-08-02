@@ -179,40 +179,6 @@ const create = async function (data: {
   return itemResponse.data;
 };
 
-// Request: 매입 결제대기 항목
-export interface RequestGetBalance {
-  // 매입조정 처리내역 확인할때
-  rt_store_id?: number;
-  vendor_id?: number;
-  start_date?: string;
-  end_date?: string;
-  // 페이지 구분
-  tab?: 'adjustment';
-  // 정산에서 매입차감 위해 조회할 때
-  warehousing_sheet_id?: string;
-  // 매입조정 상세 조회할 때
-  original_id?: number;
-}
-
-// Response: 매입 결제대청 항목
-export interface ResponseGetBalance {
-  msg: string;
-  data: {
-    item_list: Array<BalanceShow>;
-    total_count: number;
-  };
-}
-
-// 매입 결제대기 항목 요청
-const getBalance = async function (query: RequestGetBalance) {
-  let url = 'clearing/balance?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetBalance>(url);
-  return response.data;
-};
-
 /*
  * 받을돈 / 사용할돈
  */
@@ -497,7 +463,6 @@ const createParse = async (data: RequestCreateParse) => {
 
 const clearingAPI = {
   getClearing,
-  getBalance,
   getOverpaidBalanceList,
   getOverpaidBalance,
   create,
