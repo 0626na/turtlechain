@@ -89,6 +89,9 @@ module.exports = {
 
               // Badge
               '@badge-status-size': '8px',
+
+              // Tooltip
+              '@tooltip-bg': '#30333B',
             },
             javascriptEnabled: true,
           },
