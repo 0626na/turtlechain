@@ -81,12 +81,16 @@ function SuccessTab({ loading, ...props }: Props) {
         dataSource={filteredList}
         rowKey={(record) => record.index!}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        scroll={{ y: 'auto' }}
+        scroll={{ x: 1400, y: 'auto' }}
         style={{ height: filteredList.length <= 5 ? '45vh' : '' }}
         title={() => (
           <TurtleTableTitle
             count={cart.successList.length}
             searchCount={filteredList.length}
+            totalAmount={filteredList.reduce(
+              (acc, cur) => acc + cur.price * cur.count,
+              0,
+            )}
           >
             <NewSearchFilter
               searchQuery={cart.searchQuery}
@@ -102,6 +106,7 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             ellipsis: true,
+            width: 150,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
@@ -119,27 +124,31 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            width: 200,
             title: t('product.vendor product name'),
             render: (_, record) => record.vendor_product_name,
           },
           {
             ellipsis: true,
-            width: '12%',
+            width: 150,
             title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('product.option'),
             render: (_, record) => record.product_option,
           },
           {
             ellipsis: true,
+            width: 100,
             title: '창고명',
             render: (_, record) => record.store_house,
           },
           {
             ellipsis: true,
+            width: 120,
             align: 'right',
             title: t('product.price'),
             render: (_, record) => (
@@ -158,7 +167,7 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            width: '12%',
+            width: 120,
             title: t('warehousing.count'),
             render: (_, record) => (
               <InputNumber
@@ -173,6 +182,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            width: 100,
             align: 'right',
             title: t('warehousing.is reserved'),
             render: (_, record) => (
@@ -190,6 +200,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            width: 50,
             render: (_, record) => (
               <TurtleIcon
                 type="delete"

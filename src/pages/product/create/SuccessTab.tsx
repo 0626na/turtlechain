@@ -55,44 +55,50 @@ function SuccessTab({ loading, ...props }: Props) {
         dataSource={cart.successList}
         rowKey={(record) => record.product_code}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        scroll={{ y: 'auto' }}
+        scroll={{ x: 1400, y: 'auto' }}
         style={{ height: cart.successList.length <= 5 ? '45vh' : '' }}
         title={() => <TurtleTableTitle count={cart.successList.length} />}
         columns={[
           {
             ellipsis: true,
+            width: 150,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
+            width: 250,
             title: t('product.name'),
             render: (_, record) => record.name,
           },
           {
             ellipsis: true,
+            width: 200,
             title: t('product.vendor product name'),
             render: (_, record) => record.vendor_product_name,
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('product.code'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('product.option'),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
             align: 'right',
-            width: 150,
+            width: 120,
             title: t('product.price'),
             render: (_, record) => (
               <TurtleInputPrice
@@ -120,7 +126,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: '8%',
+            width: 50,
             render: (_, record) => (
               <TurtleIcon
                 type="delete"
