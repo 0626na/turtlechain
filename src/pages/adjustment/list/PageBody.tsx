@@ -93,6 +93,7 @@ const PageBody = function () {
     }));
   }, [store.id]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const openDetailModal = useCallback((adjustmentProduct) => {
     selectRow(adjustmentProduct);
     setDetailModalVisible(true);
