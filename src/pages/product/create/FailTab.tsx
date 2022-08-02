@@ -18,15 +18,17 @@ function FailTab({ loading, ...props }: Props) {
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         dataSource={cart.failList}
         rowKey={(record) => record.product_code}
-        scroll={{ y: 'auto' }}
+        scroll={{ x: 1400, y: 'auto' }}
         columns={[
           {
             ellipsis: true,
             title: t('vendor.name'),
+            width: 150,
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
           },
