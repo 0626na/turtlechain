@@ -1,7 +1,16 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { Form, Input, message, Popconfirm, Row, Select, Upload } from 'antd';
+import {
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+  Tooltip,
+  Upload,
+} from 'antd';
 import {
   TurtleButton,
   TurtleButtonSub,
@@ -71,12 +80,9 @@ function RequestModal({ visible, closeModal }: Props) {
           placeholder={t('placeholder.vendor name')}
           required={true}
         />
-        <TurtleInput // 거래처 매장번호 Input
-          name="tel"
-          label={t('vendor.phone')}
-          placeholder={t('placeholder.phone')}
-          required={true}
-        />
+        <Form.Item required={false} name="tel" label={t('vendor.phone')}>
+          <Input placeholder={t('placeholder.phone')} />
+        </Form.Item>
         <TurtleInput // 거래처 휴대번호 Input
           name="mobile"
           label={t('vendor.store phone')}
@@ -241,15 +247,17 @@ function RequestModal({ visible, closeModal }: Props) {
           required={true}
           rules={[{ required: true }]}
         >
-          <Upload
-            listType="picture"
-            maxCount={1}
-            accept=".jpg, .png, .jpeg, .pdf"
-            beforeUpload={() => false}
-            fileList={form.getFieldValue('file')?.fileList}
-          >
-            <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
-          </Upload>
+          <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+            <Upload
+              listType="picture"
+              maxCount={1}
+              accept=".jpg, .png, .jpeg, .pdf"
+              beforeUpload={() => false}
+              fileList={form.getFieldValue('file')?.fileList}
+            >
+              <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
+            </Upload>
+          </Tooltip>
         </Form.Item>
         <Row justify="end">
           <Popconfirm
