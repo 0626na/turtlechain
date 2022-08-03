@@ -40,6 +40,7 @@ import {
   TurtleQuestionTooltip,
   TurtleModal,
 } from '@components/common';
+import AddBucketlistSign from '@components/combine/AddBucketlistSign';
 
 interface Props {
   visible: boolean;
@@ -988,21 +989,26 @@ function ExcelModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
 
-      <Row justify="end" style={{ paddingTop: 20 }}>
-        <Popconfirm
-          title={t('description.really register')}
-          okText={t('yes')}
-          cancelText={t('no')}
-          onConfirm={onClickCreate}
-        >
-          <TurtleButton
-            type="primary"
-            disabled={getSuggestCount === 0 && successList?.length === 0}
-            loading={createVendorQuery.isLoading}
+      <Row justify="space-between" align="middle" style={{ paddingTop: 20 }}>
+        <Col>
+          <AddBucketlistSign />
+        </Col>
+        <Col>
+          <Popconfirm
+            title={t('description.really register')}
+            okText={t('yes')}
+            cancelText={t('no')}
+            onConfirm={onClickCreate}
           >
-            {t('vendor.create')}
-          </TurtleButton>
-        </Popconfirm>
+            <TurtleButton
+              type="primary"
+              disabled={getSuggestCount === 0 && successList?.length === 0}
+              loading={createVendorQuery.isLoading}
+            >
+              {t('vendor.create')}
+            </TurtleButton>
+          </Popconfirm>
+        </Col>
       </Row>
     </TurtleModal>
   );

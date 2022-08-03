@@ -37,6 +37,7 @@ import {
   TurtleModal,
   TurtleQuestionTooltip,
 } from '@components/common';
+import AddBucketlistSign from '@components/combine/AddBucketlistSign';
 
 interface Props {
   visible: boolean;
@@ -434,8 +435,7 @@ function ConnectModal({ visible, closeModal }: Props) {
           onClick={() => {
             connectVendorQuery.mutate({ rt_store_id: store.id! });
           }}
-          //loading={connectVendorQuery.isLoading}
-          //disabled={connectVendorQuery.isSuccess}
+          loading={connectVendorQuery.isLoading}
         >
           {t('button.connect')}
         </TurtleButtonSub>
@@ -968,21 +968,26 @@ function ConnectModal({ visible, closeModal }: Props) {
         </Tabs.TabPane>
       </Tabs>
 
-      <Row justify="end" style={{ paddingTop: 20 }}>
-        <Popconfirm
-          title={t('description.really register')}
-          okText={t('yes')}
-          cancelText={t('no')}
-          onConfirm={onClickCreate}
-        >
-          <TurtleButton
-            type="primary"
-            disabled={getSuggestCount === 0 && successList?.length === 0}
-            loading={createQuery.isLoading}
+      <Row justify="space-between" align="middle" style={{ paddingTop: 20 }}>
+        <Col>
+          <AddBucketlistSign />
+        </Col>
+        <Col>
+          <Popconfirm
+            title={t('description.really register')}
+            okText={t('yes')}
+            cancelText={t('no')}
+            onConfirm={onClickCreate}
           >
-            {t('vendor.create')}
-          </TurtleButton>
-        </Popconfirm>
+            <TurtleButton
+              type="primary"
+              disabled={getSuggestCount === 0 && successList?.length === 0}
+              loading={createQuery.isLoading}
+            >
+              {t('vendor.create')}
+            </TurtleButton>
+          </Popconfirm>
+        </Col>
       </Row>
     </TurtleModal>
   );
