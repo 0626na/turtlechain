@@ -268,7 +268,20 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             총 당일 결제 합계
           </Typography.Text>
           <Typography.Text style={{ fontWeight: 700, fontSize: 20 }}>
-            {clearingPaymentTotal.toLocaleString()}원
+            {clearingPaymentTotal > 0 && (
+              <Typography.Text style={{ fontWeight: 500, fontSize: 16 }}>
+                (부가세{' '}
+                {(
+                  Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+                  clearingPaymentTotal
+                ).toLocaleString()}
+                원 포함){' '}
+              </Typography.Text>
+            )}
+            {(
+              Math.round((clearingPaymentTotal * 1.1) / 10) * 10
+            ).toLocaleString()}
+            원
           </Typography.Text>
         </Col>
 
@@ -289,12 +302,12 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                   rt_store_id: store.id,
                   rt_store_name: store.name,
                   // 당일 결제 합계
-                  clearing_amount_list: cart.warehousingBalanceList.map(
-                    (item) => ({
+                  clearing_amount_list: cart.warehousingBalanceList
+                    .filter((item) => item.clearing_payment_amount! > 0)
+                    .map((item) => ({
                       vendor_id: item.vendor_info.id,
                       clearing_amount: item.clearing_payment_amount!,
-                    }),
-                  ),
+                    })),
                   // 매입 차감
                   subtract_amount_list: cart.adjustmentSubtractList
                     .filter((item) => item.overpaid_payment_amount! > 0)
