@@ -16,7 +16,7 @@ import {
 
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -87,6 +87,46 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     }));
   };
 
+  useEffect(() => {
+    // 당일 결제요청 금액 계산
+    setCart((cart) => ({
+      ...cart,
+      warehousingBalanceList: cart.warehousingBalanceList
+        .map((warehousingBalanceItem) => {
+          const newWarehousingBalanceItem = {
+            ...warehousingBalanceItem,
+          };
+          // 매입 차감을 warehousing으로 넘겨준다.
+          cart.adjustmentSubtractList.forEach((adjustmentSubtractItem) => {
+            if (
+              adjustmentSubtractItem.vendor_info.id ===
+              newWarehousingBalanceItem.vendor_info.id
+            ) {
+              newWarehousingBalanceItem.overpaid_payment_amount =
+                adjustmentSubtractItem.overpaid_payment_amount! ?? 0;
+            }
+          });
+
+          return newWarehousingBalanceItem;
+        })
+        .map((warehousingBalanceItem) => ({
+          // 입고 + 미결제 + 미송 결제 - 매입 차감
+          ...warehousingBalanceItem,
+          clearing_amount:
+            warehousingBalanceItem.warehousing_amount +
+            warehousingBalanceItem.unpaid_amount +
+            warehousingBalanceItem.reserve_payment_amount -
+            (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
+          // 당일 결제예정 금액 최소금액은 미송결제금액.
+          clearing_payment_amount:
+            warehousingBalanceItem.reserve_payment_amount,
+        }))
+        .filter(
+          (warehousingBalanceItem) =>
+            warehousingBalanceItem.clearing_amount! > 0,
+        ),
+    }));
+  }, [activeKey, setCart]);
   return (
     <Collapse.Panel
       {...props}
