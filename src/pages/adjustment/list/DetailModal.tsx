@@ -39,7 +39,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={visible}
+        loading={!visible}
         dataSource={selectedRow && [selectedRow]}
         rowKey={(record) => record.id}
         pagination={false}
