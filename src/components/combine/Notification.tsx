@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import moment from 'moment';
 import { useRef, useState } from 'react';
-import { Col, Divider, Popover, Row, Space, Typography } from 'antd';
+import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { BellOutlined } from '@ant-design/icons';
@@ -124,17 +124,34 @@ function Notification() {
         </>
       }
     >
-      <BellOutlined
+      <Badge
+        size="small"
+        overflowCount={9}
+        count={
+          getQuery.data?.notification_list.filter((item) => !item.read_at)
+            .length
+        }
         style={{
-          padding: 8,
-          marginRight: 12,
-          fontSize: 20,
-          cursor: 'pointer',
+          paddingBottom: 1,
+          paddingTop: 1,
+          paddingLeft: 4,
+          paddingRight: 5,
         }}
-        onClick={() => {
-          setPopoverVisible((visible) => !visible);
-        }}
-      />
+        offset={[-21, 5]}
+      >
+        <BellOutlined
+          style={{
+            padding: 8,
+            marginRight: 12,
+            fontSize: 20,
+            cursor: 'pointer',
+            color: '#fff',
+          }}
+          onClick={() => {
+            setPopoverVisible((visible) => !visible);
+          }}
+        />
+      </Badge>
     </StyledPopover>
   );
 }
