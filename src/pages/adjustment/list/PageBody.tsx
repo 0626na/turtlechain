@@ -138,16 +138,13 @@ const PageBody = function () {
           scroll={{ y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
-              // openDetailModal(record);
+              openDetailModal(record);
             },
           })}
           title={() => (
             <TurtleTableTitle
               count={getAdjustmentListQuery.data?.data.total_count ?? 0}
             >
-              {/* <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              <Divider type="vertical" style={{ margin: 0 }} /> */}
-
               <Select
                 size="small"
                 style={{ width: 100 }}
@@ -240,7 +237,7 @@ const PageBody = function () {
               align: 'right',
               title: t('adjustment.amount'),
               render: (_, record) =>
-                (record.price * record.count).toLocaleString(),
+                (record.product_info.price * record.count).toLocaleString(),
             },
             {
               ellipsis: true,

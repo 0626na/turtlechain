@@ -61,8 +61,7 @@ function PageBody() {
             bordered={false}
             style={{ width: '100%' }}
             onChange={(key) => {
-              // 전단계로만 이동할 수 있고 다음단계는 Panel 내부 버튼으로만 이동할 수 있다.
-              if (!key || Number(key) > Number(activeKey)) {
+              if (Number(activeKey) === 0 || !key) {
                 return;
               }
               setActiveKey(key[0]);

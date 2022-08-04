@@ -25,8 +25,8 @@ function PageBody() {
   const [selectedRow, selectRow] = useState<ClearingInfo>();
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
-  const getRetailerStoreOverpaidBalanceListQuery = useQuery(
-    ['getRetailerStoreOverpaidBalanceListQuery', searchQuery],
+  const getOverpaidBalanceListQuery = useQuery(
+    ['getOverpaidBalanceList', searchQuery],
     () => clearingAPI.getOverpaidBalanceList(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
@@ -52,8 +52,8 @@ function PageBody() {
       <MainContent title={t('clearing.balance lists')}>
         <Table
           size="small"
-          dataSource={getRetailerStoreOverpaidBalanceListQuery.data?.item_list}
-          loading={getRetailerStoreOverpaidBalanceListQuery.isLoading}
+          dataSource={getOverpaidBalanceListQuery.data?.item_list}
+          loading={getOverpaidBalanceListQuery.isLoading}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
           rowKey={(record) => record.vendor_info.id}
           scroll={{ y: 'auto' }}
@@ -64,10 +64,7 @@ function PageBody() {
           })}
           title={() => (
             <TurtleTableTitle
-              count={
-                getRetailerStoreOverpaidBalanceListQuery.data?.item_list
-                  .length ?? 0
-              }
+              count={getOverpaidBalanceListQuery.data?.item_list.length ?? 0}
             ></TurtleTableTitle>
           )}
           columns={[

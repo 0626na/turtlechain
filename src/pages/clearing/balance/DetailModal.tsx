@@ -20,8 +20,8 @@ interface Props {
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
   const store = useRecoilValue(storeState);
 
-  const getRetailerStoreOverpaidBalanceQuery = useQuery(
-    ['getRetailerStoreOverpaidBalanceQuery', selectedRow],
+  const getOverpaidBalanceQuery = useQuery(
+    ['getOverpaidBalance', selectedRow],
     () =>
       clearingAPI.getOverpaidBalance({
         rt_store_id: store.id!,
@@ -66,15 +66,13 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={getRetailerStoreOverpaidBalanceQuery.isLoading}
+        loading={getOverpaidBalanceQuery.isLoading}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        dataSource={getRetailerStoreOverpaidBalanceQuery.data?.item_list}
+        dataSource={getOverpaidBalanceQuery.data?.item_list}
         rowKey={(item) => item.rt_store_id}
         title={() => (
           <TurtleTableTitle
-            count={
-              getRetailerStoreOverpaidBalanceQuery.data?.item_list.length ?? 0
-            }
+            count={getOverpaidBalanceQuery.data?.item_list.length ?? 0}
           ></TurtleTableTitle>
         )}
         columns={[

@@ -222,10 +222,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         title={() => (
           <TurtleTableTitle
             label="미송"
-            count={
-              cart.adjustmentSubtractList.length +
-              cart.reserveSubtractList.length
-            }
+            count={cart.reservePaymentList.length}
           ></TurtleTableTitle>
         )}
         columns={[
@@ -275,46 +272,6 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           <TurtleButton
             children={t('button.next step')}
             onClick={() => {
-              setCart((cart) => ({
-                ...cart,
-                warehousingBalanceList: cart.warehousingBalanceList
-                  .map((warehousingBalanceItem) => {
-                    const newWarehousingBalanceItem = {
-                      ...warehousingBalanceItem,
-                    };
-                    // 매입 차감을 warehousing으로 넘겨준다.
-                    cart.adjustmentSubtractList.forEach(
-                      (adjustmentSubtractItem) => {
-                        if (
-                          adjustmentSubtractItem.vendor_info.id ===
-                          newWarehousingBalanceItem.vendor_info.id
-                        ) {
-                          newWarehousingBalanceItem.overpaid_payment_amount =
-                            adjustmentSubtractItem.overpaid_payment_amount! ??
-                            0;
-                        }
-                      },
-                    );
-
-                    return newWarehousingBalanceItem;
-                  })
-                  .map((warehousingBalanceItem) => ({
-                    // 입고 + 미결제 + 미송 결제 - 매입 차감
-                    ...warehousingBalanceItem,
-                    clearing_amount:
-                      warehousingBalanceItem.warehousing_amount +
-                      warehousingBalanceItem.unpaid_amount +
-                      warehousingBalanceItem.reserve_payment_amount -
-                      (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
-                    // 당일 결제예정 금액 최소금액은 미송결제금액.
-                    clearing_payment_amount:
-                      warehousingBalanceItem.reserve_payment_amount,
-                  }))
-                  .filter(
-                    (warehousingBalanceItem) =>
-                      warehousingBalanceItem.clearing_amount! > 0,
-                  ),
-              }));
               clickNext();
             }}
           />
