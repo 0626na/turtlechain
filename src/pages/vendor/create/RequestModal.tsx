@@ -241,13 +241,13 @@ function RequestModal({ visible, closeModal }: Props) {
           required={false}
         />
         <TurtleDivider />
-        <Form.Item
-          name="file"
-          label="전자영수증 사진첨부"
-          required={true}
-          rules={[{ required: true }]}
-        >
-          <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+        <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+          <Form.Item
+            name="file"
+            label="전자영수증 사진첨부"
+            required={true}
+            rules={[{ required: true }]}
+          >
             <Upload
               listType="picture"
               maxCount={1}
@@ -257,8 +257,8 @@ function RequestModal({ visible, closeModal }: Props) {
             >
               <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
             </Upload>
-          </Tooltip>
-        </Form.Item>
+          </Form.Item>
+        </Tooltip>
         <Row justify="end">
           <Popconfirm
             title={t('description.really register')}
@@ -271,6 +271,7 @@ function RequestModal({ visible, closeModal }: Props) {
                   ...form.getFieldsValue(),
                   type: 'create',
                   banks: [form.getFieldValue('banks')],
+                  tel: form.getFieldValue('tel') ?? '',
                   col,
                   loc,
                   ext: form.getFieldValue('ext') ?? '',
@@ -283,6 +284,7 @@ function RequestModal({ visible, closeModal }: Props) {
             <TurtleButton // 등록 요청하기 Button
               type="default"
               htmlType="submit"
+              loading={createQuery.isLoading}
             >
               {t('button.request create')}
             </TurtleButton>
