@@ -16,7 +16,7 @@ import {
 
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -43,9 +43,9 @@ interface Props extends CollapsePanelProps {
 
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const navigate = useNavigate();
-
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
+  const index = useRef(0);
   const { clearingPaymentTotal } = useClearingCart();
 
   const [searchQuery, setSearchQuery] = useState({
@@ -147,7 +147,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         pagination={false}
         loading={activeKey !== '2'}
         dataSource={filteredList}
-        rowKey="id"
+        rowKey={() => index.current++}
         title={() => (
           <>
             <TurtleTableTitle count={cart.warehousingBalanceList.length}>

@@ -1,4 +1,3 @@
-import { NumberLiteralType } from 'typescript';
 import { v2Axios } from '.';
 
 // 매입조정 상품

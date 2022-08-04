@@ -23,6 +23,7 @@ import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
 import useClearingCart from '@hooks/useClearingCart';
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
+import { useRef } from 'react';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -32,6 +33,7 @@ interface Props extends CollapsePanelProps {
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
+  const index = useRef(0);
   const { reservePaymentAmountTotal, subtractAmountTotal } = useClearingCart();
 
   const getRetailerStoreClearingQuery = useQuery(
@@ -112,7 +114,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           ...cart.adjustmentSubtractList,
           ...cart.reserveSubtractList,
         ]}
-        rowKey="id"
+        rowKey={() => index.current++}
         title={() => (
           <TurtleTableTitle
             label="차감"
@@ -218,7 +220,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         pagination={false}
         loading={getRetailerStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
-        rowKey="id"
+        rowKey={() => index.current++}
         title={() => (
           <TurtleTableTitle
             label="미송"
