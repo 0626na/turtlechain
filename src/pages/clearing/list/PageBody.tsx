@@ -24,7 +24,7 @@ import clearingAPI, {
 import { TurtleCard, TurtleIcon, TurtleTableTitle } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
-import { SelectDateModal } from '@components/combine';
+import { SelectRangeDateModal } from '@components/combine';
 import { useStoreExist } from '@hooks/index';
 import DetailModal from './DetailModal';
 
@@ -276,7 +276,7 @@ function PageBody() {
       />
 
       {/* 엑셀 다운로드 날짜선택 모달 */}
-      <SelectDateModal
+      <SelectRangeDateModal
         visible={downloadModalVisible}
         closeModal={() => {
           setDownloadModalVisible(false);
