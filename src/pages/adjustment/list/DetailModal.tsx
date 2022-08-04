@@ -16,7 +16,7 @@ interface Props {
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
   // 매입조정 상세내역 요청
   const getRetailerStoreAdjustmentDetailHistoryQuery = useQuery(
-    ['getRetailerStoreAdjustmentDetailHistory', selectedRow?.id!],
+    ['getAdjustmentDetailHistory', selectedRow?.id!],
     () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id! }),
     {
       enabled: visible,
