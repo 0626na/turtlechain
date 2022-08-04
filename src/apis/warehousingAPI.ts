@@ -193,7 +193,11 @@ const getSheet = async function (query: RequestGetSheet) {
  */
 
 export type RequestGetItem = {
-  sheet_id: number;
+  sheet_id?: number;
+  product_name?: string;
+  start_date?: string;
+  end_date?: string;
+  page?: number;
 };
 
 export interface ResponseGetItem {
