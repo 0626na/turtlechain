@@ -15,7 +15,7 @@ interface Props {
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
   // 매입조정 상세내역 요청
-  const getRetailerStoreAdjustmentDetailHistoryQuery = useQuery(
+  const getAdjustmentDetailHistoryQuery = useQuery(
     ['getAdjustmentDetailHistory', selectedRow?.id!],
     () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id! }),
     {
@@ -98,18 +98,15 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={getRetailerStoreAdjustmentDetailHistoryQuery.isLoading}
-        dataSource={
-          getRetailerStoreAdjustmentDetailHistoryQuery.data?.data
-            .transaction_list
-        }
+        loading={getAdjustmentDetailHistoryQuery.isLoading}
+        dataSource={getAdjustmentDetailHistoryQuery.data?.data.transaction_list}
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
           <TurtleTableTitle
             count={
-              getRetailerStoreAdjustmentDetailHistoryQuery.data?.data
-                .transaction_list.length ?? 0
+              getAdjustmentDetailHistoryQuery.data?.data.transaction_list
+                .length ?? 0
             }
           ></TurtleTableTitle>
         )}
