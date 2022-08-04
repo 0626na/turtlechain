@@ -204,9 +204,10 @@ export interface ResponseGetItem {
   };
 }
 
-const getItem = async function (data: RequestGetItem) {
-  const url = `warehousing/item?sheet_id=${data.sheet_id}`;
-  const response = await v2Axios.get<ResponseGetItem>(url);
+const getItem = async function (params: RequestGetItem) {
+  const url = `warehousing/item`;
+  const response = await v2Axios.get<ResponseGetItem>(url, { params });
+
   return response.data;
 };
 
