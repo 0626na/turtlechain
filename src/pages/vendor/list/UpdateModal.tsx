@@ -1,6 +1,15 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { Form, Input, message, Popconfirm, Row, Select, Upload } from 'antd';
+import {
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+  Tooltip,
+  Upload,
+} from 'antd';
 import { useRecoilValue } from 'recoil';
 import { VendorShow } from '@apis/vendorAPI';
 import {
@@ -249,15 +258,17 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           required={true}
           rules={[{ required: true }]}
         >
-          <Upload
-            listType="picture"
-            maxCount={1}
-            accept=".jpg, .png, .jpeg, .pdf"
-            beforeUpload={() => false}
-            fileList={form.getFieldValue('file')?.fileList}
-          >
-            <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
-          </Upload>
+          <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+            <Upload
+              listType="picture"
+              maxCount={1}
+              accept=".jpg, .png, .jpeg, .pdf"
+              beforeUpload={() => false}
+              fileList={form.getFieldValue('file')?.fileList}
+            >
+              <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
+            </Upload>
+          </Tooltip>
         </Form.Item>
 
         <Row justify="end">

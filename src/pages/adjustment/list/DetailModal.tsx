@@ -1,13 +1,11 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+
 import { useQuery } from 'react-query';
-import { DatePicker, Row, Table } from 'antd';
+import { Row, Table } from 'antd';
 import adjustmentAPI, { AdjustmentItemShow } from '@apis/adjustmentAPI';
-import clearingAPI, { RequestGetBalance } from '@apis/clearingAPI';
+
 import { TurtleModal, TurtleTableTitle, TurtleText } from '@components/common';
-import { storeState } from '@store/storeState';
 
 interface Props {
   visible: boolean;
@@ -16,45 +14,14 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
-  const store = useRecoilValue(storeState);
-  const [searchQuery, setSearchQuery] = useState<RequestGetBalance>({
-    rt_store_id: store.id,
-    vendor_id: selectedRow?.vendor_info.id,
-    start_date: selectedRow?.created_date,
-    end_date: moment().add(1, 'd').format('YYYY-MM-DD'),
-    tab: 'adjustment',
-    original_id: selectedRow?.id,
-  });
-
   // 매입조정 상세내역 요청
-  const getDetailQuery = useQuery(
-    ['getAdjustmentDetail', selectedRow],
-    () => adjustmentAPI.get({ id: selectedRow?.id! }),
+  const getAdjustmentDetailHistoryQuery = useQuery(
+    ['getAdjustmentDetailHistory', selectedRow?.id!],
+    () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id! }),
     {
-      enabled: visible && !!searchQuery.original_id,
+      enabled: visible,
     },
   );
-
-  // 잔금 내역 조회 요청 청
-  const getBalanceQuery = useQuery(
-    ['getBalance', searchQuery], //
-    () => clearingAPI.getBalance(searchQuery),
-    {
-      enabled: visible && !!searchQuery.original_id,
-    },
-  );
-
-  useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
-      rt_store_id: store.id,
-      vendor_id: selectedRow?.vendor_info.id,
-      start_date: selectedRow?.created_date,
-      end_date: moment().add(1, 'd').format('YYYY-MM-DD'),
-      tab: 'adjustment',
-      original_id: selectedRow?.id,
-    }));
-  }, [selectedRow, store.id]);
 
   return (
     <TurtleModal
@@ -72,7 +39,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={getDetailQuery.isLoading}
         dataSource={selectedRow && [selectedRow]}
         rowKey={(record) => record.id}
         pagination={false}
@@ -114,7 +80,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             align: 'right',
             title: t('warehousing.amount'),
             render: (_, record) =>
-              (record.price * record.count).toLocaleString(),
+              (record.product_info.price * record.count).toLocaleString(),
           },
           {
             ellipsis: true,
@@ -132,24 +98,17 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
       <Table
         size="small"
-        loading={getBalanceQuery.isLoading}
-        dataSource={getBalanceQuery.data?.data.item_list}
+        loading={getAdjustmentDetailHistoryQuery.isLoading}
+        dataSource={getAdjustmentDetailHistoryQuery.data?.data.transaction_list}
         rowKey={(record) => record.id}
         pagination={false}
         title={() => (
-          <TurtleTableTitle count={getBalanceQuery.data?.data.total_count ?? 0}>
-            <DatePicker.RangePicker
-              size="small"
-              allowClear={false}
-              value={[
-                moment(searchQuery.start_date),
-                moment(searchQuery.end_date),
-              ]}
-              onChange={(_, [start_date, end_date]) => {
-                setSearchQuery({ ...searchQuery, start_date, end_date });
-              }}
-            />
-          </TurtleTableTitle>
+          <TurtleTableTitle
+            count={
+              getAdjustmentDetailHistoryQuery.data?.data.transaction_list
+                .length ?? 0
+            }
+          ></TurtleTableTitle>
         )}
         columns={[
           {
@@ -158,7 +117,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             align: 'center',
             title: '처리시간',
             render: (_, record) =>
-              moment(record.created_time).format('YYYY-MM-DD HH:mm:ss'),
+              moment(record.created_datetime).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
             ellipsis: true,

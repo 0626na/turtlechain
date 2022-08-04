@@ -1,76 +1,48 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { clearingCartState } from '@store/clearingCartState';
-import { storeState } from '@store/storeState';
 
 function useClearingCart() {
   const cart = useRecoilValue(clearingCartState);
-  const store = useRecoilValue(storeState);
 
-  const warehousingAmount = useMemo(
+  // 미송 결제 합계
+  const reservePaymentAmountTotal = useMemo(
     () =>
-      cart.warehousingBalanceList
-        .filter((item) => item.clearing_amount)
-        .map((item) => item.clearing_amount)
-        .reduce((acc, cur) => acc + cur, 0),
-    [cart.warehousingBalanceList],
-  );
-
-  const reserveSubtractAmount = useMemo(
-    () =>
-      cart.warehousingBalanceList
-        .filter((item) => item.clearing_amount && item.reserve_amount > 0)
-        .map((item) => item.reserve_amount)
-        .reduce((acc, cur) => acc + cur, 0),
-    [cart.warehousingBalanceList],
-  );
-
-  const adjustmentAmount = useMemo(
-    () =>
-      cart.adjustmentBalanceList
-        .filter((item) => item.clearing_amount)
-        .map((item) => item.clearing_amount)
-        .reduce((acc, cur) => acc + cur, 0),
-    [cart.adjustmentBalanceList],
-  );
-
-  const reserveAmount = useMemo(
-    () =>
-      cart.reserveBalanceList.reduce(
-        (acc, cur) => acc + cur.price * cur.count,
+      cart.reservePaymentList.reduce(
+        (acc, cur) => acc + (cur.reserve_payment_amount ?? 0),
         0,
       ),
-    [cart.reserveBalanceList],
+    [cart.reservePaymentList],
   );
 
-  const paymentVatAmount = useMemo(
+  //총 차감 합계(미송차감 + 매입차감)
+  const subtractAmountTotal = useMemo(
     () =>
-      store.inventory_is_vat_included
-        ? Math.round((warehousingAmount - adjustmentAmount) / 11)
-        : (warehousingAmount - adjustmentAmount) * 0.1,
-    [warehousingAmount, adjustmentAmount, store.inventory_is_vat_included],
+      cart.reserveSubtractList.reduce(
+        (acc, cur) => acc + cur.reserve_subtract_amount,
+        0,
+      ) +
+      cart.adjustmentSubtractList.reduce(
+        (acc, cur) => acc + (cur.overpaid_payment_amount! ?? 0),
+        0,
+      ),
+    [cart.reserveSubtractList, cart.adjustmentSubtractList],
   );
 
-  const paymentSupplyAmount = useMemo(
+  //총 당일 결제 합계
+  const clearingPaymentTotal = useMemo(
     () =>
-      store.inventory_is_vat_included
-        ? warehousingAmount - adjustmentAmount - paymentVatAmount
-        : warehousingAmount - adjustmentAmount,
-    [
-      warehousingAmount,
-      adjustmentAmount,
-      paymentVatAmount,
-      store.inventory_is_vat_included,
-    ],
+      cart.warehousingBalanceList.reduce(
+        (acc, cur) => acc + (cur.clearing_payment_amount! ?? 0),
+        0,
+      ),
+    [cart.warehousingBalanceList],
   );
 
   return {
-    warehousingAmount,
-    reserveSubtractAmount,
-    adjustmentAmount,
-    reserveAmount,
-    paymentSupplyAmount,
-    paymentVatAmount,
+    reservePaymentAmountTotal,
+    subtractAmountTotal,
+    clearingPaymentTotal,
   };
 }
 

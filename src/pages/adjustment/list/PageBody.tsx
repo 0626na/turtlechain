@@ -93,6 +93,7 @@ const PageBody = function () {
     }));
   }, [store.id]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const openDetailModal = useCallback((adjustmentProduct) => {
     selectRow(adjustmentProduct);
     setDetailModalVisible(true);
@@ -144,9 +145,6 @@ const PageBody = function () {
             <TurtleTableTitle
               count={getAdjustmentListQuery.data?.data.total_count ?? 0}
             >
-              {/* <NewSearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              <Divider type="vertical" style={{ margin: 0 }} /> */}
-
               <Select
                 size="small"
                 style={{ width: 100 }}
@@ -239,7 +237,7 @@ const PageBody = function () {
               align: 'right',
               title: t('adjustment.amount'),
               render: (_, record) =>
-                (record.price * record.count).toLocaleString(),
+                (record.product_info.price * record.count).toLocaleString(),
             },
             {
               ellipsis: true,
