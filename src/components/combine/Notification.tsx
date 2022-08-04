@@ -12,16 +12,16 @@ function Notification() {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getQuery = useQuery('getNotification', () =>
+  const getNotificationQuery = useQuery('getNotification', () =>
     notificationAPI.get({ type: 'home' }),
   );
 
-  const updateQuery = useMutation(
+  const updateNotificationQuery = useMutation(
     'updateNotification',
     notificationAPI.update,
     {
       onSuccess: () => {
-        getQuery.refetch();
+        getNotificationQuery.refetch();
       },
     },
   );
@@ -37,10 +37,10 @@ function Notification() {
       content={
         <>
           <div style={{ maxHeight: 400, width: 400, overflow: 'auto' }}>
-            {getQuery.data?.notification_list.length === 0 ? (
+            {getNotificationQuery.data?.notification_list.length === 0 ? (
               <Row style={{ padding: '12px 20px' }}>알림이 없습니다.</Row>
             ) : (
-              getQuery.data?.notification_list.map((noti) => {
+              getNotificationQuery.data?.notification_list.map((noti) => {
                 let mainContent = '';
                 if (noti.type === 'internal_change') {
                   mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
@@ -85,7 +85,7 @@ function Notification() {
                               navigate('/vendor/list');
                               setPopoverVisible(false);
                               !noti.read_at &&
-                                updateQuery.mutate({ id: noti.id });
+                                updateNotificationQuery.mutate({ id: noti.id });
                             }}
                           >
                             거래처 정보 확인
@@ -128,8 +128,9 @@ function Notification() {
         size="small"
         overflowCount={9}
         count={
-          getQuery.data?.notification_list.filter((item) => !item.read_at)
-            .length
+          getNotificationQuery.data?.notification_list.filter(
+            (item) => !item.read_at,
+          ).length
         }
         style={{
           paddingBottom: 1,
