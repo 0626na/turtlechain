@@ -233,7 +233,9 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
           >
             총 선택 상품
           </Typography.Text>
-          <Typography.Text style={{ fontWeight: 700 }}>11111원</Typography.Text>
+          <Typography.Text style={{ fontWeight: 700 }}>
+            {selectedItemList.length}건
+          </Typography.Text>
         </Col>
 
         <Col>
