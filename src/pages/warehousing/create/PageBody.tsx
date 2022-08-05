@@ -20,12 +20,14 @@ import warehousingAPI, { ResponseConnectInventory } from '@apis/warehousingAPI';
 import AddProductModal from './AddProductModal';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
+import { SelectDateModal } from '@components/combine';
 
 function PageBody() {
   const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(warehousingCartState);
+  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
   const index = useRef(0);
 
@@ -49,6 +51,7 @@ function PageBody() {
       onSuccess: (data) => {
         updateStates(data);
         data.msg && message.info(data.msg);
+        setSelectDateModalVisible(false);
       },
     },
   );
@@ -71,6 +74,7 @@ function PageBody() {
       searchQuery: { type: 'vendor_name', search_string: '' },
     });
     connectQuery.reset();
+    setSelectDateModalVisible(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCart]);
 
@@ -130,15 +134,26 @@ function PageBody() {
 
   return (
     <>
+      <SelectDateModal
+        title="입고날짜선택"
+        buttonTitle="정보 불러오기"
+        visible={selectDateModalVisible}
+        closeModal={() => {
+          setSelectDateModalVisible(false);
+        }}
+        onClickButton={(date) => {
+          connectQuery.mutate({ rt_store_id: store.id!, target_date: date });
+        }}
+        loading={connectQuery.isLoading}
+      />
       <MenuBar isWarning>
         <TurtleButtonSub
           type="primary"
           color="skyblue"
           onClick={() => {
             if (!isStoreExist()) return;
-            connectQuery.mutate({ rt_store_id: store.id! });
+            setSelectDateModalVisible(true);
           }}
-          disabled={connectQuery.isLoading}
         >
           {t('button.connect external program')}
         </TurtleButtonSub>

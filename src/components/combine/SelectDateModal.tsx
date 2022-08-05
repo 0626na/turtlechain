@@ -1,38 +1,36 @@
+import { Button, DatePicker, Form, Modal } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { t } from 'i18next';
-import { Button, DatePicker, Form, Modal } from 'antd';
-
-interface Date {
-  start_date: string;
-  end_date: string;
-}
 
 interface Props {
+  title: string;
+  buttonTitle: string;
   visible: boolean;
   closeModal: () => void;
-  onClick: (date: Date) => void;
+  onClickButton: (date: string) => void;
   loading: boolean;
 }
 
-function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
-  const [date, setDate] = useState<Date>({
-    start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD'),
-  });
+function SelectDateModal({
+  title,
+  buttonTitle,
+  visible,
+  closeModal,
+  onClickButton,
+  loading,
+}: Props) {
+  const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
-    setDate({
-      start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
-    });
+    if (visible) return;
+    setDate(moment().format('YYYY-MM-DD'));
   }, [visible]);
 
   return (
     <Modal
       centered
       width={350}
-      title={'엑셀 다운로드'}
+      title={title}
       visible={visible}
       onCancel={loading ? () => {} : closeModal}
       footer={false}
@@ -40,16 +38,18 @@ function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
       <Form
         layout="vertical"
         onFinish={() => {
-          onClick(date);
+          onClickButton(date);
         }}
       >
-        <Form.Item label={t('common.during')} colon={false}>
-          <DatePicker.RangePicker
+        <Form.Item label={'날짜'} colon={false}>
+          <DatePicker
             style={{ width: '100%' }}
             allowClear={false}
-            value={[moment(date.start_date), moment(date.end_date)]}
-            onChange={(_, [start_date, end_date]) => {
-              setDate({ start_date, end_date });
+            disabledDate={(current) => current > moment()}
+            disabled={loading}
+            value={moment(date)}
+            onChange={(_, date) => {
+              setDate(date);
             }}
           />
         </Form.Item>
@@ -61,7 +61,7 @@ function SelectDateModal({ visible, closeModal, onClick, loading }: Props) {
             htmlType="submit"
             loading={loading}
           >
-            {t('button.download')}
+            {buttonTitle}
           </Button>
         </Form.Item>
       </Form>
