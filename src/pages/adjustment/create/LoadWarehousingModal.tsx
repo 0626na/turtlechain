@@ -26,7 +26,6 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
     product_name: '',
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
-    page: 1,
   });
 
   // 입고상품 불러오기.
