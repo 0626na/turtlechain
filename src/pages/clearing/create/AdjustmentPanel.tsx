@@ -244,7 +244,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             ellipsis: true,
             title: '당일 미송 금액',
             align: 'right',
-            render: (_, record) => record.reserve_payment_amount,
+            render: (_, record) =>
+              record.reserve_payment_amount.toLocaleString(),
           },
           {
             title: '',

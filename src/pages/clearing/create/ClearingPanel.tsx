@@ -16,7 +16,7 @@ import {
 
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -45,8 +45,8 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const index = useRef(0);
   const { clearingPaymentTotal } = useClearingCart();
+  const [tooltipVisibleId, setTooltipVisibleId] = useState(-1);
 
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
@@ -147,7 +147,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
         pagination={false}
         loading={activeKey !== '2'}
         dataSource={filteredList}
-        rowKey={() => index.current++}
+        rowKey={(record) => record.vendor_info.id}
         title={() => (
           <>
             <TurtleTableTitle count={cart.warehousingBalanceList.length}>
@@ -172,6 +172,14 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             </TurtleTableTitle>
           </>
         )}
+        onRow={(record) => ({
+          onMouseEnter: () => {
+            setTooltipVisibleId(record.vendor_info.id);
+          },
+          onMouseOut: () => {
+            setTooltipVisibleId(-1);
+          },
+        })}
         columns={[
           {
             ellipsis: true,
@@ -186,6 +194,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               return (
                 <Tooltip
                   color="#141720"
+                  visible={tooltipVisibleId === record.vendor_info.id}
                   title={
                     <Space
                       direction="vertical"
