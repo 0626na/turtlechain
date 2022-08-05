@@ -44,7 +44,7 @@ const PageBody = function () {
   }, [store.id, resetStates]);
 
   // 상품 추가
-  const addItem = useCallback(
+  const handleItemAdd = useCallback(
     (item: AdjustmentItem) => {
       setCart((cart) => ({
         ...cart,
@@ -111,7 +111,6 @@ const PageBody = function () {
       </Menu.Item>
     </Menu>
   );
-
   return (
     <>
       <MenuBar isWarning>
@@ -128,13 +127,13 @@ const PageBody = function () {
           <SuccessTab tab={`성공(${cart.successList.length})`} key="1" />
         </Tabs>
 
-        {/* 입고내역 불러오기 모달*/}
+        {/* 입고상품 불러오기 모달*/}
         <LoadWarehousingModal
           visible={loadWarehousingModalVisible}
           closeModal={() => {
             setLoadWarehousingModalVisible(false);
           }}
-          addItem={addItem}
+          onItemAdd={handleItemAdd}
         />
 
         {/* 미송상품 단건 추가 모달 */}
@@ -143,7 +142,7 @@ const PageBody = function () {
           closeModal={() => {
             setAddProductModalVisible(false);
           }}
-          addItem={addItem}
+          onItemAdd={handleItemAdd}
         />
       </MainContent>
 
