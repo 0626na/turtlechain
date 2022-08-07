@@ -205,7 +205,7 @@ export interface ResponseGetItem {
   };
 }
 
-const getItem = async function (params: RequestGetItem) {
+const getItem = async (params: RequestGetItem) => {
   const url = `warehousing/item`;
   const response = await v2Axios.get<ResponseGetItem>(url, { params });
 
