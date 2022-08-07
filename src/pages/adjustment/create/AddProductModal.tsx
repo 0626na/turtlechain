@@ -16,7 +16,7 @@ import { SearchProductModal, SearchVendorModal } from '@components/combine';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  onItemAdd: (item: AdjustmentItem) => boolean;
+  onItemAdd: (item: AdjustmentItem) => void;
 }
 
 function AddSingleProductModal({ visible, closeModal, onItemAdd }: Props) {
@@ -97,7 +97,8 @@ function AddSingleProductModal({ visible, closeModal, onItemAdd }: Props) {
               ...value,
               type: 'reserve',
               warehousing_item_id: 0,
-            }) && onCloseModal();
+            });
+            onCloseModal();
           }}
         >
           <Form.Item name="vendor_id" hidden>
