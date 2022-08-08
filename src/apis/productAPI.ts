@@ -174,6 +174,26 @@ const update = async function (data: RequestUpdate) {
 };
 
 /*
+ * 상품삭제
+ */
+
+export interface RequestDelete {
+  id: number;
+  is_inactive: boolean;
+}
+
+export interface ResponseDelete {
+  msg: string;
+  data: {};
+}
+
+const remove = async (data: RequestDelete) => {
+  const url = `provisioning/product/${data.id}`;
+  const response = await v2Axios.put<ResponseDelete>(url, data);
+  return response.data;
+};
+
+/*
  * 상품 코드 생성
  */
 export interface RequestGetCode {
@@ -201,6 +221,7 @@ const productAPI = {
   getList,
   create,
   update,
+  remove,
   getCode,
 };
 

@@ -1,11 +1,11 @@
 import { t } from 'i18next';
-import { Pagination, Row, Table, Typography } from 'antd';
+import { Col, message, Pagination, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import { storeState } from '@store/storeState';
-import { FileTextOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { MainContent, MenuBar } from '@layout/page';
 import { TurtleTableTitle } from '@components/common';
 import { NewSearchFilter } from '@components/combine';
@@ -27,6 +27,13 @@ function PageBody() {
     ['getProductList', searchQuery], //
     () => productAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
   );
+
+  const updateListQuery = useMutation(productAPI.remove, {
+    onSuccess: () => {
+      getListQuery.refetch();
+      message.success(`${t('message.success delete product')}`);
+    },
+  });
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
@@ -83,13 +90,31 @@ function PageBody() {
             columnWidth: 25,
             expandIcon: ({ expanded, onExpand, record }) => {
               return (
-                <FileTextOutlined
-                  style={record.memo ? {} : { opacity: '0.4', cursor: 'auto' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    record.memo && onExpand(record, e);
-                  }}
-                />
+                <Row justify="center">
+                  <Col>
+                    <FileTextOutlined
+                      style={
+                        record.memo ? {} : { opacity: '0.4', cursor: 'auto' }
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        record.memo && onExpand(record, e);
+                      }}
+                    />
+                  </Col>
+                  <Col>
+                    <DeleteOutlined
+                      style={{ opacity: '0.4' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        updateListQuery.mutate({
+                          id: record.id,
+                          is_inactive: true,
+                        });
+                      }}
+                    />
+                  </Col>
+                </Row>
               );
             },
           }}
