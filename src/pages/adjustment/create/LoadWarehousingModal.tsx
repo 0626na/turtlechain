@@ -14,6 +14,8 @@ import warehousingAPI, {
   RequestGetItem,
   WarehousingItem,
 } from '@apis/warehousingAPI';
+import { useRecoilValue } from 'recoil';
+import { storeState } from '@store/storeState';
 
 interface Props {
   visible: boolean;
@@ -25,8 +27,11 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
   const [selectedItemList, setSelectedItemList] = useState<WarehousingItem[]>(
     [],
   );
+  const store = useRecoilValue(storeState);
+
   const [itemList, setItemList] = useState<WarehousingItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<RequestGetItem>({
+    rt_store_id: -1,
     product_name: '',
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
@@ -35,9 +40,9 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
   // 입고상품 불러오기.
   const getWarehousingItemQuery = useQuery(
     ['getWarehousingItem', searchQuery],
-    () => warehousingAPI.getItem(searchQuery),
+    () => warehousingAPI.getItem({ ...searchQuery, rt_store_id: store.id }),
     {
-      enabled: visible && searchQuery.product_name !== '',
+      enabled: !!visible && !!searchQuery.product_name,
       onSuccess: (data) => {
         setItemList([...data.data.item_list]);
       },
@@ -91,6 +96,7 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
     setSelectedItemList([]);
     setItemList([]);
     setSearchQuery({
+      rt_store_id: -1,
       product_name: '',
       start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD'),
@@ -98,7 +104,7 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
   };
 
   useEffect(() => {
-    if (visible) {
+    if (!visible) {
       handleStateReset();
     }
   }, [visible]);
@@ -180,7 +186,7 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
         pagination={false}
         dataSource={itemList}
         rowKey={(record) => record.id}
-        scroll={{ y: 'auto' }}
+        scroll={{ y: 600 }}
         rowSelection={{
           selectedRowKeys: selectedItemList.map((item) => item.id),
           onSelect: handleItemSelect,

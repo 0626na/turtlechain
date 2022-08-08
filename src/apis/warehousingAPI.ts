@@ -191,6 +191,7 @@ const getSheet = async function (query: RequestGetSheet) {
  */
 
 export type RequestGetItem = {
+  rt_store_id?: number;
   sheet_id?: number;
   product_name?: string;
   start_date?: string;
