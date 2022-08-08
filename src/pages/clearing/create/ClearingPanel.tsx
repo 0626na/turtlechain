@@ -120,11 +120,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           // 당일 결제예정 금액 최소금액은 미송결제금액.
           clearing_payment_amount:
             warehousingBalanceItem.reserve_payment_amount,
-        }))
-        .filter(
-          (warehousingBalanceItem) =>
-            warehousingBalanceItem.clearing_amount! > 0,
-        ),
+        })),
     }));
   }, [activeKey, setCart]);
   return (
