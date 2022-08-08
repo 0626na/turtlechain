@@ -77,6 +77,7 @@ export interface ClearingItemShow {
 }
 
 export interface ClearingInfo {
+  id: number;
   vendor_info: {
     id: number;
     created_time: string;
