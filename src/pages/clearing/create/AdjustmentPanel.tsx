@@ -80,7 +80,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       ...cart,
       adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => ({
         ...item,
-        overpaid_payment_amount: item.overpaid_amount,
+        // 입고금액을 채워준다.
+        overpaid_payment_amount: item.warehousing_amount,
       })),
     }));
 
@@ -161,7 +162,10 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             title: '사용 가능 금액',
             render: (_, record) => {
               if (record.type === 'adjustment_subtract') {
-                return record.overpaid_amount.toLocaleString();
+                // 사용 가능 금액이 입고 금액보다 크면, 입고금액을 보여준다.
+                return record.overpaid_amount > record.warehousing_amount
+                  ? record.warehousing_amount.toLocaleString()
+                  : record.overpaid_amount.toLocaleString();
               }
 
               if (record.type === 'reserve_subtract') {
@@ -187,7 +191,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                     placeholder="금액 입력"
                     value={record.overpaid_payment_amount}
                     step={1000}
-                    max={record.overpaid_amount}
+                    //입력금액중 최고 금액은 입고 금액.
+                    max={record.warehousing_amount}
                     min={0}
                     onChange={(value) => {
                       setCart((cart) => ({
@@ -244,7 +249,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             ellipsis: true,
             title: '당일 미송 금액',
             align: 'right',
-            render: (_, record) => record.reserve_payment_amount,
+            render: (_, record) =>
+              record.reserve_payment_amount.toLocaleString(),
           },
           {
             title: '',

@@ -82,13 +82,19 @@ function Notification() {
                               cursor: 'pointer',
                             }}
                             onClick={() => {
-                              navigate('/vendor/list');
+                              navigate(
+                                noti.type === 'creation_request'
+                                  ? 'vendor/create'
+                                  : 'vendor/list',
+                              );
                               setPopoverVisible(false);
                               !noti.read_at &&
                                 updateNotificationQuery.mutate({ id: noti.id });
                             }}
                           >
-                            거래처 정보 확인
+                            {noti.type === 'creation_request'
+                              ? '거래처 등록하기'
+                              : '거래처 정보 확인'}
                           </Typography.Text>
                           <Divider type="vertical" />
                           <Typography.Text

@@ -15,7 +15,7 @@ import {
 
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -42,10 +42,9 @@ interface Props extends CollapsePanelProps {
 function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const navigate = useNavigate();
   const store = useRecoilValue(storeState);
-  const index = useRef(0);
-  const { clearingPaymentTotal } = useClearingCart();
-  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
   const [cart, setCart] = useRecoilState(clearingCartState);
+  const { clearingPaymentTotal } = useClearingCart();
+  const [tooltipVisibleId, setTooltipVisibleId] = useState(-1);
 
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
@@ -120,29 +119,132 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           // 당일 결제예정 금액 최소금액은 미송결제금액.
           clearing_payment_amount:
             warehousingBalanceItem.reserve_payment_amount,
-        }))
-        .filter(
-          (warehousingBalanceItem) =>
-            warehousingBalanceItem.clearing_amount! > 0,
-        ),
+        })),
     }));
   }, [activeKey, setCart]);
   return (
-    <>
-      <SelectDateModal
-        title="결제요청날짜 선택"
-        buttonTitle="결제요청 등록"
-        visible={selectDateModalVisible}
-        closeModal={() => {
-          setSelectDateModalVisible(false);
-        }}
-        onClickButton={(date) => {
-          createClearingQuery.mutate({
-            sheet: {
-              store_id: store.id,
-              credit_type: 'general',
-              store_name: store.name,
-              request_date: date,
+    <Collapse.Panel
+      {...props}
+      style={{
+        border: `${
+          activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
+        }`,
+      }} // #E3E6EA
+      showArrow={false}
+      extra={
+        <Typography.Text style={{ color: '#242934' }}>
+          {activeKey === '2' ? <DownOutlined /> : <RightOutlined />}
+        </Typography.Text>
+      }
+    >
+      <Table
+        size="small"
+        pagination={false}
+        loading={activeKey !== '2'}
+        dataSource={filteredList}
+        rowKey={(record) => record.vendor_info.id}
+        title={() => (
+          <>
+            <TurtleTableTitle count={cart.warehousingBalanceList.length}>
+              <Row>
+                <Col style={{ marginRight: 10 }}>
+                  <TurtleButtonSub
+                    size="small"
+                    type="primary"
+                    onClick={handlePaymentInputFiilIn}
+                  >
+                    전액 입력하기
+                  </TurtleButtonSub>
+                </Col>
+                <Col>
+                  <NewSearchFilter
+                    select={false}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                  />
+                </Col>
+              </Row>
+            </TurtleTableTitle>
+          </>
+        )}
+        onRow={(record) => ({
+          onMouseEnter: () => {
+            setTooltipVisibleId(record.vendor_info.id);
+          },
+          onMouseOut: () => {
+            setTooltipVisibleId(-1);
+          },
+        })}
+        columns={[
+          {
+            ellipsis: true,
+            title: '거래처 명',
+            render: (_, record) => record.vendor_info.vendor_name,
+          },
+          {
+            ellipsis: true,
+            align: 'right',
+            title: '당일 결제요청 금액',
+            render: (_, record) => {
+              return (
+                <Tooltip
+                  color="#141720"
+                  visible={tooltipVisibleId === record.vendor_info.id}
+                  title={
+                    <Space
+                      direction="vertical"
+                      size={2}
+                      style={{
+                        color: '#DCE0E4',
+                      }}
+                    >
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미결제</Col>
+                        <Col>{record.unpaid_amount.toLocaleString()}</Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 입고</Col>
+                        <Col>
+                          {(
+                            record.warehousing_amount +
+                            record.reserve_subtract_amount
+                          ).toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>당일 미송</Col>
+                        <Col>
+                          {record.reserve_payment_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                      <Divider
+                        style={{
+                          borderTopColor: '#5B5D63',
+                          marginTop: 10,
+                          marginBottom: 10,
+                        }}
+                      />
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>매입 차감</Col>
+                        <Col>
+                          -{' '}
+                          {record.overpaid_payment_amount?.toLocaleString() ??
+                            0}
+                        </Col>
+                      </Row>
+
+                      <Row justify="space-between">
+                        <Col style={{ marginRight: 59 }}>미송 차감</Col>
+                        <Col>
+                          - {record.reserve_subtract_amount.toLocaleString()}
+                        </Col>
+                      </Row>
+                    </Space>
+                  }
+                >
+                  {record.clearing_amount?.toLocaleString() ?? 0}
+                </Tooltip>
+              );
             },
             item: {
               rt_store_id: store.id,
