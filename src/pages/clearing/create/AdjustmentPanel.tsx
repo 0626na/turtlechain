@@ -162,7 +162,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             title: '사용 가능 금액',
             render: (_, record) => {
               if (record.type === 'adjustment_subtract') {
-                // 사용 가능  금액이 입고 금액보다 크면, 입고금액을 보여준다.
+                // 사용 가능 금액이 입고 금액보다 크면, 입고금액을 보여준다.
                 return record.overpaid_amount > record.warehousing_amount
                   ? record.warehousing_amount.toLocaleString()
                   : record.overpaid_amount.toLocaleString();
