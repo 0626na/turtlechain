@@ -90,7 +90,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       ...cart,
       adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => ({
         ...item,
-        // 입고금액을 채워준다.
+        // 사용 가능 금액이 입고 금액보다 크면, 입고금액을 넣어준다.
         overpaid_payment_amount:
           item.overpaid_amount > item.warehousing_amount
             ? item.warehousing_amount
