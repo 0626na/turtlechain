@@ -1,20 +1,24 @@
-import moment from 'moment';
 import { t } from 'i18next';
-import { Col, DatePicker, Input, message, Row, Table, Typography } from 'antd';
-import { useCallback, useState } from 'react';
+import moment from 'moment';
+import { Col, DatePicker, message, Row, Table, Typography } from 'antd';
+import Search from 'antd/lib/input/Search';
+import styled from 'styled-components';
+
+import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+
+import { TurtleButton, TurtleModal } from '@components/common';
 
 import { AdjustmentItem } from '@apis/adjustmentAPI';
 import warehousingAPI, {
   RequestGetItem,
   WarehousingItem,
 } from '@apis/warehousingAPI';
-import { TurtleButton, TurtleModal } from '@components/common';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  onItemAdd: (item: AdjustmentItem) => boolean;
+  onItemAdd: (item: AdjustmentItem) => void;
 }
 
 function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
@@ -40,7 +44,7 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
     },
   );
 
-  const handleRowClick = useCallback(
+  const handleItemSelect = useCallback(
     (record: WarehousingItem) => {
       if (selectedItemList.find((item) => item.id === record.id)) {
         setSelectedItemList((selectedItemList) =>
@@ -82,6 +86,23 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
     closeModal();
   }, [selectedItemList, onItemAdd, closeModal]);
 
+  // 모달이 visible 속성으로 관리되기 때문에 모달 내에서 관리중인 상태를 직접 초기화 시켜줘야한다.
+  const handleStateReset = () => {
+    setSelectedItemList([]);
+    setItemList([]);
+    setSearchQuery({
+      product_name: '',
+      start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      handleStateReset();
+    }
+  }, [visible]);
+
   return (
     <TurtleModal
       centered
@@ -96,7 +117,8 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
       {/*
        * 입고상품 검색
        */}
-      <Input.Search
+
+      <StyledSearch
         style={{ maxWidth: 300 }}
         placeholder={t('placeholder.product name')}
         size="small"
@@ -155,57 +177,41 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
         style={{ height: '80%' }}
         size="small"
         loading={getWarehousingItemQuery.isLoading}
-        pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
+        pagination={false}
         dataSource={itemList}
         rowKey={(record) => record.id}
         scroll={{ y: 'auto' }}
-        // title={() => (
-        //   <TurtleTableTitle
-        //     count={getWarehousingItemQuery.data?.data.total_count ?? 0}
-        //   >
-        //     <DatePicker.RangePicker
-        //       size="small"
-        //       allowClear={false}
-        //       defaultValue={[
-        //         moment(searchQuery.start_date),
-        //         moment(searchQuery.end_date),
-        //       ]}
-        //       onChange={(_, [start_date, end_date]) => {
-        //         setSearchQuery({ ...searchQuery, start_date, end_date });
-        //       }}
-        //     />
-        //   </TurtleTableTitle>
-        // )}
         rowSelection={{
           selectedRowKeys: selectedItemList.map((item) => item.id),
-          onSelect: handleRowClick,
+          onSelect: handleItemSelect,
           hideSelectAll: true,
         }}
         onRow={(record) => ({
           onClick: () => {
-            handleRowClick(record);
+            handleItemSelect(record);
           },
         })}
         columns={[
           {
             ellipsis: true,
             title: t('warehousing.date'),
-            render: (_, record) => record.vendor_info.vendor_name,
+            render: (_, record) =>
+              moment(record.created_date).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,
             title: t('vendor.name'),
-            render: (_, record) => record.vendor_info.vendor_address,
+            render: (_, record) => record.vendor_info.vendor_name,
           },
           {
             ellipsis: true,
             title: t('product.name'),
-            render: (_, record) => record.product_info.product_code,
+            render: (_, record) => record.product_info.name,
           },
           {
             ellipsis: true,
             title: t('product.vendor product name'),
-            render: (_, record) => record.product_info.name,
+            render: (_, record) => record.product_info.vendor_product_name,
           },
           {
             ellipsis: true,
@@ -215,7 +221,7 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
           {
             ellipsis: true,
             title: t('product.price'),
-            render: (_, record) => record.product_info.vendor_product_name,
+            render: (_, record) => record.product_info.price,
           },
           {
             ellipsis: true,
@@ -246,5 +252,15 @@ function LoadWarehousingModal({ visible, closeModal, onItemAdd }: Props) {
     </TurtleModal>
   );
 }
+
+const StyledSearch = styled(Search)`
+  .ant-input-search-button {
+    border: 1px solid #d9d9d9;
+    border-left: none;
+  }
+  svg {
+    color: #5b5d63;
+  }
+`;
 
 export default LoadWarehousingModal;
