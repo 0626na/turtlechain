@@ -23,7 +23,6 @@ import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
 import useClearingCart from '@hooks/useClearingCart';
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
-import { useRef } from 'react';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -33,7 +32,7 @@ interface Props extends CollapsePanelProps {
 function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
-  const index = useRef(0);
+
   const { reservePaymentAmountTotal, subtractAmountTotal } = useClearingCart();
 
   const getRetailerStoreClearingQuery = useQuery(
@@ -46,9 +45,11 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
     {
       enabled: activeKey === '1',
       onSuccess: (data) => {
+        let index = 0;
         setCart({
           warehousingBalanceList: data.item_list.map((item) => ({
             ...item,
+            id: index++,
             type: 'warehousing',
           })),
 
@@ -60,16 +61,25 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
             )
             .map((item) => ({
               ...item,
+              id: index++,
               type: 'adjustment_subtract',
             })),
 
           reserveSubtractList: data.item_list
             .filter((item) => item.reserve_subtract_amount > 0)
-            .map((item) => ({ ...item, type: 'reserve_subtract' })),
+            .map((item) => ({
+              ...item,
+              id: index++,
+              type: 'reserve_subtract',
+            })),
 
           reservePaymentList: data.item_list
             .filter((item) => item.reserve_payment_amount > 0)
-            .map((item) => ({ ...item, type: 'reserve_payment' })),
+            .map((item) => ({
+              ...item,
+              id: index++,
+              type: 'reserve_payment',
+            })),
         });
       },
     },
@@ -81,7 +91,10 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => ({
         ...item,
         // 입고금액을 채워준다.
-        overpaid_payment_amount: item.warehousing_amount,
+        overpaid_payment_amount:
+          item.overpaid_amount > item.warehousing_amount
+            ? item.warehousing_amount
+            : item.overpaid_amount,
       })),
     }));
 
@@ -115,7 +128,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           ...cart.adjustmentSubtractList,
           ...cart.reserveSubtractList,
         ]}
-        rowKey={() => index.current++}
+        rowKey={(record) => record.id}
         title={() => (
           <TurtleTableTitle
             label="차감"
@@ -199,7 +212,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
                         ...cart,
                         adjustmentSubtractList: cart.adjustmentSubtractList.map(
                           (item) =>
-                            item.vendor_info.id === record.vendor_info.id
+                            item.id === record.id
                               ? {
                                   ...item,
                                   overpaid_payment_amount: value,
@@ -225,7 +238,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         pagination={false}
         loading={getRetailerStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
-        rowKey={() => index.current++}
+        rowKey={(record) => record.id}
         title={() => (
           <TurtleTableTitle
             label="미송"
