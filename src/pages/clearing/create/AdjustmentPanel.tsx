@@ -47,11 +47,13 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       onSuccess: (data) => {
         let index = 0;
         setCart({
-          warehousingBalanceList: data.item_list.map((item) => ({
-            ...item,
-            id: index++,
-            type: 'warehousing',
-          })),
+          warehousingBalanceList: data.item_list
+            .filter((item) => item.warehousing_amount + item.unpaid_amount > 0)
+            .map((item) => ({
+              ...item,
+              id: index++,
+              type: 'warehousing',
+            })),
 
           adjustmentSubtractList: data.item_list
             .filter(
@@ -194,6 +196,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               <Space>
                 {record.type === 'reserve_subtract' ? (
                   <InputNumber
+                    size="small"
                     value={record.reserve_subtract_amount}
                     disabled={true}
                   />
