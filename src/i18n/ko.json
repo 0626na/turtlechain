@@ -67,6 +67,7 @@
     "info max adjustable price": "해당 도매 차감 가능 금액: ",
     "warning clearing information": "원활한 입금을 위해서 당일 정산은 17:30까지 요청 바랍니다. “대기” 시점에서는 정산서 수정이 불가합니다.",
     "already exist product": "이미 추가된 상품입니다.",
+    "success delete product": "상품을 삭제 했습니다.",
     "success delete mistransfer": "오입금 반환내역을 삭제했습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다."
   },
