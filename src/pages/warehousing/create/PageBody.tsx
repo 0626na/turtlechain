@@ -20,7 +20,7 @@ import warehousingAPI, { ResponseConnectInventory } from '@apis/warehousingAPI';
 import AddProductModal from './AddProductModal';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
-import { SelectDateModal } from '@components/combine';
+import { SelectRangeDateModal } from '@components/combine';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -134,17 +134,18 @@ function PageBody() {
 
   return (
     <>
-      <SelectDateModal
+      <SelectRangeDateModal
         title="입고날짜선택"
         buttonTitle="정보 불러오기"
         visible={selectDateModalVisible}
         closeModal={() => {
           setSelectDateModalVisible(false);
         }}
-        onClickButton={(date) => {
-          connectQuery.mutate({ rt_store_id: store.id!, target_date: date });
+        onClickButton={({ start_date, end_date }) => {
+          connectQuery.mutate({ rt_store_id: store.id!, start_date, end_date });
         }}
         loading={connectQuery.isLoading}
+        inThreeMonth
       />
       <MenuBar isWarning>
         <TurtleButtonSub
