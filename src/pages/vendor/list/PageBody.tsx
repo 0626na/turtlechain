@@ -1,10 +1,19 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FileTextOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  ExclamationCircleFilled,
+  FileTextOutlined,
+  FormOutlined,
+  MoreOutlined,
+} from '@ant-design/icons';
 import {
   Col,
+  Divider,
+  Dropdown,
   Input,
+  Menu,
   message,
   Pagination,
   Popconfirm,
@@ -29,12 +38,15 @@ import {
 import { MainContent, MenuBar } from '@layout/page';
 import { NewSearchFilter } from '@components/combine';
 import UpdateModal from './UpdateModal';
+import UpdateVendorNameModal from './UpdateVendorNameModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
   const [selectedRow, selectRow] = useState<VendorShow>();
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [updateVendorNameModalVisible, setUpdateVendorNameModalVisible] =
+    useState(false);
 
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
@@ -134,7 +146,6 @@ function PageBody() {
   return (
     <>
       <MenuBar />
-
       <MainContent title={t('vendor.lists')}>
         <Table
           size="small"
@@ -165,15 +176,17 @@ function PageBody() {
               />
             </Row>
           )}
-          onRow={(record) => {
-            return {
-              onClick: () => {
-                selectRow(record);
-                setUpdateModalVisible(true);
-              },
-            };
-          }}
+          // 메모아이콘 클릭시 row확장 처리
           expandable={{
+            columnWidth: 25,
+            expandIcon: ({ onExpand, record }) => (
+              <FileTextOutlined
+                style={record.memo ? {} : { opacity: '0.4' }}
+                onClick={(e) => {
+                  return onExpand(record, e);
+                }}
+              />
+            ),
             expandedRowRender: (record) => (
               <>
                 {record.memo_active ? (
@@ -233,18 +246,6 @@ function PageBody() {
                 )}
               </>
             ),
-            columnWidth: 25,
-            expandIcon: ({ expanded, onExpand, record }) => {
-              return (
-                <FileTextOutlined
-                  style={record.memo ? {} : { opacity: '0.4' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    return onExpand(record, e);
-                  }}
-                />
-              );
-            },
           }}
           columns={[
             {
@@ -268,17 +269,22 @@ function PageBody() {
             {
               ellipsis: true,
               title: t('vendor.store phone'),
-              render: (_, { vendor_phone, ws_store_info: { store_phone } }) => {
+              render: (_, record) => {
                 return (
-                  <TurtleBadge count={store_phone.length}>
+                  <TurtleBadge count={record.ws_store_info.store_phone.length}>
                     <Popover
-                      content={store_phone.map(({ id, phone }) => (
-                        <p key={id}>
-                          {phone.replace(phonePattern, `$1-$2-$3`)}
-                        </p>
-                      ))}
+                      content={record.ws_store_info.store_phone.map(
+                        ({ id, phone }) => (
+                          <p key={id}>
+                            {phone.replace(phonePattern, `$1-$2-$3`)}
+                          </p>
+                        ),
+                      )}
                     >
-                      {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
+                      {record.vendor_phone.phone.replace(
+                        phonePattern,
+                        `$1-$2-$3`,
+                      )}
                     </Popover>
                   </TurtleBadge>
                 );
@@ -287,14 +293,11 @@ function PageBody() {
             {
               ellipsis: true,
               title: t('vendor.account'),
-              render: (
-                _,
-                { vendor_account, ws_store_info: { store_account } },
-              ) => {
+              render: (_, record) => {
                 const makeAccount = (account: VendorAccount) =>
                   `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
-                return makeAccount(vendor_account);
+                return makeAccount(record.vendor_account);
               },
             },
             {
@@ -328,9 +331,88 @@ function PageBody() {
                 </div>
               ),
             },
+            // 메모 아이콘 위치 지정
             Table.EXPAND_COLUMN,
+            {
+              width: 25,
+              render: (record) => (
+                <Dropdown
+                  overlay={
+                    <Menu
+                      style={{ width: 180 }}
+                      items={[
+                        {
+                          key: '1',
+                          label: (
+                            <div
+                              onClick={() => {
+                                setUpdateVendorNameModalVisible(true);
+                              }}
+                            >
+                              <FormOutlined />
+                              거래처명 수정
+                            </div>
+                          ),
+                        },
+                        {
+                          key: '2',
+                          label: (
+                            <div
+                              onClick={() => {
+                                selectRow(record);
+                                setUpdateModalVisible(true);
+                              }}
+                            >
+                              <ExclamationCircleFilled />
+                              수정요청
+                            </div>
+                          ),
+                        },
+                        {
+                          key: '3',
+                          label: <Divider style={{ margin: 0 }}></Divider>,
+                        },
+                        {
+                          key: '4',
+                          label: (
+                            <>
+                              <DeleteOutlined />
+                              삭제
+                            </>
+                          ),
+                        },
+                      ]}
+                    />
+                  }
+                  placement="bottomLeft"
+                  trigger={['click']}
+                >
+                  <MoreOutlined />
+                </Dropdown>
+              ),
+            },
           ]}
         />
+
+        {/*
+         *  거래처명 수정 모달
+         */}
+
+        <UpdateVendorNameModal
+          title="거래처명 수정"
+          buttonTitle="저장"
+          visible={updateVendorNameModalVisible}
+          closeModal={() => {
+            setUpdateVendorNameModalVisible(false);
+          }}
+          loading={false}
+          onClickButton={(date) => {}}
+        />
+
+        {/*
+         * 수정요청 모달
+         */}
+
         <UpdateModal
           visible={updateModalVisible}
           closeModal={() => {
