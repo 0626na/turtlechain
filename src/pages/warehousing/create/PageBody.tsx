@@ -209,6 +209,7 @@ function PageBody() {
                   product_id: record.product_id,
                   count: record.count,
                   price: record.price,
+                  warehousing_date: record.warehousing_date,
                   is_reserved: record.is_reserved,
                   memo: record.memo,
                 })),
