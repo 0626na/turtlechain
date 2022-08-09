@@ -48,7 +48,13 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
         let index = 0;
         setCart({
           warehousingBalanceList: data.item_list
-            .filter((item) => item.warehousing_amount + item.unpaid_amount > 0)
+            .filter(
+              (item) =>
+                item.warehousing_amount +
+                  item.unpaid_amount +
+                  item.reserve_payment_amount >
+                0,
+            )
             .map((item) => ({
               ...item,
               id: index++,
