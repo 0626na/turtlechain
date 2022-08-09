@@ -18,7 +18,7 @@ import {
   TurtleInput,
   TurtleModal,
 } from '@components/common';
-import bucketListAPI, { RequestCreate } from '@apis/bucketListAPI';
+import bucketListAPI from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
 import { storeState } from '@store/storeState';
 import { useRecoilValue } from 'recoil';
