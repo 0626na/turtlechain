@@ -177,19 +177,19 @@ const update = async function (data: RequestUpdate) {
  * 상품삭제
  */
 
-export interface RequestDelete {
+export interface RequestRemove {
   id: number;
   is_inactive: boolean;
 }
 
-export interface ResponseDelete {
+export interface ResponseRemove {
   msg: string;
   data: {};
 }
 
-const remove = async (data: RequestDelete) => {
+const remove = async (data: RequestRemove) => {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseDelete>(url, data);
+  const response = await v2Axios.put<ResponseRemove>(url, data);
 
   return response.data;
 };

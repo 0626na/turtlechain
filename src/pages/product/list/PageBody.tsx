@@ -89,7 +89,7 @@ function PageBody() {
           expandable={{
             expandedRowRender: (record) => <div>{record.memo}</div>,
             columnWidth: 25,
-            expandIcon: ({ expanded, onExpand, record }) => {
+            expandIcon: ({ onExpand, record }) => {
               return (
                 <Row justify="center">
                   <Col>
