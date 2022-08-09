@@ -9,7 +9,7 @@ interface Props {
 
 function TurtleDropdown({ menu, children }: Props) {
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown overlay={menu} trigger={['click']}>
       <Button
         style={{ borderColor: '#CBCCD1', borderRadius: 2, color: '#5B5D63' }}
         icon={<FileOutlined />}

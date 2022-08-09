@@ -1,7 +1,16 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { Form, Input, message, Popconfirm, Row, Select, Upload } from 'antd';
+import {
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+  Tooltip,
+  Upload,
+} from 'antd';
 import {
   TurtleButton,
   TurtleButtonSub,
@@ -11,6 +20,8 @@ import {
 } from '@components/common';
 import bucketListAPI, { RequestCreate } from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
+import { storeState } from '@store/storeState';
+import { useRecoilValue } from 'recoil';
 
 interface Props {
   visible: boolean;
@@ -20,7 +31,7 @@ interface Props {
 function RequestModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm<RequestCreate>();
   const [address, setAddress] = useState({ building: '', floor: '' });
-
+  const store = useRecoilValue(storeState);
   const createQuery = useMutation('createBucketList', bucketListAPI.create, {
     onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
@@ -69,12 +80,9 @@ function RequestModal({ visible, closeModal }: Props) {
           placeholder={t('placeholder.vendor name')}
           required={true}
         />
-        <TurtleInput // 거래처 매장번호 Input
-          name="tel"
-          label={t('vendor.phone')}
-          placeholder={t('placeholder.phone')}
-          required={true}
-        />
+        <Form.Item required={false} name="tel" label={t('vendor.phone')}>
+          <Input placeholder={t('placeholder.phone')} />
+        </Form.Item>
         <TurtleInput // 거래처 휴대번호 Input
           name="mobile"
           label={t('vendor.store phone')}
@@ -233,22 +241,24 @@ function RequestModal({ visible, closeModal }: Props) {
           required={false}
         />
         <TurtleDivider />
-        <Form.Item
-          name="file"
-          label="전자영수증 사진첨부"
-          required={true}
-          rules={[{ required: true }]}
-        >
-          <Upload
-            listType="picture"
-            maxCount={1}
-            accept=".jpg, .png, .jpeg, .pdf"
-            beforeUpload={() => false}
-            fileList={form.getFieldValue('file')?.fileList}
+        <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+          <Form.Item
+            name="file"
+            label="전자영수증 사진첨부"
+            required={true}
+            rules={[{ required: true }]}
           >
-            <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
-          </Upload>
-        </Form.Item>
+            <Upload
+              listType="picture"
+              maxCount={1}
+              accept=".jpg, .png, .jpeg, .pdf"
+              beforeUpload={() => false}
+              fileList={form.getFieldValue('file')?.fileList}
+            >
+              <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
+            </Upload>
+          </Form.Item>
+        </Tooltip>
         <Row justify="end">
           <Popconfirm
             title={t('description.really register')}
@@ -261,10 +271,12 @@ function RequestModal({ visible, closeModal }: Props) {
                   ...form.getFieldsValue(),
                   type: 'create',
                   banks: [form.getFieldValue('banks')],
+                  tel: form.getFieldValue('tel') ?? '',
                   col,
                   loc,
                   ext: form.getFieldValue('ext') ?? '',
                   file: form.getFieldValue('file').fileList[0].originFileObj,
+                  rt_store_id: store.id,
                 });
               });
             }}
@@ -272,6 +284,7 @@ function RequestModal({ visible, closeModal }: Props) {
             <TurtleButton // 등록 요청하기 Button
               type="default"
               htmlType="submit"
+              loading={createQuery.isLoading}
             >
               {t('button.request create')}
             </TurtleButton>

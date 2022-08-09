@@ -19,8 +19,8 @@ import { BottomBar, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
 import ConnectModal from './ConnectModal';
 import ExcelModal from './ExcelModal';
-import RequestModal from './RequestModal';
 import SearchModal from './SearchModal';
+import AddBucketlistSign from '@components/combine/AddBucketlistSign';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -36,8 +36,6 @@ function PageBody() {
   const [excelModalVisible, setExcelModalVisible] = useState(false);
   // 거래처 검색 모달
   const [searchModalVisible, setSearchModalVisible] = useState(false);
-  // 거래처 신규 등록 요청 모달
-  const [requestModalVisible, setRequestModalVisible] = useState(false);
 
   // 거래처 코드 생성 요청
   const getCodeQuery = useQuery(
@@ -335,18 +333,7 @@ function PageBody() {
 
       <BottomBar justify="space-between">
         <Col>
-          {/* TODO: 신규거래처등록 기능 백오피스 추가 후 주석 제거 */}
-          {/* <Typography.Text>
-            등록 하고 싶은 거래처가 없나요? 신규 거래처 등록을 해주세요!&nbsp;
-          </Typography.Text>
-          <Typography.Link
-            style={{ textDecoration: "underline" }}
-            onClick={() => {
-              setRequestModalVisible(true);
-            }}
-          >
-            신규 거래처 등록하기
-          </Typography.Link> */}
+          <AddBucketlistSign />
         </Col>
 
         <Popconfirm
@@ -388,13 +375,6 @@ function PageBody() {
         visible={searchModalVisible}
         closeModal={closeSearchModal}
         selectRow={fillVendor}
-      />
-      {/* 거래처 신규 등록 요청 모달 */}
-      <RequestModal //
-        visible={requestModalVisible}
-        closeModal={() => {
-          setRequestModalVisible(false);
-        }}
       />
     </>
   );

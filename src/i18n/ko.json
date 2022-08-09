@@ -254,7 +254,7 @@
   "clearing": {
     "": "정산",
     "management": "정산 관리",
-    "create": "정산 등록",
+    "create": "결제 하기",
     "list": "정산 내역",
     "lists": "정산 리스트",
     "detail": "정산 내역 상세보기",

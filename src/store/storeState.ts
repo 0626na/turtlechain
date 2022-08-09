@@ -4,7 +4,7 @@ export interface Store {
   id: number | undefined;
   name: string;
   inventory_is_vat_included: boolean;
-  use_service: 0 | 1;
+  version: '2.0' | 'agency_services';
 }
 
 export const storeState = atom<Store>({
@@ -13,6 +13,6 @@ export const storeState = atom<Store>({
     id: undefined,
     name: '',
     inventory_is_vat_included: false,
-    use_service: 0,
+    version: '2.0',
   },
 });

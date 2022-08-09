@@ -199,9 +199,9 @@ function DetailModal({ visible, closeModal, sheet }: Props) {
             ellipsis: true,
             title: t('clearing.total payment'),
             render: (_, record) =>
-              `${record.total_amount.toLocaleString()} (부가세 포함 ${(
+              `${record.total_amount.toLocaleString()} (부가세 ${(
                 record.total_amount - record.supply_amount
-              ).toLocaleString()}원)`,
+              ).toLocaleString()}원 포함)`,
           },
         ]}
       />

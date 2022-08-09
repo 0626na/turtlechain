@@ -1,6 +1,15 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { Form, Input, message, Popconfirm, Row, Select, Upload } from 'antd';
+import {
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+  Tooltip,
+  Upload,
+} from 'antd';
 import { useRecoilValue } from 'recoil';
 import { VendorShow } from '@apis/vendorAPI';
 import {
@@ -243,22 +252,24 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Input.Group>
         </Form.Item>
 
-        <Form.Item
-          name="file"
-          label="전자영수증 사진첨부"
-          required={true}
-          rules={[{ required: true }]}
-        >
-          <Upload
-            listType="picture"
-            maxCount={1}
-            accept=".jpg, .png, .jpeg, .pdf"
-            beforeUpload={() => false}
-            fileList={form.getFieldValue('file')?.fileList}
+        <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
+          <Form.Item
+            name="file"
+            label="전자영수증 사진첨부"
+            required={true}
+            rules={[{ required: true }]}
           >
-            <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
-          </Upload>
-        </Form.Item>
+            <Upload
+              listType="picture"
+              maxCount={1}
+              accept=".jpg, .png, .jpeg, .pdf"
+              beforeUpload={() => false}
+              fileList={form.getFieldValue('file')?.fileList}
+            >
+              <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
+            </Upload>
+          </Form.Item>
+        </Tooltip>
 
         <Row justify="end">
           <Popconfirm
@@ -289,6 +300,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             <TurtleButton // 등록 요청하기 Button
               type="default"
               htmlType="submit"
+              loading={createQuery.isLoading}
             >
               {t('button.request update')}
             </TurtleButton>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import moment from 'moment';
 import { useRef, useState } from 'react';
-import { Col, Divider, Popover, Row, Space, Typography } from 'antd';
+import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { BellOutlined } from '@ant-design/icons';
@@ -12,16 +12,16 @@ function Notification() {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getQuery = useQuery('getNotification', () =>
+  const getNotificationQuery = useQuery('getNotification', () =>
     notificationAPI.get({ type: 'home' }),
   );
 
-  const updateQuery = useMutation(
+  const updateNotificationQuery = useMutation(
     'updateNotification',
     notificationAPI.update,
     {
       onSuccess: () => {
-        getQuery.refetch();
+        getNotificationQuery.refetch();
       },
     },
   );
@@ -37,26 +37,26 @@ function Notification() {
       content={
         <>
           <div style={{ maxHeight: 400, width: 400, overflow: 'auto' }}>
-            {getQuery.data?.notification_list.length === 0 ? (
+            {getNotificationQuery.data?.notification_list.length === 0 ? (
               <Row style={{ padding: '12px 20px' }}>알림이 없습니다.</Row>
             ) : (
-              getQuery.data?.notification_list.map((noti) => {
+              getNotificationQuery.data?.notification_list.map((noti) => {
                 let mainContent = '';
                 if (noti.type === 'internal_change') {
-                  mainContent = `거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+                  mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
                 }
                 if (noti.type === 'creation_request') {
                   if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
-                    mainContent = `요청하신 거래처 ${noti.content.name}가 신규 등록되었습니다.`;
+                    mainContent = `거래처 ${noti.content.vendor_name}가 신규 등록되었습니다.`;
                   }
                 }
                 if (noti.type === 'modification_request') {
                   if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
+                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
                   } else {
-                    mainContent = `요청하신 거래처 ${noti.content.name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
+                    mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
                   }
                 }
                 return (
@@ -82,13 +82,19 @@ function Notification() {
                               cursor: 'pointer',
                             }}
                             onClick={() => {
-                              navigate('/vendor/list');
+                              navigate(
+                                noti.type === 'creation_request'
+                                  ? 'vendor/create'
+                                  : 'vendor/list',
+                              );
                               setPopoverVisible(false);
                               !noti.read_at &&
-                                updateQuery.mutate({ id: noti.id });
+                                updateNotificationQuery.mutate({ id: noti.id });
                             }}
                           >
-                            거래처 정보 확인
+                            {noti.type === 'creation_request'
+                              ? '거래처 등록하기'
+                              : '거래처 정보 확인'}
                           </Typography.Text>
                           <Divider type="vertical" />
                           <Typography.Text
@@ -124,17 +130,35 @@ function Notification() {
         </>
       }
     >
-      <BellOutlined
+      <Badge
+        size="small"
+        overflowCount={9}
+        count={
+          getNotificationQuery.data?.notification_list.filter(
+            (item) => !item.read_at,
+          ).length
+        }
         style={{
-          padding: 8,
-          marginRight: 12,
-          fontSize: 20,
-          cursor: 'pointer',
+          paddingBottom: 1,
+          paddingTop: 1,
+          paddingLeft: 4,
+          paddingRight: 5,
         }}
-        onClick={() => {
-          setPopoverVisible((visible) => !visible);
-        }}
-      />
+        offset={[-21, 5]}
+      >
+        <BellOutlined
+          style={{
+            padding: 8,
+            marginRight: 12,
+            fontSize: 20,
+            cursor: 'pointer',
+            color: '#fff',
+          }}
+          onClick={() => {
+            setPopoverVisible((visible) => !visible);
+          }}
+        />
+      </Badge>
     </StyledPopover>
   );
 }

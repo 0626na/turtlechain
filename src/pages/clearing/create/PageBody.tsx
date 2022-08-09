@@ -2,14 +2,18 @@ import styled from 'styled-components';
 import { Collapse } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { t } from 'i18next';
+
 import { TurtleButtonSub, TurtlePanelHeader } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
-import { storeState } from '@store/storeState';
-import useStoreExist from '@hooks/useStoreExist';
-import AdjustmentPanel from './AdjustmentPanel';
+
 import ClearingPanel from './ClearingPanel';
-import WarehousingPanel from './WarehousingPanel';
+import AdjustmentPanel from './AdjustmentPanel';
 import ExcelModal from './ExcelModal';
+
+import { storeState } from '@store/storeState';
+
+import useStoreExist from '@hooks/useStoreExist';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
@@ -35,7 +39,7 @@ function PageBody() {
         }}
       />
       <MenuBar isWarning>
-        {store.use_service === 1 && (
+        {store.version === 'agency_services' && (
           <TurtleButtonSub
             type="primary"
             color="skyblue"
@@ -50,28 +54,27 @@ function PageBody() {
           </TurtleButtonSub>
         )}
       </MenuBar>
-      {store.use_service === 0 && (
-        <MainContent>
+      {store.version === '2.0' && (
+        <MainContent info={t('description.today reserve included')}>
           <StyledCollapse
             accordion
             bordered={false}
             style={{ width: '100%' }}
             onChange={(key) => {
-              // 전단계로만 이동할 수 있고 다음단계는 Panel 내부 버튼으로만 이동할 수 있다.
-              if (!key || Number(key) > Number(activeKey)) {
+              if (Number(activeKey) === 0 || !key) {
                 return;
               }
               setActiveKey(key[0]);
             }}
             activeKey={activeKey}
           >
-            <WarehousingPanel
+            <AdjustmentPanel
               key="1"
               header={
                 <TurtlePanelHeader
                   count={1}
                   activeKey={activeKey}
-                  title="거래처별 결제대기"
+                  title="매입조정 결제대기"
                 />
               }
               activeKey={activeKey}
@@ -79,32 +82,18 @@ function PageBody() {
                 setActiveKey('2');
               }}
             />
-            <AdjustmentPanel
+            <ClearingPanel
               key="2"
               header={
                 <TurtlePanelHeader
                   count={2}
                   activeKey={activeKey}
-                  title="매입조정 결제대기"
-                />
-              }
-              activeKey={activeKey}
-              clickNext={() => {
-                setActiveKey('3');
-              }}
-            />
-            <ClearingPanel
-              key="3"
-              header={
-                <TurtlePanelHeader
-                  count={3}
-                  activeKey={activeKey}
-                  title="정산금액 미리보기"
+                  title="결제금액 미리보기"
                 />
               }
               activeKey={activeKey}
               clickCreate={() => {
-                setActiveKey('1');
+                setActiveKey('0');
               }}
             />
           </StyledCollapse>
@@ -115,12 +104,22 @@ function PageBody() {
 }
 
 const StyledCollapse = styled(Collapse)`
-  background-color: white;
+  background-color: #fff;
+  margin-top: 20px;
+
   .ant-collapse-item {
-    background-color: #fbfcfe;
-    border: 1px solid #e3e6ea;
+    background-color: #f3f5f8;
+    border: none;
     margin-bottom: 12px;
     border-radius: 4px;
+  }
+
+  .ant-collapse-content-box {
+    background-color: #fff;
+  }
+
+  .ant-table-wrapper {
+    margin-top: 12px;
   }
 `;
 

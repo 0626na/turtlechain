@@ -27,7 +27,7 @@ function StoreSelect({ warningMessage }: Props) {
             id: store.id,
             name: store.name,
             inventory_is_vat_included: store.inventory_is_vat_included,
-            use_service: store.companies[0].use_service,
+            version: store.companies[0].version,
           })),
       );
 
@@ -38,7 +38,7 @@ function StoreSelect({ warningMessage }: Props) {
           name: data.store_list[0].name,
           inventory_is_vat_included:
             data.store_list[0].inventory_is_vat_included,
-          use_service: data.store_list[0].companies[0].use_service,
+          version: data.store_list[0].companies[0].version,
         });
       }
     },
@@ -58,7 +58,7 @@ function StoreSelect({ warningMessage }: Props) {
         name: storeList.find((item) => item.id === value)!.name,
         inventory_is_vat_included: storeList.find((item) => item.id === value)!
           .inventory_is_vat_included,
-        use_service: storeList.find((item) => item.id === value)?.use_service!,
+        version: storeList.find((item) => item.id === value)?.version!,
       });
     },
     [store, storeList, setStore, warningMessage],

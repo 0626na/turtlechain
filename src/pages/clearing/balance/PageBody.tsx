@@ -1,47 +1,49 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { DatePicker, Table } from 'antd';
+import { Table } from 'antd';
 import { TurtleTableTitle } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import { storeState } from '@store/storeState';
-import clearingAPI, { BalanceShow, RequestGetBalance } from '@apis/clearingAPI';
+import clearingAPI, {
+  ClearingInfo,
+  RequestGetOverpaidBalanceList,
+} from '@apis/clearingAPI';
 import DetailModal from './DetailModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
-  const [searchQuery, setSearchQuery] = useState<RequestGetBalance>({
-    rt_store_id: store.id,
-    start_date: moment().subtract('1', 'month').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD'),
-    tab: 'balance',
-  });
-  const [selectedRow, selectRow] = useState<BalanceShow>();
+  const [searchQuery, setSearchQuery] = useState<RequestGetOverpaidBalanceList>(
+    {
+      rt_store_id: store.id!,
+      balance_type: 'balance',
+    },
+  );
+
+  const [selectedRow, selectRow] = useState<ClearingInfo>();
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
-  const getBalanceQuery = useQuery(
-    ['getBalance', searchQuery],
-    () => clearingAPI.getBalance(searchQuery),
+  const getOverpaidBalanceListQuery = useQuery(
+    ['getOverpaidBalanceList', searchQuery],
+    () => clearingAPI.getOverpaidBalanceList(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
     },
   );
 
-  useEffect(() => {
-    setSearchQuery({
-      rt_store_id: store.id,
-      start_date: moment().subtract('1', 'month').format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
-      tab: 'balance',
-    });
-  }, [store.id]);
-
   const openDetailModal = useCallback((record) => {
     selectRow(record);
     setDetailModalVisible(true);
   }, []);
+
+  useEffect(() => {
+    setSearchQuery({
+      rt_store_id: store.id!,
+      balance_type: 'balance',
+    });
+  }, [store.id]);
 
   return (
     <>
@@ -50,10 +52,10 @@ function PageBody() {
       <MainContent title={t('clearing.balance lists')}>
         <Table
           size="small"
-          dataSource={getBalanceQuery.data?.data.item_list}
-          loading={getBalanceQuery.isLoading}
+          dataSource={getOverpaidBalanceListQuery.data?.item_list}
+          loading={getOverpaidBalanceListQuery.isLoading}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record.vendor_info.id}
           scroll={{ y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
@@ -62,20 +64,8 @@ function PageBody() {
           })}
           title={() => (
             <TurtleTableTitle
-              count={getBalanceQuery.data?.data.total_count ?? 0}
-            >
-              <DatePicker.RangePicker
-                size="small"
-                allowClear={false}
-                value={[
-                  moment(searchQuery.start_date),
-                  moment(searchQuery.end_date),
-                ]}
-                onChange={(_, [start_date, end_date]) => {
-                  setSearchQuery({ ...searchQuery, start_date, end_date });
-                }}
-              />
-            </TurtleTableTitle>
+              count={getOverpaidBalanceListQuery.data?.item_list.length ?? 0}
+            ></TurtleTableTitle>
           )}
           columns={[
             {
@@ -84,7 +74,7 @@ function PageBody() {
               align: 'center',
               title: t('clearing.recent date'),
               render: (_, record) =>
-                moment(record.created_time).format('YYYY-MM-DD'),
+                moment(record.created_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,

@@ -32,9 +32,7 @@ export interface AdjustmentItemShow {
   count: number;
   count_left: number;
   is_cleared: boolean;
-  is_vat_included: boolean;
   created_date: string;
-  price: number;
   type: 'reserve' | 'takeback' | 'exchange';
   vendor_info: {
     id: number;
@@ -45,6 +43,7 @@ export interface AdjustmentItemShow {
     name: string;
     vendor_product_name: string;
     option: string;
+    price: number;
   };
   memo: string;
   memo_active?: boolean;
@@ -56,20 +55,19 @@ export interface AdjustmentItemShow {
 
 // Request: 매입조정 리스트 조회
 export interface RequestGetList {
-  rt_store_id?: number;
-  start_date: string;
   end_date: string;
-  is_cleared?: number;
+  start_date: string;
+  is_cleared: number;
+  rt_store_id?: number;
   page?: number;
-  type?: 'reserve' | 'takeback' | 'exchange' | 'refund';
-  // 당일 미송 조회시 넣어준다.
-  original_id?: 0;
 }
 
 // Response: 매입조정 리스트 조회
 export interface ResponseGetList {
   msg: string;
   data: {
+    adjustment_list: AdjustmentItemShow[];
+
     adjustment_summary: {
       cleared: {
         count: number;
@@ -80,18 +78,41 @@ export interface ResponseGetList {
         price: number;
       };
     };
+
     total_count: number;
-    adjustment_list: Array<AdjustmentItemShow>;
   };
 }
 
 // 매입조정 리스트 조회 요청
-const getList = async function (query: RequestGetList) {
-  let url = 'adjustment/item?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetList>(url);
+const getList = async function (params: RequestGetList) {
+  const url = 'adjustment/item';
+  const response = await v2Axios.get<ResponseGetList>(url, { params });
+
+  return response.data;
+};
+
+// Request: (매입 조정 상세)입고 및 매입조정 처리이력 조회
+export interface RequestGet {
+  adjustment_item_id: number;
+}
+
+// Response: (매입 조정 상세)입고 및 매입조정 처리이력 조회
+export interface ResponseGet {
+  msg: string;
+  data: {
+    transaction_list: Array<{
+      id: number;
+      created_datetime: string; // 처리 시작
+      memo: string; // 처리 내용
+    }>;
+  };
+}
+
+// (매입 조정 상세)입고 및 매입조정 처리이력 요청
+const get = async function (data: RequestGet) {
+  const url = `adjustment/item/${data.adjustment_item_id}`;
+  const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data;
 };
 
@@ -146,53 +167,6 @@ const update = async function (data: RequestUpdate) {
   const url = `adjustment/item/${data.id}`;
   const response = await v2Axios.put<ResponseUpdate>(url, data);
   return response.data.data;
-};
-
-// Request: 매입조정 상세보기
-export interface RequestGet {
-  id: number;
-}
-
-// Response: 매입조정 상세보기
-export interface ResponseGet {
-  msg: string;
-  data: {
-    clearing_info: Array<{
-      id: number;
-      created_date: string;
-
-      vendor_name: string;
-      vendor_address: string;
-      bank: string;
-      account_holder: string;
-      account_number: string;
-
-      total_price: number;
-      is_vat_included: boolean;
-      adjustment_process_type: 'subtract' | 'refund' | '';
-      adjustment_type: 'reserve' | 'takeback' | 'exchange' | 'refund';
-    }>;
-    warehousing_info: {
-      id: number;
-      count: number;
-      price: number;
-      vendor_info: {
-        vendor_name: string;
-      };
-      product_info: {
-        name: string;
-        vendor_product_name: string;
-        option: string;
-      };
-    };
-  };
-}
-
-// 매입조정 상세보기
-const get = async function (data: RequestGet) {
-  const url = `adjustment/item/${data.id}`;
-  const response = await v2Axios.get<ResponseGet>(url);
-  return response.data;
 };
 
 const adjustmentAPI = {

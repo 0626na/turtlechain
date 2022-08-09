@@ -134,7 +134,7 @@ function PageBody() {
             if (!isStoreExist()) return;
             connectQuery.mutate({ rt_store_id: store.id! });
           }}
-          disabled={connectQuery.isSuccess}
+          disabled={connectQuery.isLoading}
         >
           {t('button.connect external program')}
         </TurtleButtonSub>
