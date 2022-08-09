@@ -18,7 +18,7 @@ import {
   TurtleInput,
   TurtleModal,
 } from '@components/common';
-import bucketListAPI, { RequestCreate } from '@apis/bucketListAPI';
+import bucketListAPI from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
 import { storeState } from '@store/storeState';
 import { useRecoilValue } from 'recoil';
@@ -29,7 +29,7 @@ interface Props {
 }
 
 function RequestModal({ visible, closeModal }: Props) {
-  const [form] = Form.useForm<RequestCreate>();
+  const [form] = Form.useForm();
   const [address, setAddress] = useState({ building: '', floor: '' });
   const store = useRecoilValue(storeState);
   const createQuery = useMutation('createBucketList', bucketListAPI.create, {
@@ -57,6 +57,12 @@ function RequestModal({ visible, closeModal }: Props) {
     resetStates();
   }, [visible, resetStates]);
 
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
   return (
     <TurtleModal
       centered
@@ -244,16 +250,19 @@ function RequestModal({ visible, closeModal }: Props) {
         <Tooltip title="전자영수증은 꼭 전체모습이 나오게 찍어주세요.">
           <Form.Item
             name="file"
+            valuePropName="fileList"
             label="전자영수증 사진첨부"
             required={true}
-            rules={[{ required: true }]}
+            getValueFromEvent={normFile}
+            rules={[
+              { required: true, message: '전자영수증 사진을 첨부해주세요.' },
+            ]}
           >
             <Upload
               listType="picture"
               maxCount={1}
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
-              fileList={form.getFieldValue('file')?.fileList}
             >
               <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
             </Upload>
@@ -275,7 +284,7 @@ function RequestModal({ visible, closeModal }: Props) {
                   col,
                   loc,
                   ext: form.getFieldValue('ext') ?? '',
-                  file: form.getFieldValue('file').fileList[0].originFileObj,
+                  file: form.getFieldValue('file')[0].originFileObj,
                   rt_store_id: store.id,
                 });
               });

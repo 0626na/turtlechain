@@ -80,6 +80,13 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
     resetStates();
   }, [visible, resetStates]);
 
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   return (
     <TurtleModal
       centered
@@ -256,15 +263,18 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
           <Form.Item
             name="file"
             label="전자영수증 사진첨부"
+            valuePropName="fileList"
             required={true}
-            rules={[{ required: true }]}
+            getValueFromEvent={normFile}
+            rules={[
+              { required: true, message: '전자영수증 사진을 첨부해주세요.' },
+            ]}
           >
             <Upload
               listType="picture"
               maxCount={1}
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
-              fileList={form.getFieldValue('file')?.fileList}
             >
               <TurtleButtonSub size="small">파일 선택하기</TurtleButtonSub>
             </Upload>
@@ -277,12 +287,6 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             okText={t('yes')}
             cancelText={t('no')}
             onConfirm={() => {
-              if (form.getFieldValue('file')?.fileList.length === 0) {
-                form.setFieldsValue({
-                  ...form.getFieldsValue(),
-                  file: undefined,
-                });
-              }
               form.validateFields().then(() => {
                 const [col, loc] = form.getFieldValue('colLoc').split(' ');
                 createQuery.mutate({
@@ -292,7 +296,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
                   col,
                   loc,
                   ext: form.getFieldValue('ext') ?? '',
-                  file: form.getFieldValue('file').fileList[0].originFileObj,
+                  file: form.getFieldValue('file')[0].originFileObj,
                 });
               });
             }}
