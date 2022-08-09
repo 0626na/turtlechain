@@ -190,6 +190,7 @@ export interface ResponseDelete {
 const remove = async (data: RequestDelete) => {
   const url = `provisioning/product/${data.id}`;
   const response = await v2Axios.put<ResponseDelete>(url, data);
+
   return response.data;
 };
 
