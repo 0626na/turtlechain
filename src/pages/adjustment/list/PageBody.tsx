@@ -252,14 +252,12 @@ const PageBody = function () {
               width: 100,
               render: (_, record) =>
                 record.count_left !== 0 &&
-                // 미송일시, 등록날짜 기준 오후 7시 이후에만 "차리"버튼 활성화
-                (record.type === 'reserve'
-                  ? moment
-                      .duration(moment().diff(moment(record.created_date)))
-                      .asHours() > 19
-                    ? true
-                    : false
-                  : true) && (
+                // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
+                ((record.type === 'reserve' &&
+                  moment
+                    .duration(moment().diff(moment(record.created_date)))
+                    .asHours() > 19) ||
+                  record.type !== 'reserve') && (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
