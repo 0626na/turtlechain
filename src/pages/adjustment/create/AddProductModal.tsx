@@ -16,10 +16,10 @@ import { SearchProductModal, SearchVendorModal } from '@components/combine';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  addItem: (item: AdjustmentItem) => boolean;
+  onItemAdd: (item: AdjustmentItem) => void;
 }
 
-function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
+function AddSingleProductModal({ visible, closeModal, onItemAdd }: Props) {
   const [form] = Form.useForm();
   const [vendorModalVisible, setVendorModalVisible] = useState(false);
   const [productModalVisible, setProductModalVisible] = useState(false);
@@ -93,11 +93,12 @@ function AddSingleProductModal({ visible, closeModal, addItem }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 16 }}
           onFinish={(value) => {
-            addItem({
+            onItemAdd({
               ...value,
               type: 'reserve',
               warehousing_item_id: 0,
-            }) && onCloseModal();
+            });
+            onCloseModal();
           }}
         >
           <Form.Item name="vendor_id" hidden>

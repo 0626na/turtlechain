@@ -71,6 +71,7 @@ export interface WarehousingItem {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
+  target_date: string;
 }
 
 export interface ResponseConnectInventory {
@@ -88,12 +89,9 @@ export interface ResponseConnectInventory {
   };
 }
 
-const connectInventory = async function (query: RequestConnectInventory) {
-  let url = 'external-api/inventory/warehousing?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseConnectInventory>(url);
+const connectInventory = async function (params: RequestConnectInventory) {
+  let url = 'external-api/inventory/warehousing';
+  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
   return response.data;
 };
 
@@ -193,7 +191,11 @@ const getSheet = async function (query: RequestGetSheet) {
  */
 
 export type RequestGetItem = {
-  sheet_id: number;
+  rt_store_id?: number;
+  sheet_id?: number;
+  product_name?: string;
+  start_date?: string;
+  end_date?: string;
 };
 
 export interface ResponseGetItem {
@@ -204,9 +206,10 @@ export interface ResponseGetItem {
   };
 }
 
-const getItem = async function (data: RequestGetItem) {
-  const url = `warehousing/item?sheet_id=${data.sheet_id}`;
-  const response = await v2Axios.get<ResponseGetItem>(url);
+const getItem = async (params: RequestGetItem) => {
+  const url = `warehousing/item`;
+  const response = await v2Axios.get<ResponseGetItem>(url, { params });
+
   return response.data;
 };
 
