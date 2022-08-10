@@ -58,7 +58,7 @@ function PageBody() {
 
   // 거래처 목록 불러오기 요청
   const getVendorListQuery = useQuery(
-    ['getVendorList', searchQuery], //
+    ['getVendorListQuery', searchQuery],
     () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onSuccess: (data) => {
@@ -82,7 +82,7 @@ function PageBody() {
   });
 
   // 거래처 삭제 요청
-  const vendorInactiveMutation = useMutation(vendorAPI.update, {
+  const vendorRemoveMutation = useMutation(vendorAPI.remove, {
     onSuccess: () => {
       message.success('거래처가 삭제되었습니다.');
       getVendorListQuery.refetch();
@@ -392,7 +392,7 @@ function PageBody() {
                                 alignItems: 'center',
                               }}
                               onClick={() => {
-                                vendorInactiveMutation.mutate({
+                                vendorRemoveMutation.mutate({
                                   id: record.id,
                                   is_inactive: true,
                                 });
