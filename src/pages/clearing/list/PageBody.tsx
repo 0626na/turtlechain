@@ -24,7 +24,7 @@ import clearingAPI, {
 import { TurtleCard, TurtleIcon, TurtleTableTitle } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
 import { storeState } from '@store/storeState';
-import { SelectDateModal } from '@components/combine';
+import { SelectRangeDateModal } from '@components/combine';
 import { useStoreExist } from '@hooks/index';
 import DetailModal from './DetailModal';
 
@@ -94,6 +94,33 @@ function PageBody() {
 
   return (
     <>
+      {/* 상세내역 모달 */}
+      <DetailModal
+        visible={detailModalVisible}
+        closeModal={() => {
+          setDetailModalVisible(false);
+        }}
+        sheet={selectedRow}
+      />
+
+      {/* 엑셀 다운로드 날짜선택 모달 */}
+      <SelectRangeDateModal
+        title="날짜선택"
+        buttonTitle="다운로드"
+        visible={downloadModalVisible}
+        closeModal={() => {
+          setDownloadModalVisible(false);
+        }}
+        onClickButton={({ start_date, end_date }) => {
+          downloadExcelQuery.mutate({
+            rt_store_id: store.id,
+            start_date,
+            end_date,
+          });
+        }}
+        loading={downloadExcelQuery.isLoading}
+      />
+
       <MenuBar>
         <Button
           type="default"
@@ -265,31 +292,6 @@ function PageBody() {
           ]}
         />
       </MainContent>
-
-      {/* 상세내역 모달 */}
-      <DetailModal
-        visible={detailModalVisible}
-        closeModal={() => {
-          setDetailModalVisible(false);
-        }}
-        sheet={selectedRow}
-      />
-
-      {/* 엑셀 다운로드 날짜선택 모달 */}
-      <SelectDateModal
-        visible={downloadModalVisible}
-        closeModal={() => {
-          setDownloadModalVisible(false);
-        }}
-        onClick={({ start_date, end_date }) => {
-          downloadExcelQuery.mutate({
-            rt_store_id: store.id,
-            start_date,
-            end_date,
-          });
-        }}
-        loading={downloadExcelQuery.isLoading}
-      />
     </>
   );
 }

@@ -251,7 +251,13 @@ const PageBody = function () {
               align: 'center',
               width: 100,
               render: (_, record) =>
-                record.count_left !== 0 && (
+                record.count_left !== 0 &&
+                // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
+                ((record.type === 'reserve' &&
+                  moment
+                    .duration(moment().diff(moment(record.created_date)))
+                    .asHours() > 19) ||
+                  record.type !== 'reserve') && (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -455,7 +461,7 @@ const PageBody = function () {
               </>
             ),
             columnWidth: 25,
-            expandIcon: ({ expanded, onExpand, record }) => {
+            expandIcon: ({ onExpand, record }) => {
               return (
                 <FileTextOutlined
                   style={record.memo ? {} : { opacity: '0.4' }}

@@ -45,6 +45,8 @@ export interface ProductShow {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
+  start_date: string;
+  end_date: string;
 }
 
 export interface ResponseConnectInventory {
@@ -61,12 +63,10 @@ export interface ResponseConnectInventory {
   };
 }
 
-const connectInventory = async function (query: RequestConnectInventory) {
-  let url = 'external-api/inventory/products?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseConnectInventory>(url);
+const connectInventory = async function (params: RequestConnectInventory) {
+  let url = 'external-api/inventory/products';
+  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
+
   return response.data;
 };
 
@@ -175,6 +175,27 @@ const update = async function (data: RequestUpdate) {
 };
 
 /*
+ * 상품삭제
+ */
+
+export interface RequestRemove {
+  id: number;
+  is_inactive: boolean;
+}
+
+export interface ResponseRemove {
+  msg: string;
+  data: {};
+}
+
+const remove = async (data: RequestRemove) => {
+  const url = `provisioning/product/${data.id}`;
+  const response = await v2Axios.put<ResponseRemove>(url, data);
+
+  return response.data;
+};
+
+/*
  * 상품 코드 생성
  */
 export interface RequestGetCode {
@@ -202,6 +223,7 @@ const productAPI = {
   getList,
   create,
   update,
+  remove,
   getCode,
 };
 

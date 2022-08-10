@@ -1,29 +1,42 @@
-import { Button, DatePicker, Form, Modal } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Button, DatePicker, Form, Modal } from 'antd';
+
+interface Date {
+  start_date: string;
+  end_date: string;
+}
 
 interface Props {
   title: string;
   buttonTitle: string;
   visible: boolean;
   closeModal: () => void;
-  onClickButton: (date: string) => void;
+  onClickButton: (date: Date) => void;
   loading: boolean;
+  inThreeMonth?: boolean;
 }
 
-function SelectDateModal({
+function SelectRangeDateModal({
   title,
   buttonTitle,
   visible,
   closeModal,
   onClickButton,
   loading,
+  inThreeMonth,
 }: Props) {
-  const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+  const [date, setDate] = useState<Date>({
+    start_date: moment().format('YYYY-MM-DD'),
+    end_date: moment().format('YYYY-MM-DD'),
+  });
 
   useEffect(() => {
     if (visible) return;
-    setDate(moment().format('YYYY-MM-DD'));
+    setDate({
+      start_date: moment().format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+    });
   }, [visible]);
 
   return (
@@ -42,14 +55,18 @@ function SelectDateModal({
         }}
       >
         <Form.Item label={'날짜'} colon={false}>
-          <DatePicker
+          <DatePicker.RangePicker
             style={{ width: '100%' }}
             allowClear={false}
-            disabledDate={(current) => current > moment()}
+            disabledDate={(current) =>
+              inThreeMonth
+                ? current > moment() || current < moment().subtract(3, 'months')
+                : current > moment()
+            }
             disabled={loading}
-            value={moment(date)}
-            onChange={(_, date) => {
-              setDate(date);
+            value={[moment(date.start_date), moment(date.end_date)]}
+            onChange={(_, [start_date, end_date]) => {
+              setDate({ start_date, end_date });
             }}
           />
         </Form.Item>
@@ -69,4 +86,4 @@ function SelectDateModal({
   );
 }
 
-export default SelectDateModal;
+export default SelectRangeDateModal;
