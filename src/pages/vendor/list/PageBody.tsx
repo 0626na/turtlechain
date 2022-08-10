@@ -149,6 +149,33 @@ function PageBody() {
 
   return (
     <>
+      {/*
+       *  거래처명 수정 모달
+       */}
+
+      <UpdateVendorNameModal
+        title="거래처명 수정"
+        buttonTitle="저장"
+        visible={updateVendorNameModalVisible}
+        onCloseModal={() => {
+          setUpdateVendorNameModalVisible(false);
+          getVendorListQuery.refetch();
+        }}
+        selectedRow={selectedRow!}
+      />
+
+      {/*
+       * 거래처 정보 수정요청 모달
+       */}
+
+      <UpdateVendorInfoModal
+        visible={updateModalVisible}
+        onCloseModal={() => {
+          setUpdateModalVisible(false);
+        }}
+        selectedRow={selectedRow!}
+      />
+
       <MenuBar />
       <MainContent title={t('vendor.lists')}>
         <Table
@@ -414,33 +441,6 @@ function PageBody() {
               ),
             },
           ]}
-        />
-
-        {/*
-         *  거래처명 수정 모달
-         */}
-
-        <UpdateVendorNameModal
-          title="거래처명 수정"
-          buttonTitle="저장"
-          visible={updateVendorNameModalVisible}
-          onCloseModal={() => {
-            setUpdateVendorNameModalVisible(false);
-            getVendorListQuery.refetch();
-          }}
-          selectedRow={selectedRow!}
-        />
-
-        {/*
-         * 거래처 정보 수정요청 모달
-         */}
-
-        <UpdateVendorInfoModal
-          visible={updateModalVisible}
-          onCloseModal={() => {
-            setUpdateModalVisible(false);
-          }}
-          selectedRow={selectedRow!}
         />
       </MainContent>
     </>
