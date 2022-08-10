@@ -1,10 +1,17 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FileTextOutlined } from '@ant-design/icons';
+import {
+  FileTextOutlined,
+  FormOutlined,
+  MoreOutlined,
+} from '@ant-design/icons';
 import {
   Col,
+  Divider,
+  Dropdown,
   Input,
+  Menu,
   message,
   Pagination,
   Popconfirm,
@@ -24,19 +31,24 @@ import { phonePattern } from '@utils/pattern';
 import {
   TurtleBadge,
   TurtleButtonSub,
+  TurtleImg,
   TurtleTableTitle,
 } from '@components/common';
 import { MainContent, MenuBar } from '@layout/page';
 import { NewSearchFilter } from '@components/combine';
-import UpdateModal from './UpdateModal';
+
+import UpdateVendorInfoModal from './UpdateVendorInfoModal';
+import UpdateVendorNameModal from './UpdateVendorNameModal';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
   const [vendorList, setVendorList] = useState<Array<VendorShow>>();
-  const [selectedRow, selectRow] = useState<VendorShow>();
-  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<VendorShow>();
 
-  // 거래처 목록 불러오기 query
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [updateVendorNameModalVisible, setUpdateVendorNameModalVisible] =
+    useState(false);
+
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
     type: 'name',
@@ -45,8 +57,8 @@ function PageBody() {
   });
 
   // 거래처 목록 불러오기 요청
-  const getListQuery = useQuery(
-    ['getVendor', searchQuery], //
+  const getVendorListQuery = useQuery(
+    ['getVendorListQuery', searchQuery],
     () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
     {
       onSuccess: (data) => {
@@ -62,27 +74,22 @@ function PageBody() {
   );
 
   // 거래처 부가세, 메모 수정 요청
-  const updateQuery = useMutation(
-    ['updateVendor'], //
-    vendorAPI.update,
-    {
-      onSuccess: () => {
-        message.success(t('message.success update'));
-        getListQuery.refetch();
-      },
+  const vendorUpdateMutation = useMutation(vendorAPI.update, {
+    onSuccess: () => {
+      message.success('수정이 완료되었습니다.');
+      getVendorListQuery.refetch();
     },
-  );
+  });
 
-  // 쇼핑몰 바뀔 때 거래처 리스트 재검색
-  useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
-      rt_store_id: store.id,
-      page: 1,
-    }));
-  }, [store.id]);
+  // 거래처 삭제 요청
+  const vendorRemoveMutation = useMutation(vendorAPI.remove, {
+    onSuccess: () => {
+      message.success('거래처가 삭제되었습니다.');
+      getVendorListQuery.refetch();
+    },
+  });
 
-  const changeMemoValue = useCallback(
+  const handleMemoValueChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
@@ -98,7 +105,7 @@ function PageBody() {
     [vendorList],
   );
 
-  const setMemoActive = useCallback(
+  const handleMemoActive = useCallback(
     (record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
@@ -114,7 +121,7 @@ function PageBody() {
     [vendorList],
   );
 
-  const setMemoInactive = useCallback(
+  const handleMemoInactive = useCallback(
     (record: VendorShow) => {
       setVendorList(
         vendorList?.map((vendor) =>
@@ -131,20 +138,57 @@ function PageBody() {
     [vendorList],
   );
 
+  // 쇼핑몰 바뀔 때 거래처 리스트 재검색
+  useEffect(() => {
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.id,
+      page: 1,
+    }));
+  }, [store.id]);
+
   return (
     <>
-      <MenuBar />
+      {/*
+       *  거래처명 수정 모달
+       */}
 
+      <UpdateVendorNameModal
+        title="거래처명 수정"
+        buttonTitle="저장"
+        visible={updateVendorNameModalVisible}
+        onCloseModal={() => {
+          setUpdateVendorNameModalVisible(false);
+          getVendorListQuery.refetch();
+        }}
+        selectedRow={selectedRow!}
+      />
+
+      {/*
+       * 거래처 정보 수정요청 모달
+       */}
+
+      <UpdateVendorInfoModal
+        visible={updateModalVisible}
+        onCloseModal={() => {
+          setUpdateModalVisible(false);
+        }}
+        selectedRow={selectedRow!}
+      />
+
+      <MenuBar />
       <MainContent title={t('vendor.lists')}>
         <Table
           size="small"
-          loading={getListQuery.isLoading}
+          loading={getVendorListQuery.isLoading}
           dataSource={vendorList}
           rowKey={(record) => record.vendor_code}
           pagination={false}
           scroll={{ y: 'auto' }}
           title={() => (
-            <TurtleTableTitle count={getListQuery.data?.data.total_count ?? 0}>
+            <TurtleTableTitle
+              count={getVendorListQuery.data?.data.total_count ?? 0}
+            >
               <NewSearchFilter
                 vendor
                 searchQuery={searchQuery}
@@ -156,7 +200,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={getListQuery.data?.data.total_count}
+                total={getVendorListQuery.data?.data.total_count}
                 showSizeChanger={false}
                 current={searchQuery.page}
                 onChange={(page) => {
@@ -165,15 +209,17 @@ function PageBody() {
               />
             </Row>
           )}
-          onRow={(record) => {
-            return {
-              onClick: () => {
-                selectRow(record);
-                setUpdateModalVisible(true);
-              },
-            };
-          }}
+          // 메모아이콘 클릭시 row확장
           expandable={{
+            columnWidth: 25,
+            expandIcon: ({ onExpand, record }) => (
+              <FileTextOutlined
+                style={record.memo ? {} : { opacity: '0.4' }}
+                onClick={(e) => {
+                  return onExpand(record, e);
+                }}
+              />
+            ),
             expandedRowRender: (record) => (
               <>
                 {record.memo_active ? (
@@ -181,7 +227,7 @@ function PageBody() {
                     <Input
                       value={record.memo_value}
                       onChange={(e) => {
-                        changeMemoValue(e, record);
+                        handleMemoValueChange(e, record);
                       }}
                     />
                     <Row justify="end" gutter={4} style={{ marginTop: '8px' }}>
@@ -191,7 +237,7 @@ function PageBody() {
                             size="small"
                             color="grey"
                             onClick={() => {
-                              setMemoInactive(record);
+                              handleMemoInactive(record);
                             }}
                           >
                             취소
@@ -202,10 +248,9 @@ function PageBody() {
                         <TurtleButtonSub
                           size="small"
                           onClick={() => {
-                            updateQuery.mutate({
+                            vendorUpdateMutation.mutate({
                               id: record.id,
                               memo: record.memo_value ?? '',
-                              is_vat_included: record.is_vat_included,
                             });
                           }}
                         >
@@ -222,7 +267,7 @@ function PageBody() {
                         <TurtleButtonSub
                           size="small"
                           onClick={() => {
-                            setMemoActive(record);
+                            handleMemoActive(record);
                           }}
                         >
                           수정
@@ -233,18 +278,6 @@ function PageBody() {
                 )}
               </>
             ),
-            columnWidth: 25,
-            expandIcon: ({ expanded, onExpand, record }) => {
-              return (
-                <FileTextOutlined
-                  style={record.memo ? {} : { opacity: '0.4' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    return onExpand(record, e);
-                  }}
-                />
-              );
-            },
           }}
           columns={[
             {
@@ -268,17 +301,22 @@ function PageBody() {
             {
               ellipsis: true,
               title: t('vendor.store phone'),
-              render: (_, { vendor_phone, ws_store_info: { store_phone } }) => {
+              render: (_, record) => {
                 return (
-                  <TurtleBadge count={store_phone.length}>
+                  <TurtleBadge count={record.ws_store_info.store_phone.length}>
                     <Popover
-                      content={store_phone.map(({ id, phone }) => (
-                        <p key={id}>
-                          {phone.replace(phonePattern, `$1-$2-$3`)}
-                        </p>
-                      ))}
+                      content={record.ws_store_info.store_phone.map(
+                        ({ id, phone }) => (
+                          <p key={id}>
+                            {phone.replace(phonePattern, `$1-$2-$3`)}
+                          </p>
+                        ),
+                      )}
                     >
-                      {vendor_phone.phone.replace(phonePattern, `$1-$2-$3`)}
+                      {record.vendor_phone.phone.replace(
+                        phonePattern,
+                        `$1-$2-$3`,
+                      )}
                     </Popover>
                   </TurtleBadge>
                 );
@@ -287,14 +325,11 @@ function PageBody() {
             {
               ellipsis: true,
               title: t('vendor.account'),
-              render: (
-                _,
-                { vendor_account, ws_store_info: { store_account } },
-              ) => {
+              render: (_, record) => {
                 const makeAccount = (account: VendorAccount) =>
                   `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
 
-                return makeAccount(vendor_account);
+                return makeAccount(record.vendor_account);
               },
             },
             {
@@ -312,9 +347,8 @@ function PageBody() {
                     okText={t('yes')}
                     cancelText={t('no')}
                     onConfirm={() => {
-                      updateQuery.mutate({
+                      vendorUpdateMutation.mutate({
                         id: record.id,
-                        memo: record.memo,
                         is_vat_included: !record.is_vat_included,
                       });
                     }}
@@ -328,15 +362,85 @@ function PageBody() {
                 </div>
               ),
             },
+            // 메모 아이콘 위치 지정
             Table.EXPAND_COLUMN,
+            {
+              width: 25,
+              render: (record) => (
+                <Dropdown
+                  overlay={
+                    <Menu
+                      style={{ width: 180 }}
+                      items={[
+                        {
+                          key: '1',
+                          label: (
+                            <div
+                              onClick={() => {
+                                setSelectedRow(record);
+                                setUpdateVendorNameModalVisible(true);
+                              }}
+                            >
+                              <FormOutlined />
+                              <span style={{ marginLeft: 10 }}>
+                                거래처명 수정
+                              </span>
+                            </div>
+                          ),
+                        },
+                        {
+                          key: '2',
+                          label: (
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                              }}
+                              onClick={() => {
+                                setSelectedRow(record);
+                                setUpdateModalVisible(true);
+                              }}
+                            >
+                              <TurtleImg name="request" />
+                              <span style={{ marginLeft: 10 }}>수정요청</span>
+                            </div>
+                          ),
+                        },
+                        {
+                          key: '3',
+                          label: <Divider style={{ margin: 0 }}></Divider>,
+                        },
+                        {
+                          key: '4',
+                          label: (
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                              }}
+                              onClick={() => {
+                                vendorRemoveMutation.mutate({
+                                  id: record.id,
+                                  is_inactive: true,
+                                });
+                              }}
+                            >
+                              <TurtleImg name="remove" />
+                              <span style={{ marginLeft: 10 }}>삭제</span>
+                            </div>
+                          ),
+                        },
+                      ]}
+                    />
+                  }
+                  placement="bottomLeft"
+                  trigger={['click']}
+                >
+                  <MoreOutlined />
+                </Dropdown>
+              ),
+            },
           ]}
-        />
-        <UpdateModal
-          visible={updateModalVisible}
-          closeModal={() => {
-            setUpdateModalVisible(false);
-          }}
-          selectedRow={selectedRow}
         />
       </MainContent>
     </>
