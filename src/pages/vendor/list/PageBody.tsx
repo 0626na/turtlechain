@@ -76,7 +76,15 @@ function PageBody() {
   // 거래처 부가세, 메모 수정 요청
   const vendorUpdateMutation = useMutation(vendorAPI.update, {
     onSuccess: () => {
-      message.success(t('message.success update'));
+      message.success('수정이 완료되었습니다.');
+      getVendorListQuery.refetch();
+    },
+  });
+
+  // 거래처 삭제 요청
+  const vendorInactiveMutation = useMutation(vendorAPI.update, {
+    onSuccess: () => {
+      message.success('거래처가 삭제되었습니다.');
       getVendorListQuery.refetch();
     },
   });
@@ -216,7 +224,6 @@ function PageBody() {
                             vendorUpdateMutation.mutate({
                               id: record.id,
                               memo: record.memo_value ?? '',
-                              is_vat_included: record.is_vat_included,
                             });
                           }}
                         >
@@ -315,7 +322,6 @@ function PageBody() {
                     onConfirm={() => {
                       vendorUpdateMutation.mutate({
                         id: record.id,
-                        memo: record.memo,
                         is_vat_included: !record.is_vat_included,
                       });
                     }}
@@ -385,7 +391,12 @@ function PageBody() {
                                 display: 'flex',
                                 alignItems: 'center',
                               }}
-                              onClick={() => {}}
+                              onClick={() => {
+                                vendorInactiveMutation.mutate({
+                                  id: record.id,
+                                  is_inactive: true,
+                                });
+                              }}
                             >
                               <TurtleImg name="remove" />
                               <span style={{ marginLeft: 10 }}>삭제</span>
