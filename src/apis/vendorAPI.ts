@@ -85,7 +85,8 @@ export interface WholesaleShow {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
-  target_date: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface ResponseConnectInventory {

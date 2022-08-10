@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { t } from 'i18next';
 import { Button, DatePicker, Form, Modal } from 'antd';
 
 interface Date {
@@ -9,26 +8,33 @@ interface Date {
 }
 
 interface Props {
+  title: string;
+  buttonTitle: string;
   visible: boolean;
   closeModal: () => void;
-  onClick: (date: Date) => void;
+  onClickButton: (date: Date) => void;
   loading: boolean;
+  inThreeMonth?: boolean;
 }
 
 function SelectRangeDateModal({
+  title,
+  buttonTitle,
   visible,
   closeModal,
-  onClick,
+  onClickButton,
   loading,
+  inThreeMonth,
 }: Props) {
   const [date, setDate] = useState<Date>({
-    start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+    start_date: moment().format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
   });
 
   useEffect(() => {
+    if (visible) return;
     setDate({
-      start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+      start_date: moment().format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD'),
     });
   }, [visible]);
@@ -37,7 +43,7 @@ function SelectRangeDateModal({
     <Modal
       centered
       width={350}
-      title={'엑셀 다운로드'}
+      title={title}
       visible={visible}
       onCancel={loading ? () => {} : closeModal}
       footer={false}
@@ -45,13 +51,19 @@ function SelectRangeDateModal({
       <Form
         layout="vertical"
         onFinish={() => {
-          onClick(date);
+          onClickButton(date);
         }}
       >
-        <Form.Item label={t('common.during')} colon={false}>
+        <Form.Item label={'날짜'} colon={false}>
           <DatePicker.RangePicker
             style={{ width: '100%' }}
             allowClear={false}
+            disabledDate={(current) =>
+              inThreeMonth
+                ? current > moment() || current < moment().subtract(3, 'months')
+                : current > moment()
+            }
+            disabled={loading}
             value={[moment(date.start_date), moment(date.end_date)]}
             onChange={(_, [start_date, end_date]) => {
               setDate({ start_date, end_date });
@@ -66,7 +78,7 @@ function SelectRangeDateModal({
             htmlType="submit"
             loading={loading}
           >
-            {t('button.download')}
+            {buttonTitle}
           </Button>
         </Form.Item>
       </Form>
