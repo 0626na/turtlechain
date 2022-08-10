@@ -152,7 +152,7 @@ function PageBody() {
             {
               ellipsis: true,
               align: 'center',
-              title: t('warehousing.date'),
+              title: '등록 날짜',
               render: (_, record) => record.created_date,
             },
             {

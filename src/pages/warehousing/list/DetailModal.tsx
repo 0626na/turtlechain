@@ -178,7 +178,7 @@ function DetailModal({ visible, onClose, sheet }: Props) {
     >
       <TurtleStatistics
         value={[
-          { title: t('warehousing.date'), value: `${sheet?.created_date}` },
+          { title: '등록날짜', value: `${sheet?.created_date}` },
           {
             title: t('warehousing.total count'),
             value: `${sheet?.total_item_count}건`,
@@ -213,6 +213,11 @@ function DetailModal({ visible, onClose, sheet }: Props) {
           </TurtleTableTitle>
         )}
         columns={[
+          {
+            ellipsis: true,
+            title: '입고 날짜',
+            render: (_, record) => record.warehousing_date,
+          },
           {
             ellipsis: true,
             title: t('vendor.name'),
