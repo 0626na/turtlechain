@@ -64,6 +64,7 @@ export interface WarehousingItem {
   is_inactive: boolean;
   is_reserved: boolean;
   created_date: string;
+  warehousing_date: string;
 }
 
 /*
