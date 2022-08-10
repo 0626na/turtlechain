@@ -217,6 +217,7 @@ export interface RequestUpdate {
   memo?: string;
   is_vat_included?: boolean;
   vendor_name?: string;
+  is_inactive?: boolean;
 }
 
 export interface ResponseUpdate {
