@@ -218,7 +218,6 @@ export interface RequestUpdate {
   memo?: string;
   is_vat_included?: boolean;
   vendor_name?: string;
-  is_inactive?: boolean;
 }
 
 export interface ResponseUpdate {
@@ -229,6 +228,23 @@ export interface ResponseUpdate {
 const update = async (data: RequestUpdate) => {
   const url = `provisioning/vendor/${data.id}`;
   const response = await v2Axios.patch<ResponseUpdate>(url, data);
+
+  return response.data;
+};
+
+export interface RequestRemove {
+  id: number;
+  is_inactive: boolean;
+}
+
+export interface ResponseRemove {
+  msg: string;
+}
+
+// 거래처 삭제 요청
+const remove = async (data: RequestRemove) => {
+  const url = `provisioning/vendor/${data.id}`;
+  const response = await v2Axios.patch<ResponseRemove>(url, data);
 
   return response.data;
 };
@@ -266,6 +282,7 @@ const vendorAPI = {
   getCode,
   create,
   update,
+  remove,
   getWholesale,
 };
 
