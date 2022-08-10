@@ -38,7 +38,7 @@ import {
   TurtleQuestionTooltip,
 } from '@components/common';
 import AddBucketlistSign from '@components/combine/AddBucketlistSign';
-import { SelectDateModal } from '@components/combine';
+import { SelectRangeDateModal } from '@components/combine';
 
 interface Props {
   visible: boolean;
@@ -424,20 +424,22 @@ function ConnectModal({ visible, closeModal }: Props) {
 
   return (
     <>
-      <SelectDateModal
-        title="입고날짜선택"
+      <SelectRangeDateModal
+        title="날짜선택"
         buttonTitle="정보 불러오기"
         visible={selectDateModalVisible}
         closeModal={() => {
           setSelectDateModalVisible(false);
         }}
-        onClickButton={(date) => {
+        onClickButton={({ start_date, end_date }) => {
           connectVendorQuery.mutate({
             rt_store_id: store.id!,
-            target_date: date,
+            start_date,
+            end_date,
           });
         }}
         loading={connectVendorQuery.isLoading}
+        inThreeMonth
       />
       <TurtleModal
         centered

@@ -12,6 +12,7 @@ export interface WarehousingItemConnect {
   product_option: string;
   product_code: number;
   store_house: string;
+  warehousing_date: string;
 
   price: number;
   count: number;
@@ -71,7 +72,8 @@ export interface WarehousingItem {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
-  target_date: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface ResponseConnectInventory {
@@ -131,6 +133,7 @@ export interface RequestCreateItem {
     product_id: number;
     count: number;
     price: number;
+    warehousing_date: string;
     is_reserved?: boolean;
     memo?: string;
   }>;
