@@ -23,10 +23,9 @@ function UpdateVendorNameModal({
   selectedRow,
 }: Props) {
   const [form] = useForm();
-
-  const vendorUpdateMutation = useMutation(vendorAPI.update, {
-    onSuccess: ({ msg }) => {
-      message.success(msg);
+  const vendorNameUpdateMutation = useMutation(vendorAPI.update, {
+    onSuccess: () => {
+      message.success('수정이 완료되었습니다.');
       onCloseModal();
       form.resetFields();
     },
@@ -49,16 +48,14 @@ function UpdateVendorNameModal({
         form={form}
         layout="vertical"
         onFinish={(value) => {
-          vendorUpdateMutation.mutate({
+          vendorNameUpdateMutation.mutate({
             id: Number(selectedRow.id),
-            memo: selectedRow.memo,
-            is_vat_included: selectedRow.is_vat_included,
             vendor_name: value.vendor_name,
           });
         }}
       >
         <Form.Item label={t('vendor.name')} name="vendor_name" colon={false}>
-          <Input placeholder={t('placeholder.vendor name')} />
+          <Input autoFocus placeholder={t('placeholder.vendor name')} />
         </Form.Item>
         <Form.Item>
           <Button
@@ -66,7 +63,7 @@ function UpdateVendorNameModal({
             style={{ width: '100%' }}
             type="primary"
             size="large"
-            loading={vendorUpdateMutation.isLoading}
+            loading={vendorNameUpdateMutation.isLoading}
           >
             {buttonTitle}
           </Button>
