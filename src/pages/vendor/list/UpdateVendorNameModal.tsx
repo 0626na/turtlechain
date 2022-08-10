@@ -1,29 +1,39 @@
-import { Button, DatePicker, Form, Modal } from 'antd';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
+import vendorAPI, { VendorShow } from '@apis/vendorAPI';
+import { Button, Form, Input, message, Modal } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+
+import { t } from 'i18next';
+
+import { useEffect } from 'react';
+import { useMutation } from 'react-query';
 
 interface Props {
   title: string;
   buttonTitle: string;
   visible: boolean;
-  closeModal: () => void;
-  onClickButton: (date: string) => void;
-  loading: boolean;
+  onCloseModal: () => void;
+  selectedRow: VendorShow;
 }
 
 function UpdateVendorNameModal({
   title,
   buttonTitle,
   visible,
-  closeModal,
-  onClickButton,
-  loading,
+  onCloseModal,
+  selectedRow,
 }: Props) {
-  const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+  const [form] = useForm();
+
+  const vendorUpdateMutation = useMutation(vendorAPI.update, {
+    onSuccess: ({ msg }) => {
+      message.success(msg);
+      onCloseModal();
+      form.resetFields();
+    },
+  });
 
   useEffect(() => {
     if (visible) return;
-    setDate(moment().format('YYYY-MM-DD'));
   }, [visible]);
 
   return (
@@ -32,34 +42,31 @@ function UpdateVendorNameModal({
       width={350}
       title={title}
       visible={visible}
-      onCancel={loading ? () => {} : closeModal}
+      onCancel={onCloseModal}
       footer={false}
     >
       <Form
+        form={form}
         layout="vertical"
-        onFinish={() => {
-          onClickButton(date);
+        onFinish={(value) => {
+          vendorUpdateMutation.mutate({
+            id: Number(selectedRow.id),
+            memo: selectedRow.memo,
+            is_vat_included: selectedRow.is_vat_included,
+            vendor_name: value.vendor_name,
+          });
         }}
       >
-        <Form.Item label={'날짜'} colon={false}>
-          <DatePicker
-            style={{ width: '100%' }}
-            allowClear={false}
-            disabledDate={(current) => current > moment()}
-            disabled={loading}
-            value={moment(date)}
-            onChange={(_, date) => {
-              setDate(date);
-            }}
-          />
+        <Form.Item label={t('vendor.name')} name="vendor_name" colon={false}>
+          <Input placeholder={t('placeholder.vendor name')} />
         </Form.Item>
         <Form.Item>
           <Button
+            htmlType="submit"
             style={{ width: '100%' }}
             type="primary"
             size="large"
-            htmlType="submit"
-            loading={loading}
+            loading={vendorUpdateMutation.isLoading}
           >
             {buttonTitle}
           </Button>
