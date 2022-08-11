@@ -13,7 +13,7 @@ export interface Product {
   option: string;
   image_url: string;
   memo: string;
-
+  need_update: boolean;
   memo_value?: string;
   memo_active?: boolean;
 }
@@ -37,6 +37,7 @@ export interface ProductShow {
   option: string;
   memo: string;
   image_url: string;
+  need_update: boolean;
 }
 
 /*
@@ -161,6 +162,7 @@ export interface RequestUpdate {
   vat_price: number;
   option: string;
   memo: string;
+  need_update: boolean;
 }
 
 export interface ResponseUpdate {

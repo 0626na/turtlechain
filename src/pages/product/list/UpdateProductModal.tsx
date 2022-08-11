@@ -42,6 +42,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_name: selectedRow?.vendor_info.vendor_name,
       vendor_address: selectedRow?.vendor_info.vendor_address,
       vendor_phone: selectedRow?.vendor_info.vendor_phone.phone,
+      need_update: false,
     });
   }, [selectedRow, form]);
 
@@ -129,7 +130,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then((value) => {
-              updateProductQuery.mutate(value);
+              updateProductQuery.mutate({ ...value, need_update: true });
             });
           }}
         >

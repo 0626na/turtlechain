@@ -1,13 +1,24 @@
 import { t } from 'i18next';
-import { useCallback } from 'react';
-import { useRecoilState } from 'recoil';
-import { Table, TabPaneProps, Tabs, Typography } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  Button,
+  Popover,
+  Row,
+  Table,
+  TabPaneProps,
+  Tabs,
+  Typography,
+} from 'antd';
 import {
   TurtleIcon,
   TurtleInputPrice,
   TurtleTableTitle,
 } from '@components/common';
 import { productCartState } from '@store/productCartState';
+import { useQuery } from 'react-query';
+import productAPI from '@apis/productAPI';
+import { storeState } from '@store/storeState';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -15,6 +26,8 @@ interface Props extends TabPaneProps {
 
 function SuccessTab({ loading, ...props }: Props) {
   const [cart, setCart] = useRecoilState(productCartState);
+  const [messageOutput, setmessageOutput] = useState(false);
+  const store = useRecoilValue(storeState);
 
   // 상품 삭제
   const deleteItem = useCallback(
@@ -27,6 +40,36 @@ function SuccessTab({ loading, ...props }: Props) {
       }));
     },
     [setCart],
+  );
+
+  //기존 등록 데이터 로딩
+  const getProductListQuery = useQuery(
+    'getProductListQuery',
+    () =>
+      productAPI.getList({
+        rt_store_id: store.id ?? -1,
+        page: 1,
+        search_string: '',
+        type: 'name',
+      }),
+    {
+      enabled: loading,
+      onSuccess: (data) => {
+        setCart({
+          ...cart,
+          //기존의 상품데이터와 셀메이트의 상품데이터 비교작업
+          successList: cart.successList.filter((successProduct) =>
+            data.data.product_list.map((product) => {
+              if (successProduct.vendor_id === product.vendor_info.id) {
+                successProduct.need_update = product.need_update;
+                setmessageOutput(true);
+                return successProduct;
+              } else return successProduct;
+            }),
+          ),
+        });
+      },
+    },
   );
 
   // 장바구니의 successList 를 수정한다.
@@ -47,6 +90,10 @@ function SuccessTab({ loading, ...props }: Props) {
     [setCart],
   );
 
+  useEffect(() => {
+    getProductListQuery.refetch();
+  }, [getProductListQuery, loading]);
+
   return (
     <Tabs.TabPane {...props}>
       <Table
@@ -63,78 +110,240 @@ function SuccessTab({ loading, ...props }: Props) {
             ellipsis: true,
             width: 150,
             title: t('vendor.name'),
-            render: (_, record) => record.vendor_name,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.vendor_name,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 150,
             title: t('vendor.address'),
-            render: (_, record) => record.vendor_address,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.vendor_address,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 250,
-            title: t('product.name'),
-            render: (_, record) => record.name,
+            title: (
+              <Popover
+                title={
+                  <Typography.Text style={{ color: 'white' }}>
+                    {t('message.product info different')}
+                  </Typography.Text>
+                }
+                content={
+                  <>
+                    <Typography.Text style={{ color: 'white' }}>
+                      {t('description product info different')}
+                    </Typography.Text>
+                    <Row justify="end" style={{ marginTop: 10 }}>
+                      <Button
+                        style={{ color: '#65C1E5', border: '#65C1E5' }}
+                        href="https://www.sellmate.co.kr/login"
+                        target="_blank"
+                      >
+                        {t('button click sellmate')}
+                      </Button>
+                    </Row>
+                  </>
+                }
+                color="#65C1E5"
+                visible={messageOutput}
+              >
+                {t('product.name')}
+              </Popover>
+            ),
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.name,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 200,
             title: t('product.vendor product name'),
-            render: (_, record) => record.vendor_product_name,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.vendor_product_name,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.code'),
-            render: (_, record) => record.product_code,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.product_code,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.option'),
-            render: (_, record) => record.option,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.option,
+              };
+            },
           },
           {
             ellipsis: true,
             align: 'right',
             width: 120,
             title: t('product.price'),
-            render: (_, record) => (
-              <TurtleInputPrice
-                size="small"
-                value={record.price}
-                onChange={(value) => {
-                  updateSuccessList('price', record.product_code, value);
-                }}
-              />
-            ),
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: (
+                  <TurtleInputPrice
+                    size="small"
+                    value={record.price}
+                    onChange={(value) => {
+                      getProductListQuery.data?.data.product_list.map(
+                        (product) => {
+                          if (
+                            record.vendor_id === product.vendor_info.id &&
+                            record.price !== product.price
+                          ) {
+                            updateSuccessList(
+                              'need_update',
+                              record.need_update,
+                              true,
+                            );
+                          }
+                          if (
+                            record.vendor_id === product.vendor_info.id &&
+                            record.price === product.price
+                          ) {
+                            updateSuccessList(
+                              'need_update',
+                              record.need_update,
+                              false,
+                            );
+                          }
+                        },
+                      );
+                      updateSuccessList('price', record.product_code, value);
+                    }}
+                  />
+                ),
+              };
+            },
           },
           {
             ellipsis: true,
             title: t('product.image url'),
-            render: (_, record) => (
-              <Typography.Link href={record.image_url} target="_blank">
-                {record.image_url}
-              </Typography.Link>
-            ),
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: (
+                  <Typography.Link href={record.image_url} target="_blank">
+                    {record.image_url}
+                  </Typography.Link>
+                ),
+              };
+            },
           },
           {
             ellipsis: true,
             title: t('product.memo'),
-            render: (_, record) => record.memo,
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: record.memo,
+              };
+            },
           },
           {
             ellipsis: true,
             width: 50,
-            render: (_, record) => (
-              <TurtleIcon
-                type="delete"
-                onClick={() => {
-                  deleteItem(record.product_code);
-                }}
-              />
-            ),
+            render: (_, record) => {
+              return {
+                props: {
+                  style: {
+                    backgroundColor: record.need_update
+                      ? '#F2F2F3'
+                      : 'transparent',
+                  },
+                },
+                children: (
+                  <TurtleIcon
+                    type="delete"
+                    onClick={() => {
+                      deleteItem(record.product_code);
+                    }}
+                  />
+                ),
+              };
+            },
           },
         ]}
       />
