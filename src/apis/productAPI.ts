@@ -16,6 +16,7 @@ export interface Product {
   need_update: boolean;
   memo_value?: string;
   memo_active?: boolean;
+  submit_product?: number;
 }
 
 export interface ProductShow {
@@ -172,7 +173,7 @@ export interface ResponseUpdate {
 
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 

@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   Button,
   Popover,
@@ -16,9 +16,6 @@ import {
   TurtleTableTitle,
 } from '@components/common';
 import { productCartState } from '@store/productCartState';
-import { useQuery } from 'react-query';
-import productAPI from '@apis/productAPI';
-import { storeState } from '@store/storeState';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -27,7 +24,6 @@ interface Props extends TabPaneProps {
 function SuccessTab({ loading, ...props }: Props) {
   const [cart, setCart] = useRecoilState(productCartState);
   const [messageOutput, setmessageOutput] = useState(false);
-  const store = useRecoilValue(storeState);
 
   // 상품 삭제
   const deleteItem = useCallback(
@@ -40,36 +36,6 @@ function SuccessTab({ loading, ...props }: Props) {
       }));
     },
     [setCart],
-  );
-
-  //기존 등록 데이터 로딩
-  const getProductListQuery = useQuery(
-    'getProductListQuery',
-    () =>
-      productAPI.getList({
-        rt_store_id: store.id ?? -1,
-        page: 1,
-        search_string: '',
-        type: 'name',
-      }),
-    {
-      enabled: loading,
-      onSuccess: (data) => {
-        setCart({
-          ...cart,
-          //기존의 상품데이터와 셀메이트의 상품데이터 비교작업
-          successList: cart.successList.filter((successProduct) =>
-            data.data.product_list.map((product) => {
-              if (successProduct.vendor_id === product.vendor_info.id) {
-                successProduct.need_update = product.need_update;
-                setmessageOutput(true);
-                return successProduct;
-              } else return successProduct;
-            }),
-          ),
-        });
-      },
-    },
   );
 
   // 장바구니의 successList 를 수정한다.
@@ -91,8 +57,10 @@ function SuccessTab({ loading, ...props }: Props) {
   );
 
   useEffect(() => {
-    getProductListQuery.refetch();
-  }, [getProductListQuery, loading]);
+    cart.successList.map(
+      (store) => store.need_update && setmessageOutput(true),
+    );
+  }, [cart]);
 
   return (
     <Tabs.TabPane {...props}>
@@ -153,7 +121,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 content={
                   <>
                     <Typography.Text style={{ color: 'white' }}>
-                      {t('description product info different')}
+                      {t('description.product info different')}
                     </Typography.Text>
                     <Row justify="end" style={{ marginTop: 10 }}>
                       <Button
@@ -161,7 +129,7 @@ function SuccessTab({ loading, ...props }: Props) {
                         href="https://www.sellmate.co.kr/login"
                         target="_blank"
                       >
-                        {t('button click sellmate')}
+                        {t('button.click sellmate')}
                       </Button>
                     </Row>
                   </>
@@ -255,30 +223,19 @@ function SuccessTab({ loading, ...props }: Props) {
                     size="small"
                     value={record.price}
                     onChange={(value) => {
-                      getProductListQuery.data?.data.product_list.map(
-                        (product) => {
-                          if (
-                            record.vendor_id === product.vendor_info.id &&
-                            record.price !== product.price
-                          ) {
-                            updateSuccessList(
-                              'need_update',
-                              record.need_update,
-                              true,
-                            );
-                          }
-                          if (
-                            record.vendor_id === product.vendor_info.id &&
-                            record.price === product.price
-                          ) {
-                            updateSuccessList(
-                              'need_update',
-                              record.need_update,
-                              false,
-                            );
-                          }
-                        },
-                      );
+                      if (record.submit_product === value)
+                        updateSuccessList(
+                          'need_update',
+                          record.product_code,
+                          false,
+                        );
+                      else
+                        updateSuccessList(
+                          'need_update',
+                          record.product_code,
+                          true,
+                        );
+
                       updateSuccessList('price', record.product_code, value);
                     }}
                   />
@@ -289,22 +246,20 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             title: t('product.image url'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
+            render: (_, record) => ({
+              props: {
+                style: {
+                  backgroundColor: record.need_update
+                    ? '#F2F2F3'
+                    : 'transparent',
                 },
-                children: (
-                  <Typography.Link href={record.image_url} target="_blank">
-                    {record.image_url}
-                  </Typography.Link>
-                ),
-              };
-            },
+              },
+              children: (
+                <Typography.Link href={record.image_url} target="_blank">
+                  {record.image_url}
+                </Typography.Link>
+              ),
+            }),
           },
           {
             ellipsis: true,
