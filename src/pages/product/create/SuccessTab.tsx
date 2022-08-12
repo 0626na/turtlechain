@@ -23,7 +23,13 @@ interface Props extends TabPaneProps {
 
 function SuccessTab({ loading, ...props }: Props) {
   const [cart, setCart] = useRecoilState(productCartState);
-  const [messageOutput, setmessageOutput] = useState(false);
+  const [messageOutputVisible, setmessageOutputVisible] = useState(false);
+
+  const needUpdateStyle = (needUpdate: boolean) => ({
+    style: {
+      backgroundColor: needUpdate ? '#F2F2F3' : 'transparent',
+    },
+  });
 
   // 상품 삭제
   const deleteItem = useCallback(
@@ -38,7 +44,7 @@ function SuccessTab({ loading, ...props }: Props) {
     [setCart],
   );
 
-  // 장바구니의 successList 를 수정한다.
+  //장바구니의 successList 를 수정한다.
   const updateSuccessList = useCallback(
     (type: string, code, value) => {
       setCart((cart) => ({
@@ -57,8 +63,8 @@ function SuccessTab({ loading, ...props }: Props) {
   );
 
   useEffect(() => {
-    cart.successList.map(
-      (store) => store.need_update && setmessageOutput(true),
+    cart.successList.forEach(
+      (store) => store.need_update && setmessageOutputVisible(true),
     );
   }, [cart]);
 
@@ -78,35 +84,19 @@ function SuccessTab({ loading, ...props }: Props) {
             ellipsis: true,
             width: 150,
             title: t('vendor.name'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.vendor_name,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.vendor_name,
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('vendor.address'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.vendor_address,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.vendor_address,
+            }),
           },
           {
             ellipsis: true,
@@ -135,125 +125,71 @@ function SuccessTab({ loading, ...props }: Props) {
                   </>
                 }
                 color="#65C1E5"
-                visible={messageOutput}
+                visible={messageOutputVisible}
               >
                 {t('product.name')}
               </Popover>
             ),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.name,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.name,
+            }),
           },
           {
             ellipsis: true,
             width: 200,
             title: t('product.vendor product name'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.vendor_product_name,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.vendor_product_name,
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.code'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.product_code,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.product_code,
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.option'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.option,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.option,
+            }),
           },
           {
             ellipsis: true,
             align: 'right',
             width: 120,
             title: t('product.price'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: (
-                  <TurtleInputPrice
-                    size="small"
-                    value={record.price}
-                    onChange={(value) => {
-                      if (record.submit_product === value)
-                        updateSuccessList(
-                          'need_update',
-                          record.product_code,
-                          false,
-                        );
-                      else
-                        updateSuccessList(
-                          'need_update',
-                          record.product_code,
-                          true,
-                        );
-
-                      updateSuccessList('price', record.product_code, value);
-                    }}
-                  />
-                ),
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: (
+                <TurtleInputPrice
+                  size="small"
+                  value={record.price}
+                  onChange={(value) => {
+                    updateSuccessList('price', record.product_code, value);
+                    updateSuccessList(
+                      'need_update',
+                      record.product_code,
+                      record.submit_product_price !== value,
+                    );
+                  }}
+                />
+              ),
+            }),
           },
           {
             ellipsis: true,
             title: t('product.image url'),
             render: (_, record) => ({
-              props: {
-                style: {
-                  backgroundColor: record.need_update
-                    ? '#F2F2F3'
-                    : 'transparent',
-                },
-              },
+              props: needUpdateStyle(record.need_update),
               children: (
                 <Typography.Link href={record.image_url} target="_blank">
                   {record.image_url}
@@ -264,41 +200,25 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             title: t('product.memo'),
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: record.memo,
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: record.memo,
+            }),
           },
           {
             ellipsis: true,
             width: 50,
-            render: (_, record) => {
-              return {
-                props: {
-                  style: {
-                    backgroundColor: record.need_update
-                      ? '#F2F2F3'
-                      : 'transparent',
-                  },
-                },
-                children: (
-                  <TurtleIcon
-                    type="delete"
-                    onClick={() => {
-                      deleteItem(record.product_code);
-                    }}
-                  />
-                ),
-              };
-            },
+            render: (_, record) => ({
+              props: needUpdateStyle(record.need_update),
+              children: (
+                <TurtleIcon
+                  type="delete"
+                  onClick={() => {
+                    deleteItem(record.product_code);
+                  }}
+                />
+              ),
+            }),
           },
         ]}
       />

@@ -16,7 +16,7 @@ export interface Product {
   need_update: boolean;
   memo_value?: string;
   memo_active?: boolean;
-  submit_product?: number;
+  submit_product_price?: number;
 }
 
 export interface ProductShow {
