@@ -23,7 +23,7 @@ interface Props extends TabPaneProps {
 
 function SuccessTab({ loading, ...props }: Props) {
   const [cart, setCart] = useRecoilState(productCartState);
-  const [messageOutputVisible, setmessageOutputVisible] = useState(false);
+  const [messageVisible, setMessageVisible] = useState(false);
 
   const needUpdateStyle = (needUpdate: boolean) => ({
     style: {
@@ -63,9 +63,9 @@ function SuccessTab({ loading, ...props }: Props) {
   );
 
   useEffect(() => {
-    cart.successList.forEach(
-      (store) => store.need_update && setmessageOutputVisible(true),
-    );
+    cart.successList.forEach((store) => {
+      store.need_update && setMessageVisible(true);
+    });
   }, [cart]);
 
   return (
@@ -125,7 +125,7 @@ function SuccessTab({ loading, ...props }: Props) {
                   </>
                 }
                 color="#65C1E5"
-                visible={messageOutputVisible}
+                visible={messageVisible}
               >
                 {t('product.name')}
               </Popover>
@@ -178,7 +178,7 @@ function SuccessTab({ loading, ...props }: Props) {
                     updateSuccessList(
                       'need_update',
                       record.product_code,
-                      record.submit_product_price !== value,
+                      record.submit_price !== value,
                     );
                   }}
                 />
