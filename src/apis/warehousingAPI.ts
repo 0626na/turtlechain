@@ -12,6 +12,7 @@ export interface WarehousingItemConnect {
   product_option: string;
   product_code: number;
   store_house: string;
+  warehousing_date: string;
 
   price: number;
   count: number;
@@ -63,6 +64,7 @@ export interface WarehousingItem {
   is_inactive: boolean;
   is_reserved: boolean;
   created_date: string;
+  warehousing_date: string;
 }
 
 /*
@@ -71,6 +73,8 @@ export interface WarehousingItem {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
+  start_date: string;
+  end_date: string;
 }
 
 export interface ResponseConnectInventory {
@@ -88,12 +92,9 @@ export interface ResponseConnectInventory {
   };
 }
 
-const connectInventory = async function (query: RequestConnectInventory) {
-  let url = 'external-api/inventory/warehousing?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseConnectInventory>(url);
+const connectInventory = async function (params: RequestConnectInventory) {
+  let url = 'external-api/inventory/warehousing';
+  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
   return response.data;
 };
 
@@ -133,6 +134,7 @@ export interface RequestCreateItem {
     product_id: number;
     count: number;
     price: number;
+    warehousing_date: string;
     is_reserved?: boolean;
     memo?: string;
   }>;
@@ -193,7 +195,11 @@ const getSheet = async function (query: RequestGetSheet) {
  */
 
 export type RequestGetItem = {
-  sheet_id: number;
+  rt_store_id?: number;
+  sheet_id?: number;
+  product_name?: string;
+  start_date?: string;
+  end_date?: string;
 };
 
 export interface ResponseGetItem {
@@ -204,9 +210,10 @@ export interface ResponseGetItem {
   };
 }
 
-const getItem = async function (data: RequestGetItem) {
-  const url = `warehousing/item?sheet_id=${data.sheet_id}`;
-  const response = await v2Axios.get<ResponseGetItem>(url);
+const getItem = async (params: RequestGetItem) => {
+  const url = `warehousing/item`;
+  const response = await v2Axios.get<ResponseGetItem>(url, { params });
+
   return response.data;
 };
 

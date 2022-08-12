@@ -15,6 +15,7 @@ import {
 import { storeState } from '@store/storeState';
 import { productCartState } from '@store/productCartState';
 import { useStoreExist } from '@hooks/index';
+import { SelectRangeDateModal } from '@components/combine';
 import SuccessTab from './SuccessTab';
 import FailTab from './FailTab';
 import AddSingleProductModal from './AddProductModal';
@@ -24,6 +25,7 @@ function PageBody() {
   const store = useRecoilValue(storeState);
   const isStoreExist = useStoreExist();
   const [cart, setCart] = useRecoilState(productCartState);
+  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
 
   // 엑셀파싱 요청
@@ -40,6 +42,7 @@ function PageBody() {
     {
       onSuccess: (data) => {
         updateStates(data);
+        setSelectDateModalVisible(false);
       },
     },
   );
@@ -67,6 +70,7 @@ function PageBody() {
       failList: [],
     });
     connectQuery.reset();
+    setSelectDateModalVisible(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCart]);
 
@@ -126,15 +130,27 @@ function PageBody() {
 
   return (
     <>
+      <SelectRangeDateModal
+        title="날짜선택"
+        buttonTitle="정보 불러오기"
+        visible={selectDateModalVisible}
+        closeModal={() => {
+          setSelectDateModalVisible(false);
+        }}
+        onClickButton={({ start_date, end_date }) => {
+          connectQuery.mutate({ rt_store_id: store.id!, start_date, end_date });
+        }}
+        loading={connectQuery.isLoading}
+        inThreeMonth
+      />
       <MenuBar isWarning>
         <TurtleButtonSub
           type="primary"
           color="skyblue"
           onClick={() => {
             if (!isStoreExist()) return;
-            connectQuery.mutate({ rt_store_id: store.id! });
+            setSelectDateModalVisible(true);
           }}
-          disabled={connectQuery.isLoading}
         >
           {t('button.connect external program')}
         </TurtleButtonSub>

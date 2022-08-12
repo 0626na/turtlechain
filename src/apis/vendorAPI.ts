@@ -85,6 +85,8 @@ export interface WholesaleShow {
 
 export interface RequestConnectInventory {
   rt_store_id: number;
+  start_date: string;
+  end_date: string;
 }
 
 export interface ResponseConnectInventory {
@@ -98,12 +100,10 @@ export interface ResponseConnectInventory {
   };
 }
 
-const connectInventory = async function (query: RequestConnectInventory) {
+const connectInventory = async function (params: RequestConnectInventory) {
   let url = 'external-api/inventory/vendors?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseConnectInventory>(url);
+  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
+
   return response.data;
 };
 

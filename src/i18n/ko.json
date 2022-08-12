@@ -67,6 +67,7 @@
     "info max adjustable price": "해당 도매 차감 가능 금액: ",
     "warning clearing information": "원활한 입금을 위해서 당일 정산은 17:30까지 요청 바랍니다. “대기” 시점에서는 정산서 수정이 불가합니다.",
     "already exist product": "이미 추가된 상품입니다.",
+    "success delete product": "상품을 삭제 했습니다.",
     "success delete mistransfer": "오입금 반환내역을 삭제했습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다."
   },
@@ -149,7 +150,7 @@
     "create warehousing": "입고 등록하기",
     "add adjustment": "매입조정 추가",
     "create adjustment": "매입조정 등록하기",
-    "load warehousing": "입고내역 불러오기",
+    "load warehousing": "입고상품 불러오기",
     "add reserve product": "미송상품 단건추가",
     "add store": "쇼핑몰 추가",
     "invite staff": "직원 초대",
@@ -210,7 +211,7 @@
     "amount": "금액",
     "total amount": "금액 합계",
     "preview": "입고서 미리보기",
-    "load": "입고내역 불러오기",
+    "load": "입고상품 불러오기",
     "is reserved": "미송입고 여부"
   },
   "adjustment": {
