@@ -44,7 +44,7 @@ const PageBody = function () {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: store.id,
-    is_cleared: 2,
+    is_cleared: '',
     start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
     page: 1,
@@ -149,7 +149,7 @@ const PageBody = function () {
                 size="small"
                 style={{ width: 100 }}
                 value={searchQuery.is_cleared}
-                defaultValue={2}
+                defaultValue={''}
                 onChange={(is_cleared) => {
                   setSearchQuery({ ...searchQuery, is_cleared });
                 }}
