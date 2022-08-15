@@ -103,7 +103,7 @@ function PageBody() {
                       }}
                     />
                   </Col>
-                  <Col>
+                  {/* <Col>
                     <DeleteOutlined
                       style={{ opacity: '0.4' }}
                       onClick={(e) => {
@@ -114,7 +114,7 @@ function PageBody() {
                         });
                       }}
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
               );
             },
