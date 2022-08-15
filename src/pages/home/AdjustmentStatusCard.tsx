@@ -11,7 +11,7 @@ function AdjustmentStatusCard() {
   // 매입조정 리스트 요청
   const getAdjustmentListQuery = useQuery(['getAdjustmentList'], () =>
     adjustmentAPI.getList({
-      is_cleared: 2,
+      is_cleared: '',
       start_date: moment().startOf('month').format('YYYY-MM-DD'),
       end_date: moment().endOf('month').format('YYYY-MM-DD'),
     }),
