@@ -55,7 +55,7 @@ function UpdateVendorNameModal({
         }}
       >
         <Form.Item label={t('vendor.name')} name="vendor_name" colon={false}>
-          <Input autoFocus placeholder={t('placeholder.vendor name')} />
+          <Input autoFocus placeholder={selectedRow?.vendor_name} />
         </Form.Item>
         <Form.Item>
           <Button
