@@ -29,7 +29,7 @@ function PageBody() {
   );
 
   //리스트내 상품 삭제
-  const removeQuery = useMutation(productAPI.remove, {
+  const removeMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
       getListQuery.refetch();
       message.success(`${t('message.success delete product')}`);
@@ -178,7 +178,7 @@ function PageBody() {
                   style={{ opacity: '0.4' }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    removeQuery.mutate({
+                    removeMutation.mutate({
                       id: record.id,
                       is_inactive: true,
                     });
