@@ -52,7 +52,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               (item) =>
                 item.warehousing_amount +
                   item.unpaid_amount +
-                  item.reserve_payment_amount >
+                  item.reserve_payment_amount +
+                  item.reserve_subtract_amount >
                 0,
             )
             .map((item) => ({
