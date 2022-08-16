@@ -1,11 +1,11 @@
 import { t } from 'i18next';
-import { Col, message, Pagination, Row, Table, Typography } from 'antd';
+import { Col, Pagination, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import { storeState } from '@store/storeState';
-import { DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileTextOutlined } from '@ant-design/icons';
 import { MainContent, MenuBar } from '@layout/page';
 import { TurtleTableTitle } from '@components/common';
 import { NewSearchFilter } from '@components/combine';
@@ -29,12 +29,12 @@ function PageBody() {
   );
 
   //리스트내 상품 삭제
-  const removeQuery = useMutation(productAPI.remove, {
-    onSuccess: () => {
-      getListQuery.refetch();
-      message.success(`${t('message.success delete product')}`);
-    },
-  });
+  // const removeQuery = useMutation(productAPI.remove, {
+  //   onSuccess: () => {
+  //     getListQuery.refetch();
+  //     message.success(`${t('message.success delete product')}`);
+  //   },
+  // });
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
