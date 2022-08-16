@@ -31,7 +31,7 @@ export interface AdjustmentItemShow {
   ws_store_id: number;
   count: number;
   count_left: number;
-  is_cleared: boolean;
+  is_cleared: string;
   created_date: string;
   type: 'reserve' | 'takeback' | 'exchange';
   vendor_info: {
@@ -57,7 +57,7 @@ export interface AdjustmentItemShow {
 export interface RequestGetList {
   end_date: string;
   start_date: string;
-  is_cleared: number;
+  is_cleared: string;
   rt_store_id?: number;
   page?: number;
 }
