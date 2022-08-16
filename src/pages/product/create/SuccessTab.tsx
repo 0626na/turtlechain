@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   Button,
+  Col,
   Popover,
   Row,
   Table,
@@ -16,6 +17,7 @@ import {
   TurtleTableTitle,
 } from '@components/common';
 import { productCartState } from '@store/productCartState';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -102,9 +104,19 @@ function SuccessTab({ loading, ...props }: Props) {
             title: (
               <Popover
                 title={
-                  <Typography.Text style={{ color: 'white' }}>
-                    {t('message.product info different')}
-                  </Typography.Text>
+                  <Row justify="space-between" align="middle">
+                    <Col>
+                      <Typography.Text style={{ color: 'white' }}>
+                        {t('message.product info different')}
+                      </Typography.Text>
+                    </Col>
+                    <Col>
+                      <CloseOutlined
+                        style={{ color: 'white' }}
+                        onClick={() => setMessageVisible(false)}
+                      />
+                    </Col>
+                  </Row>
                 }
                 content={
                   <>
