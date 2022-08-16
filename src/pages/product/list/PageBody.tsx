@@ -1,11 +1,11 @@
 import { t } from 'i18next';
-import { Col, Pagination, Row, Table, Typography } from 'antd';
+import { Col, message, Pagination, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import { storeState } from '@store/storeState';
-import { FileTextOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { MainContent, MenuBar } from '@layout/page';
 import { TurtleTableTitle } from '@components/common';
 import { NewSearchFilter } from '@components/combine';
@@ -29,12 +29,12 @@ function PageBody() {
   );
 
   //리스트내 상품 삭제
-  // const removeQuery = useMutation(productAPI.remove, {
-  //   onSuccess: () => {
-  //     getListQuery.refetch();
-  //     message.success(`${t('message.success delete product')}`);
-  //   },
-  // });
+  const removeMutation = useMutation(productAPI.remove, {
+    onSuccess: () => {
+      getListQuery.refetch();
+      message.success(`${t('message.success delete product')}`);
+    },
+  });
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
@@ -48,8 +48,16 @@ function PageBody() {
   return (
     <>
       <MenuBar />
-
       <MainContent title={t('product.lists')}>
+        {/* 상품 수정 모달 */}
+        <UpdateProductModal
+          visible={updateModalVisible}
+          closeModal={() => {
+            getListQuery.refetch();
+            setUpdateModalVisible(false);
+          }}
+          selectedRow={selectedRow}
+        />
         <Table
           size="small"
           loading={getListQuery.isLoading}
@@ -91,31 +99,13 @@ function PageBody() {
             columnWidth: 25,
             expandIcon: ({ onExpand, record }) => {
               return (
-                <Row justify="center">
-                  <Col>
-                    <FileTextOutlined
-                      style={
-                        record.memo ? {} : { opacity: '0.4', cursor: 'auto' }
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        record.memo && onExpand(record, e);
-                      }}
-                    />
-                  </Col>
-                  {/* <Col>
-                    <DeleteOutlined
-                      style={{ opacity: '0.4' }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeQuery.mutate({
-                          id: record.id,
-                          is_inactive: true,
-                        });
-                      }}
-                    />
-                  </Col> */}
-                </Row>
+                <FileTextOutlined
+                  style={record.memo ? {} : { opacity: '0.4', cursor: 'auto' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    record.memo && onExpand(record, e);
+                  }}
+                />
               );
             },
           }}
@@ -181,17 +171,22 @@ function PageBody() {
               ),
             },
             Table.EXPAND_COLUMN,
+            {
+              width: 28,
+              render: (_, record) => (
+                <DeleteOutlined
+                  style={{ opacity: '0.4' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeMutation.mutate({
+                      id: record.id,
+                      is_inactive: true,
+                    });
+                  }}
+                />
+              ),
+            },
           ]}
-        />
-
-        {/* 상품 수정 모달 */}
-        <UpdateProductModal
-          visible={updateModalVisible}
-          closeModal={() => {
-            getListQuery.refetch();
-            setUpdateModalVisible(false);
-          }}
-          selectedRow={selectedRow}
         />
       </MainContent>
     </>

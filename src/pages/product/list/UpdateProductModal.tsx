@@ -30,6 +30,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
 
   // 모달 렌더링 될 때 상품정보 채워주기
   useEffect(() => {
+    form.resetFields();
     form.setFieldsValue({
       id: selectedRow?.id,
       name: selectedRow?.name,
@@ -44,7 +45,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_phone: selectedRow?.vendor_info.vendor_phone.phone,
       need_update: false,
     });
-  }, [selectedRow, form]);
+  }, [selectedRow, visible, form]);
 
   return (
     <TurtleModal
