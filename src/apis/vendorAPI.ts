@@ -226,7 +226,7 @@ export interface ResponseUpdate {
 // 거래처 수정 요청
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/vendor/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 
