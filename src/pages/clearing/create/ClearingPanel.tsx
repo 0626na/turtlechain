@@ -262,7 +262,7 @@ function ClearingPanel({
                 <Tag
                   color={!record.vendor_info.is_vat_included ? 'green' : 'red'}
                 >
-                  {!record.vendor_info.is_vat_included ? '포함' : '미 포함'}
+                  {!record.vendor_info.is_vat_included ? '포함' : '미포함'}
                 </Tag>
               ),
             },
