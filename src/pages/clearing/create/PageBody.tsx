@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Collapse } from 'antd';
+import { Col, Collapse, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { t } from 'i18next';
@@ -14,90 +14,145 @@ import ExcelModal from './ExcelModal';
 import { storeState } from '@store/storeState';
 
 import useStoreExist from '@hooks/useStoreExist';
+import { SelectDateModal } from '@components/combine';
 
 function PageBody() {
   const store = useRecoilValue(storeState);
+
+  // agency_services(대행 서비스)
   const isStoreExist = useStoreExist();
   const [excelModalVisible, setExcelModalVisible] = useState(false);
-  const [activeKey, setActiveKey] = useState('0');
 
-  // 쇼핑몰 선택되면 입고판넬 활성화
+  // 2.0
+  const [activeKey, setActiveKey] = useState('0');
+  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
+  const [clearingRequestDate, setClearingRequestDate] = useState('');
+  // 쇼핑몰,날짜 선택시 매입조정 판넬 활성화
   useEffect(() => {
-    if (!store.id) {
+    if (!store.id || clearingRequestDate === '') {
       setActiveKey('0');
+
       return;
     }
+
     setActiveKey('1');
-  }, [store]);
+  }, [store, clearingRequestDate]);
 
   return (
     <>
-      <ExcelModal
-        visible={excelModalVisible}
-        closeModal={() => {
-          setExcelModalVisible(false);
-        }}
-      />
-      <MenuBar isWarning>
-        {store.version === 'agency_services' && (
-          <TurtleButtonSub
-            type="primary"
-            color="skyblue"
-            onClick={() => {
-              if (!isStoreExist()) {
-                return;
-              }
-              setExcelModalVisible(true);
+      {/*
+       * agency_services(대행 서비스)
+       */}
+
+      {store.version === 'agency_services' && (
+        <>
+          <ExcelModal
+            visible={excelModalVisible}
+            closeModal={() => {
+              setExcelModalVisible(false);
             }}
-          >
-            정산서 업로드
-          </TurtleButtonSub>
-        )}
-      </MenuBar>
+          />
+
+          <MenuBar isWarning>
+            <TurtleButtonSub
+              type="primary"
+              color="skyblue"
+              onClick={() => {
+                if (!isStoreExist()) {
+                  return;
+                }
+                setExcelModalVisible(true);
+              }}
+            >
+              정산서 업로드
+            </TurtleButtonSub>
+          </MenuBar>
+        </>
+      )}
+
+      {/*
+       * 2.0
+       */}
+
       {store.version === '2.0' && (
-        <MainContent info={t('description.today reserve included')}>
-          <StyledCollapse
-            accordion
-            bordered={false}
-            style={{ width: '100%' }}
-            onChange={(key) => {
-              if (Number(activeKey) === 0 || !key) {
-                return;
-              }
-              setActiveKey(key[0]);
+        <>
+          <SelectDateModal
+            title="결제요청날짜 선택"
+            buttonTitle="결제요청 등록"
+            visible={selectDateModalVisible}
+            closeModal={() => {
+              setSelectDateModalVisible(false);
             }}
-            activeKey={activeKey}
-          >
-            <AdjustmentPanel
-              key="1"
-              header={
-                <TurtlePanelHeader
-                  count={1}
-                  activeKey={activeKey}
-                  title="매입조정 결제대기"
-                />
-              }
-              activeKey={activeKey}
-              clickNext={() => {
-                setActiveKey('2');
+            onClickButton={(date) => {
+              console.log(date);
+              setClearingRequestDate(date);
+              setSelectDateModalVisible(false);
+            }}
+            loading={false}
+          />
+          <Row>
+            <Col>
+              <MenuBar isWarning>
+                <div style={{ marginLeft: 12 }}>
+                  <TurtleButtonSub
+                    type="primary"
+                    color="skyblue"
+                    onClick={() => {
+                      setSelectDateModalVisible(true);
+                    }}
+                  >
+                    결제요청 날짜 선택
+                  </TurtleButtonSub>
+                </div>
+              </MenuBar>
+            </Col>
+          </Row>
+          <MainContent info={t('description.today reserve included')}>
+            <StyledCollapse
+              accordion
+              bordered={false}
+              style={{ width: '100%' }}
+              onChange={(key) => {
+                if (Number(activeKey) === 0 || !key) {
+                  return;
+                }
+                setActiveKey(key[0]);
               }}
-            />
-            <ClearingPanel
-              key="2"
-              header={
-                <TurtlePanelHeader
-                  count={2}
-                  activeKey={activeKey}
-                  title="결제금액 미리보기"
-                />
-              }
               activeKey={activeKey}
-              clickCreate={() => {
-                setActiveKey('0');
-              }}
-            />
-          </StyledCollapse>
-        </MainContent>
+            >
+              <AdjustmentPanel
+                key="1"
+                header={
+                  <TurtlePanelHeader
+                    count={1}
+                    activeKey={activeKey}
+                    title="매입조정 결제대기"
+                  />
+                }
+                clearingRequestDate={clearingRequestDate}
+                activeKey={activeKey}
+                clickNext={() => {
+                  setActiveKey('2');
+                }}
+              />
+              <ClearingPanel
+                key="2"
+                header={
+                  <TurtlePanelHeader
+                    count={2}
+                    activeKey={activeKey}
+                    title="결제금액 미리보기"
+                  />
+                }
+                clearingRequestDate={clearingRequestDate}
+                activeKey={activeKey}
+                clickCreate={() => {
+                  setActiveKey('0');
+                }}
+              />
+            </StyledCollapse>
+          </MainContent>
+        </>
       )}
     </>
   );
