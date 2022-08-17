@@ -215,8 +215,9 @@ const create = async function (data: Array<RequestCreate>) {
 
 export interface RequestUpdate {
   id: number;
-  memo: string;
-  is_vat_included: boolean;
+  memo?: string;
+  is_vat_included?: boolean;
+  vendor_name?: string;
 }
 
 export interface ResponseUpdate {
@@ -224,9 +225,27 @@ export interface ResponseUpdate {
 }
 
 // 거래처 수정 요청
-const update = async function (data: RequestUpdate) {
+const update = async (data: RequestUpdate) => {
   const url = `provisioning/vendor/${data.id}`;
   const response = await v2Axios.patch<ResponseUpdate>(url, data);
+
+  return response.data;
+};
+
+export interface RequestRemove {
+  id: number;
+  is_inactive: boolean;
+}
+
+export interface ResponseRemove {
+  msg: string;
+}
+
+// 거래처 삭제 요청
+const remove = async (data: RequestRemove) => {
+  const url = `provisioning/vendor/${data.id}`;
+  const response = await v2Axios.patch<ResponseRemove>(url, data);
+
   return response.data;
 };
 
@@ -263,6 +282,7 @@ const vendorAPI = {
   getCode,
   create,
   update,
+  remove,
   getWholesale,
 };
 

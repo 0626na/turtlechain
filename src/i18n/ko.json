@@ -23,7 +23,8 @@
     "today reserve included": "당일 미송은 자동으로 결제금액에 포함됩니다.",
     "excel type": "대량 업로드 파일은 .CSV .XLS 또는 .XLSX 만 사용할 수 있습니다.",
     "fail product": "실패한 상품은 거래처 또는 일부 상품 정보가 정확하지 않아 추가하지 못한 상품들입니다.",
-    "check confirm": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다."
+    "check confirm": "마감 이후에는 수정 및 삭제가 불가하오니 업무 시 참고바랍니다.",
+    "product info different": "셀메이트와 상품정보가 일치하지 않습니다. 셀메이트 내 상품 세부정보를 업데이트 해주세요."
   },
   "message": {
     "login expired": "로그인이 만료되었습니다. 다시 로그인해주세요.",
@@ -69,7 +70,8 @@
     "already exist product": "이미 추가된 상품입니다.",
     "success delete product": "상품을 삭제 했습니다.",
     "success delete mistransfer": "오입금 반환내역을 삭제했습니다.",
-    "success create mistransfer": "오입금 반환요청을 성공했습니다."
+    "success create mistransfer": "오입금 반환요청을 성공했습니다.",
+    "product info different": "셀메이트에서 상품정보를 수정해주세요."
   },
   "status": {
     "open": "영업",
@@ -154,7 +156,8 @@
     "add reserve product": "미송상품 단건추가",
     "add store": "쇼핑몰 추가",
     "invite staff": "직원 초대",
-    "select file": "파일 선택하기"
+    "select file": "파일 선택하기",
+    "click sellmate": "셀메이트 바로가기"
   },
   "tooltip": {
     "request update": "수정하려는 정보는 터틀체인에서 확인 후, 최종적으로 변경됩니다.",
