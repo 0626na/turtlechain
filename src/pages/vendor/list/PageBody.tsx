@@ -211,7 +211,7 @@ function PageBody() {
           )}
           // 메모아이콘 클릭시 row확장
           expandable={{
-            columnWidth: 25,
+            columnWidth: 20,
             expandIcon: ({ onExpand, record }) => (
               <FileTextOutlined
                 style={record.memo ? {} : { opacity: '0.4' }}
@@ -365,7 +365,9 @@ function PageBody() {
             // 메모 아이콘 위치 지정
             Table.EXPAND_COLUMN,
             {
-              width: 25,
+              width: 45,
+              title: '편집',
+              align: 'center',
               render: (record) => (
                 <Dropdown
                   overlay={
