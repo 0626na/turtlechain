@@ -148,15 +148,15 @@ const PageBody = function () {
               <Select
                 size="small"
                 style={{ width: 100 }}
-                value={searchQuery.is_cleared}
+                value={searchQuery.is_cleared as 'True' | 'False' | ''}
                 defaultValue={''}
-                onChange={(is_cleared) => {
+                onChange={(is_cleared: 'True' | 'False' | '') => {
                   setSearchQuery({ ...searchQuery, is_cleared });
                 }}
               >
-                <Select.Option value={2}>{t('all')}</Select.Option>
-                <Select.Option value={0}>{t('waiting')}</Select.Option>
-                <Select.Option value={1}>{t('confirmed')}</Select.Option>
+                <Select.Option value="">{t('all')}</Select.Option>
+                <Select.Option value="False">{t('waiting')}</Select.Option>
+                <Select.Option value="True">{t('confirmed')}</Select.Option>
               </Select>
 
               <Divider type="vertical" style={{ margin: 0 }} />

@@ -57,7 +57,7 @@ export interface AdjustmentItemShow {
 export interface RequestGetList {
   end_date: string;
   start_date: string;
-  is_cleared: string;
+  is_cleared: 'True' | 'False' | '';
   rt_store_id?: number;
   page?: number;
 }
