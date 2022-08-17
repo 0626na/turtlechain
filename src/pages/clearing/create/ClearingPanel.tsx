@@ -29,7 +29,7 @@ import {
   TurtleButtonSub,
   TurtleTableTitle,
 } from '@components/common';
-import { NewSearchFilter, SelectDateModal } from '@components/combine';
+import { NewSearchFilter } from '@components/combine';
 
 import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
@@ -37,14 +37,19 @@ import { pricePattern } from '@utils/pattern';
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
   clickCreate: () => void;
+  clearingRequestDate: string;
 }
 
-function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
+function ClearingPanel({
+  activeKey,
+  clickCreate,
+  clearingRequestDate,
+  ...props
+}: Props) {
   const navigate = useNavigate();
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
   const { clearingPaymentTotal } = useClearingCart();
-  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
   const [tooltipVisibleId, setTooltipVisibleId] = useState(-1);
 
   const [searchQuery, setSearchQuery] = useState({
@@ -68,7 +73,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       onSuccess: () => {
         message.success(t('message.success create clearing'));
         clickCreate();
-        setSelectDateModalVisible(false);
         navigate('/clearing/list');
       },
     },
@@ -125,43 +129,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   }, [activeKey, setCart]);
   return (
     <>
-      <SelectDateModal
-        title="결제요청날짜 선택"
-        buttonTitle="결제요청 등록"
-        visible={selectDateModalVisible}
-        closeModal={() => {
-          setSelectDateModalVisible(false);
-        }}
-        onClickButton={(date) => {
-          createClearingQuery.mutate({
-            sheet: {
-              store_id: store.id,
-              credit_type: 'general',
-              store_name: store.name,
-              request_date: date,
-            },
-            item: {
-              rt_store_id: store.id,
-              rt_store_name: store.name,
-              // 당일 결제 합계
-              clearing_amount_list: cart.warehousingBalanceList
-                .filter((item) => item.clearing_payment_amount! > 0)
-                .map((item) => ({
-                  vendor_id: item.vendor_info.id,
-                  clearing_amount: item.clearing_payment_amount!,
-                })),
-              // 매입 차감
-              subtract_amount_list: cart.adjustmentSubtractList
-                .filter((item) => item.overpaid_payment_amount! > 0)
-                .map((item) => ({
-                  vendor_id: item.vendor_info.id,
-                  subtract_amount: item.overpaid_payment_amount!,
-                })),
-            },
-          });
-        }}
-        loading={createClearingQuery.isLoading}
-      />
       <Collapse.Panel
         {...props}
         style={{
@@ -374,7 +341,32 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               children={t('button.request clearing')}
               loading={createClearingQuery.isLoading}
               onClick={() => {
-                setSelectDateModalVisible(true);
+                createClearingQuery.mutate({
+                  sheet: {
+                    store_id: store.id,
+                    credit_type: 'general',
+                    store_name: store.name,
+                    request_date: clearingRequestDate,
+                  },
+                  item: {
+                    rt_store_id: store.id,
+                    rt_store_name: store.name,
+                    // 당일 결제 합계
+                    clearing_amount_list: cart.warehousingBalanceList
+                      .filter((item) => item.clearing_payment_amount! > 0)
+                      .map((item) => ({
+                        vendor_id: item.vendor_info.id,
+                        clearing_amount: item.clearing_payment_amount!,
+                      })),
+                    // 매입 차감
+                    subtract_amount_list: cart.adjustmentSubtractList
+                      .filter((item) => item.overpaid_payment_amount! > 0)
+                      .map((item) => ({
+                        vendor_id: item.vendor_info.id,
+                        subtract_amount: item.overpaid_payment_amount!,
+                      })),
+                  },
+                });
               }}
             />
           </Col>
