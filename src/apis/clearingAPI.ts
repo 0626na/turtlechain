@@ -110,6 +110,7 @@ export interface ClearingInfo {
 export interface RequestGetClearing {
   rt_store_id: number;
   balance_type: 'clearing';
+  clearing_request_date: string;
 }
 
 export interface ResponseGetClearing {
