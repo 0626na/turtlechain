@@ -11,6 +11,7 @@ import {
   Tooltip,
   Divider,
   Space,
+  Tag,
 } from 'antd';
 
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
@@ -252,6 +253,18 @@ function ClearingPanel({
                   </Tooltip>
                 );
               },
+            },
+            {
+              align: 'right',
+              ellipsis: true,
+              title: '부가세 입금 여부',
+              render: (_, record) => (
+                <Tag
+                  color={!record.vendor_info.is_vat_included ? 'green' : 'red'}
+                >
+                  {!record.vendor_info.is_vat_included ? '포함' : '미 포함'}
+                </Tag>
+              ),
             },
             {
               width: '48%',

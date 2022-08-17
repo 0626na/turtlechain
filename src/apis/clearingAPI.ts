@@ -82,6 +82,7 @@ export interface ClearingInfo {
     id: number;
     created_time: string;
     vendor_name: string;
+    is_vat_included: boolean;
     vendor_address?: string;
   };
   rt_store_id: number;
@@ -163,10 +164,10 @@ export interface ResponseCreateItem {
 }
 
 // 정산서 생성 요청
-const create = async function (data: {
+const create = async (data: {
   sheet: RequestCreateSheet;
   item: RequestCreateItem;
-}) {
+}) => {
   let url = 'clearing/sheet';
   const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
     url,
