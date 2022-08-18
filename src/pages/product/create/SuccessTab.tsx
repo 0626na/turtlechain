@@ -66,6 +66,7 @@ function SuccessTab({ loading, ...props }: Props) {
     cart.successList.forEach((store) => {
       store.need_update && setMessageVisible(true);
     });
+    cart.successList.length === 0 && setMessageVisible(false);
   }, [cart]);
 
   return (

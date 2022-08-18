@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { message, Pagination, Row, Table, Typography } from 'antd';
+import { message, Pagination, Popconfirm, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
@@ -174,16 +174,24 @@ function PageBody() {
             {
               width: 28,
               render: (_, record) => (
-                <DeleteOutlined
-                  style={{ opacity: '0.4' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                <Popconfirm
+                  title={t('message.confirm delete')}
+                  onConfirm={(e) => {
+                    e?.stopPropagation();
                     removeMutation.mutate({
                       id: record.id,
                       is_inactive: true,
                     });
                   }}
-                />
+                  onCancel={(e) => e?.stopPropagation()}
+                >
+                  <DeleteOutlined
+                    style={{ opacity: '0.4' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  />
+                </Popconfirm>
               ),
             },
           ]}
