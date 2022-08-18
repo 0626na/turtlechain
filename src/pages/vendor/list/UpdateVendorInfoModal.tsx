@@ -22,6 +22,7 @@ import { useMutation, useQuery } from 'react-query';
 import { storeState } from '@store/storeState';
 import bucketListAPI from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
+import { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
@@ -47,6 +48,9 @@ function UpdateVendorInfoModal({ visible, onCloseModal, selectedRow }: Props) {
       message.success('성공적으로 등록하였습니다.');
       resetStates();
       onCloseModal();
+    },
+    onError: (error: AxiosError) => {
+      message.warn(error.response?.data.msg);
     },
   });
 
