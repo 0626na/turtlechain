@@ -84,10 +84,12 @@ function warning_if_fail() {
 }
 
 function yarn_build() {
-  if [ $ENV == 'production' ]; then
+  if [ $ENV == 'prod' ]; then
     yarn run build:prod
+  elif [ $ENV == 'alpha' ]; then
+    yarn run build:alpha
   else
-    yarn run build:dev
+    yarn run build:devel
   fi
 
   exit_if_fail "yarn build fail."
