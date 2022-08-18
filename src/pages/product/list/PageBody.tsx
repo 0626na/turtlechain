@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Col, message, Pagination, Row, Table, Typography } from 'antd';
+import { message, Pagination, Row, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
