@@ -29,6 +29,7 @@ function PageBody() {
   const [cart, setCart] = useRecoilState(warehousingCartState);
   const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
   const [addProductModalVisible, setAddProductModalVisible] = useState(false);
+  const [reservedMessage, setReservedMessage] = useState('');
   const index = useRef(0);
 
   // 엑셀파싱 요청
@@ -50,7 +51,8 @@ function PageBody() {
     {
       onSuccess: (data) => {
         updateStates(data);
-        data.msg && message.info(data.msg);
+        data.msg && setReservedMessage(data.msg);
+
         setSelectDateModalVisible(false);
       },
     },
@@ -75,6 +77,7 @@ function PageBody() {
     });
     connectQuery.reset();
     setSelectDateModalVisible(false);
+    setReservedMessage('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCart]);
 
@@ -142,6 +145,7 @@ function PageBody() {
           setSelectDateModalVisible(false);
         }}
         onClickButton={({ start_date, end_date }) => {
+          setReservedMessage('');
           connectQuery.mutate({ rt_store_id: store.id!, start_date, end_date });
         }}
         loading={connectQuery.isLoading}
@@ -173,6 +177,7 @@ function PageBody() {
             key="1"
             tab={`성공(${cart.successList.length})`}
             loading={connectQuery.isLoading || parseQuery.isLoading}
+            reservedMessage={reservedMessage}
           />
           <FailTab
             key="2"

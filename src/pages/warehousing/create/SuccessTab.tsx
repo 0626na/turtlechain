@@ -1,19 +1,31 @@
 import { t } from 'i18next';
-import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from 'antd';
-import { useCallback, useMemo } from 'react';
+import {
+  Checkbox,
+  Col,
+  InputNumber,
+  Popover,
+  Row,
+  Table,
+  TabPaneProps,
+  Tabs,
+  Typography,
+} from 'antd';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { warehousingCartState } from '@store/warehousingCartState';
 import { pricePattern } from '@utils/pattern';
 import { TurtleIcon, TurtleTableTitle } from '@components/common';
 import { NewSearchFilter } from '@components/combine';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface Props extends TabPaneProps {
   loading: boolean;
+  reservedMessage: string;
 }
 
-function SuccessTab({ loading, ...props }: Props) {
+function SuccessTab({ loading, reservedMessage, ...props }: Props) {
   const [cart, setCart] = useRecoilState(warehousingCartState);
-
+  const [messageVisible, setMessageVisible] = useState(false);
   // 상품 삭제
   const deleteItem = useCallback(
     (index) => {
@@ -54,6 +66,10 @@ function SuccessTab({ loading, ...props }: Props) {
     },
     [setCart],
   );
+
+  useEffect(() => {
+    reservedMessage !== '' ? setMessageVisible(true) : setMessageVisible(false);
+  }, [reservedMessage]);
 
   const filteredList = useMemo(
     () =>
@@ -119,7 +135,34 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             width: 250,
-            title: t('product.name'),
+            title: (
+              <Popover
+                title={
+                  <Row
+                    justify="space-between"
+                    align="middle"
+                    style={{ color: 'white' }}
+                  >
+                    <Col>{t('warehousing.is reserved')}</Col>
+                    <Col>
+                      <CloseOutlined
+                        style={{ color: 'white' }}
+                        onClick={() => setMessageVisible(false)}
+                      />
+                    </Col>
+                  </Row>
+                }
+                content={
+                  <Typography.Text style={{ color: 'white' }}>
+                    {reservedMessage}
+                  </Typography.Text>
+                }
+                visible={messageVisible}
+                color="#65C1E5"
+              >
+                {t('product.name')}
+              </Popover>
+            ),
             render: (_, record) => record.product_name,
           },
           {
