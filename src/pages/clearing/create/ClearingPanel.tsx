@@ -260,9 +260,9 @@ function ClearingPanel({
               title: '부가세 입금 여부',
               render: (_, record) => (
                 <Tag
-                  color={!record.vendor_info.is_vat_included ? 'green' : 'red'}
+                  color={record.vendor_info.is_vat_included ? 'green' : 'red'}
                 >
-                  {!record.vendor_info.is_vat_included ? '포함' : '미포함'}
+                  {record.vendor_info.is_vat_included ? '포함' : '미포함'}
                 </Tag>
               ),
             },
