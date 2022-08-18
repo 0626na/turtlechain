@@ -30,6 +30,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
 
   // 모달 렌더링 될 때 상품정보 채워주기
   useEffect(() => {
+    form.resetFields();
     form.setFieldsValue({
       id: selectedRow?.id,
       name: selectedRow?.name,
@@ -42,8 +43,9 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
       vendor_name: selectedRow?.vendor_info.vendor_name,
       vendor_address: selectedRow?.vendor_info.vendor_address,
       vendor_phone: selectedRow?.vendor_info.vendor_phone.phone,
+      need_update: false,
     });
-  }, [selectedRow, form]);
+  }, [selectedRow, visible, form]);
 
   return (
     <TurtleModal
@@ -129,7 +131,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
           cancelText={t('no')}
           onConfirm={() => {
             form.validateFields().then((value) => {
-              updateProductQuery.mutate(value);
+              updateProductQuery.mutate({ ...value, need_update: true });
             });
           }}
         >

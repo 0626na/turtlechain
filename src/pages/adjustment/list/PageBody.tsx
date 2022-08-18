@@ -44,7 +44,7 @@ const PageBody = function () {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: store.id,
-    is_cleared: 2,
+    is_cleared: '',
     start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
     page: 1,
@@ -148,15 +148,15 @@ const PageBody = function () {
               <Select
                 size="small"
                 style={{ width: 100 }}
-                value={searchQuery.is_cleared}
-                defaultValue={2}
-                onChange={(is_cleared) => {
+                value={searchQuery.is_cleared as 'True' | 'False' | ''}
+                defaultValue={''}
+                onChange={(is_cleared: 'True' | 'False' | '') => {
                   setSearchQuery({ ...searchQuery, is_cleared });
                 }}
               >
-                <Select.Option value={2}>{t('all')}</Select.Option>
-                <Select.Option value={0}>{t('waiting')}</Select.Option>
-                <Select.Option value={1}>{t('confirmed')}</Select.Option>
+                <Select.Option value="">{t('all')}</Select.Option>
+                <Select.Option value="False">{t('waiting')}</Select.Option>
+                <Select.Option value="True">{t('confirmed')}</Select.Option>
               </Select>
 
               <Divider type="vertical" style={{ margin: 0 }} />

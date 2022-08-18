@@ -22,14 +22,15 @@ import { useMutation, useQuery } from 'react-query';
 import { storeState } from '@store/storeState';
 import bucketListAPI from '@apis/bucketListAPI';
 import presetAPI from '@apis/presetAPI';
+import { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
-  closeModal: () => void;
-  selectedRow?: VendorShow;
+  onCloseModal: () => void;
+  selectedRow: VendorShow;
 }
 
-function UpdateModal({ visible, closeModal, selectedRow }: Props) {
+function UpdateVendorInfoModal({ visible, onCloseModal, selectedRow }: Props) {
   const [form] = Form.useForm();
   const store = useRecoilValue(storeState);
   const [address, setAddress] = useState({ building: '', floor: '' });
@@ -46,7 +47,10 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
     onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
       resetStates();
-      closeModal();
+      onCloseModal();
+    },
+    onError: (error: AxiosError) => {
+      message.warn(error.response?.data.msg);
     },
   });
 
@@ -93,7 +97,7 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
       width="520px"
       title={t('vendor.request update')}
       visible={visible}
-      onCancel={closeModal}
+      onCancel={onCloseModal}
       footer={false}
       forceRender
     >
@@ -315,4 +319,4 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
   );
 }
 
-export default UpdateModal;
+export default UpdateVendorInfoModal;

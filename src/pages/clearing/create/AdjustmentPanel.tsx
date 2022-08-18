@@ -27,20 +27,27 @@ import { DownOutlined, RightOutlined } from '@ant-design/icons';
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
   clickNext: () => void;
+  clearingRequestDate: string;
 }
 
-function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
+function AdjustmentPanel({
+  activeKey,
+  clickNext,
+  clearingRequestDate,
+  ...props
+}: Props) {
   const store = useRecoilValue(storeState);
   const [cart, setCart] = useRecoilState(clearingCartState);
 
   const { reservePaymentAmountTotal, subtractAmountTotal } = useClearingCart();
 
-  const getRetailerStoreClearingQuery = useQuery(
-    ['getRetailerStoreClearing', store.id!],
+  const getStoreClearingQuery = useQuery(
+    ['getStoreClearingQuery', store.id!, clearingRequestDate],
     () =>
       clearingAPI.getClearing({
         rt_store_id: store.id!,
         balance_type: 'clearing',
+        clearing_request_date: clearingRequestDate,
       }),
     {
       enabled: activeKey === '1',
@@ -52,7 +59,8 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
               (item) =>
                 item.warehousing_amount +
                   item.unpaid_amount +
-                  item.reserve_payment_amount >
+                  item.reserve_payment_amount +
+                  item.reserve_subtract_amount >
                 0,
             )
             .map((item) => ({
@@ -131,7 +139,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       <Table
         size="small"
         pagination={false}
-        loading={getRetailerStoreClearingQuery.isLoading}
+        loading={getStoreClearingQuery.isLoading}
         dataSource={[
           ...cart.adjustmentSubtractList,
           ...cart.reserveSubtractList,
@@ -245,7 +253,7 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
       <Table
         size="small"
         pagination={false}
-        loading={getRetailerStoreClearingQuery.isLoading}
+        loading={getStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
         rowKey={(record) => record.id}
         title={() => (

@@ -13,6 +13,7 @@ import {
 } from '@components/common';
 import { SearchProductModal, SearchVendorModal } from '@components/combine';
 import { warehousingCartState } from '@store/warehousingCartState';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -79,6 +80,7 @@ function AddSingleProductModal({ visible, closeModal, index }: Props) {
             ...item,
             is_reserved: false,
             index: index.current++,
+            warehousing_date: moment().format('YYYY-MM-DD'),
           },
           ...cart.successList,
         ],

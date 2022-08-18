@@ -82,6 +82,7 @@ function PageBody() {
         successList: [
           ...data.data.success.map((product) => ({
             ...product,
+            submit_price: product.price,
             memo_value: product.memo,
             memo_active: !!product.memo,
           })),

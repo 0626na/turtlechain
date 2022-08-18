@@ -13,9 +13,10 @@ export interface Product {
   option: string;
   image_url: string;
   memo: string;
-
+  need_update: boolean;
   memo_value?: string;
   memo_active?: boolean;
+  submit_price?: number;
 }
 
 export interface ProductShow {
@@ -37,6 +38,7 @@ export interface ProductShow {
   option: string;
   memo: string;
   image_url: string;
+  need_update: boolean;
 }
 
 /*
@@ -161,6 +163,7 @@ export interface RequestUpdate {
   vat_price: number;
   option: string;
   memo: string;
+  need_update: boolean;
 }
 
 export interface ResponseUpdate {
@@ -170,7 +173,7 @@ export interface ResponseUpdate {
 
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 
@@ -190,7 +193,7 @@ export interface ResponseRemove {
 
 const remove = async (data: RequestRemove) => {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseRemove>(url, data);
+  const response = await v2Axios.patch<ResponseRemove>(url, data);
 
   return response.data;
 };
