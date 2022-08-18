@@ -12,19 +12,21 @@ function Notification() {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getNotificationQuery = useQuery('getNotification', () =>
-    notificationAPI.get({ type: 'home' }),
-  );
-
-  const updateNotificationQuery = useMutation(
-    'updateNotification',
-    notificationAPI.update,
+  const getNotificationQuery = useQuery(
+    'getNotificationQuery',
+    () => notificationAPI.get({ type: 'home' }),
     {
-      onSuccess: () => {
-        getNotificationQuery.refetch();
-      },
+      // 1분마다 refetch
+      refetchInterval: 60000,
+      refetchIntervalInBackground: true,
     },
   );
+
+  const updateNotificationMutate = useMutation(notificationAPI.update, {
+    onSuccess: () => {
+      getNotificationQuery.refetch();
+    },
+  });
 
   return (
     <StyledPopover
@@ -89,7 +91,9 @@ function Notification() {
                               );
                               setPopoverVisible(false);
                               !noti.read_at &&
-                                updateNotificationQuery.mutate({ id: noti.id });
+                                updateNotificationMutate.mutate({
+                                  id: noti.id,
+                                });
                             }}
                           >
                             {noti.type === 'creation_request'
