@@ -91,6 +91,8 @@ function PageBody() {
             ...item,
             is_reserved: false,
             index: index.current++,
+            warehousing_date:
+              item.warehousing_date ?? moment().format('YYYY-MM-DD'),
           })),
           ...cart.successList,
         ],
