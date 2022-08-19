@@ -13,7 +13,7 @@ export interface WarehousingItemConnect {
   product_code: number;
   store_house: string;
   warehousing_date: string;
-
+  maybe_reserved: boolean;
   price: number;
   count: number;
   memo?: string;

@@ -17,6 +17,7 @@ export interface Product {
   memo_value?: string;
   memo_active?: boolean;
   submit_price?: number;
+  maybe_reserved: boolean;
 }
 
 export interface ProductShow {
