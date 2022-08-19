@@ -1,25 +1,25 @@
-import { Row } from 'antd';
+import { Col, Row } from 'antd';
+import styled from 'styled-components';
 
 interface Props {
-  justify?: 'space-between' | 'end';
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-function BottomBar({ justify = 'end', children }: Props) {
+function BottomBar({ children }: Props) {
   return (
-    <Row
-      align="middle"
-      justify={justify}
-      style={{
-        paddingTop: 20,
-        paddingBottom: 20,
-        backgroundColor: '#F8F9FB',
-        borderRadius: '0 0 8px 8px',
-      }}
-    >
-      {children}
-    </Row>
+    <Inner>
+      <Row align="middle" justify="end">
+        <Col>{children}</Col>
+      </Row>
+    </Inner>
   );
 }
+
+const Inner = styled.div`
+  height: 92px;
+
+  padding: 23px 36px;
+  background-color: #f6f8fb;
+`;
 
 export default BottomBar;

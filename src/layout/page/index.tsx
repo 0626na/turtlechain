@@ -1,6 +1,7 @@
-import BottomBar from './BottomBar';
-import MainContent from './MainContent';
-import MenuBar from './MenuBar';
-import PageHeader from './PageHeader';
+import AlertBar from './AlertBar';
+import PageHeader from './Header';
+import PageTitle from './Title';
+import PageContent from './Content';
+import PageBottomBar from './BottomBar';
 
-export { BottomBar, MainContent, MenuBar, PageHeader };
+export { AlertBar, PageHeader, PageTitle, PageContent, PageBottomBar };

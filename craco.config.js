@@ -31,20 +31,22 @@ module.exports = {
               '@layout-header-padding': '0 40px',
               '@layout-header-color': '#FFFFFF',
               '@layout-body-background': '#F3F6F9',
-              '@layout-sider-background': '#242934',
+              '@layout-sider-background': '#2B3140',
 
               // Menu
-              '@menu-dark-bg': '#2B3140',
-              '@menu-dark-arrow-color': '#FFFFFF',
-              '@menu-dark-item-color': '#FFFFFF',
-              '@menu-item-height': '54px',
-              '@menu-inline-toplevel-item-height': '54px',
-              '@menu-dark-inline-submenu-bg': '#1A1E28',
-              '@menu-dark-highlight-color': '#FFFFFF',
-              '@menu-dark-item-active-bg': '#00B594',
-              '@border-radius-base': '4px',
-              '@menu-item-vertical-margin': '0px',
+              '@menu-inline-toplevel-item-height': '36px',
+              '@menu-item-height': '38px',
               '@menu-item-boundary-margin': '0px',
+              '@menu-item-vertical-margin': '0px',
+              '@menu-item-font-size': '14px',
+
+              // Menu dark theme
+              '@menu-dark-color': '#FFFFFF',
+              '@menu-dark-bg': '#2B3140',
+              '@menu-dark-inline-submenu-bg': '#2B3140',
+              '@menu-dark-arrow-color': '#FFFFFF',
+              '@menu-dark-item-hover-bg': 'rgba(20, 23, 32, 0.5)',
+              '@menu-dark-item-active-bg': '#141720',
 
               // Buttons
               '@btn-height-base': '36px',

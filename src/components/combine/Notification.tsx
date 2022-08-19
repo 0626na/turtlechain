@@ -6,25 +6,28 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { BellOutlined } from '@ant-design/icons';
 import notificationAPI from '@apis/notificationAPI';
+import { TurtleImg } from '@components/element';
 
 function Notification() {
   const navigate = useNavigate();
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
-  const getNotificationQuery = useQuery('getNotification', () =>
-    notificationAPI.get({ type: 'home' }),
-  );
-
-  const updateNotificationQuery = useMutation(
-    'updateNotification',
-    notificationAPI.update,
+  const getNotificationQuery = useQuery(
+    'getNotificationQuery',
+    () => notificationAPI.get({ type: 'home' }),
     {
-      onSuccess: () => {
-        getNotificationQuery.refetch();
-      },
+      // 1분마다 refetch
+      refetchInterval: 60000,
+      refetchIntervalInBackground: true,
     },
   );
+
+  const updateNotificationMutate = useMutation(notificationAPI.update, {
+    onSuccess: () => {
+      getNotificationQuery.refetch();
+    },
+  });
 
   return (
     <StyledPopover
@@ -89,7 +92,9 @@ function Notification() {
                               );
                               setPopoverVisible(false);
                               !noti.read_at &&
-                                updateNotificationQuery.mutate({ id: noti.id });
+                                updateNotificationMutate.mutate({
+                                  id: noti.id,
+                                });
                             }}
                           >
                             {noti.type === 'creation_request'
@@ -134,9 +139,10 @@ function Notification() {
         size="small"
         overflowCount={9}
         count={
-          getNotificationQuery.data?.notification_list.filter(
-            (item) => !item.read_at,
-          ).length
+          1
+          // getNotificationQuery.data?.notification_list.filter(
+          //   (item) => !item.read_at,
+          // ).length
         }
         style={{
           paddingBottom: 1,
@@ -144,20 +150,15 @@ function Notification() {
           paddingLeft: 4,
           paddingRight: 5,
         }}
-        offset={[-21, 5]}
+        offset={[-15, 2]}
       >
-        <BellOutlined
-          style={{
-            padding: 8,
-            marginRight: 12,
-            fontSize: 20,
-            cursor: 'pointer',
-            color: '#fff',
-          }}
+        <IconContainer
           onClick={() => {
             setPopoverVisible((visible) => !visible);
           }}
-        />
+        >
+          <TurtleImg name="bell" />
+        </IconContainer>
       </Badge>
     </StyledPopover>
   );
@@ -167,6 +168,13 @@ const StyledPopover = styled(Popover)`
   .ant-popover-inner-content {
     padding: 0px;
   }
+`;
+
+const IconContainer = styled.div`
+  /* width: 36px;
+  height: 36px; */
+  margin-right: 12px;
+  cursor: pointer;
 `;
 
 export default Notification;

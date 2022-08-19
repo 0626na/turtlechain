@@ -1,52 +1,21 @@
-import styled from 'styled-components';
 import { Layout } from 'antd';
-import { useLocation } from 'react-router-dom';
-import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from '@constant/index';
 
 interface Props {
   children?: React.ReactNode;
-  menuVisible: boolean;
 }
 
-function Content({ children, menuVisible }: Props) {
-  const location = useLocation();
-
+function Content({ children }: Props) {
   return (
-    <StyledContent
+    <Layout.Content
       style={{
-        marginLeft: menuVisible ? '80px' : MAIN_SIDER_WIDTH,
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {location.pathname.includes('/home') ? (
-        <HomeBox>{children}</HomeBox>
-      ) : (
-        <MainBox>{children}</MainBox>
-      )}
-    </StyledContent>
+      {children}
+    </Layout.Content>
   );
 }
-
-const StyledContent = styled(Layout.Content)`
-  margin-top: ${MAIN_HEADER_HEIGHT};
-  padding: 20px;
-  min-height: calc(100vh - 60px);
-  overflow: inherit;
-  transition: margin 0.25s;
-`;
-
-const HomeBox = styled.div`
-  & > * {
-    margin: 12px 0px;
-  }
-`;
-
-const MainBox = styled.div`
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.1);
-  & > * {
-    padding: 12px 36px;
-  }
-`;
 
 export default Content;
