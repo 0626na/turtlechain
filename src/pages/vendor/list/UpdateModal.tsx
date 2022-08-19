@@ -282,13 +282,16 @@ function UpdateModal({ visible, closeModal, selectedRow }: Props) {
             cancelText={t('no')}
             onConfirm={() => {
               form.validateFields().then(() => {
-                const [col, loc] = form.getFieldValue('colLoc').split(' ');
+                const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
+                  ' ',
+                );
                 createQuery.mutate({
                   ...form.getFieldsValue(),
                   type: 'update',
                   banks: [form.getFieldValue('banks')],
-                  col,
-                  loc,
+                  floor: form.getFieldValue('floor') ?? '',
+                  col: col ?? '',
+                  loc: loc ?? '',
                   ext: form.getFieldValue('ext') ?? '',
                   file: form.getFieldValue('file')[0].originFileObj,
                 });

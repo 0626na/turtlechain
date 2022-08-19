@@ -265,14 +265,17 @@ function RequestModal({ visible, closeModal }: Props) {
             cancelText={t('no')}
             onConfirm={() => {
               form.validateFields().then(() => {
-                const [col, loc] = form.getFieldValue('colLoc').split(' ');
+                const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
+                  ' ',
+                );
                 createQuery.mutate({
                   ...form.getFieldsValue(),
                   type: 'create',
                   banks: [form.getFieldValue('banks')],
                   tel: form.getFieldValue('tel') ?? '',
-                  col,
-                  loc,
+                  floor: form.getFieldValue('floor') ?? '',
+                  col: col ?? '',
+                  loc: loc ?? '',
                   ext: form.getFieldValue('ext') ?? '',
                   file: form.getFieldValue('file')[0].originFileObj,
                   rt_store_id: store.id,
