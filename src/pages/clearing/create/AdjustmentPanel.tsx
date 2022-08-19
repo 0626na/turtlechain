@@ -8,6 +8,7 @@ import {
   Row,
   Space,
   Table,
+  Tooltip,
   Typography,
 } from 'antd';
 import { useQuery } from 'react-query';
@@ -22,7 +23,11 @@ import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
 import useClearingCart from '@hooks/useClearingCart';
-import { DownOutlined, RightOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  QuestionCircleOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 
 interface Props extends CollapsePanelProps {
   activeKey: string | string[];
@@ -198,7 +203,22 @@ function AdjustmentPanel({ activeKey, clickNext, ...props }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: '사용할 금액',
+            title: () => (
+              <>
+                <Tooltip
+                  title={
+                    <div style={{ width: 187 }}>
+                      사용할 금액은 당일 입고 금액을 초과할 수 없습니다.
+                    </div>
+                  }
+                >
+                  <QuestionCircleOutlined />
+                </Tooltip>
+                <Typography.Text style={{ marginLeft: 4 }}>
+                  사용할 금액
+                </Typography.Text>
+              </>
+            ),
             render: (_, record) => (
               <Space>
                 {record.type === 'reserve_subtract' ? (
