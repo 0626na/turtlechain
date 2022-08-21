@@ -2,28 +2,42 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 
 import TurtleText from '../TurtleText';
-import { ReactComponent as Plusicon } from '@icon/plus.svg';
+import { ReactComponent as Plusicon } from '@icons/plus.svg';
 interface Props {
   text: string;
-  width?: number;
+  size?: 'default' | 'large';
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 function SecondaryButton({
+  size = 'default',
   text,
-  width = 160,
   disabled,
   loading,
   htmlType,
   onClick,
+  style,
 }: Props) {
-  const style = {
-    width,
-  };
+  if (size === 'default') {
+    return (
+      <StyledButton
+        style={{ width: 160, height: 40, ...style }}
+        loading={loading}
+        onClick={onClick}
+        disabled={disabled}
+        htmlType={htmlType}
+      >
+        <Plusicon />
+        <TurtleText style={{ marginLeft: 5 }}>{text}</TurtleText>
+      </StyledButton>
+    );
+  }
 
+  // 임의 사이즈 적용
   return (
     <StyledButton
       style={style}
@@ -48,7 +62,7 @@ const StyledButton = styled(Button)`
 
   color: #1a66f9;
   stroke: #1a66f9;
-  border-color: #1a66f9;
+  border: 1px solid #1a66f9;
 
   &:hover {
     color: #1553ca;
@@ -56,6 +70,7 @@ const StyledButton = styled(Button)`
     border-color: #1553ca;
   }
 
+  // active 상태
   &.ant-btn:focus {
     color: #1a66f9;
     stroke: #1a66f9;

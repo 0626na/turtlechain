@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import { Col, Row } from 'antd';
+import { Avatar, Col, Row } from 'antd';
 
 import TurtleText from '@components/element/TurtleText';
-
 import Notification from '@components/combine/Notification';
 
 interface Props {
   title: string;
-  children?: React.ReactNode;
+  Button?: React.ReactNode;
+  // children?:
 }
 
-function PageHeader({ title, children }: Props) {
+function PageHeader({ title, Button }: Props) {
   return (
     <>
       <Inner>
@@ -21,11 +21,14 @@ function PageHeader({ title, children }: Props) {
             >
               {title}
             </TurtleText>
-            {children}
+            {Button}
           </Col>
           <Col style={{ display: 'flex', alignItems: 'center' }}>
             <Notification />
-            <Avatar />
+
+            <Avatar style={{ backgroundColor: 'orange' }} size={36}>
+              김
+            </Avatar>
           </Col>
         </Row>
       </Inner>
@@ -40,12 +43,12 @@ const Inner = styled.div`
   background-color: red;
 `;
 
-const Avatar = styled.div`
-  display: inline-block;
-  width: 36px;
-  height: 36px;
-  background-color: orange;
-  border-radius: 50%;
-`;
+// const Avatar = styled.div`
+//   display: inline-block;
+//   width: 36px;
+//   height: 36px;
+//   background-color: orange;
+//   border-radius: 50%;
+// `;
 
 export default PageHeader;

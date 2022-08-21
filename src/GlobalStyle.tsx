@@ -1,19 +1,17 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+/* button */
+.ant-btn {
+    border : none;
+    border-radius :8px;
+  }
 
-
-
-h1.ant-typography {
-  margin : 0;
-  line-height: normal;
+/* dropdown */
+.ant-dropdown-menu-item:hover {
+  background-color: #EDEFF1;
 }
 
-
-
-.ant-btn > .anticon + span {
-  margin-left  : 0px;
-}
 
   /* form label 왼쪽 정렬 */
   /* .ant-form-item-label {
@@ -52,16 +50,7 @@ h1.ant-typography {
 
 
 
-  
 
-  button {
-    /* line-height: 1; */
-  background : transparent;
-  border: none;
-  cursor: pointer;
-  padding : 0px;
-  margin : 0px;
-  }
 
 `;
 

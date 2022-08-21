@@ -49,22 +49,20 @@ module.exports = {
               '@menu-dark-item-active-bg': '#141720',
 
               // Buttons
-              '@btn-height-base': '36px',
-              '@btn-font-weight': '400',
-              '@btn-border-radius-base': '4px',
-              '@btn-border-radius-sm': '4px',
-              '@btn-shadow': '0',
-              '@btn-primary-shadow': '0',
-              '@btn-text-shadow': '0',
-              '@btn-primary-bg': '#2174F1',
-              '@btn-disable-bg': '#C3C4C6',
-              '@btn-disable-color': '#FFFFFF',
+              // '@btn-border-radius-base': '8px',
+              // '@btn-shadow': '0',
+              // '@btn-text-shadow': '0',
 
-              '@btn-default-color': '#2174F1',
-              '@btn-default-border': '#2174F1',
-
-              '@btn-font-size-lg': '14px',
-              '@btn-font-size-sm': '12px',
+              // '@btn-height-base': '36px',
+              // '@btn-font-weight': '700',
+              // '@btn-primary-shadow': '0',
+              // '@btn-primary-bg': '#2174F1',
+              // '@btn-disable-bg': '#C3C4C6',
+              // '@btn-disable-color': '#FFFFFF',
+              // '@btn-default-color': '#FFFFFF',
+              // '@btn-default-border': '#2174F1',
+              // '@btn-font-size-lg': '14px',
+              // '@btn-font-size-sm': '12px',
 
               // Radio
               '@radio-dot-color': '#00BB88',

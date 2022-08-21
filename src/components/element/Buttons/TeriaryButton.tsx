@@ -1,42 +1,29 @@
 import { Button } from 'antd';
 import styled from 'styled-components';
-import TurtleImg from '../TurtleImg';
-import { ReactComponent as DownloadIcon } from '../../../assets/icon/download.svg';
+
 import TurtleText from '../TurtleText';
 interface Props {
-  size?: 'small' | 'middle' | 'large';
   text: string;
-
-  width?: number;
-  height?: number;
-  fontWeight?: number;
-
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-
-  loading?: boolean;
+  size?: 'default';
   disabled?: boolean;
+  loading?: boolean;
   htmlType?: 'submit';
+  icon?: React.ReactNode;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 function TeriaryButton({
-  size,
+  size = 'default',
   text,
-
-  fontWeight = 700,
-  leftIcon,
-  rightIcon,
+  icon,
   loading,
   disabled,
   htmlType,
   onClick,
+  style,
 }: Props) {
-  const style = {
-    fontWeight,
-  };
-
-  if (size === 'middle') {
+  if (size === 'default') {
     return (
       <StyledButton
         style={{ width: 160, height: 40, ...style }}
@@ -45,52 +32,36 @@ function TeriaryButton({
         disabled={disabled}
         htmlType={htmlType}
       >
-        {/* <DownloadIcon /> */}
-        {/* <IconContainer>
-        <TurtleImg name="plus" />
-      </IconContainer> */}
-        <TurtleText style={{ marginLeft: 5 }}>{text}</TurtleText>
-
-        {/* <IconContainer>
-        <TurtleImg name="plus" />
-      </IconContainer> */}
-        {/* <DownloadIcon /> */}
+        {icon && <IconContainer>{icon}</IconContainer>}
+        <TurtleText>{text}</TurtleText>
       </StyledButton>
     );
   }
-  1;
 
-  if (size === 'small') {
-    return (
-      <StyledButton
-        style={style}
-        loading={loading}
-        onClick={onClick}
-        disabled={false}
-        htmlType={htmlType}
-      >
-        {/* <DownloadIcon /> */}
-        {/* <IconContainer>
-        <TurtleImg name="plus" />
-      </IconContainer> */}
-        <TurtleText style={{ marginLeft: 5 }}>{text}</TurtleText>
-
-        {/* <IconContainer>
-        <TurtleImg name="plus" />
-      </IconContainer> */}
-        {/* <DownloadIcon /> */}
-      </StyledButton>
-    );
-  }
+  // 임의 사이즈 적용
+  return (
+    <StyledButton
+      style={style}
+      loading={loading}
+      onClick={onClick}
+      disabled={disabled}
+      htmlType={htmlType}
+    >
+      {icon && <IconContainer>{icon}</IconContainer>}
+      <TurtleText>{text}</TurtleText>
+    </StyledButton>
+  );
 }
 
 const StyledButton = styled(Button)`
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  padding: 0px;
-  border: none;
   color: #00aab5;
   stroke: #00aab5;
   background-color: #ddf3f5;
@@ -101,6 +72,7 @@ const StyledButton = styled(Button)`
     background-color: #d4e9eb;
   }
 
+  // active 상태
   &.ant-btn:focus {
     color: #00aab5;
     stroke: #00aab5;
@@ -116,6 +88,8 @@ const StyledButton = styled(Button)`
 `;
 
 const IconContainer = styled.div`
+  margin-right: 5px;
+
   display: flex;
   align-items: center;
 `;
