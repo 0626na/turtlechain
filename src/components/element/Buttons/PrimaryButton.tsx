@@ -25,7 +25,6 @@ function PrimaryButton({
   return (
     <StyledButton
       style={style}
-      type="primary"
       loading={loading}
       onClick={onClick}
       disabled={disabled}
@@ -38,10 +37,21 @@ function PrimaryButton({
 
 const StyledButton = styled(Button)`
   height: 46px;
+  font-size: 16px;
+
+  border: none;
+  color: #fff;
   background-color: #1a66f9;
 
   &:hover {
+    color: #fff;
     background-color: #1553ca;
+  }
+
+  &.ant-btn:focus {
+    color: #fff;
+
+    background-color: #1a66f9;
   }
 `;
 

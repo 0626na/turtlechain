@@ -9,6 +9,8 @@ h1.ant-typography {
   line-height: normal;
 }
 
+
+
 .ant-btn > .anticon + span {
   margin-left  : 0px;
 }
@@ -53,6 +55,7 @@ h1.ant-typography {
   
 
   button {
+    /* line-height: 1; */
   background : transparent;
   border: none;
   cursor: pointer;

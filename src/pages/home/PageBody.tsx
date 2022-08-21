@@ -1,4 +1,8 @@
-import { PrimaryButton, SecondaryButton } from '@components/element/Buttons';
+import {
+  PrimaryButton,
+  SecondaryButton,
+  TeriaryButton,
+} from '@components/element/Buttons';
 import {
   PageBottomBar,
   PageContent,
@@ -23,6 +27,11 @@ function PageBody() {
       <PageContent>
         <PrimaryButton text="상품 등록하기" />
         <SecondaryButton text="상품 추가하기" />
+        <Button size="small">asas</Button>
+        <Button size="middle">asas</Button>
+        <Button size="large">asas</Button>
+        {/* <TeriaryButton text="재고프로그램 연동" />
+        <TeriaryButton text="마감하기" width={88} height={26} /> */}
       </PageContent>
 
       <PageBottomBar>

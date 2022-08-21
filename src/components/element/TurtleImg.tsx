@@ -1,3 +1,5 @@
+// import plus from '../../../public/assets/svg/plus.svg';
+
 interface Props {
   name: string;
 }
