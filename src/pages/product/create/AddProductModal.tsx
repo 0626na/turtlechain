@@ -86,6 +86,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           {
             ...addedProduct,
             price: addedProduct.price,
+            need_update: false,
           },
           ...cart.successList,
         ],
