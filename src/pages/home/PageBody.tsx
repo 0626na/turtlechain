@@ -14,7 +14,12 @@ import { Button, Menu, Select, Table } from 'antd';
 import { ReactComponent as DownloadIcon } from '@icons/download.svg';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
 import styled from 'styled-components';
-import { TurtleDropdown, TurtleImg, TurtleText } from '@components/element';
+import {
+  TurtleDropdown,
+  TurtleImg,
+  TurtleSearchInput,
+  TurtleText,
+} from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
 import TurtleSelector from '@components/element/TurtleSelector';
 import TurtleSeacthInput from '@components/element/TurtleSeacthInput';
@@ -95,19 +100,16 @@ function PageBody() {
         <Table title={() => <div>3123</div>}></Table>
 
         <TurtleSelector
-          defaultValue="jack"
+          defaultValue="상품명"
           onChange={(value) => console.log(value)}
-          style={{ fontWeight: 400 }}
-        >
-          <Option key="1" value="jack" className="aa">
-            Jack
-          </Option>
-          <Option key="2" value="lucy" className="aa">
-            Lucy
-          </Option>
-        </TurtleSelector>
+          items={[
+            { value: '상품명' },
+            { value: '거래처명' },
+            { value: '거래처 상품명' },
+          ]}
+        />
 
-        <TurtleSeacthInput />
+        <TurtleSearchInput />
       </PageContent>
 
       <PageBottomBar>
