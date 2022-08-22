@@ -1,0 +1,41 @@
+import { Form } from 'antd';
+import Search from 'antd/lib/input/Search';
+import styled from 'styled-components';
+
+interface Props {
+  name?: string;
+  value?: string;
+  label?: string;
+  placeholder?: string;
+  onClick?: () => void;
+}
+
+function TurtleSearchInput({
+  name,
+  value,
+  label,
+  placeholder,
+  onClick,
+}: Props) {
+  return (
+    <StyledSearch //
+      placeholder={placeholder}
+      value={value}
+      onClick={onClick}
+      onSearch={onClick}
+      readOnly={true}
+    />
+  );
+}
+
+const StyledSearch = styled(Search)`
+  .ant-input-search-button {
+    border: 1px solid #d9d9d9;
+    border-left: none;
+  }
+  svg {
+    color: #5b5d63;
+  }
+`;
+
+export default TurtleSearchInput;
