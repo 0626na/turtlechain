@@ -168,7 +168,7 @@ interface RequestUpdate {
 }
 
 const update = async function (data: RequestUpdate) {
-  const url = `/provisioning/user/${data.user_id}`;
+  const url = `/provisioning/users/${data.user_id}`;
   delete data.user_id;
   const response = await v2Axios.patch(url, data);
   return response.data;
@@ -212,7 +212,7 @@ interface ResponseResetPassword {
 
 const resetPassword = async function (data: RequestResetPassword) {
   const { token } = data;
-  const url = '/provisioning/user/password';
+  const url = '/provisioning/users/password';
   const config = { headers: { Authorization: `Api-Key ${token}` } };
   const response = await v2Axios.put<ResponseResetPassword>(url, data, config);
   return response.data.data;
