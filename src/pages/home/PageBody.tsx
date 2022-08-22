@@ -9,13 +9,17 @@ import {
   PageHeader,
   PageTitle,
 } from '@layout/page';
-import { Button, Menu } from 'antd';
+import { Button, Menu, Select, Table } from 'antd';
 
 import { ReactComponent as DownloadIcon } from '@icons/download.svg';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
 import styled from 'styled-components';
 import { TurtleDropdown, TurtleImg, TurtleText } from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
+import TurtleSelector from '@components/element/TurtleSelector';
+import TurtleSeacthInput from '@components/element/TurtleSeacthInput';
+
+const { Option } = Select;
 
 function PageBody() {
   return (
@@ -54,10 +58,10 @@ function PageBody() {
           items={
             [
               {
+                title: '11222',
                 key: '1',
                 label: '12',
-                // icon: ,
-                // itemIcon: <DownloadIcon style={{ stroke: 'red' }} />,
+                icon: <DownloadIcon style={{ stroke: 'red' }} />,
               },
             ]
             // <Menu>
@@ -87,6 +91,23 @@ function PageBody() {
           }
           triggerButton={<SecondaryButton text="상품 추가하기" />}
         />
+
+        <Table title={() => <div>3123</div>}></Table>
+
+        <TurtleSelector
+          defaultValue="jack"
+          onChange={(value) => console.log(value)}
+          style={{ fontWeight: 400 }}
+        >
+          <Option key="1" value="jack" className="aa">
+            Jack
+          </Option>
+          <Option key="2" value="lucy" className="aa">
+            Lucy
+          </Option>
+        </TurtleSelector>
+
+        <TurtleSeacthInput />
       </PageContent>
 
       <PageBottomBar>
