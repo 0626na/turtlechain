@@ -13,6 +13,12 @@ const GlobalStyle = createGlobalStyle`
 }
 
 
+/* Table */ 
+.ant-table-title {
+    padding: 0px;
+  }
+
+
   /* form label 왼쪽 정렬 */
   /* .ant-form-item-label {
     text-align: left;        
