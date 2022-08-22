@@ -9,11 +9,12 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             modifyVars: {
-              '@primary-color': '#2174F1',
+              // '@primary-color': '#2174F1',
+
               // font
-              '@font-family': "'Spoqa Han Sans Neo', 'sans-serif'",
+              '@font-family': "'Spoqa Han Sans Neo'",
               '@font-size-base': '14px',
-              '@text-color': '#000000',
+              '@text-color': '#434852',
 
               // Input
               '@input-placeholder-color': '#CBCCD1',
@@ -22,10 +23,10 @@ module.exports = {
               // '@input-height-sm': '28px',
 
               // Form
-              '@form-item-margin-bottom': '22px',
+              // '@form-item-margin-bottom': '22px',
 
               // Switch
-              '@switch-color': '#2174F1',
+              // '@switch-color': '#2174F1',
 
               // Layout
               '@layout-header-background': '#141720',
@@ -51,12 +52,15 @@ module.exports = {
               '@menu-dark-item-active-bg': '#141720',
 
               //Select
-              '@select-item-active-bg': '#F3F6F9', // hover
+              '@select-item-active-bg': '#F3F6F9', // hovers
 
               '@select-item-selected-bg': 'rgba(19, 180, 190, 0.1)',
               '@select-item-selected-font-weight': '400',
               '@select-item-selected-color': '#00AAB5',
+
               '@select-dropdown-font-size': '13px',
+              '@select-dropdown-height': '29px',
+              '@select-dropdown-line-height': '1',
 
               // Buttons
               // '@btn-border-radius-base': '8px',
