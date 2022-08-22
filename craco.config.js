@@ -10,14 +10,16 @@ module.exports = {
           lessOptions: {
             modifyVars: {
               '@primary-color': '#2174F1',
-
               // font
               '@font-family': "'Spoqa Han Sans Neo', 'sans-serif'",
+              '@font-size-base': '14px',
+              '@text-color': '#000000',
 
               // Input
               '@input-placeholder-color': '#CBCCD1',
-              '@input-height-base': '36px',
-              '@input-height-sm': '28px',
+              // '@input-height-base': '36px',
+              // '@input-height-base': '28px',
+              // '@input-height-sm': '28px',
 
               // Form
               '@form-item-margin-bottom': '22px',
@@ -47,6 +49,14 @@ module.exports = {
               '@menu-dark-arrow-color': '#FFFFFF',
               '@menu-dark-item-hover-bg': 'rgba(20, 23, 32, 0.5)',
               '@menu-dark-item-active-bg': '#141720',
+
+              //Select
+              '@select-item-active-bg': '#F3F6F9', // hover
+
+              '@select-item-selected-bg': 'rgba(19, 180, 190, 0.1)',
+              '@select-item-selected-font-weight': '400',
+              '@select-item-selected-color': '#00AAB5',
+              '@select-dropdown-font-size': '13px',
 
               // Buttons
               // '@btn-border-radius-base': '8px',
