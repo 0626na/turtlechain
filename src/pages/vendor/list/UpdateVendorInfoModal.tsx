@@ -165,12 +165,7 @@ function UpdateVendorInfoModal({ visible, onCloseModal, selectedRow }: Props) {
                 )}
               </Select>
             </Form.Item>
-            <Form.Item
-              name="floor"
-              label="층"
-              noStyle
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="floor" label="층" noStyle>
               <Select
                 placeholder="층"
                 style={{ width: '25%' }}
@@ -191,12 +186,7 @@ function UpdateVendorInfoModal({ visible, onCloseModal, selectedRow }: Props) {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item
-              name="colLoc"
-              noStyle
-              label="열/호"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="colLoc" noStyle label="열/호">
               <Select placeholder="열/호" style={{ width: '35%' }}>
                 {(
                   getBuildingQuery.data?.data[address.building]?.[
@@ -292,13 +282,16 @@ function UpdateVendorInfoModal({ visible, onCloseModal, selectedRow }: Props) {
             cancelText={t('no')}
             onConfirm={() => {
               form.validateFields().then(() => {
-                const [col, loc] = form.getFieldValue('colLoc').split(' ');
+                const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
+                  ' ',
+                );
                 createQuery.mutate({
                   ...form.getFieldsValue(),
                   type: 'update',
                   banks: [form.getFieldValue('banks')],
-                  col,
-                  loc,
+                  floor: form.getFieldValue('floor') ?? '',
+                  col: col ?? '',
+                  loc: loc ?? '',
                   ext: form.getFieldValue('ext') ?? '',
                   file: form.getFieldValue('file')[0].originFileObj,
                 });
