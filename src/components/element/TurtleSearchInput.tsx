@@ -1,36 +1,27 @@
-import { Form } from 'antd';
+import { InputProps } from 'antd';
 import { Input } from 'antd';
 import styled from 'styled-components';
 
-const { Search } = Input;
-
-interface Props {
+interface Props extends InputProps {
   name?: string;
   value?: string;
   label?: string;
   placeholder?: string;
-  onClick?: () => void;
+  onSearch?: (value: any) => void;
 }
 
-function TurtleSearchInput({
-  name,
-  value,
-  label,
-  placeholder,
-  onClick,
-}: Props) {
+function TurtleSearchInput({ value, placeholder, onSearch }: Props) {
   return (
     <StyledSearch
       style={{ width: 220 }}
       placeholder={placeholder}
       value={value}
-      onClick={onClick}
-      onSearch={onClick}
+      onSearch={onSearch}
     />
   );
 }
 
-const StyledSearch = styled(Search)`
+const StyledSearch = styled(Input.Search)`
   // 검색 인풋 style
   input {
     height: 28px;
