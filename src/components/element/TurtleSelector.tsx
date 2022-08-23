@@ -15,7 +15,7 @@ interface Props extends SelectProps {
 function TurtleSelector({ defaultValue, items, onChange, style }: Props) {
   return (
     <StyledSelect
-      defaultOpen={true}
+      // defaultOpen={true}
       bordered={false}
       suffixIcon={<ArrowDown />}
       defaultValue={defaultValue}
@@ -46,7 +46,7 @@ const StyledSelect = styled(Select)`
   background-color: #f5f6f7;
   border-radius: 6px;
 
-  // 셀렉터
+  // 셀렉터 인풋 style
   &.ant-select-single .ant-select-selector .ant-select-selection-item {
     line-height: 26px;
   }
