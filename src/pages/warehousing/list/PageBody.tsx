@@ -172,7 +172,42 @@ function PageBody() {
               align: 'center',
               render: (_, record) => (
                 <Space>
-                  {!record.is_confirmed && (
+                  {record.is_confirmed ? (
+                    // 16일 이전은 x
+                    moment(record.created_time) > moment('2022-08-17') && (
+                      /*
+                       * 진행상태 : 마감
+                       */
+                      <Popconfirm
+                        title={'마감을 취소하시겠습니까?'}
+                        okText={t('yes')}
+                        cancelText={t('no')}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          updateSheetQuery.mutate({
+                            id: record.id,
+                            is_confirmed: false,
+                          });
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                      >
+                        <TurtleButtonSub
+                          color="red"
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          마감 취소
+                        </TurtleButtonSub>
+                      </Popconfirm>
+                    )
+                  ) : (
+                    /*
+                     * 진행상태 : 대기
+                     */
                     <>
                       <Popconfirm
                         title={t('description.really confirmed')}

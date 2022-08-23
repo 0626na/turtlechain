@@ -1,6 +1,14 @@
 import { t } from 'i18next';
-import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from 'antd';
-import { useCallback, useMemo } from 'react';
+import {
+  Checkbox,
+  InputNumber,
+  Table,
+  TabPaneProps,
+  Tabs,
+  Tooltip,
+  Typography,
+} from 'antd';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { warehousingCartState } from '@store/warehousingCartState';
 import { pricePattern } from '@utils/pattern';
@@ -9,11 +17,12 @@ import { NewSearchFilter } from '@components/combine';
 
 interface Props extends TabPaneProps {
   loading: boolean;
+  reservedMessage: string;
 }
 
-function SuccessTab({ loading, ...props }: Props) {
+function SuccessTab({ loading, reservedMessage, ...props }: Props) {
   const [cart, setCart] = useRecoilState(warehousingCartState);
-
+  const [messageVisible, setMessageVisible] = useState(false);
   // 상품 삭제
   const deleteItem = useCallback(
     (index) => {
@@ -54,6 +63,14 @@ function SuccessTab({ loading, ...props }: Props) {
     },
     [setCart],
   );
+
+  const maybeReservedStyle = (maybe_reserved: boolean) => ({
+    backgroundColor: maybe_reserved ? '#F2F2F3' : 'transparent',
+  });
+
+  useEffect(() => {
+    reservedMessage !== '' ? setMessageVisible(true) : setMessageVisible(false);
+  }, [reservedMessage]);
 
   const filteredList = useMemo(
     () =>
@@ -109,42 +126,77 @@ function SuccessTab({ loading, ...props }: Props) {
             width: 150,
             title: t('vendor.name'),
             render: (_, record) => record.vendor_name,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('vendor.address'),
             render: (_, record) => record.vendor_address,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 250,
-            title: t('product.name'),
+            title: (
+              <Tooltip
+                title={
+                  <Typography.Text
+                    style={{ color: 'white' }}
+                    onClick={() => setMessageVisible(false)}
+                  >
+                    {reservedMessage}
+                  </Typography.Text>
+                }
+                visible={messageVisible}
+              >
+                {t('product.name')}
+              </Tooltip>
+            ),
             render: (_, record) => record.product_name,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 200,
             title: t('product.vendor product name'),
             render: (_, record) => record.vendor_product_name,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.code'),
             render: (_, record) => record.product_code,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 150,
             title: t('product.option'),
             render: (_, record) => record.product_option,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
             width: 100,
             title: '창고명',
             render: (_, record) => record.store_house,
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
@@ -163,6 +215,9 @@ function SuccessTab({ loading, ...props }: Props) {
                 }}
               />
             ),
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
@@ -179,6 +234,9 @@ function SuccessTab({ loading, ...props }: Props) {
                 }}
               />
             ),
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
@@ -197,6 +255,9 @@ function SuccessTab({ loading, ...props }: Props) {
                 }}
               />
             ),
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
           {
             ellipsis: true,
@@ -209,6 +270,9 @@ function SuccessTab({ loading, ...props }: Props) {
                 }}
               />
             ),
+            onCell: (record) => ({
+              style: maybeReservedStyle(record.maybe_reserved),
+            }),
           },
         ]}
       />

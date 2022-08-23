@@ -1,6 +1,6 @@
 {
   "name": "turtlechain-v2",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -39,13 +39,14 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "export PORT=52273 && craco start",
-    "build:dev": "craco build",
-    "deploy:devel": "env-cmd -f .env.development ./deploy.sh --env devel --branch devel",
-    "deploy:alpha": "env-cmd -f .env.test ./deploy.sh --env alpha --branch alpha",
-    "deploy:prod": "env-cmd -f .env.production ./deploy.sh --env prod --branch prod",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "start": "export PORT=52273 && craco start",
+    "build:devel": "env-cmd -f .env.development craco build",
+    "build:alpha": "env-cmd -f .env.test craco build",
+    "build:prod": "env-cmd -f .env.production craco build",
+    "deploy:devel": "./deploy.sh --env devel --branch devel",
+    "deploy:alpha": "./deploy.sh --env alpha --branch alpha",
+    "deploy:prod": "./deploy.sh --env prod --branch prod"
   },
   "eslintConfig": {
     "extends": [
