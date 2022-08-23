@@ -63,6 +63,7 @@ const FalsyButton = styled(Button)`
   &.ant-btn:focus {
     color: #6b6d73;
     background-color: #f0f3f6;
+    border-color: #f0f3f6;
   }
 `;
 
@@ -74,6 +75,7 @@ const TruthyButton = styled(Button)`
   &:hover {
     color: #ffffff;
     background-color: #1553ca;
+    border-color: #1553ca;
   }
 
   // active 상태

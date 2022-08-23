@@ -3,11 +3,9 @@ import { Input } from 'antd';
 import styled from 'styled-components';
 
 interface Props extends InputProps {
-  name?: string;
   value?: string;
-  label?: string;
-  placeholder?: string;
   onSearch?: (value: any) => void;
+  placeholder?: string;
 }
 
 function TurtleSearchInput({ value, placeholder, onSearch }: Props) {
@@ -26,7 +24,7 @@ const StyledSearch = styled(Input.Search)`
   input {
     height: 28px;
     background: #f5f6f7;
-    padding: 7.5px 10px;
+    padding: 7.5px 0px 7.5px 10px;
 
     color: #242934;
     font-size: 13px;
@@ -42,13 +40,13 @@ const StyledSearch = styled(Input.Search)`
     .ant-input-search-button,
   .ant-input-group-addon {
     border-radius: 0px 6px 6px 0px;
+    border-color: #cbccd1;
   }
 
   .ant-input-search-button {
     background: #f5f6f7;
     height: 28px;
   }
-
   svg {
     color: #242934;
   }

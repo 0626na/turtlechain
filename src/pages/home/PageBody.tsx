@@ -16,6 +16,8 @@ import { ReactComponent as ListIcon } from '@icons/list.svg';
 import styled from 'styled-components';
 import {
   TurtleDropdown,
+  TurtleFormInput,
+  TurtleFormSearchInput,
   TurtleImg,
   TurtleRangePicker,
   TurtleSearchInput,
@@ -97,7 +99,7 @@ function PageBody() {
 
         <Table title={() => <div>3123</div>}></Table>
 
-        <TurtleSelector
+        {/* <TurtleSelector
           defaultValue="상품명"
           onChange={(value) => console.log(value)}
           items={[
@@ -105,11 +107,14 @@ function PageBody() {
             { value: '거래처명' },
             { value: '거래처 상품명' },
           ]}
-        />
+        /> */}
+
+        {/* <TurtleRangePicker onChange={() => {}} /> */}
 
         <TurtleSearchInput onSearch={(value: any) => console.log(value)} />
-
-        <TurtleRangePicker onChange={() => {}} />
+        <TurtleFormInput />
+        <TurtleFormInput disabled={true} value="12" />
+        <TurtleFormSearchInput />
       </PageContent>
 
       <PageBottomBar>

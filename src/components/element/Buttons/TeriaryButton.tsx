@@ -77,6 +77,7 @@ const StyledButton = styled(Button)`
     color: #00aab5;
     stroke: #00aab5;
     background-color: #ddf3f5;
+    border-color: #ddf3f5;
   }
 
   &.ant-btn[disabled] {
