@@ -9,7 +9,7 @@ import {
   PageHeader,
   PageTitle,
 } from '@layout/page';
-import { Button, Menu, Select, Table } from 'antd';
+import { Button, Form, Menu, Select, Table } from 'antd';
 
 import { ReactComponent as DownloadIcon } from '@icons/download.svg';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
@@ -17,14 +17,12 @@ import styled from 'styled-components';
 import {
   TurtleDropdown,
   TurtleImg,
+  TurtleRangePicker,
   TurtleSearchInput,
+  TurtleSelector,
   TurtleText,
 } from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
-import TurtleSelector from '@components/element/TurtleSelector';
-import TurtleSeacthInput from '@components/element/TurtleSeacthInput';
-
-const { Option } = Select;
 
 function PageBody() {
   return (
@@ -109,7 +107,9 @@ function PageBody() {
           ]}
         />
 
-        <TurtleSearchInput />
+        <TurtleSearchInput onSearch={(value: any) => console.log(value)} />
+
+        <TurtleRangePicker onChange={() => {}} />
       </PageContent>
 
       <PageBottomBar>
