@@ -6,6 +6,8 @@ import TurtleTableTitle from './TurtleTableTitle';
 import TurtleSearchInput from './TurtleSearchInput';
 import TurtleRangePicker from './TurtleRangePicker';
 import TurtleSelector from './TurtleSelector';
+import TurtleFormInput from './TurtleFormInput';
+import TurtleFormSearchInput from './TurtleFormSearchInput';
 export {
   TurtleImg,
   TurtleDivider,
@@ -15,4 +17,6 @@ export {
   TurtleSearchInput,
   TurtleRangePicker,
   TurtleSelector,
+  TurtleFormInput,
+  TurtleFormSearchInput,
 };
