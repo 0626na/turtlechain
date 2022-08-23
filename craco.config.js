@@ -9,7 +9,7 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             modifyVars: {
-              // '@primary-color': '#2174F1',
+              '@primary-color': '#00AAB5',
 
               // font
               '@font-family': "'Spoqa Han Sans Neo'",
@@ -87,6 +87,32 @@ module.exports = {
               // '@btn-default-border': '#2174F1',
               // '@btn-font-size-lg': '14px',
               // '@btn-font-size-sm': '12px',
+
+              //DatePicker
+
+              // 날짜 선택할때
+              // '@picker-basic-cell-hover-color': '#00AAB5',
+              // // 이미 선택된 날짜들 range 배경
+              // '@picker-basic-cell-active-with-range-color':
+              //   'rgba(19, 180, 190, 0.1)',
+              // // 날짜 재선택할때 range 배경
+              // '@picker-basic-cell-hover-with-range-color':
+              //   'rgba(19, 180, 190, 0.2)',
+
+              // // '@calendar-item-active-bg': 'red',
+              // // '@calendar-border-color': 'red',
+              // '@calendar-column-active-bg': 'red',
+
+              // '@picker-basic-cell-active-with-range-color':
+              //   'rgba(19, 180, 190, 0.1)',
+              // '@picker-basic-cell-hover-with-range-color': '#00AAB5',
+
+              // '@picker-date-hover-range-border-color': '#00AAB5',
+              // // '@picker-date-hover-range-color': 'rgba(19, 180, 190, 0.1);',
+              // // @picker-date-hover-range-border-color: lighten(@primary-color, 20%);
+
+              // '@calendar-item-active-bg': '#00AAB5',
+              // '@calendar-column-active-bg': '#00AAB5',
 
               // Radio
               '@radio-dot-color': '#00BB88',
