@@ -16,8 +16,17 @@ module.exports = {
               '@font-size-base': '14px',
               '@text-color': '#434852',
 
+              //Outline
+              '@outline-width': '0px',
+              // '@outline-blur-size': '0',
+              // '@outline-color': '#fff', // No use anymore
+              // '@outline-fade': 'none',
+
               // Input
               '@input-placeholder-color': '#CBCCD1',
+              // '@input-border-color': 'none',
+              // '@input-hover-border-color': 'none',
+
               // '@input-height-base': '36px',
               // '@input-height-base': '28px',
               // '@input-height-sm': '28px',
@@ -63,13 +72,14 @@ module.exports = {
               '@select-dropdown-line-height': '1',
 
               // Buttons
+
               // '@btn-border-radius-base': '8px',
-              // '@btn-shadow': '0',
-              // '@btn-text-shadow': '0',
+              '@btn-shadow': 'none',
+              '@btn-text-shadow': 'none',
 
               // '@btn-height-base': '36px',
               // '@btn-font-weight': '700',
-              // '@btn-primary-shadow': '0',
+              // '@btn-primary-shadow': 'none',
               // '@btn-primary-bg': '#2174F1',
               // '@btn-disable-bg': '#C3C4C6',
               // '@btn-disable-color': '#FFFFFF',
