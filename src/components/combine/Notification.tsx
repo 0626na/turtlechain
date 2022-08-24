@@ -4,9 +4,10 @@ import { useRef, useState } from 'react';
 import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
-import { BellOutlined } from '@ant-design/icons';
+
 import notificationAPI from '@apis/notificationAPI';
-import { TurtleImg } from '@components/element';
+
+import { ReactComponent as BellIcon } from '@icons/bell.svg';
 
 function Notification() {
   const navigate = useNavigate();
@@ -150,14 +151,14 @@ function Notification() {
           paddingLeft: 4,
           paddingRight: 5,
         }}
-        offset={[-15, 2]}
+        offset={[-20, 7]}
       >
         <IconContainer
           onClick={() => {
             setPopoverVisible((visible) => !visible);
           }}
         >
-          <TurtleImg name="bell" />
+          <BellIcon />
         </IconContainer>
       </Badge>
     </StyledPopover>

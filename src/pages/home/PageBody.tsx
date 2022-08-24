@@ -25,8 +25,16 @@ import {
   TurtleText,
 } from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
+import { TurtleModal } from '@components/combine';
+import { useState } from 'react';
 
 function PageBody() {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <>
       <PageHeader
@@ -48,7 +56,7 @@ function PageBody() {
       />
 
       <PageContent>
-        <PrimaryButton text="상품 등록하기" />
+        <PrimaryButton text="상품 등록하기" onClick={handleModal} />
         <SecondaryButton text="상품 추가하기" />
         <AnswerButton text="예" type="YES"></AnswerButton>
         <AnswerButton text="취소" type="NO"></AnswerButton>
@@ -115,6 +123,22 @@ function PageBody() {
         <TurtleFormInput />
         <TurtleFormInput disabled={true} value="12" />
         <TurtleFormSearchInput />
+        <TurtleModal
+          visible={modalVisible}
+          onCancel={() => {
+            setModalVisible(false);
+          }}
+          onOk={() => {
+            setModalVisible(false);
+          }}
+          title="거래처명 수정"
+          description={
+            <span>
+              선택한 거래처의 이름을 수정합니다. <br /> 원하는 거래처명을
+              입력하세요.
+            </span>
+          }
+        ></TurtleModal>
       </PageContent>
 
       <PageBottomBar>

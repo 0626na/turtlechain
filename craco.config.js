@@ -51,6 +51,7 @@ module.exports = {
               '@menu-item-boundary-margin': '0px',
               '@menu-item-vertical-margin': '0px',
               '@menu-item-font-size': '14px',
+              '@menu-item-padding-horizontal': '2px',
 
               // Menu dark theme
               '@menu-dark-color': '#FFFFFF',

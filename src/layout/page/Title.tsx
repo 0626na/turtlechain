@@ -36,8 +36,10 @@ function PageTitle({ title, subTitle, Buttons }: Props) {
 
           <Col>
             <Row>
-              {Buttons?.map((button) => (
-                <Col style={{ marginLeft: 8 }}>{button}</Col>
+              {Buttons?.map((button, idx) => (
+                <Col key={idx} style={{ marginLeft: 8 }}>
+                  {button}
+                </Col>
               ))}
             </Row>
           </Col>

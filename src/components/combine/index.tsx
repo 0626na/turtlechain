@@ -1,3 +1,3 @@
 import Notification from './Notification';
-
-export { Notification };
+import TurtleModal from './TurtleModal';
+export { Notification, TurtleModal };
