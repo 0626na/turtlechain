@@ -78,6 +78,11 @@ module.exports = {
               '@btn-shadow': 'none',
               '@btn-text-shadow': 'none',
 
+              //modal
+              '@modal-header-padding-vertical': '0px',
+              '@modal-header-padding-horizontal': '0px',
+              '@modal-body-padding': '0px',
+
               // '@btn-height-base': '36px',
               // '@btn-font-weight': '700',
               // '@btn-primary-shadow': 'none',
