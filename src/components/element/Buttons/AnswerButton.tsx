@@ -24,7 +24,7 @@ function AnswerButton({
   if (type === 'NO') {
     return (
       <FalsyButton
-        style={{ width: 66, height: 36, ...style }}
+        style={{ minWidth: 66, height: 36, ...style }}
         loading={loading}
         onClick={onClick}
         disabled={disabled}
@@ -38,7 +38,7 @@ function AnswerButton({
   // type === YES
   return (
     <TruthyButton
-      style={{ width: 66, height: 36, ...style }}
+      style={{ minWidth: 66, height: 36, ...style }}
       loading={loading}
       onClick={onClick}
       disabled={disabled}
