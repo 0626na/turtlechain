@@ -11,6 +11,7 @@
   "product": {
     "create": "상품등록"
   },
+
   "order": {
     "": "발주",
     "create": "발주등록",
@@ -23,11 +24,12 @@
     "history": "입고내역",
     "adjustment": "교환/반품/미송"
   },
+
   "clearing": {
     "": "결제",
     "create": "결제하기",
     "history": "결제내역",
-    "list": "거래처장부"
+    "trade": "거래장부"
   },
 
   "etc": {
