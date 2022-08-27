@@ -78,7 +78,28 @@ function StoreSelect({ warningMessage }: Props) {
         />
       }
     >
-      <Button style={{ width: 236, height: 60 }}>asd</Button>
+      <Button
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'red',
+
+          width: 236,
+          height: 60,
+        }}
+      >
+        <div
+          style={{
+            // borderRadius: '50%',
+            width: 44,
+            height: 44,
+            background: 'blue',
+          }}
+        >
+          <TurtleImg style={{ borderRadius: '50%' }} name="Logo" />
+        </div>
+        asd
+      </Button>
       {/* <Select
         placeholder={t('description.select mall')}
         loading={getStoresQuery.isLoading}

@@ -25,14 +25,23 @@ import {
   TurtleText,
 } from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
-import { TurtleModal } from '@components/combine';
+import {
+  TurtleAnswerModal,
+  TurtleContentModal,
+  TurtleModaltest,
+} from '@components/combine';
 import { useState } from 'react';
+import StoreSelect from '@layout/main/sider/StoreSelector';
 
 function PageBody() {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleModal = () => {
-    setModalVisible(!modalVisible);
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -56,7 +65,7 @@ function PageBody() {
       />
 
       <PageContent>
-        <PrimaryButton text="상품 등록하기" onClick={handleModal} />
+        <PrimaryButton text="상품 등록하기" onClick={showModal} />
         <SecondaryButton text="상품 추가하기" />
         <AnswerButton text="예" type="YES"></AnswerButton>
         <AnswerButton text="취소" type="NO"></AnswerButton>
@@ -123,8 +132,8 @@ function PageBody() {
         <TurtleFormInput />
         <TurtleFormInput disabled={true} value="12" />
         <TurtleFormSearchInput />
-        <TurtleModal
-          visible={modalVisible}
+        {/* <TurtleAnswerModal
+          visible={true}
           onCancel={() => {
             setModalVisible(false);
           }}
@@ -138,7 +147,17 @@ function PageBody() {
               입력하세요.
             </span>
           }
-        ></TurtleModal>
+        /> */}
+
+        <TurtleContentModal
+          visible={modalVisible}
+          title="거래처명 수정"
+          onClose={closeModal}
+        >
+          <div>123</div>
+        </TurtleContentModal>
+
+        <StoreSelect />
       </PageContent>
 
       <PageBottomBar>
