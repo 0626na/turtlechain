@@ -1,7 +1,20 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@layout/main';
-import { HomePage } from './pages';
+import {
+  ClearingCreatePage,
+  ClearingHistoryPage,
+  ClearingTradePage,
+  HomePage,
+  OrderCreatePage,
+  OrderHistoryPage,
+  ProductCreatePage,
+  SettingPage,
+  TutorialPage,
+  VendorCreatePage,
+  WarehousingCreatePage,
+  WarehousingHistoryPage,
+} from './pages';
 
 function App() {
   return (
@@ -21,7 +34,7 @@ function App() {
            */}
 
           <Route
-            index
+            path="home"
             element={
               <Suspense fallback={<></>}>
                 <HomePage />
@@ -33,7 +46,6 @@ function App() {
            * 거래처/상품
            */}
 
-          {/* 
           <Route
             path="vendor/create"
             element={
@@ -50,14 +62,13 @@ function App() {
                 <ProductCreatePage />
               </Suspense>
             }
-          /> 
-          */}
+          />
 
           {/*
            * 발주
            */}
 
-          {/* <Route
+          <Route
             path="order/create"
             element={
               <Suspense fallback={<></>}>
@@ -73,13 +84,13 @@ function App() {
                 <OrderHistoryPage />
               </Suspense>
             }
-          /> */}
+          />
 
           {/*
            * 입고
            */}
 
-          {/* <Route
+          <Route
             path="warehousing/create"
             element={
               <Suspense fallback={<></>}>
@@ -87,7 +98,6 @@ function App() {
               </Suspense>
             }
           />
-        </Route> 
 
           <Route
             path="warehousing/history"
@@ -97,7 +107,6 @@ function App() {
               </Suspense>
             }
           />
-        </Route> 
 
           <Route
             path="warehousing/adjustment"
@@ -107,13 +116,12 @@ function App() {
               </Suspense>
             }
           />
-        </Route> */}
 
           {/*
            * 결제
            */}
 
-          {/* <Route
+          <Route
             path="clearing/create"
             element={
               <Suspense fallback={<></>}>
@@ -121,7 +129,6 @@ function App() {
               </Suspense>
             }
           />
-        </Route> 
 
           <Route
             path="clearing/history"
@@ -131,7 +138,6 @@ function App() {
               </Suspense>
             }
           />
-        </Route> 
 
           <Route
             path="clearing/trade"
@@ -141,7 +147,31 @@ function App() {
               </Suspense>
             }
           />
-        </Route> */}
+          {/*
+           * 설정
+           */}
+
+          <Route
+            path="setting"
+            element={
+              <Suspense fallback={<></>}>
+                <SettingPage />
+              </Suspense>
+            }
+          />
+
+          {/*
+           * 사용자가이드
+           */}
+
+          <Route
+            path="tutorial"
+            element={
+              <Suspense fallback={<></>}>
+                <TutorialPage />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
     </Suspense>
