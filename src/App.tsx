@@ -6,6 +6,7 @@ import {
   ClearingHistoryPage,
   ClearingTradePage,
   HomePage,
+  NotFoundPage,
   OrderCreatePage,
   OrderHistoryPage,
   ProductCreatePage,
@@ -27,8 +28,9 @@ function App() {
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/membership-info" element={<MembershipInfoPage />} />
         <Route path="*" element={<NotFoundPage />} /> */}
+        <Route path="*" element={<NotFoundPage />} />
 
-        <Route path="/" element={<MainLayout />}>
+        <Route element={<MainLayout />}>
           {/*
            * 메인
            */}
