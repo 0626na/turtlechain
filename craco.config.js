@@ -43,20 +43,20 @@ module.exports = {
               '@layout-header-padding': '0 40px',
               '@layout-header-color': '#FFFFFF',
               '@layout-body-background': '#F3F6F9',
-              '@layout-sider-background': '#2B3140',
+              '@layout-sider-background': '#242934',
 
               // Menu
-              '@menu-inline-toplevel-item-height': '36px',
-              '@menu-item-height': '38px',
+              // '@menu-inline-toplevel-item-height': '36px',
+              // '@menu-item-height': '38px',
               '@menu-item-boundary-margin': '0px',
               '@menu-item-vertical-margin': '0px',
               '@menu-item-font-size': '14px',
-              '@menu-item-padding-horizontal': '2px',
+              // '@menu-item-padding-horizontal': '10px',
 
               // Menu dark theme
               '@menu-dark-color': '#FFFFFF',
-              '@menu-dark-bg': '#2B3140',
-              '@menu-dark-inline-submenu-bg': '#2B3140',
+              '@menu-dark-bg': '#242934',
+              '@menu-dark-inline-submenu-bg': '#242934',
               '@menu-dark-arrow-color': '#FFFFFF',
               '@menu-dark-item-hover-bg': 'rgba(20, 23, 32, 0.5)',
               '@menu-dark-item-active-bg': '#141720',
@@ -138,7 +138,7 @@ module.exports = {
               '@table-footer-bg': '#FFFFFF',
 
               // Divider
-              '@divider-color': '#CBCCD1',
+              // '@divider-color': '#434852',
 
               // Message
               '@message-notice-content-bg': '#090A0ED9',
