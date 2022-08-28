@@ -3,11 +3,10 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-function TurtleImg({ name, style, ...props }: Props) {
+function TurtleImg({ name, style }: Props) {
   return (
     <img
-      {...props}
-      style={{ width: '100%', height: '100%', ...style }}
+      style={style}
       src={`${process.env.PUBLIC_URL}/assets/img/${name}.png`}
       alt={name}
     />
