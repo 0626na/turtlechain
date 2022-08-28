@@ -6,7 +6,6 @@ import { Layout, Menu } from 'antd';
 import StoreSelector from './StoreSelector';
 
 import { TurtleImg } from '@components/element';
-import TurtleDivider from '@components/element/TurtleDivider';
 
 import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
 import { ReactComponent as OrderIcon } from '@icons/order.svg';
@@ -15,130 +14,211 @@ import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { ReactComponent as SettingIcon } from '@icons/setting.svg';
 import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
 
-// mainMenus, settingMenus가 컴포넌트 밖에서 선언되어있기때문에 선언순서에 영향을 받는다.
-const MenuTitleText = styled.span`
-  font-size: 12px;
-  color: #a1a2a6;
-`;
-const MenuContnetText = styled.span`
-  font-weight: 500;
-`;
+const pathnames = {
+  vendor: {
+    create: 'vendor/create',
+  },
 
-const mainMenus = [
-  {
-    key: '/vendor&product',
-    label: <MenuTitleText>{'거래처/상품'}</MenuTitleText>,
-    icon: <VendorProductIcon />,
-    children: [
-      {
-        key: '/vendor/create',
-        label: <MenuContnetText>{t('vendor.create')}</MenuContnetText>,
-      },
-      {
-        key: '/product/create',
-        label: <MenuContnetText>{t('product.create')}</MenuContnetText>,
-      },
-    ],
+  product: {
+    create: 'product/create',
   },
-  {
-    key: '/order',
-    label: <MenuTitleText>{t('order.')}</MenuTitleText>,
-    icon: <OrderIcon />,
-    children: [
-      {
-        key: '/order/create',
-        label: <MenuContnetText>{t('order.create')}</MenuContnetText>,
-      },
-      {
-        key: '/order/history',
-        label: <MenuContnetText>{t('order.history')}</MenuContnetText>,
-      },
-    ],
-  },
-  {
-    key: '/warehousing',
-    label: <MenuTitleText>{t('warehousing.')}</MenuTitleText>,
-    icon: <WarehousingIcon />,
-    children: [
-      {
-        key: '/warehousing/create',
-        label: <MenuContnetText>{t('warehousing.create')}</MenuContnetText>,
-      },
-      {
-        key: '/warehousing/history',
-        label: <MenuContnetText>{t('warehousing.history')}</MenuContnetText>,
-      },
-      {
-        key: '/warehousing/adjustment',
-        label: <MenuContnetText>{t('warehousing.adjustment')}</MenuContnetText>,
-      },
-    ],
-  },
-  {
-    key: '/clearing',
-    label: <MenuTitleText>{t('clearing.')}</MenuTitleText>,
-    icon: <ClearingIcon />,
-    children: [
-      {
-        key: '/clearing/create',
-        label: t('clearing.create'),
-      },
-      {
-        key: '/clearing/history',
-        label: t('clearing.history'),
-      },
-      {
-        key: '/clearing/trade',
-        label: t('clearing.trade'),
-      },
-    ],
-  },
-];
 
-const etcMenus = [
+  order: {
+    create: 'order/create',
+    history: 'order/history',
+  },
+
+  warehousing: {
+    create: 'warehousing/create',
+    history: 'warehousing/history',
+    adjustment: 'warehousing/adjustment',
+  },
+
+  clearing: {
+    create: 'clearing/create',
+    history: 'clearing/history',
+    trade: 'clearing/trade',
+  },
+
+  etc: {
+    setting: 'setting',
+    tutorial: 'tutorial',
+  },
+};
+
+/*
+ * mainMenuStyle
+ */
+
+const mainMenuContainerStyle = {
+  order: -1,
+};
+const mainMenuTitleStyle = {
+  fontSize: 12,
+  color: '#a1a2a6',
+};
+const mainMenuContentStyle = {
+  fontWeight: 500,
+  width: 236,
+  height: 38,
+
+  marginLeft: 12,
+  paddingLeft: 30,
+  borderRadius: 8,
+};
+
+/*
+ * etcMenuStyle :
+ */
+
+const etcMenuContainerStyle = {
+  order: 1,
+  padding: '16px 0px 20px 12px',
+  borderTop: 'solid #434852 1px', // divider
+};
+const etcMenuTitleStyle = {
+  fontWeight: 500,
+  width: 236,
+  height: 38,
+
+  padding: '0px 8px',
+  borderRadius: 8,
+};
+
+/*
+ * menus
+ */
+
+const menus = [
   {
-    key: '/setting',
-    label: <MenuContnetText>{t('etc.setting')}</MenuContnetText>,
-    icon: <SettingIcon />,
+    type: 'group',
+    key: 'mainMenuContainer',
+    style: mainMenuContainerStyle,
+    children: [
+      {
+        key: 'vendor&product',
+        label: '거래처/상품',
+        icon: <VendorProductIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.vendor.create,
+            label: t('vendor.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.product.create,
+            label: t('product.create'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'order',
+        label: t('order.'),
+        icon: <OrderIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.order.create,
+            label: t('order.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.order.history,
+            label: t('order.history'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'warehousing',
+        label: t('warehousing.'),
+        icon: <WarehousingIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.warehousing.create,
+            label: t('warehousing.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.warehousing.history,
+            label: t('warehousing.history'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.warehousing.adjustment,
+            label: t('warehousing.adjustment'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'clearing',
+        label: t('clearing.'),
+        icon: <ClearingIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.clearing.create,
+            label: t('clearing.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.clearing.history,
+            label: t('clearing.history'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.clearing.trade,
+            label: t('clearing.trade'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+    ],
   },
   {
-    key: '/tutorial',
-    label: <MenuContnetText>{t('etc.tutorial')}</MenuContnetText>,
-    icon: <TutorialIcon />,
+    type: 'group',
+    key: 'etcMenuContainer',
+    style: etcMenuContainerStyle,
+    children: [
+      {
+        key: pathnames.etc.setting,
+        label: t('etc.setting'),
+        icon: <SettingIcon />,
+        style: etcMenuTitleStyle,
+      },
+      {
+        key: pathnames.etc.tutorial,
+        label: t('etc.tutorial'),
+        icon: <TutorialIcon />,
+        style: etcMenuTitleStyle,
+      },
+    ],
   },
 ];
 
 function Sider() {
+  // pathname필드, seelectedPath상태는 사이드바에서 메뉴를 직접 클릭하는방식이 아닌,
+  // 페이지내에서 다른 메뉴의 페이지로 이동할때 사용된다.
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  // const [openKeys, setOpenKeys] = useState<string[]>([]);
-  // const [selectedKeys, selectKeys] = useState(pathname);
+  const [selectedPath, setSelectedPath] = useState('');
 
-  // pathname 이용하여 주소 바뀔 시 메뉴 선택
   useEffect(() => {
-    console.log(pathname);
-    console.log(pathname.split('/'));
+    const [, firstPath, secondPath] = pathname.split('/');
+    if (firstPath === ('setting' || 'tutorial')) {
+      setSelectedPath(firstPath);
+      return;
+    }
 
-    // const [, firstKey, secondKey] = pathname.split('/');
-    // if (firstKey === 'home') {
-    //   setOpenKeys([]);
-    //   selectKeys('/home');
-    //   return;
-    // }
-
-    // setOpenKeys([`/${firstKey}`]);
-    // selectKeys(`/${firstKey}/${secondKey}`);
+    setSelectedPath(firstPath + '/' + secondPath);
   }, [pathname]);
 
   return (
-    <Layout.Sider
-      style={{ height: '100vh' }}
-      width="260"
-      trigger={null}
-
-      // collapsible
-      // collapsed={false}
-    >
+    <StyledSiderLayout width="260" trigger={null}>
       <SiderHeader>
         <LogoContainer
           onClick={() => {
@@ -153,87 +233,32 @@ function Sider() {
         </StoreSelectorContainer>
       </SiderHeader>
 
-      <SiderContentContainer>
-        <MainMenuInner>
-          <Menu
-            theme="dark"
-            mode="inline"
-            inlineIndent={20}
-            items={mainMenus}
-            defaultOpenKeys={mainMenus.map((subMenu) => subMenu.key)}
-            // defaultSelectedKeys={['/home']}
-            onSelect={({ key }) => {
-              navigate(key);
-            }}
-            // openKeys={openKeys}
-            onOpenChange={(openKeys) => {
-              // setOpenKeys([openKeys.pop() ?? '']);
-            }}
-            // selectedKeys={[selectedKeys]}
-          />
-          {/* {mainMenus.map(({ key, title, submenus }) => (
-              <Menu.SubMenu
-                key={key}
-                title={
-                  <Typography.Text
-                    style={{
-                      fontSize: 12,
-                      color: '#A1A2A6',
-                    }}
-                  >
-                    {title}
-                  </Typography.Text>
-                }
-                icon={<div>{<TurtleImg name={key.substring(1)} />}</div>}
-              >
-                {submenus.map((submenu) => (
-                  <Menu.Item
-                    style={{
-                      borderRadius: 8,
-                      paddingLeft: 42,
-                      width: 236,
-                      marginLeft: 12,
-                    }}
-                    key={submenu.pathname}
-                  >
-                    {submenu.title}
-                  </Menu.Item>
-                ))}
-              </Menu.SubMenu>
-            ))} */}
-          {/* </Menu> */}
-        </MainMenuInner>
-
-        <SettingMenuInner style={{ height: '11%' }}>
-          <TurtleDivider color={`#434852`} />
-          <Menu
-            // style={{ color: 'red' }}
-            items={etcMenus}
-            theme="dark"
-            mode="inline"
-            inlineIndent={20}
-            // openKeys={openKeys}
-            // onOpenChange={(openKeys) => {
-            //   setOpenKeys([openKeys.pop() ?? '']);
-            // }}
-            // selectedKeys={[selectedKeys]}
-            onSelect={({ key }) => {
-              navigate(key);
-            }}
-          />
-          {/* {etcMenus.map(({ key, label }) => (
-              <Menu.Item
-                key={key}
-                icon={<div>{<TurtleImg name={key.substring(1)} />}</div>}
-              >
-                {label}
-              </Menu.Item>
-            ))} */}
-        </SettingMenuInner>
-      </SiderContentContainer>
-    </Layout.Sider>
+      <StyledMenu
+        theme="dark"
+        mode="inline"
+        inlineIndent={20} // ==== padding-left : 20px;
+        items={menus}
+        defaultOpenKeys={menus.flatMap((group) =>
+          group.children.map((subMenu) => subMenu.key),
+        )}
+        selectedKeys={[selectedPath]}
+        onSelect={({ key }) => {
+          navigate(key);
+        }}
+      />
+    </StyledSiderLayout>
   );
 }
+
+const StyledSiderLayout = styled(Layout.Sider)`
+  & > div {
+    // Sider의 children 선택자.
+    height: 100vh;
+    display: flex;
+
+    flex-direction: column;
+  }
+`;
 
 const SiderHeader = styled.div`
   height: 142px;
@@ -243,13 +268,11 @@ const SiderHeader = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  /* width: 200px; */
-  margin-left: 28px;
   height: 82px;
+  margin-left: 28px;
 
   display: flex;
   align-items: center;
-
   cursor: pointer;
 `;
 
@@ -257,16 +280,21 @@ const StoreSelectorContainer = styled.div`
   margin: 0px 12px;
 `;
 
-const SiderContentContainer = styled.div`
-  height: 82%;
-
+const StyledMenu = styled(Menu)`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  // mainMenuTitle 높이 설정.
+  .ant-menu-submenu-title {
+    height: 36px;
+  }
+
+  // group-menu중 antd에서 기본으로 제공하는 title의  패딩값 제거.
+  .ant-menu-item-group-title {
+    padding: 0;
+  }
 `;
-
-const MainMenuInner = styled.div``;
-
-const SettingMenuInner = styled.div``;
 
 export default Sider;
