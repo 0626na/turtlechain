@@ -6,6 +6,7 @@ import {
   ClearingHistoryPage,
   ClearingTradePage,
   HomePage,
+  LoginPage,
   NotFoundPage,
   OrderCreatePage,
   OrderHistoryPage,
@@ -21,13 +22,16 @@ function App() {
   return (
     <Suspense fallback={<></>}>
       <Routes>
-        {/* <Route index element={<LoginPage />} />
+        <Route index element={<LoginPage />} />
+        {/* 
+        <Route index element={<LoginPage />} />
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/membership-info" element={<MembershipInfoPage />} />
-        <Route path="*" element={<NotFoundPage />} /> */}
+         */}
+
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<MainLayout />}>
