@@ -51,7 +51,5 @@ function PageTitle({ title, subTitle, Buttons }: Props) {
 
 const Inner = styled.div`
   padding: 12px 36px 0px 36px;
-
-  background: blue;
 `;
 export default PageTitle;
