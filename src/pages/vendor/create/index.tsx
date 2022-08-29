@@ -1,5 +1,17 @@
-function VendorCreate() {
-  return <h1>거래처등록 페이지 입니다</h1>;
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+
+import { AlertBar } from '@layout/page';
+import PageBody from './PageBody';
+
+function VendorCreatePage() {
+  return (
+    <>
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('helmet.home')}`} />
+      <AlertBar />
+      <PageBody />
+    </>
+  );
 }
 
-export default VendorCreate;
+export default VendorCreatePage;
