@@ -35,5 +35,9 @@
   "etc": {
     "setting": "설정",
     "tutorial": "사용자 가이드"
+  },
+
+  "auth": {
+    "logout": "로그아웃"
   }
 }

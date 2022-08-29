@@ -2,7 +2,7 @@ import {
   PrimaryButton,
   SecondaryButton,
   TeriaryButton,
-} from '@components/element/Buttons';
+} from '@components/element';
 import {
   PageBottomBar,
   PageContent,

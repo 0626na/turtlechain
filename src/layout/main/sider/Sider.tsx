@@ -228,9 +228,7 @@ function Sider() {
           <TurtleImg name="logo" />
         </LogoContainer>
 
-        <StoreSelectorContainer>
-          <StoreSelector />
-        </StoreSelectorContainer>
+        <StoreSelector />
       </SiderHeader>
 
       <StyledMenu
@@ -262,6 +260,8 @@ const StyledSiderLayout = styled(Layout.Sider)`
 
 const SiderHeader = styled.div`
   height: 142px;
+  padding: 0px 12px;
+  margin-bottom: 20px;
 
   display: flex;
   flex-direction: column;
@@ -269,15 +269,11 @@ const SiderHeader = styled.div`
 
 const LogoContainer = styled.div`
   height: 82px;
-  margin-left: 28px;
+  margin-left: 14px;
 
   display: flex;
   align-items: center;
   cursor: pointer;
-`;
-
-const StoreSelectorContainer = styled.div`
-  margin: 0px 12px;
 `;
 
 const StyledMenu = styled(Menu)`

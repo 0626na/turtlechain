@@ -7,32 +7,21 @@ import { useRecoilState } from 'recoil';
 import { Store, storeState } from '@store/storeState';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import { TurtleImg } from '@components/element';
-import { SmileOutlined } from '@ant-design/icons';
-
-/*
- * toDoList
- * 1. ui 데이터 채워넣기
- */
 
 interface Props {
   warningMessage?: string;
 }
 
-const testData = [
-  { id: 0, name: 'test1', icon: <SmileOutlined />, color: 'red' },
-  { id: 1, name: 'test2', icon: <SmileOutlined />, color: 'blue' },
-  { id: 2, name: 'test3', icon: <SmileOutlined />, color: 'yellow' },
-];
-
 function StoreSelect({ warningMessage }: Props) {
   const [store, setStore] = useRecoilState(storeState);
-  const [storeList, setStoreList] = useState<Array<Store>>([]); // 폐점 쇼핑몰을 목록에서 제외시키기 위해 상태로관리.
+  const [storeList, setStoreList] = useState<Store[]>([]); // 폐점 쇼핑몰을 목록에서 제외시키기 위해 queryData를 바로사용하지않고 따로 상태로관리.
 
   // 쇼핑몰 불러오기
   const getStoreListQuery = useQuery(
-    ['getStoreList'],
+    ['getStoreListQuery'],
     retailerStoreAPI.getList,
     {
+      // enabled: !!store.id,
       onSuccess: (data) => {
         if (data.store_list.length === 0) return;
 
@@ -47,16 +36,14 @@ function StoreSelect({ warningMessage }: Props) {
             })),
         );
 
-        // 쇼핑몰이 1개일때는 해당 쇼핑몰 선택
-        if (data.store_list.length === 1) {
-          setStore({
-            id: data.store_list[0].id,
-            name: data.store_list[0].name,
-            inventory_is_vat_included:
-              data.store_list[0].inventory_is_vat_included,
-            version: data.store_list[0].companies[0].version,
-          });
-        }
+        // default : 첫번쨰 쇼핑몰 선택
+        setStore({
+          id: data.store_list[0].id,
+          name: data.store_list[0].name,
+          inventory_is_vat_included:
+            data.store_list[0].inventory_is_vat_included,
+          version: data.store_list[0].companies[0].version,
+        });
       },
     },
   );
@@ -83,14 +70,13 @@ function StoreSelect({ warningMessage }: Props) {
   return (
     <Dropdown // 이름은 DropDown지만, selector역할을 한다.
       trigger={['click']}
-      // loading={getStoresQuery.isLoading}
       overlay={
         <StyledMenu
           selectable
           onSelect={({ key }) => {
-            // handleStoreSelect(Number(key));
+            handleStoreSelect(Number(key));
           }}
-          items={testData.map((store) => ({
+          items={storeList.map((store) => ({
             style: MenuItemContainerStyle,
             onMouseEnter: (e) => {
               e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
@@ -116,8 +102,7 @@ function StoreSelect({ warningMessage }: Props) {
         />
       }
     >
-      <SlectorButton loading={getStoreListQuery.isLoading}>
-        {/* toDo -1 */}
+      <SelectorButton>
         <div>
           <TurtleImg
             style={{
@@ -130,9 +115,8 @@ function StoreSelect({ warningMessage }: Props) {
             name="Logo"
           />
         </div>
-
-        <span style={{ marginLeft: 12 }}>쇼핑몰 이름</span>
-      </SlectorButton>
+        <span style={{ marginLeft: 12 }}>{store.name}</span>
+      </SelectorButton>
     </Dropdown>
   );
 }
@@ -164,7 +148,7 @@ const MenuItemText = styled.span`
   margin-left: 8px;
 `;
 
-const SlectorButton = styled(Button)`
+const SelectorButton = styled(Button)`
   color: #fff;
 
   width: 236px;
