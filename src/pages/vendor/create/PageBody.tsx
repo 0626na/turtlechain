@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled from '@emotion/styled';
 
 import { Button } from 'antd';
 
@@ -21,12 +22,10 @@ import { TurtleText } from '@components/element';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
+import { css } from '@emotion/react';
 
 function PageBody() {
-
-const [successList,setSuccessList] = 
-
-
+  // const [successList,setSuccessList] =
 
   return (
     <>
@@ -35,7 +34,12 @@ const [successList,setSuccessList] =
         Button={
           <StyledButton>
             <ListIcon />
-            <TurtleText style={{ marginLeft: 8, color: '#fff' }}>
+            <TurtleText
+              css={css`
+                margin-left: 8px;
+                color: #fff;
+              `}
+            >
               거래처 목록
             </TurtleText>
           </StyledButton>

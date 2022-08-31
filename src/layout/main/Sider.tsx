@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
 import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { ReactComponent as SettingIcon } from '@icons/setting.svg';
 import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
+import { css } from '@emotion/react';
 
 const pathnames = {
   vendor: {
@@ -57,6 +58,7 @@ const mainMenuTitleStyle = {
   fontSize: 12,
   color: '#a1a2a6',
 };
+
 const mainMenuContentStyle = {
   fontWeight: 500,
   width: 236,
@@ -218,20 +220,22 @@ function Sider() {
   }, [pathname]);
 
   return (
-    <StyledSiderLayout width="260" trigger={null}>
-      <SiderHeader>
-        <LogoContainer
+    <Layout.Sider css={siderLayout} width="260" trigger={null}>
+      <div css={siderHeader}>
+        <div
+          css={logoContainer}
           onClick={() => {
             navigate('home');
           }}
         >
           <TurtleImg name="logo" />
-        </LogoContainer>
+        </div>
 
         <StoreSelector />
-      </SiderHeader>
+      </div>
 
-      <StyledMenu
+      <Menu
+        css={menu}
         theme="dark"
         mode="inline"
         inlineIndent={20} // ==== padding-left : 20px;
@@ -244,11 +248,11 @@ function Sider() {
           navigate(key);
         }}
       />
-    </StyledSiderLayout>
+    </Layout.Sider>
   );
 }
 
-const StyledSiderLayout = styled(Layout.Sider)`
+const siderLayout = css`
   & > div {
     // Sider의 children 선택자.
     height: 100vh;
@@ -258,7 +262,7 @@ const StyledSiderLayout = styled(Layout.Sider)`
   }
 `;
 
-const SiderHeader = styled.div`
+const siderHeader = css`
   height: 142px;
   padding: 0px 12px;
   margin-bottom: 20px;
@@ -267,7 +271,7 @@ const SiderHeader = styled.div`
   flex-direction: column;
 `;
 
-const LogoContainer = styled.div`
+const logoContainer = css`
   height: 82px;
   margin-left: 14px;
 
@@ -276,7 +280,7 @@ const LogoContainer = styled.div`
   cursor: pointer;
 `;
 
-const StyledMenu = styled(Menu)`
+const menu = css`
   flex-grow: 1;
   display: flex;
   flex-direction: column;

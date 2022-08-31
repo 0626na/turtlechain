@@ -1,6 +1,6 @@
 import { useLogin } from '@hooks/index';
 import { Navigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 interface Props {
   children?: React.ReactNode;

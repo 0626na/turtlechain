@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';

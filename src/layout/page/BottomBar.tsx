@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 interface Props {
   children?: React.ReactNode;

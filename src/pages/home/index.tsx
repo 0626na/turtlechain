@@ -1,3 +1,4 @@
+import React from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 

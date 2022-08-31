@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import TurtleText from '../TurtleText';
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
+import { css } from '@emotion/react';
 interface Props {
   text: string;
   size?: 'default' | 'large';
@@ -32,7 +33,13 @@ function SecondaryButton({
         htmlType={htmlType}
       >
         <Plusicon />
-        <TurtleText style={{ marginLeft: 5 }}>{text}</TurtleText>
+        <TurtleText
+          css={css`
+            margin-left: 5px;
+          `}
+        >
+          {text}
+        </TurtleText>
       </StyledButton>
     );
   }
@@ -47,7 +54,13 @@ function SecondaryButton({
       htmlType={htmlType}
     >
       <Plusicon />
-      <TurtleText style={{ marginLeft: 5 }}>{text}</TurtleText>
+      <TurtleText
+        css={css`
+          margin-left: 5px;
+        `}
+      >
+        {text}
+      </TurtleText>
     </StyledButton>
   );
 }

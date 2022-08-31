@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { Layout } from 'antd';
 
 interface Props {
@@ -5,17 +6,13 @@ interface Props {
 }
 
 function Content({ children }: Props) {
-  return (
-    <Layout.Content
-      style={{
-        backgroundColor: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {children}
-    </Layout.Content>
-  );
+  return <Layout.Content css={content}>{children}</Layout.Content>;
 }
+
+const content = css`
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+`;
 
 export default Content;

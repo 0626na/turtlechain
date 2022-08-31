@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled from '@emotion/styled';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';

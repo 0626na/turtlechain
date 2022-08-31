@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import React from 'react';
+import { css } from '@emotion/react';
 import { Avatar, Col, Dropdown, Menu, Row, Button as AntdButton } from 'antd';
 
 import TurtleText from '@components/element/TurtleText';
@@ -19,52 +20,66 @@ function PageHeader({ title, Button }: Props) {
   const getUserQuery = useQuery('getUserQuery', authAPI.verify);
 
   return (
-    <Container align="middle" justify="space-between">
-      <LeftContnet>
-        <TurtleText style={{ fontSize: 24, fontWeight: 700, color: '#242934' }}>
-          {title}
-        </TurtleText>
-        {Button}
-      </LeftContnet>
+    <>
+      <Row css={container} align="middle" justify="space-between">
+        <Col css={leftContnetStyled}>
+          <TurtleText css={textStyled}>{title}</TurtleText>
+          {Button}
+        </Col>
 
-      <RightContent>
-        <Notification />
+        <Col css={rightContnetStyled}>
+          <Notification />
 
-        <Dropdown
-          overlay={
-            <Menu>
-              <AntdButton type="text" onClick={logout}>
-                {t('auth.logout')}
-              </AntdButton>
-            </Menu>
-          }
-          trigger={['click']}
-        >
-          <Avatar
-            style={{ backgroundColor: 'orange', cursor: 'pointer' }}
-            size={36}
+          <Dropdown
+            overlay={
+              <Menu>
+                <AntdButton type="text" onClick={logout}>
+                  {t('auth.logout')}
+                </AntdButton>
+              </Menu>
+            }
+            trigger={['click']}
           >
-            {getUserQuery.data?.name.split('')[0]}
-          </Avatar>
-        </Dropdown>
-      </RightContent>
-    </Container>
+            <Avatar
+              style={{ backgroundColor: 'orange', cursor: 'pointer' }}
+              size={36}
+            >
+              {getUserQuery.data?.name.split('')[0]}
+            </Avatar>
+          </Dropdown>
+        </Col>
+      </Row>
+    </>
   );
 }
 
-const Container = styled(Row)`
+const container = css`
   height: 84px;
   padding: 24px 36px;
 `;
 
-const LeftContnet = styled(Col)`
+const leftContnetStyled = css`
   display: flex;
   align-items: center;
 `;
 
-const RightContent = styled(Col)`
+const rightContnetStyled = css`
   display: flex;
   align-items: center;
 `;
+
+// const textStyled = css`
+//   font-size: 24px;
+//   font-weight: 700;
+//   background-color: orange;
+//   cursor: pointer;
+// `;
+
+const textStyled = css({
+  fontSize: 24,
+  fontWeight: 700,
+
+  cursor: 'pointer',
+});
 
 export default PageHeader;

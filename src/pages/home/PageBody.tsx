@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   PrimaryButton,
   SecondaryButton,
@@ -13,7 +14,7 @@ import { Button, Form, Menu, Select, Table } from 'antd';
 
 import { ReactComponent as DownloadIcon } from '@icons/download.svg';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import {
   TurtleDropdown,
   TurtleFormInput,
@@ -31,7 +32,10 @@ import {
   TurtleModaltest,
 } from '@components/combine';
 import { useState } from 'react';
-import StoreSelect from '@layout/main/sider/StoreSelector';
+import StoreSelect from '@layout/main/StoreSelector';
+import Moment from 'react-moment';
+import moment from 'moment';
+import { css } from '@emotion/react';
 
 function PageBody() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,7 +55,13 @@ function PageBody() {
         Button={
           <StyledButton>
             <ListIcon />
-            <TurtleText style={{ marginLeft: 8, color: '#fff' }}>
+            <TurtleText
+              css={css`
+                margin-left: 8px;
+                color: #fff;
+                font-weight: 500;
+              `}
+            >
               거래처 목록
             </TurtleText>
           </StyledButton>
@@ -72,61 +82,40 @@ function PageBody() {
         {/* <Button size="small">asas</Button>
         <Button size="middle">asas</Button>
         <Button size="large">asas</Button> */}
-        <TeriaryButton icon={<DownloadIcon />} text="결제내역 다운" />
-        <TeriaryButton text="재고프로그램 연동" />
+        {/* <TeriaryButton icon={<DownloadIcon />} text="결제내역 다운" />
+        <TeriaryButton text="재고프로그램 연동" /> */}
         {/* <TeriaryButton text="마감하기" /> */}
 
         <TurtleDropdown
-          items={
-            [
-              {
-                title: '11222',
-                key: '1',
-                label: '12',
-                icon: <DownloadIcon style={{ stroke: 'red' }} />,
-              },
-            ]
-            // <Menu>
-            //   <Menu.Item style={{ background: 'red' }} key="1">
-            //     a
-            //   </Menu.Item>
-            //   <Menu.Item key="2">ab</Menu.Item>
-            //   <Menu.Item key="3">ss</Menu.Item>
-            //   <Menu.Item key="4">add</Menu.Item>
-            //   {/* <Menu.Item key="1">
-            //     <TurtleUpload //
-            //       beforeUpload={parseFile}
-            //       onRemove={resetStates}
-            //       fileList={cart.fileList}
-            //     />
-            //   </Menu.Item>
-            //   <Menu.Item
-            //     key="2"
-            //     onClick={() => {
-            //       if (!isStoreExist()) return;
-            //       setAddProductModalVisible(true);
-            //     }}
-            //   >
-            //     {t('button.add single product')}
-            //   </Menu.Item> */}
-            // </Menu>
-          }
+          items={[
+            {
+              title: '11222',
+              key: '1',
+              label: '12',
+              icon: <DownloadIcon style={{ stroke: 'red' }} />,
+            },
+          ]}
           triggerButton={<SecondaryButton text="상품 추가하기" />}
         />
 
         <Table title={() => <div>3123</div>}></Table>
 
-        {/* <TurtleSelector
-          defaultValue="상품명"
+        <TurtleSelector
+          defaultValue="거래처명"
           onChange={(value) => console.log(value)}
           items={[
             { value: '상품명' },
             { value: '거래처명' },
             { value: '거래처 상품명' },
           ]}
-        /> */}
+        />
 
-        {/* <TurtleRangePicker onChange={() => {}} /> */}
+        <TurtleRangePicker
+          onChange={(value) => {
+            console.log(value[0]);
+            console.log(value[1]);
+          }}
+        />
 
         <TurtleSearchInput onSearch={(value: any) => console.log(value)} />
         <TurtleFormInput />

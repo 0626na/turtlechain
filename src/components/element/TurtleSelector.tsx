@@ -1,34 +1,29 @@
 import { Select, SelectProps } from 'antd';
-import styled from 'styled-components';
+
+import styled from '@emotion/styled';
 import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
 import React from 'react';
 
-const { Option } = Select;
-
 interface Props extends SelectProps {
-  defaultValue: string;
   items: { value: string; icon?: React.ReactNode }[];
-  onChange?: (value: any) => void;
-  style?: React.CSSProperties;
+  onChange: (value: unknown) => void; // Select의 onChange함수와 SelectProps의 onChange함수의 타입 불일치로인한 재정의
 }
 
-function TurtleSelector({ defaultValue, items, onChange, style }: Props) {
+function TurtleSelector({ items, defaultValue, onChange }: Props) {
   return (
     <StyledSelect
-      // defaultOpen={true}
       bordered={false}
       suffixIcon={<ArrowDown />}
       defaultValue={defaultValue}
       onChange={onChange}
-      style={style}
       dropdownStyle={{
         background: '#fff',
         boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
         borderRadius: 8,
       }}
     >
-      {items.map((item, idx) => (
-        <Option
+      {items?.map((item, idx) => (
+        <Select.Option
           style={{
             padding: '8px 10px',
           }}
@@ -36,7 +31,7 @@ function TurtleSelector({ defaultValue, items, onChange, style }: Props) {
           value={item.value}
         >
           {item.value}
-        </Option>
+        </Select.Option>
       ))}
     </StyledSelect>
   );

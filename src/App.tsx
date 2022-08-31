@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@layout/main';
+import React from 'react';
 import {
   ClearingCreatePage,
   ClearingHistoryPage,

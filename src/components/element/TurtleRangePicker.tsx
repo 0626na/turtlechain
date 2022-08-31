@@ -1,10 +1,10 @@
 import { DatePicker } from 'antd';
 import moment from 'moment';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 interface Props {
   value?: [moment.Moment, moment.Moment];
-  onChange?: () => void;
+  onChange?: (value: any) => void; // value : [moment.Moment, moment.Moment]
 }
 
 function TurtleRangePicker({ value, onChange }: Props) {

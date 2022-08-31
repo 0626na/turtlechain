@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled from '@emotion/styled';
 import { Col, Row } from 'antd';
 import { ReactComponent as ModalCloseIcon } from '@icons/modalClose.svg';
 interface Props {

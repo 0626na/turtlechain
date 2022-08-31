@@ -1,5 +1,5 @@
 import Modal, { ModalProps } from 'antd/lib/modal/Modal';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { CloseOutlined } from '@ant-design/icons';
 
 interface Props extends ModalProps {

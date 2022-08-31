@@ -39,8 +39,8 @@ const ga4react = new GA4React(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider locale={koKR}>
-          <GlobalStyle />
           <BrowserRouter>
+            <GlobalStyle />
             <App />
           </BrowserRouter>
         </ConfigProvider>

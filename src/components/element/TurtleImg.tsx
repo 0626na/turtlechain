@@ -1,14 +1,14 @@
 interface Props {
   name: string;
-  style?: React.CSSProperties;
+  className?: string;
 }
 
-function TurtleImg({ name, style }: Props) {
+function TurtleImg({ name, ...props }: Props) {
   return (
     <img
-      style={style}
       src={`${process.env.PUBLIC_URL}/assets/img/${name}.png`}
       alt={name}
+      {...props}
     />
   );
 }

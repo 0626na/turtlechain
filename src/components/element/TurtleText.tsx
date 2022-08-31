@@ -1,15 +1,20 @@
-import styled from 'styled-components';
+import React from 'react';
+import { css } from '@emotion/react';
 
 interface Props {
-  children: React.ReactNode;
-  style?: React.CSSProperties;
+  children?: React.ReactNode;
+  className?: string;
 }
 
-function TurtleText({ style, children }: Props) {
-  return <StyledText style={style}>{children}</StyledText>;
+function TurtleText({ children, ...props }: Props) {
+  return (
+    <span css={styledText} {...props}>
+      {children}
+    </span>
+  );
 }
 
-const StyledText = styled.span`
+const styledText = css`
   display: inline-block;
   line-height: 1;
 `;

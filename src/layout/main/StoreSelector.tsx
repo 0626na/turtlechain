@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 import { useState, useCallback } from 'react';
 import { Button, Dropdown, Menu } from 'antd';
@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { Store, storeState } from '@store/storeState';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import { TurtleImg } from '@components/element';
+import { css } from '@emotion/react';
 
 interface Props {
   warningMessage?: string;
@@ -71,13 +72,14 @@ function StoreSelect({ warningMessage }: Props) {
     <Dropdown // 이름은 DropDown지만, selector역할을 한다.
       trigger={['click']}
       overlay={
-        <StyledMenu
+        <Menu
+          css={menu}
           selectable
           onSelect={({ key }) => {
             handleStoreSelect(Number(key));
           }}
           items={storeList.map((store) => ({
-            style: MenuItemContainerStyle,
+            style: menuItemContainer,
             onMouseEnter: (e) => {
               e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
             },
@@ -85,43 +87,23 @@ function StoreSelect({ warningMessage }: Props) {
               e.domEvent.currentTarget.style.backgroundColor = '#fff';
             },
             key: store.id!,
-            label: <MenuItemText>{store.name}</MenuItemText>,
-            icon: (
-              <TurtleImg
-                style={{
-                  borderRadius: '50%',
-                  background: 'red',
-                  width: 28,
-                  height: 28,
-                  objectFit: 'cover',
-                }}
-                name="Logo"
-              />
-            ),
+            label: <span css={menuItemText}>{store.name}</span>,
+            icon: <TurtleImg css={logo} name="Logo" />,
           }))}
         />
       }
     >
-      <SelectorButton>
+      <Button css={selectorButton}>
         <div>
-          <TurtleImg
-            style={{
-              borderRadius: '50%',
-              background: 'yellow',
-              width: 44,
-              height: 44,
-              objectFit: 'cover',
-            }}
-            name="Logo"
-          />
+          <TurtleImg css={buttonImg} name="Logo" />
         </div>
-        <span style={{ marginLeft: 12 }}>{store.name}</span>
-      </SelectorButton>
+        <span css={text}>{store.name}</span>
+      </Button>
     </Dropdown>
   );
 }
 
-const StyledMenu = styled(Menu)`
+const menu = css`
   width: 196px;
   max-height: 150px;
   overflow-y: scroll;
@@ -136,7 +118,7 @@ const StyledMenu = styled(Menu)`
   border-radius: 8px;
 `;
 
-const MenuItemContainerStyle = {
+const menuItemContainer = {
   color: '#5b5d63',
   fontWeight: 500,
 
@@ -144,11 +126,19 @@ const MenuItemContainerStyle = {
   borderRadius: '6px',
 };
 
-const MenuItemText = styled.span`
+const menuItemText = css`
   margin-left: 8px;
 `;
 
-const SelectorButton = styled(Button)`
+const logo = css`
+  border-radius: 50%;
+  background: red;
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+`;
+
+const selectorButton = css`
   color: #fff;
 
   width: 236px;
@@ -168,4 +158,17 @@ const SelectorButton = styled(Button)`
     border-color: rgba(255, 255, 255, 0.1);
   }
 `;
+
+const text = css`
+  margin-left: 12px;
+`;
+
+const buttonImg = css`
+  border-radius: 50%;
+  background: yellow;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+`;
+
 export default StoreSelect;
