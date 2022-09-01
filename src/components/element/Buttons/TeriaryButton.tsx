@@ -2,58 +2,30 @@ import { Button } from 'antd';
 import styled from '@emotion/styled';
 
 import TurtleText from '../TurtleText';
+import { css } from '@emotion/react';
 interface Props {
   text: string;
-  size?: 'default';
+  icon?: React.ReactNode;
+
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
-  icon?: React.ReactNode;
   onClick?: () => void;
-  style?: React.CSSProperties;
 }
 
-function TeriaryButton({
-  size = 'default',
-  text,
-  icon,
-  loading,
-  disabled,
-  htmlType,
-  onClick,
-  style,
-}: Props) {
-  if (size === 'default') {
-    return (
-      <StyledButton
-        style={{ width: 160, height: 40, ...style }}
-        loading={loading}
-        onClick={onClick}
-        disabled={disabled}
-        htmlType={htmlType}
-      >
-        {icon && <IconContainer>{icon}</IconContainer>}
-        <TurtleText>{text}</TurtleText>
-      </StyledButton>
-    );
-  }
-
-  // 임의 사이즈 적용
+function TeriaryButton({ text, icon, ...props }: Props) {
   return (
-    <StyledButton
-      style={style}
-      loading={loading}
-      onClick={onClick}
-      disabled={disabled}
-      htmlType={htmlType}
-    >
+    <Button css={button} {...props}>
       {icon && <IconContainer>{icon}</IconContainer>}
       <TurtleText>{text}</TurtleText>
-    </StyledButton>
+    </Button>
   );
 }
 
-const StyledButton = styled(Button)`
+const button = css`
+  width: 160px;
+  height: 40px;
+
   font-weight: 700;
   border: none;
   border-radius: 8px;

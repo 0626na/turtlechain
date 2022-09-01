@@ -1,69 +1,35 @@
 import { Button } from 'antd';
-import styled from '@emotion/styled';
+
 import TurtleText from '../TurtleText';
+import { css } from '@emotion/react';
 
 interface Props {
-  text: string;
   size?: 'default' | 'large';
+  text: string;
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
-  style?: React.CSSProperties;
 }
 
-function PrimaryButton({
-  size = 'default',
-  text,
-  style,
-  disabled,
-  loading,
-  htmlType,
-  onClick,
-}: Props) {
+function PrimaryButton({ size = 'default', text, ...props }: Props) {
   if (size === 'large') {
     return (
-      <StyledButton
-        style={{ width: 512, height: 48, ...style }}
-        loading={loading}
-        onClick={onClick}
-        disabled={disabled}
-        htmlType={htmlType}
-      >
+      <Button css={largePrimary} {...props}>
         <TurtleText>{text}</TurtleText>
-      </StyledButton>
+      </Button>
     );
   }
 
-  if (size === 'default') {
-    return (
-      <StyledButton
-        style={{ width: 200, height: 40, ...style }}
-        loading={loading}
-        onClick={onClick}
-        disabled={disabled}
-        htmlType={htmlType}
-      >
-        <TurtleText>{text}</TurtleText>
-      </StyledButton>
-    );
-  }
-
-  // 임의 사이즈 적용
+  // default
   return (
-    <StyledButton
-      style={style}
-      loading={loading}
-      onClick={onClick!}
-      disabled={disabled}
-      htmlType={htmlType!}
-    >
+    <Button css={defaultPrimary} {...props}>
       <TurtleText>{text}</TurtleText>
-    </StyledButton>
+    </Button>
   );
 }
 
-const StyledButton = styled(Button)`
+const button = css`
   font-size: 16px;
   font-weight: 700;
 
@@ -79,9 +45,11 @@ const StyledButton = styled(Button)`
   // active 상태
   &.ant-btn:focus {
     color: #fff;
-
     background-color: #1a66f9;
   }
 `;
+
+const defaultPrimary = css([button, { width: 200, height: 40 }]);
+const largePrimary = css([button, { width: 512, height: 48 }]);
 
 export default PrimaryButton;

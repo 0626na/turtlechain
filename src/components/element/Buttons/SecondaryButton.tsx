@@ -1,71 +1,33 @@
+import { css } from '@emotion/react';
 import { Button } from 'antd';
-import styled from 'styled-components';
-
 import TurtleText from '../TurtleText';
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
-import { css } from '@emotion/react';
 interface Props {
   text: string;
-  size?: 'default' | 'large';
+
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
-  style?: React.CSSProperties;
 }
 
-function SecondaryButton({
-  size = 'default',
-  text,
-  disabled,
-  loading,
-  htmlType,
-  onClick,
-  style,
-}: Props) {
-  if (size === 'default') {
-    return (
-      <StyledButton
-        style={{ width: 160, height: 40, ...style }}
-        loading={loading}
-        onClick={onClick}
-        disabled={disabled}
-        htmlType={htmlType}
-      >
-        <Plusicon />
-        <TurtleText
-          css={css`
-            margin-left: 5px;
-          `}
-        >
-          {text}
-        </TurtleText>
-      </StyledButton>
-    );
-  }
-
-  // 임의 사이즈 적용
+function SecondaryButton({ text, ...props }: Props) {
   return (
-    <StyledButton
-      style={style}
-      loading={loading}
-      onClick={onClick}
-      disabled={disabled}
-      htmlType={htmlType}
-    >
-      <Plusicon />
-      <TurtleText
-        css={css`
-          margin-left: 5px;
-        `}
-      >
-        {text}
-      </TurtleText>
-    </StyledButton>
+    <Button css={button} {...props}>
+      <Plusicon css={marginRight} />
+      <TurtleText>{text}</TurtleText>
+    </Button>
   );
 }
 
-const StyledButton = styled(Button)`
+const marginRight = css`
+  margin-right: 5px;
+`;
+
+const button = css`
+  width: 160px;
+  height: 40px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;

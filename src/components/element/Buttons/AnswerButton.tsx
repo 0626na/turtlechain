@@ -1,55 +1,40 @@
 import { Button } from 'antd';
-import styled from '@emotion/styled';
+
 import TurtleText from '../TurtleText';
+import { css } from '@emotion/react';
 
 interface Props {
   text: string;
   type?: 'YES' | 'NO';
+  margin?: string;
+
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
-  style?: React.CSSProperties;
 }
 
-function AnswerButton({
-  text,
-  type = 'YES',
-  style,
-  disabled,
-  loading,
-  htmlType,
-  onClick,
-}: Props) {
+function AnswerButton({ text, type = 'YES', margin, ...props }: Props) {
   if (type === 'NO') {
     return (
-      <FalsyButton
-        style={{ minWidth: 66, height: 36, ...style }}
-        loading={loading}
-        onClick={onClick}
-        disabled={disabled}
-        htmlType={htmlType}
-      >
+      <Button css={[falsy, { margin: margin }]} {...props}>
         <TurtleText>{text}</TurtleText>
-      </FalsyButton>
+      </Button>
     );
   }
 
   // type === YES
   return (
-    <TruthyButton
-      style={{ minWidth: 66, height: 36, ...style }}
-      loading={loading}
-      onClick={onClick}
-      disabled={disabled}
-      htmlType={htmlType}
-    >
+    <Button css={[truthy, { margin: margin }]} {...props}>
       <TurtleText>{text}</TurtleText>
-    </TruthyButton>
+    </Button>
   );
 }
 
-const FalsyButton = styled(Button)`
+const falsy = css`
+  min-width: 66px;
+  height: 36px;
+
   font-weight: 500;
   color: #6b6d73;
   background-color: #f0f3f6;
@@ -67,7 +52,10 @@ const FalsyButton = styled(Button)`
   }
 `;
 
-const TruthyButton = styled(Button)`
+const truthy = css`
+  min-width: 66px;
+  height: 36px;
+
   font-weight: 500;
   color: #ffffff;
   background-color: #1a66f9;
