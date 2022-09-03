@@ -127,14 +127,8 @@ module.exports = {
               '@radio-dot-color': '#00BB88',
 
               // Tabs
-              '@tabs-title-font-size-lg': '15px',
-              '@tabs-highlight-color': '#2174F1',
-              '@tabs-active-color': '#2174F1',
-              '@tabs-hover-color': '#2174F1',
-              '@tabs-ink-bar-color': '#2174F1',
-
-              '@tabs-horizontal-padding-lg': '30px 16px 8px 16px',
-              '@tabs-horizontal-margin': '0 0 0 0',
+              // '@tabs-horizontal-padding-lg': '0 0 8px 0',
+              // '@tabs-horizontal-margin': '0px',
 
               // Table
               '@table-header-bg': '#F7F8F9',
