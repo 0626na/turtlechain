@@ -1,17 +1,17 @@
 import { v2Axios } from '.';
 
-// 파싱, 연동 vendor
-export interface VendorConnect {
+// 엑셀, 연동 vendor
+export interface ParsedVendor {
   vendor_code: string;
   name: string;
   address: string;
   account: string;
-  ws_store_info: Array<WholesaleShow>;
-  match_type: string;
+  ws_store_info: WholesaleShow[];
+  match_type: 'success' | 'wrong' | 'fail';
 
   memo: string;
-  memo_active: boolean;
-  memo_value: string;
+  // memo_active: boolean;
+  // memo_value: string;
   is_vat_included: boolean;
   use_vendor_name: string;
   use_vendor?: WholesaleShow;
@@ -19,7 +19,7 @@ export interface VendorConnect {
   check_account?: boolean;
 }
 
-export interface ConnectCount {
+export interface ParesdResult {
   success_count: number;
   suggest_count: number;
   fail_count: number;
@@ -83,52 +83,53 @@ export interface WholesaleShow {
  *  재고 프로그램 연동
  */
 
-export interface RequestConnectInventory {
+export interface RequestVendorInventory {
   rt_store_id: number;
   start_date: string;
   end_date: string;
 }
 
-export interface ResponseConnectInventory {
+export interface ResponseVendorInventory {
   msg: string;
   data: {
-    success: Array<VendorConnect>;
-    suggest: Array<VendorConnect>;
-    fail: Array<VendorConnect>;
-    count: ConnectCount;
+    success: ParsedVendor[];
+    suggest: ParsedVendor[];
+    fail: ParsedVendor[];
+    count: ParesdResult;
     error?: string;
   };
 }
 
-const connectInventory = async function (params: RequestConnectInventory) {
-  let url = 'external-api/inventory/vendors?';
-  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
+const vendorInventory = async (params: RequestVendorInventory) => {
+  let url = 'external-api/inventory/vendors';
+  const response = await v2Axios.get<ResponseVendorInventory>(url, { params });
 
   return response.data;
 };
 
 /*
- *  엑셀 파싱
+ *  엑셀
  */
 
-export interface ResponseParseExcel {
+export interface ResponseExcel {
   msg: string;
   data: {
-    success: Array<VendorConnect>;
-    suggest: Array<VendorConnect>;
-    fail: Array<VendorConnect>;
-    count: ConnectCount;
+    success: ParsedVendor[];
+    suggest: ParsedVendor[];
+    fail: ParsedVendor[];
+    count: ParesdResult;
     error?: string;
   };
 }
 
-const parseExcel = async function (data: FormData) {
+const excel = async (data: FormData) => {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseExcel>(url, data, {
+  const response = await v2Axios.post<ResponseExcel>(url, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return response.data;
 };
 
@@ -276,8 +277,8 @@ const getWholesale = async function (query: RequestGetWholesale) {
 };
 
 const vendorAPI = {
-  connectInventory,
-  parseExcel,
+  vendorInventory,
+  excel,
   get,
   getCode,
   create,
