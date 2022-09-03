@@ -22,7 +22,7 @@ function StoreSelect({ warningMessage }: Props) {
     ['getStoreListQuery'],
     retailerStoreAPI.getList,
     {
-      // enabled: !!store.id,
+      enabled: !store.id,
       onSuccess: (data) => {
         if (data.store_list.length === 0) return;
 
