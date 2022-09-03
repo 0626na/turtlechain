@@ -1,34 +1,64 @@
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+
 import { Dropdown, Menu } from 'antd';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+
+type MenuInfo = {
+  key: string;
+  keyPath: string[];
+  /** @deprecated This will not support in future. You should avoid to use this */
+  item: React.ReactInstance;
+  domEvent: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>;
+};
+
+type info = {
+  key: string;
+  domEvent: React.MouseEvent<HTMLElement>;
+};
 
 interface Props {
-  // ItemType 예시 : { key: '1', label: 'test', icon: <TestIcon /> ,style : {}}
-  items?: ItemType[];
+  items: {
+    key: string;
+    label: React.ReactNode;
+    icon?: React.ReactNode;
+    onClick?: (e: MenuInfo) => void;
+  }[];
   triggerButton: React.ReactNode;
 }
 
-function TurtleDropdown({ items, triggerButton }: Props) {
+function SecondaryDropdown({ items, triggerButton }: Props) {
+  const menu = items.map((item) => {
+    return {
+      style: menuItem,
+      onMouseEnter: (e: info) => {
+        e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
+      },
+      onMouseLeave: (e: info) => {
+        e.domEvent.currentTarget.style.backgroundColor = '#fff';
+      },
+      onClick: item.onClick,
+      ...item,
+    };
+  });
+
   return (
-    <Dropdown overlay={<StyledMenu items={items} />} trigger={['click']}>
+    <Dropdown overlay={<Menu css={$menu} items={menu} />} trigger={['click']}>
       {triggerButton}
     </Dropdown>
   );
 }
 
-const StyledMenu = styled(Menu)`
-  width: 196px;
-  max-height: 150px;
+const $menu = css`
+  padding: 6px;
+  width: 160px;
+
   overflow-y: scroll;
 
-  padding: 8px;
-
-  position: absolute;
-  top: 0px;
-  left: 28px;
-
-  box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.4);
+  box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.28);
   border-radius: 8px;
 `;
 
-export default TurtleDropdown;
+const menuItem = {
+  borderRadius: 6,
+};
+
+export default SecondaryDropdown;
