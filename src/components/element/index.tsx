@@ -3,9 +3,11 @@ import TurtleDivider from './TurtleDivider';
 import TurtleText from './TurtleText';
 import TurtleDropdown from './TurtleDropdown';
 import TurtleTableTitle from './TurtleTableTitle';
-import TurtleSearchInput from './Input/TurtleSearchInput';
 import TurtleRangePicker from './TurtleRangePicker';
 import TurtleSelector from './TurtleSelector';
+import TurtleTooltip from '@components/TurtleTooltip';
+
+import TurtleSearchInput from './Input/TurtleSearchInput';
 import TurtleFormInput from './Input/TurtleFormInput';
 import TurtleFormSearchInput from './Input/TurtleFormSearchInput';
 
@@ -27,11 +29,12 @@ export {
   TurtleFormSearchInput,
 
   //
-  TurtleImg,
-  TurtleDivider,
-  TurtleText,
   TurtleDropdown,
-  TurtleTableTitle,
   TurtleRangePicker,
   TurtleSelector,
+  TurtleTableTitle,
+  TurtleText,
+  TurtleImg,
+  TurtleDivider,
+  TurtleTooltip,
 };
