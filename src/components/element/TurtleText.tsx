@@ -8,13 +8,13 @@ interface Props {
 
 function TurtleText({ children, ...props }: Props) {
   return (
-    <span css={styledText} {...props}>
+    <span css={text} {...props}>
       {children}
     </span>
   );
 }
 
-const styledText = css`
+const text = css`
   display: inline-block;
   line-height: 1;
 `;

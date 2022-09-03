@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'antd';
 import TurtleText from '@components/element/TurtleText';
-import styled from '@emotion/styled';
+
 import { css } from '@emotion/react';
 
 interface Props {
@@ -13,16 +13,16 @@ interface Props {
 function PageTitle({ title, subTitle, Buttons }: Props) {
   return (
     <>
-      <Row css={WrapperStyled} justify="space-between">
-        <Col css={leftContainerStyled}>
-          <TurtleText css={titleStyled}>{title}</TurtleText>
-          {subTitle && <TurtleText css={subtitleStyled}>{subTitle}</TurtleText>}
+      <Row css={wrapper} justify="space-between">
+        <Col css={leftContainer}>
+          <TurtleText css={$title}>{title}</TurtleText>
+          {subTitle && <TurtleText css={$subtitle}>{subTitle}</TurtleText>}
         </Col>
 
         <Col>
           <Row>
             {Buttons?.map((button, idx) => (
-              <Col key={idx} style={{ marginLeft: 8 }}>
+              <Col key={idx} css={buttonContainer}>
                 {button}
               </Col>
             ))}
@@ -32,26 +32,29 @@ function PageTitle({ title, subTitle, Buttons }: Props) {
     </>
   );
 }
-const WrapperStyled = css`
+const wrapper = css`
   padding: 12px 36px 0px 36px;
 `;
 
-const leftContainerStyled = css`
+const leftContainer = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 
-const titleStyled = css`
+const $title = css`
   font-size: 20px;
   font-weight: 500;
   color: #242934;
 `;
 
-const subtitleStyled = css`
+const $subtitle = css`
   font-size: 13px;
   font-weight: 400;
   color: #6b6d73;
 `;
 
+const buttonContainer = css`
+  margin-left: 8px;
+`;
 export default PageTitle;
