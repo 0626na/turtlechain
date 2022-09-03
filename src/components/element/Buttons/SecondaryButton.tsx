@@ -14,13 +14,13 @@ interface Props {
 function SecondaryButton({ text, ...props }: Props) {
   return (
     <Button css={button} {...props}>
-      <Plusicon css={marginRight} />
+      <Plusicon css={icon} />
       <TurtleText>{text}</TurtleText>
     </Button>
   );
 }
 
-const marginRight = css`
+const icon = css`
   margin-right: 5px;
 `;
 

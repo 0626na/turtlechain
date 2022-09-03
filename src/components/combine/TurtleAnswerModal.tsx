@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from '@emotion/styled';
 
 import AnswerButton from '../element/Buttons/AnswerButton';
@@ -39,7 +41,7 @@ function TurtleAnswerModal({
               <AnswerButton
                 onClick={onOk}
                 disabled={okDisabled}
-                style={{ marginLeft: 8 }}
+                margin={'0px 0px 0px 8px'}
                 type="YES"
                 text={okText}
               />
