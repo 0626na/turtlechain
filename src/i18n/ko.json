@@ -39,5 +39,12 @@
 
   "auth": {
     "logout": "로그아웃"
+  },
+
+  "table": {
+    "column": {
+      "vatIncluded": "부가세 포함 여부",
+      "accountInfo": "계좌 정보"
+    }
   }
 }
