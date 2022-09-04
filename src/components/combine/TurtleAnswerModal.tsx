@@ -1,8 +1,7 @@
 import React from 'react';
 
-import styled from '@emotion/styled';
-
 import AnswerButton from '../element/Buttons/AnswerButton';
+import { css } from '@emotion/react';
 interface Props {
   visible: boolean;
   title: string;
@@ -23,7 +22,7 @@ function TurtleAnswerModal({
   children,
 
   cancelText = '취소',
-  okText = '결제내역 바로가기',
+  okText = '확인',
   okDisabled = false,
   onCancel = () => {},
   onOk = () => {},
@@ -31,12 +30,12 @@ function TurtleAnswerModal({
   return (
     <>
       {visible && (
-        <ModalMask>
-          <ModalContent>
-            <Title>{title}</Title>
-            <Description>{description}</Description>
+        <div css={modalMask}>
+          <div css={modalContent}>
+            <h1 css={$title}>{title}</h1>
+            <p css={$description}>{description}</p>
             {children}
-            <Footer>
+            <div css={footer}>
               <AnswerButton type="NO" text={cancelText} onClick={onCancel} />
               <AnswerButton
                 onClick={onOk}
@@ -45,15 +44,15 @@ function TurtleAnswerModal({
                 type="YES"
                 text={okText}
               />
-            </Footer>
-          </ModalContent>
-        </ModalMask>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
 }
 
-const ModalMask = styled.div`
+const modalMask = css`
   height: 100vh;
   position: fixed;
   top: 0;
@@ -64,8 +63,10 @@ const ModalMask = styled.div`
   background: rgba(0, 0, 0, 0.45);
 `;
 
-const ModalContent = styled.div`
+const modalContent = css`
   width: 400px;
+
+  color: #5b5d63;
 
   position: relative;
   top: 50%;
@@ -84,21 +85,21 @@ const ModalContent = styled.div`
   border-radius: 12px;
 `;
 
-const Title = styled.h1`
+const $title = css`
   font-weight: 700;
   font-size: 22px;
   line-height: 1;
   color: #242934;
 `;
 
-const Description = styled.p`
+const $description = css`
   margin-top: 16px;
 
-  color: #5b5d63;
   line-height: 1.429;
+  color: #5b5d63;
 `;
 
-const Footer = styled.div`
+const footer = css`
   display: flex;
   justify-content: end;
   margin-top: 28px;

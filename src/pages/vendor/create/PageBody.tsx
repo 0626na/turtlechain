@@ -1,5 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { storeState } from '@store/storeState';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import vendorAPI, { ParesdResult, ParsedVendor } from '@apis/vendorAPI';
+import { useMutation, useQuery } from 'react-query';
+import { t } from 'i18next';
 import { css } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -16,6 +21,7 @@ import {
   SecondaryButton,
   TeriaryButton,
   TurtleDropdown,
+  TurtleSecondaryRangePicker,
   TurtleTooltip,
 } from '@components/element';
 import { TurtleText } from '@components/element';
@@ -25,61 +31,66 @@ import { ReactComponent as ListIcon } from '@icons/list.svg';
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
 
-import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
-import { ReactComponent as MemoIcon } from '@icons/memo.svg';
+import {
+  parsedVendorCountsState,
+  parsedVendorListsState,
+} from '@store/vendorState';
+import SuccessTab from './Tabs/SuccessTab';
+import { TurtleAnswerModal } from '@components/combine';
 
-import { storeState } from '@store/storeState';
-import { useRecoilValue } from 'recoil';
-import vendorAPI, { ParesdResult, ParsedVendor } from '@apis/vendorAPI';
-import { useMutation } from 'react-query';
-import { t } from 'i18next';
+import moment from 'moment';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const store = useRecoilValue(storeState);
 
-  const [successList, setSuccessList] = useState<ParsedVendor[]>([]);
-  const [pendingList, setPendingList] = useState<ParsedVendor[]>([]);
-  const [failList, setFailList] = useState<ParsedVendor[]>([]);
-  const [count, setCount] = useState<ParesdResult>({
-    success_count: 0,
-    suggest_count: 0,
-    fail_count: 0,
-    duplicated_count: 0,
+  const setParsedVendorLists = useSetRecoilState(parsedVendorListsState);
+  const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
+    parsedVendorCountsState,
+  );
+
+  const [searchDate, setSearchDate] = useState({
+    startDate: moment().format('YYY-MM-DD'),
+    endDate: moment().format('YYY-MM-DD'),
   });
 
-  const [searchDate, setSearchDate] = useState({});
+  // 모달 제어
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   // 재고프로그램 연동
   const vendorInventoryMutation = useMutation(vendorAPI.vendorInventory, {
-    // enabled: !!searchDate,
     onError: () => {
       // resetField();
     },
     onSuccess: (data) => {
-      console.log(data);
-      if (data.data.error) {
-        message.error(data.data.error);
-        // resetField();
-        return;
-      }
+      // if (data.data.error) {
+      //   message.error(data.data.error);
+      //   // resetField();
+      //   return;
+      // }
 
-      message.info(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
-      );
+      // message.info(
+      //   `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
+      // );
 
-      setSuccessList(
-        data.data.success.map((vendor) => ({
+      setParsedVendorLists({
+        successList: data.data.success.map((vendor) => ({
           ...vendor,
           memo: '',
           is_vat_included: false,
           use_vendor_name: vendor.name,
         })),
-      );
 
-      setPendingList(
-        data.data.suggest.map((vendor) => ({
+        pendingList: data.data.suggest.map((vendor) => ({
           ...vendor,
           memo: '',
           is_vat_included: false,
@@ -95,74 +106,61 @@ function PageBody() {
               : undefined,
           check_account: false,
         })),
-      );
 
-      setFailList(data.data.fail);
+        failList: data.data.fail,
+      });
 
-      setCount(data.data.count);
+      setParsedVendorCounts(data.data.count);
     },
   });
 
-  const handleVatIncludedUpdate = useCallback(
-    (targetVendor) => {
-      if (targetVendor.match_type === 'success') {
-        setSuccessList(
-          successList?.map((vendor) =>
-            vendor.vendor_code === targetVendor.vendor_code
-              ? {
-                  ...vendor,
-                  is_vat_included: !targetVendor.is_vat_included,
-                }
-              : vendor,
-          ),
-        );
-      }
-
-      setPendingList(
-        pendingList?.map((vendor) =>
-          vendor.vendor_code === targetVendor.vendor_code
-            ? {
-                ...vendor,
-                is_vat_included: !targetVendor.is_vat_included,
-              }
-            : vendor,
-        ),
-      );
-    },
-    [successList, pendingList],
-  );
-
-  const handleUseVendorNameUpdate = useCallback(
-    (newVendorName, targetVendor) => {
-      if (targetVendor.match_type === 'success') {
-        setSuccessList(
-          successList?.map((vendor) =>
-            vendor.vendor_code === targetVendor.vendro_code
-              ? {
-                  ...vendor,
-                  use_vendor_name: newVendorName,
-                }
-              : vendor,
-          ),
-        );
-      }
-
-      setPendingList(
-        pendingList?.map((vendor) =>
-          vendor.vendor_code === targetVendor.vendro_code
-            ? {
-                ...vendor,
-                use_vendor_name: newVendorName,
-              }
-            : vendor,
-        ),
-      );
-    },
-    [successList, pendingList],
-  );
+  // 엑셀 연동
 
   return (
     <>
+      {/*
+       *
+       *  재고프로그램 연동 모달
+       *
+       */}
+      <TurtleAnswerModal
+        visible={modalVisible}
+        title={'재고프로그램 연동'}
+        description={
+          <span>
+            선택한 기간의 재고 정보를 불러옵니다. <br /> 정보의 양에따라 최대
+            1분 정도 걸릴 수 있어요.
+          </span>
+        }
+        children={
+          <div css={ModalRangePickerContainer}>
+            <TurtleSecondaryRangePicker
+              onChange={(value) => {
+                const startDate = moment(value[0]).format('YYYY-MM-DD');
+                const endDate = moment(value[1]).format('YYYY-MM-DD');
+
+                setSearchDate({
+                  startDate,
+                  endDate,
+                });
+              }}
+            />
+          </div>
+        }
+        onCancel={() => {
+          closeModal();
+        }}
+        onOk={() => {
+          vendorInventoryMutation.mutate({
+            rt_store_id: store.id!,
+            start_date: searchDate.startDate,
+            end_date: searchDate.endDate,
+          });
+
+          closeModal();
+        }}
+      />
+
       <PageHeader
         title="거래처등록"
         Button={
@@ -179,7 +177,8 @@ function PageBody() {
           <TeriaryButton
             text="재고프로그램 연동"
             onClick={() => {
-              console.log(123);
+              openModal();
+
               // vendorInventoryMutation()
             }}
           />,
@@ -216,132 +215,20 @@ function PageBody() {
             setSearchParams({ tab: newTab });
           }}
         >
-          <Tabs.TabPane tab={`성공(${count?.success_count}`} key="success">
-            <Table
-              size="small"
-              loading={vendorInventoryMutation.isLoading}
-              dataSource={successList}
-              rowKey={(record) => record.vendor_code}
-              pagination={{
-                position: ['bottomCenter'],
-                showSizeChanger: false,
-              }}
-              scroll={{ y: 'auto' }}
-              columns={[
-                {
-                  ellipsis: true,
-                  width: '8%',
-                  title: '거래처 코드',
-                  render: (_, record) => record.ws_store_info[0]?.id,
-                },
-                {
-                  ellipsis: true,
-                  width: '15%',
-                  title: '쇼핑몰 입력 값',
-                  render: (_, record) => {
-                    return `${record.name}  ${record.address}`;
-                  },
-                },
-                {
-                  ellipsis: true,
-                  title: '거래처 주소',
-                  render: (_, record) => record.ws_store_info[0]?.address,
-                },
-                {
-                  ellipsis: true,
-                  title: '휴대번호',
-                  width: '10%',
-                  render: (_, record) =>
-                    record.ws_store_info[0]?.store_phone[0]?.phone
-                      .replace(/[^0-9]/, '')
-                      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
-                },
-                {
-                  ellipsis: true,
-                  title: '계좌정보',
-                  render: (_, record) => {
-                    const {
-                      bank = '',
-                      account_number = '',
-                      account_holder = '',
-                    } = record.ws_store_info[0]?.store_account[0] || {};
-                    return `${bank} ${account_number} ${account_holder}`;
-                  },
-                },
-                {
-                  ellipsis: true,
-                  title: t('table.column.vatIncluded'),
-                  render: (_, record) => {
-                    return (
-                      <Switch
-                        style={{ width: '52px' }}
-                        // checkedChildren={t('table.column.VatIncluded')}
-                        checked={record.is_vat_included}
-                        onClick={() => {
-                          handleVatIncludedUpdate(record);
-                        }}
-                      />
-                    );
-                  },
-                },
-                {
-                  ellipsis: true,
-                  title: '추천 거래처명',
-                  render: (_, record) => record.ws_store_info[0]?.name,
-                },
-                {
-                  ellipsis: true,
-                  title: (
-                    <>
-                      <TurtleText>사용할 거래처명</TurtleText>
-                      <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
-                    </>
-                  ),
-                  render: (_, record) => (
-                    <Input
-                      size="small"
-                      value={record.use_vendor_name}
-                      onChange={(e) => {
-                        handleUseVendorNameUpdate(
-                          e.currentTarget.value,
-                          record,
-                        );
-                      }}
-                    />
-                  ),
-                },
-                {
-                  ellipsis: true,
-                  align: 'center',
-                  width: '6%',
-                  title: '메모',
-                  render: (_, record) => {
-                    if (
-                      record.ws_store_info.length === 1 &&
-                      record.ws_store_info[0]?.store_account.length === 1
-                    ) {
-                      return <MemoIcon style={{ color: 'green' }} />;
-                    }
-                    return <MemoIcon style={{ color: 'red' }} />;
-                  },
-                },
-                {
-                  ellipsis: true,
-                  align: 'center',
-                  width: '6%',
-                  render: (_, record) => <RemoveIcon />,
-                },
-              ]}
-            />
-          </Tabs.TabPane>
-
           <Tabs.TabPane
-            tab={`보류(${count.suggest_count})`}
+            tab={`성공(${parsedVendorCounts?.success_count})`}
+            key="success"
+          >
+            <SuccessTab isLoading={vendorInventoryMutation.isLoading} />
+          </Tabs.TabPane>
+          {/* <Tabs.TabPane
+            tab={`보류(${parsedVendorCounts.suggest_count})`}
             key="pending"
           ></Tabs.TabPane>
-          <Tabs.TabPane tab={`실패(${count.fail_count})`} key="fail">
-            {/* <UnMatchedTab/> */}
-          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={`실패(${parsedVendorCounts.fail_count})`}
+            key="fail"
+          ></Tabs.TabPane> */}
         </Tabs>
       </PageContent>
 
@@ -375,6 +262,10 @@ const button = css`
 
 const icon = css`
   margin-right: 8px;
+`;
+
+const ModalRangePickerContainer = css`
+  margin-top: 24px;
 `;
 
 // PageContent

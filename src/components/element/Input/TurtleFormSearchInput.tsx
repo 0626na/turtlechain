@@ -1,6 +1,6 @@
+import { css } from '@emotion/react';
 import { InputProps } from 'antd';
 import { Input } from 'antd';
-import styled from '@emotion/styled';
 
 interface Props extends InputProps {
   value?: string;
@@ -10,8 +10,8 @@ interface Props extends InputProps {
 
 function TurtleFormSearchInput({ value, placeholder, onSearch }: Props) {
   return (
-    <StyledSearch
-      style={{ width: 360, marginTop: 10 }}
+    <Input.Search
+      css={searchInput}
       placeholder={placeholder}
       value={value}
       onSearch={onSearch}
@@ -19,7 +19,9 @@ function TurtleFormSearchInput({ value, placeholder, onSearch }: Props) {
   );
 }
 
-const StyledSearch = styled(Input.Search)`
+const searchInput = css`
+  width: 360px;
+
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 

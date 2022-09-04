@@ -3,7 +3,10 @@ import TurtleDivider from './TurtleDivider';
 import TurtleText from './TurtleText';
 import TurtleDropdown from './TurtleDropdown';
 import TurtleTableTitle from './TurtleTableTitle';
-import TurtleRangePicker from './TurtleRangePicker';
+
+import TurtlePrimaryRangePicker from './RangePicker/TurtlePrimaryRangePicker';
+import TurtleSecondaryRangePicker from './RangePicker/TurtleSecondaryRangePicker';
+
 import TurtleSelector from './TurtleSelector';
 import TurtleTooltip from '@components/TurtleTooltip';
 
@@ -28,9 +31,12 @@ export {
   TurtleFormInput,
   TurtleFormSearchInput,
 
+  //RangePicker
+  TurtlePrimaryRangePicker,
+  TurtleSecondaryRangePicker,
+
   //
   TurtleDropdown,
-  TurtleRangePicker,
   TurtleSelector,
   TurtleTableTitle,
   TurtleText,

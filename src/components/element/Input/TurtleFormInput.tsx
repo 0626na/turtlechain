@@ -1,6 +1,7 @@
 import { InputProps } from 'antd';
 import { Input } from 'antd';
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 interface Props extends InputProps {
   value?: string;
@@ -11,7 +12,8 @@ interface Props extends InputProps {
 
 function TurtleFormInput({ value, onChange, disabled, placeholder }: Props) {
   return (
-    <StyledInput
+    <Input
+      css={input}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -20,7 +22,7 @@ function TurtleFormInput({ value, onChange, disabled, placeholder }: Props) {
   );
 }
 
-const StyledInput = styled(Input)`
+const input = css`
   display: inline-block;
   height: 36px;
   width: 360px;

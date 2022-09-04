@@ -1,15 +1,17 @@
 import { DatePicker } from 'antd';
 import moment from 'moment';
-import styled from '@emotion/styled';
+
+import { css } from '@emotion/react';
 
 interface Props {
   value?: [moment.Moment, moment.Moment];
   onChange?: (value: any) => void; // value : [moment.Moment, moment.Moment]
 }
 
-function TurtleRangePicker({ value, onChange }: Props) {
+function TurtlePrimaryRangePicker({ value, onChange }: Props) {
   return (
-    <StyledRangePicker
+    <DatePicker.RangePicker
+      css={container}
       value={value}
       onChange={onChange}
       placement="bottomLeft"
@@ -17,10 +19,10 @@ function TurtleRangePicker({ value, onChange }: Props) {
   );
 }
 
-const StyledRangePicker = styled(DatePicker.RangePicker)`
+const container = css`
   background: #f5f6f7;
   border: none;
   border-radius: 6px;
 `;
 
-export default TurtleRangePicker;
+export default TurtlePrimaryRangePicker;

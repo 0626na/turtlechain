@@ -20,7 +20,7 @@ import {
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtleImg,
-  TurtleRangePicker,
+  TurtlePrimaryRangePicker,
   TurtleSearchInput,
   TurtleSelector,
   TurtleText,
@@ -89,7 +89,7 @@ function PageBody() {
         <TurtleDropdown
           items={[
             {
-              title: '11222',
+              // title: '11222',
               key: '1',
               label: '12',
               icon: <DownloadIcon style={{ stroke: 'red' }} />,
@@ -110,17 +110,17 @@ function PageBody() {
           ]}
         />
 
-        <TurtleRangePicker
+        <TurtlePrimaryRangePicker
           onChange={(value) => {
             console.log(value[0]);
             console.log(value[1]);
           }}
         />
 
-        <TurtleSearchInput onSearch={(value: any) => console.log(value)} />
+        {/* <TurtleSearchInput onSearch={(value: any) => console.log(value)} /> */}
         <TurtleFormInput />
         <TurtleFormInput disabled={true} value="12" />
-        <TurtleFormSearchInput />
+
         {/* <TurtleAnswerModal
           visible={true}
           onCancel={() => {
@@ -146,7 +146,7 @@ function PageBody() {
           <div>123</div>
         </TurtleContentModal>
 
-        <StoreSelect />
+        <TurtleFormSearchInput />
       </PageContent>
 
       <PageBottomBar>
