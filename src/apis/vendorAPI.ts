@@ -101,7 +101,7 @@ export interface ResponseVendorInventory {
 }
 
 const vendorInventory = async (params: RequestVendorInventory) => {
-  let url = 'external-api/inventory/vendors';
+  const url = 'external-api/inventory/vendors';
   const response = await v2Axios.get<ResponseVendorInventory>(url, { params });
 
   return response.data;
