@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 
 export interface ParsedVendorListsState {
   successList: ParsedVendor[];
-  pendingList: ParsedVendor[];
+  suggestList: ParsedVendor[];
   failList: ParsedVendor[];
 }
 
@@ -11,7 +11,7 @@ export const parsedVendorListsState = atom<ParsedVendorListsState>({
   key: 'parsedVendorListsState',
   default: {
     successList: [],
-    pendingList: [],
+    suggestList: [],
     failList: [],
   },
 });
