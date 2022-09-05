@@ -22,7 +22,6 @@ import {
   TeriaryButton,
   TurtleDropdown,
   TurtleSecondaryRangePicker,
-  TurtleTooltip,
 } from '@components/element';
 import { TurtleText } from '@components/element';
 
@@ -51,8 +50,8 @@ function PageBody() {
   );
 
   const [searchDate, setSearchDate] = useState({
-    startDate: moment().format('YYY-MM-DD'),
-    endDate: moment().format('YYY-MM-DD'),
+    startDate: moment().format('YYYY-MM-DD'),
+    endDate: moment().format('YYYY-MM-DD'),
   });
 
   // 모달 제어
@@ -78,9 +77,9 @@ function PageBody() {
       //   return;
       // }
 
-      // message.info(
-      //   `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
-      // );
+      message.info(
+        `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
+      );
 
       setParsedVendorLists({
         successList: data.data.success.map((vendor) => ({
@@ -90,7 +89,7 @@ function PageBody() {
           use_vendor_name: vendor.name,
         })),
 
-        pendingList: data.data.suggest.map((vendor) => ({
+        suggestList: data.data.suggest.map((vendor) => ({
           ...vendor,
           memo: '',
           is_vat_included: false,
