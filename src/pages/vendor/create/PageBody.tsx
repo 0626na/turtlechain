@@ -1,14 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { storeState } from '@store/storeState';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import vendorAPI, { ParesdResult, ParsedVendor } from '@apis/vendorAPI';
-import { useMutation, useQuery } from 'react-query';
-import { t } from 'i18next';
+import vendorAPI from '@apis/vendorAPI';
+import { useMutation } from 'react-query';
 import { css } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Input, message, Switch, Table, Tabs } from 'antd';
+import { Button, message, Tabs } from 'antd';
 import {
   PageBottomBar,
   PageContent,
@@ -26,7 +25,6 @@ import {
 import { TurtleText } from '@components/element';
 
 //icon
-import { ReactComponent as ListIcon } from '@icons/list.svg';
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
 
@@ -38,6 +36,7 @@ import SuccessTab from './Tabs/SuccessTab';
 import { TurtleAnswerModal } from '@components/combine';
 
 import moment from 'moment';
+import { ReactComponent as ListIcon } from '@icons/list.svg';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -172,7 +171,7 @@ function PageBody() {
 
       <PageTitle
         title="거래처등록 미리보기"
-        Buttons={[
+        buttons={[
           <TeriaryButton
             text="재고프로그램 연동"
             onClick={() => {

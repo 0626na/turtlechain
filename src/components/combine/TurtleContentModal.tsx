@@ -77,17 +77,4 @@ const Title = styled.h1`
   color: #242934;
 `;
 
-const Description = styled.p`
-  margin-top: 16px;
-
-  color: #5b5d63;
-  line-height: 1.429;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: end;
-  margin-top: 28px;
-`;
-
 export default TurtleContentModal;

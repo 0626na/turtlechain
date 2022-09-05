@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';

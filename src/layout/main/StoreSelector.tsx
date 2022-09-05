@@ -1,5 +1,3 @@
-import styled from '@emotion/styled';
-
 import { useState, useCallback } from 'react';
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
@@ -18,6 +16,7 @@ function StoreSelect({ warningMessage }: Props) {
   const [storeList, setStoreList] = useState<Store[]>([]); // 폐점 쇼핑몰을 목록에서 제외시키기 위해 queryData를 바로사용하지않고 따로 상태로관리.
 
   // 쇼핑몰 불러오기
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
     ['getStoreListQuery'],
     retailerStoreAPI.getList,

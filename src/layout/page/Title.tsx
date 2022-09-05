@@ -1,27 +1,32 @@
 import React from 'react';
 import { Col, Row } from 'antd';
 import TurtleText from '@components/element/TurtleText';
-
+import { InfoCircleOutlined as InfoIcon } from '@ant-design/icons';
 import { css } from '@emotion/react';
 
 interface Props {
   title: string;
   subTitle?: string;
-  Buttons?: React.ReactNode[];
+  buttons?: React.ReactNode[];
 }
 
-function PageTitle({ title, subTitle, Buttons }: Props) {
+function PageTitle({ title, subTitle, buttons }: Props) {
   return (
     <>
       <Row css={wrapper} justify="space-between">
         <Col css={leftContainer}>
           <TurtleText css={$title}>{title}</TurtleText>
-          {subTitle && <TurtleText css={$subtitle}>{subTitle}</TurtleText>}
+          {subTitle && (
+            <TurtleText css={$subtitle}>
+              <InfoIcon />
+              {subTitle}
+            </TurtleText>
+          )}
         </Col>
 
         <Col>
           <Row>
-            {Buttons?.map((button, idx) => (
+            {buttons?.map((button, idx) => (
               <Col key={idx} css={buttonContainer}>
                 {button}
               </Col>
@@ -32,8 +37,9 @@ function PageTitle({ title, subTitle, Buttons }: Props) {
     </>
   );
 }
+
 const wrapper = css`
-  padding: 12px 36px 0px 36px;
+  padding: 12px 36px 12px 36px;
 `;
 
 const leftContainer = css`
@@ -57,4 +63,5 @@ const $subtitle = css`
 const buttonContainer = css`
   margin-left: 8px;
 `;
+
 export default PageTitle;

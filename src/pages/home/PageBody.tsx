@@ -1,16 +1,12 @@
 import React from 'react';
-import {
-  PrimaryButton,
-  SecondaryButton,
-  TeriaryButton,
-} from '@components/element';
+import { PrimaryButton, SecondaryButton } from '@components/element';
 import {
   PageBottomBar,
   PageContent,
   PageHeader,
   PageTitle,
 } from '@layout/page';
-import { Button, Form, Menu, Select, Table } from 'antd';
+import { Button, Table } from 'antd';
 
 import { ReactComponent as DownloadIcon } from '@icons/download.svg';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
@@ -19,22 +15,13 @@ import {
   TurtleDropdown,
   TurtleFormInput,
   TurtleFormSearchInput,
-  TurtleImg,
   TurtlePrimaryRangePicker,
-  TurtleSearchInput,
   TurtleSelector,
   TurtleText,
 } from '@components/element';
 import AnswerButton from '@components/element/Buttons/AnswerButton';
-import {
-  TurtleAnswerModal,
-  TurtleContentModal,
-  TurtleModaltest,
-} from '@components/combine';
+import { TurtleContentModal } from '@components/combine';
 import { useState } from 'react';
-import StoreSelect from '@layout/main/StoreSelector';
-import Moment from 'react-moment';
-import moment from 'moment';
 import { css } from '@emotion/react';
 
 function PageBody() {
@@ -71,7 +58,7 @@ function PageBody() {
       <PageTitle
         title="페이지 제목"
         subTitle="페이지 부제목"
-        Buttons={[<Button>ㅁㅇㄹ</Button>, <Button>ㅁㅇㄹ</Button>]}
+        buttons={[<Button>ㅁㅇㄹ</Button>, <Button>ㅁㅇㄹ</Button>]}
       />
 
       <PageContent>
