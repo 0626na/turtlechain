@@ -114,18 +114,22 @@ function ClearingPanel({
 
           return newWarehousingBalanceItem;
         })
-        .map((warehousingBalanceItem) => ({
-          // 입고 + 미결제 + 미송 결제 - 매입 차감
-          ...warehousingBalanceItem,
-          clearing_amount:
-            warehousingBalanceItem.warehousing_amount +
-            warehousingBalanceItem.unpaid_amount +
-            warehousingBalanceItem.reserve_payment_amount -
-            (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
-          // 당일 결제예정 금액 최소금액은 미송결제금액.
-          clearing_payment_amount:
-            warehousingBalanceItem.reserve_payment_amount,
-        })),
+        .map((warehousingBalanceItem) => {
+          return {
+            // 입고 + 미결제 + 미송 결제 - 매입 차감
+            ...warehousingBalanceItem,
+            clearing_amount:
+              warehousingBalanceItem.warehousing_amount +
+              warehousingBalanceItem.unpaid_amount +
+              warehousingBalanceItem.reserve_payment_amount -
+              (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
+            // 당일 결제예정 금액 최소금액은 미송결제금액 - 매입차감 - 미송입고.
+            clearing_payment_amount:
+              warehousingBalanceItem.reserve_payment_amount -
+              (warehousingBalanceItem.overpaid_payment_amount! ?? 0) -
+              warehousingBalanceItem.reserve_subtract_amount,
+          };
+        }),
     }));
   }, [activeKey, setCart]);
   return (
@@ -282,8 +286,12 @@ function ClearingPanel({
                       : undefined
                   }
                   step={1000}
-                  max={record.clearing_amount}
-                  min={record.reserve_payment_amount}
+                  max={record.clearing_amount!}
+                  min={
+                    record.reserve_payment_amount -
+                    (record.overpaid_payment_amount! ?? 0) -
+                    record.reserve_subtract_amount
+                  }
                   onChange={(value) => {
                     setCart((cart) => ({
                       ...cart,
