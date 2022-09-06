@@ -49,22 +49,17 @@ function ClearingPanel({
 }: Props) {
   const navigate = useNavigate();
   const store = useRecoilValue(storeState);
-  const [cart, setCart] = useRecoilState(clearingCartState);
-  const { clearingPaymentTotal } = useClearingCart();
   const [tooltipVisibleId, setTooltipVisibleId] = useState(-1);
-
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
-
-  // 거래처 검색(default : 전체)
-  const filteredList = useMemo(
-    () =>
-      cart.warehousingBalanceList.filter((item) =>
-        item.vendor_info.vendor_name.includes(searchQuery.search_string),
-      ),
-    [cart.warehousingBalanceList, searchQuery],
-  );
+  const {
+    cart,
+    calculateClearingAmount,
+    handleClearingAmount,
+    fillAllClearingAmount,
+    clearingPaymentTotal,
+  } = useClearingCart();
 
   // 정산서 생성 및 정산 상품추가
   const createClearingQuery = useMutation(
@@ -79,59 +74,23 @@ function ClearingPanel({
     },
   );
 
-  // 전액 체우기
-  const handlePaymentInputFiilIn = () => {
-    setCart((cart) => ({
-      ...cart,
-      warehousingBalanceList: cart.warehousingBalanceList.map((item) => {
-        return {
-          ...item,
-          clearing_payment_amount: item.clearing_amount,
-        };
-      }),
-    }));
-  };
+  // 거래처 검색(default : 전체)
+  const filteredList = useMemo(
+    () =>
+      cart.resultList.filter((item) =>
+        item.vendor_info.vendor_name.includes(searchQuery.search_string),
+      ),
+    [cart.resultList, searchQuery],
+  );
 
   useEffect(() => {
-    // 당일 결제요청 금액 계산
-    setCart((cart) => ({
-      ...cart,
-      warehousingBalanceList: cart.warehousingBalanceList
-        .map((warehousingBalanceItem) => {
-          const newWarehousingBalanceItem = {
-            ...warehousingBalanceItem,
-          };
-          // 매입 차감을 warehousing으로 넘겨준다.
-          cart.adjustmentSubtractList.forEach((adjustmentSubtractItem) => {
-            if (
-              adjustmentSubtractItem.vendor_info.id ===
-              newWarehousingBalanceItem.vendor_info.id
-            ) {
-              newWarehousingBalanceItem.overpaid_payment_amount =
-                adjustmentSubtractItem.overpaid_payment_amount! ?? 0;
-            }
-          });
+    calculateClearingAmount();
+  }, []);
 
-          return newWarehousingBalanceItem;
-        })
-        .map((warehousingBalanceItem) => {
-          return {
-            // 입고 + 미결제 + 미송 결제 - 매입 차감
-            ...warehousingBalanceItem,
-            clearing_amount:
-              warehousingBalanceItem.warehousing_amount +
-              warehousingBalanceItem.unpaid_amount +
-              warehousingBalanceItem.reserve_payment_amount -
-              (warehousingBalanceItem.overpaid_payment_amount! ?? 0),
-            // 당일 결제예정 금액 최소금액은 미송결제금액 - 매입차감 - 미송입고.
-            clearing_payment_amount:
-              warehousingBalanceItem.reserve_payment_amount -
-              (warehousingBalanceItem.overpaid_payment_amount! ?? 0) -
-              warehousingBalanceItem.reserve_subtract_amount,
-          };
-        }),
-    }));
-  }, [activeKey, setCart]);
+  useEffect(() => {
+    console.log(cart);
+  }, [cart]);
+
   return (
     <>
       <Collapse.Panel
@@ -156,13 +115,13 @@ function ClearingPanel({
           rowKey={(record) => record.vendor_info.id}
           title={() => (
             <>
-              <TurtleTableTitle count={cart.warehousingBalanceList.length}>
+              <TurtleTableTitle count={cart.resultList.length}>
                 <Row>
                   <Col style={{ marginRight: 10 }}>
                     <TurtleButtonSub
                       size="small"
                       type="primary"
-                      onClick={handlePaymentInputFiilIn}
+                      onClick={fillAllClearingAmount}
                     >
                       전액 입력하기
                     </TurtleButtonSub>
@@ -293,18 +252,7 @@ function ClearingPanel({
                     record.reserve_subtract_amount
                   }
                   onChange={(value) => {
-                    setCart((cart) => ({
-                      ...cart,
-                      warehousingBalanceList: cart.warehousingBalanceList.map(
-                        (item) =>
-                          item.vendor_info.id === record.vendor_info.id
-                            ? {
-                                ...item,
-                                clearing_payment_amount: value,
-                              }
-                            : item,
-                      ),
-                    }));
+                    handleClearingAmount(record, value);
                   }}
                 />
               ),
@@ -373,7 +321,7 @@ function ClearingPanel({
                     rt_store_id: store.id,
                     rt_store_name: store.name,
                     // 당일 결제 합계
-                    clearing_amount_list: cart.warehousingBalanceList
+                    clearing_amount_list: cart.resultList
                       .filter((item) => item.clearing_payment_amount! > 0)
                       .map((item) => ({
                         vendor_id: item.vendor_info.id,

@@ -77,7 +77,7 @@ export interface ClearingItemShow {
 }
 
 export interface ClearingInfo {
-  id: number;
+  id?: number;
   vendor_info: {
     id: number;
     created_time: string;
@@ -98,7 +98,7 @@ export interface ClearingInfo {
   reserve_subtract_amount: number; // 미송 차감 금액 (미송 입고 시 생성)
 
   // client State
-  type:
+  type?:
     | 'warehousing'
     | 'adjustment_subtract'
     | 'reserve_subtract'
