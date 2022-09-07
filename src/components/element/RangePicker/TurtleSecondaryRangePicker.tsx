@@ -1,21 +1,19 @@
 import { DatePicker } from 'antd';
-import moment from 'moment';
-
 import { css } from '@emotion/react';
 
 interface Props {
-  value?: [moment.Moment, moment.Moment];
-  onChange?: (value: any) => void; // value : [moment.Moment, moment.Moment]
+  value: [moment.Moment, moment.Moment];
+  onChange?: (_: unknown, dateStrings: string[]) => void; // value : [moment.Moment, moment.Moment]
 }
 
 function TurtleSecondaryRangePicker({ value, onChange }: Props) {
   return (
     <DatePicker.RangePicker
       css={container}
-      defaultValue={[moment(), moment()]}
+      allowClear={false}
+      placement="bottomLeft"
       value={value}
       onChange={onChange}
-      placement="bottomLeft"
     />
   );
 }

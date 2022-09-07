@@ -1,5 +1,9 @@
 import React from 'react';
-import { PrimaryButton, SecondaryButton } from '@components/element';
+import {
+  AnswerButton,
+  PrimaryButton,
+  SecondaryButton,
+} from '@components/element';
 import {
   PageBottomBar,
   PageContent,
@@ -19,7 +23,6 @@ import {
   TurtleSelector,
   TurtleText,
 } from '@components/element';
-import AnswerButton from '@components/element/Buttons/AnswerButton';
 import { TurtleContentModal } from '@components/combine';
 import { useState } from 'react';
 import { css } from '@emotion/react';
@@ -39,7 +42,7 @@ function PageBody() {
     <>
       <PageHeader
         title="입고등록"
-        Button={
+        button={
           <StyledButton>
             <ListIcon />
             <TurtleText

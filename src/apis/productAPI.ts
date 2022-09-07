@@ -13,6 +13,7 @@ export interface Product {
   option: string;
   image_url: string;
   memo: string;
+  need_update: boolean;
 
   memo_value?: string;
   memo_active?: boolean;

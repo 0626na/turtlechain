@@ -1,21 +1,22 @@
 import React from 'react';
 
-import AnswerButton from '../element/Buttons/AnswerButton';
+import AnswerButton from '../button/AnswerButton';
 import { css } from '@emotion/react';
 interface Props {
   visible: boolean;
   title: string;
-  description: React.ReactNode; // 줄바꿈이 필요할땐 사용하는 컴포넌트내에서 br태그를 사용할것.
+  description: string[]; // 줄바꿈이 필요할땐 사용하는 컴포넌트내에서 br태그를 사용할것.
   children?: React.ReactNode;
 
   cancelText?: string;
   okText?: string;
   okDisabled?: boolean;
+  loading?: boolean;
   onCancel: () => void;
   onOk: () => void;
 }
 
-function TurtleAnswerModal({
+function TurtleConfirmModal({
   visible = false,
   title,
   description,
@@ -24,8 +25,9 @@ function TurtleAnswerModal({
   cancelText = '취소',
   okText = '확인',
   okDisabled = false,
-  onCancel = () => {},
-  onOk = () => {},
+  loading,
+  onCancel,
+  onOk,
 }: Props) {
   return (
     <>
@@ -33,12 +35,20 @@ function TurtleAnswerModal({
         <div css={modalMask}>
           <div css={modalContent}>
             <h1 css={$title}>{title}</h1>
-            <p css={$description}>{description}</p>
+            <p css={$description}>
+              {description.map((item, index) => (
+                <React.Fragment key={index}>
+                  {item}
+                  <br />
+                </React.Fragment>
+              ))}
+            </p>
             {children}
             <div css={footer}>
               <AnswerButton type="NO" text={cancelText} onClick={onCancel} />
               <AnswerButton
                 onClick={onOk}
+                loading={loading}
                 disabled={okDisabled}
                 margin={'0px 0px 0px 8px'}
                 type="YES"
@@ -105,4 +115,4 @@ const footer = css`
   margin-top: 28px;
 `;
 
-export default TurtleAnswerModal;
+export default TurtleConfirmModal;

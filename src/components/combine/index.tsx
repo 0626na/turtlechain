@@ -1,5 +1,5 @@
 import Notification from './Notification';
-import TurtleAnswerModal from './TurtleAnswerModal';
+import TurtleAnswerModal from '../element/modal/TurtleConfirmModal';
 import TurtleModaltest from './TurtleModaltest';
 import TurtleContentModal from './TurtleContentModal';
 

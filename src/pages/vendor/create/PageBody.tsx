@@ -20,7 +20,6 @@ import {
   SecondaryButton,
   TeriaryButton,
   TurtleDropdown,
-  TurtleSecondaryRangePicker,
 } from '@components/element';
 import { TurtleText } from '@components/element';
 
@@ -33,10 +32,9 @@ import {
   parsedVendorListsState,
 } from '@store/vendorState';
 import SuccessTab from './Tabs/SuccessTab';
-import { TurtleAnswerModal } from '@components/combine';
 
-import moment from 'moment';
 import { ReactComponent as ListIcon } from '@icons/list.svg';
+import ConnectModal from '@components/combine/ConnectModal';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,11 +45,6 @@ function PageBody() {
   const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
     parsedVendorCountsState,
   );
-
-  const [searchDate, setSearchDate] = useState({
-    startDate: moment().format('YYYY-MM-DD'),
-    endDate: moment().format('YYYY-MM-DD'),
-  });
 
   // 모달 제어
   const [modalVisible, setModalVisible] = useState(false);
@@ -70,11 +63,7 @@ function PageBody() {
       // resetField();
     },
     onSuccess: (data) => {
-      // if (data.data.error) {
-      //   message.error(data.data.error);
-      //   // resetField();
-      //   return;
-      // }
+      closeModal();
 
       message.info(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
@@ -121,47 +110,27 @@ function PageBody() {
        *  재고프로그램 연동 모달
        *
        */}
-      <TurtleAnswerModal
+      <ConnectModal
         visible={modalVisible}
-        title={'재고프로그램 연동'}
-        description={
-          <span>
-            선택한 기간의 재고 정보를 불러옵니다. <br /> 정보의 양에따라 최대
-            1분 정도 걸릴 수 있어요.
-          </span>
-        }
-        children={
-          <div css={ModalRangePickerContainer}>
-            <TurtleSecondaryRangePicker
-              onChange={(value) => {
-                const startDate = moment(value[0]).format('YYYY-MM-DD');
-                const endDate = moment(value[1]).format('YYYY-MM-DD');
-
-                setSearchDate({
-                  startDate,
-                  endDate,
-                });
-              }}
-            />
-          </div>
-        }
-        onCancel={() => {
-          closeModal();
-        }}
-        onOk={() => {
+        title="재고프로그램 연동"
+        description={[
+          '선택한 기간의 재고 정보를 불러옵니다.',
+          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+        ]}
+        onCancel={closeModal}
+        onOk={({ start_date, end_date }) => {
           vendorInventoryMutation.mutate({
             rt_store_id: store.id!,
-            start_date: searchDate.startDate,
-            end_date: searchDate.endDate,
+            start_date,
+            end_date,
           });
-
-          closeModal();
         }}
+        loading={vendorInventoryMutation.isLoading}
       />
 
       <PageHeader
         title="거래처등록"
-        Button={
+        button={
           <Button css={button}>
             <ListIcon css={icon} />
             <TurtleText>거래처 목록</TurtleText>
@@ -260,10 +229,6 @@ const button = css`
 
 const icon = css`
   margin-right: 8px;
-`;
-
-const ModalRangePickerContainer = css`
-  margin-top: 24px;
 `;
 
 // PageContent

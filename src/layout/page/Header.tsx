@@ -11,10 +11,10 @@ import { t } from 'i18next';
 
 interface Props {
   title: string;
-  Button?: React.ReactNode;
+  button?: React.ReactNode;
 }
 
-function PageHeader({ title, Button }: Props) {
+function PageHeader({ title, button }: Props) {
   const { logout } = useLogin();
 
   const getUserQuery = useQuery('getUserQuery', authAPI.verify);
@@ -24,7 +24,7 @@ function PageHeader({ title, Button }: Props) {
       <Row css={container} align="middle" justify="space-between">
         <Col css={leftContnetStyled}>
           <TurtleText css={textStyled}>{title}</TurtleText>
-          {Button}
+          {button}
         </Col>
 
         <Col css={rightContnetStyled}>
@@ -67,13 +67,6 @@ const rightContnetStyled = css`
   display: flex;
   align-items: center;
 `;
-
-// const textStyled = css`
-//   font-size: 24px;
-//   font-weight: 700;
-//   background-color: orange;
-//   cursor: pointer;
-// `;
 
 const textStyled = css({
   fontSize: 24,
