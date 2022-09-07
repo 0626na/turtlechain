@@ -1,81 +1,137 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { t } from 'i18next';
 import { TurtleText, TurtleTooltip } from '@components/element';
 import {
-  parsedVendorCountsState,
-  parsedVendorListsState,
-} from '@store/vendorState';
+  vendorCartCountsState,
+  vendorCartState,
+  SuccessItem,
+} from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 
-import { ParsedVendor } from '@apis/vendorAPI';
 import { css } from '@emotion/react';
+import { TurtleAnswerModal } from '@components/combine';
+import TurtleModalInput from '@components/element/input/TurtleModalInput';
 
 interface Props {
   isLoading: boolean;
 }
 
 function SuccessTab({ isLoading }: Props) {
-  const [parsedVendorLists, setParsedVendorLists] = useRecoilState(
-    parsedVendorListsState,
-  );
+  const [vendorCartLists, setVendorCartLists] = useRecoilState(vendorCartState);
+  const vendorCartCounts = useSetRecoilState(vendorCartCountsState);
 
-  const setParsedVendorCounts = useSetRecoilState(parsedVendorCountsState);
+  //modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalInputValue, setModalInputValue] = useState('');
+  const [selectedRow, setSelectedRow] = useState<SuccessItem>();
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
-  const handleVatIncludedUpdate = (targetVendor: ParsedVendor) => {
-    setParsedVendorLists((parsedVendorLists) => ({
-      ...parsedVendorLists,
-      successList: parsedVendorLists.successList?.map((vendor) =>
-        vendor.vendor_code === targetVendor.vendor_code
+  const handleVatIncludedUpdate = (target: SuccessItem) => {
+    setVendorCartLists((vendorCartLists) => ({
+      ...vendorCartLists,
+      successList: vendorCartLists.successList?.map((item) =>
+        item.vendor_code === target.vendor_code
           ? {
-              ...vendor,
-              is_vat_included: !targetVendor.is_vat_included,
+              ...item,
+              isVatIncluded: !target.isVatIncluded,
             }
-          : vendor,
+          : item,
       ),
     }));
   };
 
   const handleUseVendorNameUpdate = (
     newVendorName: string,
-    targetVendor: ParsedVendor,
+    target: SuccessItem,
   ) => {
-    setParsedVendorLists((parsedVendorLists) => ({
-      ...parsedVendorLists,
-      successList: parsedVendorLists.successList?.map((vendor) =>
-        vendor.vendor_code === targetVendor.vendor_code
+    setVendorCartLists((vendorCartLists) => ({
+      ...vendorCartLists,
+      successList: vendorCartLists.successList?.map((item) =>
+        item.vendor_code === target.vendor_code
           ? {
-              ...vendor,
-              use_vendor_name: newVendorName,
+              ...item,
+              useVendorName: newVendorName,
             }
-          : vendor,
+          : item,
       ),
     }));
   };
 
   const handleVendorRemove = (targetVendorCode: string) => {
-    setParsedVendorLists(() => ({
-      ...parsedVendorLists,
-      successList: parsedVendorLists.successList.filter(
-        (vendor) => vendor.vendor_code === targetVendorCode,
+    setVendorCartLists(() => ({
+      ...vendorCartLists,
+      successList: vendorCartLists.successList.filter(
+        (item) => item.vendor_code === targetVendorCode,
       ),
     }));
 
-    setParsedVendorCounts((counts) => ({
+    vendorCartCounts((counts) => ({
       ...counts,
       success_count: counts.success_count - 1,
     }));
   };
 
+  const handleMemoUpdate = (newMemo: string, target: SuccessItem) => {
+    setVendorCartLists((vendorCartLists) => ({
+      ...vendorCartLists,
+      successList: vendorCartLists.successList?.map((item) =>
+        item.vendor_code === target.vendor_code
+          ? {
+              ...item,
+              memo: newMemo,
+            }
+          : item,
+      ),
+    }));
+  };
+
   return (
     <>
+      <TurtleAnswerModal
+        visible={modalVisible}
+        title={'메모'}
+        description={
+          <span>
+            해당 건과 관련해 중요한 내용을 기록해보세요. <br /> 개인 메모로도
+            자유롭게 활용할 수 있어요 👀
+          </span>
+        }
+        children={
+          <div css={ModalInputContainer}>
+            <TurtleModalInput
+              placeholder="ex) 영수증 이중으로 확인 또 확인!"
+              defaultValue={selectedRow?.memo}
+              onChange={(e) => {
+                const value = e.currentTarget.value;
+                setModalInputValue(value);
+              }}
+            />
+          </div>
+        }
+        onCancel={() => {
+          setModalInputValue('');
+          closeModal();
+        }}
+        onOk={() => {
+          handleMemoUpdate(modalInputValue, selectedRow!);
+          setModalInputValue('');
+          closeModal();
+        }}
+      />
+
       <Table
         size="small"
         loading={isLoading}
-        dataSource={parsedVendorLists.successList}
+        dataSource={vendorCartLists.successList}
         rowKey={(record) => record.vendor_code}
         pagination={{
           position: ['bottomCenter'],
@@ -87,7 +143,7 @@ function SuccessTab({ isLoading }: Props) {
             ellipsis: true,
             width: '8%',
             title: '거래처 코드',
-            render: (_, record) => record.ws_store_info[0]?.id,
+            render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
@@ -125,12 +181,13 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            align: 'center',
             title: t('table.column.vatIncluded'),
             render: (_, record) => {
               return (
                 <Switch
-                  style={{ width: '52px' }}
-                  checked={record.is_vat_included}
+                  css={$switch}
+                  checked={record.isVatIncluded}
                   onClick={() => {
                     handleVatIncludedUpdate(record);
                   }}
@@ -154,9 +211,10 @@ function SuccessTab({ isLoading }: Props) {
             render: (_, record) => (
               <Input
                 size="small"
-                value={record.use_vendor_name}
+                defaultValue={record.ws_store_info[0].name}
                 onChange={(e) => {
-                  handleUseVendorNameUpdate(e.currentTarget.value, record);
+                  const value = e.currentTarget.value;
+                  handleUseVendorNameUpdate(value, record);
                 }}
               />
             ),
@@ -169,9 +227,13 @@ function SuccessTab({ isLoading }: Props) {
             render: (_, record) => {
               return (
                 <MemoIcon
+                  onClick={() => {
+                    setSelectedRow(record);
+                    openModal();
+                  }}
                   css={css`
                     cursor: pointer;
-                    color: ${record.memo && 'red'};
+                    stroke: ${record.memo === '' ? '#A1A2A6' : '#2ab8c1'}; ;
                   `}
                 />
               );
@@ -183,7 +245,9 @@ function SuccessTab({ isLoading }: Props) {
             width: '6%',
             render: (_, record) => (
               <RemoveIcon
-                css={icon}
+                css={css`
+                  cursor: pointer;
+                `}
                 onClick={() => {
                   handleVendorRemove(record.vendor_code);
                 }}
@@ -196,8 +260,16 @@ function SuccessTab({ isLoading }: Props) {
   );
 }
 
-const icon = css`
-  cursor: pointer;
+const $switch = css`
+  width: 30px;
+
+  &.ant-switch-checked {
+    background-color: #1a66f9;
+  }
+`;
+
+const ModalInputContainer = css`
+  margin-top: 24px;
 `;
 
 export default SuccessTab;
