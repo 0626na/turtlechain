@@ -38,12 +38,15 @@ function StoreSelect({ warningMessage }: Props) {
         );
 
         // default : 첫번쨰 쇼핑몰 선택
+        const defaultStore = data.store_list.find(
+          (store) => store.is_closed === false,
+        );
+
         setStore({
-          id: data.store_list[0].id,
-          name: data.store_list[0].name,
-          inventory_is_vat_included:
-            data.store_list[0].inventory_is_vat_included,
-          version: data.store_list[0].companies[0].version,
+          id: defaultStore?.id,
+          name: defaultStore?.name!,
+          inventory_is_vat_included: defaultStore?.inventory_is_vat_included!,
+          version: defaultStore?.companies[0].version!,
         });
       },
     },
@@ -51,18 +54,18 @@ function StoreSelect({ warningMessage }: Props) {
 
   // 쇼핑몰 선택
   const handleStoreSelect = useCallback(
-    (value: number) => {
+    (id: number) => {
       // store.id 가 기존에 있으면 confirm 받고 false 시 return;
       if (store.id && warningMessage && !window.confirm(warningMessage)) {
         return;
       }
 
       setStore({
-        id: value,
-        name: storeList.find((item) => item.id === value)!.name,
-        inventory_is_vat_included: storeList.find((item) => item.id === value)!
+        id,
+        name: storeList.find((item) => item.id === id)!.name,
+        inventory_is_vat_included: storeList.find((item) => item.id === id)!
           .inventory_is_vat_included,
-        version: storeList.find((item) => item.id === value)?.version!,
+        version: storeList.find((item) => item.id === id)?.version!,
       });
     },
     [store, storeList, setStore, warningMessage],
