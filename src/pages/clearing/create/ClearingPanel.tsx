@@ -18,11 +18,10 @@ import { DownOutlined, RightOutlined } from '@ant-design/icons';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { storeState } from '@store/storeState';
-import { clearingCartState } from '@store/clearingCartState';
 import { useClearingCart } from '@hooks/index';
 
 import {
@@ -84,12 +83,10 @@ function ClearingPanel({
   );
 
   useEffect(() => {
+    if (activeKey !== '2') return;
     calculateClearingAmount();
-  }, []);
-
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeKey]);
 
   return (
     <>
@@ -246,11 +243,12 @@ function ClearingPanel({
                   }
                   step={1000}
                   max={record.clearing_amount!}
-                  min={
+                  min={Math.max(
                     record.reserve_payment_amount -
-                    (record.overpaid_payment_amount! ?? 0) -
-                    record.reserve_subtract_amount
-                  }
+                      (record.overpaid_payment_amount! ?? 0) -
+                      record.reserve_subtract_amount,
+                    0,
+                  )}
                   onChange={(value) => {
                     handleClearingAmount(record, value);
                   }}
