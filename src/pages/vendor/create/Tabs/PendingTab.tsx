@@ -5,7 +5,6 @@ import {
   vendorCartCountsState,
   vendorCartState,
   PendingItem,
-  SelectedWholesale,
 } from '@store/vendorCartState';
 import { Input, Popover, Radio, Space, Switch, Table } from 'antd';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -13,10 +12,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 import { ReactComponent as MatchingIcon } from '@icons/matching.svg';
 
-import { Wholesale } from '@apis/vendorAPI';
+import { Wholesale, VendorAccount } from '@apis/vendorAPI';
 import { css } from '@emotion/react';
 import { TurtleAnswerModal } from '@components/combine';
 import TurtleModalInput from '@components/element/input/TurtleModalInput';
+
+// todo : success로 이전했을때 row 컬러 변경
 
 interface Props {
   isLoading: boolean;
@@ -53,34 +54,28 @@ function PendingTab({ isLoading }: Props) {
     }));
   };
 
-  // const findWsStoreInfo = (item) => {
-  //   return item .
-  // }
-
-  // const handle;
-
-  const handleVatIncludedUpdate = (targetVendor: PendingItem) => {
+  const handleVatIncludedUpdate = (target: PendingItem) => {
     setVendorCartLists((vendorCartLists) => ({
       ...vendorCartLists,
       pendingList: vendorCartLists.pendingList?.map((vendor) =>
-        vendor.vendor_code === targetVendor.vendor_code
+        vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
-              isVatIncluded: !targetVendor.isVatIncluded,
+              isVatIncluded: !target.isVatIncluded,
             }
           : vendor,
       ),
     }));
   };
 
-  const handleselectedWholesaleNameUpdate = (
+  const handleUseVendorNameUpdate = (
     newVendorName: string,
-    targetVendor: PendingItem,
+    target: PendingItem,
   ) => {
     setVendorCartLists((vendorCartLists) => ({
       ...vendorCartLists,
       pendingList: vendorCartLists.pendingList?.map((vendor) =>
-        vendor.vendor_code === targetVendor.vendor_code
+        vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
               use_vendor_name: newVendorName,
@@ -90,11 +85,11 @@ function PendingTab({ isLoading }: Props) {
     }));
   };
 
-  const handleMemoUpdate = (newMemo: string, targetVendor: PendingItem) => {
+  const handleMemoUpdate = (newMemo: string, target: PendingItem) => {
     setVendorCartLists((vendorCartLists) => ({
       ...vendorCartLists,
       pendingList: vendorCartLists.pendingList?.map((vendor) =>
-        vendor.vendor_code === targetVendor.vendor_code
+        vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
               memo: newMemo,
@@ -102,6 +97,71 @@ function PendingTab({ isLoading }: Props) {
           : vendor,
       ),
     }));
+  };
+
+  const handleAccountSelecte = (
+    account: VendorAccount,
+    target: PendingItem,
+  ) => {
+    const newItem = {
+      ...vendorCartLists.pendingList.find(
+        (item) => item.vendor_code === target.vendor_code,
+      )!,
+      selectedWsStoreInfo: {
+        ...target.selectedWsStoreInfo!,
+        selectedAccount: account,
+      },
+    };
+
+    setVendorCartLists((vendorCartLists) => ({
+      ...vendorCartLists,
+      pendingList: vendorCartLists.pendingList.filter(
+        (item) => item.vendor_code === target.vendor_code,
+      ),
+    }));
+
+    setVendorCartLists((vendorCartLists) => ({
+      ...vendorCartLists,
+      successList: [
+        {
+          ...newItem,
+          ws_store_info: [
+            {
+              ...newItem.selectedWsStoreInfo,
+              vendor_account: [newItem.selectedWsStoreInfo.selectedAccount],
+              vendor_address: newItem.selectedWsStoreInfo.address,
+              vendor_name: newItem.selectedWsStoreInfo.name,
+            },
+          ],
+        },
+
+        ...vendorCartLists.successList,
+      ],
+    }));
+
+    // setVendorCartLists((vendorCartLists) => ({
+    //   ...vendorCartLists,
+    //   successList: [
+    //     ...vendorCartLists.successList,
+    //     {
+    //       id: newItem.id,
+    //       name: newItem.name,
+    //       phone: "",
+    //       address: newItem.selectedWsStoreInfo.address,
+    //       store_account: newItem.selectedWsStoreInfo.selectedAccount,
+    //       store_phone: newItem.store_phone[0],
+    //       // company: VendorCompany[];
+    //       building: newItem.selectedWsStoreInfo.building,
+    //       floor: newItem.selectedWsStoreInfo.floor,
+    //       col: newItem.selectedWsStoreInfo.col,
+    //       loc: newItem.selectedWsStoreInfo.loc,
+    //       ext: newItem.selectedWsStoreInfo.ext,
+    //       ws_store_info : newItem.ws_store_info
+    //     },
+    //   ],
+    // }));
+
+    return;
   };
 
   return (
@@ -151,29 +211,30 @@ function PendingTab({ isLoading }: Props) {
         columns={[
           {
             title: '매칭',
-            width: '3%',
+            width: 50,
             ellipsis: true,
             render: (_) => <MatchingIcon />,
           },
           {
             title: '거래처코드',
-            width: '8%',
+            width: 85,
             ellipsis: true,
             render: (_, record) => record.vendor_code,
           },
           {
             title: '쇼핑몰 입력값',
-            width: '15%',
+            width: 200,
             ellipsis: true,
             render: (_, record) => {
               return `${record.name}  ${record.address}`;
             },
           },
           {
-            ellipsis: true,
             title: '거래처명',
+            width: 340,
+            ellipsis: true,
             render: (_, record) => {
-              if (record.ws_store_info.length === 1) {
+              if (record?.selectedWsStoreInfo) {
                 return record.selectedWsStoreInfo?.name;
               }
 
@@ -217,11 +278,8 @@ function PendingTab({ isLoading }: Props) {
                           : '#a1a2a6'};
                       `}
                     >
-                      {record.selectedWsStoreInfo
-                        ? record.selectedWsStoreInfo.name
-                        : record.ws_store_info[0]?.name}
-                      {/* {record.selectedWsStoreInfo?.name ??
-                        record.ws_store_info[0]?.name} */}
+                      {record.selectedWsStoreInfo?.name ??
+                        record.ws_store_info[0]?.name}
                     </span>
                   </Popover>
                 </TurtleBadge>
@@ -229,15 +287,12 @@ function PendingTab({ isLoading }: Props) {
             },
           },
           {
-            ellipsis: true,
             title: '거래처 주소',
+            width: 200,
+            ellipsis: true,
             render: (_, record) => {
-              if (record.ws_store_info.length === 1) {
-                return record.ws_store_info[0].address;
-              }
-
-              if (record.selectedWsStoreInfo) {
-                return record.selectedWsStoreInfo.address;
+              if (record?.selectedWsStoreInfo) {
+                return record.selectedWsStoreInfo?.address;
               }
 
               return (
@@ -253,7 +308,7 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             title: '휴대번호',
-            width: '10%',
+            width: 130,
             ellipsis: true,
             render: (_, record) =>
               record.selectedWsStoreInfo?.store_phone[0]?.phone
@@ -262,75 +317,91 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             title: '계좌정보',
+            width: 200,
             ellipsis: true,
-            // render: (_, record) => {
-            //   if (!record.selectedWsStoreInfo) return;
+            render: (_, record) => {
+              if (!record?.selectedWsStoreInfo)
+                // 선택된 매장이 없을때
+                return (
+                  <span
+                    css={css`
+                      color: '#a1a2a6';
+                    `}
+                  >
+                    -
+                  </span>
+                );
 
-            //   const {
-            //     bank = '',
-            //     account_number = '',
-            //     account_holder = '',
-            //   } = record.selectedWholesale?.store_account[0] || {};
+              if (record.selectedWsStoreInfo?.store_account.length === 1) {
+                handleAccountSelecte(
+                  record.selectedWsStoreInfo?.store_account[0],
+                  record,
+                );
 
-            //   if (record.selectedWholesale?.store_account.length === 1) {
-            //     return (
-            //       <span>
-            //         {bank} {account_number} {account_holder}
-            //       </span>
-            //     );
-            //   }
+                return;
+              }
 
-            //   <TurtleBadge
-            //     count={record.selectedWholesale?.store_account.length}
-            //     color="red"
-            //   >
-            //     <Popover
-            //       content={
-            //         <Radio.Group value={record.useAccount?.id}>
-            //           <Space direction="vertical">
-            //             {record.selectedWholesale?.store_account.map(
-            //               ({ id, bank, account_number, account_holder }) => (
-            //                 <Radio
-            //                   value={id}
-            //                   key={id}
-            //                   onClick={() => {
-            //                     setSuggestAccount(record, id);
-            //                   }}
-            //                 >
-            //                   {bank} {account_number} {account_holder}
-            //                 </Radio>
-            //               ),
-            //             )}
-            //           </Space>
-            //         </Radio.Group>
-            //       }
-            //     >
-            //       <div style={{ color: record.check_account ? '' : 'red' }}>
-            //         {record.use_account?.bank ??
-            //           record.use_vendor.store_account[0]?.bank}{' '}
-            //         {record.use_account?.account_number ??
-            //           record.use_vendor.store_account[0]?.account_number}{' '}
-            //         {record.use_account?.account_holder ??
-            //           record.use_vendor.store_account[0]?.account_holder}
-            //       </div>
-            //     </Popover>
-            //   </TurtleBadge>;
+              const {
+                bank: defaultBank,
+                account_number: defaultAccountNumber,
+                account_holder: defaultAccountHolder,
+              } = record.selectedWsStoreInfo?.store_account[0];
 
-            //   return `${bank} ${account_number} ${account_holder}`;
+              const {
+                id: selectedAccountId,
+                bank: selectedBank,
+                account_number: selectedAccountNumber,
+                account_holder: selectedAccountHolder,
+              } = record.selectedWsStoreInfo.selectedAccount!;
 
-            //   return '거래처를 선택해 주세요.';
-            //   // const {
-            //   //   bank = '',
-            //   //   account_number = '',
-            //   //   account_holder = '',
-            //   // } = record.ws_store_info[0]?.store_account[0] || {};
-            //   // return `${bank} ${account_number} ${account_holder}`;
-            // },
+              return (
+                <TurtleBadge
+                  count={record.selectedWsStoreInfo?.store_account.length}
+                  color="#F47E12"
+                >
+                  <Popover
+                    content={
+                      <Radio.Group value={selectedAccountId}>
+                        <Space direction="vertical">
+                          {record.selectedWsStoreInfo?.store_account.map(
+                            (account) => (
+                              <Radio
+                                value={account.id}
+                                key={account.id}
+                                onClick={() => {
+                                  handleAccountSelecte(account, record);
+                                }}
+                              >
+                                {account.bank} {account.account_number}{' '}
+                                {account.account_holder}
+                              </Radio>
+                            ),
+                          )}
+                        </Space>
+                      </Radio.Group>
+                    }
+                  >
+                    <span
+                      css={css`
+                        color: ${record.selectedWsStoreInfo.selectedAccount
+                          ? ''
+                          : '#a1a2a6'};
+                      `}
+                    >
+                      {selectedBank ?? defaultBank}{' '}
+                      {selectedAccountNumber ?? defaultAccountNumber}{' '}
+                      {selectedAccountHolder ?? defaultAccountHolder}
+                    </span>
+                  </Popover>
+                </TurtleBadge>
+              );
+            },
           },
 
           {
-            title: t('table.column.vatIncluded'),
             ellipsis: true,
+            title: t('table.column.vatIncluded'),
+            width: 90,
             align: 'center',
             render: (_, record) => {
               return (
@@ -346,27 +417,22 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            title: '추천 거래처명',
-            render: (_, record) => record.ws_store_info[0]?.name,
-          },
-          {
-            ellipsis: true,
             title: (
               <>
                 <TurtleText>사용할 거래처명</TurtleText>
                 <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
               </>
             ),
-            // render: (_, record) => (
-            //   <Input
-            //     size="small"
-            //     defaultValue={record.selectedWholesaleName}
-            //     onChange={(e) => {
-            //       const value = e.currentTarget.value;
-            //       handleselectedWholesaleNameUpdate(value, record);
-            //     }}
-            //   />
-            // ),
+            render: (_, record) => (
+              <Input
+                size="small"
+                defaultValue={record.name}
+                onChange={(e) => {
+                  const value = e.currentTarget.value;
+                  handleUseVendorNameUpdate(value, record);
+                }}
+              />
+            ),
           },
           {
             ellipsis: true,
