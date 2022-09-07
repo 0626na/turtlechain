@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AnswerButton from '../element/Buttons/AnswerButton';
+import AnswerButton from '../element/button/AnswerButton';
 import { css } from '@emotion/react';
 interface Props {
   visible: boolean;
