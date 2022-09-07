@@ -1,8 +1,5 @@
 import {
   ParsedVendor,
-  // ParsedSuccessVendor,
-  // ParsedPendingVendor,
-  // ParsedVendor,
   ParesdResult,
   Wholesale,
   VendorAccount,
@@ -23,8 +20,9 @@ export interface SelectedWholesale extends Wholesale {
 export interface PendingItem extends ParsedVendor {
   isMatching: boolean;
   isVatIncluded: boolean;
-  selectedWsStoreInfo?: SelectedWholesale;
+  useVendorName: string;
   memo: string;
+  selectedWsStoreInfo?: SelectedWholesale;
 }
 
 interface FailItem {}
