@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { Avatar, Col, Dropdown, Menu, Row, Button as AntdButton } from 'antd';
+import { Avatar, Col, Dropdown, Menu, Row, Button } from 'antd';
 
 import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
@@ -11,10 +11,10 @@ import { t } from 'i18next';
 
 interface Props {
   title: string;
-  Button?: React.ReactNode;
+  button?: React.ReactNode;
 }
 
-function PageHeader({ title, Button }: Props) {
+function PageHeader({ title, button }: Props) {
   const { logout } = useLogin();
 
   const getUserQuery = useQuery('getUserQuery', authAPI.verify);
@@ -24,7 +24,7 @@ function PageHeader({ title, Button }: Props) {
       <Row css={container} align="middle" justify="space-between">
         <Col css={leftContnetStyled}>
           <TurtleText css={textStyled}>{title}</TurtleText>
-          {Button}
+          {button}
         </Col>
 
         <Col css={rightContnetStyled}>
@@ -33,9 +33,9 @@ function PageHeader({ title, Button }: Props) {
           <Dropdown
             overlay={
               <Menu>
-                <AntdButton type="text" onClick={logout}>
+                <Button type="text" onClick={logout}>
                   {t('auth.logout')}
-                </AntdButton>
+                </Button>
               </Menu>
             }
             trigger={['click']}
