@@ -7,10 +7,10 @@ import { css } from '@emotion/react';
 interface Props {
   title: string;
   subTitle?: string;
-  Buttons?: React.ReactNode[];
+  buttons?: React.ReactNode[];
 }
 
-function PageTitle({ title, subTitle, Buttons }: Props) {
+function PageTitle({ title, subTitle, buttons }: Props) {
   return (
     <>
       <Row css={wrapper} justify="space-between">
@@ -21,7 +21,7 @@ function PageTitle({ title, subTitle, Buttons }: Props) {
 
         <Col>
           <Row>
-            {Buttons?.map((button, idx) => (
+            {buttons?.map((button, idx) => (
               <Col key={idx} css={buttonContainer}>
                 {button}
               </Col>
