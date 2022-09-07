@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { storeState } from '@store/storeState';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import vendorAPI, { ParesdResult, ParsedVendor } from '@apis/vendorAPI';
-import { useMutation, useQuery } from 'react-query';
-import { t } from 'i18next';
-import { css } from '@emotion/react';
-import { useSearchParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import vendorAPI from '@apis/vendorAPI';
+import { useMutation } from 'react-query';
 
-import { Button, Input, message, Switch, Table, Tabs } from 'antd';
+import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
+
+import { Button, message, Tabs } from 'antd';
 import {
   PageBottomBar,
   PageContent,
@@ -30,23 +30,22 @@ import { ReactComponent as ListIcon } from '@icons/list.svg';
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
 
-import {
-  parsedVendorCountsState,
-  parsedVendorListsState,
-} from '@store/vendorState';
-import SuccessTab from './Tabs/SuccessTab';
+import { vendorCartCountsState, vendorCartState } from '@store/vendorCartState';
+import SuccessTab from './tabs/SuccessTab';
 import { TurtleAnswerModal } from '@components/combine';
 
 import moment from 'moment';
+import PendingTab from './tabs/PendingTab';
 
 function PageBody() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const store = useRecoilValue(storeState);
 
-  const setParsedVendorLists = useSetRecoilState(parsedVendorListsState);
+  const [parsedVendorLists, setParsedVendorLists] =
+    useRecoilState(vendorCartState);
   const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
-    parsedVendorCountsState,
+    vendorCartCountsState,
   );
 
   const [searchDate, setSearchDate] = useState({
@@ -55,14 +54,22 @@ function PageBody() {
   });
 
   // 모달 제어
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const openModal = () => {
-    setModalVisible(true);
+  const [inventoryModalVisible, setInventoryModalVisible] = useState(false);
+  const [confirmModalVisivle, setConfirmModalVisivle] = useState(false);
+  const openInventoryModal = () => {
+    setInventoryModalVisible(true);
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const closeInventoryModal = () => {
+    setInventoryModalVisible(false);
+  };
+
+  const openConfirmModal = () => {
+    setConfirmModalVisivle(true);
+  };
+
+  const closeConfirmModal = () => {
+    setConfirmModalVisivle(false);
   };
 
   // 재고프로그램 연동
@@ -84,26 +91,27 @@ function PageBody() {
       setParsedVendorLists({
         successList: data.data.success.map((vendor) => ({
           ...vendor,
+          isVatIncluded: false,
+          useVendorName: vendor.name,
           memo: '',
-          is_vat_included: false,
-          use_vendor_name: vendor.name,
         })),
 
-        suggestList: data.data.suggest.map((vendor) => ({
+        pendingList: data.data.suggest.map((vendor) => ({
           ...vendor,
+          isMatching: false,
+          isVatIncluded: false,
+          useVendorName: vendor.name,
           memo: '',
-          is_vat_included: false,
-          use_vendor_name: vendor.name,
-          use_vendor:
+          selectedWsStoreInfo:
             vendor.ws_store_info.length === 1
-              ? vendor.ws_store_info[0]
+              ? {
+                  ...vendor.ws_store_info[0],
+                  selectedAccount:
+                    vendor.ws_store_info[0].store_account.length === 1
+                      ? vendor.ws_store_info[0].store_account[0]
+                      : undefined,
+                }
               : undefined,
-          use_account:
-            vendor.ws_store_info.length === 1 &&
-            vendor.ws_store_info[0].store_account.length === 1
-              ? vendor.ws_store_info[0].store_account[0]
-              : undefined,
-          check_account: false,
         })),
 
         failList: data.data.fail,
@@ -115,6 +123,18 @@ function PageBody() {
 
   // 엑셀 연동
 
+  // 거래처 등록하기
+  const vendorCreateMutation = useMutation(vendorAPI.create, {
+    onError: () => {},
+    onSuccess: (data) => {
+      message.success(
+        `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+      );
+      closeConfirmModal();
+      navigate('/vendor/list');
+    },
+  });
+
   return (
     <>
       {/*
@@ -122,8 +142,9 @@ function PageBody() {
        *  재고프로그램 연동 모달
        *
        */}
+
       <TurtleAnswerModal
-        visible={modalVisible}
+        visible={inventoryModalVisible}
         title={'재고프로그램 연동'}
         description={
           <span>
@@ -147,7 +168,7 @@ function PageBody() {
           </div>
         }
         onCancel={() => {
-          closeModal();
+          closeInventoryModal();
         }}
         onOk={() => {
           vendorInventoryMutation.mutate({
@@ -156,13 +177,44 @@ function PageBody() {
             end_date: searchDate.endDate,
           });
 
-          closeModal();
+          closeInventoryModal();
+        }}
+      />
+
+      {/*
+       *
+       * 거래처 등록 확인 모달
+       *
+       */}
+
+      <TurtleAnswerModal
+        visible={confirmModalVisivle}
+        title={'정말 등록할까요?'}
+        description={'추천과 미매칭에 남아있는 거래처는 등록에서 제외됩니다.'}
+        onCancel={() => {
+          closeConfirmModal();
+        }}
+        okText="네"
+        onOk={() => {
+          vendorCreateMutation.mutate(
+            parsedVendorLists.successList.map((vendor) => ({
+              rt_store_id: store.id ?? -1,
+              vendor_code: vendor.vendor_code,
+              vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
+              vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
+              ws_store_id: vendor.ws_store_info[0].id,
+              vendor_address: vendor.ws_store_info[0].address,
+              vendor_name: vendor.useVendorName,
+              memo: vendor.memo,
+              is_vat_included: vendor.isVatIncluded,
+            })),
+          );
         }}
       />
 
       <PageHeader
         title="거래처등록"
-        Button={
+        button={
           <Button css={button}>
             <ListIcon css={icon} />
             <TurtleText>거래처 목록</TurtleText>
@@ -172,11 +224,11 @@ function PageBody() {
 
       <PageTitle
         title="거래처등록 미리보기"
-        Buttons={[
+        buttons={[
           <TeriaryButton
             text="재고프로그램 연동"
             onClick={() => {
-              openModal();
+              openInventoryModal();
 
               // vendorInventoryMutation()
             }}
@@ -206,25 +258,20 @@ function PageBody() {
       />
 
       <PageContent>
-        <Tabs
-          css={tabContainer}
-          size="large"
-          activeKey={searchParams.get('tab') ?? 'success'}
-          onChange={(newTab) => {
-            setSearchParams({ tab: newTab });
-          }}
-        >
+        <Tabs css={tabContainer} size="large" defaultActiveKey="success">
           <Tabs.TabPane
             tab={`성공(${parsedVendorCounts?.success_count})`}
             key="success"
           >
             <SuccessTab isLoading={vendorInventoryMutation.isLoading} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
+          <Tabs.TabPane
             tab={`보류(${parsedVendorCounts.suggest_count})`}
             key="pending"
-          ></Tabs.TabPane>
-          <Tabs.TabPane
+          >
+            <PendingTab isLoading={vendorInventoryMutation.isLoading} />
+          </Tabs.TabPane>
+          {/* <Tabs.TabPane
             tab={`실패(${parsedVendorCounts.fail_count})`}
             key="fail"
           ></Tabs.TabPane> */}
@@ -232,7 +279,12 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton text="거래처 등록하기" />
+        <PrimaryButton
+          text="거래처 등록하기"
+          onClick={() => {
+            openConfirmModal();
+          }}
+        />
       </PageBottomBar>
     </>
   );
