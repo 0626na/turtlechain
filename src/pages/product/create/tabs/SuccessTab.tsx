@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { TurtleTableTitle } from '@components/element';
-import TurtleInputPrice from '@components/element/Input/TurtlePriceInput';
+import TurtleInputPrice from '@components/element/input/TurtlePriceInput';
 import useProductCart from '@hooks/useProductCart';
 import {
   Button,

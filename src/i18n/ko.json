@@ -42,7 +42,7 @@
   },
 
   "table": {
-    "vatIncluded": "부가세 포함 여부",
+    "vatIncluded": "부가세 입금",
     "accountInfo": "계좌 정보",
     "vendorName": "거래처명",
     "vendorAddress": "거래처 주소",

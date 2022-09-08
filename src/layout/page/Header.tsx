@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { Avatar, Col, Dropdown, Menu, Row, Button as AntdButton } from 'antd';
+import { Avatar, Col, Dropdown, Menu, Row, Button } from 'antd';
 
 import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
@@ -33,9 +33,9 @@ function PageHeader({ title, button }: Props) {
           <Dropdown
             overlay={
               <Menu>
-                <AntdButton type="text" onClick={logout}>
+                <Button type="text" onClick={logout}>
                   {t('auth.logout')}
-                </AntdButton>
+                </Button>
               </Menu>
             }
             trigger={['click']}

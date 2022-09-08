@@ -14,11 +14,11 @@ import SuccessTab from './tabs/SuccessTab';
 import TurtleTabs from '@components/element/TurtleTabs';
 import PendingTab from './tabs/PendingTab';
 import FailTab from './tabs/FailTab';
-import ConnectModal from '@components/combine/ConnectModal';
 import { useMutation } from 'react-query';
 import productAPI from '@apis/productAPI';
 import useProductCart from '@hooks/useProductCart';
 import useStore from '@hooks/useStore';
+import { InventoryModal } from '@components/combine';
 
 function PageBody() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,7 +64,7 @@ function PageBody() {
        *  재고프로그램 연동 모달
        *
        */}
-      <ConnectModal
+      <InventoryModal
         visible={modalVisible}
         title={'재고프로그램 연동'}
         description={[

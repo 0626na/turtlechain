@@ -1,22 +1,12 @@
 import { v2Axios } from '.';
 
-// 엑셀, 연동 vendor
+//  엑셀, 연동 결과
 export interface ParsedVendor {
   vendor_code: string;
   name: string;
   address: string;
-  account: string;
-  ws_store_info: WholesaleShow[];
   match_type: 'success' | 'wrong' | 'fail';
-
-  memo: string;
-  // memo_active: boolean;
-  // memo_value: string;
-  is_vat_included: boolean;
-  use_vendor_name: string;
-  use_vendor?: WholesaleShow;
-  use_account?: VendorAccount;
-  check_account?: boolean;
+  ws_store_info: Wholesale[];
 }
 
 export interface ParesdResult {
@@ -24,6 +14,28 @@ export interface ParesdResult {
   suggest_count: number;
   fail_count: number;
   duplicated_count: number;
+}
+
+// 거래처 사업자 타입
+// export interface VendorCompany {
+//   name: string;
+//   owner: string;
+//   biz_num: string;
+// }
+
+// 거래처
+export interface Vendor {
+  id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  is_vat_included: boolean;
+  memo: string;
+  vendor_phone: VendorPhone;
+  vendor_account: VendorAccount;
+  ws_store_info: Wholesale;
+  memo_active?: boolean;
+  memo_value?: string;
 }
 
 // 거래처 계좌 타입
@@ -38,40 +50,17 @@ export interface VendorAccount {
 export interface VendorPhone {
   id: number;
   phone: string;
-  send_alimtalk: boolean;
 }
 
-// 거래처 사업자 타입
-export interface VendorCompany {
-  name: string;
-  owner: string;
-  biz_num: string;
-}
-
-// 거래처 타입
-export interface VendorShow {
-  id: number;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  is_vat_included: boolean;
-  memo: string;
-  vendor_phone: VendorPhone;
-  vendor_account: VendorAccount;
-  ws_store_info: WholesaleShow;
-  memo_active?: boolean;
-  memo_value?: string;
-}
-
-// 마스터 도매 타입
-export interface WholesaleShow {
+// 마스터 도매
+export interface Wholesale {
   id: number;
   name: string;
   phone: string;
   address: string;
-  store_account: Array<VendorAccount>;
-  store_phone: Array<VendorPhone>;
-  company: Array<VendorCompany>;
+  store_account: VendorAccount[];
+  store_phone: VendorPhone[];
+  // company: VendorCompany[];
   building: string;
   floor: string;
   col: string;
@@ -108,7 +97,7 @@ const vendorInventory = async (params: RequestVendorInventory) => {
 };
 
 /*
- *  엑셀
+ *  엑셀파일 연동
  */
 
 export interface ResponseExcel {
@@ -146,15 +135,16 @@ export interface RequestGet {
 
 export interface ResponseGet {
   msg: string;
-  data: { vendor_list: Array<VendorShow>; total_count: number };
+  data: { vendor_list: Vendor[]; total_count: number };
 }
 
-const get = async function (query: RequestGet) {
+const get = async (query: RequestGet) => {
   let url = 'provisioning/vendor?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data;
 };
 
@@ -172,12 +162,13 @@ export interface ResponseGetCode {
   data: string;
 }
 
-const getCode = async function (query: RequestGetCode) {
+const getCode = async (query: RequestGetCode) => {
   let url = `provisioning/create_vendor_code?`;
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGetCode>(url);
+
   return response.data;
 };
 
@@ -208,9 +199,10 @@ export interface ResponseCreate {
   };
 }
 
-const create = async function (data: Array<RequestCreate>) {
+const create = async (data: RequestCreate[]) => {
   const url = `provisioning/vendor`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
+
   return response.data;
 };
 
@@ -262,12 +254,12 @@ export interface ResponseGetWholesale {
   msg: string;
   data: {
     total_count: number;
-    vendor_list: Array<WholesaleShow>;
+    vendor_list: Wholesale[];
   };
 }
 
 // 마스터 도매 검색
-const getWholesale = async function (query: RequestGetWholesale) {
+const getWholesale = async (query: RequestGetWholesale) => {
   let url = `provisioning/search_wholesale?`;
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;

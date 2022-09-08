@@ -21,7 +21,7 @@ interface Props {
   loading: boolean;
 }
 
-function ConnectModal({
+function InventoryModal({
   visible,
   onCancel,
   onOk,
@@ -73,4 +73,4 @@ const marginTop = css`
   margin-top: 24px;
 `;
 
-export default ConnectModal;
+export default InventoryModal;

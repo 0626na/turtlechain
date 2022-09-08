@@ -1,11 +1,11 @@
-import React from 'react';
-
-import AnswerButton from '../button/AnswerButton';
 import { css } from '@emotion/react';
+import React from 'react';
+import AnswerButton from '../button/AnswerButton';
+
 interface Props {
   visible: boolean;
   title: string;
-  description: string[]; // 줄바꿈이 필요할땐 사용하는 컴포넌트내에서 br태그를 사용할것.
+  description: string[];
   children?: React.ReactNode;
 
   cancelText?: string;
@@ -69,7 +69,7 @@ const modalMask = css`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1;
+  z-index: 10000;
   background: rgba(0, 0, 0, 0.45);
 `;
 
