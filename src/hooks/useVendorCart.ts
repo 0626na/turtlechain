@@ -5,7 +5,7 @@ const useVendorCart = () => {
   const [cart, setCart] = useRecoilState(vendorCartState);
 
   const ready = (data: ResponseVendorInventory) => {
-    const setSuccess = (data: ParsedVendor[]) => {
+    const initSuccessList = (data: ParsedVendor[]) => {
       return data.map((vendor) => ({
         ...vendor,
         isVatIncluded: false,
@@ -14,7 +14,7 @@ const useVendorCart = () => {
       }));
     };
 
-    const setPending = (data: ParsedVendor[]) => {
+    const initPendingList = (data: ParsedVendor[]) => {
       return data.map((vendor) => ({
         ...vendor,
         isMatching: false,
@@ -35,14 +35,15 @@ const useVendorCart = () => {
     };
 
     setCart({
-      successList: setSuccess(data.data.success),
-      pendingList: setPending(data.data.suggest),
+      successList: initSuccessList(data.data.success),
+      pendingList: initPendingList(data.data.suggest),
       failList: data.data.fail,
     });
   };
 
   return {
     cart,
+    setCart,
     ready,
   };
 };
