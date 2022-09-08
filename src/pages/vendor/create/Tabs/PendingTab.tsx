@@ -99,16 +99,6 @@ function PendingTab({ isLoading }: Props) {
     account: VendorAccount,
     target: PendingItem,
   ) => {
-    // const newItem = {
-    //   ...cart.pendingList.find(
-    //     (item) => item.vendor_code === target.vendor_code,
-    //   )!,
-    //   selectedWsStoreInfo: {
-    //     ...target.selectedWsStoreInfo!,
-    //     selectedAccount: account,
-    //   },
-    // };
-
     setCart((cart) => ({
       ...cart,
       pendingList: cart.pendingList.map((item) =>
@@ -128,8 +118,8 @@ function PendingTab({ isLoading }: Props) {
     return;
   };
 
-  const handleItemSwitch = (target: PendingItem) => {
-    const a = {
+  const convertItem = (target: PendingItem) => {
+    return {
       ...target,
       ws_store_info: [
         {
@@ -138,10 +128,12 @@ function PendingTab({ isLoading }: Props) {
         },
       ],
     };
+  };
 
+  const pendingToSuccess = (target: PendingItem) => {
     setCart((cart) => ({
       ...cart,
-      successList: [a, ...cart.successList],
+      successList: [convertItem(target), ...cart.successList],
       pendingList: cart.pendingList.filter(
         (item) => item.vendor_code !== target.vendor_code,
       ),
@@ -198,7 +190,7 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             render: (_, record) => {
               if (record.isMatching) {
-                handleItemSwitch(record);
+                pendingToSuccess(record);
 
                 return <TurtleIcon name="matching" />;
               }
