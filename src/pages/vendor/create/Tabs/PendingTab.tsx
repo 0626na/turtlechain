@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { t } from 'i18next';
 import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
-import { Input, Popover, Radio, Space, Switch, Table } from 'antd';
+import { Input, message, Popover, Radio, Space, Switch, Table } from 'antd';
 
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 import { TurtleIcon } from '@components/element';
@@ -53,13 +53,13 @@ function PendingTab({ isLoading }: Props) {
   const handleVatIncludedUpdate = (target: PendingItem) => {
     setCart((cart) => ({
       ...cart,
-      pendingList: cart.pendingList?.map((vendor) =>
-        vendor.vendor_code === target.vendor_code
+      pendingList: cart.pendingList?.map((item) =>
+        item.vendor_code === target.vendor_code
           ? {
-              ...vendor,
+              ...target,
               isVatIncluded: !target.isVatIncluded,
             }
-          : vendor,
+          : item,
       ),
     }));
   };
@@ -70,13 +70,13 @@ function PendingTab({ isLoading }: Props) {
   ) => {
     setCart((cart) => ({
       ...cart,
-      pendingList: cart.pendingList?.map((vendor) =>
-        vendor.vendor_code === target.vendor_code
+      pendingList: cart.pendingList?.map((item) =>
+        item.vendor_code === target.vendor_code
           ? {
-              ...vendor,
+              ...target,
               use_vendor_name: newVendorName,
             }
-          : vendor,
+          : item,
       ),
     }));
   };
@@ -84,25 +84,11 @@ function PendingTab({ isLoading }: Props) {
   const handleMemoUpdate = (newMemo: string, target: PendingItem) => {
     setCart((cart) => ({
       ...cart,
-      pendingList: cart.pendingList?.map((vendor) =>
-        vendor.vendor_code === target.vendor_code
-          ? {
-              ...vendor,
-              memo: newMemo,
-            }
-          : vendor,
-      ),
-    }));
-  };
-
-  const handleMatchingUpdate = (target: PendingItem) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList.map((item) =>
+      pendingList: cart.pendingList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...target,
-              isMatching: true,
+              memo: newMemo,
             }
           : item,
       ),
@@ -123,12 +109,11 @@ function PendingTab({ isLoading }: Props) {
                 ...target.selectedWsStoreInfo!,
                 selectedAccount: account,
               },
+              isMatching: true,
             }
           : item,
       ),
     }));
-
-    handleMatchingUpdate(target);
 
     return;
   };
@@ -206,7 +191,7 @@ function PendingTab({ isLoading }: Props) {
             render: (_, record) => {
               if (record.isMatching) {
                 pendingToSuccess(record);
-
+                message.success('성공탭으로 이동');
                 return <TurtleIcon name="matching" />;
               }
 
@@ -336,7 +321,11 @@ function PendingTab({ isLoading }: Props) {
               } = record.selectedWsStoreInfo?.store_account[0];
 
               if (record.selectedWsStoreInfo?.store_account.length === 1) {
-                handleMatchingUpdate(record);
+                handleAccountSelecte(
+                  record.selectedWsStoreInfo?.store_account[0],
+                  record,
+                );
+
                 return (
                   <span>
                     {defaultBank} {defaultAccountNumber} {defaultAccountHolder}
