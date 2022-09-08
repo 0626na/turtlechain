@@ -74,7 +74,7 @@ function PendingTab({ isLoading }: Props) {
         item.vendor_code === target.vendor_code
           ? {
               ...target,
-              use_vendor_name: newVendorName,
+              useVendorName: newVendorName,
             }
           : item,
       ),
