@@ -190,16 +190,10 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane
-            tab={`성공(${parsedVendorCounts?.success_count})`}
-            key="success"
-          >
+          <Tabs.TabPane tab={`성공(${cart.successList.length})`} key="success">
             <SuccessTab isLoading={vendorInventoryMutation.isLoading} />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`보류(${parsedVendorCounts.suggest_count})`}
-            key="pending"
-          >
+          <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
             <PendingTab isLoading={vendorInventoryMutation.isLoading} />
           </Tabs.TabPane>
           {/* <Tabs.TabPane
