@@ -13,7 +13,6 @@ import { TurtleConfirmModal } from '@components/element';
 import TurtleModalInput from '@components/element/input/TurtleModalInput';
 import useVendorCart from '@hooks/useVendorCart';
 
-//TODO: success로 이전했을때 row 컬러 변경
 interface Props {
   isLoading: boolean;
 }
@@ -156,8 +155,7 @@ function PendingTab({ isLoading }: Props) {
               placeholder="ex) 영수증 이중으로 확인 또 확인!"
               defaultValue={selectedRow?.memo}
               onChange={(e) => {
-                const value = e.currentTarget.value;
-                setModalContentValue(value);
+                setModalContentValue(e.currentTarget.value);
               }}
             />
           </div>
@@ -412,8 +410,7 @@ function PendingTab({ isLoading }: Props) {
                 size="small"
                 defaultValue={record.name}
                 onChange={(e) => {
-                  const value = e.currentTarget.value;
-                  handleUseVendorNameUpdate(value, record);
+                  handleUseVendorNameUpdate(e.currentTarget.value, record);
                 }}
               />
             ),
