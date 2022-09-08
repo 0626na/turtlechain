@@ -24,7 +24,7 @@ import { ReactComponent as SingleIcon } from '@icons/single.svg';
 import { vendorCartCountsState } from '@store/vendorCartState';
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
-import { InventoryModal } from '@components/combine';
+import { RangeDateModal } from '@components/combine';
 import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 
@@ -98,7 +98,8 @@ function PageBody() {
        *  재고프로그램 연동 모달
        *
        */}
-      <InventoryModal
+      <RangeDateModal
+        inThreeMonth
         visible={inventoryModalVisible}
         title="재고프로그램 연동"
         description={[

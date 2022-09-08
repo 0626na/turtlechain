@@ -19,7 +19,7 @@ import { useMutation } from 'react-query';
 import productAPI from '@apis/productAPI';
 import useProductCart from '@hooks/useProductCart';
 import useStore from '@hooks/useStore';
-import { InventoryModal } from '@components/combine';
+import { RangeDateModal } from '@components/combine';
 import AddSingleProductModal from './modals/AddProductModal';
 import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
@@ -73,7 +73,7 @@ function PageBody() {
       {/*
        *  재고프로그램 연동 모달
        */}
-      <InventoryModal
+      <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible as boolean}
         title="재고프로그램 연동"

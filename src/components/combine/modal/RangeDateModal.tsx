@@ -22,7 +22,7 @@ interface Props {
   inThreeMonth?: boolean;
 }
 
-function InventoryModal({
+function RangeDateModal({
   visible,
   onCancel,
   onOk,
@@ -80,4 +80,4 @@ const marginTop = css`
   margin-top: 24px;
 `;
 
-export default InventoryModal;
+export default RangeDateModal;

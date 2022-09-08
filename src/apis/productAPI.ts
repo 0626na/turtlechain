@@ -157,11 +157,11 @@ const create = async function (data: RequestCreate[]) {
  */
 export interface RequestUpdate {
   id: number;
-  name: string;
-  supply_price: number;
-  vat_price: number;
-  option: string;
   memo: string;
+  // name: string;
+  // supply_price: number;
+  // vat_price: number;
+  // option: string;
 }
 
 export interface ResponseUpdate {
@@ -171,7 +171,7 @@ export interface ResponseUpdate {
 
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
 
   return response.data;
 };

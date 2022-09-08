@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
-import { TurtleTableTitle } from '@components/element';
+import { TurtleIcon, TurtleTableTitle } from '@components/element';
 import TurtleInputPrice from '@components/element/input/TurtlePriceInput';
 import useProductCart from '@hooks/useProductCart';
 import {
@@ -14,7 +14,6 @@ import {
   Typography,
 } from 'antd';
 import { t } from 'i18next';
-import TurtleIcon from '@components/element/TurtleIcon';
 
 interface Props extends TabPaneProps {
   loading: boolean;

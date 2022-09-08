@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { FileTextOutlined } from '@ant-design/icons';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import SearchFilter from '@components/combine/SearchFilter';
 import {
@@ -13,6 +12,7 @@ import { PageContent, PageTitle } from '@layout/page';
 import { message, Pagination, Row, Table, Typography } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
+import InputModal from '@components/combine/modal/InputModal';
 
 function PageBody() {
   const [selectedRow, selectRow] = useState<ProductShow>();
@@ -24,6 +24,7 @@ function PageBody() {
     type: 'name',
   });
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
+  const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
 
   // 상품 리스트 불러오기 요청
   const getProductListQuery = useQuery(
@@ -32,15 +33,27 @@ function PageBody() {
   );
 
   //리스트내 상품 삭제
-  const removeMutation = useMutation(productAPI.remove, {
+  const removeProductMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
-      getProductListQuery.refetch();
       (closeRemoveModal as () => void)();
       message.success(`상품이 삭제되었습니다`);
+      getProductListQuery.refetch();
     },
   });
 
-  const loading = getProductListQuery.isLoading || removeMutation.isLoading;
+  // 상품 수정 요청
+  const updateProductQuery = useMutation('updateProduct', productAPI.update, {
+    onSuccess: () => {
+      message.success('상품 정보가 수정되었습니다');
+      (closeMemoModal as () => void)();
+      getProductListQuery.refetch();
+    },
+  });
+
+  const loading =
+    getProductListQuery.isLoading ||
+    removeProductMutation.isLoading ||
+    updateProductQuery.isLoading;
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
@@ -53,20 +66,44 @@ function PageBody() {
 
   return (
     <>
+      {/**
+       * 메모 수정 모달
+       */}
+      <InputModal
+        visible={memoModalVisible as boolean}
+        loading={loading}
+        onCancel={loading ? () => {} : (closeMemoModal as () => void)}
+        defaultValue={selectedRow?.memo}
+        onOk={(value) => {
+          updateProductQuery.mutate({
+            id: selectedRow?.id ?? -1,
+            memo: value,
+          });
+        }}
+        title="메모"
+        description={[
+          '해당 건과 관련해 중요한 내용을 기록해보세요.',
+          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+        ]}
+      />
+      {/**
+       * 삭제 confirm 모달
+       */}
       <TurtleConfirmModal
         title="정말 삭제할까요?"
-        description={['삭제 후에는 이전으로 되도릴 수 없어요.']}
+        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="네"
         visible={removeModalVisible as boolean}
         loading={loading}
         onCancel={closeRemoveModal as () => void}
         onOk={() => {
-          removeMutation.mutate({
+          removeProductMutation.mutate({
             id: selectedRow?.id ?? -1,
             is_inactive: true,
           });
         }}
       />
+
       <PageTitle title="상품 리스트" />
       <PageContent>
         <Table
@@ -100,25 +137,10 @@ function PageBody() {
               />
             </Row>
           )}
-          expandable={{
-            expandedRowRender: (record) => <div>{record.memo}</div>,
-            columnWidth: 25,
-            expandIcon: ({ onExpand, record }) => {
-              return (
-                <FileTextOutlined
-                  style={record.memo ? {} : { opacity: '0.4', cursor: 'auto' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    record.memo && onExpand(record, e);
-                  }}
-                />
-              );
-            },
-          }}
           columns={[
             {
               ellipsis: true,
-              width: 90,
+              width: 100,
               title: t('table.vendorCode'),
               render: (_, record) => record.vendor_info.vendor_code,
             },
@@ -181,9 +203,23 @@ function PageBody() {
                 </Typography.Link>
               ),
             },
-            Table.EXPAND_COLUMN,
             {
-              width: 80,
+              width: 70,
+              align: 'center',
+              title: t('table.memo'),
+              render: (_, record) => (
+                <TurtleIcon
+                  name="memo"
+                  css={{ stroke: record.memo ? '#2ab8c1' : '#a1a2a6' }}
+                  onClick={() => {
+                    selectRow(record);
+                    (openMemoModal as () => void)();
+                  }}
+                />
+              ),
+            },
+            {
+              width: 50,
               render: (_, record) => (
                 <TurtleIcon
                   name="delete"

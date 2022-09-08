@@ -1,7 +1,7 @@
 import React from 'react';
-
 import { css } from '@emotion/react';
-import TurtleIcon from '@components/element/TurtleIcon';
+import TurtleIcon from '../TurtleIcon';
+
 interface Props {
   visible: boolean;
   title: string;
