@@ -29,9 +29,9 @@ const GlobalStyle = () => (
       }
 
       /* form label 왼쪽 정렬 */
-      /* .ant-form-item-label {
+      .ant-form-item-label {
         text-align: left;
-      } */
+      }
 
       /* table header padding 제거 */
       /* .ant-table-title {
