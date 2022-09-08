@@ -15,11 +15,12 @@ function TurtleIcon({ name, onClick }: Props) {
 
   if (name === 'delete') {
     return <RemoveIcon css={icon} onClick={handleClick} />;
-  } else if ((name = 'memo')) {
-    return <MemoIcon css={icon} onClick={handleClick} />;
-  } else {
-    return <></>;
   }
+  if (name === 'memo') {
+    return <MemoIcon css={icon} onClick={handleClick} />;
+  }
+
+  return <></>;
 }
 
 const icon = css`

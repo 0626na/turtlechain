@@ -8,9 +8,15 @@ interface Props extends InputProps {
   placeholder?: string;
 }
 
-function TurtleFormSearchInput({ value, placeholder, onSearch }: Props) {
+function TurtleFormSearchInput({
+  value,
+  placeholder,
+  onSearch,
+  ...props
+}: Props) {
   return (
     <Input.Search
+      {...props}
       css={searchInput}
       placeholder={placeholder}
       value={value}

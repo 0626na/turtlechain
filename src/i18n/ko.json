@@ -52,10 +52,12 @@
     "option": "옵션",
     "imageUrl": "이미지 URL",
     "price": "가격",
-    "memo": "메모"
+    "memo": "메모",
+    "mobile": "휴대전화번호"
   },
 
   "button": {
-    "uploadExcel": "엑셀 업로드"
+    "uploadExcel": "엑셀 업로드",
+    "addProduct": "상품 추가하기"
   }
 }

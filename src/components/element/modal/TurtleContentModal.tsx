@@ -19,7 +19,7 @@ function TurtleContentModal({
     <>
       {visible && (
         <div css={modalMask}>
-          <div css={modalContent}>
+          <div css={modalHeader}>
             <Row justify="space-between">
               <Col>
                 <h1 css={$title}>{title}</h1>
@@ -31,7 +31,14 @@ function TurtleContentModal({
                 />
               </Col>
             </Row>
-            {children}
+            <Row
+              css={css`
+                overflow: auto;
+                padding-right: 16px;
+              `}
+            >
+              {children}
+            </Row>
           </div>
         </div>
       )}
@@ -50,16 +57,16 @@ const modalMask = css`
   background: rgba(0, 0, 0, 0.45);
 `;
 
-const modalContent = css`
+const modalHeader = css`
   width: 600px;
-  height: 80vh;
+  max-height: 80vh;
 
   position: relative;
   top: 50%;
   left: 50%;
   z-index: 1;
 
-  transform: translate(-50%, -75%);
+  transform: translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;

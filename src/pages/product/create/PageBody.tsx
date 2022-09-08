@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import {
   PrimaryButton,
   SecondaryButton,
@@ -20,18 +20,20 @@ import useProductCart from '@hooks/useProductCart';
 import useStore from '@hooks/useStore';
 import { InventoryModal } from '@components/combine';
 import AddSingleProductModal from './modals/AddProductModal';
+import useModal from '@hooks/useModal';
 
 function PageBody() {
-  const [inventoryModalVisible, setInventoryModalVisible] = useState(false);
-  const [addingModalVisible, setAddingModalVisible] = useState(false);
   const { store, isStoreExist } = useStore();
   const { cart, ready, saveFile } = useProductCart();
+  const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
+    useModal();
+  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
 
   // 재고관리 연동 요청
   const connectInventoryMutation = useMutation(productAPI.connectInventory, {
     onSuccess: (data) => {
       ready(data);
-      closeInventoryModal();
+      (closeInventoryModal as () => void)();
       message.info(
         `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
       );
@@ -51,22 +53,6 @@ function PageBody() {
   const loading =
     connectInventoryMutation.isLoading || parseExcelMutation.isLoading;
 
-  const openInventoryModal = useCallback(() => {
-    setInventoryModalVisible(true);
-  }, []);
-
-  const closeInventoryModal = useCallback(() => {
-    setInventoryModalVisible(false);
-  }, []);
-
-  const openAddingModal = useCallback(() => {
-    setAddingModalVisible(true);
-  }, []);
-
-  const closeAddingModal = useCallback(() => {
-    setAddingModalVisible(false);
-  }, []);
-
   return (
     <>
       {/*
@@ -74,14 +60,14 @@ function PageBody() {
        */}
       <InventoryModal
         inThreeMonth
-        visible={inventoryModalVisible}
+        visible={inventoryModalVisible as boolean}
         title="재고프로그램 연동"
         description={[
           '선택한 기간의 재고 정보를 불러옵니다.',
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
         loading={loading}
-        onCancel={closeInventoryModal}
+        onCancel={closeInventoryModal as () => void}
         onOk={({ start_date, end_date }) => {
           if (!isStoreExist()) return;
           connectInventoryMutation.mutate({
@@ -95,8 +81,8 @@ function PageBody() {
        *  단건 추가 모달
        */}
       <AddSingleProductModal
-        visible={addingModalVisible}
-        closeModal={closeAddingModal}
+        visible={addingModalVisible as boolean}
+        closeModal={closeAddingModal as () => void}
       />
       <PageTitle
         title="상품등록 미리보기"
@@ -105,10 +91,11 @@ function PageBody() {
           <TeriaryButton
             text="재고프로그램 연동"
             onClick={() => {
-              openInventoryModal();
+              (openInventoryModal as () => void)();
             }}
           />,
           <TurtleDropdown
+            triggerButton={<SecondaryButton text="상품 추가하기" />}
             items={[
               {
                 key: '0',
@@ -133,11 +120,10 @@ function PageBody() {
                 label: '단건추가',
                 icon: <SingleIcon />,
                 onClick(e) {
-                  openAddingModal();
+                  (openAddingModal as () => void)();
                 },
               },
             ]}
-            triggerButton={<SecondaryButton text="상품 추가하기" />}
           />,
         ]}
       />
