@@ -13,7 +13,7 @@ import TurtlePrimaryRangePicker from './rangePicker/TurtlePrimaryRangePicker';
 import TurtleSecondaryRangePicker from './rangePicker/TurtleSecondaryRangePicker';
 
 import TurtleDropdown from './TurtleDropdown';
-import TurtleSelector from './TurtleSelector';
+import TurtleSelect from './TurtleSelect';
 import TurtleTableTitle from './TurtleTableTitle';
 import TurtleText from './TurtleText';
 import TurtleImg from './TurtleImg';
@@ -50,7 +50,7 @@ export {
 
   //
   TurtleDropdown,
-  TurtleSelector,
+  TurtleSelect,
   TurtleTableTitle,
   TurtleText,
   TurtleImg,

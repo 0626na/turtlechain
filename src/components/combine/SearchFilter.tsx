@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
-import { Select, Space, Input } from 'antd';
+import { TurtleSearchInput, TurtleSelect } from '@components/element';
+import { Space } from 'antd';
 import { t } from 'i18next';
 
 interface Props {
@@ -18,56 +18,46 @@ function NewSearchFilter({
   const options = vendor
     ? [
         {
-          name: t('vendor.name'),
+          name: t('table.vendorName'),
           value: 'name',
         },
         {
-          name: t('vendor.account'),
+          name: t('table.vendorAccount'),
           value: 'account',
         },
         {
-          name: t('vendor.store phone'),
+          name: t('table.mobile'),
           value: 'phone',
         },
       ]
     : [
         {
-          name: t('vendor.name'),
-          value: 'vendor_name',
-        },
-        {
-          name: t('product.name'), //
+          name: t('table.productName'),
           value: 'name',
         },
         {
-          name: t('product.vendor product name'),
+          name: t('table.vendorProductName'),
           value: 'vendor_product_name',
+        },
+        {
+          name: t('table.vendorName'),
+          value: 'vendor_name',
         },
       ];
 
   return (
     <Space>
       {select && (
-        <Select
-          style={{ width: 120 }}
-          size="small"
+        <TurtleSelect
           value={searchQuery.type}
           onChange={(value) => {
             setSearchQuery({ ...searchQuery, type: value, page: 1 });
           }}
-        >
-          {options.map(({ name, value }) => (
-            <Select.Option key={value} value={value}>
-              {name}
-            </Select.Option>
-          ))}
-        </Select>
+          items={options}
+        />
       )}
-      <Input.Search
-        css={search}
-        size="small"
-        placeholder={t('placeholder.search')}
-        style={{ width: 200 }}
+      <TurtleSearchInput
+        placeholder="검색어를 입력하세요"
         value={searchQuery.search_string}
         onChange={(e) => {
           setSearchQuery({
@@ -81,13 +71,4 @@ function NewSearchFilter({
   );
 }
 
-const search = css`
-  .ant-input-search-button {
-    border: 1px solid #d9d9d9;
-    border-left: none;
-  }
-  svg {
-    color: #5b5d63;
-  }
-`;
 export default NewSearchFilter;

@@ -1,6 +1,6 @@
+import React from 'react';
 import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
-import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import PageBody from './PageBody';

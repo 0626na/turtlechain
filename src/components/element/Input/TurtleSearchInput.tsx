@@ -2,21 +2,10 @@ import { InputProps } from 'antd';
 import { Input } from 'antd';
 import styled from '@emotion/styled';
 
-interface Props extends InputProps {
-  value?: string;
-  onSearch?: (value: any) => void;
-  placeholder?: string;
-}
+interface Props extends InputProps {}
 
-function TurtleSearchInput({ value, placeholder, onSearch }: Props) {
-  return (
-    <StyledSearch
-      style={{ width: 220 }}
-      placeholder={placeholder}
-      value={value}
-      onSearch={onSearch}
-    />
-  );
+function TurtleSearchInput({ ...props }: Props) {
+  return <StyledSearch {...props} />;
 }
 
 const StyledSearch = styled(Input.Search)`

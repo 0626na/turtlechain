@@ -26,7 +26,9 @@ function PageHeader({ title, button, onClickBefore }: Props) {
       <Row css={container} align="middle" justify="space-between">
         <Col css={leftContnetStyled}>
           {onClickBefore && (
-            <ArrowLeftOutlined css={icon} onClick={onClickBefore} />
+            <div css={iconContainer} onClick={onClickBefore}>
+              <ArrowLeftOutlined css={icon} />
+            </div>
           )}
           <TurtleText css={textStyled}>{title}</TurtleText>
           {button}
@@ -78,9 +80,17 @@ const textStyled = css`
   font-weight: 700;
 `;
 
-const icon = css`
-  font-size: 28px;
+const iconContainer = css`
+  background-color: #edeff1;
+  border-radius: 6px;
   margin-right: 8px;
+
+  cursor: pointer;
+`;
+
+const icon = css`
+  font-size: 24px;
+  margin: 6px;
 `;
 
 export default PageHeader;
