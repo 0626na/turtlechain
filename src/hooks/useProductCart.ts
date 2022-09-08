@@ -8,7 +8,7 @@ const useProductCart = () => {
 
   const ready = (data: ResponseConnectInventory) => {
     setCart((cart) => ({
-      ...cart,
+      // ...cart,
       successList: [
         ...data.data.success.map((product) => ({
           ...product,
@@ -19,6 +19,7 @@ const useProductCart = () => {
         ...cart.successList,
       ],
       failList: [...data.data.fail, ...cart.failList],
+      fileList: [],
     }));
   };
 

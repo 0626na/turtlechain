@@ -1,7 +1,7 @@
 import { InputNumber, InputNumberProps } from 'antd';
 import { pricePattern } from '@utils/pattern';
 
-function TurtleInputPrice({ ...props }: InputNumberProps) {
+function TurtlePriceInput({ ...props }: InputNumberProps) {
   return (
     <InputNumber
       {...props}
@@ -12,4 +12,4 @@ function TurtleInputPrice({ ...props }: InputNumberProps) {
   );
 }
 
-export default TurtleInputPrice;
+export default TurtlePriceInput;

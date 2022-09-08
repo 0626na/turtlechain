@@ -65,7 +65,7 @@ export interface ResponseConnectInventory {
 }
 
 const connectInventory = async function (params: RequestConnectInventory) {
-  let url = 'external-api/inventory/products';
+  const url = 'external-api/inventory/products';
   const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
 
   return response.data;
@@ -90,6 +90,7 @@ const parseExcel = async function (data: RequestParseExcel) {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return response.data;
 };
 
@@ -113,12 +114,10 @@ export interface ResponseGetList {
   };
 }
 
-const getList = async function (query: RequestGetList) {
-  let url = 'provisioning/product?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetList>(url);
+const getList = async function (params: RequestGetList) {
+  const url = 'provisioning/product?';
+  const response = await v2Axios.get<ResponseGetList>(url, { params });
+
   return response.data;
 };
 
@@ -149,6 +148,7 @@ export interface ResponseCreate {
 const create = async function (data: RequestCreate[]) {
   const url = `provisioning/product`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
+
   return response.data;
 };
 
@@ -172,6 +172,7 @@ export interface ResponseUpdate {
 const update = async function (data: RequestUpdate) {
   const url = `provisioning/product/${data.id}`;
   const response = await v2Axios.put<ResponseUpdate>(url, data);
+
   return response.data;
 };
 
@@ -209,12 +210,10 @@ export interface ResponseGetCode {
   data: string;
 }
 
-const getCode = async function (query: RequestGetCode) {
-  let url = 'provisioning/create_product_code?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetCode>(url);
+const getCode = async function (params: RequestGetCode) {
+  const url = 'provisioning/create_product_code?';
+
+  const response = await v2Axios.get<ResponseGetCode>(url, { params });
   return response.data;
 };
 

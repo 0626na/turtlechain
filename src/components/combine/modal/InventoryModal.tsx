@@ -19,6 +19,7 @@ interface Props {
   title: string;
   description: string[];
   loading: boolean;
+  inThreeMonth?: boolean;
 }
 
 function InventoryModal({
@@ -28,6 +29,7 @@ function InventoryModal({
   title,
   description,
   loading,
+  inThreeMonth,
 }: Props) {
   const [date, setDate] = useState<Date>({
     start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
@@ -55,7 +57,12 @@ function InventoryModal({
       children={
         <div css={marginTop}>
           <TurtleSecondaryRangePicker
-            // css={marginTop}
+            disabledDate={(current) =>
+              inThreeMonth
+                ? current > moment() || current < moment().subtract(3, 'months')
+                : current > moment()
+            }
+            disabled={loading}
             value={[moment(date.start_date), moment(date.end_date)]}
             onChange={(_, dateStrings) => {
               const start_date = dateStrings[0];

@@ -7,6 +7,7 @@ import HistoryButton from './button/HistoryButton';
 import TurtleSearchInput from './input/TurtleSearchInput';
 import TurtleFormInput from './input/TurtleFormInput';
 import TurtleFormSearchInput from './input/TurtleFormSearchInput';
+import TurtlePriceInput from './input/TurtlePriceInput';
 
 import TurtlePrimaryRangePicker from './rangePicker/TurtlePrimaryRangePicker';
 import TurtleSecondaryRangePicker from './rangePicker/TurtleSecondaryRangePicker';
@@ -37,6 +38,7 @@ export {
   TurtleSearchInput,
   TurtleFormInput,
   TurtleFormSearchInput,
+  TurtlePriceInput,
 
   //RangePicker
   TurtlePrimaryRangePicker,

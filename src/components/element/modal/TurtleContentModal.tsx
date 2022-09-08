@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import { Col, Row } from 'antd';
 import { ReactComponent as ModalCloseIcon } from '@icons/modalClose.svg';
+import { css } from '@emotion/react';
 interface Props {
   visible: boolean;
   title: string;
@@ -18,11 +18,11 @@ function TurtleContentModal({
   return (
     <>
       {visible && (
-        <ModalMask>
-          <ModalContent>
+        <div css={modalMask}>
+          <div css={modalContent}>
             <Row justify="space-between">
               <Col>
-                <Title>{title}</Title>
+                <h1 css={$title}>{title}</h1>
               </Col>
               <Col>
                 <ModalCloseIcon
@@ -32,14 +32,14 @@ function TurtleContentModal({
               </Col>
             </Row>
             {children}
-          </ModalContent>
-        </ModalMask>
+          </div>
+        </div>
       )}
     </>
   );
 }
 
-const ModalMask = styled.div`
+const modalMask = css`
   height: 100vh;
   position: fixed;
   top: 0;
@@ -50,8 +50,9 @@ const ModalMask = styled.div`
   background: rgba(0, 0, 0, 0.45);
 `;
 
-const ModalContent = styled.div`
-  width: 400px;
+const modalContent = css`
+  width: 600px;
+  height: 80vh;
 
   position: relative;
   top: 50%;
@@ -70,7 +71,7 @@ const ModalContent = styled.div`
   border-radius: 12px;
 `;
 
-const Title = styled.h1`
+const $title = css`
   font-weight: 700;
   font-size: 22px;
   line-height: 1;
