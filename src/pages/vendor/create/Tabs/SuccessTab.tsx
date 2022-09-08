@@ -34,7 +34,7 @@ function SuccessTab({ isLoading }: Props) {
       successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               isVatIncluded: !target.isVatIncluded,
             }
           : item,
@@ -51,7 +51,7 @@ function SuccessTab({ isLoading }: Props) {
       successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               useVendorName: newVendorName,
             }
           : item,
@@ -74,7 +74,7 @@ function SuccessTab({ isLoading }: Props) {
       successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               memo: newMemo,
             }
           : item,
@@ -214,7 +214,9 @@ function SuccessTab({ isLoading }: Props) {
             render: (_, record) => (
               <Input
                 size="small"
-                defaultValue={record.ws_store_info[0].name}
+                defaultValue={
+                  record.useVendorName || record.ws_store_info[0].name
+                }
                 onChange={(e) => {
                   const value = e.currentTarget.value;
                   handleUseVendorNameUpdate(value, record);
