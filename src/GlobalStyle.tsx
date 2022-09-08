@@ -40,9 +40,23 @@ const GlobalStyle = () => (
       */
 
       /* message 색상 변경 */
-      /* .ant-message {
-      color: #FFFFFF !important;
+      .ant-message {
+        color: #ffffff !important;
       }
+
+      .ant-message-notice {
+        text-align: right;
+        margin-right: 30px;
+      }
+
+      /* message 박스 크기 설정 */
+      .ant-message-notice-content {
+        border-radius: 12px;
+        width: 360px;
+        text-align: left;
+      }
+
+      /* 
       .ant-message-error .anticon {
       color: #FFFFFF !important;
       }

@@ -65,7 +65,7 @@ function PageBody() {
       />
 
       <PageContent>
-        <PrimaryButton text="상품 등록하기" onClick={showModal} />
+        <PrimaryButton onClick={showModal}>상품 등록하기</PrimaryButton>
         <SecondaryButton text="상품 추가하기" />
         <AnswerButton text="예" type="YES"></AnswerButton>
         <AnswerButton text="취소" type="NO"></AnswerButton>
@@ -140,7 +140,7 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton text="상품 등록하기" />
+        <PrimaryButton>상품 등록하기</PrimaryButton>
       </PageBottomBar>
     </>
   );

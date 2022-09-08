@@ -9,7 +9,9 @@
   },
 
   "product": {
-    "create": "상품등록"
+    "create": "상품등록",
+    "history": "상품목록",
+    "addSingle": "상품 단건추가"
   },
 
   "order": {
@@ -46,6 +48,7 @@
     "accountInfo": "계좌 정보",
     "vendorName": "거래처명",
     "vendorAddress": "거래처 주소",
+    "vendorCode": "거래처코드",
     "productName": "상품명",
     "vendorProductName": "거래처 상품명",
     "productCode": "상품 바코드",

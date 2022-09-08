@@ -6,6 +6,7 @@ export const HomePage = lazy(() => import('./home'));
 
 export const VendorCreatePage = lazy(() => import('./vendor/create'));
 export const ProductCreatePage = lazy(() => import('./product/create'));
+export const ProductHistoryPage = lazy(() => import('./product/history'));
 
 export const OrderCreatePage = lazy(() => import('./order/create'));
 export const OrderHistoryPage = lazy(() => import('./order/history'));

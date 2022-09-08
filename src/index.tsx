@@ -14,8 +14,9 @@ import App from './App';
 
 // Antd Message
 message.config({
-  top: 60,
+  top: 65,
   maxCount: 1,
+  duration: 3,
 });
 
 // React Query

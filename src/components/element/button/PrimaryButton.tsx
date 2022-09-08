@@ -5,18 +5,18 @@ import { css } from '@emotion/react';
 
 interface Props {
   size?: 'default' | 'large';
-  text: string;
+  children: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
   onClick?: () => void;
 }
 
-function PrimaryButton({ size = 'default', text, ...props }: Props) {
+function PrimaryButton({ size = 'default', children, ...props }: Props) {
   if (size === 'large') {
     return (
       <Button css={largePrimary} {...props}>
-        <TurtleText>{text}</TurtleText>
+        <TurtleText>{children}</TurtleText>
       </Button>
     );
   }
@@ -24,7 +24,7 @@ function PrimaryButton({ size = 'default', text, ...props }: Props) {
   // default
   return (
     <Button css={defaultPrimary} {...props}>
-      <TurtleText>{text}</TurtleText>
+      <TurtleText>{children}</TurtleText>
     </Button>
   );
 }

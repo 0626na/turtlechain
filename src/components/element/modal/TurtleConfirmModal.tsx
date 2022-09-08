@@ -6,14 +6,14 @@ interface Props {
   visible: boolean;
   title: string;
   description: string[];
-  children?: React.ReactNode;
+  onCancel: () => void;
+  onOk: () => void;
 
+  children?: React.ReactNode;
   cancelText?: string;
   okText?: string;
   okDisabled?: boolean;
   loading?: boolean;
-  onCancel: () => void;
-  onOk: () => void;
 }
 
 function TurtleConfirmModal({

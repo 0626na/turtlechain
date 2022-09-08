@@ -3,6 +3,7 @@ import {
   PrimaryButton,
   SecondaryButton,
   TeriaryButton,
+  TurtleConfirmModal,
   TurtleDropdown,
   TurtleUpload,
 } from '@components/element';
@@ -21,13 +22,16 @@ import useStore from '@hooks/useStore';
 import { InventoryModal } from '@components/combine';
 import AddSingleProductModal from './modals/AddProductModal';
 import useModal from '@hooks/useModal';
+import { useNavigate } from 'react-router-dom';
 
 function PageBody() {
+  const navigate = useNavigate();
   const { store, isStoreExist } = useStore();
   const { cart, ready, saveFile } = useProductCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
+  const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
   // 재고관리 연동 요청
   const connectInventoryMutation = useMutation(productAPI.connectInventory, {
@@ -47,6 +51,17 @@ function PageBody() {
       message.info(
         `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
       );
+    },
+  });
+
+  // 상품 생성 요청
+  const createMutation = useMutation(productAPI.create, {
+    onSuccess: (data) => {
+      // resetStates();
+      message.success(
+        `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+      );
+      navigate('/product/history');
     },
   });
 
@@ -83,6 +98,26 @@ function PageBody() {
       <AddSingleProductModal
         visible={addingModalVisible as boolean}
         closeModal={closeAddingModal as () => void}
+      />
+      {/**
+       *  confirm 모달
+       */}
+      <TurtleConfirmModal
+        title="정말 등록할까요?"
+        description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
+        okText="네"
+        visible={confirmModalVisible as boolean}
+        onCancel={closeConfirmModal as () => void}
+        onOk={() => {
+          createMutation.mutate(
+            cart.successList.map((product) => ({
+              ...product,
+              rt_store_id: store.id!,
+              image_url: product.image_url ?? '',
+              memo: product.memo ?? '',
+            })),
+          );
+        }}
       />
       <PageTitle
         title="상품등록 미리보기"
@@ -145,7 +180,14 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton text="거래처 등록하기" />
+        <PrimaryButton
+          onClick={() => {
+            (openConfirmModal as () => void)();
+          }}
+          disabled={cart.successList.length === 0}
+        >
+          상품 등록하기
+        </PrimaryButton>
       </PageBottomBar>
     </>
   );

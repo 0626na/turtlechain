@@ -4,8 +4,11 @@ import { Helmet } from 'react-helmet';
 import PageBody from './PageBody';
 import { PageHeader } from '@layout/page';
 import { HistoryButton } from '@components/element';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCreate() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Helmet title={`${t('helmet.turtleChain')} - ${t('product.create')}`} />
@@ -15,7 +18,7 @@ function ProductCreate() {
           <HistoryButton
             text="상품목록"
             onClick={() => {
-              alert('상품목록 이동');
+              navigate('/product/history');
             }}
           />
         }

@@ -192,7 +192,7 @@ export interface ResponseRemove {
 
 const remove = async (data: RequestRemove) => {
   const url = `provisioning/product/${data.id}`;
-  const response = await v2Axios.put<ResponseRemove>(url, data);
+  const response = await v2Axios.patch<ResponseRemove>(url, data);
 
   return response.data;
 };

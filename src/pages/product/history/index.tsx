@@ -1,7 +1,25 @@
+import { PageHeader } from '@layout/page';
+import { t } from 'i18next';
 import React from 'react';
+import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import PageBody from './PageBody';
 
-function index() {
-  return <div>상품내역 페이지</div>;
+function Index() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('product.history')}`} />
+      <PageHeader
+        title={t('product.history')}
+        onClickBefore={() => {
+          navigate('/product/create');
+        }}
+      />
+      <PageBody />
+    </>
+  );
 }
 
-export default index;
+export default Index;

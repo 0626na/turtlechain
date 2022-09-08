@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productAPI from '@apis/productAPI';
 import {
+  PrimaryButton,
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtlePriceInput,
@@ -88,7 +89,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         onClickSelect={selectVendor}
       />
       <TurtleContentModal
-        title={t('product.createSingle')}
+        title={t('product.addSingle')}
         visible={visible}
         onClose={closeModal}
       >
@@ -168,24 +169,28 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <Button onClick={createProductCode}>코드 만들기</Button>
           </Form.Item>
 
-          <Form.Item name="option" label={t('table.option')}>
+          <Form.Item
+            name="option"
+            label={t('table.option')}
+            rules={[{ required: true }]}
+          >
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
             name="price"
-            label={t('price')}
+            label={t('table.price')}
             rules={[{ required: true }]}
           >
             <TurtlePriceInput style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
-            label={t('imageUrl')}
+            label={t('table.imageUrl')}
             name="image_url"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
-            <TurtleFormInput required={false} />
+            <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
@@ -197,9 +202,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           </Form.Item>
 
           <Row justify="end">
-            <Button type="default" htmlType="submit">
+            <PrimaryButton size="large" htmlType="submit">
               {t('button.addProduct')}
-            </Button>
+            </PrimaryButton>
           </Row>
         </Form>
       </TurtleContentModal>

@@ -210,11 +210,12 @@ function PageBody() {
 
       <PageBottomBar>
         <PrimaryButton
-          text="거래처 등록하기"
           onClick={() => {
             openConfirmModal();
           }}
-        />
+        >
+          거래처 등록하기
+        </PrimaryButton>
       </PageBottomBar>
     </>
   );

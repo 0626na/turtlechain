@@ -8,13 +8,15 @@ import useLogin from '@hooks/useLogin';
 import { useQuery } from 'react-query';
 import authAPI from '@apis/authAPI';
 import { t } from 'i18next';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 interface Props {
   title: string;
   button?: React.ReactNode;
+  onClickBefore?: () => void;
 }
 
-function PageHeader({ title, button }: Props) {
+function PageHeader({ title, button, onClickBefore }: Props) {
   const { logout } = useLogin();
 
   const getUserQuery = useQuery('getUserQuery', authAPI.verify);
@@ -23,6 +25,9 @@ function PageHeader({ title, button }: Props) {
     <>
       <Row css={container} align="middle" justify="space-between">
         <Col css={leftContnetStyled}>
+          {onClickBefore && (
+            <ArrowLeftOutlined css={icon} onClick={onClickBefore} />
+          )}
           <TurtleText css={textStyled}>{title}</TurtleText>
           {button}
         </Col>
@@ -68,11 +73,14 @@ const rightContnetStyled = css`
   align-items: center;
 `;
 
-const textStyled = css({
-  fontSize: 24,
-  fontWeight: 700,
+const textStyled = css`
+  font-size: 24px;
+  font-weight: 700;
+`;
 
-  cursor: 'pointer',
-});
+const icon = css`
+  font-size: 28px;
+  margin-right: 8px;
+`;
 
 export default PageHeader;

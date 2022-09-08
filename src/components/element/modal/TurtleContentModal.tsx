@@ -72,8 +72,9 @@ const modalHeader = css`
 `;
 
 const modalContent = css`
-  padding: 0px 32px 40px 32px;
+  padding: 0px 32px 20px 32px;
   overflow-y: auto;
+  margin-bottom: 20px;
 `;
 
 const $title = css`

@@ -12,6 +12,7 @@ import {
   OrderCreatePage,
   OrderHistoryPage,
   ProductCreatePage,
+  ProductHistoryPage,
   SettingPage,
   TutorialPage,
   VendorCreatePage,
@@ -67,6 +68,15 @@ function App() {
             element={
               <Suspense fallback={<></>}>
                 <ProductCreatePage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="product/history"
+            element={
+              <Suspense fallback={<></>}>
+                <ProductHistoryPage />
               </Suspense>
             }
           />
