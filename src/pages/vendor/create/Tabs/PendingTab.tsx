@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
 import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
-import { vendorCartState, PendingItem } from '@store/vendorCartState';
+import { PendingItem } from '@store/vendorCartState';
 import { Input, Popover, Radio, Space, Switch, Table } from 'antd';
-import { useRecoilState } from 'recoil';
 
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
-import { ReactComponent as MatchingIcon } from '@icons/matching.svg';
+import { TurtleIcon } from '@components/element';
 
 import { Wholesale, VendorAccount } from '@apis/vendorAPI';
 import { css } from '@emotion/react';
 import { TurtleConfirmModal } from '@components/element';
 import TurtleModalInput from '@components/element/input/TurtleModalInput';
+import useVendorCart from '@hooks/useVendorCart';
 
 //TODO: success로 이전했을때 row 컬러 변경
 interface Props {
@@ -19,24 +19,25 @@ interface Props {
 }
 
 function PendingTab({ isLoading }: Props) {
-  const [vendorCartLists, setVendorCartLists] = useRecoilState(vendorCartState);
-  // const vendorCartCounts = useSetRecoilState(vendorCartCountsState);
+  const { cart, setCart } = useVendorCart();
 
   //modal
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContentValue, setModalContentValue] = useState('');
   const [selectedRow, setSelectedRow] = useState<PendingItem>();
+
   const openModal = () => {
     setModalVisible(true);
   };
+
   const closeModal = () => {
     setModalVisible(false);
   };
 
   const handleWholesaleSelecte = (wsStoreId: number, target: PendingItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      pendingList: vendorCartLists.pendingList.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...target,
@@ -50,9 +51,9 @@ function PendingTab({ isLoading }: Props) {
   };
 
   const handleVatIncludedUpdate = (target: PendingItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      pendingList: vendorCartLists.pendingList?.map((vendor) =>
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList?.map((vendor) =>
         vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
@@ -67,9 +68,9 @@ function PendingTab({ isLoading }: Props) {
     newVendorName: string,
     target: PendingItem,
   ) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      pendingList: vendorCartLists.pendingList?.map((vendor) =>
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList?.map((vendor) =>
         vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
@@ -81,9 +82,9 @@ function PendingTab({ isLoading }: Props) {
   };
 
   const handleMemoUpdate = (newMemo: string, target: PendingItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      pendingList: vendorCartLists.pendingList?.map((vendor) =>
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList?.map((vendor) =>
         vendor.vendor_code === target.vendor_code
           ? {
               ...vendor,
@@ -98,64 +99,53 @@ function PendingTab({ isLoading }: Props) {
     account: VendorAccount,
     target: PendingItem,
   ) => {
-    const newItem = {
-      ...vendorCartLists.pendingList.find(
-        (item) => item.vendor_code === target.vendor_code,
-      )!,
-      selectedWsStoreInfo: {
-        ...target.selectedWsStoreInfo!,
-        selectedAccount: account,
-      },
-    };
+    // const newItem = {
+    //   ...cart.pendingList.find(
+    //     (item) => item.vendor_code === target.vendor_code,
+    //   )!,
+    //   selectedWsStoreInfo: {
+    //     ...target.selectedWsStoreInfo!,
+    //     selectedAccount: account,
+    //   },
+    // };
 
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      pendingList: vendorCartLists.pendingList.filter(
-        (item) => item.vendor_code === target.vendor_code,
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList.map((item) =>
+        item.vendor_code === target.vendor_code
+          ? {
+              ...target,
+              selectedWsStoreInfo: {
+                ...target.selectedWsStoreInfo!,
+                selectedAccount: account,
+              },
+              isMatching: true,
+            }
+          : item,
       ),
     }));
 
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: [
+    return;
+  };
+
+  const handleItemSwitch = (target: PendingItem) => {
+    const a = {
+      ...target,
+      ws_store_info: [
         {
-          ...newItem,
-          ws_store_info: [
-            {
-              ...newItem.selectedWsStoreInfo,
-              vendor_account: [newItem.selectedWsStoreInfo.selectedAccount],
-              vendor_address: newItem.selectedWsStoreInfo.address,
-              vendor_name: newItem.selectedWsStoreInfo.name,
-            },
-          ],
+          ...target.selectedWsStoreInfo!,
+          store_account: [target.selectedWsStoreInfo?.selectedAccount!],
         },
-
-        ...vendorCartLists.successList,
       ],
+    };
+
+    setCart((cart) => ({
+      ...cart,
+      successList: [a, ...cart.successList],
+      pendingList: cart.pendingList.filter(
+        (item) => item.vendor_code !== target.vendor_code,
+      ),
     }));
-
-    // setVendorCartLists((vendorCartLists) => ({
-    //   ...vendorCartLists,
-    //   successList: [
-    //     ...vendorCartLists.successList,
-    //     {
-    //       id: newItem.id,
-    //       name: newItem.name,
-    //       phone: "",
-    //       address: newItem.selectedWsStoreInfo.address,
-    //       store_account: newItem.selectedWsStoreInfo.selectedAccount,
-    //       store_phone: newItem.store_phone[0],
-    //       // company: VendorCompany[];
-    //       building: newItem.selectedWsStoreInfo.building,
-    //       floor: newItem.selectedWsStoreInfo.floor,
-    //       col: newItem.selectedWsStoreInfo.col,
-    //       loc: newItem.selectedWsStoreInfo.loc,
-    //       ext: newItem.selectedWsStoreInfo.ext,
-    //       ws_store_info : newItem.ws_store_info
-    //     },
-    //   ],
-    // }));
-
     return;
   };
 
@@ -194,7 +184,7 @@ function PendingTab({ isLoading }: Props) {
       <Table
         size="small"
         loading={isLoading}
-        dataSource={vendorCartLists.pendingList}
+        dataSource={cart.pendingList}
         rowKey={(record) => record.vendor_code}
         pagination={{
           position: ['bottomCenter'],
@@ -206,7 +196,15 @@ function PendingTab({ isLoading }: Props) {
             title: '매칭',
             width: 50,
             ellipsis: true,
-            render: (_) => <MatchingIcon />,
+            render: (_, record) => {
+              if (record.isMatching) {
+                handleItemSwitch(record);
+
+                return <TurtleIcon name="matching" />;
+              }
+
+              return <TurtleIcon name="misMatching" />;
+            },
           },
           {
             title: '거래처코드',
@@ -224,10 +222,10 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             title: '거래처명',
-            width: 340,
+            width: 250,
             ellipsis: true,
             render: (_, record) => {
-              if (record?.selectedWsStoreInfo) {
+              if (record.ws_store_info.length === 1) {
                 return record.selectedWsStoreInfo?.name;
               }
 
@@ -281,7 +279,7 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             title: '거래처 주소',
-            width: 200,
+            width: 150,
             ellipsis: true,
             render: (_, record) => {
               if (record?.selectedWsStoreInfo) {
@@ -310,11 +308,10 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             title: '계좌정보',
-            width: 200,
+            width: 300,
             ellipsis: true,
             render: (_, record) => {
               if (!record?.selectedWsStoreInfo)
-                // 선택된 매장이 없을때
                 return (
                   <span
                     css={css`
@@ -325,27 +322,19 @@ function PendingTab({ isLoading }: Props) {
                   </span>
                 );
 
-              if (record.selectedWsStoreInfo?.store_account.length === 1) {
-                handleAccountSelecte(
-                  record.selectedWsStoreInfo?.store_account[0],
-                  record,
-                );
-
-                return;
-              }
-
               const {
                 bank: defaultBank,
                 account_number: defaultAccountNumber,
                 account_holder: defaultAccountHolder,
               } = record.selectedWsStoreInfo?.store_account[0];
 
-              const {
-                id: selectedAccountId,
-                bank: selectedBank,
-                account_number: selectedAccountNumber,
-                account_holder: selectedAccountHolder,
-              } = record.selectedWsStoreInfo.selectedAccount!;
+              if (record.selectedWsStoreInfo?.store_account.length === 1) {
+                return (
+                  <span>
+                    {defaultBank} {defaultAccountNumber} {defaultAccountHolder}
+                  </span>
+                );
+              }
 
               return (
                 <TurtleBadge
@@ -354,7 +343,9 @@ function PendingTab({ isLoading }: Props) {
                 >
                   <Popover
                     content={
-                      <Radio.Group value={selectedAccountId}>
+                      <Radio.Group
+                        value={record.selectedWsStoreInfo.selectedAccount?.id}
+                      >
                         <Space direction="vertical">
                           {record.selectedWsStoreInfo?.store_account.map(
                             (account) => (
@@ -381,9 +372,12 @@ function PendingTab({ isLoading }: Props) {
                           : '#a1a2a6'};
                       `}
                     >
-                      {selectedBank ?? defaultBank}{' '}
-                      {selectedAccountNumber ?? defaultAccountNumber}{' '}
-                      {selectedAccountHolder ?? defaultAccountHolder}
+                      {record.selectedWsStoreInfo.selectedAccount?.bank ??
+                        defaultBank}{' '}
+                      {record.selectedWsStoreInfo.selectedAccount
+                        ?.account_number ?? defaultAccountNumber}{' '}
+                      {record.selectedWsStoreInfo.selectedAccount
+                        ?.account_holder ?? defaultAccountHolder}
                     </span>
                   </Popover>
                 </TurtleBadge>
@@ -393,7 +387,7 @@ function PendingTab({ isLoading }: Props) {
 
           {
             ellipsis: true,
-            title: t('table.column.vatIncluded'),
+            title: t('table.vatIncluded'),
             width: 90,
             align: 'center',
             render: (_, record) => {
@@ -439,10 +433,10 @@ function PendingTab({ isLoading }: Props) {
                     setSelectedRow(record);
                     openModal();
                   }}
-                  css={css`
-                    cursor: pointer;
-                    stroke: ${record.memo === '' ? '#A1A2A6' : '#2ab8c1'}; ;
-                  `}
+                  css={{
+                    cursor: 'pointer',
+                    stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
+                  }}
                 />
               );
             },

@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
-import { TurtleText, TurtleTooltip } from '@components/element';
-import {
-  vendorCartCountsState,
-  vendorCartState,
-  SuccessItem,
-} from '@store/vendorCartState';
+import { TurtleIcon, TurtleText, TurtleTooltip } from '@components/element';
+import { SuccessItem } from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
@@ -15,19 +10,20 @@ import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 import { css } from '@emotion/react';
 import { TurtleConfirmModal } from '@components/element';
 import TurtleModalInput from '@components/element/input/TurtleModalInput';
+import useVendorCart from '@hooks/useVendorCart';
 
 interface Props {
   isLoading: boolean;
 }
 
 function SuccessTab({ isLoading }: Props) {
-  const [vendorCartLists, setVendorCartLists] = useRecoilState(vendorCartState);
-  const vendorCartCounts = useSetRecoilState(vendorCartCountsState);
+  const { cart, setCart } = useVendorCart();
 
   //modal
   const [modalVisible, setModalVisible] = useState(false);
   const [modalInputValue, setModalInputValue] = useState('');
   const [selectedRow, setSelectedRow] = useState<SuccessItem>();
+
   const openModal = () => {
     setModalVisible(true);
   };
@@ -36,9 +32,9 @@ function SuccessTab({ isLoading }: Props) {
   };
 
   const handleVatIncludedUpdate = (target: SuccessItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...item,
@@ -53,9 +49,9 @@ function SuccessTab({ isLoading }: Props) {
     newVendorName: string,
     target: SuccessItem,
   ) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...item,
@@ -67,23 +63,18 @@ function SuccessTab({ isLoading }: Props) {
   };
 
   const handleVendorRemove = (targetVendorCode: string) => {
-    setVendorCartLists(() => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList.filter(
+    setCart(() => ({
+      ...cart,
+      successList: cart.successList.filter(
         (item) => item.vendor_code === targetVendorCode,
       ),
-    }));
-
-    vendorCartCounts((counts) => ({
-      ...counts,
-      success_count: counts.success_count - 1,
     }));
   };
 
   const handleMemoUpdate = (newMemo: string, target: SuccessItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...item,
@@ -129,13 +120,20 @@ function SuccessTab({ isLoading }: Props) {
       <Table
         size="small"
         loading={isLoading}
-        dataSource={vendorCartLists.successList}
+        dataSource={cart.successList}
         rowKey={(record) => record.vendor_code}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
         scroll={{ y: 'auto', x: 1400 }}
+        onRow={(record) => {
+          return {
+            style: {
+              background: record.match_type !== 'success' ? 'red' : '',
+            },
+          };
+        }}
         columns={[
           {
             ellipsis: true,
@@ -222,30 +220,27 @@ function SuccessTab({ isLoading }: Props) {
             align: 'center',
             width: '6%',
             title: '메모',
-            render: (_, record) => {
-              return (
-                <MemoIcon
-                  onClick={() => {
-                    setSelectedRow(record);
-                    openModal();
-                  }}
-                  css={css`
-                    cursor: pointer;
-                    stroke: ${record.memo === '' ? '#A1A2A6' : '#2ab8c1'}; ;
-                  `}
-                />
-              );
-            },
+            render: (_, record) => (
+              <TurtleIcon
+                name="memo"
+                onClick={() => {
+                  setSelectedRow(record);
+                  openModal();
+                }}
+                css={{
+                  cursor: 'pointer',
+                  stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
+                }}
+              />
+            ),
           },
           {
             ellipsis: true,
             align: 'center',
             width: '6%',
             render: (_, record) => (
-              <RemoveIcon
-                css={css`
-                  cursor: pointer;
-                `}
+              <TurtleIcon
+                name="delete"
                 onClick={() => {
                   handleVendorRemove(record.vendor_code);
                 }}
