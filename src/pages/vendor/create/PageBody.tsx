@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { storeState } from '@store/storeState';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import vendorAPI from '@apis/vendorAPI';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -22,18 +21,21 @@ import {
 } from '@components/element';
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
-import { vendorCartCountsState, vendorCartState } from '@store/vendorCartState';
+import { vendorCartCountsState } from '@store/vendorCartState';
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
 import { InventoryModal } from '@components/combine';
+import useStore from '@hooks/useStore';
+import useVendorCart from '@hooks/useVendorCart';
 
 function PageBody() {
   const navigate = useNavigate();
 
-  const store = useRecoilValue(storeState);
+  const { store } = useStore();
+  const { cart, ready } = useVendorCart();
 
-  const [parsedVendorLists, setParsedVendorLists] =
-    useRecoilState(vendorCartState);
+  // const [parsedVendorLists, setParsedVendorLists] =
+  //   useRecoilState(vendorCartState);
   const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
     vendorCartCountsState,
   );
@@ -69,34 +71,7 @@ function PageBody() {
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
       );
 
-      setParsedVendorLists({
-        successList: data.data.success.map((vendor) => ({
-          ...vendor,
-          isVatIncluded: false,
-          useVendorName: vendor.name,
-          memo: '',
-        })),
-
-        pendingList: data.data.suggest.map((vendor) => ({
-          ...vendor,
-          isMatching: false,
-          isVatIncluded: false,
-          useVendorName: vendor.name,
-          memo: '',
-          selectedWsStoreInfo:
-            vendor.ws_store_info.length === 1
-              ? {
-                  ...vendor.ws_store_info[0],
-                  selectedAccount:
-                    vendor.ws_store_info[0].store_account.length === 1
-                      ? vendor.ws_store_info[0].store_account[0]
-                      : undefined,
-                }
-              : undefined,
-        })),
-
-        failList: data.data.fail,
-      });
+      ready(data);
 
       setParsedVendorCounts(data.data.count);
     },
@@ -158,7 +133,7 @@ function PageBody() {
         okText="네"
         onOk={() => {
           vendorCreateMutation.mutate(
-            parsedVendorLists.successList.map((vendor) => ({
+            cart.successList.map((vendor) => ({
               rt_store_id: store.id ?? -1,
               vendor_code: vendor.vendor_code,
               vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
