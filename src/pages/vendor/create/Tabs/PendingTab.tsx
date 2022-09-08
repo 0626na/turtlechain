@@ -95,6 +95,20 @@ function PendingTab({ isLoading }: Props) {
     }));
   };
 
+  const handleMatchingUpdate = (target: PendingItem) => {
+    setCart((cart) => ({
+      ...cart,
+      pendingList: cart.pendingList.map((item) =>
+        item.vendor_code === target.vendor_code
+          ? {
+              ...target,
+              isMatching: true,
+            }
+          : item,
+      ),
+    }));
+  };
+
   const handleAccountSelecte = (
     account: VendorAccount,
     target: PendingItem,
@@ -109,11 +123,12 @@ function PendingTab({ isLoading }: Props) {
                 ...target.selectedWsStoreInfo!,
                 selectedAccount: account,
               },
-              isMatching: true,
             }
           : item,
       ),
     }));
+
+    handleMatchingUpdate(target);
 
     return;
   };
@@ -321,6 +336,7 @@ function PendingTab({ isLoading }: Props) {
               } = record.selectedWsStoreInfo?.store_account[0];
 
               if (record.selectedWsStoreInfo?.store_account.length === 1) {
+                handleMatchingUpdate(record);
                 return (
                   <span>
                     {defaultBank} {defaultAccountNumber} {defaultAccountHolder}
