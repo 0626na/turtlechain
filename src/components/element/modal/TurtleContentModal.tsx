@@ -1,7 +1,7 @@
 import React from 'react';
-import { Col, Row } from 'antd';
-import { ReactComponent as ModalCloseIcon } from '@icons/modalClose.svg';
+
 import { css } from '@emotion/react';
+import TurtleIcon from '@components/element/TurtleIcon';
 interface Props {
   visible: boolean;
   title: string;
@@ -19,26 +19,14 @@ function TurtleContentModal({
     <>
       {visible && (
         <div css={modalMask}>
-          <div css={modalHeader}>
-            <Row justify="space-between">
-              <Col>
-                <h1 css={$title}>{title}</h1>
-              </Col>
-              <Col>
-                <ModalCloseIcon
-                  style={{ cursor: 'pointer' }}
-                  onClick={onClose}
-                />
-              </Col>
-            </Row>
-            <Row
-              css={css`
-                overflow: auto;
-                padding-right: 16px;
-              `}
-            >
-              {children}
-            </Row>
+          <div css={modalContainer}>
+            <div css={modalHeader}>
+              <h1 css={$title}>{title}</h1>
+              <div>
+                <TurtleIcon name="modalClose" onClick={onClose} />
+              </div>
+            </div>
+            <div css={modalContent}>{children}</div>
           </div>
         </div>
       )}
@@ -57,11 +45,10 @@ const modalMask = css`
   background: rgba(0, 0, 0, 0.45);
 `;
 
-const modalHeader = css`
+const modalContainer = css`
   width: 600px;
-  max-height: 80vh;
-
-  position: relative;
+  max-height: 90vh;
+  position: absolute;
   top: 50%;
   left: 50%;
   z-index: 1;
@@ -71,31 +58,29 @@ const modalHeader = css`
   display: flex;
   flex-direction: column;
 
-  padding: 32px;
-
-  background: #ffffff;
+  background: #fff;
   box-shadow: 0px 8px 28px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
 `;
 
-const $title = css`
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 1;
-  color: #242934;
+const modalHeader = css`
+  height: 24px;
+  margin: 32px 32px 40px 32px;
+
+  display: flex;
+  justify-content: space-between;
 `;
 
-// const Description = styled.p`
-//   margin-top: 16px;
+const modalContent = css`
+  padding: 0px 32px 40px 32px;
+  overflow-y: auto;
+`;
 
-//   color: #5b5d63;
-//   line-height: 1.429;
-// `;
+const $title = css`
+  font-weight: 700;
+  font-size: 24px;
 
-// const Footer = styled.div`
-//   display: flex;
-//   justify-content: end;
-//   margin-top: 28px;
-// `;
+  color: #242934;
+`;
 
 export default TurtleContentModal;
