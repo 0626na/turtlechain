@@ -25,11 +25,11 @@ function PendingTab({ isLoading }: Props) {
   const [modalContentValue, setModalContentValue] = useState('');
   const [selectedRow, setSelectedRow] = useState<PendingItem>();
 
-  const openModal = () => {
+  const openMemoModal = () => {
     setModalVisible(true);
   };
 
-  const closeModal = () => {
+  const closeMemoModal = () => {
     setModalVisible(false);
   };
 
@@ -162,12 +162,12 @@ function PendingTab({ isLoading }: Props) {
         }
         onCancel={() => {
           setModalContentValue('');
-          closeModal();
+          closeMemoModal();
         }}
         onOk={() => {
           handleMemoUpdate(modalContentValue, selectedRow!);
           setModalContentValue('');
-          closeModal();
+          closeMemoModal();
         }}
       />
 
@@ -425,7 +425,7 @@ function PendingTab({ isLoading }: Props) {
                 <MemoIcon
                   onClick={() => {
                     setSelectedRow(record);
-                    openModal();
+                    openMemoModal();
                   }}
                   css={{
                     cursor: 'pointer',
