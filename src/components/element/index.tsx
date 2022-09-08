@@ -25,6 +25,7 @@ import TurtleTooltip from './TurtleTooltip';
 import TurtleBadge from './TurtleBadge';
 import TurtleUpload from './TurtleUpload';
 import TurtleTabs from './TurtleTabs';
+import TurtleIcon from './TurtleIcon';
 
 export {
   //buttons
@@ -58,4 +59,5 @@ export {
   TurtleUpload,
   TurtleBadge,
   TurtleTabs,
+  TurtleIcon,
 };
