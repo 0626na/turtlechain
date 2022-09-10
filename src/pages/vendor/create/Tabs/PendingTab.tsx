@@ -9,10 +9,10 @@ import { TurtleIcon } from '@components/element';
 
 import { Wholesale, VendorAccount } from '@apis/vendorAPI';
 import { css } from '@emotion/react';
-import { TurtleConfirmModal } from '@components/element';
-import TurtleModalInput from '@components/element/input/TurtleModalInput';
+
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
+import InputModal from '@components/combine/modal/InputModal';
 
 interface Props {
   isLoading: boolean;
@@ -23,7 +23,6 @@ function PendingTab({ isLoading }: Props) {
 
   //modal
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
-  const [modalContentValue, setModalContentValue] = useState('');
   const [selectedRow, setSelectedRow] = useState<PendingItem>();
 
   const findWsStore = (wsStoreList: Wholesale[], wsStoreId: number) => {
@@ -154,33 +153,22 @@ function PendingTab({ isLoading }: Props) {
 
   return (
     <>
-      <TurtleConfirmModal
+      {/*
+       * 메모 수정 모달
+       */}
+      <InputModal
         visible={memoModalVisible}
+        onCancel={closeMemoModal}
+        defaultValue={selectedRow?.memo}
+        onOk={(value) => {
+          handleMemoUpdate(value, selectedRow!);
+          closeMemoModal();
+        }}
         title="메모"
         description={[
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요 👀',
+          '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        children={
-          <div css={ModalInputContainer}>
-            <TurtleModalInput
-              placeholder="ex) 영수증 이중으로 확인 또 확인!"
-              defaultValue={selectedRow?.memo}
-              onChange={(e) => {
-                setModalContentValue(e.currentTarget.value);
-              }}
-            />
-          </div>
-        }
-        onCancel={() => {
-          setModalContentValue('');
-          closeMemoModal();
-        }}
-        onOk={() => {
-          handleMemoUpdate(modalContentValue, selectedRow!);
-          setModalContentValue('');
-          closeMemoModal();
-        }}
       />
 
       <Table
@@ -454,10 +442,6 @@ const $switch = css`
   &.ant-switch-checked {
     background-color: #1a66f9;
   }
-`;
-
-const ModalInputContainer = css`
-  margin-top: 24px;
 `;
 
 export default PendingTab;
