@@ -12,6 +12,7 @@ import { css } from '@emotion/react';
 import { TurtleConfirmModal } from '@components/element';
 import TurtleModalInput from '@components/element/input/TurtleModalInput';
 import useVendorCart from '@hooks/useVendorCart';
+import useModal from '@hooks/useModal';
 
 interface Props {
   isLoading: boolean;
@@ -21,17 +22,9 @@ function PendingTab({ isLoading }: Props) {
   const { cart, setCart } = useVendorCart();
 
   //modal
-  const [modalVisible, setModalVisible] = useState(false);
+  const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [modalContentValue, setModalContentValue] = useState('');
   const [selectedRow, setSelectedRow] = useState<PendingItem>();
-
-  const openMemoModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeMemoModal = () => {
-    setModalVisible(false);
-  };
 
   const findWsStore = (wsStoreList: Wholesale[], wsStoreId: number) => {
     let result = wsStoreList.find(
@@ -162,7 +155,7 @@ function PendingTab({ isLoading }: Props) {
   return (
     <>
       <TurtleConfirmModal
-        visible={modalVisible}
+        visible={memoModalVisible}
         title="메모"
         description={[
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
