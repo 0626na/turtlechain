@@ -5,9 +5,10 @@ import { SuccessItem } from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
 
 import { css } from '@emotion/react';
-import { TurtleConfirmModal } from '@components/element';
-import TurtleModalInput from '@components/element/input/TurtleModalInput';
+
 import useVendorCart from '@hooks/useVendorCart';
+import InputModal from '@components/combine/modal/InputModal';
+import useModal from '@hooks/useModal';
 
 interface Props {
   isLoading: boolean;
@@ -16,17 +17,8 @@ interface Props {
 function SuccessTab({ isLoading }: Props) {
   const { cart, setCart } = useVendorCart();
 
-  //modal
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalInputValue, setModalInputValue] = useState('');
+  const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [selectedRow, setSelectedRow] = useState<SuccessItem>();
-
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   const handleVatIncludedUpdate = (target: SuccessItem) => {
     setCart((cart) => ({
@@ -94,34 +86,22 @@ function SuccessTab({ isLoading }: Props) {
 
   return (
     <>
-      <TurtleConfirmModal
-        visible={modalVisible}
-        title={'메모'}
+      {/*
+       * 메모 수정 모달
+       */}
+      <InputModal
+        visible={memoModalVisible}
+        onCancel={closeMemoModal}
+        defaultValue={selectedRow?.memo}
+        onOk={(value) => {
+          handleMemoUpdate(value, selectedRow!);
+          closeMemoModal();
+        }}
+        title="메모"
         description={[
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요 👀',
+          '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        children={
-          <div css={ModalInputContainer}>
-            <TurtleModalInput
-              placeholder="ex) 영수증 이중으로 확인 또 확인!"
-              defaultValue={selectedRow?.memo}
-              onChange={(e) => {
-                const value = e.currentTarget.value;
-                setModalInputValue(value);
-              }}
-            />
-          </div>
-        }
-        onCancel={() => {
-          setModalInputValue('');
-          closeModal();
-        }}
-        onOk={() => {
-          handleMemoUpdate(modalInputValue, selectedRow!);
-          setModalInputValue('');
-          closeModal();
-        }}
       />
 
       <Table
@@ -237,10 +217,10 @@ function SuccessTab({ isLoading }: Props) {
                 name="memo"
                 onClick={() => {
                   setSelectedRow(record);
-                  openModal();
+                  openMemoModal();
                 }}
                 css={{
-                  cursor: 'pointer',
+                  cursoMemor: 'pointer',
                   stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
                 }}
               />
