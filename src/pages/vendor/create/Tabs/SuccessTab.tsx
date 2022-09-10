@@ -254,8 +254,4 @@ const $switch = css`
   }
 `;
 
-const ModalInputContainer = css`
-  margin-top: 24px;
-`;
-
 export default SuccessTab;
