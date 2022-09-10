@@ -29,7 +29,7 @@ import { RangeDateModal } from '@components/combine';
 import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
-import AddSingleProductModal from '@pages/product/create/modals/AddProductModal';
+
 function PageBody() {
   const navigate = useNavigate();
 
@@ -39,9 +39,9 @@ function PageBody() {
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
-  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
+
   // 재고프로그램 연동
-  const vendorInventoryMutation = useMutation(vendorAPI.vendorInventory, {
+  const inventoryMutation = useMutation(vendorAPI.inventory, {
     onError: () => {
       // resetField();
     },
@@ -57,6 +57,14 @@ function PageBody() {
   });
 
   // 엑셀 연동
+  const excelMutation = useMutation(vendorAPI.excel, {
+    onSuccess: (data) => {
+      ready(data);
+      message.info(
+        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+      );
+    },
+  });
 
   // 거래처 등록하기
   const vendorCreateMutation = useMutation(vendorAPI.create, {
@@ -70,7 +78,7 @@ function PageBody() {
     },
   });
 
-  const loading = vendorInventoryMutation.isLoading;
+  const loading = inventoryMutation.isLoading || excelMutation.isLoading;
 
   return (
     <>
@@ -90,7 +98,7 @@ function PageBody() {
         loading={loading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
-          vendorInventoryMutation.mutate({
+          inventoryMutation.mutate({
             rt_store_id: store.id!,
             start_date,
             end_date,
@@ -127,7 +135,7 @@ function PageBody() {
             })),
           );
         }}
-        loading={vendorInventoryMutation.isLoading}
+        loading={inventoryMutation.isLoading}
       />
 
       <PageHeader
@@ -148,7 +156,17 @@ function PageBody() {
             items={[
               {
                 key: '0',
-                label: '엑셀 업로드',
+                label: (
+                  <TurtleUpload
+                    beforeUpload={(file) => {
+                      console.log(file.name);
+                      excelMutation.mutate({
+                        file,
+                        rt_store_id: store.id!,
+                      });
+                    }}
+                  />
+                ),
                 icon: <TurtleIcon name="exel" />,
                 onClick(e) {
                   console.log(e);
@@ -158,9 +176,7 @@ function PageBody() {
                 key: '1',
                 label: '단건추가',
                 icon: <TurtleIcon name="single" />,
-                onClick(e) {
-                  openAddingModal();
-                },
+                onClick(e) {},
               },
             ]}
             triggerButton={<SecondaryButton text="거래처 추가하기" />}
@@ -171,10 +187,10 @@ function PageBody() {
       <PageContent>
         <TurtleTabs>
           <Tabs.TabPane tab={`성공(${cart.successList.length})`} key="success">
-            <SuccessTab isLoading={vendorInventoryMutation.isLoading} />
+            <SuccessTab isLoading={loading} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
-            <PendingTab isLoading={vendorInventoryMutation.isLoading} />
+            <PendingTab isLoading={loading} />
           </Tabs.TabPane>
           {/* <Tabs.TabPane
             tab={`실패(${parsedVendorCounts.fail_count})`}

@@ -1,3 +1,4 @@
+import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 //  엑셀, 연동 결과
@@ -89,7 +90,7 @@ export interface ResponseVendorInventory {
   };
 }
 
-const vendorInventory = async (params: RequestVendorInventory) => {
+const inventory = async (params: RequestVendorInventory) => {
   const url = 'external-api/inventory/vendors';
   const response = await v2Axios.get<ResponseVendorInventory>(url, { params });
 
@@ -97,8 +98,13 @@ const vendorInventory = async (params: RequestVendorInventory) => {
 };
 
 /*
- *  엑셀파일 연동
+ *  엑셀 파싱
  */
+
+export interface RequestExcel {
+  file: RcFile;
+  rt_store_id: number;
+}
 
 export interface ResponseExcel {
   msg: string;
@@ -111,9 +117,14 @@ export interface ResponseExcel {
   };
 }
 
-const excel = async (data: FormData) => {
+const excel = async (data: RequestExcel) => {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseExcel>(url, data, {
+
+  const formData = new FormData();
+  formData.append('files', data.file);
+  formData.append('rt_store_id', data.rt_store_id.toString());
+
+  const response = await v2Axios.post<ResponseExcel>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -269,7 +280,7 @@ const getWholesale = async (query: RequestGetWholesale) => {
 };
 
 const vendorAPI = {
-  vendorInventory,
+  inventory,
   excel,
   get,
   getCode,
