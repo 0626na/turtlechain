@@ -29,6 +29,7 @@ import { RangeDateModal } from '@components/combine';
 import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
+import FailTab from './tabs/FailTab';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -192,10 +193,9 @@ function PageBody() {
           <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
             <PendingTab isLoading={loading} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={`실패(${parsedVendorCounts.fail_count})`}
-            key="fail"
-          ></Tabs.TabPane> */}
+          <Tabs.TabPane tab={`실패(${cart.failList.length})`} key="fail">
+            <FailTab isLoading={loading} />
+          </Tabs.TabPane>
         </TurtleTabs>
       </PageContent>
 
