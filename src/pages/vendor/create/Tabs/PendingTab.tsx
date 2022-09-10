@@ -117,7 +117,7 @@ function PendingTab({ isLoading }: Props) {
     return;
   };
 
-  const convertItem = (target: PendingItem) => {
+  const convertToSuccessItem = (target: PendingItem) => {
     return {
       ...target,
       ws_store_info: [
@@ -129,10 +129,10 @@ function PendingTab({ isLoading }: Props) {
     };
   };
 
-  const pendingToSuccess = (target: PendingItem) => {
+  const passingToSuccessTab = (target: PendingItem) => {
     setCart((cart) => ({
       ...cart,
-      successList: [convertItem(target), ...cart.successList],
+      successList: [convertToSuccessItem(target), ...cart.successList],
       pendingList: cart.pendingList.filter(
         (item) => item.vendor_code !== target.vendor_code,
       ),
@@ -188,7 +188,7 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             render: (_, record) => {
               if (record.isMatching) {
-                pendingToSuccess(record);
+                passingToSuccessTab(record);
                 message.success('성공탭으로 이동');
                 return <TurtleIcon name="matching" />;
               }
