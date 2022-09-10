@@ -56,7 +56,9 @@
     "imageUrl": "이미지 URL",
     "price": "가격",
     "memo": "메모",
-    "mobile": "휴대전화번호"
+    "mobile": "휴대전화번호",
+    "retailerStoreInput": "쇼핑몰 입력값",
+    "matching": "매칭"
   },
 
   "button": {

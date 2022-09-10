@@ -117,15 +117,15 @@ function SuccessTab({ isLoading }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: '8%',
-            title: '거래처 코드',
+            width: 85,
+            title: t('table.vendorCode'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
-            width: '15%',
-            title: '쇼핑몰 입력 값',
+            width: 200,
+            title: t('table.retailerStoreInput'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               return `${record.name}  ${record.address}`;
@@ -133,14 +133,22 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            title: '거래처 주소',
+            width: 250,
+            title: t('table.vendorName'),
+            onCell: (record) => handleColumnHighlight(record),
+            render: (_, record) => record.ws_store_info[0]?.name,
+          },
+          {
+            ellipsis: true,
+            width: 150,
+            title: t('table.vendorAddress'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => record.ws_store_info[0]?.address,
           },
           {
             ellipsis: true,
-            title: '휴대번호',
-            width: '10%',
+            width: 130,
+            title: t('table.mobile'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) =>
               record.ws_store_info[0]?.store_phone[0]?.phone
@@ -149,7 +157,8 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            title: '계좌정보',
+            width: 300,
+            title: t('table.accountInfo'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               const {
@@ -162,8 +171,9 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 100,
+            title: t('table.vatIncluded'),
             align: 'center',
-            title: t('table.column.vatIncluded'),
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               return (
@@ -177,20 +187,17 @@ function SuccessTab({ isLoading }: Props) {
               );
             },
           },
+
           {
             ellipsis: true,
-            title: '추천 거래처명',
-            onCell: (record) => handleColumnHighlight(record),
-            render: (_, record) => record.ws_store_info[0]?.name,
-          },
-          {
-            ellipsis: true,
+            width: 200,
             title: (
               <>
-                <TurtleText>사용할 거래처명</TurtleText>
+                <TurtleText>{t('table.retailerStoreInput')}</TurtleText>
                 <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
               </>
             ),
+
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
               <Input
@@ -208,9 +215,9 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 50,
+            title: t('table.memo'),
             align: 'center',
-            width: '6%',
-            title: '메모',
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
               <TurtleIcon
@@ -228,8 +235,8 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 30,
             align: 'center',
-            width: '6%',
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
               <TurtleIcon

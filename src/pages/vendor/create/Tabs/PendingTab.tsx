@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { t } from 'i18next';
+import React, { useState } from 'react';
 import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
 import { PendingItem, SelectedWholesale } from '@store/vendorCartState';
 import { Input, message, Popover, Radio, Space, Switch, Table } from 'antd';
@@ -189,9 +189,9 @@ function PendingTab({ isLoading }: Props) {
         scroll={{ y: 'auto', x: 1400 }}
         columns={[
           {
-            title: '매칭',
-            width: 50,
             ellipsis: true,
+            width: 50,
+            title: t('table.matching'),
             render: (_, record) => {
               if (record.isMatching) {
                 passingToSuccessTab(record);
@@ -202,23 +202,23 @@ function PendingTab({ isLoading }: Props) {
             },
           },
           {
-            title: '거래처코드',
-            width: 85,
             ellipsis: true,
+            width: 85,
+            title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
           {
-            title: '쇼핑몰 입력값',
-            width: 200,
             ellipsis: true,
+            width: 200,
+            title: t('table.retailerStoreInput'),
             render: (_, record) => {
               return `${record.name}  ${record.address}`;
             },
           },
           {
-            title: '거래처명',
-            width: 250,
             ellipsis: true,
+            width: 250,
+            title: t('table.vendorName'),
             render: (_, record) => {
               if (record.ws_store_info.length === 1) {
                 return record.selectedWsStoreInfo?.name;
@@ -273,9 +273,9 @@ function PendingTab({ isLoading }: Props) {
             },
           },
           {
-            title: '거래처 주소',
-            width: 150,
             ellipsis: true,
+            title: t('table.vendorAddress'),
+            width: 150,
             render: (_, record) => {
               if (record?.selectedWsStoreInfo) {
                 return record.selectedWsStoreInfo?.address;
@@ -293,18 +293,18 @@ function PendingTab({ isLoading }: Props) {
             },
           },
           {
-            title: '휴대번호',
-            width: 130,
             ellipsis: true,
+            width: 130,
+            title: t('table.mobile'),
             render: (_, record) =>
               record.selectedWsStoreInfo?.store_phone[0]?.phone
                 .replace(/[^0-9]/, '')
                 .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
           },
           {
-            title: '계좌정보',
-            width: 300,
             ellipsis: true,
+            width: 300,
+            title: t('table.accountInfo'),
             render: (_, record) => {
               if (!record?.selectedWsStoreInfo)
                 return (
@@ -382,8 +382,8 @@ function PendingTab({ isLoading }: Props) {
 
           {
             ellipsis: true,
-            title: t('table.vatIncluded'),
             width: 90,
+            title: t('table.vatIncluded'),
             align: 'center',
             render: (_, record) => {
               return (
@@ -399,9 +399,10 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 200,
             title: (
               <>
-                <TurtleText>사용할 거래처명</TurtleText>
+                <TurtleText>{t('table.retailerStoreInput')}</TurtleText>
                 <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
               </>
             ),
@@ -417,9 +418,9 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 30,
+            title: t('table.memo'),
             align: 'center',
-            width: '6%',
-            title: '메모',
             render: (_, record) => {
               return (
                 <MemoIcon

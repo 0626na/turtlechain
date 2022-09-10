@@ -1,9 +1,9 @@
 import React from 'react';
+import { t } from 'i18next';
+import { css } from '@emotion/react';
 
 import { Table } from 'antd';
-
 import useVendorCart from '@hooks/useVendorCart';
-import { css } from '@emotion/react';
 
 interface Props {
   isLoading: boolean;
@@ -28,14 +28,14 @@ function FailTab({ isLoading }: Props) {
           {
             ellipsis: true,
             width: 85,
-            title: '거래처 코드',
+            title: t('table.vendorCode'),
             render: (_, record) =>
               record.vendor_code ?? <span css={fail}>(정보없음)</span>,
           },
           {
             ellipsis: true,
             width: 200,
-            title: '쇼핑몰 입력 값',
+            title: t('table.retailerStoreInput'),
             render: (_, record) => {
               if (!!record.name || !!record.address) {
                 return <span css={fail}>(정보없음)</span>;
@@ -46,19 +46,19 @@ function FailTab({ isLoading }: Props) {
           {
             ellipsis: true,
             width: 150,
-            title: '거래처 주소',
+            title: t('table.vendorAddress'),
             render: (_) => <span css={fail}>(정보없음)</span>,
           },
           {
             ellipsis: true,
             width: 130,
-            title: '휴대번호',
+            title: t('table.mobile'),
             render: (_) => <span css={fail}>(정보없음)</span>,
           },
           {
             ellipsis: true,
             width: 300,
-            title: '계좌정보',
+            title: t('table.accountInfo'),
             render: (_) => <span css={fail}>(정보없음)</span>,
           },
         ]}
