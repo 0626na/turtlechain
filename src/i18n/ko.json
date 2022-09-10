@@ -5,7 +5,8 @@
   },
 
   "vendor": {
-    "create": "거래처등록"
+    "create": "거래처등록",
+    "addSingle": "상품 단건추가"
   },
 
   "product": {
