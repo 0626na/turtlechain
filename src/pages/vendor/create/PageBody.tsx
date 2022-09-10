@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+
 import vendorAPI from '@apis/vendorAPI';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -17,48 +17,29 @@ import {
   TeriaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
+  TurtleIcon,
   TurtleTabs,
+  TurtleUpload,
 } from '@components/element';
-import { ReactComponent as ExelIcon } from '@icons/exel.svg';
-import { ReactComponent as SingleIcon } from '@icons/single.svg';
-import { vendorCartCountsState } from '@store/vendorCartState';
+
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
 import { RangeDateModal } from '@components/combine';
+
 import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
-
+import useModal from '@hooks/useModal';
+import AddSingleProductModal from '@pages/product/create/modals/AddProductModal';
 function PageBody() {
   const navigate = useNavigate();
 
   const { store } = useStore();
   const { cart, ready } = useVendorCart();
 
-  // const [parsedVendorLists, setParsedVendorLists] =
-  //   useRecoilState(vendorCartState);
-  const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
-    vendorCartCountsState,
-  );
-
-  // 모달 제어
-  const [inventoryModalVisible, setInventoryModalVisible] = useState(false);
-  const [confirmModalVisivle, setConfirmModalVisivle] = useState(false);
-  const openInventoryModal = () => {
-    setInventoryModalVisible(true);
-  };
-
-  const closeInventoryModal = () => {
-    setInventoryModalVisible(false);
-  };
-
-  const openConfirmModal = () => {
-    setConfirmModalVisivle(true);
-  };
-
-  const closeConfirmModal = () => {
-    setConfirmModalVisivle(false);
-  };
-
+  const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
+    useModal();
+  const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
+  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
   // 재고프로그램 연동
   const vendorInventoryMutation = useMutation(vendorAPI.vendorInventory, {
     onError: () => {
@@ -72,8 +53,6 @@ function PageBody() {
       );
 
       ready(data);
-
-      setParsedVendorCounts(data.data.count);
     },
   });
 
@@ -91,6 +70,8 @@ function PageBody() {
     },
   });
 
+  const loading = vendorInventoryMutation.isLoading;
+
   return (
     <>
       {/*
@@ -106,7 +87,7 @@ function PageBody() {
           '선택한 기간의 재고 정보를 불러옵니다.',
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
-        loading={vendorInventoryMutation.isLoading}
+        loading={loading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
           vendorInventoryMutation.mutate({
@@ -114,7 +95,6 @@ function PageBody() {
             start_date,
             end_date,
           });
-          closeInventoryModal();
         }}
       />
 
@@ -169,7 +149,7 @@ function PageBody() {
               {
                 key: '0',
                 label: '엑셀 업로드',
-                icon: <ExelIcon />,
+                icon: <TurtleIcon name="exel" />,
                 onClick(e) {
                   console.log(e);
                 },
@@ -177,9 +157,9 @@ function PageBody() {
               {
                 key: '1',
                 label: '단건추가',
-                icon: <SingleIcon />,
+                icon: <TurtleIcon name="single" />,
                 onClick(e) {
-                  console.log(e);
+                  openAddingModal();
                 },
               },
             ]}
