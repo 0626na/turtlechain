@@ -83,10 +83,11 @@ function SuccessTab({ isLoading }: Props) {
   };
 
   const handleColumnHighlight = (target: SuccessItem) => {
+    // 보류에서 넘어온 아이템 색상 변경
     return {
       style: {
         backgroundColor:
-          target.match_type !== 'success' ? 'red' : 'transparent',
+          target.match_type !== 'success' ? ' #DDF3F5' : 'transparent',
       },
     };
   };
@@ -215,6 +216,7 @@ function SuccessTab({ isLoading }: Props) {
               <Input
                 size="small"
                 defaultValue={
+                  //보류에서 이미 수정했다면 useVenderName으로 보여준다.
                   record.useVendorName || record.ws_store_info[0].name
                 }
                 onChange={(e) => {
