@@ -45,17 +45,22 @@ function PendingTab({ isLoading }: Props) {
     wsStoreId: number,
     target: PendingItem,
   ) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList.map((item) =>
-        item.vendor_code === target.vendor_code
-          ? {
-              ...target,
-              selectedWsStoreInfo: findWsStore(target.ws_store_info, wsStoreId),
-            }
-          : item,
-      ),
-    }));
+    const wsStoreInfo = findWsStore(target.ws_store_info, wsStoreId);
+
+    setCart((cart) => {
+      return {
+        ...cart,
+        pendingList: cart.pendingList.map((item) =>
+          item.vendor_code === target.vendor_code
+            ? {
+                ...target,
+                selectedWsStoreInfo: wsStoreInfo,
+                isMatching: wsStoreInfo.selectedAccount ? true : false,
+              }
+            : item,
+        ),
+      };
+    });
   };
 
   const handleVatIncludedUpdate = (target: PendingItem) => {
@@ -113,6 +118,7 @@ function PendingTab({ isLoading }: Props) {
         item.vendor_code === target.vendor_code
           ? {
               ...target,
+              isMatching: true,
               selectedWsStoreInfo: {
                 ...target.selectedWsStoreInfo!,
                 selectedAccount: account,
@@ -187,9 +193,8 @@ function PendingTab({ isLoading }: Props) {
             width: 50,
             ellipsis: true,
             render: (_, record) => {
-              if (record.selectedWsStoreInfo?.selectedAccount) {
+              if (record.isMatching) {
                 passingToSuccessTab(record);
-
                 return <TurtleIcon name="matching" />;
               }
 
@@ -318,13 +323,13 @@ function PendingTab({ isLoading }: Props) {
                 account_holder: defaultAccountHolder,
               } = record.selectedWsStoreInfo?.store_account[0];
 
-              if (record.selectedWsStoreInfo?.store_account.length === 1) {
-                return (
-                  <span>
-                    {defaultBank} {defaultAccountNumber} {defaultAccountHolder}
-                  </span>
-                );
-              }
+              // if (record.selectedWsStoreInfo?.store_account.length === 1) {
+              //   return (
+              //     <span>
+              //       {defaultBank} {defaultAccountNumber} {defaultAccountHolder}
+              //     </span>
+              //   );
+              // }
 
               return (
                 <TurtleBadge
