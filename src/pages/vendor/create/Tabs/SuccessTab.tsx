@@ -55,7 +55,7 @@ function SuccessTab({ isLoading }: Props) {
     setCart(() => ({
       ...cart,
       successList: cart.successList.filter(
-        (item) => item.vendor_code === targetVendorCode,
+        (item) => item.vendor_code !== targetVendorCode,
       ),
     }));
   };
