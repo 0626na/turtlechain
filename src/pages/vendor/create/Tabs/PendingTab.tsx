@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
 import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
-import { PendingItem } from '@store/vendorCartState';
+import { PendingItem, SelectedWholesale } from '@store/vendorCartState';
 import { Input, message, Popover, Radio, Space, Switch, Table } from 'antd';
 
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
@@ -33,16 +33,33 @@ function PendingTab({ isLoading }: Props) {
     setModalVisible(false);
   };
 
-  const handleWholesaleSelecte = (wsStoreId: number, target: PendingItem) => {
+  const findWsStore = (wsStoreList: Wholesale[], wsStoreId: number) => {
+    let result = wsStoreList.find(
+      (wholesale: Wholesale) => wholesale.id === wsStoreId,
+    ) as SelectedWholesale;
+
+    result = {
+      ...result,
+      selectedAccount:
+        result?.store_account.length === 1
+          ? result.store_account[0]
+          : undefined,
+    };
+
+    return result;
+  };
+
+  const handleWholesaleStoreSelecte = (
+    wsStoreId: number,
+    target: PendingItem,
+  ) => {
     setCart((cart) => ({
       ...cart,
       pendingList: cart.pendingList.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
               ...target,
-              selectedWsStoreInfo: target.ws_store_info.find(
-                (wholesale: Wholesale) => wholesale.id === wsStoreId,
-              ),
+              selectedWsStoreInfo: findWsStore(target.ws_store_info, wsStoreId),
             }
           : item,
       ),
@@ -108,7 +125,6 @@ function PendingTab({ isLoading }: Props) {
                 ...target.selectedWsStoreInfo!,
                 selectedAccount: account,
               },
-              isMatching: true,
             }
           : item,
       ),
@@ -130,14 +146,17 @@ function PendingTab({ isLoading }: Props) {
   };
 
   const passingToSuccessTab = (target: PendingItem) => {
-    setCart((cart) => ({
-      ...cart,
-      successList: [convertToSuccessItem(target), ...cart.successList],
-      pendingList: cart.pendingList.filter(
-        (item) => item.vendor_code !== target.vendor_code,
-      ),
-    }));
-    return;
+    setTimeout(() => {
+      setCart((cart) => ({
+        ...cart,
+        successList: [convertToSuccessItem(target), ...cart.successList],
+        pendingList: cart.pendingList.filter(
+          (item) => item.vendor_code !== target.vendor_code,
+        ),
+      }));
+
+      message.success('성공탭으로 이동');
+    }, 500);
   };
 
   return (
@@ -187,9 +206,9 @@ function PendingTab({ isLoading }: Props) {
             width: 50,
             ellipsis: true,
             render: (_, record) => {
-              if (record.isMatching) {
+              if (record.selectedWsStoreInfo?.selectedAccount) {
                 passingToSuccessTab(record);
-                message.success('성공탭으로 이동');
+
                 return <TurtleIcon name="matching" />;
               }
 
@@ -234,7 +253,7 @@ function PendingTab({ isLoading }: Props) {
                                 key={id}
                                 value={id}
                                 onClick={() => {
-                                  handleWholesaleSelecte(id, record);
+                                  handleWholesaleStoreSelecte(id, record);
                                 }}
                               >
                                 <span>{wsName}</span> |
@@ -319,11 +338,6 @@ function PendingTab({ isLoading }: Props) {
               } = record.selectedWsStoreInfo?.store_account[0];
 
               if (record.selectedWsStoreInfo?.store_account.length === 1) {
-                handleAccountSelecte(
-                  record.selectedWsStoreInfo?.store_account[0],
-                  record,
-                );
-
                 return (
                   <span>
                     {defaultBank} {defaultAccountNumber} {defaultAccountHolder}

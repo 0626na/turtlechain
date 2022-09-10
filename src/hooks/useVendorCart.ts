@@ -17,7 +17,6 @@ const useVendorCart = () => {
     const initPendingList = (data: ParsedVendor[]) => {
       return data.map((vendor) => ({
         ...vendor,
-        isMatching: false,
         isVatIncluded: false,
         useVendorName: vendor.name,
         memo: '',
