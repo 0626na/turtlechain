@@ -35,7 +35,7 @@ function PageBody() {
   //리스트내 상품 삭제
   const removeProductMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
-      (closeRemoveModal as () => void)();
+      closeRemoveModal();
       message.success(`상품이 삭제되었습니다`);
       getProductListQuery.refetch();
     },
@@ -45,7 +45,7 @@ function PageBody() {
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: () => {
       message.success('상품 정보가 수정되었습니다');
-      (closeMemoModal as () => void)();
+      closeMemoModal();
       getProductListQuery.refetch();
     },
   });
@@ -72,7 +72,7 @@ function PageBody() {
       <InputModal
         visible={memoModalVisible as boolean}
         loading={loading}
-        onCancel={loading ? () => {} : (closeMemoModal as () => void)}
+        onCancel={loading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
           updateProductQuery.mutate({
@@ -93,9 +93,9 @@ function PageBody() {
         title="정말 삭제할까요?"
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="네"
-        visible={removeModalVisible as boolean}
+        visible={removeModalVisible}
         loading={loading}
-        onCancel={closeRemoveModal as () => void}
+        onCancel={closeRemoveModal}
         onOk={() => {
           removeProductMutation.mutate({
             id: selectedRow?.id ?? -1,
@@ -213,7 +213,7 @@ function PageBody() {
                   css={{ stroke: record.memo ? '#2ab8c1' : '#a1a2a6' }}
                   onClick={() => {
                     selectRow(record);
-                    (openMemoModal as () => void)();
+                    openMemoModal();
                   }}
                 />
               ),
@@ -225,7 +225,7 @@ function PageBody() {
                   name="delete"
                   onClick={() => {
                     selectRow(record);
-                    (openRemoveModal as () => void)();
+                    openRemoveModal();
                   }}
                 />
               ),
