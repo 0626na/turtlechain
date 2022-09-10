@@ -18,7 +18,6 @@ export interface SelectedWholesale extends Wholesale {
 }
 
 export interface PendingItem extends ParsedVendor {
-  isMatching: boolean;
   isVatIncluded: boolean;
   useVendorName: string;
   memo: string;
