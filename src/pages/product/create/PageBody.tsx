@@ -75,7 +75,7 @@ function PageBody() {
        */}
       <RangeDateModal
         inThreeMonth
-        visible={inventoryModalVisible as boolean}
+        visible={inventoryModalVisible}
         title="재고프로그램 연동"
         description={[
           '선택한 기간의 재고 정보를 불러옵니다.',
