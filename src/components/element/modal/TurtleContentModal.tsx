@@ -46,7 +46,7 @@ const modalMask = css`
 `;
 
 const modalContainer = css`
-  width: 600px;
+  width: 592px;
   max-height: 90vh;
   position: absolute;
   top: 50%;
@@ -72,7 +72,7 @@ const modalHeader = css`
 `;
 
 const modalContent = css`
-  padding: 0px 32px 20px 32px;
+  padding: 0px 40px 12px 40px;
   overflow-y: auto;
   margin-bottom: 20px;
 `;
@@ -80,7 +80,7 @@ const modalContent = css`
 const $title = css`
   font-weight: 700;
   font-size: 24px;
-
+  line-height: 1;
   color: #242934;
 `;
 
