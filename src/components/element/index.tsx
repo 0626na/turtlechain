@@ -13,7 +13,7 @@ import TurtlePrimaryRangePicker from './rangePicker/TurtlePrimaryRangePicker';
 import TurtleSecondaryRangePicker from './rangePicker/TurtleSecondaryRangePicker';
 
 import TurtleDropdown from './TurtleDropdown';
-import TurtleSelect from './TurtleSelect';
+import TurtleSearchSelect from './select/TurtleSearchSelect';
 import TurtleTableTitle from './TurtleTableTitle';
 import TurtleText from './TurtleText';
 import TurtleImg from './TurtleImg';
@@ -26,6 +26,7 @@ import TurtleBadge from './TurtleBadge';
 import TurtleUpload from './TurtleUpload';
 import TurtleTabs from './TurtleTabs';
 import TurtleIcon from './TurtleIcon';
+import TurtleFormSelect from './select/TurtleFormSelect';
 
 export {
   //buttons
@@ -48,9 +49,11 @@ export {
   //modal
   TurtleConfirmModal,
 
+  //select
+  TurtleSearchSelect,
+  TurtleFormSelect,
   //
   TurtleDropdown,
-  TurtleSelect,
   TurtleTableTitle,
   TurtleText,
   TurtleImg,

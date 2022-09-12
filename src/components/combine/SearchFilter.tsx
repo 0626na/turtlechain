@@ -1,4 +1,4 @@
-import { TurtleSearchInput, TurtleSelect } from '@components/element';
+import { TurtleSearchInput, TurtleSearchSelect } from '@components/element';
 import { Space } from 'antd';
 import { t } from 'i18next';
 
@@ -48,7 +48,7 @@ function NewSearchFilter({
   return (
     <Space>
       {select && (
-        <TurtleSelect
+        <TurtleSearchSelect
           value={searchQuery.type}
           onChange={(value) => {
             setSearchQuery({ ...searchQuery, type: value, page: 1 });
