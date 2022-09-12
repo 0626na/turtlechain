@@ -6,7 +6,8 @@
 
   "vendor": {
     "create": "거래처등록",
-    "addSingle": "거래처 단건추가"
+    "addSingle": "거래처 단건추가",
+    "search": "거래처검색"
   },
 
   "product": {
@@ -66,6 +67,8 @@
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명"
   },
+
+  "wholesaler": {},
 
   "button": {
     "uploadExcel": "엑셀 업로드",
