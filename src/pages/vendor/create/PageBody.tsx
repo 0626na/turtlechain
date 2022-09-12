@@ -30,6 +30,7 @@ import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
+import AddSingleVendorModal from './modals/AddSingleVendorModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ function PageBody() {
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
+  const [addModalVisivle, openAddModal, closeAddModal] = useModal();
 
   // 재고프로그램 연동
   const inventoryMutation = useMutation(vendorAPI.inventory, {
@@ -105,6 +107,15 @@ function PageBody() {
             end_date,
           });
         }}
+      />
+
+      {/*
+       *  단건 추가 모달
+       */}
+
+      <AddSingleVendorModal
+        visible={addModalVisivle}
+        closeModal={closeAddModal}
       />
 
       {/*
@@ -177,7 +188,9 @@ function PageBody() {
                 key: '1',
                 label: '단건추가',
                 icon: <TurtleIcon name="single" />,
-                onClick(e) {},
+                onClick() {
+                  openAddModal();
+                },
               },
             ]}
             triggerButton={<SecondaryButton text="거래처 추가하기" />}
