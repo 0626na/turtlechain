@@ -24,20 +24,15 @@ const GlobalStyle = () => (
       }
 
       /* Table */
+
       .ant-table-title {
-        padding: 0px;
+        padding: 0px !important;
       }
 
       /* form label 왼쪽 정렬 */
       .ant-form-item-label {
         text-align: left;
       }
-
-      /* table header padding 제거 */
-      /* .ant-table-title {
-        padding: 8px 0px !important;
-      }
-      */
 
       /* message 색상 변경 */
       .ant-message {
