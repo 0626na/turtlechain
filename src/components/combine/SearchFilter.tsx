@@ -9,7 +9,7 @@ interface Props {
   vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }
 
-function NewSearchFilter({
+function SearchFilter({
   searchQuery,
   setSearchQuery,
   select = true,
@@ -71,4 +71,4 @@ function NewSearchFilter({
   );
 }
 
-export default NewSearchFilter;
+export default SearchFilter;
