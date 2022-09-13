@@ -84,7 +84,6 @@ function PageBody() {
               setSelectDateModalVisible(false);
             }}
             onClickButton={(date) => {
-              console.log(date);
               setClearingRequestDate(date);
               setSelectDateModalVisible(false);
             }}

@@ -12,13 +12,12 @@ import {
   Typography,
 } from 'antd';
 import { useQuery } from 'react-query';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
   TurtleButton,
   TurtleButtonSub,
   TurtleTableTitle,
 } from '@components/common';
-import { clearingCartState } from '@store/clearingCartState';
 import clearingAPI from '@apis/clearingAPI';
 import { pricePattern } from '@utils/pattern';
 import { storeState } from '@store/storeState';
@@ -42,9 +41,15 @@ function AdjustmentPanel({
   ...props
 }: Props) {
   const store = useRecoilValue(storeState);
-  const [cart, setCart] = useRecoilState(clearingCartState);
 
-  const { reservePaymentAmountTotal, subtractAmountTotal } = useClearingCart();
+  const {
+    cart,
+    reservePaymentAmountTotal,
+    subtractAmountTotal,
+    separate,
+    handleAdjustmentSubtract,
+    fillAllAdjustmentSubtract,
+  } = useClearingCart();
 
   const getStoreClearingQuery = useQuery(
     ['getStoreClearingQuery', store.id!, clearingRequestDate],
@@ -57,76 +62,10 @@ function AdjustmentPanel({
     {
       enabled: activeKey === '1',
       onSuccess: (data) => {
-        let index = 0;
-        setCart({
-          warehousingBalanceList: data.item_list
-            .filter(
-              (item) =>
-                item.warehousing_amount +
-                  item.unpaid_amount +
-                  item.reserve_payment_amount +
-                  item.reserve_subtract_amount >
-                0,
-            )
-            .map((item) => ({
-              ...item,
-              id: index++,
-              type: 'warehousing',
-            })),
-
-          adjustmentSubtractList: data.item_list
-            .filter(
-              (item) =>
-                (item.warehousing_amount + item.unpaid_amount > 0 &&
-                  item.overpaid_amount > 0) ||
-                (item.overpaid_amount > 0 && item.reserve_payment_amount),
-            )
-            .map((item) => ({
-              ...item,
-              id: index++,
-              type: 'adjustment_subtract',
-            })),
-
-          reserveSubtractList: data.item_list
-            .filter((item) => item.reserve_subtract_amount > 0)
-            .map((item) => ({
-              ...item,
-              id: index++,
-              type: 'reserve_subtract',
-            })),
-
-          reservePaymentList: data.item_list
-            .filter((item) => item.reserve_payment_amount > 0)
-            .map((item) => ({
-              ...item,
-              id: index++,
-              type: 'reserve_payment',
-            })),
-        });
+        separate(data.item_list);
       },
     },
   );
-
-  const handlePaymentInputFiilIn = () => {
-    setCart((cart) => ({
-      ...cart,
-      adjustmentSubtractList: cart.adjustmentSubtractList.map((item) => ({
-        ...item,
-        // 사용 가능 금액이 입고 금액보다 크면, 입고금액을 넣어준다.
-        overpaid_payment_amount:
-          item.overpaid_amount >
-          item.warehousing_amount +
-            item.unpaid_amount +
-            item.reserve_payment_amount
-            ? item.warehousing_amount +
-              item.unpaid_amount +
-              item.reserve_payment_amount
-            : item.overpaid_amount,
-      })),
-    }));
-
-    return;
-  };
 
   return (
     <Collapse.Panel
@@ -155,7 +94,7 @@ function AdjustmentPanel({
           ...cart.adjustmentSubtractList,
           ...cart.reserveSubtractList,
         ]}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.id!}
         title={() => (
           <TurtleTableTitle
             label="차감"
@@ -168,7 +107,7 @@ function AdjustmentPanel({
               size="small"
               type="primary"
               onClick={() => {
-                handlePaymentInputFiilIn();
+                fillAllAdjustmentSubtract();
               }}
             >
               전액 입력하기
@@ -185,11 +124,9 @@ function AdjustmentPanel({
           {
             ellipsis: true,
             title: '매입조정 종류',
-            render: (_, record) => {
+            render: (_, record) =>
               // i18
-              if (record.type === 'adjustment_subtract') return '매입 차감';
-              if (record.type === 'reserve_subtract') return '미송 차감';
-            },
+              record.type === 'adjustment_subtract' ? '매입 차감' : '미송 차감',
           },
           {
             ellipsis: true,
@@ -200,25 +137,10 @@ function AdjustmentPanel({
             ellipsis: true,
             align: 'right',
             title: '사용 가능 금액',
-            render: (_, record) => {
-              if (record.type === 'adjustment_subtract') {
-                // 사용 가능 금액이 입고 금액 + 미결제 + 미송결제보다 크면, 입고 금액 + 미결제 + 미송결제을 보여준다.
-                return record.overpaid_amount >
-                  record.warehousing_amount +
-                    record.unpaid_amount +
-                    record.reserve_payment_amount
-                  ? (
-                      record.warehousing_amount +
-                      record.unpaid_amount +
-                      record.reserve_payment_amount
-                    ).toLocaleString()
-                  : record.overpaid_amount.toLocaleString();
-              }
-
-              if (record.type === 'reserve_subtract') {
-                return record.reserve_subtract_amount.toLocaleString();
-              }
-            },
+            render: (_, record) =>
+              record.type === 'adjustment_subtract'
+                ? record.overpaid_amount.toLocaleString()
+                : record.reserve_subtract_amount.toLocaleString(),
           },
           {
             ellipsis: true,
@@ -241,40 +163,25 @@ function AdjustmentPanel({
             ),
             render: (_, record) => (
               <Space>
-                {record.type === 'reserve_subtract' ? (
-                  <InputNumber
-                    size="small"
-                    value={record.reserve_subtract_amount}
-                    disabled={true}
-                  />
-                ) : (
+                {record.type === 'adjustment_subtract' ? (
                   <InputNumber
                     size="small"
                     formatter={(value) => `${value}`.replace(pricePattern, ',')}
                     placeholder="금액 입력"
                     value={record.overpaid_payment_amount}
                     step={1000}
-                    //입력금액중 최고 금액은 입고 금액 + 미송 결제 + 미결제.
-                    max={
-                      record.warehousing_amount +
-                      record.unpaid_amount +
-                      record.reserve_payment_amount
-                    }
+                    max={record.overpaid_amount}
                     min={0}
                     onChange={(value) => {
-                      setCart((cart) => ({
-                        ...cart,
-                        adjustmentSubtractList: cart.adjustmentSubtractList.map(
-                          (item) =>
-                            item.id === record.id
-                              ? {
-                                  ...item,
-                                  overpaid_payment_amount: value,
-                                }
-                              : item,
-                        ),
-                      }));
+                      handleAdjustmentSubtract(record, value);
                     }}
+                  />
+                ) : (
+                  <InputNumber
+                    size="small"
+                    formatter={(value) => `${value}`.replace(pricePattern, ',')}
+                    value={record.reserve_subtract_amount}
+                    disabled={true}
                   />
                 )}
               </Space>
@@ -292,7 +199,7 @@ function AdjustmentPanel({
         pagination={false}
         loading={getStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.id!}
         title={() => (
           <TurtleTableTitle
             label="미송"
