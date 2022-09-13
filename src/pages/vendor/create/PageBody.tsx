@@ -152,7 +152,14 @@ function PageBody() {
 
       <PageHeader
         title="거래처등록"
-        button={<HistoryButton text="거래처 목록" onClick={() => {}} />}
+        button={
+          <HistoryButton
+            text="거래처 목록"
+            onClick={() => {
+              navigate('/vendor/history');
+            }}
+          />
+        }
       />
 
       <PageTitle
