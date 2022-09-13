@@ -1,21 +1,31 @@
+import React from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import { PageHeader } from '@layout/page';
 import PageBody from './PageBody';
+import { PageHeader } from '@layout/page';
+import { HistoryButton } from '@components/element';
+import { useNavigate } from 'react-router-dom';
 
-function ProductCreatePage() {
-  const title = `${t('turtlechain')} - ${t('product.create')}`;
+function ProductCreate() {
+  const navigate = useNavigate();
 
   return (
     <>
-      <Helmet title={title} />
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('product.create')}`} />
       <PageHeader
-        title={t('product.create')}
-        infoList={[t('description.excel type')]}
+        title="상품등록"
+        button={
+          <HistoryButton
+            text="상품목록"
+            onClick={() => {
+              navigate('/product/history');
+            }}
+          />
+        }
       />
       <PageBody />
     </>
   );
 }
 
-export default ProductCreatePage;
+export default ProductCreate;

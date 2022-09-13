@@ -1,18 +1,15 @@
+import React from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import { PageHeader } from '@layout/page';
+
+import { AlertBar } from '@layout/page';
 import PageBody from './PageBody';
 
 function VendorCreatePage() {
-  const title = `${t('turtlechain')} - ${t('vendor.create')}`;
-
   return (
     <>
-      <Helmet title={title} />
-      <PageHeader
-        title={t('vendor.create')}
-        infoList={[t('description.search vendor')]}
-      />
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('helmet.home')}`} />
+      <AlertBar />
       <PageBody />
     </>
   );

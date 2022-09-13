@@ -1,21 +1,5 @@
-import { t } from 'i18next';
-import { Helmet } from 'react-helmet';
-import { PageHeader } from '@layout/page';
-import OrderPreviewList from './OrderPreviewList';
-
-const OrderCreatePage = function () {
-  const title = `${t('turtlechain')} - ${t('order.create')}`;
-
-  return (
-    <>
-      <Helmet title={title} />
-      <PageHeader
-        title={t('order.create')}
-        infoList={[t('description.excel type')]}
-      />
-      <OrderPreviewList />
-    </>
-  );
-};
+function OrderCreatePage() {
+  return <h1>발주생성 페이지 입니다</h1>;
+}
 
 export default OrderCreatePage;

@@ -1,198 +1,299 @@
-import styled from 'styled-components';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { TurtleImg } from '@components/common';
+import StoreSelector from './StoreSelector';
 
-interface Props {
-  collapsed: boolean;
-}
+import { TurtleImg } from '@components/element';
 
-function Sider({ collapsed }: Props) {
+import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
+import { ReactComponent as OrderIcon } from '@icons/order.svg';
+import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
+import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
+import { ReactComponent as SettingIcon } from '@icons/setting.svg';
+import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
+import { css } from '@emotion/react';
+
+const pathnames = {
+  vendor: {
+    create: 'vendor/create',
+  },
+
+  product: {
+    create: 'product/create',
+  },
+
+  order: {
+    create: 'order/create',
+    history: 'order/history',
+  },
+
+  warehousing: {
+    create: 'warehousing/create',
+    history: 'warehousing/history',
+    adjustment: 'warehousing/adjustment',
+  },
+
+  clearing: {
+    create: 'clearing/create',
+    history: 'clearing/history',
+    trade: 'clearing/trade',
+  },
+
+  etc: {
+    setting: 'setting',
+    tutorial: 'tutorial',
+  },
+};
+
+/*
+ * mainMenuStyle
+ */
+
+const mainMenuContainerStyle = {
+  order: -1,
+};
+const mainMenuTitleStyle = {
+  fontSize: 12,
+  color: '#a1a2a6',
+};
+
+const mainMenuContentStyle = {
+  fontWeight: 500,
+  width: 236,
+  height: 38,
+
+  marginLeft: 12,
+  paddingLeft: 30,
+  borderRadius: 8,
+};
+
+/*
+ * etcMenuStyle :
+ */
+
+const etcMenuContainerStyle = {
+  order: 1,
+  padding: '16px 0px 20px 12px',
+  borderTop: 'solid #434852 1px', // divider
+};
+const etcMenuTitleStyle = {
+  fontWeight: 500,
+  width: 236,
+  height: 38,
+
+  padding: '0px 8px',
+  borderRadius: 8,
+};
+
+/*
+ * menus
+ */
+
+const menus = [
+  {
+    type: 'group',
+    key: 'mainMenuContainer',
+    style: mainMenuContainerStyle,
+    children: [
+      {
+        key: 'vendor&product',
+        label: '거래처/상품',
+        icon: <VendorProductIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.vendor.create,
+            label: t('vendor.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.product.create,
+            label: t('product.create'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'order',
+        label: t('order.'),
+        icon: <OrderIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.order.create,
+            label: t('order.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.order.history,
+            label: t('order.history'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'warehousing',
+        label: t('warehousing.'),
+        icon: <WarehousingIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.warehousing.create,
+            label: t('warehousing.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.warehousing.history,
+            label: t('warehousing.history'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.warehousing.adjustment,
+            label: t('warehousing.adjustment'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+      {
+        key: 'clearing',
+        label: t('clearing.'),
+        icon: <ClearingIcon />,
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.clearing.create,
+            label: t('clearing.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.clearing.history,
+            label: t('clearing.history'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.clearing.trade,
+            label: t('clearing.trade'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'group',
+    key: 'etcMenuContainer',
+    style: etcMenuContainerStyle,
+    children: [
+      {
+        key: pathnames.etc.setting,
+        label: t('etc.setting'),
+        icon: <SettingIcon />,
+        style: etcMenuTitleStyle,
+      },
+      {
+        key: pathnames.etc.tutorial,
+        label: t('etc.tutorial'),
+        icon: <TutorialIcon />,
+        style: etcMenuTitleStyle,
+      },
+    ],
+  },
+];
+
+function Sider() {
+  // pathname필드, seelectedPath상태는 사이드바에서 메뉴를 직접 클릭하는방식이 아닌,
+  // 페이지내에서 다른 메뉴의 페이지로 이동할때 사용된다.
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-  const [selectedKeys, selectKeys] = useState(pathname);
+  const [selectedPath, setSelectedPath] = useState('');
 
-  // pathname 이용하여 주소 바뀔 시 메뉴 선택
   useEffect(() => {
-    const [, firstKey, secondKey] = pathname.split('/');
-    if (firstKey === 'home') {
-      setOpenKeys([]);
-      selectKeys('/home');
+    const [, firstPath, secondPath] = pathname.split('/');
+    if (firstPath === ('setting' || 'tutorial')) {
+      setSelectedPath(firstPath);
       return;
     }
-    setOpenKeys([`/${firstKey}`]);
-    selectKeys(`/${firstKey}/${secondKey}`);
+
+    setSelectedPath(firstPath + '/' + secondPath);
   }, [pathname]);
 
-  const menus = [
-    {
-      key: '/vendor',
-      title: t('vendor.management'),
-      submenus: [
-        {
-          title: t('vendor.create'),
-          pathname: '/vendor/create',
-        },
-        {
-          title: t('vendor.list'),
-          pathname: '/vendor/list',
-        },
-      ],
-    },
-    {
-      key: '/product',
-      title: t('product.management'),
-      submenus: [
-        {
-          title: t('product.create'),
-          pathname: '/product/create',
-        },
-        {
-          title: t('product.list'),
-          pathname: '/product/list',
-        },
-      ],
-    },
-    {
-      key: '/warehousing',
-      title: t('warehousing.management'),
-      submenus: [
-        {
-          title: t('warehousing.create'),
-          pathname: '/warehousing/create',
-        },
-        {
-          title: t('warehousing.list'),
-          pathname: '/warehousing/list',
-        },
-      ],
-    },
-    {
-      key: '/adjustment',
-      title: t('adjustment.management'),
-      submenus: [
-        {
-          title: t('adjustment.create'),
-          pathname: '/adjustment/create',
-        },
-        {
-          title: t('adjustment.list'),
-          pathname: '/adjustment/list',
-        },
-      ],
-    },
-    {
-      key: '/clearing',
-      title: t('clearing.management'),
-      submenus: [
-        {
-          title: t('clearing.create'),
-          pathname: '/clearing/create',
-        },
-        {
-          title: t('clearing.list'),
-          pathname: '/clearing/list',
-        },
-        {
-          title: t('clearing.balance'),
-          pathname: '/clearing/balance',
-        },
-      ],
-    },
-    {
-      key: '/mistransfer',
-      title: t('mistransfer.management'),
-      submenus: [
-        {
-          title: t('mistransfer.create'),
-          pathname: '/mistransfer/create',
-        },
-        {
-          title: t('mistransfer.list'),
-          pathname: '/mistransfer/list',
-        },
-      ],
-    },
-    {
-      key: '/setting',
-      title: t('setting'),
-      submenus: [
-        {
-          title: t('user.management'),
-          pathname: '/setting/user',
-        },
-        {
-          title: t('company.management'),
-          pathname: '/setting/company',
-        },
-        {
-          title: t('store.management'),
-          pathname: '/setting/store',
-        },
-        // {
-        //   title: t("staff.management"),
-        //   pathname: "/setting/staff",
-        // },
-        // {
-        //   title: t("membership.info"),
-        //   pathname: "/setting/membership",
-        // },
-      ],
-    },
-  ];
-
   return (
-    <StyledSider trigger={null} collapsible collapsed={collapsed}>
+    <Layout.Sider css={siderLayout} width="260" trigger={null}>
+      <div css={siderHeader}>
+        <div
+          css={logoContainer}
+          onClick={() => {
+            navigate('home');
+          }}
+        >
+          <TurtleImg name="logo" />
+        </div>
+
+        <StoreSelector />
+      </div>
+
       <Menu
+        css={menu}
         theme="dark"
         mode="inline"
-        openKeys={openKeys}
-        onOpenChange={(openKeys) => {
-          setOpenKeys([openKeys.pop() ?? '']);
-        }}
-        selectedKeys={[selectedKeys]}
+        inlineIndent={20} // ==== padding-left : 20px;
+        items={menus}
+        defaultOpenKeys={menus.flatMap((group) =>
+          group.children.map((subMenu) => subMenu.key),
+        )}
+        selectedKeys={[selectedPath]}
         onSelect={({ key }) => {
           navigate(key);
         }}
-        style={{ height: '100vh' }}
-      >
-        <Menu.Item
-          key="/home"
-          icon={
-            <div>
-              <TurtleImg name="home" />
-            </div>
-          }
-        >
-          {t('common.home')}
-        </Menu.Item>
-        {menus.map(({ key, title, submenus }) => (
-          <Menu.SubMenu
-            key={key}
-            title={title}
-            icon={
-              <div>
-                <TurtleImg name={key.substring(1)} />
-              </div>
-            }
-          >
-            {submenus?.map((submenu) => (
-              <Menu.Item key={submenu.pathname}>{submenu.title}</Menu.Item>
-            ))}
-          </Menu.SubMenu>
-        ))}
-      </Menu>
-    </StyledSider>
+      />
+    </Layout.Sider>
   );
 }
 
-const StyledSider = styled(Layout.Sider)`
-  position: fixed;
-  top: 60px;
-  overflow: auto;
+const siderLayout = css`
+  & > div {
+    // Sider의 children 선택자.
+    height: 100vh;
+    display: flex;
+
+    flex-direction: column;
+  }
+`;
+
+const siderHeader = css`
+  height: 142px;
+  padding: 0px 12px;
+  margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+`;
+
+const logoContainer = css`
+  height: 82px;
+  margin-left: 14px;
+
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const menu = css`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  // mainMenuTitle 높이 설정.
+  .ant-menu-submenu-title {
+    height: 36px;
+  }
+
+  // group-menu중 antd에서 기본으로 제공하는 title의  패딩값 제거.
+  .ant-menu-item-group-title {
+    padding: 0;
+  }
 `;
 
 export default Sider;

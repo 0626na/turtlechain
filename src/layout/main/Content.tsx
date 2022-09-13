@@ -1,52 +1,26 @@
-import styled from 'styled-components';
+import { css } from '@emotion/react';
+import useLogin from '@hooks/useLogin';
 import { Layout } from 'antd';
-import { useLocation } from 'react-router-dom';
-import { MAIN_HEADER_HEIGHT, MAIN_SIDER_WIDTH } from '@constant/index';
+import { Navigate } from 'react-router-dom';
 
 interface Props {
   children?: React.ReactNode;
-  menuVisible: boolean;
 }
 
-function Content({ children, menuVisible }: Props) {
-  const location = useLocation();
+function Content({ children }: Props) {
+  const { isLogin } = useLogin();
 
-  return (
-    <StyledContent
-      style={{
-        marginLeft: menuVisible ? '80px' : MAIN_SIDER_WIDTH,
-      }}
-    >
-      {location.pathname.includes('/home') ? (
-        <HomeBox>{children}</HomeBox>
-      ) : (
-        <MainBox>{children}</MainBox>
-      )}
-    </StyledContent>
-  );
+  if (!isLogin) {
+    return <Navigate to="/" replace={true} />;
+  }
+
+  return <Layout.Content css={content}>{children}</Layout.Content>;
 }
 
-const StyledContent = styled(Layout.Content)`
-  margin-top: ${MAIN_HEADER_HEIGHT};
-  padding: 20px;
-  min-height: calc(100vh - 60px);
-  overflow: inherit;
-  transition: margin 0.25s;
-`;
-
-const HomeBox = styled.div`
-  & > * {
-    margin: 12px 0px;
-  }
-`;
-
-const MainBox = styled.div`
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.1);
-  & > * {
-    padding: 12px 36px;
-  }
+const content = css`
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default Content;

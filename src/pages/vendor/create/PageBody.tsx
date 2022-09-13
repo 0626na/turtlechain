@@ -1,381 +1,226 @@
-import { t } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import { useRecoilValue } from 'recoil';
-import { Col, Form, Input, message, Popconfirm, Space, Switch } from 'antd';
-import { useForm } from 'antd/es/form/Form';
+import React from 'react';
+
+import vendorAPI from '@apis/vendorAPI';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import vendorAPI, { WholesaleShow } from '@apis/vendorAPI';
+import { message, Tabs } from 'antd';
 import {
-  TurtleButton,
-  TurtleButtonSub,
-  TurtleInput,
-  TurtleSearchInput,
-  TurtleText,
-  TurtleTextArea,
-} from '@components/common';
-import { useStoreExist } from '@hooks/index';
-import { BottomBar, MenuBar } from '@layout/page';
-import { storeState } from '@store/storeState';
-import ConnectModal from './ConnectModal';
-import ExcelModal from './ExcelModal';
-import SearchModal from './SearchModal';
-import AddBucketlistSign from '@components/combine/AddBucketlistSign';
+  PageBottomBar,
+  PageContent,
+  PageHeader,
+  PageTitle,
+} from '@layout/page';
+import {
+  HistoryButton,
+  PrimaryButton,
+  SecondaryButton,
+  TeriaryButton,
+  TurtleConfirmModal,
+  TurtleDropdown,
+  TurtleIcon,
+  TurtleTabs,
+  TurtleUpload,
+} from '@components/element';
+
+import SuccessTab from './tabs/SuccessTab';
+import PendingTab from './tabs/PendingTab';
+import { RangeDateModal } from '@components/combine';
+
+import useStore from '@hooks/useStore';
+import useVendorCart from '@hooks/useVendorCart';
+import useModal from '@hooks/useModal';
+import FailTab from './tabs/FailTab';
+import AddSingleVendorModal from './modals/AddSingleVendorModal';
 
 function PageBody() {
   const navigate = useNavigate();
-  // 쇼핑몰 id
-  const store = useRecoilValue(storeState);
-  const isStoreExist = useStoreExist();
-  const [form] = useForm();
-  // 선택된 거래처
-  const [selectedVendor, selectVendor] = useState<WholesaleShow>();
-  // 재고관리 연동 모달
-  const [connectModalVisible, setConnectModalVisible] = useState(false);
-  // 대량등록 모달
-  const [excelModalVisible, setExcelModalVisible] = useState(false);
-  // 거래처 검색 모달
-  const [searchModalVisible, setSearchModalVisible] = useState(false);
 
-  // 거래처 코드 생성 요청
-  const getCodeQuery = useQuery(
-    'getVendorCode',
-    () =>
-      vendorAPI.getCode({
-        rt_store_id: store.id ?? -1,
-        ws_store_id: selectedVendor?.id ?? -1,
-      }),
-    {
-      enabled: false,
-      onSuccess: (data) => {
-        form.setFieldsValue({
-          ...form.getFieldsValue(),
-          vendor_code: data.data,
-        });
-      },
+  const { store } = useStore();
+  const { cart, ready } = useVendorCart();
+
+  const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
+    useModal();
+  const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
+  const [addModalVisivle, openAddModal, closeAddModal] = useModal();
+
+  // 재고프로그램 연동
+  const inventoryMutation = useMutation(vendorAPI.inventory, {
+    onError: () => {
+      // resetField();
     },
-  );
-
-  // 거래처 생성 요청
-  const createQuery = useMutation(['createVendor'], vendorAPI.create, {
     onSuccess: (data) => {
-      if (data.data.fail_count > 0) {
-        message.error('이미 등록된 거래처입니다.');
-        return;
-      }
-      message.success('성공적으로 등록하였습니다.');
-      form.resetFields();
-      selectVendor(undefined);
-      form.setFieldsValue({
-        rt_store_id: store.id,
-      });
+      closeInventoryModal();
+
+      message.info(
+        `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
+      );
+
+      ready(data);
+    },
+  });
+
+  // 엑셀 연동
+  const excelMutation = useMutation(vendorAPI.excel, {
+    onSuccess: (data) => {
+      ready(data);
+      message.info(
+        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+      );
+    },
+  });
+
+  // 거래처 등록하기
+  const vendorCreateMutation = useMutation(vendorAPI.create, {
+    onError: () => {},
+    onSuccess: (data) => {
+      message.success(
+        `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+      );
+      closeConfirmModal();
       navigate('/vendor/list');
     },
   });
 
-  //쇼핑몰 선택 감지하여 form에 넣어줌
-  useEffect(() => {
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      rt_store_id: store.id,
-      vendor_code: undefined,
-    });
-  }, [store.id, form]);
-
-  // 거래처 검색 modal 닫기
-  const closeSearchModal = () => {
-    setSearchModalVisible(false);
-  };
-
-  // 코드 만들기 Button 클릭
-  const clickCreateVendorCode = () => {
-    if (!isStoreExist()) {
-      return;
-    }
-    if (!selectedVendor || selectedVendor.id === -1) {
-      message.warn('거래처를 선택해 주세요');
-      return;
-    }
-    getCodeQuery.refetch();
-  };
-
-  // 거래처 선택후 폼에 채워넣기
-  const fillVendor = (vendor: WholesaleShow) => {
-    selectVendor(vendor);
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      vendor_code: undefined,
-      vendor_account_id: vendor.store_account[0].id,
-      vendor_phone_id: vendor.store_phone[0].id,
-      ws_store_id: vendor.id,
-      vendor_name: vendor.name,
-      vendor_address: `${vendor.building} ${vendor.floor}${
-        vendor.floor ? '층' : ''
-      } ${vendor.col} ${vendor.loc} ${vendor.ext}`,
-      memo: '',
-      is_vat_included: false,
-      owner: vendor.company[0]?.owner,
-      biz_num: vendor.company[0]?.biz_num,
-      biz_name: vendor.company[0]?.name,
-    });
-    closeSearchModal();
-  };
-
-  const openConnectModal = useCallback(() => {
-    if (!isStoreExist()) {
-      return;
-    }
-    setConnectModalVisible(true);
-  }, [setConnectModalVisible, isStoreExist]);
-
-  const openExcelModal = useCallback(() => {
-    if (!isStoreExist()) {
-      return;
-    }
-    setExcelModalVisible(true);
-  }, [setExcelModalVisible, isStoreExist]);
-
-  const openSearchModal = useCallback(() => {
-    if (!isStoreExist()) {
-      return;
-    }
-    setSearchModalVisible(true);
-  }, [setSearchModalVisible, isStoreExist]);
+  const loading = inventoryMutation.isLoading || excelMutation.isLoading;
 
   return (
     <>
-      <MenuBar isWarning>
-        <TurtleButtonSub // 재고프로그램 연동 Button
-          type="primary"
-          color="skyblue"
-          onClick={openConnectModal}
-        >
-          {t('button.connect external program')}
-        </TurtleButtonSub>
-        <TurtleButtonSub // 거래처 대량 등록 Button
-          icon="file"
-          onClick={openExcelModal}
-        >
-          {t('button.create bulk vendor')}
-        </TurtleButtonSub>
-      </MenuBar>
+      {/*
+       *
+       *  재고프로그램 연동 모달
+       *
+       */}
+      <RangeDateModal
+        inThreeMonth
+        visible={inventoryModalVisible}
+        title="재고프로그램 연동"
+        description={[
+          '선택한 기간의 재고 정보를 불러옵니다.',
+          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+        ]}
+        loading={loading}
+        onCancel={closeInventoryModal}
+        onOk={({ start_date, end_date }) => {
+          inventoryMutation.mutate({
+            rt_store_id: store.id!,
+            start_date,
+            end_date,
+          });
+        }}
+      />
 
-      <Form //
-        layout="horizontal"
-        form={form}
-        labelCol={{ span: 3 }}
-        wrapperCol={{ span: 7 }}
-        colon={false}
-      >
-        <div style={{ marginBottom: 24 }}>
-          <TurtleText>{t('vendor.basic info')}</TurtleText>
-        </div>
+      {/*
+       *  단건 추가 모달
+       */}
 
-        <Form.Item name="rt_store_id" hidden>
-          <Input hidden />
-        </Form.Item>
-        <Form.Item name="vendor_name" hidden>
-          <Input hidden />
-        </Form.Item>
-        <Form.Item name="vendor_address" hidden>
-          <Input hidden />
-        </Form.Item>
-        <Form.Item name="vendor_account_id" hidden>
-          <Input hidden />
-        </Form.Item>
-        <Form.Item name="vendor_phone_id" hidden>
-          <Input hidden />
-        </Form.Item>
-        <Form.Item name="ws_store_id" hidden>
-          <Input hidden />
-        </Form.Item>
+      <AddSingleVendorModal
+        visible={addModalVisivle}
+        closeModal={closeAddModal}
+      />
 
-        <TurtleSearchInput //
-          value={selectedVendor?.name}
-          label={t('vendor.name')}
-          placeholder={t('placeholder.vendor name')}
-          onClick={openSearchModal}
-        />
+      {/*
+       *
+       * 거래처 등록 확인 모달
+       *
+       */}
 
-        <TurtleInput // 거래처 매장번호 Input
-          label={t('vendor.phone')}
-          placeholder={t('placeholder.tel')}
-          disabled={true}
-          value={selectedVendor?.phone}
-          required={true}
-        />
-        <TurtleInput // 휴대번호 선택 Input
-          value={selectedVendor?.store_phone[0]?.phone}
-          label={t('vendor.store phone')}
-          placeholder={t('placeholder.mobile')}
-          disabled={true}
-        />
+      <TurtleConfirmModal
+        visible={confirmModalVisivle}
+        title={'정말 등록할까요?'}
+        description={['추천과 미매칭에 남아있는 거래처는 등록에서 제외됩니다.']}
+        onCancel={() => {
+          closeConfirmModal();
+        }}
+        okText="네"
+        onOk={() => {
+          vendorCreateMutation.mutate(
+            cart.successList.map((vendor) => ({
+              rt_store_id: store.id ?? -1,
+              vendor_code: vendor.vendor_code,
+              vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
+              vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
+              ws_store_id: vendor.ws_store_info[0].id,
+              vendor_address: vendor.ws_store_info[0].address,
+              vendor_name: vendor.useVendorName,
+              memo: vendor.memo,
+              is_vat_included: vendor.isVatIncluded,
+            })),
+          );
+        }}
+        loading={inventoryMutation.isLoading}
+      />
 
-        <TurtleInput
-          label={t('vendor.address')}
-          placeholder={t('placeholder.vendor address')}
-          disabled
-          value={
-            selectedVendor
-              ? `${selectedVendor.building} ${selectedVendor.floor} ${selectedVendor.col} ${selectedVendor.loc}`
-              : undefined
-          }
-        />
+      <PageHeader
+        title="거래처등록"
+        button={<HistoryButton text="거래처 목록" onClick={() => {}} />}
+      />
 
-        <TurtleInput // 기타 주소 Input
-          value={selectedVendor?.ext}
-          label={t('vendor.ext')}
-          placeholder={t('placeholder.ext')}
-          disabled={true}
-          required={true}
-        />
+      <PageTitle
+        title="거래처등록 미리보기"
+        buttons={[
+          <TeriaryButton
+            text="재고프로그램 연동"
+            onClick={() => {
+              openInventoryModal();
+            }}
+          />,
+          <TurtleDropdown
+            items={[
+              {
+                key: '0',
+                label: (
+                  <TurtleUpload
+                    beforeUpload={(file) => {
+                      console.log(file.name);
+                      excelMutation.mutate({
+                        file,
+                        rt_store_id: store.id!,
+                      });
+                    }}
+                  />
+                ),
+                icon: <TurtleIcon name="exel" />,
+                onClick(e) {
+                  console.log(e);
+                },
+              },
+              {
+                key: '1',
+                label: '단건추가',
+                icon: <TurtleIcon name="single" />,
+                onClick() {
+                  openAddModal();
+                },
+              },
+            ]}
+            triggerButton={<SecondaryButton text="거래처 추가하기" />}
+          />,
+        ]}
+      />
 
-        <Form.Item // 계좌 Input
-          label={t('vendor.account')}
-          required={true}
-        >
-          <Input.Group compact>
-            <Form.Item noStyle rules={[{ required: true }]}>
-              <Input
-                value={selectedVendor?.store_account[0]?.bank}
-                disabled={true}
-                style={{ width: '30%' }}
-                placeholder={t('vendor.account bank')}
-              />
-            </Form.Item>
-            <Form.Item noStyle rules={[{ required: true }]}>
-              <Input
-                value={selectedVendor?.store_account[0]?.account_number}
-                disabled={true}
-                style={{ width: '40%' }}
-                placeholder={t('vendor.account number')}
-              />
-            </Form.Item>
-            <Form.Item noStyle rules={[{ required: true }]}>
-              <Input
-                value={selectedVendor?.store_account[0]?.account_holder}
-                disabled={true}
-                style={{ width: '30%' }}
-                placeholder={t('vendor.account holder')}
-              />
-            </Form.Item>
-          </Input.Group>
-        </Form.Item>
+      <PageContent>
+        <TurtleTabs>
+          <Tabs.TabPane tab={`성공(${cart.successList.length})`} key="success">
+            <SuccessTab isLoading={loading} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
+            <PendingTab isLoading={loading} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={`실패(${cart.failList.length})`} key="fail">
+            <FailTab isLoading={loading} />
+          </Tabs.TabPane>
+        </TurtleTabs>
+      </PageContent>
 
-        <div style={{ marginTop: 24, marginBottom: 24 }}>
-          <TurtleText>{t('vendor.additional info')}</TurtleText>
-        </div>
-        <Form.Item // 거래처 코드 Input
-          label={t('vendor.code')}
-          required={true}
-          style={{ marginBottom: 0 }}
-        >
-          <Space>
-            <Form.Item
-              name="vendor_code"
-              rules={[
-                { required: true, message: '거래처 코드를 만들어주세요.' },
-              ]}
-            >
-              <Input
-                placeholder={t('placeholder.vendor code')}
-                disabled={true}
-              />
-            </Form.Item>
-            <Form.Item>
-              <TurtleButtonSub color="blue" onClick={clickCreateVendorCode}>
-                코드 만들기
-              </TurtleButtonSub>
-            </Form.Item>
-          </Space>
-        </Form.Item>
-        <Form.Item
-          name="is_vat_included"
-          label="부가세 포함 여부"
-          valuePropName="checked"
-          required={false}
-        >
-          <Switch //
-            checkedChildren={t('button.include')}
-            style={{ width: '55px' }}
-          />
-        </Form.Item>
-        <TurtleTextArea // 주문 메모 TextArea
-          required={false}
-          name="memo"
-          label={t('vendor.memo')}
-          placeholder={t('placeholder.memo')}
-          rows={5}
-        />
-
-        <div style={{ marginTop: 24, marginBottom: 24 }}>
-          <TurtleText>{t('vendor.biz info')}</TurtleText>
-        </div>
-        <TurtleInput // 사업자 번호 Input
-          name="biz_num"
-          label={t('company.num')}
-          placeholder={t('placeholder.biz num')}
-          required={false}
-        />
-        <TurtleInput // 상호명 Input
-          name="biz_name"
-          label={t('company.name')}
-          placeholder={t('placeholder.biz name')}
-          required={false}
-        />
-        <TurtleInput // 대표자명 Input
-          name="owner"
-          label={t('company.owner')}
-          placeholder={t('placeholder.biz owner')}
-          required={false}
-        />
-      </Form>
-
-      <BottomBar justify="space-between">
-        <Col>
-          <AddBucketlistSign />
-        </Col>
-
-        <Popconfirm
-          title={t('description.really register')}
-          okText={t('yes')}
-          cancelText={t('no')}
-          onConfirm={() => {
-            form.validateFields().then(() => {
-              createQuery.mutate([{ ...form.getFieldsValue() }]);
-            });
+      <PageBottomBar>
+        <PrimaryButton
+          onClick={() => {
+            openConfirmModal();
           }}
         >
-          <TurtleButton // 거래처 등록 Button
-            type="primary"
-            disabled={!store.id}
-            loading={createQuery.isLoading}
-          >
-            {t('vendor.create')}
-          </TurtleButton>
-        </Popconfirm>
-      </BottomBar>
-
-      {/* 거래처 재고연동 모달 */}
-      <ConnectModal
-        visible={connectModalVisible}
-        closeModal={() => {
-          setConnectModalVisible(false);
-        }}
-      />
-      {/* 거래처 대량등록 모달 */}
-      <ExcelModal
-        visible={excelModalVisible}
-        closeModal={() => {
-          setExcelModalVisible(false);
-        }}
-      />
-      {/* master 도매 검색 모달 */}
-      <SearchModal //
-        visible={searchModalVisible}
-        closeModal={closeSearchModal}
-        selectRow={fillVendor}
-      />
+          거래처 등록하기
+        </PrimaryButton>
+      </PageBottomBar>
     </>
   );
 }

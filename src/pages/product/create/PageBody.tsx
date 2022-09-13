@@ -1,219 +1,194 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Menu, message, Popconfirm, Tabs } from 'antd';
-import { t } from 'i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { BottomBar, MainContent, MenuBar } from '@layout/page';
-import productAPI, { ResponseConnectInventory } from '@apis/productAPI';
+import React from 'react';
 import {
-  TurtleButton,
-  TurtleButtonSub,
+  PrimaryButton,
+  SecondaryButton,
+  TeriaryButton,
+  TurtleConfirmModal,
   TurtleDropdown,
   TurtleUpload,
-} from '@components/common';
-import { storeState } from '@store/storeState';
-import { productCartState } from '@store/productCartState';
-import { useStoreExist } from '@hooks/index';
-import { SelectRangeDateModal } from '@components/combine';
-import SuccessTab from './SuccessTab';
-import FailTab from './FailTab';
-import AddSingleProductModal from './AddProductModal';
+} from '@components/element';
+import { PageBottomBar, PageContent, PageTitle } from '@layout/page';
+import { ReactComponent as ExelIcon } from '@icons/exel.svg';
+import { ReactComponent as SingleIcon } from '@icons/single.svg';
+import { message } from 'antd';
+import SuccessTab from './tabs/SuccessTab';
+import TurtleTabs from '@components/element/TurtleTabs';
+import PendingTab from './tabs/PendingTab';
+import FailTab from './tabs/FailTab';
+import { useMutation } from 'react-query';
+import productAPI from '@apis/productAPI';
+import useProductCart from '@hooks/useProductCart';
+import useStore from '@hooks/useStore';
+import { RangeDateModal } from '@components/combine';
+import AddSingleProductModal from './modals/AddProductModal';
+import useModal from '@hooks/useModal';
+import { useNavigate } from 'react-router-dom';
 
 function PageBody() {
   const navigate = useNavigate();
-  const store = useRecoilValue(storeState);
-  const isStoreExist = useStoreExist();
-  const [cart, setCart] = useRecoilState(productCartState);
-  const [selectDateModalVisible, setSelectDateModalVisible] = useState(false);
-  const [addProductModalVisible, setAddProductModalVisible] = useState(false);
-
-  // 엑셀파싱 요청
-  const parseQuery = useMutation('parseProduct', productAPI.parseExcel, {
-    onSuccess: (data) => {
-      updateStates(data);
-    },
-  });
+  const { store, isStoreExist } = useStore();
+  const { cart, ready, saveFile } = useProductCart();
+  const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
+    useModal();
+  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
+  const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
   // 재고관리 연동 요청
-  const connectQuery = useMutation(
-    'connectProduct',
-    productAPI.connectInventory,
-    {
-      onSuccess: (data) => {
-        updateStates(data);
-        setSelectDateModalVisible(false);
-      },
-    },
-  );
-
-  // 상품 생성 요청
-  const createQuery = useMutation(
-    ['createProduct'], //
-    productAPI.create,
-    {
-      onSuccess: (data) => {
-        resetStates();
-        message.success(
-          `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
-        );
-        navigate('/product/list');
-      },
-    },
-  );
-
-  // 모든 상태 초기화
-  const resetStates = useCallback(() => {
-    setCart({
-      fileList: [],
-      successList: [],
-      failList: [],
-    });
-    connectQuery.reset();
-    setSelectDateModalVisible(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setCart]);
-
-  // 파싱 or 연동 후 상태 세팅
-  const updateStates = useCallback(
-    (data: ResponseConnectInventory) => {
-      setCart((cart) => ({
-        ...cart,
-        successList: [
-          ...data.data.success.map((product) => ({
-            ...product,
-            submit_price: product.price,
-            memo_value: product.memo,
-            memo_active: !!product.memo,
-          })),
-          ...cart.successList,
-        ],
-        failList: [...data.data.fail, ...cart.failList],
-      }));
+  const connectInventoryMutation = useMutation(productAPI.connectInventory, {
+    onSuccess: (data) => {
+      ready(data);
+      closeInventoryModal();
       message.info(
         `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
       );
     },
-    [setCart],
-  );
+  });
 
-  // 쇼핑몰 변경시 모든 state 초기화
-  useEffect(() => {
-    resetStates();
-  }, [store.id, resetStates]);
+  // 엑셀파싱 요청
+  const parseExcelMutation = useMutation(productAPI.parseExcel, {
+    onSuccess: (data) => {
+      ready(data);
+      message.info(
+        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+      );
+    },
+  });
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">
-        <TurtleUpload //
-          beforeUpload={(file) => {
-            setCart((cart) => ({ ...cart, fileList: [file] }));
-            parseQuery.mutate({
-              files: file,
-              rt_store_id: store.id!,
-            });
-          }}
-          onRemove={resetStates}
-          fileList={cart.fileList}
-        />
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={() => {
-          if (!isStoreExist()) return;
-          setAddProductModalVisible(true);
-        }}
-      >
-        {t('button.add single product')}
-      </Menu.Item>
-    </Menu>
-  );
+  // 상품 생성 요청
+  const createMutation = useMutation(productAPI.create, {
+    onSuccess: (data) => {
+      // resetStates();
+      message.success(
+        `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+      );
+      navigate('/product/history');
+    },
+  });
+
+  const loading =
+    connectInventoryMutation.isLoading || parseExcelMutation.isLoading;
 
   return (
     <>
-      <SelectRangeDateModal
-        title="날짜선택"
-        buttonTitle="정보 불러오기"
-        visible={selectDateModalVisible}
-        closeModal={() => {
-          setSelectDateModalVisible(false);
-        }}
-        onClickButton={({ start_date, end_date }) => {
-          connectQuery.mutate({ rt_store_id: store.id!, start_date, end_date });
-        }}
-        loading={connectQuery.isLoading}
+      {/*
+       *  재고프로그램 연동 모달
+       */}
+      <RangeDateModal
         inThreeMonth
+        visible={inventoryModalVisible}
+        title="재고프로그램 연동"
+        description={[
+          '선택한 기간의 재고 정보를 불러옵니다.',
+          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+        ]}
+        loading={loading}
+        onCancel={closeInventoryModal}
+        onOk={({ start_date, end_date }) => {
+          if (!isStoreExist()) return;
+          connectInventoryMutation.mutate({
+            rt_store_id: store.id as number,
+            start_date,
+            end_date,
+          });
+        }}
       />
-      <MenuBar isWarning>
-        <TurtleButtonSub
-          type="primary"
-          color="skyblue"
-          onClick={() => {
-            if (!isStoreExist()) return;
-            setSelectDateModalVisible(true);
-          }}
-        >
-          {t('button.connect external program')}
-        </TurtleButtonSub>
-        <TurtleDropdown //
-          menu={menu}
-        >
-          {t('button.add product')}
-        </TurtleDropdown>
-      </MenuBar>
+      {/*
+       *  단건 추가 모달
+       */}
+      <AddSingleProductModal
+        visible={addingModalVisible}
+        closeModal={closeAddingModal}
+      />
+      {/**
+       *  confirm 모달
+       */}
+      <TurtleConfirmModal
+        title="정말 등록할까요?"
+        description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
+        okText="네"
+        visible={confirmModalVisible}
+        onCancel={closeConfirmModal}
+        onOk={() => {
+          createMutation.mutate(
+            cart.successList.map((product) => ({
+              ...product,
+              rt_store_id: store.id!,
+              image_url: product.image_url ?? '',
+              memo: product.memo ?? '',
+            })),
+          );
+        }}
+      />
+      <PageTitle
+        title="상품등록 미리보기"
+        subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."
+        buttons={[
+          <TeriaryButton
+            text="재고프로그램 연동"
+            onClick={() => {
+              openInventoryModal();
+            }}
+          />,
+          <TurtleDropdown
+            triggerButton={<SecondaryButton text="상품 추가하기" />}
+            items={[
+              {
+                key: '0',
+                label: (
+                  <TurtleUpload
+                    beforeUpload={(file) => {
+                      saveFile(file);
+                      parseExcelMutation.mutate({
+                        files: file,
+                        rt_store_id: store.id!,
+                      });
+                    }}
+                  />
+                ),
+                icon: <ExelIcon />,
+                onClick(e) {
+                  console.log(e);
+                },
+              },
+              {
+                key: '1',
+                label: '단건추가',
+                icon: <SingleIcon />,
+                onClick(e) {
+                  openAddingModal();
+                },
+              },
+            ]}
+          />,
+        ]}
+      />
 
-      <MainContent
-        title={t('product.preview')}
-        info={t('description.fail product')}
-      >
-        {/* 성공 실패 탭 */}
-        <Tabs defaultActiveKey="1" size="large" style={{ width: '100%' }}>
+      <PageContent>
+        <TurtleTabs>
           <SuccessTab
-            key="1"
+            key="success"
             tab={`성공(${cart.successList.length})`}
-            loading={connectQuery.isLoading || parseQuery.isLoading}
+            loading={loading}
           />
+          <PendingTab key="pending" tab={`보류()`} loading={loading} />
           <FailTab
-            key="2"
+            key="fail"
             tab={`실패(${cart.failList.length})`}
-            loading={connectQuery.isLoading || parseQuery.isLoading}
+            loading={loading}
           />
-        </Tabs>
+        </TurtleTabs>
+      </PageContent>
 
-        {/* 상품 단건 추가 모달 */}
-        <AddSingleProductModal
-          visible={addProductModalVisible}
-          closeModal={() => {
-            setAddProductModalVisible(false);
+      <PageBottomBar>
+        <PrimaryButton
+          onClick={() => {
+            openConfirmModal();
           }}
-        />
-      </MainContent>
-
-      <BottomBar>
-        <Popconfirm
-          title={t('description.really register')}
-          okText={t('yes')}
-          cancelText={t('no')}
-          onConfirm={() => {
-            createQuery.mutate(
-              cart.successList.map((product) => ({
-                ...product,
-                rt_store_id: store.id!,
-                image_url: product.image_url ?? '',
-                memo: product.memo ?? '',
-              })),
-            );
-          }}
+          disabled={cart.successList.length === 0}
         >
-          <TurtleButton
-            type="primary"
-            disabled={cart.successList.length === 0}
-            loading={createQuery.isLoading}
-          >
-            {t('button.create product')}
-          </TurtleButton>
-        </Popconfirm>
-      </BottomBar>
+          상품 등록하기
+        </PrimaryButton>
+      </PageBottomBar>
     </>
   );
 }

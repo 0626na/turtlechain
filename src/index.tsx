@@ -14,8 +14,9 @@ import App from './App';
 
 // Antd Message
 message.config({
-  top: 60,
+  top: 65,
   maxCount: 1,
+  duration: 3,
 });
 
 // React Query
@@ -39,8 +40,8 @@ const ga4react = new GA4React(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider locale={koKR}>
-          <GlobalStyle />
           <BrowserRouter>
+            <GlobalStyle />
             <App />
           </BrowserRouter>
         </ConfigProvider>

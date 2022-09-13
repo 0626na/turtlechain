@@ -1,6 +1,7 @@
 // MAIN LAYOUT
 export const MAIN_HEADER_HEIGHT = '60px';
 export const MAIN_SIDER_WIDTH = '200px';
+export const MAIN_CONTENT_PADDING = '36px';
 
 // TOKEN
 export const TOKEN = 'TC_V2_TOKEN';

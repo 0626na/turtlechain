@@ -1,40 +1,78 @@
-import { createGlobalStyle } from 'styled-components';
+import { Global, css } from '@emotion/react';
 
-const GlobalStyle = createGlobalStyle`
-  /* form label 왼쪽 정렬 */
-  .ant-form-item-label {
-    text-align: left;        
-  }
+const GlobalStyle = () => (
+  <Global
+    styles={css`
+      /* Typography */
+      h1 {
+        margin: 0;
+      }
 
-  /* table header padding 제거 */
-  .ant-table-title {
-    padding: 8px 0px !important;
-  }
+      p {
+        margin: 0;
+      }
 
-  /* message 색상 변경 */
-  .ant-message {
-    color: #FFFFFF !important;
-  }
-  .ant-message-error .anticon {
-    color: #FFFFFF !important;
-  }
-  .ant-message-warning .anticon {
-    color: #FFFFFF !important;
-  }
-  .ant-message-info .anticon {
-    color: #FFFFFF !important;
-  }
-  .ant-message-success .anticon {
-    color: #FFFFFF !important;
-  }
+      /* button */
+      .ant-btn {
+        border: none;
+        border-radius: 8px;
+      }
 
-  /* badge status 마진값 제거 */
-  .ant-badge-status-text {
-    margin-left: 4px;
-    color: #5B5D63;
-  }
+      /* dropdown */
+      .ant-dropdown-menu-item:hover {
+        background-color: #edeff1;
+      }
 
+      /* Table */
 
-`;
+      .ant-table-title {
+        padding: 0px !important;
+      }
+
+      /* form label 왼쪽 정렬 */
+      .ant-form-item-label {
+        text-align: left;
+      }
+
+      /* message 색상 변경 */
+      .ant-message {
+        color: #ffffff !important;
+      }
+
+      .ant-message-notice {
+        text-align: right;
+        margin-right: 30px;
+      }
+
+      /* message 박스 크기 설정 */
+      .ant-message-notice-content {
+        border-radius: 12px;
+        width: 360px;
+        text-align: left;
+      }
+
+      /* 
+      .ant-message-error .anticon {
+      color: #FFFFFF !important;
+      }
+      .ant-message-warning .anticon {
+      color: #FFFFFF !important;
+      }
+
+      .ant-message-info .anticon {
+      color: #FFFFFF !important;
+      }
+      .ant-message-success .anticon {
+      color: #FFFFFF !important;
+      } */
+
+      /* badge status 마진값 제거 */
+      /* .ant-badge-status-text {
+      margin-left: 4px;
+      color: #5B5D63;
+      } */
+    `}
+  />
+);
 
 export default GlobalStyle;

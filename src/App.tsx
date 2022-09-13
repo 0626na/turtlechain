@@ -1,33 +1,23 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@layout/main';
+import React from 'react';
 import {
-  AdjustmentCreatePage,
-  AdjustmentListPage,
-  ClearingBalancePage,
   ClearingCreatePage,
-  ClearingListPage,
-  CompanyManagementPage,
-  FindIdPage,
+  ClearingHistoryPage,
+  ClearingTradePage,
   HomePage,
   LoginPage,
-  MembershipInfoPage,
-  MembershipManagementPage,
-  MistransferCreatePage,
-  MistransferListPage,
   NotFoundPage,
+  OrderCreatePage,
+  OrderHistoryPage,
   ProductCreatePage,
-  ProductListPage,
-  ResetPasswordPage,
-  SignupPage,
-  RegistrationPage,
-  StaffManagementPage,
-  StoreManagementPage,
-  UserManagementPage,
+  ProductHistoryPage,
+  SettingPage,
+  TutorialPage,
   VendorCreatePage,
-  VendorListPage,
   WarehousingCreatePage,
-  WarehousingListPage,
+  WarehousingHistoryPage,
 } from './pages';
 
 function App() {
@@ -35,163 +25,167 @@ function App() {
     <Suspense fallback={<></>}>
       <Routes>
         <Route index element={<LoginPage />} />
+        {/* 
+        <Route index element={<LoginPage />} />
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/membership-info" element={<MembershipInfoPage />} />
+         */}
+
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<MainLayout />}>
+          {/*
+           * 메인
+           */}
+
           <Route
-            path="/home"
+            path="home"
             element={
               <Suspense fallback={<></>}>
                 <HomePage />
               </Suspense>
             }
           />
+
+          {/*
+           * 거래처/상품
+           */}
+
           <Route
-            path="/warehousing/create"
-            element={
-              <Suspense fallback={<></>}>
-                <WarehousingCreatePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/warehousing/list"
-            element={
-              <Suspense fallback={<></>}>
-                <WarehousingListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/adjustment/create"
-            element={
-              <Suspense fallback={<></>}>
-                <AdjustmentCreatePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/adjustment/list"
-            element={
-              <Suspense fallback={<></>}>
-                <AdjustmentListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/clearing/create"
-            element={
-              <Suspense fallback={<></>}>
-                <ClearingCreatePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/clearing/list"
-            element={
-              <Suspense fallback={<></>}>
-                <ClearingListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/clearing/balance"
-            element={
-              <Suspense fallback={<></>}>
-                <ClearingBalancePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/mistransfer/create"
-            element={
-              <Suspense fallback={<></>}>
-                <MistransferCreatePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/mistransfer/list"
-            element={
-              <Suspense fallback={<></>}>
-                <MistransferListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/product/create"
-            element={
-              <Suspense fallback={<></>}>
-                <ProductCreatePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/product/list"
-            element={
-              <Suspense fallback={<></>}>
-                <ProductListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/vendor/create"
+            path="vendor/create"
             element={
               <Suspense fallback={<></>}>
                 <VendorCreatePage />
               </Suspense>
             }
           />
+
           <Route
-            path="/vendor/list"
+            path="product/create"
             element={
               <Suspense fallback={<></>}>
-                <VendorListPage />
+                <ProductCreatePage />
               </Suspense>
             }
           />
+
           <Route
-            path="/setting/user"
+            path="product/history"
             element={
               <Suspense fallback={<></>}>
-                <UserManagementPage />
+                <ProductHistoryPage />
               </Suspense>
             }
           />
+
+          {/*
+           * 발주
+           */}
+
           <Route
-            path="/setting/company"
+            path="order/create"
             element={
               <Suspense fallback={<></>}>
-                <CompanyManagementPage />
+                <OrderCreatePage />
               </Suspense>
             }
           />
+
           <Route
-            path="/setting/store"
+            path="order/history"
             element={
               <Suspense fallback={<></>}>
-                <StoreManagementPage />
+                <OrderHistoryPage />
               </Suspense>
             }
           />
+
+          {/*
+           * 입고
+           */}
+
           <Route
-            path="/setting/staff"
+            path="warehousing/create"
             element={
               <Suspense fallback={<></>}>
-                <StaffManagementPage />
+                <WarehousingCreatePage />
               </Suspense>
             }
           />
+
           <Route
-            path="/setting/membership"
+            path="warehousing/history"
             element={
               <Suspense fallback={<></>}>
-                <MembershipManagementPage />
+                <WarehousingHistoryPage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="warehousing/adjustment"
+            element={
+              <Suspense fallback={<></>}>
+                <WarehousingCreatePage />
+              </Suspense>
+            }
+          />
+
+          {/*
+           * 결제
+           */}
+
+          <Route
+            path="clearing/create"
+            element={
+              <Suspense fallback={<></>}>
+                <ClearingCreatePage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="clearing/history"
+            element={
+              <Suspense fallback={<></>}>
+                <ClearingHistoryPage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="clearing/trade"
+            element={
+              <Suspense fallback={<></>}>
+                <ClearingTradePage />
+              </Suspense>
+            }
+          />
+          {/*
+           * 설정
+           */}
+
+          <Route
+            path="setting"
+            element={
+              <Suspense fallback={<></>}>
+                <SettingPage />
+              </Suspense>
+            }
+          />
+
+          {/*
+           * 사용자가이드
+           */}
+
+          <Route
+            path="tutorial"
+            element={
+              <Suspense fallback={<></>}>
+                <TutorialPage />
               </Suspense>
             }
           />

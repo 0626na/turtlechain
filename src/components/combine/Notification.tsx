@@ -1,11 +1,14 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled from '@emotion/styled';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
-import { BellOutlined } from '@ant-design/icons';
+
 import notificationAPI from '@apis/notificationAPI';
+
+import { ReactComponent as BellIcon } from '@icons/bell.svg';
 
 function Notification() {
   const navigate = useNavigate();
@@ -138,9 +141,10 @@ function Notification() {
         size="small"
         overflowCount={9}
         count={
-          getNotificationQuery.data?.notification_list.filter(
-            (item) => !item.read_at,
-          ).length
+          1
+          // getNotificationQuery.data?.notification_list.filter(
+          //   (item) => !item.read_at,
+          // ).length
         }
         style={{
           paddingBottom: 1,
@@ -148,20 +152,15 @@ function Notification() {
           paddingLeft: 4,
           paddingRight: 5,
         }}
-        offset={[-21, 5]}
+        offset={[-20, 7]}
       >
-        <BellOutlined
-          style={{
-            padding: 8,
-            marginRight: 12,
-            fontSize: 20,
-            cursor: 'pointer',
-            color: '#fff',
-          }}
+        <IconContainer
           onClick={() => {
             setPopoverVisible((visible) => !visible);
           }}
-        />
+        >
+          <BellIcon />
+        </IconContainer>
       </Badge>
     </StyledPopover>
   );
@@ -171,6 +170,13 @@ const StyledPopover = styled(Popover)`
   .ant-popover-inner-content {
     padding: 0px;
   }
+`;
+
+const IconContainer = styled.div`
+  /* width: 36px;
+  height: 36px; */
+  margin-right: 12px;
+  cursor: pointer;
 `;
 
 export default Notification;

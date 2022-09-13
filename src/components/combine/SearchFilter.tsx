@@ -1,118 +1,74 @@
-import styled from 'styled-components';
+import { TurtleSearchInput, TurtleSearchSelect } from '@components/element';
+import { Space } from 'antd';
 import { t } from 'i18next';
-import { useMemo, useState } from 'react';
-import { Select, Space, Input } from 'antd';
-
-export interface SearchState {
-  type: string;
-  search_string: string;
-}
 
 interface Props {
-  type: 'vendor' | 'product';
-  onSearch: (searchState: SearchState) => void;
+  searchQuery: any; // state
+  setSearchQuery: (searchQuery: any) => void; // setState
+  select?: boolean;
+  vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }
 
-function SearchFilter({ type, onSearch }: Props) {
-  const [searchState, setSearchState] = useState<SearchState>({
-    type: 'all',
-    search_string: '',
-  });
-
-  const onSelectSearchType = (value: string) => {
-    setSearchState({ ...searchState, type: value });
-  };
-
-  const onChangeSearchString = (e: React.FormEvent<HTMLInputElement>) => {
-    setSearchState({ ...searchState, search_string: e.currentTarget.value });
-    onSearch({ ...searchState, search_string: e.currentTarget.value });
-  };
-
-  // 엔터키 눌렀을 때 검색
-  const onEnterPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') onSearch({ ...searchState });
-  };
-
-  // Select Box 옵션 선택
-  const options = useMemo(() => {
-    if (type === 'vendor')
-      return [
+function SearchFilter({
+  searchQuery,
+  setSearchQuery,
+  select = true,
+  vendor = false,
+}: Props) {
+  const options = vendor
+    ? [
         {
-          name: t('common.all'),
-          value: 'all',
-        },
-        {
-          name: t('vendor.name'),
+          name: t('table.vendorName'),
           value: 'name',
         },
         {
-          name: t('vendor.account'),
+          name: t('table.vendorAccount'),
           value: 'account',
         },
         {
-          name: t('vendor.store phone'),
+          name: t('table.mobile'),
           value: 'phone',
         },
-      ];
-    if (type === 'product')
-      return [
+      ]
+    : [
         {
-          name: t('common.all'),
-          value: 'all',
-        },
-
-        {
-          name: t('product.name'), //
+          name: t('table.productName'),
           value: 'name',
         },
         {
-          name: t('product.vendor product name'),
+          name: t('table.vendorProductName'),
           value: 'vendor_product_name',
         },
         {
-          name: t('vendor.name'),
+          name: t('table.vendorName'),
           value: 'vendor_name',
         },
       ];
-  }, [type]);
 
   return (
     <Space>
-      <Select
-        style={{ width: 100 }}
-        size="small"
-        value={searchState.type}
-        onSelect={onSelectSearchType}
-      >
-        {options?.map(({ name, value }) => (
-          <Select.Option key={value} value={value}>
-            {name}
-          </Select.Option>
-        ))}
-      </Select>
-      <StyledSearch //
-        size="small"
-        placeholder={t('placeholder.search')}
-        style={{ width: 200 }}
-        value={searchState.search_string}
-        onChange={onChangeSearchString}
-        onKeyPress={onEnterPress}
-        onSearch={() => {
-          onSearch(searchState);
+      {select && (
+        <TurtleSearchSelect
+          value={searchQuery.type}
+          onChange={(value) => {
+            setSearchQuery({ ...searchQuery, type: value, page: 1 });
+          }}
+          items={options}
+        />
+      )}
+      <TurtleSearchInput
+        placeholder="검색어를 입력하세요"
+        value={searchQuery.search_string}
+        onChange={(e) => {
+          setSearchQuery({
+            ...searchQuery,
+            search_string: e.currentTarget.value,
+            page: 1,
+          });
         }}
       />
     </Space>
   );
 }
-
-const StyledSearch = styled(Input.Search)`
-  .ant-input-search-button {
-    border: 1px solid #d9d9d9;
-    border-left: none;
-  }
-  svg {
-    color: #5b5d63;
-  }
-`;
 
 export default SearchFilter;

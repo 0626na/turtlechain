@@ -1,29 +1,42 @@
+import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
-// 파싱, 연동 vendor
-export interface VendorConnect {
+//  엑셀, 연동 결과
+export interface ParsedVendor {
   vendor_code: string;
   name: string;
   address: string;
-  account: string;
-  ws_store_info: Array<WholesaleShow>;
-  match_type: string;
-
-  memo: string;
-  memo_active: boolean;
-  memo_value: string;
-  is_vat_included: boolean;
-  use_vendor_name: string;
-  use_vendor?: WholesaleShow;
-  use_account?: VendorAccount;
-  check_account?: boolean;
+  match_type: 'success' | 'wrong' | 'fail';
+  ws_store_info: Wholesale[];
 }
 
-export interface ConnectCount {
+export interface ParesdResult {
   success_count: number;
   suggest_count: number;
   fail_count: number;
   duplicated_count: number;
+}
+
+// 거래처 사업자 타입
+export interface VendorCompany {
+  name: string;
+  owner: string;
+  biz_num: string;
+}
+
+// 거래처
+export interface Vendor {
+  id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  is_vat_included: boolean;
+  memo: string;
+  vendor_phone: VendorPhone;
+  vendor_account: VendorAccount;
+  ws_store_info: Wholesale;
+  memo_active?: boolean;
+  memo_value?: string;
 }
 
 // 거래처 계좌 타입
@@ -38,40 +51,17 @@ export interface VendorAccount {
 export interface VendorPhone {
   id: number;
   phone: string;
-  send_alimtalk: boolean;
 }
 
-// 거래처 사업자 타입
-export interface VendorCompany {
-  name: string;
-  owner: string;
-  biz_num: string;
-}
-
-// 거래처 타입
-export interface VendorShow {
-  id: number;
-  vendor_code: string;
-  vendor_name: string;
-  vendor_address: string;
-  is_vat_included: boolean;
-  memo: string;
-  vendor_phone: VendorPhone;
-  vendor_account: VendorAccount;
-  ws_store_info: WholesaleShow;
-  memo_active?: boolean;
-  memo_value?: string;
-}
-
-// 마스터 도매 타입
-export interface WholesaleShow {
+// 마스터 도매
+export interface Wholesale {
   id: number;
   name: string;
   phone: string;
   address: string;
-  store_account: Array<VendorAccount>;
-  store_phone: Array<VendorPhone>;
-  company: Array<VendorCompany>;
+  store_account: VendorAccount[];
+  store_phone: VendorPhone[];
+  company: VendorCompany[];
   building: string;
   floor: string;
   col: string;
@@ -83,26 +73,26 @@ export interface WholesaleShow {
  *  재고 프로그램 연동
  */
 
-export interface RequestConnectInventory {
+export interface RequestVendorInventory {
   rt_store_id: number;
   start_date: string;
   end_date: string;
 }
 
-export interface ResponseConnectInventory {
+export interface ResponseVendorInventory {
   msg: string;
   data: {
-    success: Array<VendorConnect>;
-    suggest: Array<VendorConnect>;
-    fail: Array<VendorConnect>;
-    count: ConnectCount;
+    success: ParsedVendor[];
+    suggest: ParsedVendor[];
+    fail: ParsedVendor[];
+    count: ParesdResult;
     error?: string;
   };
 }
 
-const connectInventory = async function (params: RequestConnectInventory) {
-  let url = 'external-api/inventory/vendors?';
-  const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
+const inventory = async (params: RequestVendorInventory) => {
+  const url = 'external-api/inventory/vendors';
+  const response = await v2Axios.get<ResponseVendorInventory>(url, { params });
 
   return response.data;
 };
@@ -111,24 +101,35 @@ const connectInventory = async function (params: RequestConnectInventory) {
  *  엑셀 파싱
  */
 
-export interface ResponseParseExcel {
+export interface RequestExcel {
+  file: RcFile;
+  rt_store_id: number;
+}
+
+export interface ResponseExcel {
   msg: string;
   data: {
-    success: Array<VendorConnect>;
-    suggest: Array<VendorConnect>;
-    fail: Array<VendorConnect>;
-    count: ConnectCount;
+    success: ParsedVendor[];
+    suggest: ParsedVendor[];
+    fail: ParsedVendor[];
+    count: ParesdResult;
     error?: string;
   };
 }
 
-const parseExcel = async function (data: FormData) {
+const excel = async (data: RequestExcel) => {
   const url = `excel/vendor`;
-  const response = await v2Axios.post<ResponseParseExcel>(url, data, {
+
+  const formData = new FormData();
+  formData.append('files', data.file);
+  formData.append('rt_store_id', data.rt_store_id.toString());
+
+  const response = await v2Axios.post<ResponseExcel>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return response.data;
 };
 
@@ -145,15 +146,16 @@ export interface RequestGet {
 
 export interface ResponseGet {
   msg: string;
-  data: { vendor_list: Array<VendorShow>; total_count: number };
+  data: { vendor_list: Vendor[]; total_count: number };
 }
 
-const get = async function (query: RequestGet) {
+const get = async (query: RequestGet) => {
   let url = 'provisioning/vendor?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data;
 };
 
@@ -171,12 +173,13 @@ export interface ResponseGetCode {
   data: string;
 }
 
-const getCode = async function (query: RequestGetCode) {
+const getCode = async (query: RequestGetCode) => {
   let url = `provisioning/create_vendor_code?`;
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
   const response = await v2Axios.get<ResponseGetCode>(url);
+
   return response.data;
 };
 
@@ -207,9 +210,10 @@ export interface ResponseCreate {
   };
 }
 
-const create = async function (data: Array<RequestCreate>) {
+const create = async (data: RequestCreate[]) => {
   const url = `provisioning/vendor`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
+
   return response.data;
 };
 
@@ -261,12 +265,12 @@ export interface ResponseGetWholesale {
   msg: string;
   data: {
     total_count: number;
-    vendor_list: Array<WholesaleShow>;
+    vendor_list: Wholesale[];
   };
 }
 
 // 마스터 도매 검색
-const getWholesale = async function (query: RequestGetWholesale) {
+const getWholesale = async (query: RequestGetWholesale) => {
   let url = `provisioning/search_wholesale?`;
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
@@ -276,8 +280,8 @@ const getWholesale = async function (query: RequestGetWholesale) {
 };
 
 const vendorAPI = {
-  connectInventory,
-  parseExcel,
+  inventory,
+  excel,
   get,
   getCode,
   create,

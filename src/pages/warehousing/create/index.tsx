@@ -1,21 +1,5 @@
-import { Helmet } from 'react-helmet';
-import { t } from 'i18next';
-import { PageHeader } from '@layout/page';
-import PageBody from './PageBody';
-
 function WarehousingCreatePage() {
-  const title = `${t('turtlechain')} - ${t('warehousing create')}`;
-
-  return (
-    <>
-      <Helmet title={title} />
-      <PageHeader
-        title={t('warehousing create')}
-        infoList={[t('description.excel type')]}
-      />
-      <PageBody />
-    </>
-  );
+  return <h1>입고등록 페이지 입니다</h1>;
 }
 
 export default WarehousingCreatePage;
