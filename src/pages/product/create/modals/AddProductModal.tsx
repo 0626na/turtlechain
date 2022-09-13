@@ -12,6 +12,7 @@ import {
 import { SearchVendorModal, TurtleContentModal } from '@components/combine';
 import useStore from '@hooks/useStore';
 import useProductCart from '@hooks/useProductCart';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
@@ -165,9 +166,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Form.Item>
-            <Button onClick={createProductCode}>코드 만들기</Button>
-          </Form.Item>
+          <div css={flexEnd}>
+            <Button css={createCodeBtn} onClick={createProductCode}>
+              <span css={createCodeFont}>코드 만들기</span>
+            </Button>
+          </div>
 
           <Form.Item
             name="option"
@@ -198,7 +201,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.memo')}
             rules={[{ required: false }]}
           >
-            <Input.TextArea rows={5} />
+            <TurtleFormInput />
           </Form.Item>
 
           <Row justify="end">
@@ -211,5 +214,23 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
     </>
   );
 }
+
+const flexEnd = css`
+  display: flex;
+  justify-content: end;
+  margin-bottom: 16px;
+`;
+
+const createCodeBtn = css`
+  background: #f0f3f6;
+  width: 100px;
+  height: 36px;
+`;
+
+const createCodeFont = css`
+  font-weight: 700;
+  color: #6b6d73;
+  opacity: 1; // 거래처 선택시 0.5
+`;
 
 export default AddSingleProductModal;
