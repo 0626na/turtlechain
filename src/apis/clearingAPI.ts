@@ -77,11 +77,12 @@ export interface ClearingItemShow {
 }
 
 export interface ClearingInfo {
-  id: number;
+  id?: number;
   vendor_info: {
     id: number;
     created_time: string;
     vendor_name: string;
+    is_vat_included: boolean;
     vendor_address?: string;
   };
   rt_store_id: number;
@@ -97,7 +98,7 @@ export interface ClearingInfo {
   reserve_subtract_amount: number; // 미송 차감 금액 (미송 입고 시 생성)
 
   // client State
-  type:
+  type?:
     | 'warehousing'
     | 'adjustment_subtract'
     | 'reserve_subtract'
@@ -110,6 +111,7 @@ export interface ClearingInfo {
 export interface RequestGetClearing {
   rt_store_id: number;
   balance_type: 'clearing';
+  clearing_request_date: string;
 }
 
 export interface ResponseGetClearing {
@@ -162,10 +164,10 @@ export interface ResponseCreateItem {
 }
 
 // 정산서 생성 요청
-const create = async function (data: {
+const create = async (data: {
   sheet: RequestCreateSheet;
   item: RequestCreateItem;
-}) {
+}) => {
   let url = 'clearing/sheet';
   const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
     url,

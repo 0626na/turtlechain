@@ -14,9 +14,6 @@ export interface Product {
   image_url: string;
   memo: string;
   need_update: boolean;
-
-  memo_value?: string;
-  memo_active?: boolean;
 }
 
 export interface ProductShow {
@@ -38,6 +35,7 @@ export interface ProductShow {
   option: string;
   memo: string;
   image_url: string;
+  need_update: boolean;
 }
 
 /*
@@ -158,10 +156,7 @@ const create = async function (data: RequestCreate[]) {
 export interface RequestUpdate {
   id: number;
   memo: string;
-  // name: string;
-  // supply_price: number;
-  // vat_price: number;
-  // option: string;
+  need_update: boolean;
 }
 
 export interface ResponseUpdate {
