@@ -22,7 +22,7 @@ function SearchFilter({
           value: 'name',
         },
         {
-          name: t('table.vendorAccount'),
+          name: t('table.accountInfo'),
           value: 'account',
         },
         {
