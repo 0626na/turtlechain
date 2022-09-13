@@ -25,7 +25,7 @@ export interface PendingItem extends ParsedVendor {
   selectedWsStoreInfo?: SelectedWholesale;
 }
 
-interface FailItem {}
+interface FailItem extends ParsedVendor {}
 
 export interface VendorCartState {
   successList: SuccessItem[];

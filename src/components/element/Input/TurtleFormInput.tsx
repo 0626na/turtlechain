@@ -11,12 +11,12 @@ function TurtleFormInput({ ...props }: Props) {
 const input = css`
   display: inline-block;
   height: 36px;
-  width: 360px;
+
   padding: 11px 12px;
 
   color: #242934;
-
   border: 1px solid #cbccd1;
+
   border-radius: 8px;
 
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@ const input = css`
   // hover, focus시에도 default와 동일하게 맞춰준다.
   &.ant-input:focus,
   &.ant-input:hover {
-    border: 1px solid #cbccd1;
+    border-color: #cbccd1;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   }
 

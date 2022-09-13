@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+
 import vendorAPI from '@apis/vendorAPI';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -17,16 +17,20 @@ import {
   TeriaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
+  TurtleIcon,
   TurtleTabs,
+  TurtleUpload,
 } from '@components/element';
-import { ReactComponent as ExelIcon } from '@icons/exel.svg';
-import { ReactComponent as SingleIcon } from '@icons/single.svg';
-import { vendorCartCountsState } from '@store/vendorCartState';
+
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
 import { RangeDateModal } from '@components/combine';
+
 import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
+import useModal from '@hooks/useModal';
+import FailTab from './tabs/FailTab';
+import AddSingleVendorModal from './modals/AddSingleVendorModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -34,33 +38,13 @@ function PageBody() {
   const { store } = useStore();
   const { cart, ready } = useVendorCart();
 
-  // const [parsedVendorLists, setParsedVendorLists] =
-  //   useRecoilState(vendorCartState);
-  const [parsedVendorCounts, setParsedVendorCounts] = useRecoilState(
-    vendorCartCountsState,
-  );
-
-  // 모달 제어
-  const [inventoryModalVisible, setInventoryModalVisible] = useState(false);
-  const [confirmModalVisivle, setConfirmModalVisivle] = useState(false);
-  const openInventoryModal = () => {
-    setInventoryModalVisible(true);
-  };
-
-  const closeInventoryModal = () => {
-    setInventoryModalVisible(false);
-  };
-
-  const openConfirmModal = () => {
-    setConfirmModalVisivle(true);
-  };
-
-  const closeConfirmModal = () => {
-    setConfirmModalVisivle(false);
-  };
+  const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
+    useModal();
+  const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
+  const [addModalVisivle, openAddModal, closeAddModal] = useModal();
 
   // 재고프로그램 연동
-  const vendorInventoryMutation = useMutation(vendorAPI.vendorInventory, {
+  const inventoryMutation = useMutation(vendorAPI.inventory, {
     onError: () => {
       // resetField();
     },
@@ -72,12 +56,18 @@ function PageBody() {
       );
 
       ready(data);
-
-      setParsedVendorCounts(data.data.count);
     },
   });
 
   // 엑셀 연동
+  const excelMutation = useMutation(vendorAPI.excel, {
+    onSuccess: (data) => {
+      ready(data);
+      message.info(
+        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+      );
+    },
+  });
 
   // 거래처 등록하기
   const vendorCreateMutation = useMutation(vendorAPI.create, {
@@ -90,6 +80,8 @@ function PageBody() {
       navigate('/vendor/list');
     },
   });
+
+  const loading = inventoryMutation.isLoading || excelMutation.isLoading;
 
   return (
     <>
@@ -106,16 +98,24 @@ function PageBody() {
           '선택한 기간의 재고 정보를 불러옵니다.',
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
-        loading={vendorInventoryMutation.isLoading}
+        loading={loading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
-          vendorInventoryMutation.mutate({
+          inventoryMutation.mutate({
             rt_store_id: store.id!,
             start_date,
             end_date,
           });
-          closeInventoryModal();
         }}
+      />
+
+      {/*
+       *  단건 추가 모달
+       */}
+
+      <AddSingleVendorModal
+        visible={addModalVisivle}
+        closeModal={closeAddModal}
       />
 
       {/*
@@ -147,7 +147,7 @@ function PageBody() {
             })),
           );
         }}
-        loading={vendorInventoryMutation.isLoading}
+        loading={inventoryMutation.isLoading}
       />
 
       <PageHeader
@@ -168,8 +168,18 @@ function PageBody() {
             items={[
               {
                 key: '0',
-                label: '엑셀 업로드',
-                icon: <ExelIcon />,
+                label: (
+                  <TurtleUpload
+                    beforeUpload={(file) => {
+                      console.log(file.name);
+                      excelMutation.mutate({
+                        file,
+                        rt_store_id: store.id!,
+                      });
+                    }}
+                  />
+                ),
+                icon: <TurtleIcon name="exel" />,
                 onClick(e) {
                   console.log(e);
                 },
@@ -177,9 +187,9 @@ function PageBody() {
               {
                 key: '1',
                 label: '단건추가',
-                icon: <SingleIcon />,
-                onClick(e) {
-                  console.log(e);
+                icon: <TurtleIcon name="single" />,
+                onClick() {
+                  openAddModal();
                 },
               },
             ]}
@@ -190,22 +200,15 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane
-            tab={`성공(${parsedVendorCounts?.success_count})`}
-            key="success"
-          >
-            <SuccessTab isLoading={vendorInventoryMutation.isLoading} />
+          <Tabs.TabPane tab={`성공(${cart.successList.length})`} key="success">
+            <SuccessTab isLoading={loading} />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`보류(${parsedVendorCounts.suggest_count})`}
-            key="pending"
-          >
-            <PendingTab isLoading={vendorInventoryMutation.isLoading} />
+          <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
+            <PendingTab isLoading={loading} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={`실패(${parsedVendorCounts.fail_count})`}
-            key="fail"
-          ></Tabs.TabPane> */}
+          <Tabs.TabPane tab={`실패(${cart.failList.length})`} key="fail">
+            <FailTab isLoading={loading} />
+          </Tabs.TabPane>
         </TurtleTabs>
       </PageContent>
 

@@ -11,7 +11,7 @@ const useModal = () => {
     setVisible(false);
   };
 
-  return [visible, open, close];
+  return [visible, open, close] as const;
 };
 
 export default useModal;

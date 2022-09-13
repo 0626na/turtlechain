@@ -5,12 +5,11 @@ import { Input } from 'antd';
 interface Props extends InputProps {
   value?: string;
   onSearch?: (value: any) => void;
-  placeholder?: string;
 }
 
 function TurtleFormSearchInput({
   value,
-  placeholder,
+
   onSearch,
   ...props
 }: Props) {
@@ -18,7 +17,6 @@ function TurtleFormSearchInput({
     <Input.Search
       {...props}
       css={searchInput}
-      placeholder={placeholder}
       value={value}
       onSearch={onSearch}
     />
@@ -26,7 +24,7 @@ function TurtleFormSearchInput({
 }
 
 const searchInput = css`
-  width: 360px;
+  /* width: 360px; */
 
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 8px;

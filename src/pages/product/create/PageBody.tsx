@@ -37,7 +37,7 @@ function PageBody() {
   const connectInventoryMutation = useMutation(productAPI.connectInventory, {
     onSuccess: (data) => {
       ready(data);
-      (closeInventoryModal as () => void)();
+      closeInventoryModal();
       message.info(
         `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
       );
@@ -75,14 +75,14 @@ function PageBody() {
        */}
       <RangeDateModal
         inThreeMonth
-        visible={inventoryModalVisible as boolean}
+        visible={inventoryModalVisible}
         title="재고프로그램 연동"
         description={[
           '선택한 기간의 재고 정보를 불러옵니다.',
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
         loading={loading}
-        onCancel={closeInventoryModal as () => void}
+        onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
           if (!isStoreExist()) return;
           connectInventoryMutation.mutate({
@@ -96,8 +96,8 @@ function PageBody() {
        *  단건 추가 모달
        */}
       <AddSingleProductModal
-        visible={addingModalVisible as boolean}
-        closeModal={closeAddingModal as () => void}
+        visible={addingModalVisible}
+        closeModal={closeAddingModal}
       />
       {/**
        *  confirm 모달
@@ -106,8 +106,8 @@ function PageBody() {
         title="정말 등록할까요?"
         description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
         okText="네"
-        visible={confirmModalVisible as boolean}
-        onCancel={closeConfirmModal as () => void}
+        visible={confirmModalVisible}
+        onCancel={closeConfirmModal}
         onOk={() => {
           createMutation.mutate(
             cart.successList.map((product) => ({
@@ -126,7 +126,7 @@ function PageBody() {
           <TeriaryButton
             text="재고프로그램 연동"
             onClick={() => {
-              (openInventoryModal as () => void)();
+              openInventoryModal();
             }}
           />,
           <TurtleDropdown
@@ -135,7 +135,7 @@ function PageBody() {
               {
                 key: '0',
                 label: (
-                  <TurtleUpload //
+                  <TurtleUpload
                     beforeUpload={(file) => {
                       saveFile(file);
                       parseExcelMutation.mutate({
@@ -155,7 +155,7 @@ function PageBody() {
                 label: '단건추가',
                 icon: <SingleIcon />,
                 onClick(e) {
-                  (openAddingModal as () => void)();
+                  openAddingModal();
                 },
               },
             ]}
@@ -182,7 +182,7 @@ function PageBody() {
       <PageBottomBar>
         <PrimaryButton
           onClick={() => {
-            (openConfirmModal as () => void)();
+            openConfirmModal();
           }}
           disabled={cart.successList.length === 0}
         >

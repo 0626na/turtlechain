@@ -98,7 +98,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           form={form}
           colon={false}
           labelCol={{ span: 7 }}
-          wrapperCol={{ span: 16 }}
+          wrapperCol={{ span: 17 }}
           onFinish={(values) => {
             addProduct(values) && closeModal();
           }}

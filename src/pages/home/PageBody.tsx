@@ -3,7 +3,6 @@ import {
   AnswerButton,
   PrimaryButton,
   SecondaryButton,
-  TurtleSelect,
 } from '@components/element';
 import {
   PageBottomBar,
@@ -89,16 +88,6 @@ function PageBody() {
         />
 
         <Table title={() => <div>3123</div>}></Table>
-
-        <TurtleSelect
-          value={'상품명'}
-          onChange={(value) => console.log(value)}
-          items={[
-            { value: '상품명', name: '상품명' },
-            { value: '거래처명', name: '거래처명' },
-            { value: '거래처 상품명', name: '거래처 상품명' },
-          ]}
-        />
 
         <TurtlePrimaryRangePicker
           onChange={(value) => {

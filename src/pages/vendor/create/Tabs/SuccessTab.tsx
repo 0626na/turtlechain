@@ -1,47 +1,32 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
-import { TurtleText, TurtleTooltip } from '@components/element';
-import {
-  vendorCartCountsState,
-  vendorCartState,
-  SuccessItem,
-} from '@store/vendorCartState';
+import { TurtleIcon, TurtleText, TurtleTooltip } from '@components/element';
+import { SuccessItem } from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-
-import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
-import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 
 import { css } from '@emotion/react';
-import { TurtleConfirmModal } from '@components/element';
-import TurtleModalInput from '@components/element/input/TurtleModalInput';
+
+import useVendorCart from '@hooks/useVendorCart';
+import InputModal from '@components/combine/modal/InputModal';
+import useModal from '@hooks/useModal';
 
 interface Props {
   isLoading: boolean;
 }
 
 function SuccessTab({ isLoading }: Props) {
-  const [vendorCartLists, setVendorCartLists] = useRecoilState(vendorCartState);
-  const vendorCartCounts = useSetRecoilState(vendorCartCountsState);
+  const { cart, setCart } = useVendorCart();
 
-  //modal
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalInputValue, setModalInputValue] = useState('');
+  const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [selectedRow, setSelectedRow] = useState<SuccessItem>();
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   const handleVatIncludedUpdate = (target: SuccessItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               isVatIncluded: !target.isVatIncluded,
             }
           : item,
@@ -53,12 +38,12 @@ function SuccessTab({ isLoading }: Props) {
     newVendorName: string,
     target: SuccessItem,
   ) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               useVendorName: newVendorName,
             }
           : item,
@@ -67,26 +52,21 @@ function SuccessTab({ isLoading }: Props) {
   };
 
   const handleVendorRemove = (targetVendorCode: string) => {
-    setVendorCartLists(() => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList.filter(
-        (item) => item.vendor_code === targetVendorCode,
+    setCart(() => ({
+      ...cart,
+      successList: cart.successList.filter(
+        (item) => item.vendor_code !== targetVendorCode,
       ),
-    }));
-
-    vendorCartCounts((counts) => ({
-      ...counts,
-      success_count: counts.success_count - 1,
     }));
   };
 
   const handleMemoUpdate = (newMemo: string, target: SuccessItem) => {
-    setVendorCartLists((vendorCartLists) => ({
-      ...vendorCartLists,
-      successList: vendorCartLists.successList?.map((item) =>
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
         item.vendor_code === target.vendor_code
           ? {
-              ...item,
+              ...target,
               memo: newMemo,
             }
           : item,
@@ -94,42 +74,40 @@ function SuccessTab({ isLoading }: Props) {
     }));
   };
 
+  const handleColumnHighlight = (target: SuccessItem) => {
+    // 보류에서 넘어온 아이템 색상 변경
+    return {
+      style: {
+        backgroundColor:
+          target.match_type !== 'success' ? ' #DDF3F5' : 'transparent',
+      },
+    };
+  };
+
   return (
     <>
-      <TurtleConfirmModal
-        visible={modalVisible}
-        title={'메모'}
+      {/*
+       * 메모 수정 모달
+       */}
+      <InputModal
+        visible={memoModalVisible}
+        onCancel={closeMemoModal}
+        defaultValue={selectedRow?.memo}
+        onOk={(value) => {
+          handleMemoUpdate(value, selectedRow!);
+          closeMemoModal();
+        }}
+        title="메모"
         description={[
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요 👀',
+          '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        children={
-          <div css={ModalInputContainer}>
-            <TurtleModalInput
-              placeholder="ex) 영수증 이중으로 확인 또 확인!"
-              defaultValue={selectedRow?.memo}
-              onChange={(e) => {
-                const value = e.currentTarget.value;
-                setModalInputValue(value);
-              }}
-            />
-          </div>
-        }
-        onCancel={() => {
-          setModalInputValue('');
-          closeModal();
-        }}
-        onOk={() => {
-          handleMemoUpdate(modalInputValue, selectedRow!);
-          setModalInputValue('');
-          closeModal();
-        }}
       />
 
       <Table
         size="small"
         loading={isLoading}
-        dataSource={vendorCartLists.successList}
+        dataSource={cart.successList}
         rowKey={(record) => record.vendor_code}
         pagination={{
           position: ['bottomCenter'],
@@ -139,27 +117,39 @@ function SuccessTab({ isLoading }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: '8%',
-            title: '거래처 코드',
+            width: 85,
+            title: t('table.vendorCode'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
-            width: '15%',
-            title: '쇼핑몰 입력 값',
+            width: 200,
+            title: t('table.retailerStoreInput'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               return `${record.name}  ${record.address}`;
             },
           },
           {
             ellipsis: true,
-            title: '거래처 주소',
+            width: 250,
+            title: t('table.vendorName'),
+            onCell: (record) => handleColumnHighlight(record),
+            render: (_, record) => record.ws_store_info[0]?.name,
+          },
+          {
+            ellipsis: true,
+            width: 150,
+            title: t('table.vendorAddress'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => record.ws_store_info[0]?.address,
           },
           {
             ellipsis: true,
-            title: '휴대번호',
-            width: '10%',
+            width: 130,
+            title: t('table.mobile'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) =>
               record.ws_store_info[0]?.store_phone[0]?.phone
                 .replace(/[^0-9]/, '')
@@ -167,7 +157,9 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            title: '계좌정보',
+            width: 300,
+            title: t('table.accountInfo'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               const {
                 bank = '',
@@ -179,8 +171,10 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 100,
+            title: t('table.vatIncluded'),
             align: 'center',
-            title: t('table.column.vatIncluded'),
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => {
               return (
                 <Switch
@@ -193,23 +187,25 @@ function SuccessTab({ isLoading }: Props) {
               );
             },
           },
+
           {
             ellipsis: true,
-            title: '추천 거래처명',
-            render: (_, record) => record.ws_store_info[0]?.name,
-          },
-          {
-            ellipsis: true,
+            width: 200,
             title: (
               <>
-                <TurtleText>사용할 거래처명</TurtleText>
+                <TurtleText>{t('table.retailerStoreInput')}</TurtleText>
                 <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
               </>
             ),
+
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
               <Input
                 size="small"
-                defaultValue={record.ws_store_info[0].name}
+                defaultValue={
+                  //보류에서 이미 수정했다면 useVenderName으로 보여준다.
+                  record.useVendorName || record.ws_store_info[0].name
+                }
                 onChange={(e) => {
                   const value = e.currentTarget.value;
                   handleUseVendorNameUpdate(value, record);
@@ -219,33 +215,32 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
+            width: 50,
+            title: t('table.memo'),
             align: 'center',
-            width: '6%',
-            title: '메모',
-            render: (_, record) => {
-              return (
-                <MemoIcon
-                  onClick={() => {
-                    setSelectedRow(record);
-                    openModal();
-                  }}
-                  css={css`
-                    cursor: pointer;
-                    stroke: ${record.memo === '' ? '#A1A2A6' : '#2ab8c1'}; ;
-                  `}
-                />
-              );
-            },
+            onCell: (record) => handleColumnHighlight(record),
+            render: (_, record) => (
+              <TurtleIcon
+                name="memo"
+                onClick={() => {
+                  setSelectedRow(record);
+                  openMemoModal();
+                }}
+                css={{
+                  cursoMemor: 'pointer',
+                  stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
+                }}
+              />
+            ),
           },
           {
             ellipsis: true,
+            width: 30,
             align: 'center',
-            width: '6%',
+            onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
-              <RemoveIcon
-                css={css`
-                  cursor: pointer;
-                `}
+              <TurtleIcon
+                name="delete"
                 onClick={() => {
                   handleVendorRemove(record.vendor_code);
                 }}
@@ -264,10 +259,6 @@ const $switch = css`
   &.ant-switch-checked {
     background-color: #1a66f9;
   }
-`;
-
-const ModalInputContainer = css`
-  margin-top: 24px;
 `;
 
 export default SuccessTab;

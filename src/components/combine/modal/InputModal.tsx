@@ -8,7 +8,7 @@ interface Props {
   onOk(value: string): void;
   title: string;
   description: string[];
-  loading: boolean;
+  loading?: boolean;
 
   defaultValue?: string;
   placeholder?: string;

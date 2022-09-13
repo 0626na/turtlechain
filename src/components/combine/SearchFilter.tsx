@@ -1,4 +1,4 @@
-import { TurtleSearchInput, TurtleSelect } from '@components/element';
+import { TurtleSearchInput, TurtleSearchSelect } from '@components/element';
 import { Space } from 'antd';
 import { t } from 'i18next';
 
@@ -9,7 +9,7 @@ interface Props {
   vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }
 
-function NewSearchFilter({
+function SearchFilter({
   searchQuery,
   setSearchQuery,
   select = true,
@@ -48,7 +48,7 @@ function NewSearchFilter({
   return (
     <Space>
       {select && (
-        <TurtleSelect
+        <TurtleSearchSelect
           value={searchQuery.type}
           onChange={(value) => {
             setSearchQuery({ ...searchQuery, type: value, page: 1 });
@@ -71,4 +71,4 @@ function NewSearchFilter({
   );
 }
 
-export default NewSearchFilter;
+export default SearchFilter;

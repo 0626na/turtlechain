@@ -5,7 +5,9 @@
   },
 
   "vendor": {
-    "create": "거래처등록"
+    "create": "거래처등록",
+    "addSingle": "거래처 단건추가",
+    "search": "거래처검색"
   },
 
   "product": {
@@ -56,11 +58,21 @@
     "imageUrl": "이미지 URL",
     "price": "가격",
     "memo": "메모",
-    "mobile": "휴대전화번호"
+    "mobile": "휴대전화번호",
+    "retailerStoreInput": "쇼핑몰 입력값",
+    "matching": "매칭",
+    "wsStoreNumber": "매장번호",
+    "vendorEtcAddress": "기타 주소",
+    "wsStoreName": "상호명",
+    "wsCompanyNum": "사업자 번호",
+    "wsOwner": "대표자명"
   },
+
+  "wholesaler": {},
 
   "button": {
     "uploadExcel": "엑셀 업로드",
-    "addProduct": "상품 추가하기"
+    "addProduct": "상품 추가하기",
+    "addVendor": "거래처 추가하기"
   }
 }
