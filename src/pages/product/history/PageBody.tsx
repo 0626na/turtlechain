@@ -29,7 +29,8 @@ function PageBody() {
   // 상품 리스트 불러오기 요청
   const getProductListQuery = useQuery(
     ['getProductListQuery', searchQuery],
-    () => productAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
+    () =>
+      productAPI.getList({ ...searchQuery, rt_store_id: store.selected?.id }),
   );
 
   //리스트내 상품 삭제
@@ -59,10 +60,10 @@ function PageBody() {
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
       ...searchQuery,
-      rt_store_id: store.id,
+      rt_store_id: store.selected?.id,
       page: 1,
     }));
-  }, [store.id]);
+  }, [store.selected]);
 
   return (
     <>

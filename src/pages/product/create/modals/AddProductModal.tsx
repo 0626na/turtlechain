@@ -28,7 +28,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
     'getProductCode', //
     () =>
       productAPI.getCode({
-        rt_store_id: store.id!,
+        rt_store_id: store.selected?.id ?? -1,
         vendor_code: form.getFieldValue('vendor_id'),
       }),
     {

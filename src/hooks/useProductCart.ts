@@ -1,12 +1,27 @@
+import { useEffect } from 'react';
 import { RcFile } from 'antd/lib/upload';
 import { productCartState } from '@store/productCartState';
 import { useRecoilState } from 'recoil';
 import { Product, ResponseConnectInventory } from '@apis/productAPI';
 import { message } from 'antd';
 import { t } from 'i18next';
+import useStore from './useStore';
 
 const useProductCart = () => {
   const [cart, setCart] = useRecoilState(productCartState);
+  const { store } = useStore();
+
+  useEffect(() => {
+    const resetCart = () => {
+      setCart({
+        successList: [],
+        failList: [],
+        fileList: [],
+      });
+    };
+
+    resetCart();
+  }, [store.selected, setCart]);
 
   const ready = (data: ResponseConnectInventory) => {
     setCart((cart) => ({

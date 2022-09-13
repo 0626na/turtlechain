@@ -1,18 +1,14 @@
+import { StoreShow } from '@apis/retailerStoreAPI';
 import { atom } from 'recoil';
 
-export interface Store {
-  id: number | undefined;
-  name: string;
-  inventory_is_vat_included: boolean;
-  version: '2.0' | 'agency_services';
+export interface StoreState {
+  list: StoreShow[];
+  selected?: StoreShow;
 }
-
-export const storeState = atom<Store>({
+export const storeState = atom<StoreState>({
   key: 'store',
   default: {
-    id: undefined,
-    name: '',
-    inventory_is_vat_included: false,
-    version: '2.0',
+    list: [],
+    selected: undefined,
   },
 });

@@ -27,7 +27,7 @@ interface Props {
 function AddSingleVendorModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { store } = useStore();
-  const { isStoreExist } = useStore();
+  const { isStoreSelected } = useStore();
 
   const [form] = Form.useForm();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
@@ -40,7 +40,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
     'getVendorCode',
     () =>
       vendorAPI.getCode({
-        rt_store_id: store.id ?? -1,
+        rt_store_id: store.selected?.id ?? -1,
         ws_store_id: selectedVendor?.id ?? -1,
       }),
     {
@@ -65,7 +65,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       form.resetFields();
       // selectVendor(undefined);
       form.setFieldsValue({
-        rt_store_id: store.id,
+        rt_store_id: store.selected?.id,
       });
       navigate('/vendor/list');
     },
@@ -95,7 +95,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
 
   // 코드 만들기 Button 클릭
   const clickCreateVendorCode = () => {
-    if (!isStoreExist()) {
+    if (!isStoreSelected()) {
       return;
     }
     if (!selectedVendor || selectedVendor.id === -1) {

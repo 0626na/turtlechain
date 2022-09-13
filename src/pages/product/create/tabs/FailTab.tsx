@@ -1,15 +1,14 @@
 import { t } from 'i18next';
 import { Table, TabPaneProps, Tabs, Typography } from 'antd';
-import { useRecoilValue } from 'recoil';
-import { productCartState } from '@store/productCartState';
 import { TurtleTableTitle } from '@components/element';
+import useProductCart from '@hooks/useProductCart';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const cart = useRecoilValue(productCartState);
+  const { cart } = useProductCart();
 
   return (
     <Tabs.TabPane {...props}>

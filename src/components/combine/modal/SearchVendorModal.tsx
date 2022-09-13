@@ -3,8 +3,6 @@ import React from 'react';
 import { Pagination, Row, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useRecoilValue } from 'recoil';
-import { storeState } from '@store/storeState';
 import { phonePattern } from '@utils/pattern';
 import vendorAPI, { RequestGet } from '@apis/vendorAPI';
 import { TurtleTableTitle } from '@components/element';
@@ -12,6 +10,7 @@ import { TurtleTableTitle } from '@components/element';
 import { css } from '@emotion/react';
 import TurtleContentModal from '@components/element/modal/TurtleContentModal';
 import SearchFilter from '../SearchFilter';
+import useStore from '@hooks/useStore';
 
 interface Props {
   visible: boolean;
@@ -26,22 +25,22 @@ interface Props {
 }
 
 function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
-  const store = useRecoilValue(storeState);
+  const { store } = useStore();
 
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
     type: 'name',
     search_string: '',
-    rt_store_id: store.id,
+    rt_store_id: store.selected?.id,
   });
 
   // 거래처 목록 불러오기 요청
   const getListQuery = useQuery(
     ['getVendor', searchQuery], //
-    () => vendorAPI.get({ ...searchQuery, rt_store_id: store.id ?? -1 }),
+    () => vendorAPI.get({ ...searchQuery, rt_store_id: store.selected?.id }),
     {
-      enabled: visible && !!store.id,
+      enabled: visible && !!store.selected,
     },
   );
 
@@ -58,9 +57,9 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       page: 1,
       type: 'name',
       search_string: '',
-      rt_store_id: store.id,
+      rt_store_id: store.selected?.id,
     });
-  }, [visible, store.id]);
+  }, [visible, store.selected]);
 
   return (
     <div
@@ -121,25 +120,25 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.name'),
+              title: t('table.vendorName'),
               render: (_, record) => record.vendor_name,
             },
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.address'),
+              title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.store phone'),
+              title: t('table.mobile'),
               render: (_, record) =>
                 record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
             },
             {
               ellipsis: true,
-              title: t('vendor.account'),
+              title: t('table.vendorAccount'),
               render: (_, record) =>
                 `${record.vendor_account.bank} ${record.vendor_account.account_number} ${record.vendor_account.account_holder}`,
             },

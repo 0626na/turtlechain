@@ -102,7 +102,7 @@ function PageBody() {
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
           inventoryMutation.mutate({
-            rt_store_id: store.id!,
+            rt_store_id: store.selected?.id as number,
             start_date,
             end_date,
           });
@@ -135,7 +135,7 @@ function PageBody() {
         onOk={() => {
           vendorCreateMutation.mutate(
             cart.successList.map((vendor) => ({
-              rt_store_id: store.id ?? -1,
+              rt_store_id: store.selected?.id ?? -1,
               vendor_code: vendor.vendor_code,
               vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
               vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
@@ -174,7 +174,7 @@ function PageBody() {
                       console.log(file.name);
                       excelMutation.mutate({
                         file,
-                        rt_store_id: store.id!,
+                        rt_store_id: store.selected?.id as number,
                       });
                     }}
                   />

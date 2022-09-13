@@ -1,73 +1,24 @@
-import { useState, useCallback } from 'react';
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { useRecoilState } from 'recoil';
-import { Store, storeState } from '@store/storeState';
-import retailerStoreAPI from '@apis/retailerStoreAPI';
 import { TurtleImg } from '@components/element';
 import { css } from '@emotion/react';
+import retailerStoreAPI from '@apis/retailerStoreAPI';
+import useStore from '@hooks/useStore';
 
-interface Props {
-  warningMessage?: string;
-}
+function StoreSelector() {
+  const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
 
-function StoreSelector({ warningMessage }: Props) {
-  const [store, setStore] = useRecoilState(storeState);
-  const [storeList, setStoreList] = useState<Store[]>([]); // 폐점 쇼핑몰을 목록에서 제외시키기 위해 queryData를 바로사용하지않고 따로 상태로관리.
-
-  // 쇼핑몰 불러오기
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
     ['getStoreListQuery'],
     retailerStoreAPI.getList,
     {
-      enabled: !store.id,
+      enabled: !store.selected,
       onSuccess: (data) => {
-        if (data.store_list.length === 0) return;
-
-        setStoreList(
-          data.store_list
-            .filter((store) => !store.is_closed)
-            .map((store) => ({
-              id: store.id,
-              name: store.name,
-              inventory_is_vat_included: store.inventory_is_vat_included,
-              version: store.companies[0].version,
-            })),
-        );
-
-        // default : 첫번쨰 쇼핑몰 선택
-        const defaultStore = data.store_list.find(
-          (store) => store.is_closed === false,
-        );
-
-        setStore({
-          id: defaultStore?.id,
-          name: defaultStore?.name!,
-          inventory_is_vat_included: defaultStore?.inventory_is_vat_included!,
-          version: defaultStore?.companies[0].version!,
-        });
+        fillStoreList(data.store_list);
+        selectDefaultStore();
       },
     },
-  );
-
-  // 쇼핑몰 선택
-  const handleStoreSelect = useCallback(
-    (id: number) => {
-      // store.id 가 기존에 있으면 confirm 받고 false 시 return;
-      if (store.id && warningMessage && !window.confirm(warningMessage)) {
-        return;
-      }
-
-      setStore({
-        id,
-        name: storeList.find((item) => item.id === id)!.name,
-        inventory_is_vat_included: storeList.find((item) => item.id === id)!
-          .inventory_is_vat_included,
-        version: storeList.find((item) => item.id === id)?.version!,
-      });
-    },
-    [store, storeList, setStore, warningMessage],
   );
 
   return (
@@ -78,9 +29,9 @@ function StoreSelector({ warningMessage }: Props) {
           css={menu}
           selectable
           onSelect={({ key }) => {
-            handleStoreSelect(Number(key));
+            selectStore(Number(key), 'warning');
           }}
-          items={storeList.map((store) => ({
+          items={store.list.map((store) => ({
             style: menuItemContainer,
             onMouseEnter: (e) => {
               e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
@@ -99,7 +50,7 @@ function StoreSelector({ warningMessage }: Props) {
         <div>
           <TurtleImg css={buttonImg} name="Logo" />
         </div>
-        <span css={text}>{store.name}</span>
+        <span css={text}>{store.selected?.name}</span>
       </Button>
     </Dropdown>
   );

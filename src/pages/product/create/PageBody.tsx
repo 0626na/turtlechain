@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 
 function PageBody() {
   const navigate = useNavigate();
-  const { store, isStoreExist } = useStore();
+  const { store, isStoreSelected } = useStore();
   const { cart, ready, saveFile } = useProductCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
@@ -84,9 +84,9 @@ function PageBody() {
         loading={loading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
-          if (!isStoreExist()) return;
+          if (!isStoreSelected()) return;
           connectInventoryMutation.mutate({
-            rt_store_id: store.id as number,
+            rt_store_id: store.selected?.id as number,
             start_date,
             end_date,
           });
@@ -112,7 +112,7 @@ function PageBody() {
           createMutation.mutate(
             cart.successList.map((product) => ({
               ...product,
-              rt_store_id: store.id!,
+              rt_store_id: store.selected?.id as number,
               image_url: product.image_url ?? '',
               memo: product.memo ?? '',
             })),
@@ -140,7 +140,7 @@ function PageBody() {
                       saveFile(file);
                       parseExcelMutation.mutate({
                         files: file,
-                        rt_store_id: store.id!,
+                        rt_store_id: store.selected?.id as number,
                       });
                     }}
                   />

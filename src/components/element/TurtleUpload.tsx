@@ -8,14 +8,14 @@ interface Props {
 }
 
 function TurtleUpload({ beforeUpload }: Props) {
-  const { isStoreExist } = useStore();
+  const { isStoreSelected } = useStore();
 
   return (
     <Upload
       maxCount={1}
       accept=".csv, .xls, .xlsx"
       beforeUpload={(file) => {
-        if (!isStoreExist()) return false;
+        if (!isStoreSelected()) return false;
         beforeUpload(file);
         return false;
       }}
