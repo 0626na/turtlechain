@@ -26,8 +26,8 @@ import { useNavigate } from 'react-router-dom';
 
 function PageBody() {
   const navigate = useNavigate();
-  const { store, isStoreExist } = useStore();
-  const { cart, ready, saveFile } = useProductCart();
+  const { store, isStoreSelected } = useStore();
+  const { cart, ready, saveFile, resetCart } = useProductCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
@@ -38,9 +38,6 @@ function PageBody() {
     onSuccess: (data) => {
       ready(data);
       closeInventoryModal();
-      message.info(
-        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
-      );
     },
   });
 
@@ -48,16 +45,13 @@ function PageBody() {
   const parseExcelMutation = useMutation(productAPI.parseExcel, {
     onSuccess: (data) => {
       ready(data);
-      message.info(
-        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
-      );
     },
   });
 
   // 상품 생성 요청
   const createMutation = useMutation(productAPI.create, {
     onSuccess: (data) => {
-      // resetStates();
+      resetCart();
       message.success(
         `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
       );
@@ -66,7 +60,9 @@ function PageBody() {
   });
 
   const loading =
-    connectInventoryMutation.isLoading || parseExcelMutation.isLoading;
+    connectInventoryMutation.isLoading ||
+    parseExcelMutation.isLoading ||
+    createMutation.isLoading;
 
   return (
     <>
@@ -84,9 +80,9 @@ function PageBody() {
         loading={loading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
-          if (!isStoreExist()) return;
+          if (!isStoreSelected()) return;
           connectInventoryMutation.mutate({
-            rt_store_id: store.id as number,
+            rt_store_id: store.selected?.id as number,
             start_date,
             end_date,
           });
@@ -106,13 +102,14 @@ function PageBody() {
         title="정말 등록할까요?"
         description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
         okText="네"
+        loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
         onOk={() => {
           createMutation.mutate(
             cart.successList.map((product) => ({
               ...product,
-              rt_store_id: store.id!,
+              rt_store_id: store.selected?.id as number,
               image_url: product.image_url ?? '',
               memo: product.memo ?? '',
             })),
@@ -140,7 +137,7 @@ function PageBody() {
                       saveFile(file);
                       parseExcelMutation.mutate({
                         files: file,
-                        rt_store_id: store.id!,
+                        rt_store_id: store.selected?.id as number,
                       });
                     }}
                   />

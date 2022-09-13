@@ -1,16 +1,31 @@
+import { useCallback, useEffect } from 'react';
 import { RcFile } from 'antd/lib/upload';
 import { productCartState } from '@store/productCartState';
 import { useRecoilState } from 'recoil';
 import { Product, ResponseConnectInventory } from '@apis/productAPI';
 import { message } from 'antd';
 import { t } from 'i18next';
+import useStore from './useStore';
 
 const useProductCart = () => {
   const [cart, setCart] = useRecoilState(productCartState);
+  const { store } = useStore();
+
+  const resetCart = useCallback(() => {
+    setCart({
+      successList: [],
+      failList: [],
+      fileList: [],
+    });
+  }, [setCart]);
+
+  // 쇼핑몰 변경시 상태 초기화
+  useEffect(() => {
+    resetCart();
+  }, [store.selected, resetCart]);
 
   const ready = (data: ResponseConnectInventory) => {
-    setCart((cart) => ({
-      // ...cart,
+    setCart({
       successList: data.data.success.map((product) => ({
         ...product,
         submit_price: product.price,
@@ -20,7 +35,11 @@ const useProductCart = () => {
 
       failList: data.data.fail,
       fileList: [],
-    }));
+    });
+
+    message.info(
+      `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+    );
   };
 
   const saveFile = (file: RcFile) => {
@@ -38,6 +57,7 @@ const useProductCart = () => {
           ? {
               ...product,
               price: value,
+              need_update: true,
             }
           : product,
       ),
@@ -85,6 +105,7 @@ const useProductCart = () => {
     updatePrice,
     deleteProduct,
     addProduct,
+    resetCart,
   };
 };
 

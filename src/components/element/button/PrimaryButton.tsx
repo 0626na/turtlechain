@@ -4,11 +4,13 @@ import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
 
 interface Props {
-  size?: 'default' | 'large';
+  size?: 'default' | 'large' | 'small';
   children: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit';
+  href?: string;
+  target?: string;
   onClick?: () => void;
 }
 
@@ -16,6 +18,14 @@ function PrimaryButton({ size = 'default', children, ...props }: Props) {
   if (size === 'large') {
     return (
       <Button css={largePrimary} {...props}>
+        <TurtleText>{children}</TurtleText>
+      </Button>
+    );
+  }
+
+  if (size === 'small') {
+    return (
+      <Button css={smallPrimary} {...props}>
         <TurtleText>{children}</TurtleText>
       </Button>
     );
@@ -51,5 +61,9 @@ const button = css`
 
 const defaultPrimary = css([button, { width: 200, height: 40 }]);
 const largePrimary = css([button, { width: 512, height: 48 }]);
+const smallPrimary = css([
+  button,
+  { width: 140, height: 36, fontSize: 14, fontWeight: 500 },
+]);
 
 export default PrimaryButton;

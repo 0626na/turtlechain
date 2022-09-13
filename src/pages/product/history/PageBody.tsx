@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import SearchFilter from '@components/combine/SearchFilter';
 import {
+  MemoIcon,
   TurtleConfirmModal,
   TurtleIcon,
   TurtleTableTitle,
@@ -29,7 +30,8 @@ function PageBody() {
   // 상품 리스트 불러오기 요청
   const getProductListQuery = useQuery(
     ['getProductListQuery', searchQuery],
-    () => productAPI.getList({ ...searchQuery, rt_store_id: store.id ?? -1 }),
+    () =>
+      productAPI.getList({ ...searchQuery, rt_store_id: store.selected?.id }),
   );
 
   //리스트내 상품 삭제
@@ -59,10 +61,10 @@ function PageBody() {
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
       ...searchQuery,
-      rt_store_id: store.id,
+      rt_store_id: store.selected?.id,
       page: 1,
     }));
-  }, [store.id]);
+  }, [store.selected]);
 
   return (
     <>
@@ -208,13 +210,12 @@ function PageBody() {
               align: 'center',
               title: t('table.memo'),
               render: (_, record) => (
-                <TurtleIcon
-                  name="memo"
-                  css={{ stroke: record.memo ? '#2ab8c1' : '#a1a2a6' }}
+                <MemoIcon
                   onClick={() => {
                     selectRow(record);
                     openMemoModal();
                   }}
+                  value={record.memo}
                 />
               ),
             },

@@ -5,7 +5,7 @@ interface Props extends TabPaneProps {
 }
 
 function PendingTab({ loading, ...props }: Props) {
-  return <Tabs.TabPane {...props}>pendingTab</Tabs.TabPane>;
+  return <Tabs.TabPane {...props}>구현중</Tabs.TabPane>;
 }
 
 export default PendingTab;
