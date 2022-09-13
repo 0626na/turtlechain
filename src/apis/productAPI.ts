@@ -156,7 +156,7 @@ const create = async function (data: RequestCreate[]) {
 export interface RequestUpdate {
   id: number;
   memo: string;
-  need_update: boolean;
+  // need_update: boolean;
 }
 
 export interface ResponseUpdate {
