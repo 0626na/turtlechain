@@ -7,9 +7,13 @@ import { ReactComponent as MisMatchingIcon } from '@icons/misMatching.svg';
 
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
+import { ReactComponent as UpdateVendorNameIcon } from '@icons/updateVendorName.svg';
+import { ReactComponent as UpdateVendorInfoIcon } from '@icons/updateVendorInfo.svg';
+import { ReactComponent as MoreIcon } from '@icons/more.svg';
 import { css } from '@emotion/react';
 
 interface Props {
+  danger?: boolean;
   name:
     | 'delete'
     | 'memo'
@@ -17,12 +21,15 @@ interface Props {
     | 'matching'
     | 'misMatching'
     | 'exel'
-    | 'single';
+    | 'single'
+    | 'updateVendorName'
+    | 'updateVendorInfo'
+    | 'more';
   onClick?: () => void;
   className?: string;
 }
 
-function TurtleIcon({ name, onClick, className }: Props) {
+function TurtleIcon({ name, onClick, danger, className }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     onClick && onClick();
@@ -30,7 +37,10 @@ function TurtleIcon({ name, onClick, className }: Props) {
 
   if (name === 'delete') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div
+        css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
+        onClick={handleClick}
+      >
         <RemoveIcon className={className} />
       </div>
     );
@@ -80,6 +90,30 @@ function TurtleIcon({ name, onClick, className }: Props) {
     return (
       <div css={iconContainer} onClick={handleClick}>
         <SingleIcon className={className} />
+      </div>
+    );
+  }
+
+  if (name === 'updateVendorName') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UpdateVendorNameIcon className={className} />
+      </div>
+    );
+  }
+
+  if (name === 'updateVendorInfo') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UpdateVendorInfoIcon className={className} />
+      </div>
+    );
+  }
+
+  if (name === 'more') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <MoreIcon className={className} />
       </div>
     );
   }
