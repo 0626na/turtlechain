@@ -26,10 +26,10 @@ import { css } from '@emotion/react';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectRow: (wholeSaleStore: Wholesale) => void;
+  onFieldFillin: (wholeSaleStore: Wholesale) => void;
 }
 
-function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
+function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
   const [wholesaleList, setWholesaleList] = useState<Array<Wholesale>>([]);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
@@ -54,11 +54,14 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
       message.warning('휴대번호를 선택해주세요');
       return;
     }
+
     if (record.store_account.length !== 1) {
       message.warning('계좌번호를 선택해주세요');
       return;
     }
-    // onVendorSelect(record);
+
+    onFieldFillin(record);
+    closeModal();
     setSearchQuery({
       page: 1,
       type: 'name',
@@ -220,6 +223,7 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
                 if (record.store_account.length === 0) {
                   return;
                 }
+
                 if (record.store_account.length === 1) {
                   return makeAddress(record.store_account[0]);
                 }
@@ -265,7 +269,6 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
                     onClickSelect(record);
                   }}
                 >
-                  {' '}
                   asa
                 </Button>
                 // <TurtleButtonSub //

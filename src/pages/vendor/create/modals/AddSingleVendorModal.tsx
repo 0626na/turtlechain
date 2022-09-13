@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Button, Form, Input, message, Switch } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   PrimaryButton,
@@ -33,15 +33,14 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
 
   // 선택된 거래처
-  const [selectedVendor, selectVendor] = useState<Wholesale>();
 
   //거래처코드 생성
   const getVendorCodeQuery = useQuery(
     'getVendorCode',
     () =>
       vendorAPI.getCode({
-        rt_store_id: store.selected?.id ?? -1,
-        ws_store_id: selectedVendor?.id ?? -1,
+        rt_store_id: store.selected?.id as number,
+        ws_store_id: form.getFieldValue('ws_store_id'),
       }),
     {
       enabled: false,
@@ -63,34 +62,43 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       }
       message.success('성공적으로 등록하였습니다.');
       form.resetFields();
-      // selectVendor(undefined);
-      form.setFieldsValue({
-        rt_store_id: store.selected?.id,
-      });
       navigate('/vendor/list');
     },
   });
 
   // 거래처 선택후 폼에 채워넣기
-  const fillVendor = (vendor: Wholesale) => {
-    selectVendor(vendor);
+  const HandleFieldFillin = (vendor: Wholesale) => {
+    console.log(vendor);
     form.setFieldsValue({
       ...form.getFieldsValue(),
-      vendor_code: undefined,
-      vendor_account_id: vendor.store_account[0].id,
-      vendor_phone_id: vendor.store_phone[0].id,
+
       ws_store_id: vendor.id,
       vendor_name: vendor.name,
+      store_phone: vendor.phone,
+
+      vendor_phone_id: vendor.store_phone[0].id,
+      vendor_phone: vendor.store_phone[0].phone,
+
       vendor_address: `${vendor.building} ${vendor.floor}${
         vendor.floor ? '층' : ''
       } ${vendor.col} ${vendor.loc} ${vendor.ext}`,
-      memo: '',
+      vendor_address_buliding: vendor.building,
+      vendor_address_floor: vendor.floor,
+      vendor_address_col: vendor.col,
+      vendor_address_loc: vendor.loc,
+      vendor_address_ext: vendor.ext,
+
+      vendor_account_id: vendor.store_account[0].id,
+      bank: vendor.store_account[0].bank,
+      account_holder: vendor.store_account[0].account_holder,
+      account_number: vendor.store_account[0].account_number,
+
       is_vat_included: false,
-      owner: vendor.company[0]?.owner,
-      biz_num: vendor.company[0]?.biz_num,
       biz_name: vendor.company[0]?.name,
+      biz_num: vendor.company[0]?.biz_num,
+      owner: vendor.company[0]?.owner,
+      memo: '',
     });
-    closeVendorModal();
   };
 
   // 코드 만들기 Button 클릭
@@ -98,15 +106,19 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
     if (!isStoreSelected()) {
       return;
     }
-    if (!selectedVendor || selectedVendor.id === -1) {
+
+    console.log(form.getFieldValue('vendor_name'));
+    if (!form.getFieldValue('vendor_name')) {
       message.warn('거래처를 선택해 주세요');
       return;
     }
+
     getVendorCodeQuery.refetch();
   };
 
   useEffect(() => {
     if (visible) return;
+
     form.resetFields();
   }, [visible, form]);
 
@@ -118,7 +130,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       <SearchWsStoreModal
         visible={vendorModalVisible}
         closeModal={closeVendorModal}
-        selectRow={fillVendor}
+        onFieldFillin={HandleFieldFillin}
       />
 
       <TurtleContentModal
@@ -133,17 +145,14 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
-          // onFinish={(values) => {
-          //   addProduct(values) && closeModal();
-          // }}
         >
           {/*  서버 전달용 데이터 */}
           <Form.Item name="rt_store_id" hidden>
             <Input hidden />
           </Form.Item>
-          <Form.Item name="vendor_name" hidden>
+          {/* <Form.Item name="vendor_name" hidden>
             <Input hidden />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name="vendor_address" hidden>
             <Input hidden />
           </Form.Item>
@@ -157,9 +166,12 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
             <Input hidden />
           </Form.Item>
 
-          <Form.Item label={t('table.vendorName')} required>
-            <TurtleFormSearchInput // 거래처명 검색 Input
-              value={selectedVendor?.name}
+          <Form.Item
+            label={t('table.vendorName')}
+            name="vendor_name"
+            rules={[{ required: true }]}
+          >
+            <TurtleFormSearchInput
               readOnly
               onClick={openVendorModal}
               onSearch={openVendorModal}
@@ -167,118 +179,97 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
-          <Form.Item required label={t('table.wsStoreNumber')}>
-            <TurtleFormInput
-              value={selectedVendor?.phone}
-              disabled={true}
-              placeholder="매장번호를 입력해주세요"
-            />
+          <Form.Item name="store_phone" label={t('table.wsStoreNumber')}>
+            <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
           </Form.Item>
 
-          <Form.Item label={t('table.mobile')} required>
+          <Form.Item label={t('table.mobile')} name="vendor_phone" required>
             <TurtleFormInput
-              value={selectedVendor?.store_phone[0]?.phone}
-              disabled={true}
+              disabled
               placeholder="휴대전화번호를 입력해주세요"
             />
           </Form.Item>
 
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
-              <Form.Item name="building" noStyle>
-                <TurtleFormSelect
-                  value={selectedVendor?.building!}
-                  placeholder="상가"
-                  disabled
-                  // items={[{ value: 'asd', name: 'assd' }]}
-                />
+              <Form.Item name="vendor_address_buliding" noStyle>
+                <TurtleFormSelect placeholder="상가" disabled />
               </Form.Item>
 
-              <Form.Item noStyle>
-                <TurtleFormInput
-                  value={selectedVendor?.floor}
-                  placeholder="층"
-                  disabled={true}
-                />
+              <Form.Item name="vendor_address_floor" noStyle>
+                <TurtleFormInput placeholder="층" disabled />
               </Form.Item>
 
-              <Form.Item noStyle>
-                <TurtleFormInput
-                  value={`${selectedVendor?.col} ${selectedVendor?.loc}`}
-                  placeholder="호"
-                  disabled={true}
-                />
+              <Form.Item name="vendor_address_col" noStyle>
+                <TurtleFormInput placeholder="열" disabled />
+              </Form.Item>
+
+              <Form.Item name="vendor_address_loc" noStyle>
+                <TurtleFormInput placeholder="호" disabled />
               </Form.Item>
             </div>
           </Form.Item>
 
-          <Form.Item label={t('table.vendorEtcAddress')} required>
-            <TurtleFormInput
-              value={selectedVendor?.ext}
-              placeholder="기타 주소를 입력해주세요"
-              disabled={true}
-            />
+          <Form.Item
+            name="vendor_address_ext"
+            label={t('table.vendorEtcAddress')}
+          >
+            <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
-              <Form.Item noStyle>
-                <TurtleFormSelect
-                  value={selectedVendor?.store_account[0]?.bank!}
-                  placeholder="은행"
-                  disabled
-                  // items={[{ value: 'asd', name: 'assd' }]}
-                  // onChange={() => {
-                  //   console.log(123);
-                  // }}
-                />
+              <Form.Item name="bank" noStyle>
+                <TurtleFormSelect placeholder="은행" disabled />
               </Form.Item>
 
-              <Form.Item noStyle>
-                <TurtleFormInput
-                  value={selectedVendor?.store_account[0]?.account_number}
-                  placeholder="계좌번호"
-                  disabled={true}
-                />
+              <Form.Item name="account_number" noStyle>
+                <TurtleFormInput placeholder="계좌번호" disabled />
               </Form.Item>
 
-              <Form.Item noStyle>
-                <TurtleFormInput
-                  value={selectedVendor?.store_account[0]?.account_holder}
-                  placeholder="예금주명"
-                  disabled={true}
-                />
+              <Form.Item name="account_holder" noStyle>
+                <TurtleFormInput placeholder="예금주명" disabled />
               </Form.Item>
             </div>
           </Form.Item>
 
-          <Form.Item name="vendorCode" label={t('table.vendorCode')} required>
-            <TurtleFormInput disabled={true} />
+          <Form.Item
+            label={t('table.vendorCode')}
+            name="vendor_code"
+            rules={[{ required: true }]}
+          >
+            <TurtleFormInput placeholder="거래처코드를 입력해주세요" disabled />
           </Form.Item>
+
           <div css={flexEnd}>
             <Button css={createCodeBtn} onClick={clickCreateVendorCode}>
               <span css={createCodeFont}>코드 만들기</span>
             </Button>
           </div>
+
           <TurtleDivider marginBottom={37} marginTop={32} />
-          <Form.Item label={t('table.vatIncluded')} required>
-            <Switch
-              css={$switch}
-              checked={false}
-              onClick={() => {
-                // handleVatIncludedUpdate(record);
-              }}
-            />
+
+          <Form.Item
+            name="is_vat_included"
+            label={t('table.vatIncluded')}
+            valuePropName="checked"
+            required
+          >
+            <Switch css={$switch} />
           </Form.Item>
-          <Form.Item name="wsStoreName" label={t('table.wsStoreName')}>
+
+          <Form.Item name="biz_name" label={t('table.wsStoreName')}>
             <TurtleFormInput placeholder="상호명을 입력해주세요" />
           </Form.Item>
-          <Form.Item name="wsCompanyNumber" label={t('table.wsCompanyNum')}>
+
+          <Form.Item name="biz_num" label={t('table.wsCompanyNum')}>
             <TurtleFormInput placeholder="사업자 번호를입력해주세요" />
           </Form.Item>
-          <Form.Item name="companyName" label={t('table.wsOwner')}>
+
+          <Form.Item name="owner" label={t('table.wsOwner')}>
             <TurtleFormInput placeholder="대표자명을 입력해주세요" />
           </Form.Item>
+
           <Form.Item name="memo" label={t('table.memo')}>
             <TurtleFormInput placeholder="메모를 입력해주세요" />
           </Form.Item>
@@ -289,6 +280,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               htmlType="submit"
               onClick={() => {
                 form.validateFields().then(() => {
+                  console.log(form.getFieldsValue());
                   createVendorMutation.mutate([{ ...form.getFieldsValue() }]);
                 });
               }}
@@ -341,6 +333,14 @@ const createCodeBtn = css`
   background: #f0f3f6;
   width: 100px;
   height: 36px;
+
+  &:hover {
+    background-color: #f0f3f6;
+  }
+
+  &.ant-btn:focus {
+    background-color: #f0f3f6;
+  }
 `;
 
 const createCodeFont = css`
