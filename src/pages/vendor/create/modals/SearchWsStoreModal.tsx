@@ -19,7 +19,7 @@ import vendorAPI, {
   Wholesale,
 } from '@apis/vendorAPI';
 import { phonePattern } from '@utils/pattern';
-import { TurtleBadge, TurtleTableTitle } from '@components/element';
+import { TurtleBadge, TurtleTableTitle, TurtleText } from '@components/element';
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
@@ -105,7 +105,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
       `}
     >
       <TurtleContentModal
-        size="large"
+        size="middle"
         title={t('vendor.search')}
         visible={visible}
         onClose={closeModal}
@@ -265,19 +265,13 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
               title: '',
               render: (_, record) => (
                 <Button
+                  css={button}
                   onClick={() => {
                     onClickSelect(record);
                   }}
                 >
-                  asa
+                  <TurtleText>선택</TurtleText>
                 </Button>
-                // <TurtleButtonSub //
-                //   size="small"
-                //   color="green"
-                //   onClick={() => onClickSelect(record)}
-                // >
-                //   {t('button.select')}
-                // </TurtleButtonSub>
               ),
             },
           ]}
@@ -286,5 +280,34 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     </div>
   );
 }
+
+const button = css`
+  width: 60px;
+  height: 26px;
+
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #00aab5;
+  background-color: #ddf3f5;
+  border-color: #ddf3f5;
+  &:hover {
+    color: #00aab5;
+    border-color: #d4e9eb;
+    background-color: #d4e9eb;
+  }
+
+  // active 상태
+  &.ant-btn:focus {
+    color: #00aab5;
+    background-color: #ddf3f5;
+    border-color: #ddf3f5;
+  }
+`;
 
 export default SearchWsStoreModal;
