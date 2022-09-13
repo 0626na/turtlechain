@@ -7,21 +7,21 @@ import { StoreShow } from '@apis/retailerStoreAPI';
 function useStore() {
   const [store, setStore] = useRecoilState(storeState);
 
-  const fillStoreList = (storeList: StoreShow[]) => {
-    const isClosed = (store: StoreShow) => !store.is_closed;
+  const isOpen = (store: StoreShow) => !store.is_closed;
 
+  const fillStoreList = (storeList: StoreShow[]) => {
     setStore({
-      list: storeList.filter(isClosed),
+      list: storeList.filter(isOpen),
       selected: undefined,
     });
   };
 
-  const selectDefaultStore = () => {
-    if (store.list.length === 0) return;
+  const selectDefaultStore = (storeList: StoreShow[]) => {
+    if (storeList.length === 0) return;
 
     setStore((store) => ({
       ...store,
-      now: store.list[0],
+      selected: storeList.filter(isOpen)[0],
     }));
   };
 

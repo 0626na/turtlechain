@@ -16,7 +16,7 @@ function StoreSelector() {
       enabled: !store.selected,
       onSuccess: (data) => {
         fillStoreList(data.store_list);
-        selectDefaultStore();
+        selectDefaultStore(data.store_list);
       },
     },
   );
@@ -29,7 +29,7 @@ function StoreSelector() {
           css={menu}
           selectable
           onSelect={({ key }) => {
-            selectStore(Number(key), 'warning');
+            selectStore(Number(key), 'warning message');
           }}
           items={store.list.map((store) => ({
             style: menuItemContainer,
