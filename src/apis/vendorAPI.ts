@@ -18,11 +18,11 @@ export interface ParesdResult {
 }
 
 // 거래처 사업자 타입
-// export interface VendorCompany {
-//   name: string;
-//   owner: string;
-//   biz_num: string;
-// }
+export interface VendorCompany {
+  name: string;
+  owner: string;
+  biz_num: string;
+}
 
 // 거래처
 export interface Vendor {
@@ -61,7 +61,7 @@ export interface Wholesale {
   address: string;
   store_account: VendorAccount[];
   store_phone: VendorPhone[];
-  // company: VendorCompany[];
+  company: VendorCompany[];
   building: string;
   floor: string;
   col: string;
