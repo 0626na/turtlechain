@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
-import { TurtleIcon, TurtleText, TurtleTooltip } from '@components/element';
+import {
+  MemoIcon,
+  TurtleIcon,
+  TurtleText,
+  TurtleTooltip,
+} from '@components/element';
 import { SuccessItem } from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
 
@@ -220,16 +225,12 @@ function SuccessTab({ isLoading }: Props) {
             align: 'center',
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
-              <TurtleIcon
-                name="memo"
+              <MemoIcon
                 onClick={() => {
                   setSelectedRow(record);
                   openMemoModal();
                 }}
-                css={{
-                  cursoMemor: 'pointer',
-                  stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
-                }}
+                value={record.memo}
               />
             ),
           },

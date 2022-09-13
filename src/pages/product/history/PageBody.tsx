@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
 import SearchFilter from '@components/combine/SearchFilter';
 import {
+  MemoIcon,
   TurtleConfirmModal,
   TurtleIcon,
   TurtleTableTitle,
@@ -209,13 +210,12 @@ function PageBody() {
               align: 'center',
               title: t('table.memo'),
               render: (_, record) => (
-                <TurtleIcon
-                  name="memo"
-                  css={{ stroke: record.memo ? '#2ab8c1' : '#a1a2a6' }}
+                <MemoIcon
                   onClick={() => {
                     selectRow(record);
                     openMemoModal();
                   }}
+                  value={record.memo}
                 />
               ),
             },

@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { CloseOutlined } from '@ant-design/icons';
-import { TurtleIcon, TurtleTableTitle } from '@components/element';
+import React from 'react';
+import { MemoIcon, TurtleIcon, TurtleTableTitle } from '@components/element';
 import TurtleInputPrice from '@components/element/input/TurtlePriceInput';
 import useProductCart from '@hooks/useProductCart';
-import {
-  Button,
-  Col,
-  Popover,
-  Row,
-  Table,
-  TabPaneProps,
-  Tabs,
-  Typography,
-} from 'antd';
+import { Table, TabPaneProps, Tabs, Tooltip, Typography } from 'antd';
 import { t } from 'i18next';
+import NeedUpdatePopover from '../popovers/NeedUpdatePopover';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 function SuccessTab({ loading, ...props }: Props) {
-  const [messageVisible, setMessageVisible] = useState(false);
   const { cart, updatePrice, deleteProduct } = useProductCart();
 
   const needUpdateStyle = (needUpdate: boolean) => ({
@@ -27,13 +17,6 @@ function SuccessTab({ loading, ...props }: Props) {
       backgroundColor: needUpdate ? '#F2F2F3' : 'transparent',
     },
   });
-
-  useEffect(() => {
-    cart.successList.forEach((store) => {
-      store.need_update && setMessageVisible(true);
-    });
-    cart.successList.length === 0 && setMessageVisible(false);
-  }, [cart]);
 
   return (
     <Tabs.TabPane {...props}>
@@ -44,7 +27,6 @@ function SuccessTab({ loading, ...props }: Props) {
         rowKey={(record) => record.product_code}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         scroll={{ x: 1400, y: 'auto' }}
-        style={{ height: cart.successList.length <= 5 ? '45vh' : '' }}
         title={() => <TurtleTableTitle totalCount={cart.successList.length} />}
         columns={[
           {
@@ -65,43 +47,7 @@ function SuccessTab({ loading, ...props }: Props) {
             ellipsis: true,
             width: 250,
             title: (
-              <Popover
-                title={
-                  <Row justify="space-between" align="middle">
-                    <Col>
-                      <Typography.Text style={{ color: 'white' }}>
-                        {t('message.product info different')}
-                      </Typography.Text>
-                    </Col>
-                    <Col>
-                      <CloseOutlined
-                        style={{ color: 'white' }}
-                        onClick={() => setMessageVisible(false)}
-                      />
-                    </Col>
-                  </Row>
-                }
-                content={
-                  <>
-                    <Typography.Text style={{ color: 'white' }}>
-                      {t('description.product info different')}
-                    </Typography.Text>
-                    <Row justify="end" style={{ marginTop: 10 }}>
-                      <Button
-                        style={{ color: '#65C1E5', border: '#65C1E5' }}
-                        href="https://www.sellmate.co.kr/login"
-                        target="_blank"
-                      >
-                        {t('button.click sellmate')}
-                      </Button>
-                    </Row>
-                  </>
-                }
-                color="#65C1E5"
-                visible={messageVisible}
-              >
-                {t('table.productName')}
-              </Popover>
+              <NeedUpdatePopover>{t('table.productName')}</NeedUpdatePopover>
             ),
             onCell: (record) => needUpdateStyle(record.need_update),
             render: (_, record) => record.name,
@@ -159,7 +105,11 @@ function SuccessTab({ loading, ...props }: Props) {
             width: 50,
             title: t('table.memo'),
             onCell: (record) => needUpdateStyle(record.need_update),
-            render: (_, record) => record.memo,
+            render: (_, record) => (
+              <Tooltip title={record.memo}>
+                <MemoIcon value={record.memo} />
+              </Tooltip>
+            ),
           },
           {
             ellipsis: true,
