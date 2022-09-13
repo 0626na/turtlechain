@@ -119,8 +119,10 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
   useEffect(() => {
     if (visible) return;
 
-    form.resetFields();
-  }, [visible, form]);
+    form.setFieldsValue({
+      rt_store_id: store.selected?.id as number,
+    });
+  }, [visible, form, store.selected?.id]);
 
   return (
     <>
@@ -136,7 +138,10 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       <TurtleContentModal
         title={t('vendor.addSingle')}
         visible={visible}
-        onClose={closeModal}
+        onClose={() => {
+          form.resetFields();
+          closeModal();
+        }}
       >
         <Form
           css={formItemMarginBottom}
