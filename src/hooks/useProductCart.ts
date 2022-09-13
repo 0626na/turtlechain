@@ -11,16 +11,14 @@ const useProductCart = () => {
   const ready = (data: ResponseConnectInventory) => {
     setCart((cart) => ({
       // ...cart,
-      successList: [
-        ...data.data.success.map((product) => ({
-          ...product,
-          submit_price: product.price,
-          memo_value: product.memo,
-          memo_active: !!product.memo,
-        })),
-        ...cart.successList,
-      ],
-      failList: [...data.data.fail, ...cart.failList],
+      successList: data.data.success.map((product) => ({
+        ...product,
+        submit_price: product.price,
+        memo_value: product.memo,
+        memo_active: !!product.memo,
+      })),
+
+      failList: data.data.fail,
       fileList: [],
     }));
   };
