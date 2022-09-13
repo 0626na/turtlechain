@@ -155,9 +155,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           <Form.Item name="rt_store_id" hidden>
             <Input hidden />
           </Form.Item>
-          {/* <Form.Item name="vendor_name" hidden>
-            <Input hidden />
-          </Form.Item> */}
           <Form.Item name="vendor_address" hidden>
             <Input hidden />
           </Form.Item>
@@ -174,7 +171,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: '거래처명을 입력해주세요' }]}
           >
             <TurtleFormSearchInput
               readOnly
@@ -241,13 +238,13 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           <Form.Item
             label={t('table.vendorCode')}
             name="vendor_code"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: '거래처코드를 입력해주세요' }]}
           >
             <TurtleFormInput placeholder="거래처코드를 입력해주세요" disabled />
           </Form.Item>
 
           <div css={flexEnd}>
-            <Button css={createCodeBtn} onClick={clickCreateVendorCode}>
+            <Button css={createCodeButton} onClick={clickCreateVendorCode}>
               <span css={createCodeFont}>코드 만들기</span>
             </Button>
           </div>
@@ -285,7 +282,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               htmlType="submit"
               onClick={() => {
                 form.validateFields().then(() => {
-                  console.log(form.getFieldsValue());
                   createVendorMutation.mutate([{ ...form.getFieldsValue() }]);
                 });
               }}
@@ -334,7 +330,7 @@ const marginTop = css`
   margin-top: 44px;
 `;
 
-const createCodeBtn = css`
+const createCodeButton = css`
   background: #f0f3f6;
   width: 100px;
   height: 36px;
@@ -345,6 +341,7 @@ const createCodeBtn = css`
 
   &.ant-btn:focus {
     background-color: #f0f3f6;
+    border-color: #f0f3f6;
   }
 `;
 
