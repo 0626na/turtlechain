@@ -6,13 +6,13 @@ import React from 'react';
 
 interface Props {
   value: string;
-  onChange: (value: unknown) => void;
-  items: { value: string; name: string; icon?: React.ReactNode }[];
+  onChange?: (value: unknown) => void;
+  items?: { value: string; name: string; icon?: React.ReactNode }[];
   disabled?: boolean;
   placeholder?: string;
 }
 
-function TestSelect({ items, ...props }: Props) {
+function TurtleFormSelect({ items, ...props }: Props) {
   return (
     <StyledSelect
       {...props}
@@ -67,4 +67,4 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-export default TestSelect;
+export default TurtleFormSelect;
