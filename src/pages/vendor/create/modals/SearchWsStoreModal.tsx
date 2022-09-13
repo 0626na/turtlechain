@@ -146,13 +146,13 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.name'),
+              title: <span css={tableTitle}>{t('table.vendorName')}</span>,
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.address'),
+              title: <span css={tableTitle}>{t('table.vendorAddress')}</span>,
               render: (_, record) => {
                 return `${record.building} ${
                   record.floor && record.floor + '층'
@@ -162,7 +162,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.store phone'),
+              title: <span css={tableTitle}>{t('table.mobile')}</span>,
               render: (_, record) => {
                 if (record.store_phone.length === 1) {
                   return record.store_phone[0].phone.replace(
@@ -210,7 +210,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
             },
             {
               ellipsis: true,
-              title: t('vendor.account'),
+              title: <span css={tableTitle}>{t('table.accountInfo')}</span>,
               render: (_, record) => {
                 const makeAddress = ({
                   bank,
@@ -280,6 +280,11 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     </div>
   );
 }
+
+const tableTitle = css`
+  font-weight: 400;
+  color: #5b5d63;
+`;
 
 const button = css`
   width: 60px;
