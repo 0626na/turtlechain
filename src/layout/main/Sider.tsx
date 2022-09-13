@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import StoreSelector from './StoreSelector';
 
-import { TurtleImg } from '@components/element';
-
+import { ReactComponent as Home } from '@icons/home.svg';
 import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
 import { ReactComponent as OrderIcon } from '@icons/order.svg';
 import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
@@ -58,9 +57,14 @@ const mainMenuTitleStyle = {
   color: '#a1a2a6',
 };
 
+const mainMenuHomeStyle = {
+  fontSize: 12,
+  color: '#a1a2a6',
+};
+
 const mainMenuContentStyle = {
   fontWeight: 500,
-  width: 236,
+  width: 216,
   height: 38,
 
   marginLeft: 12,
@@ -79,7 +83,7 @@ const etcMenuContainerStyle = {
 };
 const etcMenuTitleStyle = {
   fontWeight: 500,
-  width: 236,
+  width: 216,
   height: 38,
 
   padding: '0px 8px',
@@ -90,12 +94,30 @@ const etcMenuTitleStyle = {
  * menus
  */
 
+type info = {
+  key: string;
+  domEvent: React.MouseEvent<HTMLElement>;
+};
+
 const menus = [
   {
     type: 'group',
     key: 'mainMenuContainer',
     style: mainMenuContainerStyle,
     children: [
+      {
+        key: 'home',
+        label: '홈',
+        icon: <Home />,
+        style: mainMenuHomeStyle,
+        onMouseEnter: (e: info) => {
+          e.domEvent.currentTarget.style.color = '#EAECEF';
+          e.domEvent.currentTarget.style.backgroundColor = 'transparent';
+        },
+        onMouseLeave: (e: info) => {
+          e.domEvent.currentTarget.style.color = '#a1a2a6';
+        },
+      },
       {
         key: 'vendor&product',
         label: '거래처/상품',
@@ -219,17 +241,8 @@ function Sider() {
   }, [pathname]);
 
   return (
-    <Layout.Sider css={siderLayout} width="260" trigger={null}>
+    <Layout.Sider css={siderLayout} width="240" trigger={null}>
       <div css={siderHeader}>
-        <div
-          css={logoContainer}
-          onClick={() => {
-            navigate('home');
-          }}
-        >
-          <TurtleImg name="logo" />
-        </div>
-
         <StoreSelector />
       </div>
 
@@ -262,21 +275,11 @@ const siderLayout = css`
 `;
 
 const siderHeader = css`
-  height: 142px;
-  padding: 0px 12px;
-  margin-bottom: 20px;
+  height: 100px;
+  padding: 20px 12px;
 
   display: flex;
   flex-direction: column;
-`;
-
-const logoContainer = css`
-  height: 82px;
-  margin-left: 14px;
-
-  display: flex;
-  align-items: center;
-  cursor: pointer;
 `;
 
 const menu = css`
