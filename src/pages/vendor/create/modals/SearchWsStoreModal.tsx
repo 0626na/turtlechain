@@ -1,30 +1,35 @@
-import { Button, Pagination, Popover, Radio, Row, Space, Table } from 'antd';
-import { useCallback, useState } from 'react';
+import React from 'react';
+import {
+  Button,
+  message,
+  Pagination,
+  Popover,
+  Radio,
+  Row,
+  Space,
+  Table,
+} from 'antd';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { t } from 'i18next';
 import vendorAPI, {
   RequestGetWholesale,
   VendorAccount,
+  VendorPhone,
   Wholesale,
 } from '@apis/vendorAPI';
 import { phonePattern } from '@utils/pattern';
 import { TurtleBadge, TurtleTableTitle } from '@components/element';
 import { SearchFilter, TurtleContentModal } from '@components/combine';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  onVendorSelect?: (wholeSaleStore: Wholesale) => void;
-  // onClickSelect?: (
-  //   vendor_id: number,
-  //   vendor_name: string,
-  //   vendor_address: string,
-  //   vendor_phone: string,
-  //   is_vat_included: boolean,
-  // ) => void;
+  selectRow: (wholeSaleStore: Wholesale) => void;
 }
 
-function SearchWsStoreModal({ visible, closeModal, onVendorSelect }: Props) {
+function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
   const [wholesaleList, setWholesaleList] = useState<Array<Wholesale>>([]);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
@@ -44,230 +49,238 @@ function SearchWsStoreModal({ visible, closeModal, onVendorSelect }: Props) {
     },
   );
 
-  // const onClickSelect = useCallback(
-  //   (record: Wholesale) => {
-  //     if (record.store_phone.length !== 1) {
-  //       message.warning('휴대번호를 선택해주세요');
-  //       return;
-  //     }
-  //     if (record.store_account.length !== 1) {
-  //       message.warning('계좌번호를 선택해주세요');
-  //       return;
-  //     }
-  //     // onVendorSelect(record);
-  //     setSearchQuery({
-  //       page: 1,
-  //       type: 'name',
-  //       search_string: '',
-  //     });
-  //   },
-  //   [onVendorSelect],
-  // );
+  const onClickSelect = (record: Wholesale) => {
+    if (record.store_phone.length !== 1) {
+      message.warning('휴대번호를 선택해주세요');
+      return;
+    }
+    if (record.store_account.length !== 1) {
+      message.warning('계좌번호를 선택해주세요');
+      return;
+    }
+    // onVendorSelect(record);
+    setSearchQuery({
+      page: 1,
+      type: 'name',
+      search_string: '',
+    });
+  };
 
-  const selectStorePhone = useCallback(
-    (record, storePhone) => {
-      setWholesaleList(
-        wholesaleList.map((vendor) =>
-          vendor.id === record.id
-            ? {
-                ...vendor,
-                store_phone: [storePhone],
-              }
-            : vendor,
-        ),
-      );
-    },
-    [wholesaleList],
-  );
+  const selectStorePhone = (record: Wholesale, storePhone: VendorPhone) => {
+    setWholesaleList(
+      wholesaleList.map((vendor) =>
+        vendor.id === record.id
+          ? {
+              ...vendor,
+              store_phone: [storePhone],
+            }
+          : vendor,
+      ),
+    );
+  };
 
-  const selectStoreAccount = useCallback(
-    (record, storeAccount) => {
-      setWholesaleList(
-        wholesaleList.map((vendor) =>
-          vendor.id === record.id
-            ? {
-                ...vendor,
-                store_account: [storeAccount],
-              }
-            : vendor,
-        ),
-      );
-    },
-    [wholesaleList],
-  );
+  const selectStoreAccount = (
+    record: Wholesale,
+    storeAccount: VendorAccount,
+  ) => {
+    setWholesaleList(
+      wholesaleList.map((vendor) =>
+        vendor.id === record.id
+          ? {
+              ...vendor,
+              store_account: [storeAccount],
+            }
+          : vendor,
+      ),
+    );
+  };
 
   return (
-    <TurtleContentModal
-      title={t('vendor.search')}
-      visible={visible}
-      onClose={closeModal}
+    <div
+      css={css`
+        z-index: 2;
+      `}
     >
-      <Table
-        size="small"
-        loading={getWholesaleQuery.isLoading}
-        dataSource={wholesaleList}
-        rowKey={(record) => record.id}
-        pagination={false}
-        scroll={{ y: 'auto' }}
-        title={() => (
-          <TurtleTableTitle
-            totalCount={getWholesaleQuery.data?.data.total_count ?? 0}
-            rightContent={
-              <SearchFilter
-                vendor
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-              />
-            }
-          />
-        )}
-        footer={() => (
-          <Row justify="center">
-            <Pagination
-              size="small"
-              total={getWholesaleQuery.data?.data.total_count}
-              showSizeChanger={false}
-              current={searchQuery.page}
-              onChange={(page) => {
-                setSearchQuery({ ...searchQuery, page });
-              }}
+      <TurtleContentModal
+        size="large"
+        title={t('vendor.search')}
+        visible={visible}
+        onClose={closeModal}
+      >
+        <Table
+          size="small"
+          loading={getWholesaleQuery.isLoading}
+          dataSource={wholesaleList}
+          rowKey={(record) => record.id}
+          pagination={false}
+          scroll={{ y: 'auto' }}
+          title={() => (
+            <TurtleTableTitle
+              totalCount={getWholesaleQuery.data?.data.total_count ?? 0}
+              rightContent={
+                <SearchFilter
+                  vendor
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                />
+              }
             />
-          </Row>
-        )}
-        columns={[
-          {
-            ellipsis: true,
-            width: '20%',
-            title: t('vendor.name'),
-            render: (_, record) => record.name,
-          },
-          {
-            ellipsis: true,
-            width: '20%',
-            title: t('vendor.address'),
-            render: (_, record) => {
-              return `${record.building} ${
-                record.floor && record.floor + '층'
-              } ${record.col} ${record.loc} ${record.ext}`;
+          )}
+          footer={() => (
+            <Row justify="center">
+              <Pagination
+                size="small"
+                total={getWholesaleQuery.data?.data.total_count}
+                showSizeChanger={false}
+                current={searchQuery.page}
+                onChange={(page) => {
+                  setSearchQuery({ ...searchQuery, page });
+                }}
+              />
+            </Row>
+          )}
+          columns={[
+            {
+              ellipsis: true,
+              width: '20%',
+              title: t('vendor.name'),
+              render: (_, record) => record.name,
             },
-          },
-          {
-            ellipsis: true,
-            width: '20%',
-            title: t('vendor.store phone'),
-            render: (_, record) => {
-              if (record.store_phone.length === 1) {
-                return record.store_phone[0].phone.replace(
-                  phonePattern,
-                  `$1-$2-$3`,
+            {
+              ellipsis: true,
+              width: '20%',
+              title: t('vendor.address'),
+              render: (_, record) => {
+                return `${record.building} ${
+                  record.floor && record.floor + '층'
+                } ${record.col} ${record.loc} ${record.ext}`;
+              },
+            },
+            {
+              ellipsis: true,
+              width: '20%',
+              title: t('vendor.store phone'),
+              render: (_, record) => {
+                if (record.store_phone.length === 1) {
+                  return record.store_phone[0].phone.replace(
+                    phonePattern,
+                    `$1-$2-$3`,
+                  );
+                }
+
+                return (
+                  <TurtleBadge count={record.store_phone.length}>
+                    <Popover
+                      content={
+                        <>
+                          <Radio.Group>
+                            <Space direction="vertical">
+                              {record.store_phone.map((storePhone) => (
+                                <Radio
+                                  value={storePhone.phone}
+                                  key={storePhone.id}
+                                  onClick={() => {
+                                    selectStorePhone(record, storePhone);
+                                  }}
+                                >
+                                  {storePhone.phone.replace(
+                                    phonePattern,
+                                    `$1-$2-$3`,
+                                  )}
+                                </Radio>
+                              ))}
+                            </Space>
+                          </Radio.Group>
+                        </>
+                      }
+                    >
+                      <span style={{ color: 'red', cursor: 'pointer' }}>
+                        {record.store_phone[0]?.phone.replace(
+                          phonePattern,
+                          `$1-$2-$3`,
+                        )}
+                      </span>
+                    </Popover>
+                  </TurtleBadge>
                 );
-              }
-
-              return (
-                <TurtleBadge count={record.store_phone.length}>
-                  <Popover
-                    content={
-                      <>
-                        <Radio.Group>
-                          <Space direction="vertical">
-                            {record.store_phone.map((storePhone) => (
-                              <Radio
-                                value={storePhone.phone}
-                                key={storePhone.id}
-                                onClick={() => {
-                                  selectStorePhone(record, storePhone);
-                                }}
-                              >
-                                {storePhone.phone.replace(
-                                  phonePattern,
-                                  `$1-$2-$3`,
-                                )}
-                              </Radio>
-                            ))}
-                          </Space>
-                        </Radio.Group>
-                      </>
-                    }
-                  >
-                    <span style={{ color: 'red', cursor: 'pointer' }}>
-                      {record.store_phone[0]?.phone.replace(
-                        phonePattern,
-                        `$1-$2-$3`,
-                      )}
-                    </span>
-                  </Popover>
-                </TurtleBadge>
-              );
+              },
             },
-          },
-          {
-            ellipsis: true,
-            title: t('vendor.account'),
-            render: (_, record) => {
-              const makeAddress = ({
-                bank,
-                account_number,
-                account_holder,
-              }: VendorAccount) => {
-                return `${bank} ${account_number} ${account_holder}`;
-              };
+            {
+              ellipsis: true,
+              title: t('vendor.account'),
+              render: (_, record) => {
+                const makeAddress = ({
+                  bank,
+                  account_number,
+                  account_holder,
+                }: VendorAccount) => {
+                  return `${bank} ${account_number} ${account_holder}`;
+                };
 
-              if (record.store_account.length === 0) {
-                return;
-              }
-              if (record.store_account.length === 1) {
-                return makeAddress(record.store_account[0]);
-              }
+                if (record.store_account.length === 0) {
+                  return;
+                }
+                if (record.store_account.length === 1) {
+                  return makeAddress(record.store_account[0]);
+                }
 
-              return (
-                <TurtleBadge count={record.store_account.length}>
-                  <Popover
-                    content={
-                      <>
-                        <Radio.Group>
-                          <Space direction="vertical">
-                            {record.store_account.map((storeAccount) => (
-                              <Radio
-                                key={storeAccount.id}
-                                value={storeAccount.account_number}
-                                onClick={() => {
-                                  selectStoreAccount(record, storeAccount);
-                                }}
-                              >
-                                {makeAddress(storeAccount)}
-                              </Radio>
-                            ))}
-                          </Space>
-                        </Radio.Group>
-                      </>
-                    }
-                  >
-                    <span style={{ color: 'red', cursor: 'pointer' }}>
-                      {makeAddress(record.store_account[0])}
-                    </span>
-                  </Popover>
-                </TurtleBadge>
-              );
+                return (
+                  <TurtleBadge count={record.store_account.length}>
+                    <Popover
+                      content={
+                        <>
+                          <Radio.Group>
+                            <Space direction="vertical">
+                              {record.store_account.map((storeAccount) => (
+                                <Radio
+                                  key={storeAccount.id}
+                                  value={storeAccount.account_number}
+                                  onClick={() => {
+                                    selectStoreAccount(record, storeAccount);
+                                  }}
+                                >
+                                  {makeAddress(storeAccount)}
+                                </Radio>
+                              ))}
+                            </Space>
+                          </Radio.Group>
+                        </>
+                      }
+                    >
+                      <span style={{ color: 'red', cursor: 'pointer' }}>
+                        {makeAddress(record.store_account[0])}
+                      </span>
+                    </Popover>
+                  </TurtleBadge>
+                );
+              },
             },
-          },
-          {
-            width: 100,
-            align: 'center',
-            title: '',
-            render: (_, record) => (
-              <Button> asa</Button>
-              // <TurtleButtonSub //
-              //   size="small"
-              //   color="green"
-              //   onClick={() => onClickSelect(record)}
-              // >
-              //   {t('button.select')}
-              // </TurtleButtonSub>
-            ),
-          },
-        ]}
-      />
-    </TurtleContentModal>
+            {
+              width: 100,
+              align: 'center',
+              title: '',
+              render: (_, record) => (
+                <Button
+                  onClick={() => {
+                    onClickSelect(record);
+                  }}
+                >
+                  {' '}
+                  asa
+                </Button>
+                // <TurtleButtonSub //
+                //   size="small"
+                //   color="green"
+                //   onClick={() => onClickSelect(record)}
+                // >
+                //   {t('button.select')}
+                // </TurtleButtonSub>
+              ),
+            },
+          ]}
+        />
+      </TurtleContentModal>
+    </div>
   );
 }
 
