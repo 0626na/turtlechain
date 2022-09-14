@@ -84,6 +84,7 @@ const rightContnetStyled = css`
 const textStyled = css`
   font-size: 24px;
   font-weight: 700;
+  color: #242934;
 `;
 
 const iconContainer = css`

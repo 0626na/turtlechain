@@ -55,6 +55,7 @@ const $menu = css`
 
 const menuItem = {
   borderRadius: 6,
+  height: 38,
 };
 
 export default TurtleDropdown;
