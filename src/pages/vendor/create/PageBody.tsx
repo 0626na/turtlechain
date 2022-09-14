@@ -52,7 +52,7 @@ function PageBody() {
       closeInventoryModal();
 
       message.info(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}개 있습니다.`,
+        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
 
       ready(data);
@@ -64,7 +64,7 @@ function PageBody() {
     onSuccess: (data) => {
       ready(data);
       message.info(
-        `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
+        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
     },
   });
@@ -131,7 +131,7 @@ function PageBody() {
         onCancel={() => {
           closeConfirmModal();
         }}
-        okText="네"
+        okText="등록"
         onOk={() => {
           vendorCreateMutation.mutate(
             cart.successList.map((vendor) => ({
