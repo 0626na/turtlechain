@@ -88,7 +88,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
       file: undefined,
     });
 
-    console.log(form.getFieldsValue());
+    // console.log(form.getFieldsValue());
   };
 
   const normFile = (e: any) => {
@@ -338,11 +338,6 @@ const formItemMarginBottom = css`
   }
 `;
 
-const flexEnd = css`
-  display: flex;
-  justify-content: end;
-`;
-
 const flexGap = css`
   display: flex;
   gap: 4px;
@@ -350,27 +345,6 @@ const flexGap = css`
 
 const marginTop = css`
   margin-top: 44px;
-`;
-
-const createCodeButton = css`
-  background: #f0f3f6;
-  width: 100px;
-  height: 36px;
-
-  &:hover {
-    background-color: #f0f3f6;
-  }
-
-  &.ant-btn:focus {
-    background-color: #f0f3f6;
-    border-color: #f0f3f6;
-  }
-`;
-
-const createCodeFont = css`
-  font-weight: 700;
-  color: #6b6d73;
-  opacity: 1; // 거래처 선택시 0.5
 `;
 
 export default VendorInfoUpdateModal;
