@@ -52,8 +52,6 @@ const $menu = css`
   padding: 6px;
   width: 160px;
 
-  overflow-y: scroll;
-
   box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.28);
   border-radius: 8px;
 `;
