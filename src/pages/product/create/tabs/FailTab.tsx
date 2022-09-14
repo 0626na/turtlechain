@@ -1,6 +1,6 @@
 import { t } from 'i18next';
-import { Table, TabPaneProps, Tabs, Typography } from 'antd';
-import { TurtleTableTitle } from '@components/element';
+import { Table, TabPaneProps, Tabs, Tooltip, Typography } from 'antd';
+import { MemoIcon, TurtleIcon, TurtleTableTitle } from '@components/element';
 import useProductCart from '@hooks/useProductCart';
 
 interface Props extends TabPaneProps {
@@ -79,8 +79,13 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
+            width: 50,
             title: t('table.memo'),
-            render: (_, record) => record.memo,
+            render: (_, record) => (
+              <Tooltip title={record.memo}>
+                <MemoIcon value={record.memo} />
+              </Tooltip>
+            ),
           },
         ]}
       />

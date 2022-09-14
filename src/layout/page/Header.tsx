@@ -1,14 +1,13 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { useQuery } from 'react-query';
 import { Avatar, Col, Dropdown, Menu, Row, Button } from 'antd';
-
+import { t } from 'i18next';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
 import useLogin from '@hooks/useLogin';
-import { useQuery } from 'react-query';
 import authAPI from '@apis/authAPI';
-import { t } from 'i18next';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 
 interface Props {
   title: string;
@@ -39,11 +38,18 @@ function PageHeader({ title, button, onClickBefore }: Props) {
 
           <Dropdown
             overlay={
-              <Menu>
-                <Button type="text" onClick={logout}>
-                  {t('auth.logout')}
-                </Button>
-              </Menu>
+              <Menu
+                items={[
+                  {
+                    key: 1,
+                    label: (
+                      <Button type="text" onClick={logout}>
+                        {t('auth.logout')}
+                      </Button>
+                    ),
+                  },
+                ]}
+              />
             }
             trigger={['click']}
           >

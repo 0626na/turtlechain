@@ -25,7 +25,8 @@ import TurtleTooltip from './TurtleTooltip';
 import TurtleBadge from './TurtleBadge';
 import TurtleUpload from './TurtleUpload';
 import TurtleTabs from './TurtleTabs';
-import TurtleIcon from './TurtleIcon';
+import TurtleIcon from './icon/TurtleIcon';
+import MemoIcon from './icon/MemoIcon';
 import TurtleFormSelect from './select/TurtleFormSelect';
 
 export {
@@ -63,4 +64,5 @@ export {
   TurtleBadge,
   TurtleTabs,
   TurtleIcon,
+  MemoIcon,
 };

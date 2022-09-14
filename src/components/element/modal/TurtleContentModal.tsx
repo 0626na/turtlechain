@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import TurtleIcon from '../TurtleIcon';
+import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props {
   visible: boolean;

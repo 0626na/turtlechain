@@ -1,5 +1,4 @@
 import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
-import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 import { ReactComponent as ModalCloseIcon } from '@icons/modalClose.svg';
 
 import { ReactComponent as MatchingIcon } from '@icons/matching.svg';
@@ -10,13 +9,15 @@ import { ReactComponent as SingleIcon } from '@icons/single.svg';
 import { ReactComponent as UpdateVendorNameIcon } from '@icons/updateVendorName.svg';
 import { ReactComponent as UpdateVendorInfoIcon } from '@icons/updateVendorInfo.svg';
 import { ReactComponent as MoreIcon } from '@icons/more.svg';
+import { ReactComponent as WarningIcon } from '@icons/warning.svg';
+import { ReactComponent as MemoIcon } from '@icons/memo.svg';
+
 import { css } from '@emotion/react';
 
 interface Props {
   danger?: boolean;
   name:
     | 'delete'
-    | 'memo'
     | 'modalClose'
     | 'matching'
     | 'misMatching'
@@ -24,7 +25,9 @@ interface Props {
     | 'single'
     | 'updateVendorName'
     | 'updateVendorInfo'
-    | 'more';
+    | 'more'
+    | 'warning'
+    | 'memo';
   onClick?: () => void;
   className?: string;
 }
@@ -57,7 +60,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'modalClose') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <ModalCloseIcon className={className} />
+        <ModalCloseIcon />
       </div>
     );
   }
@@ -65,7 +68,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'matching') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <MatchingIcon className={className} />
+        <MatchingIcon />
       </div>
     );
   }
@@ -73,7 +76,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'misMatching') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <MisMatchingIcon className={className} />
+        <MisMatchingIcon />
       </div>
     );
   }
@@ -81,7 +84,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'exel') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <ExelIcon className={className} />
+        <ExelIcon />
       </div>
     );
   }
@@ -89,7 +92,15 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'single') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <SingleIcon className={className} />
+        <SingleIcon />
+      </div>
+    );
+  }
+
+  if (name === 'warning') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <WarningIcon />
       </div>
     );
   }
