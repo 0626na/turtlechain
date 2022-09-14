@@ -57,7 +57,6 @@ const StyledSelect = styled(Select)`
   }
 
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    width: 152px;
     height: 36px;
     font-size: 14px;
     padding: 0px 10px;
