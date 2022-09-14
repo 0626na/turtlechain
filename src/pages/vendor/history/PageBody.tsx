@@ -218,7 +218,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 200,
-              title: t('table.vendorMobile'),
+              title: t('table.mobile'),
               render: (_, record) => record.vendor_phone.phone,
             },
             {
