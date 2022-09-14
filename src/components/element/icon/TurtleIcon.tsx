@@ -10,7 +10,6 @@ import { ReactComponent as UpdateVendorNameIcon } from '@icons/updateVendorName.
 import { ReactComponent as UpdateVendorInfoIcon } from '@icons/updateVendorInfo.svg';
 import { ReactComponent as MoreIcon } from '@icons/more.svg';
 import { ReactComponent as WarningIcon } from '@icons/warning.svg';
-import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 
 import { css } from '@emotion/react';
 
@@ -26,13 +25,11 @@ interface Props {
     | 'updateVendorName'
     | 'updateVendorInfo'
     | 'more'
-    | 'warning'
-    | 'memo';
+    | 'warning';
   onClick?: () => void;
-  className?: string;
 }
 
-function TurtleIcon({ name, onClick, danger, className }: Props) {
+function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     onClick && onClick();
@@ -44,15 +41,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
         css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
         onClick={handleClick}
       >
-        <RemoveIcon className={className} />
-      </div>
-    );
-  }
-
-  if (name === 'memo') {
-    return (
-      <div css={iconContainer} onClick={handleClick}>
-        <MemoIcon className={className} />
+        <RemoveIcon />
       </div>
     );
   }
@@ -108,7 +97,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'updateVendorName') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <UpdateVendorNameIcon className={className} />
+        <UpdateVendorNameIcon />
       </div>
     );
   }
@@ -116,7 +105,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'updateVendorInfo') {
     return (
       <div css={iconContainer} onClick={handleClick}>
-        <UpdateVendorInfoIcon className={className} />
+        <UpdateVendorInfoIcon />
       </div>
     );
   }
@@ -124,7 +113,7 @@ function TurtleIcon({ name, onClick, danger, className }: Props) {
   if (name === 'more') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
-        <MoreIcon className={className} />
+        <MoreIcon />
       </div>
     );
   }
