@@ -129,7 +129,17 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.vendorAddress')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput disabled={true} />
+            <TurtleFormInput disabled />
+          </Form.Item>
+
+          <Form.Item
+            label={t('table.otherAddress')}
+            rules={[{ required: false }]}
+          >
+            <TurtleFormInput
+              disabled
+              value={form.getFieldValue('ws_store_info')?.ext ?? ''}
+            />
           </Form.Item>
 
           <Form.Item
@@ -137,7 +147,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.mobile')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput disabled={true} />
+            <TurtleFormInput disabled />
           </Form.Item>
 
           <Divider />

@@ -26,20 +26,17 @@ interface Props {
   triggerButton: React.ReactNode;
 }
 
-function SecondaryDropdown({ items, triggerButton }: Props) {
-  const menu = items.map((item) => {
-    return {
-      style: menuItem,
-      onMouseEnter: (e: info) => {
-        e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
-      },
-      onMouseLeave: (e: info) => {
-        e.domEvent.currentTarget.style.backgroundColor = '#fff';
-      },
-      onClick: item.onClick,
-      ...item,
-    };
-  });
+function TurtleDropdown({ items, triggerButton }: Props) {
+  const menu = items.map((item) => ({
+    ...item,
+    style: menuItem,
+    onMouseEnter: (e: info) => {
+      e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
+    },
+    onMouseLeave: (e: info) => {
+      e.domEvent.currentTarget.style.backgroundColor = '#fff';
+    },
+  }));
 
   return (
     <Dropdown overlay={<Menu css={$menu} items={menu} />} trigger={['click']}>
@@ -52,8 +49,6 @@ const $menu = css`
   padding: 6px;
   width: 160px;
 
-  overflow-y: scroll;
-
   box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.28);
   border-radius: 8px;
 `;
@@ -62,4 +57,4 @@ const menuItem = {
   borderRadius: 6,
 };
 
-export default SecondaryDropdown;
+export default TurtleDropdown;

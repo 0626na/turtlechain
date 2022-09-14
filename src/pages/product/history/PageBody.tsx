@@ -94,7 +94,7 @@ function PageBody() {
       <TurtleConfirmModal
         title="정말 삭제할까요?"
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="네"
+        okText="삭제"
         visible={removeModalVisible}
         loading={loading}
         onCancel={closeRemoveModal}

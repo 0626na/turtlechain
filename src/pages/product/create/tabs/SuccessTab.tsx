@@ -107,7 +107,9 @@ function SuccessTab({ loading, ...props }: Props) {
             onCell: (record) => needUpdateStyle(record.need_update),
             render: (_, record) => (
               <Tooltip title={record.memo}>
-                <MemoIcon value={record.memo} />
+                <div>
+                  <MemoIcon value={record.memo} />
+                </div>
               </Tooltip>
             ),
           },

@@ -83,7 +83,9 @@ function FailTab({ loading, ...props }: Props) {
             title: t('table.memo'),
             render: (_, record) => (
               <Tooltip title={record.memo}>
-                <MemoIcon value={record.memo} />
+                <div>
+                  <MemoIcon value={record.memo} />
+                </div>
               </Tooltip>
             ),
           },
