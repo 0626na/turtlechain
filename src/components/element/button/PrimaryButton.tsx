@@ -41,7 +41,7 @@ function PrimaryButton({ size = 'default', children, ...props }: Props) {
 
 const button = css`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 
   border: none;
   color: #fff;
@@ -59,11 +59,8 @@ const button = css`
   }
 `;
 
-const defaultPrimary = css([button, { width: 200, height: 40 }]);
+const defaultPrimary = css([button, { width: 200, height: 48 }]);
 const largePrimary = css([button, { width: 512, height: 48 }]);
-const smallPrimary = css([
-  button,
-  { width: 140, height: 36, fontSize: 14, fontWeight: 500 },
-]);
+const smallPrimary = css([button, { width: 140, height: 36, fontSize: 14 }]);
 
 export default PrimaryButton;

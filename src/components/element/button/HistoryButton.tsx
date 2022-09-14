@@ -23,6 +23,7 @@ function HistoryButton({ text, ...props }: Props) {
 const button = css`
   color: #fff;
   margin-left: 20px;
+  height: 36px;
 
   border: none;
   background-color: #141720;
@@ -32,11 +33,13 @@ const button = css`
 
   &:hover {
     background-color: #373a41;
+    color: #ffffff;
   }
 
   // active 상태
   &.ant-btn:focus {
-    background-color: #141720;
+    background-color: #373a41;
+    color: #ffffff;
   }
 `;
 
