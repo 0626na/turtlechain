@@ -138,7 +138,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
             },
             {
               ellipsis: true,
-              title: t('table.vendorAccount'),
+              title: t('table.accountInfo'),
               render: (_, record) =>
                 `${record.vendor_account.bank} ${record.vendor_account.account_number} ${record.vendor_account.account_holder}`,
             },
