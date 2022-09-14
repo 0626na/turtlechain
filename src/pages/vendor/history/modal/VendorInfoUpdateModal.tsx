@@ -10,14 +10,16 @@ import {
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import vendorAPI, { Vendor } from '@apis/vendorAPI';
+import { Vendor } from '@apis/vendorAPI';
 
 import { css } from '@emotion/react';
 
 import useStore from '@hooks/useStore';
-import { useNavigate } from 'react-router-dom';
+
 import { useMutation, useQuery } from 'react-query';
 import presetAPI from '@apis/presetAPI';
+import bucketListAPI from '@apis/bucketListAPI';
+import { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
@@ -26,7 +28,6 @@ interface Props {
 }
 
 function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
-  const navigate = useNavigate();
   const { store } = useStore();
   // const { isStoreSelected } = useStore();
 
@@ -50,16 +51,13 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
-  // 거래처 등록
-  const createVendorMutation = useMutation(vendorAPI.create, {
-    onSuccess: (data) => {
-      if (data.data.fail_count > 0) {
-        message.error('이미 등록된 거래처입니다.');
-        return;
-      }
+  // 거래처 정보수정
+  const createVendorMutation = useMutation(bucketListAPI.create, {
+    onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
-      form.resetFields();
-      navigate('/vendor/list');
+    },
+    onError: (error: AxiosError) => {
+      message.warn(error.response?.data.msg);
     },
   });
 
@@ -103,30 +101,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  const handleColFilter = () => {
-    // 불러온 col중에서 중복col을 제거하는 함수.
-    const set = new Set<string>();
-    (
-      getBuildingQuery.data?.data[form.getFieldValue('building')]?.[
-        form.getFieldValue('floor')
-      ] ?? []
-    ).forEach((colLoc: string) => {
-      const [col] = colLoc.split(' ');
-      set.add(col);
-    });
-
-    console.log(
-      [...set].map((item) => ({
-        value: item,
-        name: item,
-      })),
-    );
-    return [...set].map((item) => ({
-      value: item,
-      name: item,
-    }));
-  };
-
   return (
     <>
       <TurtleContentModal
@@ -162,7 +136,11 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
           </Form.Item>
 
-          <Form.Item label={t('table.mobile')} name="mobile" required>
+          <Form.Item
+            label={t('table.mobile')}
+            name="mobile"
+            rules={[{ required: true, message: '휴대전화번호를 입력해주세요' }]}
+          >
             <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
           </Form.Item>
 
@@ -170,7 +148,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <div css={flexGap}>
               <div
                 css={css`
-                  flex-basis: 40%;
+                  flex-basis: 46.05%;
                 `}
               >
                 <Form.Item name="building" noStyle>
@@ -194,23 +172,35 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   flex-basis: 30%;
                 `}
               >
-                <Form.Item name="floor" noStyle>
-                  <TurtleFormSelect
-                    items={Object.keys(
-                      getBuildingQuery.data?.data[
-                        form.getFieldValue('building')
-                      ] ?? [],
-                    ).map((floor: string) => ({ value: floor, name: floor }))}
-                    placeholder="층"
-                    onChange={(floor) => {
-                      form.setFieldsValue({
-                        ...form.getFieldsValue(),
-                        colLoc: undefined,
-                        col: undefined,
-                        loc: undefined,
-                      });
-                    }}
-                  />
+                <Form.Item
+                  noStyle
+                  shouldUpdate={(prevValues, curValues) =>
+                    prevValues.additional !== curValues.additional
+                  }
+                >
+                  {() => {
+                    return (
+                      <Form.Item name="floor" noStyle>
+                        <TurtleFormSelect
+                          items={Object.keys(
+                            getBuildingQuery.data?.data[
+                              form.getFieldValue('building')
+                            ] ?? [],
+                          ).map((floor: string) => ({
+                            value: floor,
+                            name: floor,
+                          }))}
+                          placeholder="층"
+                          onChange={(floor) => {
+                            form.setFieldsValue({
+                              ...form.getFieldsValue(),
+                              colLoc: undefined,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    );
+                  }}
                 </Form.Item>
               </div>
               <div
@@ -218,42 +208,32 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   flex-basis: 30%;
                 `}
               >
-                <Form.Item name="col" noStyle>
-                  <TurtleFormSelect
-                    items={handleColFilter()}
-                    placeholder="열"
-                    onChange={(col) => {
-                      form.setFieldsValue({
-                        ...form.getFieldsValue(),
-                        colLoc: `${col} ${form.getFieldValue('loc')}`,
-                      });
-                    }}
-                  />
-                </Form.Item>
-              </div>
-              <div
-                css={css`
-                  flex-basis: 30%;
-                `}
-              >
-                <Form.Item name="loc" noStyle>
-                  <TurtleFormSelect
-                    items={(
-                      getBuildingQuery.data?.data[
-                        form.getFieldValue('building')
-                      ]?.[form.getFieldValue('floor')] ?? []
-                    ).map((colLoc: string) => {
-                      const [, loc] = colLoc.split(' ');
-                      return { value: loc, name: loc };
-                    })}
-                    placeholder="호"
-                    onChange={(loc) => {
-                      form.setFieldsValue({
-                        ...form.getFieldsValue(),
-                        colLoc: `${form.getFieldValue('col')} ${loc}`,
-                      });
-                    }}
-                  />
+                <Form.Item
+                  noStyle
+                  shouldUpdate={(prevValues, curValues) =>
+                    prevValues.additional !== curValues.additional
+                  }
+                >
+                  {() => {
+                    return (
+                      <Form.Item name="colLoc" noStyle>
+                        <TurtleFormSelect
+                          items={(
+                            getBuildingQuery.data?.data[
+                              form.getFieldValue('building')
+                            ]?.[form.getFieldValue('floor')] ?? []
+                          ).map((colLoc: string) => {
+                            const [col, loc] = colLoc.split(' ');
+                            return {
+                              value: `${col} ${loc}`,
+                              name: `${col} ${loc}`,
+                            };
+                          })}
+                          placeholder="열/호"
+                        />
+                      </Form.Item>
+                    );
+                  }}
                 </Form.Item>
               </div>
             </div>
@@ -274,11 +254,19 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 />
               </Form.Item>
 
-              <Form.Item name={['banks', 'account_number']} noStyle>
+              <Form.Item
+                name={['banks', 'account_number']}
+                rules={[{ required: true, message: '계좌번호를 입력해주세요' }]}
+                noStyle
+              >
                 <TurtleFormInput placeholder="계좌번호" />
               </Form.Item>
 
-              <Form.Item name={['banks', 'account_holder']} noStyle>
+              <Form.Item
+                name={['banks', 'account_holder']}
+                rules={[{ required: true, message: '예금주를 입력해주세요' }]}
+                noStyle
+              >
                 <TurtleFormInput placeholder="예금주명" />
               </Form.Item>
             </div>
@@ -295,12 +283,14 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             ]}
           >
             <Upload
-              listType="picture"
+              css={upload}
               maxCount={1}
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <Button size="small">파일 선택하기</Button>
+              <Button css={createCodeButton}>
+                <span css={createCodeFont}>사진 첨부하기</span>
+              </Button>
             </Upload>
           </Form.Item>
 
@@ -310,13 +300,16 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               htmlType="submit"
               onClick={() => {
                 form.validateFields().then(() => {
+                  const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
+                    ' ',
+                  );
                   createVendorMutation.mutate({
                     ...form.getFieldsValue(),
-                    type: 'update', //
+                    type: 'update',
                     banks: [form.getFieldValue('banks')],
                     floor: form.getFieldValue('floor') ?? '',
-                    col: form.getFieldValue('col') ?? '', //
-                    loc: form.getFieldValue('loc') ?? '', //
+                    col: col ?? '',
+                    loc: loc ?? '',
                     ext: form.getFieldValue('ext') ?? '',
                     file: form.getFieldValue('file')[0].originFileObj,
                   });
@@ -337,14 +330,47 @@ const formItemMarginBottom = css`
     margin-bottom: 16px;
   }
 `;
+const marginTop = css`
+  padding-top: 44px;
+`;
 
 const flexGap = css`
   display: flex;
   gap: 4px;
 `;
 
-const marginTop = css`
-  margin-top: 44px;
+const createCodeButton = css`
+  width: 113px;
+  height: 36px;
+  background: #f0f3f6;
+
+  &:hover {
+    background-color: #f0f3f6;
+    color: #6b6d73;
+  }
+
+  &.ant-btn:focus {
+    background-color: #f0f3f6;
+    border-color: #f0f3f6;
+  }
+`;
+
+const createCodeFont = css`
+  font-weight: 700;
+  color: #6b6d73;
+`;
+
+const upload = css`
+  display: flex;
+
+  .ant-upload-list {
+    margin-left: 12px;
+  }
+
+  .ant-upload-list-item-name {
+    color: #a1a2a6;
+    width: 200px;
+  }
 `;
 
 export default VendorInfoUpdateModal;
