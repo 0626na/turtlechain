@@ -284,6 +284,7 @@ const siderHeader = css`
 
 const menu = css`
   flex-grow: 1;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
