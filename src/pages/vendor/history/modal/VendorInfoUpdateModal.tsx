@@ -55,6 +55,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   const createVendorMutation = useMutation(bucketListAPI.create, {
     onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
+      closeModal();
     },
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
@@ -85,8 +86,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
       file: undefined,
     });
-
-    // console.log(form.getFieldsValue());
   };
 
   const normFile = (e: any) => {
