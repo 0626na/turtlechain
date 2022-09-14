@@ -61,7 +61,12 @@ const searchInput = css`
     border-radius: 0px 8px 8px 0px;
 
     background-color: #fcfcfc;
+
+    &.ant-btn[disabled] {
+      background-color: #f5f5f5;
+    }
   }
+
   .ant-input-search-button {
     height: 36px;
   }

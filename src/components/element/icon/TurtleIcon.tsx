@@ -6,11 +6,15 @@ import { ReactComponent as MisMatchingIcon } from '@icons/misMatching.svg';
 
 import { ReactComponent as ExelIcon } from '@icons/exel.svg';
 import { ReactComponent as SingleIcon } from '@icons/single.svg';
+import { ReactComponent as UpdateVendorNameIcon } from '@icons/updateVendorName.svg';
+import { ReactComponent as UpdateVendorInfoIcon } from '@icons/updateVendorInfo.svg';
+import { ReactComponent as MoreIcon } from '@icons/more.svg';
 import { ReactComponent as WarningIcon } from '@icons/warning.svg';
 
 import { css } from '@emotion/react';
 
 interface Props {
+  danger?: boolean;
   name:
     | 'delete'
     | 'modalClose'
@@ -18,11 +22,14 @@ interface Props {
     | 'misMatching'
     | 'exel'
     | 'single'
+    | 'updateVendorName'
+    | 'updateVendorInfo'
+    | 'more'
     | 'warning';
   onClick?: () => void;
 }
 
-function TurtleIcon({ name, onClick }: Props) {
+function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     onClick && onClick();
@@ -30,7 +37,10 @@ function TurtleIcon({ name, onClick }: Props) {
 
   if (name === 'delete') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div
+        css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
+        onClick={handleClick}
+      >
         <RemoveIcon />
       </div>
     );
@@ -80,6 +90,30 @@ function TurtleIcon({ name, onClick }: Props) {
     return (
       <div css={iconContainer} onClick={handleClick}>
         <WarningIcon />
+      </div>
+    );
+  }
+
+  if (name === 'updateVendorName') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UpdateVendorNameIcon />
+      </div>
+    );
+  }
+
+  if (name === 'updateVendorInfo') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UpdateVendorInfoIcon />
+      </div>
+    );
+  }
+
+  if (name === 'more') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <MoreIcon />
       </div>
     );
   }

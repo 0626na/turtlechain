@@ -18,9 +18,10 @@ type info = {
 interface Props {
   items: {
     key: string;
-    label: React.ReactNode;
+    label?: React.ReactNode;
     icon?: React.ReactNode;
     onClick?: (e: MenuInfo) => void;
+    type?: 'divider';
   }[];
   triggerButton: React.ReactNode;
 }

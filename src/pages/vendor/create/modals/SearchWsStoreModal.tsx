@@ -19,17 +19,17 @@ import vendorAPI, {
   Wholesale,
 } from '@apis/vendorAPI';
 import { phonePattern } from '@utils/pattern';
-import { TurtleBadge, TurtleTableTitle } from '@components/element';
+import { TurtleBadge, TurtleTableTitle, TurtleText } from '@components/element';
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectRow: (wholeSaleStore: Wholesale) => void;
+  onFieldFillin: (wholeSaleStore: Wholesale) => void;
 }
 
-function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
+function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
   const [wholesaleList, setWholesaleList] = useState<Array<Wholesale>>([]);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
@@ -54,11 +54,14 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
       message.warning('휴대번호를 선택해주세요');
       return;
     }
+
     if (record.store_account.length !== 1) {
       message.warning('계좌번호를 선택해주세요');
       return;
     }
-    // onVendorSelect(record);
+
+    onFieldFillin(record);
+    closeModal();
     setSearchQuery({
       page: 1,
       type: 'name',
@@ -102,7 +105,7 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
       `}
     >
       <TurtleContentModal
-        size="large"
+        size="middle"
         title={t('vendor.search')}
         visible={visible}
         onClose={closeModal}
@@ -143,13 +146,13 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.name'),
+              title: <span css={tableTitle}>{t('table.vendorName')}</span>,
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.address'),
+              title: <span css={tableTitle}>{t('table.vendorAddress')}</span>,
               render: (_, record) => {
                 return `${record.building} ${
                   record.floor && record.floor + '층'
@@ -159,7 +162,7 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('vendor.store phone'),
+              title: <span css={tableTitle}>{t('table.mobile')}</span>,
               render: (_, record) => {
                 if (record.store_phone.length === 1) {
                   return record.store_phone[0].phone.replace(
@@ -207,7 +210,7 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
             },
             {
               ellipsis: true,
-              title: t('vendor.account'),
+              title: <span css={tableTitle}>{t('table.accountInfo')}</span>,
               render: (_, record) => {
                 const makeAddress = ({
                   bank,
@@ -220,6 +223,7 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
                 if (record.store_account.length === 0) {
                   return;
                 }
+
                 if (record.store_account.length === 1) {
                   return makeAddress(record.store_account[0]);
                 }
@@ -261,20 +265,13 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
               title: '',
               render: (_, record) => (
                 <Button
+                  css={button}
                   onClick={() => {
                     onClickSelect(record);
                   }}
                 >
-                  {' '}
-                  asa
+                  <TurtleText>선택</TurtleText>
                 </Button>
-                // <TurtleButtonSub //
-                //   size="small"
-                //   color="green"
-                //   onClick={() => onClickSelect(record)}
-                // >
-                //   {t('button.select')}
-                // </TurtleButtonSub>
               ),
             },
           ]}
@@ -283,5 +280,39 @@ function SearchWsStoreModal({ visible, closeModal, selectRow }: Props) {
     </div>
   );
 }
+
+const tableTitle = css`
+  font-weight: 400;
+  color: #5b5d63;
+`;
+
+const button = css`
+  width: 60px;
+  height: 26px;
+
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #00aab5;
+  background-color: #ddf3f5;
+  border-color: #ddf3f5;
+  &:hover {
+    color: #00aab5;
+    border-color: #d4e9eb;
+    background-color: #d4e9eb;
+  }
+
+  // active 상태
+  &.ant-btn:focus {
+    color: #00aab5;
+    background-color: #ddf3f5;
+    border-color: #ddf3f5;
+  }
+`;
 
 export default SearchWsStoreModal;

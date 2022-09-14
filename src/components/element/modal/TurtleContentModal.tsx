@@ -19,7 +19,7 @@ function TurtleContentModal({
 }: Props) {
   let containerWidth = 0;
   if (size === 'large') containerWidth = 1600;
-  if (size === 'middle') containerWidth = 1200;
+  if (size === 'middle') containerWidth = 884;
   if (size === 'small') containerWidth = 592;
 
   return (

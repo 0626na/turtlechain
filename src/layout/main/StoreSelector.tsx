@@ -65,7 +65,7 @@ const menu = css`
 
   position: absolute;
   top: 0px;
-  left: 28px;
+  left: 20px;
 
   box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.4);
   border-radius: 8px;
@@ -94,7 +94,7 @@ const logo = css`
 const selectorButton = css`
   color: #fff;
 
-  width: 236px;
+  width: 216px;
   height: 60px;
 
   display: flex;

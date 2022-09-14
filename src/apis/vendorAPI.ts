@@ -173,12 +173,9 @@ export interface ResponseGetCode {
   data: string;
 }
 
-const getCode = async (query: RequestGetCode) => {
-  let url = `provisioning/create_vendor_code?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetCode>(url);
+const getCode = async (params: RequestGetCode) => {
+  const url = `provisioning/create_vendor_code`;
+  const response = await v2Axios.get<ResponseGetCode>(url, { params });
 
   return response.data;
 };

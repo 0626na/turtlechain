@@ -5,6 +5,7 @@ export const LoginPage = lazy(() => import('./auth/login'));
 export const HomePage = lazy(() => import('./home'));
 
 export const VendorCreatePage = lazy(() => import('./vendor/create'));
+export const VendorHistoryPage = lazy(() => import('./vendor/history'));
 export const ProductCreatePage = lazy(() => import('./product/create'));
 export const ProductHistoryPage = lazy(() => import('./product/history'));
 

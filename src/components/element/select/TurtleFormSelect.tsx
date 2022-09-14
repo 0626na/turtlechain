@@ -5,7 +5,7 @@ import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
 import React from 'react';
 
 interface Props {
-  value: string;
+  value?: string;
   onChange?: (value: unknown) => void;
   items?: { value: string; name: string; icon?: React.ReactNode }[];
   disabled?: boolean;
@@ -57,7 +57,6 @@ const StyledSelect = styled(Select)`
   }
 
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    width: 152px;
     height: 36px;
     font-size: 14px;
     padding: 0px 10px;
