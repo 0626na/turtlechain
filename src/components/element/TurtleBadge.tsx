@@ -8,12 +8,7 @@ interface Props {
 
 function TurtleBadge({ count, children, color = 'green' }: Props) {
   return (
-    <Badge
-      count={count === 1 ? 0 : count}
-      offset={[10, 10]}
-      color={color}
-      size="small"
-    >
+    <Badge count={count} offset={[10, 10]} color={color} size="small">
       {children}
     </Badge>
   );
