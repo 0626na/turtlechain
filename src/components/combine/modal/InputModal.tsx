@@ -9,7 +9,6 @@ interface Props {
   title: string;
   description: string[];
   loading?: boolean;
-
   defaultValue?: string;
   placeholder?: string;
 }
@@ -41,6 +40,7 @@ function InputModal({
       }}
       title={title}
       description={description}
+      okDisabled={inputValue === ''}
     >
       <div css={marginTop}>
         <TurtleFormInput
