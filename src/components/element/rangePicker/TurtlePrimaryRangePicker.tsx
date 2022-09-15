@@ -12,6 +12,7 @@ function TurtlePrimaryRangePicker({ value, onChange }: Props) {
   return (
     <DatePicker.RangePicker
       css={container}
+      allowClear={false}
       value={value}
       onChange={onChange}
       placement="bottomLeft"

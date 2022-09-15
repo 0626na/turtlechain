@@ -10,7 +10,7 @@ interface Props {
   items: { value: string; name: string; icon?: React.ReactNode }[];
 }
 
-function TurtleSelect({ items, onChange, value }: Props) {
+function TurtleSearchSelect({ items, onChange, value }: Props) {
   return (
     <StyledSelect
       bordered={false}
@@ -57,4 +57,4 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-export default TurtleSelect;
+export default TurtleSearchSelect;

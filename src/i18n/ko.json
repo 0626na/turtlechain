@@ -28,7 +28,12 @@
     "": "입고",
     "create": "입고등록",
     "history": "입고내역",
-    "adjustment": "교환/반품/미송"
+    "adjustment": "교환/반품/미송",
+    "confirm": {
+      "true": "마감",
+      "false": "대기",
+      "all": "전체"
+    }
   },
 
   "clearing": {
@@ -60,6 +65,8 @@
     "option": "옵션",
     "imageUrl": "이미지 URL",
     "price": "가격",
+    "amount": "금액",
+    "totalAmount": "금액 합계",
     "memo": "메모",
     "mobile": "휴대전화번호",
     "retailerStoreInput": "쇼핑몰 입력값",
@@ -69,7 +76,13 @@
     "wsStoreName": "상호명",
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명",
-    "otherAddress": "기타주소"
+    "otherAddress": "기타주소",
+    "warehouseName": "창고명",
+    "warehousingCount": "입고 수량",
+    "totalWarehousingCount": "입고 수량 합계",
+    "isReserveWarehousing": "미송입고여부",
+    "progressStatus": "진행 상태",
+    "createdDate": "등록 날짜"
   },
 
   "wholesaler": {},
