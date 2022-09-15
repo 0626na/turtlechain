@@ -29,6 +29,7 @@ import TurtleIcon from './icon/TurtleIcon';
 import MemoIcon from './icon/MemoIcon';
 import TurtleFormSelect from './select/TurtleFormSelect';
 import AddButton from './button/AddButton';
+import TurtleCard from './TurtleCard';
 
 export {
   //buttons
@@ -55,6 +56,11 @@ export {
   //select
   TurtleSearchSelect,
   TurtleFormSelect,
+
+  //icon
+  TurtleIcon,
+  MemoIcon,
+
   //
   TurtleDropdown,
   TurtleTableTitle,
@@ -65,6 +71,5 @@ export {
   TurtleUpload,
   TurtleBadge,
   TurtleTabs,
-  TurtleIcon,
-  MemoIcon,
+  TurtleCard,
 };
