@@ -51,6 +51,7 @@
     "vatIncluded": "부가세 입금",
     "accountInfo": "계좌 정보",
     "vendorName": "거래처명",
+    "useVendorName": "사용할 거래처명",
     "vendorAddress": "거래처 주소",
     "vendorCode": "거래처코드",
     "productName": "상품명",

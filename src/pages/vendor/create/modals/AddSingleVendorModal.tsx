@@ -107,7 +107,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       return;
     }
 
-    console.log(form.getFieldValue('vendor_name'));
     if (!form.getFieldValue('vendor_name')) {
       message.warn('거래처를 선택해 주세요');
       return;

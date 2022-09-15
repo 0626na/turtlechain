@@ -21,16 +21,6 @@ const useVendorCart = () => {
         isVatIncluded: false,
         useVendorName: vendor.name,
         memo: '',
-        selectedWsStoreInfo:
-          vendor.ws_store_info.length === 1
-            ? {
-                ...vendor.ws_store_info[0],
-                selectedAccount:
-                  vendor.ws_store_info[0].store_account.length === 1
-                    ? vendor.ws_store_info[0].store_account[0]
-                    : undefined,
-              }
-            : undefined,
       }));
     };
 
