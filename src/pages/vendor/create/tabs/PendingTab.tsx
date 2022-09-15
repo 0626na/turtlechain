@@ -410,7 +410,7 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 30,
+            width: 35,
             title: t('table.memo'),
             align: 'center',
             render: (_, record) => {
