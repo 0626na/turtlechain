@@ -1,5 +1,19 @@
+import React from 'react';
+import { PageHeader } from '@layout/page';
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+import PageBody from './PageBody';
+
 function WarehousingCreatePage() {
-  return <h1>입고등록 페이지 입니다</h1>;
+  return (
+    <>
+      <Helmet
+        title={`${t('helmet.turtleChain')} - ${t('warehousing.create')}`}
+      />
+      <PageHeader title={t('warehousing.create')} />
+      <PageBody />
+    </>
+  );
 }
 
 export default WarehousingCreatePage;
