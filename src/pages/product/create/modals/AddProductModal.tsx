@@ -1,11 +1,12 @@
 import { t } from 'i18next';
-import { Button, Divider, Form, Input, message, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Form, Input, message, Row } from 'antd';
+import React, { useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import productAPI from '@apis/productAPI';
 import {
   AddButton,
   PrimaryButton,
+  TurtleDivider,
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtlePriceInput,
@@ -14,6 +15,7 @@ import { SearchVendorModal, TurtleContentModal } from '@components/combine';
 import useStore from '@hooks/useStore';
 import useProductCart from '@hooks/useProductCart';
 import { css } from '@emotion/react';
+import useModal from '@hooks/useModal';
 
 interface Props {
   visible: boolean;
@@ -24,7 +26,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   const { store } = useStore();
   const { addProduct } = useProductCart();
   const [form] = Form.useForm();
-  const [vendorModalVisible, setVendorModalVisible] = useState(false);
+  const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
 
   const getProductCodeQuery = useQuery(
     'getProductCode', //
@@ -44,14 +46,6 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
     },
   );
 
-  const openVendorModal = useCallback(() => {
-    setVendorModalVisible(true);
-  }, []);
-
-  const closeVendorModal = useCallback(() => {
-    setVendorModalVisible(false);
-  }, []);
-
   const selectVendor = useCallback(
     (vendor_id, vendor_name, vendor_address, vendor_phone) => {
       form.setFieldsValue({
@@ -61,9 +55,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         vendor_phone,
         product_code: undefined,
       });
-      setVendorModalVisible(false);
+      closeVendorModal();
     },
-    [form],
+    [closeVendorModal, form],
   );
 
   const createProductCode = useCallback(() => {
@@ -108,11 +102,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           <Form.Item name="rt_store_id" hidden>
             <Input hidden />
           </Form.Item>
-
           <Form.Item name="vendor_id" hidden>
             <Input hidden />
           </Form.Item>
-
           <Form.Item
             name="vendor_name"
             label={t('table.vendorName')}
@@ -124,7 +116,6 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               readOnly
             />
           </Form.Item>
-
           <Form.Item
             name="vendor_address"
             label={t('table.vendorAddress')}
@@ -151,7 +142,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Divider />
+          <TurtleDivider marginTop={32} marginBottom={32} />
 
           <Form.Item
             name="name"
@@ -202,7 +193,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.price')}
             rules={[{ required: true }]}
           >
-            <TurtlePriceInput style={{ width: '100%' }} />
+            <TurtlePriceInput />
           </Form.Item>
 
           <Form.Item
