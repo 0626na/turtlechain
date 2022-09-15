@@ -1,5 +1,19 @@
-function WarehousingAdjustmentPage() {
-  return <h1>교환/반품/미송 페이지 입니다</h1>;
+import { AlertBar } from '@layout/page';
+import { t } from 'i18next';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import PageBody from './PageBody';
+
+function WarehousingAdjustment() {
+  return (
+    <>
+      <Helmet
+        title={`${t('helmet.turtleChain')} - ${t('warehousing.adjustment')}`}
+      />
+      <AlertBar />
+      <PageBody />
+    </>
+  );
 }
 
-export default WarehousingAdjustmentPage;
+export default WarehousingAdjustment;
