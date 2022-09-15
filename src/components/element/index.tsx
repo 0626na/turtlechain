@@ -28,6 +28,7 @@ import TurtleTabs from './TurtleTabs';
 import TurtleIcon from './icon/TurtleIcon';
 import MemoIcon from './icon/MemoIcon';
 import TurtleFormSelect from './select/TurtleFormSelect';
+import AddButton from './button/AddButton';
 
 export {
   //buttons
@@ -36,6 +37,7 @@ export {
   TeriaryButton,
   AnswerButton,
   HistoryButton,
+  AddButton,
 
   //inputs
   TurtleSearchInput,
