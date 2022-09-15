@@ -98,7 +98,7 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         title="정말 등록할까요?"
-        description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
+        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
         okText="등록"
         loading={loading}
         visible={confirmModalVisible}
@@ -114,6 +114,9 @@ function PageBody() {
           );
         }}
       />
+      {/*
+       * Page
+       */}
       <PageTitle
         title="상품등록 미리보기"
         subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."

@@ -3,6 +3,7 @@ import {
   PrimaryButton,
   SecondaryButton,
   TeriaryButton,
+  TurtleConfirmModal,
   TurtleDropdown,
   TurtleIcon,
   TurtleTabs,
@@ -19,13 +20,15 @@ import { useMutation } from 'react-query';
 import warehousingAPI from '@apis/warehousingAPI';
 import useWarehousingCart from '@hooks/useWarehousingCart';
 import { message } from 'antd';
+import moment from 'moment';
 
 function PageBody() {
   const navigate = useNavigate();
   const { store, isStoreSelected } = useStore();
-  const { cart, ready, reset } = useWarehousingCart();
+  const { cart, ready, reset, saveFile } = useWarehousingCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
+  const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
   const connectInventoryMutation = useMutation(
     warehousingAPI.connectInventory,
@@ -82,6 +85,40 @@ function PageBody() {
           });
         }}
       />
+      {/**
+       *  confirm 모달
+       */}
+      <TurtleConfirmModal
+        title="정말 등록할까요?"
+        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
+        okText="등록"
+        loading={loading}
+        visible={confirmModalVisible}
+        onCancel={closeConfirmModal}
+        onOk={() => {
+          createMutation.mutate({
+            sheet: {
+              created_date: moment().format('YYYY-MM-DD'),
+              rt_store_id: store.selected?.id as number,
+            },
+            item: {
+              rt_store_id: store.selected?.id as number,
+              item_list: cart.successList.map((record) => ({
+                vendor_id: record.vendor_id,
+                product_id: record.product_id,
+                count: record.count,
+                price: record.price,
+                warehousing_date: record.warehousing_date,
+                is_reserved: record.is_reserved,
+                memo: record.memo,
+              })),
+            },
+          });
+        }}
+      />
+      {/*
+       * Page
+       */}
       <PageTitle
         title="입고서 미리보기"
         buttons={[
@@ -99,11 +136,11 @@ function PageBody() {
                 label: (
                   <TurtleUpload
                     beforeUpload={(file) => {
-                      // saveFile(file);
-                      // parseExcelMutation.mutate({
-                      //   files: file,
-                      //   rt_store_id: store.selected?.id as number,
-                      // });
+                      saveFile(file);
+                      parseExcelMutation.mutate({
+                        files: file,
+                        rt_store_id: store.selected?.id as number,
+                      });
                     }}
                   />
                 ),
@@ -140,7 +177,7 @@ function PageBody() {
 
       <PageBottomBar>
         <PrimaryButton
-          onClick={() => {}}
+          onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
           입고서 등록하기

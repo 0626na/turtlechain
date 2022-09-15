@@ -3,6 +3,7 @@ import {
   WarehousingItemConnect,
 } from '@apis/warehousingAPI';
 import { warehousingCartState } from '@store/warehousingCartState';
+import { RcFile } from 'antd/lib/upload';
 import moment from 'moment';
 import { useCallback, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
@@ -30,6 +31,13 @@ const useWarehousingCart = () => {
     },
     [setCart],
   );
+
+  const saveFile = (file: RcFile) => {
+    setCart((cart) => ({
+      ...cart,
+      fileList: [file],
+    }));
+  };
 
   const reset = useCallback(() => {
     setCart({
@@ -92,6 +100,7 @@ const useWarehousingCart = () => {
   return {
     cart,
     ready,
+    saveFile,
     reset,
     updatePrice,
     updateCount,

@@ -1,3 +1,4 @@
+import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 // 파싱, 연동된 입고 상품
@@ -102,13 +103,22 @@ const connectInventory = async function (params: RequestConnectInventory) {
  *   엑셀 파싱
  */
 
-const parseExcel = async function (data: FormData) {
+export interface RequestParseExcel {
+  files: RcFile;
+  rt_store_id: number;
+}
+
+const parseExcel = async function (data: RequestParseExcel) {
   const url = `excel/warehousing`;
+  const formData = new FormData();
+  formData.append('files', data.files);
+  formData.append('rt_store_id', data.rt_store_id.toString());
   const response = await v2Axios.post<ResponseConnectInventory>(url, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return response.data;
 };
 
@@ -158,6 +168,7 @@ const create = async function (data: {
     ...data.item,
     sheet_id: sheetResponse.data.data,
   });
+
   return itemResponse.data;
 };
 
@@ -181,12 +192,10 @@ export interface ResponseGetSheet {
   };
 }
 
-const getSheet = async function (query: RequestGetSheet) {
+const getSheet = async (params: RequestGetSheet) => {
   let url = 'warehousing/sheet?';
-  for (const [key, value] of Object.entries(query)) {
-    value !== '' && (url = url + `${key}=${value}&`);
-  }
-  const response = await v2Axios.get<ResponseGetSheet>(url);
+  const response = await v2Axios.get<ResponseGetSheet>(url, { params });
+
   return response.data.data;
 };
 
@@ -235,6 +244,7 @@ export interface ResponseUpdateSheet {
 const updateSheet = async function (data: RequestUpdateSheet) {
   const url = `warehousing/sheet/${data.id}`;
   const response = await v2Axios.patch<ResponseUpdateSheet>(url, data);
+
   return response.data.data;
 };
 
@@ -258,6 +268,7 @@ export interface ResponseUpdateItem {
 const updateItem = async function (data: RequestUpdateItem) {
   const url = 'warehousing/item/bulk_update';
   const response = await v2Axios.patch<ResponseUpdateItem>(url, data);
+
   return response.data;
 };
 
