@@ -69,7 +69,12 @@
     "wsStoreName": "상호명",
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명",
-    "otherAddress": "기타주소"
+    "otherAddress": "기타주소",
+
+    "progress": "진행상태",
+    "createDate": "등록일자",
+    "type": "분류",
+    "proccessed totalCount": "처리/총수량"
   },
 
   "wholesaler": {},
