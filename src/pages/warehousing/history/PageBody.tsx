@@ -87,7 +87,7 @@ function PageBody() {
                       moment(searchQuery.start_date),
                       moment(searchQuery.end_date),
                     ]}
-                    onChange={([start_date, end_date]) => {
+                    onChange={(_, [start_date, end_date]) => {
                       setSearchQuery({ ...searchQuery, start_date, end_date });
                     }}
                   />
