@@ -5,11 +5,11 @@ import {
   TeriaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
+  TurtleIcon,
   TurtleUpload,
 } from '@components/element';
 import { PageBottomBar, PageContent, PageTitle } from '@layout/page';
-import { ReactComponent as ExelIcon } from '@icons/exel.svg';
-import { ReactComponent as SingleIcon } from '@icons/single.svg';
+
 import { message } from 'antd';
 import SuccessTab from './tabs/SuccessTab';
 import TurtleTabs from '@components/element/TurtleTabs';
@@ -142,18 +142,12 @@ function PageBody() {
                     }}
                   />
                 ),
-                icon: <ExelIcon />,
-                onClick(e) {
-                  console.log(e);
-                },
+                icon: <TurtleIcon name="exel" />,
               },
               {
                 key: '1',
                 label: '단건추가',
-                icon: <SingleIcon />,
-                onClick(e) {
-                  openAddingModal();
-                },
+                icon: <TurtleIcon name="single" />,
               },
             ]}
           />,
