@@ -10,6 +10,7 @@ import { ReactComponent as UpdateVendorNameIcon } from '@icons/updateVendorName.
 import { ReactComponent as UpdateVendorInfoIcon } from '@icons/updateVendorInfo.svg';
 import { ReactComponent as MoreIcon } from '@icons/more.svg';
 import { ReactComponent as WarningIcon } from '@icons/warning.svg';
+import { ReactComponent as SiderSelectIcon } from '@icons/siderSelect.svg';
 
 import { css } from '@emotion/react';
 
@@ -25,7 +26,8 @@ interface Props {
     | 'updateVendorName'
     | 'updateVendorInfo'
     | 'more'
-    | 'warning';
+    | 'warning'
+    | 'siderSelect';
   onClick?: () => void;
 }
 
@@ -114,6 +116,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <MoreIcon />
+      </div>
+    );
+  }
+
+  if (name === 'siderSelect') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <SiderSelectIcon />
       </div>
     );
   }

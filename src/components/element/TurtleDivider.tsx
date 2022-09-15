@@ -7,7 +7,7 @@ interface Props extends DividerProps {
 }
 
 function TurtleDivider({
-  color = '',
+  color = 'E3E6EA',
   marginTop = 0,
   marginBottom = 0,
   ...Props

@@ -34,6 +34,11 @@ const GlobalStyle = () => (
         text-align: left;
       }
 
+      /* form item 기본 margin-bottom */
+      .ant-form-item {
+        margin-bottom: 16px;
+      }
+
       /* message 색상 변경 */
       .ant-message {
         color: #ffffff !important;
