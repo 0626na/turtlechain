@@ -101,7 +101,7 @@ function PageBody() {
       <TurtleConfirmModal
         title="정말 등록할까요?"
         description={['보류와 실패에 남아있는 상품은 등록에서 제외됩니다.']}
-        okText="네"
+        okText="등록"
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}

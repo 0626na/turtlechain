@@ -57,7 +57,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
               style={{ backgroundColor: 'orange', cursor: 'pointer' }}
               size={36}
             >
-              {getUserQuery.data?.name.split('')[0]}
+              <span css={name}>{getUserQuery.data?.name.split('')[0]}</span>
             </Avatar>
           </Dropdown>
         </Col>
@@ -84,6 +84,7 @@ const rightContnetStyled = css`
 const textStyled = css`
   font-size: 24px;
   font-weight: 700;
+  color: #242934;
 `;
 
 const iconContainer = css`
@@ -97,6 +98,10 @@ const iconContainer = css`
 const icon = css`
   font-size: 24px;
   margin: 6px;
+`;
+
+const name = css`
+  font-size: 16px;
 `;
 
 export default PageHeader;

@@ -68,7 +68,8 @@
     "vendorEtcAddress": "기타 주소",
     "wsStoreName": "상호명",
     "wsCompanyNum": "사업자 번호",
-    "wsOwner": "대표자명"
+    "wsOwner": "대표자명",
+    "otherAddress": "기타주소"
   },
 
   "wholesaler": {},

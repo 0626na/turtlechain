@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
@@ -9,6 +8,7 @@ import { useMutation, useQuery } from 'react-query';
 import notificationAPI from '@apis/notificationAPI';
 
 import { ReactComponent as BellIcon } from '@icons/bell.svg';
+import { css } from '@emotion/react';
 
 function Notification() {
   const navigate = useNavigate();
@@ -32,7 +32,8 @@ function Notification() {
   });
 
   return (
-    <StyledPopover
+    <Popover
+      css={popover}
       getPopupContainer={(triggerNode) => triggerNode}
       placement="bottomRight"
       trigger="click"
@@ -154,27 +155,26 @@ function Notification() {
         }}
         offset={[-20, 7]}
       >
-        <IconContainer
+        <div
+          css={iconContainer}
           onClick={() => {
             setPopoverVisible((visible) => !visible);
           }}
         >
           <BellIcon />
-        </IconContainer>
+        </div>
       </Badge>
-    </StyledPopover>
+    </Popover>
   );
 }
 
-const StyledPopover = styled(Popover)`
-  .ant-popover-inner-content {
-    padding: 0px;
+const popover = css`
+  .ant-badge-count {
+    padding: 1px !important;
   }
 `;
 
-const IconContainer = styled.div`
-  /* width: 36px;
-  height: 36px; */
+const iconContainer = css`
   margin-right: 12px;
   cursor: pointer;
 `;

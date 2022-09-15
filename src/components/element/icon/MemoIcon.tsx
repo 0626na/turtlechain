@@ -8,13 +8,8 @@ interface Props {
 }
 
 function MemoIcon({ onClick, value }: Props) {
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    onClick && onClick();
-  };
-
   return (
-    <div css={iconContainer} onClick={handleClick}>
+    <div css={iconContainer} onClick={onClick}>
       <Memo css={{ stroke: value ? '#2ab8c1' : '#a1a2a6' }} />
     </div>
   );
