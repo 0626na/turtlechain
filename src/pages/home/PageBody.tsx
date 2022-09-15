@@ -65,7 +65,7 @@ function PageBody() {
 
       <PageContent>
         <PrimaryButton onClick={showModal}>상품 등록하기</PrimaryButton>
-        <SecondaryButton text="상품 추가하기" />
+        {/* <SecondaryButton text="상품 추가하기" /> */}
         <AnswerButton text="예" type="YES"></AnswerButton>
         <AnswerButton text="취소" type="NO"></AnswerButton>
         {/* <Button size="small">asas</Button>
@@ -84,7 +84,7 @@ function PageBody() {
               icon: <DownloadIcon style={{ stroke: 'red' }} />,
             },
           ]}
-          triggerButton={<SecondaryButton text="상품 추가하기" />}
+          triggerButton={<SecondaryButton>"상품 추가하기" </SecondaryButton>}
         />
 
         <Table title={() => <div>3123</div>}></Table>

@@ -196,7 +196,7 @@ function PageBody() {
                 },
               },
             ]}
-            triggerButton={<SecondaryButton text="거래처 추가하기" />}
+            triggerButton={<SecondaryButton>거래처 추가하기</SecondaryButton>}
           />,
         ]}
       />
