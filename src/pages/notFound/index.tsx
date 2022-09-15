@@ -1,10 +1,10 @@
+import React from 'react';
 import { Button, Result, Row } from 'antd';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
-function index() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+function Index() {
   const navigate = useNavigate();
 
   return (
@@ -39,4 +39,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;

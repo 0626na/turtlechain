@@ -113,7 +113,7 @@ const parseExcel = async function (data: RequestParseExcel) {
   const formData = new FormData();
   formData.append('files', data.files);
   formData.append('rt_store_id', data.rt_store_id.toString());
-  const response = await v2Axios.post<ResponseConnectInventory>(url, data, {
+  const response = await v2Axios.post<ResponseConnectInventory>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -178,7 +178,7 @@ const create = async function (data: {
 
 export interface RequestGetSheet {
   rt_store_id: number;
-  is_confirmed: number | '';
+  is_confirmed?: number | '';
   start_date: string;
   end_date: string;
   did_settlement?: number;
@@ -193,8 +193,16 @@ export interface ResponseGetSheet {
 }
 
 const getSheet = async (params: RequestGetSheet) => {
-  let url = 'warehousing/sheet?';
-  const response = await v2Axios.get<ResponseGetSheet>(url, { params });
+  const url = 'warehousing/sheet';
+
+  const copiedParams = { ...params };
+  if (copiedParams.is_confirmed === '') {
+    delete copiedParams.is_confirmed;
+  }
+
+  const response = await v2Axios.get<ResponseGetSheet>(url, {
+    params: copiedParams,
+  });
 
   return response.data.data;
 };
