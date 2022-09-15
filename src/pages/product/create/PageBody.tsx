@@ -51,7 +51,7 @@ function PageBody() {
     onSuccess: (data) => {
       resetCart();
       message.success(
-        `성공적으로 등록하였습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+        `성공적으로 등록했습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
       );
       navigate('/product/history');
     },
@@ -173,9 +173,7 @@ function PageBody() {
 
       <PageBottomBar>
         <PrimaryButton
-          onClick={() => {
-            openConfirmModal();
-          }}
+          onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
           상품 등록하기

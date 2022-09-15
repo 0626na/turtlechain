@@ -69,7 +69,10 @@
     "wsStoreName": "상호명",
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명",
-    "otherAddress": "기타주소"
+    "otherAddress": "기타주소",
+    "warehouseName": "창고명",
+    "warehousingCount": "입고수량",
+    "isReserveWarehousing": "미송입고여부"
   },
 
   "wholesaler": {},

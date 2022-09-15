@@ -3,7 +3,7 @@ import {
   TurtleSecondaryRangePicker,
 } from '@components/element';
 import moment from 'moment';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
@@ -32,14 +32,14 @@ function RangeDateModal({
   inThreeMonth,
 }: Props) {
   const [date, setDate] = useState<Date>({
-    start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+    start_date: moment().format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
   });
 
   useEffect(() => {
     if (visible) return;
     setDate({
-      start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+      start_date: moment().format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD'),
     });
   }, [visible]);
