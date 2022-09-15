@@ -284,8 +284,30 @@ const siderHeader = css`
 `;
 
 const menu = css`
+  /* window에서도 스크롤바 mac처럼 둥글게 */
+  /* total width */
+  ::-webkit-scrollbar {
+    background-color: #242934;
+    width: 13px;
+  }
+
+  /* background of the scrollbar except button or resizer */
+  ::-webkit-scrollbar-track {
+    background-color: #242934;
+  }
+
+  /* scrollbar itself */
+  ::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 16px;
+    border: 4px solid #242934;
+  }
+
+  ////////////////
+
   flex-grow: 1;
-  overflow-y: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
