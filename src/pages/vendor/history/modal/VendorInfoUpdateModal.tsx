@@ -1,8 +1,9 @@
 import { t } from 'i18next';
-import { Button, Form, Input, message, Upload } from 'antd';
+import { Form, Input, message, Upload } from 'antd';
 import React, { useEffect } from 'react';
 
 import {
+  AddButton,
   PrimaryButton,
   TurtleFormInput,
   TurtleFormSearchInput,
@@ -29,7 +30,6 @@ interface Props {
 
 function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   const { store } = useStore();
-  // const { isStoreSelected } = useStore();
 
   const [form] = Form.useForm();
 
@@ -38,17 +38,11 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   // 건물정보 불러오기
   const getBuildingQuery = useQuery('getAdress', presetAPI.getBuilding, {
     enabled: !!visible,
-    onSuccess: (data) => {
-      console.log(data);
-    },
   });
 
   // 은행정보 불러오기
   const getBankQuery = useQuery('getBank', presetAPI.getBank, {
     enabled: !!visible,
-    onSuccess: (data) => {
-      console.log(data);
-    },
   });
 
   // 거래처 정보수정
@@ -111,7 +105,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
         }}
       >
         <Form
-          css={formItemMarginBottom}
           layout="horizontal"
           form={form}
           colon={false}
@@ -287,9 +280,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <Button css={createCodeButton}>
-                <span css={createCodeFont}>사진 첨부하기</span>
-              </Button>
+              <AddButton>사진 첨부하기</AddButton>
             </Upload>
           </Form.Item>
 
@@ -324,11 +315,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   );
 }
 
-const formItemMarginBottom = css`
-  .ant-form-item {
-    margin-bottom: 16px;
-  }
-`;
 const marginTop = css`
   padding-top: 44px;
 `;
@@ -336,27 +322,6 @@ const marginTop = css`
 const flexGap = css`
   display: flex;
   gap: 4px;
-`;
-
-const createCodeButton = css`
-  width: 113px;
-  height: 36px;
-  background: #f0f3f6;
-
-  &:hover {
-    background-color: #f0f3f6;
-    color: #6b6d73;
-  }
-
-  &.ant-btn:focus {
-    background-color: #f0f3f6;
-    border-color: #f0f3f6;
-  }
-`;
-
-const createCodeFont = css`
-  font-weight: 700;
-  color: #6b6d73;
 `;
 
 const upload = css`
