@@ -30,7 +30,8 @@ import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
-import AddSingleVendorModal from './modals/AddSingleVendorModal';
+import AddSingleVendorModal from './modals/AddVendorModal';
+import { css } from '@emotion/react';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -178,7 +179,6 @@ function PageBody() {
                 label: (
                   <TurtleUpload
                     beforeUpload={(file) => {
-                      console.log(file.name);
                       excelMutation.mutate({
                         file,
                         rt_store_id: store.selected?.id as number,
@@ -187,9 +187,6 @@ function PageBody() {
                   />
                 ),
                 icon: <TurtleIcon name="exel" />,
-                onClick(e) {
-                  console.log(e);
-                },
               },
               {
                 key: '1',
