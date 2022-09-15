@@ -29,7 +29,8 @@ interface Props {
 function TurtleDropdown({ items, triggerButton }: Props) {
   const menu = items.map((item) => ({
     ...item,
-    style: menuItem,
+    icon: item.icon ? <div css={iconMargin}>{item.icon}</div> : '',
+    style: item.type === 'divider' ? $divider : menuItem,
     onMouseEnter: (e: info) => {
       e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
     },
@@ -53,9 +54,18 @@ const $menu = css`
   border-radius: 8px;
 `;
 
+const iconMargin = css`
+  margin-right: 4px;
+`;
+
 const menuItem = {
   borderRadius: 6,
-  height: 38,
+  height: 34,
+};
+
+const $divider = {
+  margin: '6px 0px',
+  background: '#EBEBEE',
 };
 
 export default TurtleDropdown;

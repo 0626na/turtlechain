@@ -53,6 +53,7 @@ const mainMenuContainerStyle = {
   order: -1,
 };
 const mainMenuTitleStyle = {
+  marginTop: 16,
   fontSize: 12,
   color: '#a1a2a6',
 };
@@ -63,7 +64,7 @@ const mainMenuHomeStyle = {
 };
 
 const mainMenuContentStyle = {
-  fontWeight: 500,
+  fontWeight: 400,
   width: 216,
   height: 38,
 
@@ -82,7 +83,7 @@ const etcMenuContainerStyle = {
   borderTop: 'solid #434852 1px', // divider
 };
 const etcMenuTitleStyle = {
-  fontWeight: 500,
+  fontWeight: 400,
   width: 216,
   height: 38,
 

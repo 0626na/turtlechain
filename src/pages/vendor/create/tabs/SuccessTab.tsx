@@ -107,6 +107,7 @@ function SuccessTab({ isLoading }: Props) {
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
+        placeholder="ex. 영수증 이중으로 확인 또 확인!"
       />
 
       <Table
@@ -198,7 +199,7 @@ function SuccessTab({ isLoading }: Props) {
             width: 200,
             title: (
               <>
-                <TurtleText>{t('table.retailerStoreInput')}</TurtleText>
+                <TurtleText>{t('table.useVendorName')}</TurtleText>
                 <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
               </>
             ),

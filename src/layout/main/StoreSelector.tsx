@@ -1,6 +1,6 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { TurtleImg } from '@components/element';
+import { TurtleIcon, TurtleImg } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
@@ -47,10 +47,15 @@ function StoreSelector() {
       }
     >
       <Button css={selectorButton}>
-        <div>
-          <TurtleImg css={buttonImg} name="Logo" />
+        <div css={selectorButtonLeft}>
+          <div>
+            <TurtleImg css={buttonImg} name="Logo" />
+          </div>
+          <span css={text}>{store.selected?.name}</span>
         </div>
-        <span css={text}>{store.selected?.name}</span>
+        <div>
+          <TurtleIcon name="siderSelect" />
+        </div>
       </Button>
     </Dropdown>
   );
@@ -93,12 +98,13 @@ const logo = css`
 
 const selectorButton = css`
   color: #fff;
-
+  padding: 8px 12px;
   width: 216px;
   height: 60px;
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1);
@@ -110,6 +116,11 @@ const selectorButton = css`
     background-color: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.1);
   }
+`;
+
+const selectorButtonLeft = css`
+  display: flex;
+  align-items: center;
 `;
 
 const text = css`
