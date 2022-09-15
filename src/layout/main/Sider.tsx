@@ -73,6 +73,18 @@ const mainMenuContentStyle = {
   borderRadius: 8,
 };
 
+const lastMainMenuContentStyle = {
+  fontWeight: 400,
+  width: 216,
+  height: 38,
+
+  marginLeft: 12,
+  paddingLeft: 30,
+  borderRadius: 8,
+  // 마지막 아이템 마진적용
+  marginBottom: 40,
+};
+
 /*
  * etcMenuStyle :
  */
@@ -197,7 +209,7 @@ const menus = [
           {
             key: pathnames.clearing.trade,
             label: t('clearing.trade'),
-            style: mainMenuContentStyle,
+            style: lastMainMenuContentStyle,
           },
         ],
       },
