@@ -32,16 +32,11 @@ interface Props {
 }
 
 function TurtleIcon({ name, onClick, danger }: Props) {
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    onClick && onClick();
-  };
-
   if (name === 'delete') {
     return (
       <div
         css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
-        onClick={handleClick}
+        onClick={onClick}
       >
         <RemoveIcon />
       </div>
@@ -50,7 +45,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'modalClose') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <ModalCloseIcon />
       </div>
     );
@@ -58,7 +53,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'matching') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <MatchingIcon />
       </div>
     );
@@ -66,7 +61,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'misMatching') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <MisMatchingIcon />
       </div>
     );
@@ -74,7 +69,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'exel') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <ExelIcon />
       </div>
     );
@@ -82,7 +77,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'single') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <SingleIcon />
       </div>
     );
@@ -90,7 +85,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'warning') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <WarningIcon />
       </div>
     );
@@ -98,7 +93,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'updateVendorName') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <UpdateVendorNameIcon />
       </div>
     );
@@ -106,7 +101,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'updateVendorInfo') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={onClick}>
         <UpdateVendorInfoIcon />
       </div>
     );
@@ -114,7 +109,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'more') {
     return (
-      <div css={[iconContainer]} onClick={handleClick}>
+      <div css={[iconContainer]} onClick={onClick}>
         <MoreIcon />
       </div>
     );
@@ -122,7 +117,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'siderSelect') {
     return (
-      <div css={[iconContainer]} onClick={handleClick}>
+      <div css={[iconContainer]} onClick={onClick}>
         <SiderSelectIcon />
       </div>
     );
