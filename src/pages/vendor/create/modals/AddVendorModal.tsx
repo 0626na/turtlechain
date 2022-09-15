@@ -3,6 +3,7 @@ import { Button, Form, Input, message, Switch } from 'antd';
 import React, { useEffect } from 'react';
 
 import {
+  AddButton,
   PrimaryButton,
   TurtleDivider,
   TurtleFormInput,
@@ -68,7 +69,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
 
   // 거래처 선택후 폼에 채워넣기
   const HandleFieldFillin = (vendor: Wholesale) => {
-    console.log(vendor);
     form.setFieldsValue({
       ...form.getFieldsValue(),
 
@@ -143,7 +143,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
         }}
       >
         <Form
-          css={formItemMarginBottom}
           layout="horizontal"
           form={form}
           colon={false}
@@ -243,9 +242,15 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           </Form.Item>
 
           <div css={flexEnd}>
-            <Button css={createCodeButton} onClick={clickCreateVendorCode}>
-              <span css={createCodeFont}>코드 만들기</span>
-            </Button>
+            <AddButton
+              disabled={
+                !!form.getFieldValue('vendor_code') ||
+                !form.getFieldValue('vendor_name')
+              }
+              onClick={clickCreateVendorCode}
+            >
+              코드만들기
+            </AddButton>
           </div>
 
           <TurtleDivider marginBottom={37} marginTop={32} />
@@ -309,12 +314,6 @@ const $switch = css`
   }
 `;
 
-const formItemMarginBottom = css`
-  .ant-form-item {
-    margin-bottom: 16px;
-  }
-`;
-
 const flexEnd = css`
   display: flex;
   justify-content: end;
@@ -327,27 +326,6 @@ const flexGap = css`
 
 const marginTop = css`
   margin-top: 44px;
-`;
-
-const createCodeButton = css`
-  background: #f0f3f6;
-  width: 100px;
-  height: 36px;
-
-  &:hover {
-    background-color: #f0f3f6;
-  }
-
-  &.ant-btn:focus {
-    background-color: #f0f3f6;
-    border-color: #f0f3f6;
-  }
-`;
-
-const createCodeFont = css`
-  font-weight: 700;
-  color: #6b6d73;
-  opacity: 1; // 거래처 선택시 0.5
 `;
 
 export default AddSingleVendorModal;

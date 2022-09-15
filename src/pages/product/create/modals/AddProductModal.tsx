@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import productAPI from '@apis/productAPI';
 import {
+  AddButton,
   PrimaryButton,
   TurtleFormInput,
   TurtleFormSearchInput,
@@ -176,10 +177,16 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <div css={flexEnd}>
-            <Button css={createCodeBtn} onClick={createProductCode}>
-              <span css={createCodeFont}>코드 만들기</span>
-            </Button>
+          <div css={flexLayout}>
+            <AddButton
+              disabled={
+                !!form.getFieldValue('product_code') ||
+                !form.getFieldValue('vendor_name')
+              }
+              onClick={createProductCode}
+            >
+              코드만들기
+            </AddButton>
           </div>
 
           <Form.Item
@@ -225,22 +232,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   );
 }
 
-const flexEnd = css`
+const flexLayout = css`
   display: flex;
   justify-content: end;
   margin-bottom: 16px;
-`;
-
-const createCodeBtn = css`
-  background: #f0f3f6;
-  width: 100px;
-  height: 36px;
-`;
-
-const createCodeFont = css`
-  font-weight: 700;
-  color: #6b6d73;
-  opacity: 1; // 거래처 선택시 0.5
+  margin-top: -4px;
 `;
 
 export default AddSingleProductModal;
