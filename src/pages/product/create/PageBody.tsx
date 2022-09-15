@@ -148,6 +148,9 @@ function PageBody() {
                 key: '1',
                 label: '단건추가',
                 icon: <TurtleIcon name="single" />,
+                onClick: () => {
+                  openAddingModal();
+                },
               },
             ]}
           />,
