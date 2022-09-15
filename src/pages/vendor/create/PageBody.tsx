@@ -31,7 +31,6 @@ import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
 import AddSingleVendorModal from './modals/AddVendorModal';
-import { css } from '@emotion/react';
 
 function PageBody() {
   const navigate = useNavigate();

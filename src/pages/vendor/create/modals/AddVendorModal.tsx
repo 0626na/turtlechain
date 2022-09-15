@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Button, Form, Input, message, Switch } from 'antd';
+import { Form, Input, message, Switch } from 'antd';
 import React, { useEffect } from 'react';
 
 import {
