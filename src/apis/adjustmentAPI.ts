@@ -55,10 +55,16 @@ export interface AdjustmentItemShow {
 
 // Request: 매입조정 리스트 조회
 export interface RequestGetList {
+  rt_store_id: number;
+
+  is_cleared: 'True' | 'False' | '';
+
   end_date: string;
   start_date: string;
-  is_cleared: 'True' | 'False' | '';
-  rt_store_id?: number;
+
+  type: 'name' | 'vendor_name' | 'product_name';
+  search_string: string;
+
   page?: number;
 }
 
@@ -84,7 +90,7 @@ export interface ResponseGetList {
 }
 
 // 매입조정 리스트 조회 요청
-const getList = async function (params: RequestGetList) {
+const getList = async (params: RequestGetList) => {
   const url = 'adjustment/item';
   const response = await v2Axios.get<ResponseGetList>(url, { params });
 

@@ -8,8 +8,13 @@ import {
   MemoIcon,
   SecondaryButton,
   TurtleCard,
+  TurtleDivider,
   TurtleDropdown,
   TurtleIcon,
+  TurtlePrimaryRangePicker,
+  TurtleSearchInput,
+  TurtleSearchSelect,
+  TurtleSecondaryRangePicker,
   TurtleTableTitle,
 } from '@components/element';
 import { css } from '@emotion/react';
@@ -17,10 +22,10 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Button, message, Pagination, Popconfirm, Row, Table } from 'antd';
+import { Button, Col, message, Pagination, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 function PageBody() {
@@ -30,7 +35,7 @@ function PageBody() {
     useModal();
 
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
-
+  console.log(store);
   const [
     addExchangeRefundModalVisible,
     addExchangeRefundModalOpen,
@@ -39,19 +44,25 @@ function PageBody() {
 
   // 매입조정 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: store.selected?.id,
+    rt_store_id: store.selected?.id as number,
+
     is_cleared: '',
+
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
+
+    type: 'vendor_name',
+    search_string: '',
+
     page: 1,
   });
 
-  // 매입조정 리스트 요청
+  // 매입조정 검색 요청
   const getAdjustmentListQuery = useQuery(
     ['getAdjustmentList', searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
-      enabled: !!searchQuery.rt_store_id,
+      enabled: !!store.selected?.id,
     },
   );
 
@@ -183,10 +194,71 @@ function PageBody() {
                 getAdjustmentListQuery.data?.data.adjustment_list?.length ?? 0
               }
               rightContent={
-                <SearchFilter
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                />
+                <Row>
+                  <Col>
+                    <TurtleSearchSelect
+                      value="전체"
+                      onChange={(search_type) => {
+                        setSearchQuery((searchQuery) => ({
+                          ...searchQuery,
+                          type: search_type as
+                            | 'name'
+                            | 'vendor_name'
+                            | 'product_name',
+                        }));
+                      }}
+                      items={[
+                        { value: '전체', name: '전체' },
+                        { value: '대기', name: '대기' },
+                        { value: '마감', name: '마감' },
+                      ]}
+                    />
+                  </Col>
+
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
+
+                  <Col>
+                    <TurtlePrimaryRangePicker
+                      value={[
+                        moment(searchQuery.start_date),
+                        moment(searchQuery.end_date),
+                      ]}
+                      onChange={(_, dateStrings) => {
+                        const start_date = dateStrings[0];
+                        const end_date = dateStrings[1];
+
+                        setSearchQuery((searchQuery) => ({
+                          ...searchQuery,
+                          start_date,
+                          end_date,
+                        }));
+                      }}
+                    />
+                  </Col>
+
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
+
+                  <Col>
+                    <SearchFilter
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                    />
+                  </Col>
+                </Row>
               }
             />
           )}
@@ -209,7 +281,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 100,
-              title: t('table.progress'),
+              title: t('table.progressStatus'),
               render: (_, record) => {
                 const { is_cleared } = record;
                 return is_cleared ? (
@@ -236,7 +308,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 150,
-              title: t('table.createDate'),
+              title: t('table.createdDate'),
               render: (_, record) => record.created_date,
             },
             {
