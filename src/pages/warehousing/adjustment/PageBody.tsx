@@ -201,16 +201,13 @@ function PageBody() {
                       onChange={(search_type) => {
                         setSearchQuery((searchQuery) => ({
                           ...searchQuery,
-                          type: search_type as
-                            | 'name'
-                            | 'vendor_name'
-                            | 'product_name',
+                          is_cleared: search_type as '' | 'True' | 'False',
                         }));
                       }}
                       items={[
-                        { value: '전체', name: '전체' },
-                        { value: '대기', name: '대기' },
-                        { value: '마감', name: '마감' },
+                        { value: '', name: '전체' },
+                        { value: 'False', name: '대기' },
+                        { value: 'True', name: '마감' },
                       ]}
                     />
                   </Col>
