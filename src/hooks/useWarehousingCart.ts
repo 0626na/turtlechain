@@ -5,11 +5,13 @@ import {
 import { warehousingCartState } from '@store/warehousingCartState';
 import { RcFile } from 'antd/lib/upload';
 import moment from 'moment';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
+import useStore from './useStore';
 
 const useWarehousingCart = () => {
   const [cart, setCart] = useRecoilState(warehousingCartState);
+  const { store } = useStore();
 
   const ready = useCallback(
     (data: ResponseConnectInventory) => {
@@ -46,6 +48,11 @@ const useWarehousingCart = () => {
       failList: [],
     });
   }, [setCart]);
+
+  // 쇼핑몰 변경시 상태 초기화
+  useEffect(() => {
+    reset();
+  }, [store.selected, reset]);
 
   const updatePrice = (record: WarehousingItemConnect, value: number) => {
     setCart((cart) => ({
@@ -85,6 +92,38 @@ const useWarehousingCart = () => {
     }));
   };
 
+  const add = (record: WarehousingItemConnect) => {
+    const index = 100000; // 단건 추가항목은 100000부터 시작
+    const temp = cart.successList.slice(-1);
+    console.log(temp, temp.length, temp[0]?.index);
+    setCart((cart) => ({
+      ...cart,
+      successList: [
+        {
+          ...record,
+          is_reserved: false,
+          index: (temp.length === 0 ? index : (temp[0]?.index as number)) + 1,
+          warehousing_date: moment().format('YYYY-MM-DD'),
+          store_house: '기본창고',
+        },
+        ...cart.successList,
+      ],
+    }));
+  };
+
+  // 미송입고 상품 존재여부
+  const existMaybeReserve = useMemo(
+    () => !!cart.successList.find((item) => item.maybe_reserved),
+    [cart.successList],
+  );
+
+  // 총 거래처 수 중복 제거해서 계산
+  const vendorCount = useMemo(() => {
+    const set = new Set(cart.successList.map((item) => item.vendor_id));
+    const count = Array.from(set).length;
+    return count;
+  }, [cart.successList]);
+
   // 입고 수량 합계 계산
   const totalCount = useMemo(
     () => cart.successList.reduce((acc, cur) => acc + cur.count, 0),
@@ -106,6 +145,9 @@ const useWarehousingCart = () => {
     updateCount,
     updateIsReserved,
     remove,
+    add,
+    existMaybeReserve,
+    vendorCount,
     totalCount,
     totalAmount,
   };

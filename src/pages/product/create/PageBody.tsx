@@ -18,7 +18,7 @@ import productAPI from '@apis/productAPI';
 import useProductCart from '@hooks/useProductCart';
 import useStore from '@hooks/useStore';
 import { RangeDateModal } from '@components/combine';
-import AddSingleProductModal from './modals/AddProductModal';
+import AddSingleProductModal from './modals/AddSingleProductModal';
 import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 

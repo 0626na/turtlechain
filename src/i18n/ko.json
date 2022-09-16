@@ -15,7 +15,8 @@
   "product": {
     "create": "상품등록",
     "history": "상품목록",
-    "addSingle": "상품 단건추가"
+    "addSingle": "상품 단건추가",
+    "search": "상품 검색"
   },
 
   "order": {
@@ -77,6 +78,7 @@
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명",
     "otherAddress": "기타주소",
+    "count": "수량",
 
     "type": "분류",
     "proccessed totalCount": "처리/총수량",

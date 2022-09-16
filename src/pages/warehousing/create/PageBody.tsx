@@ -21,6 +21,7 @@ import warehousingAPI from '@apis/warehousingAPI';
 import useWarehousingCart from '@hooks/useWarehousingCart';
 import { message } from 'antd';
 import moment from 'moment';
+import AddSingleProductModal from './modals/AddSingleProductModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function PageBody() {
   const { cart, ready, reset, saveFile } = useWarehousingCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
+  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
   const connectInventoryMutation = useMutation(
@@ -84,6 +86,13 @@ function PageBody() {
             end_date,
           });
         }}
+      />
+      {/**
+       *  상품 단건추가 모달
+       */}
+      <AddSingleProductModal
+        visible={addingModalVisible}
+        closeModal={closeAddingModal}
       />
       {/**
        *  confirm 모달
@@ -151,9 +160,7 @@ function PageBody() {
                 key: '1',
                 label: '단건추가',
                 icon: <TurtleIcon name="single" />,
-                onClick: (e) => {
-                  // openAddingModal();
-                },
+                onClick: openAddingModal,
               },
             ]}
           />,

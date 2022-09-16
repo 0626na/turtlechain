@@ -2,21 +2,36 @@ import { SearchFilter } from '@components/combine';
 import { TurtleIcon, TurtleTableTitle } from '@components/element';
 import useWarehousingCart from '@hooks/useWarehousingCart';
 import { pricePattern } from '@utils/pattern';
-import { Checkbox, InputNumber, Table, TabPaneProps, Tabs } from 'antd';
+import {
+  Checkbox,
+  InputNumber,
+  Table,
+  TabPaneProps,
+  Tabs,
+  Tooltip,
+} from 'antd';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 
 function SuccessTab({ loading, ...props }: Props) {
-  const { cart, updatePrice, updateCount, updateIsReserved, remove } =
-    useWarehousingCart();
+  const {
+    cart,
+    updatePrice,
+    updateCount,
+    updateIsReserved,
+    remove,
+    existMaybeReserve,
+    vendorCount,
+  } = useWarehousingCart();
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
     search_string: '',
   });
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const reservedStyle = (needUpdate: boolean) => ({
     style: {
@@ -42,6 +57,12 @@ function SuccessTab({ loading, ...props }: Props) {
     [cart.successList, searchQuery],
   );
 
+  useEffect(() => {
+    if (existMaybeReserve) {
+      setTooltipVisible(true);
+    }
+  }, [existMaybeReserve]);
+
   return (
     <Tabs.TabPane {...props}>
       <Table
@@ -54,7 +75,7 @@ function SuccessTab({ loading, ...props }: Props) {
         title={() => (
           <TurtleTableTitle
             totalCount={cart.successList.length}
-            vendorCount={1}
+            vendorCount={vendorCount}
             searchCount={filteredList.length}
             searchAmount={filteredList.reduce(
               (acc, cur) => acc + cur.price * cur.count,
@@ -86,20 +107,22 @@ function SuccessTab({ loading, ...props }: Props) {
           {
             ellipsis: true,
             width: 250,
-            title:
-              // <Tooltip
-              //   title={
-              //     <Typography.Text
-              //       style={{ color: 'white' }}
-              //       onClick={() => setMessageVisible(false)}
-              //     >
-              //       {reservedMessage}
-              //     </Typography.Text>
-              //   }
-              //   visible={messageVisible}
-              // >
-              t('table.productName'),
-            // </Tooltip>
+            title: (
+              <div onClick={() => setTooltipVisible(false)}>
+                <Tooltip
+                  visible={tooltipVisible}
+                  title={
+                    <span>
+                      당일 입고에 미송상품이 있네요!
+                      <br />
+                      누락되지 않도록 다시 한번 확인해주세요.
+                    </span>
+                  }
+                >
+                  {t('table.productName')}
+                </Tooltip>
+              </div>
+            ),
             onCell: (record) => reservedStyle(record.maybe_reserved),
             render: (_, record) => record.product_name,
           },

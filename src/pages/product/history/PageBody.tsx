@@ -19,7 +19,7 @@ function PageBody() {
   const [selectedRow, selectRow] = useState<ProductShow>();
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: -1,
+    rt_store_id: undefined,
     page: 1,
     search_string: '',
     type: 'name',
@@ -30,8 +30,10 @@ function PageBody() {
   // 상품 리스트 불러오기 요청
   const getProductListQuery = useQuery(
     ['getProductListQuery', searchQuery],
-    () =>
-      productAPI.getList({ ...searchQuery, rt_store_id: store.selected?.id }),
+    () => productAPI.getList(searchQuery),
+    {
+      enabled: !!searchQuery.rt_store_id,
+    },
   );
 
   //리스트내 상품 삭제
