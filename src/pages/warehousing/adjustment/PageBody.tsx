@@ -44,7 +44,7 @@ function PageBody() {
 
   // 매입조정 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: store.selected?.id as number,
+    rt_store_id: null,
 
     is_cleared: '',
 
@@ -62,7 +62,7 @@ function PageBody() {
     ['getAdjustmentList', searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
-      enabled: !!store.selected?.id,
+      enabled: !!searchQuery.rt_store_id,
     },
   );
 
@@ -80,6 +80,13 @@ function PageBody() {
   });
 
   const loading = getAdjustmentListQuery.isLoading;
+
+  useEffect(() => {
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.selected?.id as number,
+    }));
+  }, [store.selected?.id]);
 
   return (
     <>

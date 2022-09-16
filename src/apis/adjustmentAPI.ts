@@ -55,7 +55,7 @@ export interface AdjustmentItemShow {
 
 // Request: 매입조정 리스트 조회
 export interface RequestGetList {
-  rt_store_id: number;
+  rt_store_id: number | null;
 
   is_cleared: 'True' | 'False' | '';
 
