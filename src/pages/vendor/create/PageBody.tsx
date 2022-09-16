@@ -127,7 +127,7 @@ function PageBody() {
       <TurtleConfirmModal
         visible={confirmModalVisivle}
         title={'정말 등록할까요?'}
-        description={['추천과 미매칭에 남아있는 거래처는 등록에서 제외됩니다.']}
+        description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
         onCancel={() => {
           closeConfirmModal();
         }}

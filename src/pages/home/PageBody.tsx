@@ -89,12 +89,7 @@ function PageBody() {
 
         <Table title={() => <div>3123</div>}></Table>
 
-        <TurtlePrimaryRangePicker
-          onChange={(value) => {
-            console.log(value[0]);
-            console.log(value[1]);
-          }}
-        />
+        <TurtlePrimaryRangePicker />
 
         {/* <TurtleSearchInput onSearch={(value: any) => console.log(value)} /> */}
         <TurtleFormInput />

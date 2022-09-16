@@ -6,54 +6,53 @@ import {
   TurtleConfirmModal,
   TurtleDropdown,
   TurtleIcon,
+  TurtleTabs,
   TurtleUpload,
 } from '@components/element';
 import { PageBottomBar, PageContent, PageTitle } from '@layout/page';
-import { message } from 'antd';
 import SuccessTab from './tabs/SuccessTab';
-import TurtleTabs from '@components/element/TurtleTabs';
 import FailTab from './tabs/FailTab';
-import { useMutation } from 'react-query';
-import productAPI from '@apis/productAPI';
-import useProductCart from '@hooks/useProductCart';
-import useStore from '@hooks/useStore';
 import { RangeDateModal } from '@components/combine';
-import AddSingleProductModal from './modals/AddProductModal';
-import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
+import useModal from '@hooks/useModal';
+import useStore from '@hooks/useStore';
+import { useMutation } from 'react-query';
+import warehousingAPI from '@apis/warehousingAPI';
+import useWarehousingCart from '@hooks/useWarehousingCart';
+import { message } from 'antd';
+import moment from 'moment';
 
 function PageBody() {
   const navigate = useNavigate();
   const { store, isStoreSelected } = useStore();
-  const { cart, ready, saveFile, resetCart } = useProductCart();
+  const { cart, ready, reset, saveFile } = useWarehousingCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
-  const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
-  // 재고관리 연동 요청
-  const connectInventoryMutation = useMutation(productAPI.connectInventory, {
+  const connectInventoryMutation = useMutation(
+    warehousingAPI.connectInventory,
+    {
+      onSuccess: (data) => {
+        ready(data);
+        // data.msg && setReservedMessage(data.msg);
+        closeInventoryModal();
+      },
+    },
+  );
+
+  const parseExcelMutation = useMutation(warehousingAPI.parseExcel, {
     onSuccess: (data) => {
       ready(data);
-      closeInventoryModal();
+      // data.msg && message.info(data.msg);
     },
   });
 
-  // 엑셀파싱 요청
-  const parseExcelMutation = useMutation(productAPI.parseExcel, {
-    onSuccess: (data) => {
-      ready(data);
-    },
-  });
-
-  // 상품 생성 요청
-  const createMutation = useMutation(productAPI.create, {
-    onSuccess: (data) => {
-      resetCart();
-      message.success(
-        `성공적으로 등록했습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
-      );
-      navigate('/product/history');
+  const createMutation = useMutation(warehousingAPI.create, {
+    onSuccess: () => {
+      reset();
+      message.success('성공적으로 등록했습니다.');
+      navigate('/warehousing/history');
     },
   });
 
@@ -86,13 +85,6 @@ function PageBody() {
           });
         }}
       />
-      {/*
-       *  단건 추가 모달
-       */}
-      <AddSingleProductModal
-        visible={addingModalVisible}
-        closeModal={closeAddingModal}
-      />
       {/**
        *  confirm 모달
        */}
@@ -104,22 +96,31 @@ function PageBody() {
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
         onOk={() => {
-          createMutation.mutate(
-            cart.successList.map((product) => ({
-              ...product,
+          createMutation.mutate({
+            sheet: {
+              created_date: moment().format('YYYY-MM-DD'),
               rt_store_id: store.selected?.id as number,
-              image_url: product.image_url ?? '',
-              memo: product.memo ?? '',
-            })),
-          );
+            },
+            item: {
+              rt_store_id: store.selected?.id as number,
+              item_list: cart.successList.map((record) => ({
+                vendor_id: record.vendor_id,
+                product_id: record.product_id,
+                count: record.count,
+                price: record.price,
+                warehousing_date: record.warehousing_date,
+                is_reserved: record.is_reserved,
+                memo: record.memo,
+              })),
+            },
+          });
         }}
       />
       {/*
        * Page
        */}
       <PageTitle
-        title="상품등록 미리보기"
-        subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."
+        title="입고서 미리보기"
         buttons={[
           <TeriaryButton
             text="재고프로그램 연동"
@@ -128,7 +129,7 @@ function PageBody() {
             }}
           />,
           <TurtleDropdown
-            triggerButton={<SecondaryButton>상품 추가하기</SecondaryButton>}
+            triggerButton={<SecondaryButton>입고 추가하기</SecondaryButton>}
             items={[
               {
                 key: '0',
@@ -150,8 +151,8 @@ function PageBody() {
                 key: '1',
                 label: '단건추가',
                 icon: <TurtleIcon name="single" />,
-                onClick: () => {
-                  openAddingModal();
+                onClick: (e) => {
+                  // openAddingModal();
                 },
               },
             ]}
@@ -179,7 +180,7 @@ function PageBody() {
           onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
-          상품 등록하기
+          입고서 등록하기
         </PrimaryButton>
       </PageBottomBar>
     </>

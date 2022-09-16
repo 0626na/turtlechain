@@ -13,7 +13,7 @@ function ProductCreate() {
     <>
       <Helmet title={`${t('helmet.turtleChain')} - ${t('product.create')}`} />
       <PageHeader
-        title="상품등록"
+        title={t('product.create')}
         button={
           <HistoryButton
             text="상품목록"
