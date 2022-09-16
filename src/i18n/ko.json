@@ -77,6 +77,9 @@
     "wsCompanyNum": "사업자 번호",
     "wsOwner": "대표자명",
     "otherAddress": "기타주소",
+
+    "type": "분류",
+    "proccessed totalCount": "처리/총수량",
     "warehouseName": "창고명",
     "warehousingCount": "입고 수량",
     "totalWarehousingCount": "입고 수량 합계",

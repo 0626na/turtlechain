@@ -129,7 +129,7 @@ function PageBody() {
             }}
           />,
           <TurtleDropdown
-            triggerButton={<SecondaryButton text="입고 추가하기" />}
+            triggerButton={<SecondaryButton>입고 추가하기</SecondaryButton>}
             items={[
               {
                 key: '0',
