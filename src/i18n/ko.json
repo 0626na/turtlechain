@@ -28,7 +28,11 @@
     "": "입고",
     "create": "입고등록",
     "history": "입고내역",
-    "adjustment": "교환/반품/미송",
+    "adjustment": {
+      "": "교환/반품/미송",
+      "pending": "대기",
+      "confirmed": "마감"
+    },
     "confirm": {
       "true": "마감",
       "false": "대기",
