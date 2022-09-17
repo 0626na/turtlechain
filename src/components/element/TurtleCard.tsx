@@ -1,41 +1,83 @@
-import { Card, Col, Row, Tag } from 'antd';
-import Meta from 'antd/lib/card/Meta';
+import { css } from '@emotion/react';
+
 import React from 'react';
+import TurtleTag from './TurtleTag';
+import TurtleText from './TurtleText';
 
 interface Props {
-  value: Array<{
+  value: {
     color: string;
     title: string;
     count: number;
     price: number;
-  }>;
+  }[];
 }
 
 function TurtleCard({ value }: Props) {
   return (
-    <Row gutter={16}>
+    <div css={cardsContainer}>
       {value.map(({ color, title, count, price }) => (
-        <Col span={4} key={title}>
-          <Card size="small">
-            <Row justify="center">
-              <Tag color={color} style={{ margin: 4 }}>
-                {title}
-              </Tag>
-            </Row>
-            <Meta
-              title={
-                <>
-                  <span style={{ fontSize: 24 }}>{count}</span>건
-                </>
-              }
-              description={`${price.toLocaleString()}원`}
-              style={{ textAlign: 'center', margin: '12px 0' }}
-            />
-          </Card>
-        </Col>
+        <div css={card} key={title}>
+          <div css={tagContainer}>
+            <TurtleTag color={color}>{title}</TurtleTag>
+          </div>
+
+          <div css={metaContainer}>
+            <TurtleText css={metaLeft}>{count}</TurtleText>
+            <TurtleText css={metaRight}>건</TurtleText>
+          </div>
+
+          <TurtleText css={$price}>{`${price.toLocaleString()}원`}</TurtleText>
+        </div>
       ))}
-    </Row>
+    </div>
   );
 }
+
+const cardsContainer = css`
+  display: flex;
+  gap: 20px;
+`;
+
+const card = css`
+  width: 240px;
+  height: 160px;
+  padding: 20px;
+
+  box-shadow: 0px 2px 14px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const tagContainer = css`
+  width: 37px;
+`;
+
+const metaContainer = css`
+  color: #242934;
+`;
+
+const metaLeft = css`
+  margin-top: 20px;
+
+  font-size: 36px;
+  font-weight: 700;
+`;
+const metaRight = css`
+  margin-left: 2px;
+
+  font-size: 20px;
+  font-weight: 500;
+`;
+
+const $price = css`
+  margin-top: 12px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #a1a2a6;
+`;
 
 export default TurtleCard;
