@@ -30,6 +30,7 @@ import MemoIcon from './icon/MemoIcon';
 import TurtleFormSelect from './select/TurtleFormSelect';
 import AddButton from './button/AddButton';
 import TurtleCard from './TurtleCard';
+import TurtleTag from './TurtleTag';
 
 export {
   //buttons
@@ -72,4 +73,5 @@ export {
   TurtleBadge,
   TurtleTabs,
   TurtleCard,
+  TurtleTag,
 };
