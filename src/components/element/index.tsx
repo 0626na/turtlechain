@@ -31,6 +31,8 @@ import TurtleFormSelect from './select/TurtleFormSelect';
 import AddButton from './button/AddButton';
 import TurtleCard from './TurtleCard';
 import TurtleTag from './TurtleTag';
+import TurtlePanelTitle from './TurtlePanelTitle';
+import TurtleTableInput from './input/TurtleTableInput';
 
 export {
   //buttons
@@ -46,6 +48,7 @@ export {
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtlePriceInput,
+  TurtleTableInput,
 
   //RangePicker
   TurtlePrimaryRangePicker,
@@ -74,4 +77,5 @@ export {
   TurtleTabs,
   TurtleCard,
   TurtleTag,
+  TurtlePanelTitle,
 };

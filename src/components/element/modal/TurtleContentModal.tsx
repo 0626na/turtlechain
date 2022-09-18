@@ -18,7 +18,7 @@ function TurtleContentModal({
   size = 'small',
 }: Props) {
   let containerWidth = 0;
-  if (size === 'large') containerWidth = 1600;
+  if (size === 'large') containerWidth = 1200;
   if (size === 'middle') containerWidth = 884;
   if (size === 'small') containerWidth = 592;
 
@@ -55,6 +55,7 @@ const modal = {
 
   container: css({
     maxHeight: '90vh',
+    height: '100%',
     position: 'absolute',
     top: '50%',
     left: '50%',

@@ -17,6 +17,7 @@ import {
   TurtleSecondaryRangePicker,
   TurtleTableTitle,
 } from '@components/element';
+import TurtleTag from '@components/element/TurtleTag';
 import { css } from '@emotion/react';
 
 import useModal from '@hooks/useModal';
@@ -27,15 +28,17 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import ExchangeRefundModal from './addExchangeRefund/ExchangeRefundModal';
 
 function PageBody() {
   const { store } = useStore();
+
   const [selectedRow, setSelectedRow] = useState<AdjustmentItemShow>();
   const [addReserveModalVisible, addReserveModalOpen, addReserveModalClose] =
     useModal();
 
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
-  console.log(store);
+
   const [
     addExchangeRefundModalVisible,
     addExchangeRefundModalOpen,
@@ -124,11 +127,10 @@ function PageBody() {
       {/*
        * 교환/반품 추가 모달
        */}
-      <TurtleContentModal
-        title="교환/반품 추가"
+      <ExchangeRefundModal
         visible={addExchangeRefundModalVisible}
         onClose={addExchangeRefundModalClose}
-      ></TurtleContentModal>
+      />
 
       <PageHeader title="교환/반품/미송" />
 
@@ -163,30 +165,32 @@ function PageBody() {
         {/*
          *  매입조정 현황
          */}
-        <TurtleCard
-          value={[
-            {
-              color: 'orange',
-              title: t('adjustment.pending'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.price ?? 0,
-            },
-            {
-              color: 'geekblue',
-              title: t('adjustment.confirmed'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .price ?? 0,
-            },
-          ]}
-        />
+        <div css={cardsMargin}>
+          <TurtleCard
+            value={[
+              {
+                color: '#DD7A32',
+                title: t('warehousing.adjustment.pending'),
+                count:
+                  getAdjustmentListQuery.data?.data.adjustment_summary
+                    ?.not_cleared.count ?? 0,
+                price:
+                  getAdjustmentListQuery.data?.data.adjustment_summary
+                    ?.not_cleared.price ?? 0,
+              },
+              {
+                color: '#00AAB5',
+                title: t('warehousing.adjustment.confirmed'),
+                count:
+                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                    .count ?? 0,
+                price:
+                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                    .price ?? 0,
+              },
+            ]}
+          />
+        </div>
 
         <Table
           size="small"
@@ -204,7 +208,7 @@ function PageBody() {
                 <Row>
                   <Col>
                     <TurtleSearchSelect
-                      value="전체"
+                      value={''}
                       onChange={(search_type) => {
                         setSearchQuery((searchQuery) => ({
                           ...searchQuery,
@@ -289,23 +293,9 @@ function PageBody() {
               render: (_, record) => {
                 const { is_cleared } = record;
                 return is_cleared ? (
-                  <div
-                    css={css`
-                      background-color: #ddf3f5;
-                      color: #00aab5;
-                    `}
-                  >
-                    마감
-                  </div>
+                  <TurtleTag color="#00AAB5">마감</TurtleTag>
                 ) : (
-                  <div
-                    css={css`
-                      background-color: #fbefe6;
-                      color: #dd7a32;
-                    `}
-                  >
-                    대기
-                  </div>
+                  <TurtleTag color="#DD7A32">대기</TurtleTag>
                 );
               },
             },
@@ -415,5 +405,9 @@ function PageBody() {
     </>
   );
 }
+
+const cardsMargin = css`
+  margin-bottom: 60px;
+`;
 
 export default PageBody;
