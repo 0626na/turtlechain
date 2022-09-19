@@ -185,6 +185,33 @@ const create = async function (data: {
   return itemResponse.data;
 };
 
+/*
+ * 발주서 양식 조회
+ */
+
+export interface RequestCreateOrderFormat {
+  vendor_name: string[];
+  vendor_address: string[];
+  vendor_mobile: string[];
+  product_name: string[];
+  product_option: string[];
+  product_count: string[];
+  product_price: string[];
+  order_type: string[];
+  memo: string[];
+}
+
+export interface ResponseCreateOrderFormat {
+  msg: string;
+}
+
+const createOrderFormat = async (data: RequestCreateOrderFormat) => {
+  const url = 'order/format';
+  const response = await v2Axios.post<ResponseCreateOrderFormat>(url, data);
+
+  return response.data;
+};
+
 const orderAPI = {
   getList,
   get,
