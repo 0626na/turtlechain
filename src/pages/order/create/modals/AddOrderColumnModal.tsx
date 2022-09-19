@@ -1,10 +1,11 @@
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { RequestCreateOrderFormat } from '@apis/orderAPI';
+import orderAPI, { RequestCreateOrderFormat } from '@apis/orderAPI';
 import { TurtleText } from '@components/element';
 import { css } from '@emotion/react';
 import { PageTitle } from '@layout/page';
-import { Button, Col, Divider, Input, Modal, Row } from 'antd';
+import { Button, Col, Divider, Input, message, Modal, Row } from 'antd';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 
 interface Props {
   visible: boolean;
@@ -23,8 +24,16 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     order_type: ['123'],
     memo: ['jj'],
   });
+
+  const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
+    onSuccess: (data) => {
+      if (data.msg === 'success')
+        message.success('양식 등록이 완료되었습니다.');
+    },
+  });
+
   return (
-    <Modal visible={visible} onCancel={closeModal} width="100vw">
+    <Modal visible={visible} onCancel={closeModal} width="100vw" footer={false}>
       <Row css={wrapper}>
         <Col>
           <TurtleText css={$title}>발주서 설정</TurtleText>
@@ -536,6 +545,15 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
             )}
           </Col>
         </Row>
+      </Row>
+      <Row justify="end">
+        <Button
+          type="primary"
+          style={{ marginBottom: 20, marginRight: 20, width: 200, height: 40 }}
+          onClick={() => createOrderFormatMutation.mutate(orderFormat)}
+        >
+          저장하기
+        </Button>
       </Row>
     </Modal>
   );
