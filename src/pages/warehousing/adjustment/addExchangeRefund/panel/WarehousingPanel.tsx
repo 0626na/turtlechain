@@ -1,4 +1,3 @@
-import { AdjustmentItem } from '@apis/adjustmentAPI';
 import warehousingAPI, { WarehousingItem } from '@apis/warehousingAPI';
 import {
   TurtleFormSearchInput,
