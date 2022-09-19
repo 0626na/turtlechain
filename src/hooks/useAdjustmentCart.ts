@@ -1,7 +1,7 @@
 import { adjustmentCartState } from './../store/adjustmentCartState';
 import { useRecoilState } from 'recoil';
 
-const useAdjustmentCart = () => {
+const useExchageRefundCart = () => {
   const [cart, setCart] = useRecoilState(adjustmentCartState);
 
   return {
@@ -10,4 +10,4 @@ const useAdjustmentCart = () => {
   };
 };
 
-export default useAdjustmentCart;
+export default useExchageRefundCart;

@@ -1,15 +1,23 @@
-import { WarehousingItem } from '@apis/warehousingAPI';
+import adjustmentAPI from '@apis/adjustmentAPI';
 import { TurtleContentModal } from '@components/combine';
-import { TurtlePanelTitle } from '@components/element';
+import {
+  PrimaryButton,
+  TurtlePanelTitle,
+  TurtleText,
+} from '@components/element';
 import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
-import { Collapse } from 'antd';
+import useStore from '@hooks/useStore';
+
+import { Col, Collapse, message, Row } from 'antd';
+import { t } from 'i18next';
 
 import React, { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
 
 import ExchangeRefundPanel from '../panel/ExchangeRefundPanel';
 import WarehousingPanel from '../panel/WarehousingPanel';
-
+import { QueryClient } from 'react-query';
 interface Props {
   onClose: () => void;
   visible: boolean;
@@ -17,9 +25,68 @@ interface Props {
 
 function ExchangeRefundModal({ onClose, visible }: Props) {
   const [activeKey, setActiveKey] = useState('1');
-  const { setCart } = useAdjustmentCart();
+  const { cart, setCart } = useAdjustmentCart();
+  const { store } = useStore();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
+
   const handleModalClose = () => {
     onClose();
+  };
+
+  // 교환반품 생성 요성
+  const createExchageRefundMutation = useMutation(adjustmentAPI.create, {
+    onSuccess: () => {
+      queryClient.refetchQueries(['getAdjustmentList'], { active: true });
+      // resetStates();
+      message.success(t('message.success create adjustment'));
+
+      handleModalClose();
+      // navigate('/adjustment/list');
+    },
+  });
+
+  // 수량, 종류, 가격 입력되었는지 확인
+  const handleValidationCheck = () => {
+    let isVaild = true;
+
+    cart.adjustmentItemList.forEach((item) => {
+      if (
+        item.type === '' ||
+        item.product_count === 0 ||
+        item.product_price === 0
+      ) {
+        isVaild = false;
+        console.log('123123213');
+      }
+    });
+    return isVaild;
+  };
+
+  const handleExchangeRefundCreate = () => {
+    if (!handleValidationCheck()) {
+      message.warn('교환/반품 가격,수량,종류를 확인해주세요.');
+      return;
+    }
+
+    createExchageRefundMutation.mutate({
+      item_list: cart.adjustmentItemList.map((item) => ({
+        rt_store_id: store.selected?.id as number,
+        vendor_id: item.vendor_id,
+        product_id: item.product_id,
+        warehousing_item_id: item.warehousing_item_id,
+        count: item.product_count,
+        price: item.product_price,
+        type: item.type,
+        memo: item.memo,
+      })),
+    });
   };
 
   useEffect(() => {
@@ -72,11 +139,36 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
             />
           }
           activeKey={activeKey}
-          clickCreate={() => {
-            setActiveKey('1');
-          }}
         />
       </Collapse>
+
+      <Row style={{ marginTop: 32 }} justify="end" align="middle">
+        <Col style={{ marginRight: 24 }}>
+          <TurtleText css={{ color: ' #6B6D73', marginRight: 8, fontSize: 15 }}>
+            금액 합계
+          </TurtleText>
+          <TurtleText css={{ fontWeight: 700 }}>
+            {cart.adjustmentItemList
+              .map((item) => item.product_count * item.product_price)
+              .reduce((totalPrice, price) => totalPrice + price, 0)
+              .toLocaleString()}
+            원
+          </TurtleText>
+        </Col>
+
+        <Col>
+          <PrimaryButton
+            disabled={
+              !handleValidationCheck() || cart.adjustmentItemList.length === 0
+            }
+            onClick={() => {
+              handleExchangeRefundCreate();
+            }}
+          >
+            매입조정 등록하기
+          </PrimaryButton>
+        </Col>
+      </Row>
     </TurtleContentModal>
   );
 }

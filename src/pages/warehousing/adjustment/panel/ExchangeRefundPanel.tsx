@@ -20,18 +20,16 @@ import NumberInput from './NumberInput';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
-  clickCreate: () => void;
 }
 
-function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
+function ExchangeRefundPanel({ activeKey, ...props }: Props) {
   const { cart, setCart } = useAdjustmentCart();
   const [selectedRow, setSelectedRow] = useState<AdjustmentItem>();
 
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
 
   //AdjustmentItemList의 필드값중 변경대상을 type으로 받아 업데이트 시킨다.
-
-  const handleAdjustmentItemUpdate = (
+  const handleExchangeRefundItemUpdate = (
     type: string,
     index: number, // id
     value: number | string,
@@ -44,7 +42,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
     }));
   };
 
-  const handleAdjustmentItemDelete = (index: number) => {
+  const handleExchangeRefundItemDelete = (index: number) => {
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.adjustmentItemList.filter(
@@ -89,7 +87,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
         onCancel={memoModalClose}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
-          handleAdjustmentItemUpdate(
+          handleExchangeRefundItemUpdate(
             'memo',
             selectedRow?.index as number,
             value,
@@ -176,7 +174,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                 <NumberInput
                   defaultValue={record.product_price}
                   onChange={(value) => {
-                    handleAdjustmentItemUpdate(
+                    handleExchangeRefundItemUpdate(
                       'product_price',
                       record.index as number,
                       value,
@@ -195,7 +193,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                     defaultValue={record.product_count}
                     max={record.product_count_max}
                     onChange={(value) => {
-                      handleAdjustmentItemUpdate(
+                      handleExchangeRefundItemUpdate(
                         'product_count',
                         record.index as number,
                         value,
@@ -212,7 +210,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                 <Select
                   status={record.type === '' ? 'error' : ''}
                   onSelect={(value: string) => {
-                    handleAdjustmentItemUpdate(
+                    handleExchangeRefundItemUpdate(
                       'type',
                       record.index as number,
                       value,
@@ -232,7 +230,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                       padding: '8px 10px',
                     }}
                     key={0}
-                    value="교환"
+                    value="takeback"
                   >
                     교환
                   </Select.Option>
@@ -241,7 +239,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                       padding: '8px 10px',
                     }}
                     key={1}
-                    value="반품"
+                    value="refund"
                   >
                     반품
                   </Select.Option>
@@ -271,7 +269,7 @@ function ExchangeRefundPanel({ activeKey, clickCreate, ...props }: Props) {
                 <TurtleIcon
                   name="delete"
                   onClick={() => {
-                    handleAdjustmentItemDelete(record.index as number);
+                    handleExchangeRefundItemDelete(record.index as number);
                   }}
                 />
               ),
