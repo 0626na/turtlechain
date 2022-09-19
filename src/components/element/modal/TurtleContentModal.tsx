@@ -17,16 +17,17 @@ function TurtleContentModal({
   children,
   size = 'small',
 }: Props) {
-  let containerWidth = 0;
-  if (size === 'large') containerWidth = 1200;
-  if (size === 'middle') containerWidth = 884;
-  if (size === 'small') containerWidth = 592;
+  const width = {
+    small: { width: 592 },
+    middle: { width: 884, height: 640 },
+    large: { width: 1400 },
+  };
 
   return (
     <>
       {visible && (
         <div css={modal.mask}>
-          <div css={[modal.container, { width: containerWidth }]}>
+          <div css={[modal.container, width[size]]}>
             <div css={modal.header}>
               <h1 css={modal.headerTitle}>{title}</h1>
               <div>
@@ -54,8 +55,8 @@ const modal = {
   }),
 
   container: css({
-    maxHeight: '90vh',
-    height: '100%',
+    maxHeight: '92vh',
+    // height: '100%',
     position: 'absolute',
     top: '50%',
     left: '50%',

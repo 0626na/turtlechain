@@ -240,8 +240,7 @@ const getItem = async (params: RequestGetItem) => {
 
 export interface RequestUpdateSheet {
   id: number;
-  is_inactive?: boolean;
-  is_confirmed?: boolean;
+  is_confirmed: boolean;
 }
 
 export interface ResponseUpdateSheet {
@@ -252,6 +251,27 @@ export interface ResponseUpdateSheet {
 const updateSheet = async function (data: RequestUpdateSheet) {
   const url = `warehousing/sheet/${data.id}`;
   const response = await v2Axios.patch<ResponseUpdateSheet>(url, data);
+
+  return response.data.data;
+};
+
+/*
+ * 입고장 삭제하기
+ */
+
+export interface RequestRemoveSheet {
+  id: number;
+  is_inactive: boolean;
+}
+
+export interface ResponseRemoveSheet {
+  msg: string;
+  data: WarehousingSheet;
+}
+
+const removeSheet = async function (data: RequestRemoveSheet) {
+  const url = `warehousing/sheet/${data.id}`;
+  const response = await v2Axios.patch<ResponseRemoveSheet>(url, data);
 
   return response.data.data;
 };
@@ -287,6 +307,7 @@ const warehousingAPI = {
   getSheet,
   getItem,
   updateSheet,
+  removeSheet,
   updateItem,
 };
 

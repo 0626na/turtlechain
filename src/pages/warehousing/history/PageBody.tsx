@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import warehousingAPI, { RequestGetSheet } from '@apis/warehousingAPI';
+import warehousingAPI, {
+  RequestGetSheet,
+  WarehousingSheet,
+} from '@apis/warehousingAPI';
 import {
+  TurtleConfirmModal,
+  TurtleIcon,
   TurtlePrimaryRangePicker,
   TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { Space, Table, Tag } from 'antd';
+import { Button, message, Space, Table, Tag } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import useModal from '@hooks/useModal';
+import DetailModal from './modals/DetailModal';
 
 function PageBody() {
   const { store } = useStore();
@@ -22,6 +29,12 @@ function PageBody() {
     page: 1,
   });
 
+  const [selectedRow, selectRow] = useState<WarehousingSheet>();
+  const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
+  const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
+  const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
+  const [cancelModalVisible, openCancelModal, closeCancelModal] = useModal();
+
   // 입고장 리스트 요청
   const getWarehousingSheetQuery = useQuery(
     ['getWarehousingSheetQuery', searchQuery],
@@ -31,6 +44,25 @@ function PageBody() {
     },
   );
 
+  // 입고장 수정 요청
+  const updateSheetMutation = useMutation(warehousingAPI.updateSheet, {
+    onSuccess: () => {
+      message.success('입고서를 수정되었습니다.');
+      closeConfirmModal();
+      closeCancelModal();
+      getWarehousingSheetQuery.refetch();
+    },
+  });
+
+  // 입고장 삭제 요청
+  const removeSheetMutation = useMutation(warehousingAPI.removeSheet, {
+    onSuccess: () => {
+      message.success('입고서를 삭제했습니다.');
+      closeRemoveModal();
+      getWarehousingSheetQuery.refetch();
+    },
+  });
+
   // 쇼핑몰 바뀔때 마다 입고서 리스트 재요청
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
@@ -39,8 +71,78 @@ function PageBody() {
     }));
   }, [store.selected]);
 
+  const loading =
+    getWarehousingSheetQuery.isLoading ||
+    updateSheetMutation.isLoading ||
+    removeSheetMutation.isLoading;
+
   return (
     <>
+      {/**
+       * 상세보기 모달
+       */}
+      <DetailModal
+        visible={detailModalVisible}
+        onClose={closeDetailModal}
+        selectedRow={selectedRow}
+      />
+      {/**
+       * 삭제 확인 모달
+       */}
+      <TurtleConfirmModal
+        visible={removeModalVisible}
+        title="정말 삭제할까요?"
+        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
+        onCancel={closeRemoveModal}
+        onOk={() => {
+          removeSheetMutation.mutate({
+            id: selectedRow?.id as number,
+            is_inactive: true,
+          });
+        }}
+        cancelText="아니요"
+        okText="네"
+        loading={loading}
+      />
+      {/**
+       * 마감 확인 모달
+       */}
+      <TurtleConfirmModal
+        visible={confirmModalVisible}
+        title="정말 마감할까요?"
+        description={['해당 입고서를 마감합니다.']}
+        onCancel={closeConfirmModal}
+        onOk={() => {
+          updateSheetMutation.mutate({
+            id: selectedRow?.id as number,
+            is_confirmed: true,
+          });
+        }}
+        cancelText="아니요"
+        okText="네"
+        loading={loading}
+      />
+      {/**
+       * 마감 취소 확인 모달
+       */}
+      <TurtleConfirmModal
+        visible={cancelModalVisible}
+        title="정말 취소할까요?"
+        description={['해당 입고서의 마감을 취소합니다.']}
+        onCancel={closeConfirmModal}
+        onOk={() => {
+          updateSheetMutation.mutate({
+            id: selectedRow?.id as number,
+            is_confirmed: false,
+          });
+        }}
+        cancelText="아니요"
+        okText="네"
+        loading={loading}
+      />
+      {/**
+       * 페이지
+       */}
       <PageTitle title="입고서 리스트" />
       <PageContent>
         <Table
@@ -50,14 +152,18 @@ function PageBody() {
           rowKey={(record) => record.id}
           pagination={false}
           scroll={{ x: 1400, y: 'auto' }}
+          onRow={(record) => ({
+            onClick: () => {
+              selectRow(record);
+              openDetailModal();
+            },
+          })}
           title={() => (
             <TurtleTableTitle
               totalCount={getWarehousingSheetQuery.data?.total_count ?? 0}
               rightContent={
                 <Space>
                   <TurtleSearchSelect
-                    // size="small"
-                    // style={{ width: 100 }}
                     value={String(searchQuery.is_confirmed)}
                     onChange={(is_confirmed) => {
                       setSearchQuery({
@@ -98,11 +204,11 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 200,
+              width: 100,
               align: 'center',
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
-                <Tag color={is_confirmed ? 'geekblue' : 'orange'}>
+                <Tag color={is_confirmed ? 'cyan' : 'orange'}>
                   {t(`warehousing.confirm.${is_confirmed}`)}
                 </Tag>
               ),
@@ -116,14 +222,14 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 300,
+              width: 200,
               align: 'right',
               title: t('table.totalWarehousingCount'),
               render: (_, record) => record.total_item_count.toLocaleString(),
             },
             {
               ellipsis: true,
-              width: 300,
+              width: 200,
               align: 'right',
               title: t('table.totalAmount'),
               render: (_, record) => record.total_amount.toLocaleString(),
@@ -131,89 +237,55 @@ function PageBody() {
             {
               ellipsis: true,
               align: 'center',
-              render: (_, record) => '',
-              // <Space>
-              //   {record.is_confirmed ? (
-              //     // 16일 이전은 x
-              //     moment(record.created_time) > moment('2022-08-17') && (
-              //       /*
-              //        * 진행상태 : 마감
-              //        */
-              //       <Popconfirm
-              //         title={'마감을 취소하시겠습니까?'}
-              //         okText={t('yes')}
-              //         cancelText={t('no')}
-              //         onConfirm={(e) => {
-              //           e?.stopPropagation();
-              //           updateSheetQuery.mutate({
-              //             id: record.id,
-              //             is_confirmed: false,
-              //           });
-              //         }}
-              //         onCancel={(e) => {
-              //           e?.stopPropagation();
-              //         }}
-              //       >
-              //         <TurtleButtonSub
-              //           color="red"
-              //           size="small"
-              //           onClick={(e) => {
-              //             e.stopPropagation();
-              //           }}
-              //         >
-              //           마감 취소
-              //         </TurtleButtonSub>
-              //       </Popconfirm>
-              //     )
-              //   ) : (
-              //     /*
-              //      * 진행상태 : 대기
-              //      */
-              //     <>
-              //       <Popconfirm
-              //         title={t('description.really confirmed')}
-              //         okText={t('yes')}
-              //         cancelText={t('no')}
-              //         onConfirm={(e) => {
-              //           e?.stopPropagation();
-              //           updateSheetQuery.mutate({
-              //             id: record.id,
-              //             is_confirmed: true,
-              //           });
-              //         }}
-              //         onCancel={(e) => {
-              //           e?.stopPropagation();
-              //         }}
-              //       >
-              //         <TurtleButtonSub
-              //           size="small"
-              //           onClick={(e) => {
-              //             e.stopPropagation();
-              //           }}
-              //         >
-              //           마감
-              //         </TurtleButtonSub>
-              //       </Popconfirm>
-              //       <Popconfirm
-              //         title={t('description.really delete')}
-              //         okText={t('yes')}
-              //         cancelText={t('no')}
-              //         onConfirm={(e) => {
-              //           e?.stopPropagation();
-              //           updateSheetQuery.mutate({
-              //             id: record.id,
-              //             is_inactive: true,
-              //           });
-              //         }}
-              //         onCancel={(e) => {
-              //           e?.stopPropagation();
-              //         }}
-              //       >
-              //         <TurtleIcon type="delete" />
-              //       </Popconfirm>
-              //     </>
-              //   )}
-              // </Space>
+              width: 200,
+              render: (_, record) => (
+                <Space size="large">
+                  {record.is_confirmed ? (
+                    // 16일 이전은 x
+                    moment(record.created_time) > moment('2022-08-17') && (
+                      /*
+                       * 진행상태 : 마감
+                       */
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          selectRow(record);
+                          openCancelModal();
+                        }}
+                      >
+                        마감취소
+                      </Button>
+                    )
+                  ) : (
+                    /*
+                     * 진행상태 : 대기
+                     */
+                    <>
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          selectRow(record);
+                          openConfirmModal();
+                        }}
+                      >
+                        마감하기
+                      </Button>
+                      <TurtleIcon
+                        name="delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          selectRow(record);
+                          openRemoveModal();
+                        }}
+                      />
+                    </>
+                  )}
+                </Space>
+              ),
             },
           ]}
         />

@@ -56,6 +56,13 @@ const GlobalStyle = () => (
         text-align: left;
       }
 
+      .ant-tooltip-inner {
+        font-size: 13px;
+        font-weight: 400;
+        border-radius: 12px;
+        width: 250px;
+      }
+
       /* window에서도 스크롤바 mac처럼 둥글게 */
       /* total width */
       ::-webkit-scrollbar {
