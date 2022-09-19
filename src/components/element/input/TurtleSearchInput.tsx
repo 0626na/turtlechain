@@ -1,14 +1,13 @@
 import { InputProps } from 'antd';
 import { Input } from 'antd';
-import styled from '@emotion/styled';
 
-interface Props extends InputProps {}
+import { css } from '@emotion/react';
 
-function TurtleSearchInput({ ...props }: Props) {
-  return <StyledSearch {...props} />;
+function TurtleSearchInput({ ...props }: InputProps) {
+  return <Input.Search {...props} css={search} />;
 }
 
-const StyledSearch = styled(Input.Search)`
+const search = css`
   // 검색 인풋 style
   input {
     height: 28px;

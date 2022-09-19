@@ -56,6 +56,7 @@ const modal = {
 
   container: css({
     maxHeight: '90vh',
+    height: '100%',
     position: 'absolute',
     top: '50%',
     left: '50%',

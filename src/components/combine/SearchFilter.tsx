@@ -1,5 +1,6 @@
 import { TurtleSearchInput, TurtleSearchSelect } from '@components/element';
-import { Space } from 'antd';
+import { css } from '@emotion/react';
+import { Col, Row } from 'antd';
 import { t } from 'i18next';
 
 interface Props {
@@ -46,29 +47,37 @@ function SearchFilter({
       ];
 
   return (
-    <Space>
+    <Row>
       {select && (
-        <TurtleSearchSelect
-          value={searchQuery.type}
-          onChange={(value) => {
-            setSearchQuery({ ...searchQuery, type: value, page: 1 });
-          }}
-          items={options}
-        />
+        <Col css={marginRight}>
+          <TurtleSearchSelect
+            value={searchQuery.type}
+            onChange={(value) => {
+              setSearchQuery({ ...searchQuery, type: value, page: 1 });
+            }}
+            items={options}
+          />
+        </Col>
       )}
-      <TurtleSearchInput
-        placeholder="검색어를 입력하세요"
-        value={searchQuery.search_string}
-        onChange={(e) => {
-          setSearchQuery({
-            ...searchQuery,
-            search_string: e.currentTarget.value,
-            page: 1,
-          });
-        }}
-      />
-    </Space>
+      <Col>
+        <TurtleSearchInput
+          placeholder="검색어를 입력하세요"
+          value={searchQuery.search_string}
+          onChange={(e) => {
+            setSearchQuery({
+              ...searchQuery,
+              search_string: e.currentTarget.value,
+              page: 1,
+            });
+          }}
+        />
+      </Col>
+    </Row>
   );
 }
+
+const marginRight = css`
+  margin-right: 6px;
+`;
 
 export default SearchFilter;
