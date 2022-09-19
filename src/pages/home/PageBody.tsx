@@ -3,7 +3,6 @@ import {
   AnswerButton,
   PrimaryButton,
   SecondaryButton,
-  TurtleTag,
 } from '@components/element';
 import {
   PageBottomBar,
@@ -57,7 +56,7 @@ function PageBody() {
           </StyledButton>
         }
       />
-      <TurtleTag color="#00AAB5">대기</TurtleTag>
+
       <PageTitle
         title="페이지 제목"
         subTitle="페이지 부제목"
@@ -112,8 +111,6 @@ function PageBody() {
             </span>
           }
         /> */}
-
-        <TurtleTag color="#00AAB5">대기</TurtleTag>
 
         <TurtleContentModal
           visible={modalVisible}
