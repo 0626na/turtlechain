@@ -15,6 +15,9 @@ import { ReactComponent as SiderSelectIcon } from '@icons/siderSelect.svg';
 import { ReactComponent as AddReserveIcon } from '@icons/addReserve.svg';
 import { ReactComponent as AddExchangeRefundIcon } from '@icons/addExchangeRefund.svg';
 
+import { ReactComponent as ArrowDownIcon } from '@icons/arrowDown.svg';
+import { ReactComponent as ArrowRightIcon } from '@icons/arrowRight.svg';
+
 import { css } from '@emotion/react';
 
 interface Props {
@@ -32,7 +35,10 @@ interface Props {
     | 'warning'
     | 'siderSelect'
     | 'exchangeRefund'
-    | 'reserve';
+    | 'reserve'
+    | 'arrowDown'
+    | 'arrowRight';
+
   onClick?: () => void;
 }
 
@@ -140,6 +146,22 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={onClick}>
         <AddReserveIcon />
+      </div>
+    );
+  }
+
+  if (name === 'arrowDown') {
+    return (
+      <div css={[iconContainer]} onClick={onClick}>
+        <ArrowDownIcon />
+      </div>
+    );
+  }
+
+  if (name === 'arrowRight') {
+    return (
+      <div css={[iconContainer]} onClick={onClick}>
+        <ArrowRightIcon />
       </div>
     );
   }

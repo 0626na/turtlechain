@@ -185,7 +185,7 @@ const menus = [
           },
           {
             key: pathnames.warehousing.adjustment,
-            label: t('warehousing.adjustment'),
+            label: t('warehousing.adjustment.'),
             style: mainMenuContentStyle,
           },
         ],

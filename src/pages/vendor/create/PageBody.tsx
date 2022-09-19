@@ -77,7 +77,7 @@ function PageBody() {
         `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
       );
       closeConfirmModal();
-      navigate('/vendor/list');
+      navigate('/vendor/history');
     },
   });
 

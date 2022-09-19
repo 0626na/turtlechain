@@ -8,23 +8,31 @@ import {
   MemoIcon,
   SecondaryButton,
   TurtleCard,
+  TurtleDivider,
   TurtleDropdown,
   TurtleIcon,
+  TurtlePrimaryRangePicker,
+  TurtleSearchInput,
+  TurtleSearchSelect,
+  TurtleSecondaryRangePicker,
   TurtleTableTitle,
 } from '@components/element';
+import TurtleTag from '@components/element/TurtleTag';
 import { css } from '@emotion/react';
 
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Button, message, Pagination, Popconfirm, Row, Table } from 'antd';
+import { Button, Col, message, Pagination, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import ExchangeRefundModal from './addExchangeRefund/ExchangeRefundModal';
 
 function PageBody() {
   const { store } = useStore();
+
   const [selectedRow, setSelectedRow] = useState<AdjustmentItemShow>();
   const [addReserveModalVisible, addReserveModalOpen, addReserveModalClose] =
     useModal();
@@ -39,14 +47,20 @@ function PageBody() {
 
   // 매입조정 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: store.selected?.id,
+    rt_store_id: null,
+
     is_cleared: '',
+
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
+
+    type: 'vendor_name',
+    search_string: '',
+
     page: 1,
   });
 
-  // 매입조정 리스트 요청
+  // 매입조정 검색 요청
   const getAdjustmentListQuery = useQuery(
     ['getAdjustmentList', searchQuery],
     () => adjustmentAPI.getList(searchQuery),
@@ -69,6 +83,13 @@ function PageBody() {
   });
 
   const loading = getAdjustmentListQuery.isLoading;
+
+  useEffect(() => {
+    setSearchQuery((searchQuery) => ({
+      ...searchQuery,
+      rt_store_id: store.selected?.id as number,
+    }));
+  }, [store.selected?.id]);
 
   return (
     <>
@@ -106,11 +127,10 @@ function PageBody() {
       {/*
        * 교환/반품 추가 모달
        */}
-      <TurtleContentModal
-        title="교환/반품 추가"
+      <ExchangeRefundModal
         visible={addExchangeRefundModalVisible}
         onClose={addExchangeRefundModalClose}
-      ></TurtleContentModal>
+      />
 
       <PageHeader title="교환/반품/미송" />
 
@@ -145,30 +165,32 @@ function PageBody() {
         {/*
          *  매입조정 현황
          */}
-        <TurtleCard
-          value={[
-            {
-              color: 'orange',
-              title: t('adjustment.pending'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.price ?? 0,
-            },
-            {
-              color: 'geekblue',
-              title: t('adjustment.confirmed'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .price ?? 0,
-            },
-          ]}
-        />
+        <div css={cardsMargin}>
+          <TurtleCard
+            value={[
+              {
+                color: '#DD7A32',
+                title: t('warehousing.adjustment.pending'),
+                count:
+                  getAdjustmentListQuery.data?.data.adjustment_summary
+                    ?.not_cleared.count ?? 0,
+                price:
+                  getAdjustmentListQuery.data?.data.adjustment_summary
+                    ?.not_cleared.price ?? 0,
+              },
+              {
+                color: '#00AAB5',
+                title: t('warehousing.adjustment.confirmed'),
+                count:
+                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                    .count ?? 0,
+                price:
+                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                    .price ?? 0,
+              },
+            ]}
+          />
+        </div>
 
         <Table
           size="small"
@@ -183,10 +205,68 @@ function PageBody() {
                 getAdjustmentListQuery.data?.data.adjustment_list?.length ?? 0
               }
               rightContent={
-                <SearchFilter
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                />
+                <Row>
+                  <Col>
+                    <TurtleSearchSelect
+                      value={''}
+                      onChange={(search_type) => {
+                        setSearchQuery((searchQuery) => ({
+                          ...searchQuery,
+                          is_cleared: search_type as '' | 'True' | 'False',
+                        }));
+                      }}
+                      items={[
+                        { value: '', name: '전체' },
+                        { value: 'False', name: '대기' },
+                        { value: 'True', name: '마감' },
+                      ]}
+                    />
+                  </Col>
+
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
+
+                  <Col>
+                    <TurtlePrimaryRangePicker
+                      value={[
+                        moment(searchQuery.start_date),
+                        moment(searchQuery.end_date),
+                      ]}
+                      onChange={(_, dateStrings) => {
+                        const start_date = dateStrings[0];
+                        const end_date = dateStrings[1];
+
+                        setSearchQuery((searchQuery) => ({
+                          ...searchQuery,
+                          start_date,
+                          end_date,
+                        }));
+                      }}
+                    />
+                  </Col>
+
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
+
+                  <Col>
+                    <SearchFilter
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                    />
+                  </Col>
+                </Row>
               }
             />
           )}
@@ -209,34 +289,20 @@ function PageBody() {
             {
               ellipsis: true,
               width: 100,
-              title: t('table.progress'),
+              title: t('table.progressStatus'),
               render: (_, record) => {
                 const { is_cleared } = record;
                 return is_cleared ? (
-                  <div
-                    css={css`
-                      background-color: #ddf3f5;
-                      color: #00aab5;
-                    `}
-                  >
-                    마감
-                  </div>
+                  <TurtleTag color="#00AAB5">마감</TurtleTag>
                 ) : (
-                  <div
-                    css={css`
-                      background-color: #fbefe6;
-                      color: #dd7a32;
-                    `}
-                  >
-                    대기
-                  </div>
+                  <TurtleTag color="#DD7A32">대기</TurtleTag>
                 );
               },
             },
             {
               ellipsis: true,
               width: 150,
-              title: t('table.createDate'),
+              title: t('table.createdDate'),
               render: (_, record) => record.created_date,
             },
             {
@@ -339,5 +405,9 @@ function PageBody() {
     </>
   );
 }
+
+const cardsMargin = css`
+  margin-bottom: 60px;
+`;
 
 export default PageBody;
