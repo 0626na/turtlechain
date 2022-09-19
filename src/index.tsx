@@ -16,7 +16,7 @@ import App from './App';
 message.config({
   top: 65,
   maxCount: 1,
-  duration: 3,
+  duration: 1,
 });
 
 // React Query

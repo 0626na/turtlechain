@@ -94,19 +94,19 @@ const useWarehousingCart = () => {
 
   const add = (record: WarehousingItemConnect) => {
     const index = 100000; // 단건 추가항목은 100000부터 시작
-    const temp = cart.successList.slice(-1);
-    console.log(temp, temp.length, temp[0]?.index);
+    const last = cart.successList.slice(-1);
+
     setCart((cart) => ({
       ...cart,
       successList: [
+        ...cart.successList,
         {
           ...record,
           is_reserved: false,
-          index: (temp.length === 0 ? index : (temp[0]?.index as number)) + 1,
+          index: (last.length === 0 ? index : (last[0]?.index as number)) + 1,
           warehousing_date: moment().format('YYYY-MM-DD'),
           store_house: '기본창고',
         },
-        ...cart.successList,
       ],
     }));
   };

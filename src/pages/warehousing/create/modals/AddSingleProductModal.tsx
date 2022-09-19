@@ -74,8 +74,8 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            console.log(values);
             add(values);
+            closeModal();
           }}
         >
           <Form.Item name="vendor_id" hidden>
