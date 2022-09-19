@@ -17,10 +17,15 @@ import { useQuery } from 'react-query';
 interface Props extends CollapsePanelProps {
   activeKey: string;
   onWarehousingItemSelect: (record: WarehousingItem) => void;
+  onWarehousingItemSelectAll: (
+    records: WarehousingItem[],
+    totalCount: number,
+  ) => void;
 }
 
 function WarehousingPanel({
   onWarehousingItemSelect,
+  onWarehousingItemSelectAll,
   activeKey,
   ...props
 }: Props) {
@@ -81,6 +86,12 @@ function WarehousingPanel({
         scroll={{ x: 1400, y: 410 }}
         rowSelection={{
           onSelect: onWarehousingItemSelect,
+          onSelectAll: (_, records: WarehousingItem[]) => {
+            onWarehousingItemSelectAll(
+              records,
+              getWarehousingItemQuery.data?.data.item_list?.length as number,
+            );
+          },
         }}
         title={() => (
           <TurtleTableTitle

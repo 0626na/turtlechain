@@ -6,8 +6,8 @@ import { Collapse } from 'antd';
 
 import React, { useEffect, useState } from 'react';
 
-import ExchangeRefundPanel from './panel/ExchangeRefundPanel';
-import WarehousingPanel from './panel/WarehousingPanel';
+import ExchangeRefundPanel from '../panel/ExchangeRefundPanel';
+import WarehousingPanel from '../panel/WarehousingPanel';
 
 interface Props {
   onClose: () => void;
@@ -36,11 +36,25 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
     ]);
   };
 
+  const handleWarehousingItemSelectAll = (
+    records: WarehousingItem[],
+    totalCount: number,
+  ) => {
+    if (exchangeRefundList.length === totalCount) {
+      setExchageRefundList([]);
+      return;
+    }
+
+    setExchageRefundList([...records]);
+  };
+
   const handleModalClose = () => {
     onClose();
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(exchangeRefundList);
+  }, [exchangeRefundList]);
 
   return (
     <TurtleContentModal
@@ -61,6 +75,7 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
         bordered={false}
       >
         <WarehousingPanel
+          onWarehousingItemSelectAll={handleWarehousingItemSelectAll}
           onWarehousingItemSelect={handleWarehousingItemSelect}
           activeKey={activeKey}
           key="1"

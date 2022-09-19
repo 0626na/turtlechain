@@ -26,9 +26,7 @@ function ExchangeRefundPanel({
   // clearingRequestDate,
   ...props
 }: Props) {
-  useEffect(() => {
-    console.log(exchangeRefundList);
-  }, [exchangeRefundList]);
+  useEffect(() => {}, [exchangeRefundList]);
 
   return (
     <Collapse.Panel

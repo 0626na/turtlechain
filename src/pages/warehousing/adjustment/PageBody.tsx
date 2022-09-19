@@ -26,7 +26,7 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import ExchangeRefundModal from './addExchangeRefund/ExchangeRefundModal';
+import ExchangeRefundModal from './modal/ExchangeRefundModal';
 
 function PageBody() {
   const { store } = useStore();
