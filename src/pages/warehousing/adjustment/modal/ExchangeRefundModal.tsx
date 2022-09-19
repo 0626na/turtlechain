@@ -2,6 +2,7 @@ import { WarehousingItem } from '@apis/warehousingAPI';
 import { TurtleContentModal } from '@components/combine';
 import { TurtlePanelTitle } from '@components/element';
 import { css } from '@emotion/react';
+import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import { Collapse } from 'antd';
 
 import React, { useEffect, useState } from 'react';
@@ -15,46 +16,20 @@ interface Props {
 }
 
 function ExchangeRefundModal({ onClose, visible }: Props) {
-  const [exchangeRefundList, setExchageRefundList] = useState<
-    WarehousingItem[]
-  >([]);
-
   const [activeKey, setActiveKey] = useState('1');
-
-  const handleWarehousingItemSelect = (record: WarehousingItem) => {
-    if (exchangeRefundList.find((item) => item.id === record.id)) {
-      setExchageRefundList((exchangeRefundList) => [
-        ...exchangeRefundList.filter((item) => item.id !== record.id),
-      ]);
-
-      return;
-    }
-
-    setExchageRefundList((exchangeRefundList) => [
-      ...exchangeRefundList,
-      record,
-    ]);
-  };
-
-  const handleWarehousingItemSelectAll = (
-    records: WarehousingItem[],
-    totalCount: number,
-  ) => {
-    if (exchangeRefundList.length === totalCount) {
-      setExchageRefundList([]);
-      return;
-    }
-
-    setExchageRefundList([...records]);
-  };
-
+  const { setCart } = useAdjustmentCart();
   const handleModalClose = () => {
     onClose();
   };
 
   useEffect(() => {
-    console.log(exchangeRefundList);
-  }, [exchangeRefundList]);
+    if (visible) return;
+    setCart((cart) => ({
+      selectedList: [],
+      adjustmentItemList: [],
+    }));
+    setActiveKey('1');
+  }, [visible, setCart]);
 
   return (
     <TurtleContentModal
@@ -75,8 +50,6 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
         bordered={false}
       >
         <WarehousingPanel
-          onWarehousingItemSelectAll={handleWarehousingItemSelectAll}
-          onWarehousingItemSelect={handleWarehousingItemSelect}
           activeKey={activeKey}
           key="1"
           style={{ border: '1px solid red' }}
@@ -90,7 +63,6 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
         />
 
         <ExchangeRefundPanel
-          exchangeRefundList={exchangeRefundList}
           key="2"
           header={
             <TurtlePanelTitle
