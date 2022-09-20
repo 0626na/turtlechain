@@ -7,7 +7,7 @@ import {
   TurtleText,
 } from '@components/element';
 import { css } from '@emotion/react';
-import { useStore } from '@hooks/index';
+import { useAdjustmentCart, useStore } from '@hooks/index';
 import { Col, Collapse, CollapsePanelProps, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
@@ -16,15 +16,11 @@ import { useQuery } from 'react-query';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
-  onWarehousingItemSelect: (record: WarehousingItem) => void;
 }
 
-function WarehousingPanel({
-  onWarehousingItemSelect,
-  activeKey,
-  ...props
-}: Props) {
+function WarehousingPanel({ activeKey, ...props }: Props) {
   const { store } = useStore();
+  const { cart, setCart } = useAdjustmentCart();
 
   const [searchQuery, setSearchQuery] = useState({
     rt_store_id: store.selected?.id as number,
@@ -37,6 +33,34 @@ function WarehousingPanel({
     ['getWarehousingItem', searchQuery],
     () => warehousingAPI.getItem(searchQuery),
   );
+
+  const handleWarehousingItemSelect = (record: WarehousingItem) => {
+    if (cart.selectedList.find((item) => item.id === record.id)) {
+      setCart((cart) => ({
+        ...cart,
+        selectedList: cart.selectedList.filter((item) => item.id !== record.id),
+      }));
+
+      return;
+    }
+
+    setCart((cart) => ({
+      ...cart,
+      selectedList: [...cart.selectedList, record],
+    }));
+  };
+
+  const handleWarehousingItemSelectAll = (
+    records: WarehousingItem[],
+    totalCount: number,
+  ) => {
+    if (cart.selectedList.length === totalCount) {
+      setCart((cart) => ({ ...cart, selectedList: [] }));
+      return;
+    }
+
+    setCart((cart) => ({ ...cart, selectedList: [...records] }));
+  };
 
   return (
     <Collapse.Panel
@@ -80,7 +104,13 @@ function WarehousingPanel({
         pagination={false}
         scroll={{ x: 1400, y: 410 }}
         rowSelection={{
-          onSelect: onWarehousingItemSelect,
+          onSelect: handleWarehousingItemSelect,
+          onSelectAll: (_, records: WarehousingItem[]) => {
+            handleWarehousingItemSelectAll(
+              records,
+              getWarehousingItemQuery.data?.data.item_list?.length as number,
+            );
+          },
         }}
         title={() => (
           <TurtleTableTitle
