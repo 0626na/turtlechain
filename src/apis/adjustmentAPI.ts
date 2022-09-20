@@ -133,7 +133,7 @@ export interface RequestCreate {
     count: number;
     price: number;
     type: string;
-    is_vat_included: boolean;
+    is_vat_included?: boolean;
     memo?: string;
   }>;
 }

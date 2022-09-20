@@ -1,8 +1,8 @@
 import { Select } from 'antd';
 
-import styled from '@emotion/styled';
-import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
 import React from 'react';
+import { css } from '@emotion/react';
+import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props {
   value: string;
@@ -12,10 +12,11 @@ interface Props {
 
 function TurtleSearchSelect({ items, onChange, value }: Props) {
   return (
-    <StyledSelect
+    <Select
+      css={select}
       bordered={false}
       value={value}
-      suffixIcon={<ArrowDown />}
+      suffixIcon={<TurtleIcon name="arrowDown" />}
       onChange={onChange}
       dropdownStyle={{
         background: '#fff',
@@ -34,11 +35,11 @@ function TurtleSearchSelect({ items, onChange, value }: Props) {
           {item.name}
         </Select.Option>
       ))}
-    </StyledSelect>
+    </Select>
   );
 }
 
-const StyledSelect = styled(Select)`
+const select = css`
   background-color: #f5f6f7;
   border-radius: 6px;
 
