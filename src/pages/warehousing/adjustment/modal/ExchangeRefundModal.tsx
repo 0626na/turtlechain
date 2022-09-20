@@ -16,26 +16,20 @@ import { useMutation } from 'react-query';
 
 import ExchangeRefundPanel from '../panel/ExchangeRefundPanel';
 import WarehousingPanel from '../panel/WarehousingPanel';
-import { QueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 interface Props {
   onClose: () => void;
   visible: boolean;
 }
 
 function ExchangeRefundModal({ onClose, visible }: Props) {
+  const queryClient = useQueryClient();
+
   const [activeKey, setActiveKey] = useState('1');
   const { cart, setCart } = useAdjustmentCart();
   const { store } = useStore();
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-      },
-    },
-  });
-
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     onClose();
   };
 
@@ -43,7 +37,6 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
   const createExchageRefundMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentList'], { active: true });
-      // resetStates();
       message.success('교환/반품이 성공적으로 등록되었습니다.');
 
       handleModalClose();
