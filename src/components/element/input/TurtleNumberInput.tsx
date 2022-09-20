@@ -2,12 +2,16 @@ import { InputNumber, InputNumberProps } from 'antd';
 import { pricePattern } from '@utils/pattern';
 import { css } from '@emotion/react';
 
-function TurtlePriceInput({ ...props }: InputNumberProps) {
+interface Props extends InputNumberProps {
+  step?: number;
+}
+
+function TurtleNumberInput({ step = 1000, ...props }: Props) {
   return (
     <InputNumber
       {...props}
-      step={1000}
       css={priceInput}
+      step={step}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}
       min={0}
     />
@@ -40,4 +44,4 @@ const priceInput = css`
   }
 `;
 
-export default TurtlePriceInput;
+export default TurtleNumberInput;

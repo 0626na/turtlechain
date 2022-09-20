@@ -5,7 +5,7 @@ import {
   PrimaryButton,
   TurtleFormInput,
   TurtleFormSearchInput,
-  TurtlePriceInput,
+  TurtleNumberInput,
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 import useModal from '@hooks/useModal';
@@ -132,7 +132,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             name="price"
             rules={[{ required: true }]}
           >
-            <TurtlePriceInput
+            <TurtleNumberInput
               style={{ width: '100%' }}
               step={1000}
               min={0}

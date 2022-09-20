@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoIcon, TurtleIcon, TurtleTableTitle } from '@components/element';
-import TurtlePriceInput from '@components/element/input/TurtlePriceInput';
+import TurtleNumberInput from '@components/element/input/TurtleNumberInput';
 import useProductCart from '@hooks/useProductCart';
 import { Table, TabPaneProps, Tabs, Tooltip, Typography } from 'antd';
 import { t } from 'i18next';
@@ -80,7 +80,7 @@ function SuccessTab({ loading, ...props }: Props) {
             title: t('table.price'),
             onCell: (record) => needUpdateStyle(record.need_update),
             render: (_, record) => (
-              <TurtlePriceInput
+              <TurtleNumberInput
                 size="small"
                 value={record.price}
                 onChange={(value) => {

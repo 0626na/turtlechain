@@ -9,7 +9,7 @@ import {
   TurtleDivider,
   TurtleFormInput,
   TurtleFormSearchInput,
-  TurtlePriceInput,
+  TurtleNumberInput,
 } from '@components/element';
 import { SearchVendorModal, TurtleContentModal } from '@components/combine';
 import useStore from '@hooks/useStore';
@@ -193,7 +193,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.price')}
             rules={[{ required: true }]}
           >
-            <TurtlePriceInput />
+            <TurtleNumberInput />
           </Form.Item>
 
           <Form.Item
