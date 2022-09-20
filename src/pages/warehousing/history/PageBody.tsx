@@ -129,7 +129,7 @@ function PageBody() {
         visible={cancelModalVisible}
         title="정말 취소할까요?"
         description={['해당 입고서의 마감을 취소합니다.']}
-        onCancel={closeConfirmModal}
+        onCancel={closeCancelModal}
         onOk={() => {
           updateSheetMutation.mutate({
             id: selectedRow?.id as number,
