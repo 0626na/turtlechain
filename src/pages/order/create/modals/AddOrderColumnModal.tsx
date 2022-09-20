@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { PageTitle } from '@layout/page';
 import { Button, Col, Divider, Input, message, Modal, Row } from 'antd';
 import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 interface Props {
   visible: boolean;
@@ -14,21 +14,42 @@ interface Props {
 
 function AddOrderColumnModal({ visible, closeModal }: Props) {
   const [orderFormat, setOrderFormat] = useState<RequestCreateOrderFormat>({
-    vendor_name: ['1', '2', '3'],
-    vendor_address: ['22'],
-    vendor_mobile: ['33', '44'],
+    vendor_name: [],
+    vendor_address: [],
+    vendor_mobile: [],
     product_name: [],
-    product_option: ['55'],
-    product_count: ['66', '77', '88', '99'],
-    product_price: ['1123', '23123'],
-    order_type: ['123'],
-    memo: ['jj'],
+    product_option: [],
+    product_count: [],
+    product_price: [],
+    order_type: [],
+    memo: [],
   });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const getOrderFormatQuery = useQuery(
+    'getOrderFormatQuery',
+    () => orderAPI.getOrderFormat(),
+    {
+      onSuccess: (data) =>
+        setOrderFormat({
+          vendor_name: data.data.vendor_name ?? [],
+          vendor_address: data.data.vendor_address ?? [],
+          vendor_mobile: data.data.vendor_mobile ?? [],
+          product_name: data.data.product_name ?? [],
+          product_option: data.data.product_option ?? [],
+          product_count: data.data.product_count ?? [],
+          product_price: data.data.product_price ?? [],
+          order_type: data.data.order_type ?? [],
+          memo: data.data.memo ?? [],
+        }),
+    },
+  );
 
   const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
     onSuccess: (data) => {
       if (data.msg === 'success')
         message.success('양식 등록이 완료되었습니다.');
+      closeModal();
     },
   });
 

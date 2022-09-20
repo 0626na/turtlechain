@@ -1,3 +1,4 @@
+import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 // 주문 등록 추가 타입
@@ -189,6 +190,32 @@ const create = async function (data: {
  * 발주서 양식 조회
  */
 
+export interface ResponseGetOrderFormat {
+  msg: string;
+  data: {
+    vendor_name: string[];
+    vendor_address: string[];
+    vendor_mobile: string[];
+    product_name: string[];
+    product_option: string[];
+    product_count: string[];
+    product_price: string[];
+    order_type: string[];
+    memo: string[];
+  };
+}
+
+const getOrderFormat = async () => {
+  const url = 'order/format';
+  const response = await v2Axios.get<ResponseGetOrderFormat>(url);
+
+  return response.data;
+};
+
+/*
+ * 발주서 양식 생성
+ */
+
 export interface RequestCreateOrderFormat {
   vendor_name: string[];
   vendor_address: string[];
@@ -212,12 +239,81 @@ const createOrderFormat = async (data: RequestCreateOrderFormat) => {
   return response.data;
 };
 
+/*
+ * 발주서 엑셀 파싱
+ */
+
+interface WholesalerMobile {
+  id: number;
+  phone: string;
+}
+
+interface WholesalerStore {
+  id: number;
+  name: string;
+  address: string;
+  mobiles: WholesalerMobile[];
+}
+
+export interface StoreOrder {
+  vendor_name: string;
+  vendor_address: string;
+  vendor_mobile: string;
+  product_id?: number;
+  product_name: string;
+  product_option: string;
+  product_price: string;
+  product_count: string;
+  order_type: string;
+  memo: string;
+
+  ws_store_info: WholesalerStore[];
+}
+
+export interface StoreOrderItemExcelParsing {
+  rt_store_id: number;
+  rt_store_name: string;
+  orders: StoreOrder[];
+}
+
+export interface RequestCreateOrderItemExcelParsing {
+  files: RcFile[];
+}
+
+export interface ResponseCreateOrderItemExcelParsing {
+  msg: string;
+  data: {
+    successes: StoreOrderItemExcelParsing[];
+  };
+}
+
+const createOrderExcelParsing = async (
+  data: RequestCreateOrderItemExcelParsing,
+) => {
+  const url = 'order/parsing';
+  const formData = new FormData();
+  data.files.map((file) => formData.append('files', file));
+  const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
+    url,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+
+  return response.data;
+};
+
 const orderAPI = {
   getList,
   get,
   getItem,
   create,
+  getOrderFormat,
   createOrderFormat,
+  createOrderExcelParsing,
 };
 
 export default orderAPI;
