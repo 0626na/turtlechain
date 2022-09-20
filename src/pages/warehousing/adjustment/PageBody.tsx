@@ -287,72 +287,80 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 100,
+              width: 70,
               title: t('table.progressStatus'),
               render: (_, record) => {
                 const { is_cleared } = record;
-                return is_cleared ? (
-                  <TurtleTag color="#00AAB5">마감</TurtleTag>
-                ) : (
-                  <TurtleTag color="#DD7A32">대기</TurtleTag>
+                return (
+                  <div
+                    css={css`
+                      width: 36.71px;
+                    `}
+                  >
+                    {is_cleared ? (
+                      <TurtleTag color="#00AAB5">마감</TurtleTag>
+                    ) : (
+                      <TurtleTag color="#DD7A32">대기</TurtleTag>
+                    )}
+                  </div>
                 );
               },
             },
             {
               ellipsis: true,
-              width: 150,
+              width: 100,
               title: t('table.createdDate'),
               render: (_, record) => record.created_date,
             },
             {
               ellipsis: true,
-              width: 150,
+              width: 100,
               title: t('table.type'),
               render: (_, record) => record.type,
             },
             {
               ellipsis: true,
-              width: 200,
+              width: 100,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              width: 120,
-              align: 'center',
+              width: 200,
               title: t('table.productName'),
               render: (_, record) => record.product_info.name,
             },
             {
               ellipsis: true,
-              width: 120,
-              align: 'center',
+              width: 200,
               title: t('table.vendorProductName'),
               render: (_, record) => record.product_info.vendor_product_name,
             },
             {
-              width: 70,
-              align: 'center',
+              ellipsis: true,
+              width: 100,
               title: t('table.option'),
               render: (_, record) => record.product_info.option,
             },
             {
-              width: 45,
+              width: 70,
+              align: 'right',
               title: t('table.price'),
-              align: 'center',
               render: (record) =>
                 (record.product_info.price * record.count).toLocaleString(),
             },
             {
+              width: 70,
+              align: 'right',
               ellipsis: true,
-              width: 200,
               title: t('table.proccessed totalCount'),
               render: (_, record) =>
                 `${record.count - record.count_left} / ${record.count}`,
             },
             {
               ellipsis: true,
-              width: 200,
+              width: 50,
+              align: 'center',
               title: t('table.memo'),
               render: (_, record) => (
                 <MemoIcon
@@ -366,7 +374,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 30,
+              width: 100,
               align: 'center',
               render: (_, record) => <Button>처리하기</Button>,
             },
