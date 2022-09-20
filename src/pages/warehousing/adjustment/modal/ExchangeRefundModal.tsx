@@ -10,7 +10,6 @@ import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import useStore from '@hooks/useStore';
 
 import { Col, Collapse, message, Row } from 'antd';
-import { t } from 'i18next';
 
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
