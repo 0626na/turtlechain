@@ -45,7 +45,7 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentList'], { active: true });
       // resetStates();
-      message.success(t('message.success create adjustment'));
+      message.success('교환/반품이 성공적으로 등록되었습니다.');
 
       handleModalClose();
       // navigate('/adjustment/list');
