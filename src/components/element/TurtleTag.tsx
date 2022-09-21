@@ -21,6 +21,18 @@ function TurtleTag({ children, color }: Props) {
     if (color === '#00AAB5') {
       setTone({ fontColor: '#00AAB5', backgroundColor: '#DDF3F5' });
     }
+
+    if (color === '#5C6069') {
+      setTone({ fontColor: '#5C6069', backgroundColor: '#EBECED' });
+    }
+
+    if (color === '#FFFFFF') {
+      setTone({ fontColor: '#FFFFFF', backgroundColor: '#29A9DD' });
+    }
+
+    if (color === '#29A9DD') {
+      setTone({ fontColor: '#29A9DD', backgroundColor: '##E6F4FA' });
+    }
   }, [color]);
 
   return (
