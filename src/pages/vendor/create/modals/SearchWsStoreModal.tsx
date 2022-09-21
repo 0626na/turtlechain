@@ -19,7 +19,11 @@ import vendorAPI, {
   Wholesale,
 } from '@apis/vendorAPI';
 import { phonePattern } from '@utils/pattern';
-import { TurtleBadge, TurtleTableTitle, TurtleText } from '@components/element';
+import {
+  SelectButton,
+  TurtleBadge,
+  TurtleTableTitle,
+} from '@components/element';
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
@@ -264,14 +268,14 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
               align: 'center',
               title: '',
               render: (_, record) => (
-                <Button
-                  css={button}
+                <SelectButton
+                  size="small"
                   onClick={() => {
                     onClickSelect(record);
                   }}
                 >
-                  <TurtleText>선택</TurtleText>
-                </Button>
+                  선택
+                </SelectButton>
               ),
             },
           ]}

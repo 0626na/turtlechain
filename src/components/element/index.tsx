@@ -33,6 +33,7 @@ import TurtleCard from './TurtleCard';
 import TurtleTag from './TurtleTag';
 import TurtlePanelTitle from './TurtlePanelTitle';
 import ProcessButton from './button/ProcessButton';
+import SelectButton from './button/SelectButton';
 
 export {
   //buttons
@@ -43,6 +44,7 @@ export {
   HistoryButton,
   AddButton,
   ProcessButton,
+  SelectButton,
 
   //inputs
   TurtleSearchInput,
