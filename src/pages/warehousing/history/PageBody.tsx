@@ -4,6 +4,7 @@ import warehousingAPI, {
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import {
+  SelectButton,
   TurtleConfirmModal,
   TurtleIcon,
   TurtlePrimaryRangePicker,
@@ -247,9 +248,7 @@ function PageBody() {
                       /*
                        * 진행상태 : 마감
                        */
-                      <Button
-                        size="small"
-                        type="primary"
+                      <SelectButton
                         onClick={(e) => {
                           e.stopPropagation();
                           selectRow(record);
@@ -257,7 +256,7 @@ function PageBody() {
                         }}
                       >
                         마감취소
-                      </Button>
+                      </SelectButton>
                     )
                   ) : (
                     /*
