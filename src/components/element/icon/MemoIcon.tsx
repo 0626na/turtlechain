@@ -3,7 +3,7 @@ import React from 'react';
 import { ReactComponent as Memo } from '@icons/memo.svg';
 
 interface Props {
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   value: string;
 }
 
