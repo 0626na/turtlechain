@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  message,
-  Pagination,
-  Popover,
-  Radio,
-  Row,
-  Space,
-  Table,
-} from 'antd';
+import { message, Pagination, Popover, Radio, Row, Space, Table } from 'antd';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { t } from 'i18next';
@@ -288,35 +279,6 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
 const tableTitle = css`
   font-weight: 400;
   color: #5b5d63;
-`;
-
-const button = css`
-  width: 60px;
-  height: 26px;
-
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #00aab5;
-  background-color: #ddf3f5;
-  border-color: #ddf3f5;
-  &:hover {
-    color: #00aab5;
-    border-color: #d4e9eb;
-    background-color: #d4e9eb;
-  }
-
-  // active 상태
-  &.ant-btn:focus {
-    color: #00aab5;
-    background-color: #ddf3f5;
-    border-color: #ddf3f5;
-  }
 `;
 
 export default SearchWsStoreModal;
