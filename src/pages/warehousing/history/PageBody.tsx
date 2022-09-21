@@ -18,6 +18,7 @@ import moment from 'moment';
 import { useMutation, useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import DetailModal from './modals/DetailModal';
+import ProcessButton from '@components/element/button/ProcessButton';
 
 function PageBody() {
   const { store } = useStore();
@@ -263,9 +264,7 @@ function PageBody() {
                      * 진행상태 : 대기
                      */
                     <>
-                      <Button
-                        size="small"
-                        type="primary"
+                      <ProcessButton
                         onClick={(e) => {
                           e.stopPropagation();
                           selectRow(record);
@@ -273,7 +272,7 @@ function PageBody() {
                         }}
                       >
                         마감하기
-                      </Button>
+                      </ProcessButton>
                       <TurtleIcon
                         name="delete"
                         onClick={(e) => {

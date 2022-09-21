@@ -18,6 +18,8 @@ import { ReactComponent as AddExchangeRefundIcon } from '@icons/addExchangeRefun
 import { ReactComponent as ArrowDownIcon } from '@icons/arrowDown.svg';
 import { ReactComponent as ArrowRightIcon } from '@icons/arrowRight.svg';
 
+import { ReactComponent as ProcessIcon } from '@icons/process.svg';
+
 import { css } from '@emotion/react';
 
 interface Props {
@@ -37,7 +39,8 @@ interface Props {
     | 'exchangeRefund'
     | 'reserve'
     | 'arrowDown'
-    | 'arrowRight';
+    | 'arrowRight'
+    | 'process';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -166,6 +169,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <ArrowRightIcon />
+      </div>
+    );
+  }
+
+  if (name === 'process') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <ProcessIcon />
       </div>
     );
   }

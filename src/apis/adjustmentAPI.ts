@@ -153,7 +153,7 @@ const create = async function (data: RequestCreate) {
 // Request: 매입조정 상품 수정
 export interface RequestUpdate {
   id: number;
-  is_inactive?: number;
+
   memo?: string;
 
   // for 매입조정 처리
@@ -169,9 +169,10 @@ export interface ResponseUpdate {
 }
 
 // 매입조정 상품 수정
-const update = async function (data: RequestUpdate) {
+const update = async (data: RequestUpdate) => {
   const url = `adjustment/item/${data.id}`;
   const response = await v2Axios.put<ResponseUpdate>(url, data);
+
   return response.data.data;
 };
 

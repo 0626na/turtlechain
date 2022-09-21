@@ -7,7 +7,7 @@ import HistoryButton from './button/HistoryButton';
 import TurtleSearchInput from './input/TurtleSearchInput';
 import TurtleFormInput from './input/TurtleFormInput';
 import TurtleFormSearchInput from './input/TurtleFormSearchInput';
-import TurtlePriceInput from './input/TurtlePriceInput';
+import TurtleNumberInput from './input/TurtleNumberInput';
 
 import TurtlePrimaryRangePicker from './rangePicker/TurtlePrimaryRangePicker';
 import TurtleSecondaryRangePicker from './rangePicker/TurtleSecondaryRangePicker';
@@ -32,6 +32,7 @@ import AddButton from './button/AddButton';
 import TurtleCard from './TurtleCard';
 import TurtleTag from './TurtleTag';
 import TurtlePanelTitle from './TurtlePanelTitle';
+import ProcessButton from './button/ProcessButton';
 
 export {
   //buttons
@@ -41,12 +42,13 @@ export {
   AnswerButton,
   HistoryButton,
   AddButton,
+  ProcessButton,
 
   //inputs
   TurtleSearchInput,
   TurtleFormInput,
   TurtleFormSearchInput,
-  TurtlePriceInput,
+  TurtleNumberInput,
 
   //RangePicker
   TurtlePrimaryRangePicker,
