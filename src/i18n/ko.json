@@ -46,7 +46,10 @@
       "": "처리방식",
       "default": "매입조정 처리",
       "subtract": "차감",
-      "refund": "환불"
+      "reserve": "미송",
+      "refund": "환불",
+      "exchange": "교환",
+      "takeback": "반품"
     }
   },
 

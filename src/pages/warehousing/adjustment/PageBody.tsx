@@ -356,7 +356,8 @@ function PageBody() {
               ellipsis: true,
               width: 100,
               title: t('table.type'),
-              render: (_, record) => record.type,
+              render: (_, record) =>
+                t(`adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,
