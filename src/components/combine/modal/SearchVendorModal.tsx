@@ -20,7 +20,10 @@ interface Props {
     vendor_name: string,
     vendor_address: string,
     vendor_phone: string,
-    is_vat_included: boolean,
+    is_vat_included?: boolean,
+    vendor_account_bank?: string,
+    vendor_account_number?: string,
+    vendor_account_holder?: string,
   ) => void;
 }
 
@@ -106,12 +109,17 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
           onRow={(record) => {
             return {
               onClick: (event) => {
+                console.log(record);
+
                 onClickSelect(
                   record.id,
                   record.vendor_name,
                   record.vendor_address,
                   record.vendor_phone.phone,
                   record.is_vat_included,
+                  record.vendor_account.bank,
+                  record.vendor_account.account_number,
+                  record.vendor_account.account_holder,
                 );
               },
             };

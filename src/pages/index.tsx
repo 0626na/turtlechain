@@ -22,7 +22,7 @@ export const WarehousingAdjustmentPage = lazy(
 
 export const ClearingCreatePage = lazy(() => import('./clearing/create'));
 export const ClearingHistoryPage = lazy(() => import('./clearing/history'));
-export const ClearingTradePage = lazy(() => import('./clearing/trade'));
+export const ClearingBalancePage = lazy(() => import('./clearing/balance'));
 
 export const SettingPage = lazy(() => import('./setting'));
 export const TutorialPage = lazy(() => import('./tutorial'));

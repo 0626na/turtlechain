@@ -5,7 +5,7 @@ import React from 'react';
 import {
   ClearingCreatePage,
   ClearingHistoryPage,
-  ClearingTradePage,
+  ClearingBalancePage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -168,10 +168,10 @@ function App() {
           />
 
           <Route
-            path="clearing/trade"
+            path="clearing/balance"
             element={
               <Suspense fallback={<></>}>
-                <ClearingTradePage />
+                <ClearingBalancePage />
               </Suspense>
             }
           />

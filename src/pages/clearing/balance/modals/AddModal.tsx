@@ -16,7 +16,7 @@ import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
 import SearchVendorModal from '@components/combine/modal/SearchVendorModal';
 import useStore from '@hooks/useStore';
-import { useNavigate } from 'react-router-dom';
+
 import { useMutation } from 'react-query';
 
 interface Props {
@@ -24,15 +24,11 @@ interface Props {
   closeModal: () => void;
 }
 
-function AddPastAdjustmentModal({ visible, closeModal }: Props) {
-  const navigate = useNavigate();
+function AddModal({ visible, closeModal }: Props) {
   const { store } = useStore();
-  // const { isStoreSelected } = useStore();
 
   const [form] = Form.useForm();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
-
-  // 선택된 거래처
 
   // 거래처 등록
   const createVendorMutation = useMutation(vendorAPI.create, {
@@ -43,57 +39,28 @@ function AddPastAdjustmentModal({ visible, closeModal }: Props) {
       }
       message.success('성공적으로 등록하였습니다.');
       form.resetFields();
-      navigate('/vendor/list');
     },
   });
-
-  // 거래처 선택후 폼에 채워넣기
-  // const HandleFieldFillin = (vendor: Wholesale) => {
-  //   form.setFieldsValue({
-  //     ...form.getFieldsValue(),
-
-  //     ws_store_id: vendor.id,
-  //     vendor_name: vendor.name,
-  //     store_phone: vendor.phone,
-
-  //     vendor_phone_id: vendor.store_phone[0].id,
-  //     vendor_phone: vendor.store_phone[0].phone,
-
-  //     vendor_address: `${vendor.building} ${vendor.floor}${
-  //       vendor.floor ? '층' : ''
-  //     } ${vendor.col} ${vendor.loc} ${vendor.ext}`,
-  //     vendor_address_buliding: vendor.building,
-  //     vendor_address_floor: vendor.floor,
-  //     vendor_address_col: vendor.col,
-  //     vendor_address_loc: vendor.loc,
-  //     vendor_address_ext: vendor.ext,
-
-  //     vendor_account_id: vendor.store_account[0].id,
-  //     bank: vendor.store_account[0].bank,
-  //     account_holder: vendor.store_account[0].account_holder,
-  //     account_number: vendor.store_account[0].account_number,
-
-  //     is_vat_included: false,
-  //     biz_name: vendor.company[0]?.name,
-  //     biz_num: vendor.company[0]?.biz_num,
-  //     owner: vendor.company[0]?.owner,
-  //     memo: '',
-  //   });
-  // };
 
   const selectVendor = (
     vendor_id: number,
     vendor_name: string,
     vendor_address: string,
     vendor_phone: string,
-    is_vat_included: boolean,
+    is_vat_included?: boolean,
+    vendor_account_bank?: string,
+    vendor_account_number?: string,
+    vendor_account_holder?: string,
   ) => {
     form.setFieldsValue({
       vendor_id,
       vendor_name,
       vendor_address,
       vendor_phone,
-      product_code: undefined,
+      vendor_account_bank,
+      vendor_account_number,
+      vendor_account_holder,
+      //
     });
     closeVendorModal();
   };
@@ -154,24 +121,12 @@ function AddPastAdjustmentModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
-          <Form.Item label={t('table.vendorAddress')} required>
-            <div css={flexGap}>
-              <Form.Item name="vendor_address_buliding" noStyle>
-                <TurtleFormSelect placeholder="상가" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_floor" noStyle>
-                <TurtleFormInput placeholder="층" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_col" noStyle>
-                <TurtleFormInput placeholder="열" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_loc" noStyle>
-                <TurtleFormInput placeholder="호" disabled />
-              </Form.Item>
-            </div>
+          <Form.Item
+            label={t('table.vendorAddress')}
+            name="vendor_address"
+            required
+          >
+            <TurtleFormInput placeholder="거래처 주소" disabled />
           </Form.Item>
 
           <Form.Item
@@ -183,15 +138,15 @@ function AddPastAdjustmentModal({ visible, closeModal }: Props) {
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
-              <Form.Item name="bank" noStyle>
+              <Form.Item name="vendor_account_bank" noStyle>
                 <TurtleFormSelect placeholder="은행" disabled />
               </Form.Item>
 
-              <Form.Item name="account_number" noStyle>
+              <Form.Item name="vendor_account_number" noStyle>
                 <TurtleFormInput placeholder="계좌번호" disabled />
               </Form.Item>
 
-              <Form.Item name="account_holder" noStyle>
+              <Form.Item name="vendor_account_holder" noStyle>
                 <TurtleFormInput placeholder="예금주명" disabled />
               </Form.Item>
             </div>
@@ -243,4 +198,4 @@ const marginTop = css`
   margin-top: 44px;
 `;
 
-export default AddPastAdjustmentModal;
+export default AddModal;

@@ -188,9 +188,11 @@ const create = async (data: {
 
 // 리스트
 export interface RequestGetOverpaidBalanceList {
-  rt_store_id: number | null;
+  rt_store_id?: number;
 
   balance_type: 'balance';
+
+  search_string: string;
 
   start_date?: string;
   end_date?: string;
@@ -291,23 +293,23 @@ const getSheet = async function (query: RequestGetSheet) {
 };
 
 /*
- *  정산장 수정 요청
+ *  정산장 삭제 요청
  */
 
-export interface RequestUpdateSheet {
+export interface RequestRemoveSheet {
   id: number;
   // 삭제 요청시 1
   is_inactive: number;
 }
 
-export interface ResponseUpdateSheet {
+export interface ResponseRemoveSheet {
   msg: string;
   data: number;
 }
 
-const updateSheet = async function (data: RequestUpdateSheet) {
+const removeSheet = async function (data: RequestRemoveSheet) {
   let url = `clearing/sheet/${data.id}`;
-  const response = await v2Axios.patch<ResponseUpdateSheet>(url, data);
+  const response = await v2Axios.patch<ResponseRemoveSheet>(url, data);
   return response.data;
 };
 
@@ -317,7 +319,7 @@ const updateSheet = async function (data: RequestUpdateSheet) {
 
 export interface RequestGetItem {
   sheet_id: number;
-  page_size: 100;
+  page_size: 10000;
 }
 
 export interface ResponseGetItem {
@@ -472,7 +474,7 @@ const clearingAPI = {
   getOverpaidBalance,
   create,
   getSheet,
-  updateSheet,
+  removeSheet,
   getItem,
   getItemDetail,
   download,
