@@ -67,7 +67,8 @@
   },
 
   "auth": {
-    "logout": "로그아웃"
+    "logout": "로그아웃",
+    "login": "로그인"
   },
 
   "table": {
