@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,6 +20,8 @@ import {
 import { useLogin } from '@hooks/index';
 import authAPI, { RequestLogin } from '@apis/authAPI';
 import { AxiosError } from 'axios';
+import { css } from '@emotion/react';
+import { TurtleText } from '@components/element';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -30,15 +31,14 @@ function LoginForm() {
 
   // 로그인 요청
   const loginQuery = useMutation(
-    ['login'],
     (variables: RequestLogin) => {
       if (!variables.login_id) {
-        setErrorMsg(t('message.enter id'));
-        return Promise.reject(t('message.enter id'));
+        setErrorMsg(t('message.enterId'));
+        return Promise.reject(t('message.enterId'));
       }
       if (!variables.password) {
-        setErrorMsg(t('message.enter password'));
-        return Promise.reject(t('message.enter password'));
+        setErrorMsg(t('message.enterPassword'));
+        return Promise.reject(t('message.enterPassword'));
       }
 
       return authAPI.login(variables);
@@ -46,12 +46,12 @@ function LoginForm() {
     {
       onError: (data: AxiosError) => {
         if (data.response?.status === 400) {
-          setErrorMsg(`${t('message.incorrect user')}`);
+          setErrorMsg(`${t('message.incorrectUser')}`);
           return;
         }
 
         if (data.response) {
-          setErrorMsg(`${t('message.network error')}`);
+          setErrorMsg(`${t('message.networkError')}`);
           return;
         }
       },
@@ -74,8 +74,9 @@ function LoginForm() {
         loginQuery.mutate({ login_id, password });
       }}
     >
-      <LogoImage
-        src={`${process.env.PUBLIC_URL}/assets/img/new_logo_login.png`}
+      <img
+        css={logoImage}
+        src={`${process.env.PUBLIC_URL}/assets/img/logo_login.png`}
         alt="logo"
       />
       <Form.Item
@@ -84,29 +85,29 @@ function LoginForm() {
         style={{ marginBottom: '12px' }}
       >
         <Input
-          placeholder={t('id')}
+          css={input}
+          placeholder={t('auth.id')}
           prefix={<UserOutlined />}
-          style={{ height: '44px' }}
         />
       </Form.Item>
       <Form.Item name="password" rules={[{ required: false }]}>
         <Input.Password
-          placeholder={t('password')}
+          css={input}
+          placeholder={t('auth.password')}
           prefix={<LockOutlined />}
-          style={{ height: '44px' }}
         />
       </Form.Item>
       <Space>
         <Form.Item name="autoLogin" valuePropName="checked">
-          <Checkbox>{t('auto login')}</Checkbox>
+          <Checkbox>{t('auth.autoLogin')}</Checkbox>
         </Form.Item>
         <Form.Item>
           <Link style={{ color: '#7C7D82' }} to="/find-id">
-            {t('find id')}
+            {t('auth.findId')}
           </Link>
           <Divider type="vertical" />
           <Link style={{ color: '#7C7D82' }} to="/reset-password">
-            {t('reset password')}
+            {t('auth.resetPassword')}
           </Link>
         </Form.Item>
       </Space>
@@ -120,46 +121,70 @@ function LoginForm() {
       )}
       <Form.Item>
         <Button
+          css={loginbButton}
           block
           type="primary"
           htmlType="submit"
           size="large"
-          style={{
-            background: 'linear-gradient(92.01deg, #02ACB7 0%, #00AE99 100%)',
-            border: 'none',
-            borderRadius: '4px',
-            height: '46px',
-          }}
         >
-          {t('login')}
+          {t('auth.login')}
         </Button>
       </Form.Item>
       <Divider />
       <Row justify="center">
         <Typography.Text type="secondary">
-          {t('description.not member')}{' '}
+          {t('auth.notMember')}{' '}
         </Typography.Text>
         <Link to="/signup" style={{ color: '#00B594' }}>
-          &nbsp;&nbsp;{t('signup')}
+          &nbsp;&nbsp;{t('auth.signUp')}
         </Link>
       </Row>
       <Row>
         <Typography.Text type="secondary">
-          {t('description.about membership')}{' '}
+          {t('auth.wonderMembership')}{' '}
         </Typography.Text>
         <Link to="/membership-info" style={{ color: '#00B594' }}>
-          &nbsp;&nbsp;{t('about membership')}
+          &nbsp;&nbsp;{t('auth.aboutMembership')}
         </Link>
+      </Row>
+      <Row justify="center">
+        <TurtleText
+          css={css`
+            color: #cbccd1;
+            margin-top: 60px;
+            font-weight: 400;
+          `}
+        >
+          © Turtleship Corp.
+        </TurtleText>
       </Row>
     </Form>
   );
 }
 
-const LogoImage = styled.img`
+const logoImage = css`
   height: 20px;
   display: block;
   margin: 0 auto;
   margin-bottom: 60px;
+`;
+
+const input = css`
+  height: 44px;
+  border-radius: 8px;
+`;
+
+const loginbButton = css`
+  background: #242934;
+  border-radius: 8px;
+  height: 48px;
+
+  &:hover {
+    background: #242934;
+  }
+  &:focus {
+    background: #242934;
+  }
 `;
 
 export default LoginForm;

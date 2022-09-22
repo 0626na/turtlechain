@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import LoginForm from './LoginForm';
 
 function LoginPage() {
-  const title = `${t('turtlechain')} - ${t('login')}`;
+  const title = `${t('helmet.turtleChain')} - ${t('auth.login')}`;
 
   return (
     <>

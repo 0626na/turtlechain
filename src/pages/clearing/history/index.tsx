@@ -1,5 +1,17 @@
-function ClearingHistoryPage() {
-  return <h1>정산내역 페이지 입니다</h1>;
+import { t } from 'i18next';
+import { Helmet } from 'react-helmet';
+import React from 'react';
+import { PageHeader } from '@layout/page';
+import PageBody from './PageBody';
+
+function ClearingCreatePage() {
+  return (
+    <>
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('clearing.history')}`} />
+      <PageHeader title={t('clearing.history')} />
+      <PageBody />
+    </>
+  );
 }
 
-export default ClearingHistoryPage;
+export default ClearingCreatePage;

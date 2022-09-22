@@ -9,9 +9,9 @@ interface Props extends ButtonProps {
   children: React.ReactNode;
 }
 
-function ProcessButton({ children, ...props }: Props) {
+function ProcessButton({ children, size = 'small', ...props }: Props) {
   return (
-    <Button {...props} css={button}>
+    <Button size={size} {...props} css={button}>
       {children}
       <div css={{ marginLeft: 3 }}>
         <TurtleIcon name="process" />
@@ -21,8 +21,8 @@ function ProcessButton({ children, ...props }: Props) {
 }
 
 const button = css`
-  width: 88px;
-  height: 26px;
+  /* width: 88px; */
+  /* height: 26px; */
 
   font-weight: 500;
   border-radius: 8px;

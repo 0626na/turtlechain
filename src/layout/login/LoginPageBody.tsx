@@ -31,10 +31,10 @@ const Container = styled.div`
 `;
 
 const StyledCard = styled(Card)`
-  padding: 80px 40px;
+  padding: 80px 40px 20px 40px;
   background: #ffffff;
   box-shadow: 0px 10px 30px rgba(41, 77, 119, 0.08);
-  border-radius: 4px;
+  border-radius: 20px;
   border: none;
 `;
 
