@@ -18,38 +18,42 @@ import orderAPI, {
   CreatingOrdersItem,
   OrderItemList,
   //PreParsingOrderList,
+  RequestCreateOrderItemExcelParsing,
 } from '@apis/orderAPI';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
-//import ExcelPreParsingModal from './modals/ExcelPreParsingModal';
-//import { RcFile } from 'antd/lib/upload';
 //import { TurtleContentModal } from '@components/combine';
+//import { RcFile } from 'antd/lib/upload';
 
 function PageBody() {
   const { cart, ready } = useOrderCart();
-  //const [fileList, setFileList] = useState<RcFile[]>([]);
+  // const [fileList, setFileList] = useState<RcFile[]>([]);
   // const [preParsingList, setPreParsingList] = useState<PreParsingOrderList>({
   //   first_order: [],
   //   second_order: [],
   //   third_order: [],
   // });
+
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   //const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
-  //const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
-  useModal();
+  // const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
+  //   useModal();
 
   const createOrderExcelParseMutation = useMutation(
-    orderAPI.createOrderExcelParsing,
+    ['sdfdsf'],
+    (data: RequestCreateOrderItemExcelParsing) => {
+      return orderAPI.createOrderExcelParsing(data);
+    },
     {
       onSuccess: (data) => {
-        console.log(data);
         ready(data);
       },
     },
   );
   //const loading = !createOrderExcelParseMutation.isSuccess;
 
+  //발주서 등록 (발주 시트)
   const createOrderSheetMutation = useMutation(orderAPI.createOrderSheet, {
     onSuccess: () => {
       const rt_stores = cart.successList.map<OrderItemList>((store) => {
@@ -78,23 +82,26 @@ function PageBody() {
     },
   });
 
+  //발주서 등록 (발주 Item)
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
-      message.success(data.msg);
+      if (data.msg === 'success')
+        message.success('발주서 등록이 완료되었습니다.');
     },
   });
 
+  //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   // const creatOrderSheetsPreParsingMutation = useMutation(
   //   orderAPI.createPreParsing,
   //   {
   //     onSuccess: (data) => {
-  //       //setPreParsingList(data.data);
-  //       //createOrderExcelParseMutation.mutate({ files: fileList });
-  //       // if (data.data.third_order.length === 0) {
-  //       //   createOrderExcelParseMutation.mutate({ files: fileList });
-  //       //   return;
-  //       // }
-  //       // openPreparsingModal();
+  //       setPreParsingList(data.responseData.data);
+  //       setFileList(data.files);
+  //       if (data.responseData.data.third_order.length === 0) {
+  //         createOrderExcelParseMutation.mutate({ files: data.files });
+  //         return;
+  //       }
+  //       openPreparsingModal();
   //     },
   //   },
   // );
@@ -106,7 +113,7 @@ function PageBody() {
         closeModal={closeSettingColumnModal}
       />
       {/* <TurtleContentModal
-        size="middle"
+        size="small"
         visible={preparsingModalVisible}
         title="발주서 재등록"
         onClose={closePreparsingModal}
@@ -152,11 +159,9 @@ function PageBody() {
                     accept=".csv, .xls, .xlsx"
                     multiple
                     beforeUpload={(_, list) => {
-                      //setFileList(list);
                       // creatOrderSheetsPreParsingMutation.mutate({
                       //   files: list,
                       // });
-
                       createOrderExcelParseMutation.mutate({ files: list });
 
                       return false;
