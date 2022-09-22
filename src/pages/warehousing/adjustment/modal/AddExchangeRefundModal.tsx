@@ -125,7 +125,7 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
             <TurtlePanelTitle
               count={2}
               activeKey={activeKey}
-              title="결제금액 미리보기"
+              title="교환/반품 미리보기"
             />
           }
           activeKey={activeKey}

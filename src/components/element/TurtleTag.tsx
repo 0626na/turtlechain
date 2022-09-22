@@ -1,38 +1,33 @@
 import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import TurtleText from './TurtleText';
 
 interface Props {
   children: React.ReactNode;
-  color: string;
+  color: 'orange' | 'cyan' | 'green';
 }
 
 function TurtleTag({ children, color }: Props) {
-  const [tone, setTone] = useState({
-    fontColor: '',
-    backgroundColor: '',
-  });
-
-  useEffect(() => {
-    if (color === '#DD7A32') {
-      setTone({ fontColor: '#DD7A32', backgroundColor: '#FBEFE6' });
-    }
-
-    if (color === '#00AAB5') {
-      setTone({ fontColor: '#00AAB5', backgroundColor: '#DDF3F5' });
-    }
-  }, [color]);
+  const colors = useMemo(
+    () => ({
+      orange: {
+        color: '#DD7A32',
+        backgroundColor: '#FBEFE6',
+      },
+      cyan: {
+        color: '#00AAB5',
+        backgroundColor: '#DDF3F5',
+      },
+      green: {
+        color: '#389E0D',
+        backgroundColor: '#EBF6DF',
+      },
+    }),
+    [],
+  );
 
   return (
-    <div
-      css={[
-        container,
-        {
-          backgroundColor: tone.backgroundColor,
-          color: tone.fontColor,
-        },
-      ]}
-    >
+    <div css={[container, colors[color]]}>
       <TurtleText>{children}</TurtleText>
     </div>
   );

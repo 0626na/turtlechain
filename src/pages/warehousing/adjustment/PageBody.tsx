@@ -198,32 +198,31 @@ function PageBody() {
         {/*
          *  매입조정 현황
          */}
-        <div css={cardsMargin}>
-          <TurtleCard
-            value={[
-              {
-                color: '#DD7A32',
-                title: t('warehousing.adjustment.pending'),
-                count:
-                  getAdjustmentListQuery.data?.data.adjustment_summary
-                    ?.not_cleared.count ?? 0,
-                price:
-                  getAdjustmentListQuery.data?.data.adjustment_summary
-                    ?.not_cleared.price ?? 0,
-              },
-              {
-                color: '#00AAB5',
-                title: t('warehousing.adjustment.confirmed'),
-                count:
-                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                    .count ?? 0,
-                price:
-                  getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                    .price ?? 0,
-              },
-            ]}
-          />
-        </div>
+
+        <TurtleCard
+          value={[
+            {
+              color: 'orange',
+              title: t('warehousing.adjustment.pending'),
+              count:
+                getAdjustmentListQuery.data?.data.adjustment_summary
+                  ?.not_cleared.count ?? 0,
+              price:
+                getAdjustmentListQuery.data?.data.adjustment_summary
+                  ?.not_cleared.price ?? 0,
+            },
+            {
+              color: 'cyan',
+              title: t('warehousing.adjustment.confirmed'),
+              count:
+                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                  .count ?? 0,
+              price:
+                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
+                  .price ?? 0,
+            },
+          ]}
+        />
 
         <Table
           size="small"
@@ -338,9 +337,9 @@ function PageBody() {
                     `}
                   >
                     {is_cleared ? (
-                      <TurtleTag color="#00AAB5">마감</TurtleTag>
+                      <TurtleTag color="cyan">마감</TurtleTag>
                     ) : (
-                      <TurtleTag color="#DD7A32">대기</TurtleTag>
+                      <TurtleTag color="orange">대기</TurtleTag>
                     )}
                   </div>
                 );
@@ -466,9 +465,5 @@ function PageBody() {
     </>
   );
 }
-
-const cardsMargin = css`
-  margin-bottom: 60px;
-`;
 
 export default PageBody;

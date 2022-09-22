@@ -6,6 +6,17 @@ import { ClearingInfo } from '@apis/clearingAPI';
 function useClearingCart() {
   const [cart, setCart] = useRecoilState(clearingCartState);
 
+  // 결제요청일을 선택한다.
+  const selectDate = (date: string) => {
+    setCart({
+      clearingRequestDate: date,
+      reservePaymentList: [],
+      reserveSubtractList: [],
+      adjustmentSubtractList: [],
+      resultList: [],
+    });
+  };
+
   // 당일 미송인 거래처를 filter
   const filterReservePayment = (balanceList: ClearingInfo[]) => {
     let index = 10000;
@@ -85,12 +96,13 @@ function useClearingCart() {
 
   // balance중 차감, 추가를 구분한다
   const separate = (balanceList: ClearingInfo[]) => {
-    setCart({
+    setCart((cart) => ({
+      ...cart,
       reservePaymentList: filterReservePayment(balanceList),
       reserveSubtractList: filterReserveSubtract(balanceList),
       adjustmentSubtractList: filterAdjustmentSubtract(balanceList),
       resultList: filterPayment(balanceList),
-    });
+    }));
   };
 
   const handleAdjustmentSubtract = (record: ClearingInfo, value: number) => {
@@ -225,6 +237,7 @@ function useClearingCart() {
 
   return {
     cart,
+    selectDate,
     separate,
     handleAdjustmentSubtract,
     fillAllAdjustmentSubtract,
