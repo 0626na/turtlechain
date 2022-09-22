@@ -35,8 +35,7 @@ function PageBody() {
           <TurtleCard
             value={[
               {
-                color: '#00AAB5',
-
+                color: 'cyan',
                 title: '성공',
                 count:
                   getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
@@ -44,7 +43,7 @@ function PageBody() {
                 price: 0,
               },
               {
-                color: '#DD7A32',
+                color: 'orange',
                 title: '실패',
                 count: 0,
                 price: 0,
