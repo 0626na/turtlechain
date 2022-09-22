@@ -9,11 +9,11 @@ interface Props extends DividerProps {
 }
 
 function TurtleDivider({
+  type = 'horizontal',
   marginTop = 0,
   marginBottom = 0,
-  marginLeft = 8,
-  marginRight = 8,
-  type = 'horizontal',
+  marginLeft = type === 'horizontal' ? 0 : 8,
+  marginRight = type === 'horizontal' ? 0 : 8,
   color = type === 'horizontal' ? '#E3E6EA' : '#DCE0E4',
   ...Props
 }: Props) {

@@ -4,6 +4,7 @@ import warehousingAPI, {
   WarehousingSheet,
 } from '@apis/warehousingAPI';
 import {
+  SelectButton,
   TurtleConfirmModal,
   TurtleIcon,
   TurtlePrimaryRangePicker,
@@ -12,12 +13,13 @@ import {
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { Button, message, Space, Table, Tag } from 'antd';
+import { message, Space, Table, Tag } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import { useMutation, useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import DetailModal from './modals/DetailModal';
+import ProcessButton from '@components/element/button/ProcessButton';
 
 function PageBody() {
   const { store } = useStore();
@@ -246,9 +248,7 @@ function PageBody() {
                       /*
                        * 진행상태 : 마감
                        */
-                      <Button
-                        size="small"
-                        type="primary"
+                      <SelectButton
                         onClick={(e) => {
                           e.stopPropagation();
                           selectRow(record);
@@ -256,16 +256,14 @@ function PageBody() {
                         }}
                       >
                         마감취소
-                      </Button>
+                      </SelectButton>
                     )
                   ) : (
                     /*
                      * 진행상태 : 대기
                      */
                     <>
-                      <Button
-                        size="small"
-                        type="primary"
+                      <ProcessButton
                         onClick={(e) => {
                           e.stopPropagation();
                           selectRow(record);
@@ -273,7 +271,7 @@ function PageBody() {
                         }}
                       >
                         마감하기
-                      </Button>
+                      </ProcessButton>
                       <TurtleIcon
                         name="delete"
                         onClick={(e) => {

@@ -42,6 +42,18 @@
     }
   },
 
+  "adjustment": {
+    "process type": {
+      "": "처리방식",
+      "default": "매입조정 처리",
+      "subtract": "차감",
+      "reserve": "미송",
+      "refund": "환불",
+      "exchange": "교환",
+      "takeback": "반품"
+    }
+  },
+
   "clearing": {
     "": "결제",
     "create": "결제하기",
@@ -93,8 +105,7 @@
     "totalWarehousingCount": "입고 수량 합계",
     "isReserveWarehousing": "미송입고여부",
     "progressStatus": "진행 상태",
-    "createdDate": "등록 날짜",
-    "count": "수량"
+    "createdDate": "등록 날짜"
   },
 
   "wholesaler": {},

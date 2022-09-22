@@ -1,8 +1,9 @@
 import { t } from 'i18next';
-import { Divider, Form, Input, InputNumber, Row } from 'antd';
+import { Form, Input, message } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import {
   PrimaryButton,
+  TurtleDivider,
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtleNumberInput,
@@ -12,17 +13,34 @@ import useModal from '@hooks/useModal';
 import { pricePattern } from '@utils/pattern';
 import SearchProductModal from '@components/combine/modal/SearchProductModal';
 import { ProductShow } from '@apis/productAPI';
-import useWarehousingCart from '@hooks/useWarehousingCart';
+
+import adjustmentAPI from '@apis/adjustmentAPI';
+import { useMutation, useQueryClient } from 'react-query';
+import { useStore } from '@hooks/index';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
 }
 
-function AddSingleProductModal({ visible, closeModal }: Props) {
+function AddReserveModal({ visible, closeModal }: Props) {
+  const queryClient = useQueryClient();
+
+  const { store } = useStore();
   const [form] = Form.useForm();
-  const { add } = useWarehousingCart();
+
   const [productModalVisible, openProductModal, closeProductModal] = useModal();
+
+  // 미송 상품 추가 요청
+  const createReserveMutation = useMutation(adjustmentAPI.create, {
+    onSuccess: () => {
+      queryClient.refetchQueries(['getAdjustmentList'], { active: true });
+      message.success('미송상품이 성공적으로 등록되었습니다.');
+
+      closeModal();
+    },
+  });
 
   const selectProduct = useCallback(
     (product: ProductShow) => {
@@ -44,6 +62,41 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
     [form, closeProductModal],
   );
 
+  // 미송 생성
+  const handleReserveCreate = (data: any) => {
+    createReserveMutation.mutate({
+      item_list: [
+        {
+          rt_store_id: store.selected?.id as number,
+          vendor_id: data.vendor_id,
+          product_id: data.product_id,
+          count: data.count,
+          warehousing_item_id: 0,
+          price: data.price,
+          type: 'reserve',
+          memo: data.memo,
+        },
+      ],
+    });
+  };
+
+  // 가격, 수량  === 0 유효성 검사.
+  const handlePriceValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('가격을 확인해 주세요.'));
+    }
+
+    return Promise.resolve();
+  };
+
+  const handleCountValidationCheck = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error('수량을 입력해 주세요.'));
+    }
+
+    return Promise.resolve();
+  };
+
   useEffect(() => {
     if (visible) return;
     form.resetFields();
@@ -63,7 +116,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={t('product.addSingle')}
+        title={'미송상품 추가'}
         visible={visible}
         onClose={closeModal}
       >
@@ -74,7 +127,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            add(values);
+            handleReserveCreate(values);
             closeModal();
           }}
         >
@@ -127,31 +180,51 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
-          <Form.Item
-            label={t('table.price')}
-            name="price"
-            rules={[{ required: true }]}
-          >
-            <TurtleNumberInput
-              style={{ width: '100%' }}
-              step={1000}
-              min={0}
-              formatter={(value) => `${value}`.replace(pricePattern, ',')}
-            />
+          <Form.Item shouldUpdate noStyle>
+            {() => (
+              <Form.Item
+                label={t('table.price')}
+                name="price"
+                // rules={[{}]}
+                rules={[
+                  {
+                    required: true,
+                    validator: handlePriceValidationCheck,
+                  },
+                ]}
+              >
+                <TurtleNumberInput
+                  style={{ width: '100%' }}
+                  step={1000}
+                  min={0}
+                  formatter={(value) => `${value}`.replace(pricePattern, ',')}
+                />
+              </Form.Item>
+            )}
           </Form.Item>
 
-          <Form.Item
-            label={t('table.count')}
-            name="count"
-            rules={[{ required: true }]}
-          >
-            <InputNumber // 상품 수량 Input
-              style={{ width: '100%' }}
-              min={1}
-            />
+          <Form.Item shouldUpdate noStyle>
+            {() => (
+              <Form.Item
+                label={t('table.count')}
+                name="count"
+                rules={[
+                  {
+                    required: true,
+                    validator: handleCountValidationCheck,
+                  },
+                ]}
+              >
+                <TurtleNumberInput style={{ width: '100%' }} step={1} min={1} />
+              </Form.Item>
+            )}
           </Form.Item>
 
-          <Divider />
+          <Form.Item name="memo" label={t('table.memo')}>
+            <TurtleFormInput placeholder="메모를 입력해주세요" />
+          </Form.Item>
+
+          <TurtleDivider marginTop={32} marginBottom={32} />
 
           <Form.Item
             label={t('table.vendorName')}
@@ -183,15 +256,27 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
-          <Row justify="end">
-            <PrimaryButton size="large" htmlType="submit">
-              {t('button.addProduct')}
-            </PrimaryButton>
-          </Row>
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldValue }) => (
+              <div css={marginTop}>
+                <PrimaryButton
+                  size="large"
+                  htmlType="submit"
+                  disabled={!getFieldValue('price') || !getFieldValue('count')}
+                >
+                  {t('button.addProduct')}
+                </PrimaryButton>
+              </div>
+            )}
+          </Form.Item>
         </Form>
       </TurtleContentModal>
     </>
   );
 }
 
-export default AddSingleProductModal;
+const marginTop = css`
+  margin-top: 60px;
+`;
+
+export default AddReserveModal;

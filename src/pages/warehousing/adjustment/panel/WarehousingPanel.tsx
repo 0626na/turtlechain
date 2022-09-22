@@ -178,7 +178,7 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
             width: 120,
             align: 'right',
             title: t('table.price'),
-            render: (_, record) => record.price,
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             width: 120,

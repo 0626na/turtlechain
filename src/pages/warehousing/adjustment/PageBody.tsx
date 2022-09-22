@@ -2,7 +2,7 @@ import adjustmentAPI, {
   AdjustmentItemShow,
   RequestGetList,
 } from '@apis/adjustmentAPI';
-import { SearchFilter, TurtleContentModal } from '@components/combine';
+import { SearchFilter } from '@components/combine';
 import InputModal from '@components/combine/modal/InputModal';
 import {
   MemoIcon,
@@ -15,18 +15,22 @@ import {
   TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
+import ProcessButton from '@components/element/button/ProcessButton';
 import TurtleTag from '@components/element/TurtleTag';
 import { css } from '@emotion/react';
 
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Button, Col, message, Pagination, Popconfirm, Row, Table } from 'antd';
+import { Col, message, Pagination, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import ExchangeRefundModal from './modal/ExchangeRefundModal';
+import ExchangeRefundModal from './modal/AddExchangeRefundModal';
+import AddReserveModal from './modal/AddReserveModal';
+import AdjustmentProcessModal from './modal/AdjustmentProcessModal';
+import DetailModal from './modal/DetailModal';
 
 function PageBody() {
   const { store } = useStore();
@@ -42,6 +46,11 @@ function PageBody() {
     addExchangeRefundModalOpen,
     addExchangeRefundModalClose,
   ] = useModal();
+
+  const [adjustmentModalVisible, adjustmentModalOpen, adjustmentModalClose] =
+    useModal();
+
+  const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
 
   // 매입조정 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
@@ -67,20 +76,29 @@ function PageBody() {
     },
   );
 
-  // 매입조정 수정, 삭제 요청
+  // 매입조정 정보 수정 요청
   const updateAdjustmentMutation = useMutation(adjustmentAPI.update, {
-    onSuccess: (data) => {
-      message.success(
-        data.is_inactive
-          ? t('message.success delete')
-          : t('message.success update'),
-      );
+    onSuccess: () => {
+      message.success('성공적으로 업데이트 되었습니다.');
+      setSearchQuery({ ...searchQuery, page: 1 });
+      getAdjustmentListQuery.refetch();
+      memoModalClose();
+    },
+  });
+
+  // 매입조정 삭제 요청
+  const removeAdjustmentMutation = useMutation(adjustmentAPI.update, {
+    onSuccess: () => {
+      message.success('성공적으로 삭제되었습니다.');
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
     },
   });
 
-  const loading = getAdjustmentListQuery.isLoading;
+  const loading =
+    getAdjustmentListQuery.isLoading ||
+    updateAdjustmentMutation.isLoading ||
+    removeAdjustmentMutation.isLoading;
 
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
@@ -91,6 +109,40 @@ function PageBody() {
 
   return (
     <>
+      {/*
+       * 미송상품 추가 모달
+       */}
+      <AddReserveModal
+        visible={addReserveModalVisible}
+        closeModal={addReserveModalClose}
+      />
+
+      {/*
+       * 교환/반품 추가 모달
+       */}
+      <ExchangeRefundModal
+        visible={addExchangeRefundModalVisible}
+        onClose={addExchangeRefundModalClose}
+      />
+
+      {/*
+       * 상세보기 모달
+       */}
+      <DetailModal
+        selectedRow={selectedRow as AdjustmentItemShow}
+        visible={detailModalVisible}
+        onClose={detailModalClose}
+      />
+
+      {/*
+       *  매입조정 처리 모달
+       */}
+      <AdjustmentProcessModal
+        selectedRow={selectedRow as AdjustmentItemShow}
+        visible={adjustmentModalVisible}
+        onClose={adjustmentModalClose}
+      />
+
       {/**
        * 메모 수정 모달
        */}
@@ -111,24 +163,6 @@ function PageBody() {
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
         placeholder="ex. 영수증 이중으로 확인 또 확인!"
-      />
-
-      {/*
-       * 미송상품 추가 모달
-       */}
-      <TurtleContentModal
-        title="미송상품 추가"
-        visible={addReserveModalVisible}
-        onClose={addReserveModalClose}
-      ></TurtleContentModal>
-
-      {/*
-       * 교환/반품 추가 모달
-       */}
-
-      <ExchangeRefundModal
-        visible={addExchangeRefundModalVisible}
-        onClose={addExchangeRefundModalClose}
       />
 
       <PageHeader title="교환/반품/미송" />
@@ -197,6 +231,12 @@ function PageBody() {
           dataSource={getAdjustmentListQuery.data?.data.adjustment_list}
           rowKey={(record) => record.id}
           pagination={false}
+          onRow={(record) => ({
+            onClick: () => {
+              setSelectedRow(record);
+              detailModalOpen();
+            },
+          })}
           scroll={{ x: 1400, y: 'auto' }}
           title={() => (
             <TurtleTableTitle
@@ -316,7 +356,8 @@ function PageBody() {
               ellipsis: true,
               width: 100,
               title: t('table.type'),
-              render: (_, record) => record.type,
+              render: (_, record) =>
+                t(`adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,
@@ -364,7 +405,8 @@ function PageBody() {
               title: t('table.memo'),
               render: (_, record) => (
                 <MemoIcon
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedRow(record);
                     memoModalOpen();
                   }}
@@ -376,7 +418,24 @@ function PageBody() {
               ellipsis: true,
               width: 100,
               align: 'center',
-              render: (_, record) => <Button>처리하기</Button>,
+              render: (_, record) =>
+                record.count_left !== 0 &&
+                // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
+                ((record.type === 'reserve' &&
+                  moment
+                    .duration(moment().diff(moment(record.created_date)))
+                    .asHours() > 19) ||
+                  record.type !== 'reserve') && (
+                  <ProcessButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedRow(record);
+                      adjustmentModalOpen();
+                    }}
+                  >
+                    처리하기
+                  </ProcessButton>
+                ),
             },
             {
               ellipsis: true,
@@ -392,13 +451,8 @@ function PageBody() {
                   }}
                   onConfirm={(e) => {
                     e?.stopPropagation();
-                    // updateAdjustmentQuery.mutate({
-                    //   id: record.id,
-                    //   is_inactive: 1,
-                    // });
-                    updateAdjustmentMutation.mutate({
+                    removeAdjustmentMutation.mutate({
                       id: record.id,
-                      is_inactive: 1,
                     });
                   }}
                 >

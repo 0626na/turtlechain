@@ -29,7 +29,7 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
   const { cart, setCart } = useAdjustmentCart();
   const { store } = useStore();
 
-  const handleModalClose = async () => {
+  const handleModalClose = () => {
     onClose();
   };
 
@@ -40,7 +40,6 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
       message.success('교환/반품이 성공적으로 등록되었습니다.');
 
       handleModalClose();
-      // navigate('/adjustment/list');
     },
   });
 
@@ -55,7 +54,6 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
         item.product_price === 0
       ) {
         isVaild = false;
-        console.log('123123213');
       }
     });
     return isVaild;
