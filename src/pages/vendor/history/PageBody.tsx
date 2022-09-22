@@ -15,7 +15,7 @@ import { message, Pagination, Popconfirm, Row, Switch, Table } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';
-import vendorAPI, { Vendor } from '@apis/vendorAPI';
+import vendorAPI, { Vendor, VendorAccount } from '@apis/vendorAPI';
 
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
@@ -223,6 +223,17 @@ function PageBody() {
             },
             {
               ellipsis: true,
+              width: 200,
+              title: t('table.accountInfo'),
+              render: (_, record) => {
+                const makeAccount = (account: VendorAccount) =>
+                  `${account?.bank} ${account?.account_number} ${account?.account_holder}`;
+
+                return makeAccount(record.vendor_account);
+              },
+            },
+            {
+              ellipsis: true,
               width: 120,
               align: 'center',
               title: t('table.vatIncluded'),
@@ -233,9 +244,9 @@ function PageBody() {
                   }}
                 >
                   <Popconfirm
-                    title={t('description.update tax included')}
-                    okText={t('yes')}
-                    cancelText={t('no')}
+                    title={'부가세 입금 여부를 변경하시겠습니까?'}
+                    okText={'예'}
+                    cancelText={'아니오'}
                     onConfirm={() => {
                       vendorUpdateMutation.mutate({
                         id: record.id,
@@ -243,11 +254,7 @@ function PageBody() {
                       });
                     }}
                   >
-                    <Switch
-                      checkedChildren={t('button.include')}
-                      checked={record.is_vat_included}
-                      style={{ width: '52px' }}
-                    />
+                    <Switch css={$switch} checked={record.is_vat_included} />
                   </Popconfirm>
                 </div>
               ),
@@ -324,5 +331,13 @@ function PageBody() {
     </>
   );
 }
+
+const $switch = css`
+  width: 30px;
+
+  &.ant-switch-checked {
+    background-color: #1a66f9;
+  }
+`;
 
 export default PageBody;

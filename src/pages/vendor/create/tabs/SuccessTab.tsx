@@ -181,17 +181,15 @@ function SuccessTab({ isLoading }: Props) {
             title: t('table.vatIncluded'),
             align: 'center',
             onCell: (record) => handleColumnHighlight(record),
-            render: (_, record) => {
-              return (
-                <Switch
-                  css={$switch}
-                  checked={record.isVatIncluded}
-                  onClick={() => {
-                    handleVatIncludedUpdate(record);
-                  }}
-                />
-              );
-            },
+            render: (_, record) => (
+              <Switch
+                css={$switch}
+                checked={record.isVatIncluded}
+                onClick={() => {
+                  handleVatIncludedUpdate(record);
+                }}
+              />
+            ),
           },
 
           {

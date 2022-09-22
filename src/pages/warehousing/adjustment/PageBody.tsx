@@ -240,14 +240,12 @@ function PageBody() {
           scroll={{ x: 1400, y: 'auto' }}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getAdjustmentListQuery.data?.data.adjustment_list?.length ?? 0
-              }
+              totalCount={getAdjustmentListQuery.data?.data.total_count ?? 0}
               rightContent={
                 <Row>
                   <Col>
                     <TurtleSearchSelect
-                      value={''}
+                      defaultValue={''}
                       onChange={(search_type) => {
                         setSearchQuery((searchQuery) => ({
                           ...searchQuery,
@@ -313,9 +311,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={
-                  getAdjustmentListQuery.data?.data.adjustment_list.length ?? 0
-                }
+                total={getAdjustmentListQuery.data?.data.total_count ?? 0}
                 showSizeChanger={false}
                 current={searchQuery.page}
                 onChange={(page) => {
@@ -468,7 +464,7 @@ function PageBody() {
 }
 
 const cardsMargin = css`
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 `;
 
 export default PageBody;
