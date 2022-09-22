@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  AnswerButton,
   PrimaryButton,
   SecondaryButton,
   TeriaryButton,
@@ -12,33 +13,33 @@ import SuccessTab from './tabs/SucceessTab';
 
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
-import { message, Upload } from 'antd';
+import { Col, message, Row, Upload } from 'antd';
 import { useMutation } from 'react-query';
 import orderAPI, {
   CreatingOrdersItem,
   OrderItemList,
-  //PreParsingOrderList,
+  PreParsingOrderList,
   RequestCreateOrderItemExcelParsing,
 } from '@apis/orderAPI';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
-//import { TurtleContentModal } from '@components/combine';
-//import { RcFile } from 'antd/lib/upload';
+import { TurtleContentModal } from '@components/combine';
+import { RcFile } from 'antd/lib/upload';
 
 function PageBody() {
   const { cart, ready } = useOrderCart();
-  // const [fileList, setFileList] = useState<RcFile[]>([]);
-  // const [preParsingList, setPreParsingList] = useState<PreParsingOrderList>({
-  //   first_order: [],
-  //   second_order: [],
-  //   third_order: [],
-  // });
+  const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [preParsingList, setPreParsingList] = useState<PreParsingOrderList>({
+    first_order: [],
+    second_order: [],
+    third_order: [],
+  });
 
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   //const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
-  // const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
-  //   useModal();
+  const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
+    useModal();
 
   const createOrderExcelParseMutation = useMutation(
     ['sdfdsf'],
@@ -91,20 +92,21 @@ function PageBody() {
   });
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
-  // const creatOrderSheetsPreParsingMutation = useMutation(
-  //   orderAPI.createPreParsing,
-  //   {
-  //     onSuccess: (data) => {
-  //       setPreParsingList(data.responseData.data);
-  //       setFileList(data.files);
-  //       if (data.responseData.data.third_order.length === 0) {
-  //         createOrderExcelParseMutation.mutate({ files: data.files });
-  //         return;
-  //       }
-  //       openPreparsingModal();
-  //     },
-  //   },
-  // );
+  const creatOrderSheetsPreParsingMutation = useMutation(
+    orderAPI.createPreParsing,
+    {
+      onSuccess: (data) => {
+        setPreParsingList(data.responseData.data);
+        setFileList(data.files);
+        if (data.responseData.data.third_order.length === 0) {
+          console.log('됨');
+          createOrderExcelParseMutation.mutate({ files: data.files });
+          return;
+        }
+        openPreparsingModal();
+      },
+    },
+  );
 
   return (
     <>
@@ -112,7 +114,7 @@ function PageBody() {
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
       />
-      {/* <TurtleContentModal
+      <TurtleContentModal
         size="small"
         visible={preparsingModalVisible}
         title="발주서 재등록"
@@ -138,9 +140,30 @@ function PageBody() {
         </p>
 
         <Row justify="end">
-          <PrimaryButton>재등록하기</PrimaryButton>
+          <Col style={{ marginRight: 20 }}>
+            <AnswerButton
+              type="NO"
+              text="취소"
+              onClick={closePreparsingModal}
+            />
+          </Col>
+          <Col>
+            <AnswerButton
+              type="YES"
+              text="재등록하기"
+              disabled={
+                preParsingList.third_order.length !== 0 &&
+                preParsingList.first_order.length === 0 &&
+                preParsingList.second_order.length === 0
+              }
+              onClick={() => {
+                createOrderExcelParseMutation.mutate({ files: fileList });
+                closePreparsingModal();
+              }}
+            />
+          </Col>
         </Row>
-      </TurtleContentModal> */}
+      </TurtleContentModal>
 
       {/*
        * Page
@@ -159,10 +182,9 @@ function PageBody() {
                     accept=".csv, .xls, .xlsx"
                     multiple
                     beforeUpload={(_, list) => {
-                      // creatOrderSheetsPreParsingMutation.mutate({
-                      //   files: list,
-                      // });
-                      createOrderExcelParseMutation.mutate({ files: list });
+                      creatOrderSheetsPreParsingMutation.mutate({
+                        files: list,
+                      });
 
                       return false;
                     }}
@@ -200,6 +222,7 @@ function PageBody() {
 
       <PageBottomBar>
         <PrimaryButton
+          disabled={cart.successList.length === 0}
           onClick={() => {
             createOrderSheetMutation.mutate({
               rt_store_ids: cart.successList.map((store) => store.rt_store_id),
