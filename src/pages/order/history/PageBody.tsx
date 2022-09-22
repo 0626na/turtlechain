@@ -57,7 +57,11 @@ function PageBody() {
                 count:
                   getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
 
-                price: 0,
+                price:
+                  getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                    (acc, sheet) => acc + sheet.order_price,
+                    0,
+                  ) ?? 0,
               },
               {
                 color: '#DD7A32',

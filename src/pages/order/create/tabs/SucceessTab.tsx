@@ -1,4 +1,5 @@
 import { StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import { TurtleTableTitle } from '@components/element';
 import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
 import { useState } from 'react';
@@ -14,11 +15,18 @@ function SuccessTab({ loading, ...props }: Props) {
   return (
     <Tabs.TabPane {...props}>
       <Table
-        scroll={{ x: 'auto', y: 490, scrollToFirstRowOnChange: true }}
+        scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
         dataSource={cart.successList}
         loading={loading}
         size="small"
         rowKey={(record) => record.rt_store_id}
+        pagination={{
+          position: ['bottomCenter'],
+          showSizeChanger: false,
+        }}
+        title={() => (
+          <TurtleTableTitle totalCount={cart.successList.length ?? 0} />
+        )}
         expandable={{
           expandRowByClick: true,
           expandedRowKeys: [selectedRowOrder?.rt_store_id ?? -1],
@@ -43,6 +51,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '거래처 주소',
+                  width: 200,
                   render: (_, record) => record.vendor_address,
                 },
                 {
@@ -60,16 +69,17 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '분류',
+                  width: 100,
                   render: (_, record) => record.order_type,
                 },
                 {
                   title: '수량',
                   width: 100,
-                  align: 'center',
                   render: (_, record) => record.product_count,
                 },
                 {
                   title: '공급가',
+                  width: 100,
                   render: (_, record) =>
                     Number(record.product_price).toLocaleString(),
                 },
@@ -80,6 +90,7 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             title: '쇼핑몰',
+            width: 180,
             render: (_, record) => record.rt_store_name,
           },
           {
@@ -98,6 +109,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '수량 합계',
+            width: 140,
             render: (_, record) =>
               record.orders.reduce(
                 (acc, order) => acc + Number(order.product_count),
@@ -106,6 +118,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '공급가 합계',
+            width: 140,
             render: (_, record) =>
               record.orders
                 .reduce((acc, order) => acc + Number(order.product_price), 0)

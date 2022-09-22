@@ -408,6 +408,7 @@ export interface OrderSheetList {
   is_inactive: boolean; //삭제여부
   created_time: string;
   total_store_count: number;
+  order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify
 }
 
