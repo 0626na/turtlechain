@@ -60,6 +60,12 @@
     "history": "결제내역",
     "balance": {
       "": "장부"
+    },
+    "status": {
+      "all": "전체",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
     }
   },
 
