@@ -19,6 +19,7 @@ const useOrderCart = () => {
     setCart({
       successList: [],
     });
+    console.log('리셋 실행됨');
   }, [setCart]);
 
   return {
