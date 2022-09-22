@@ -1,6 +1,5 @@
 import orderAPI from '@apis/orderAPI';
 import { TeriaryButton, TurtleCard, TurtleIcon } from '@components/element';
-import { css } from '@emotion/react';
 import { PageContent, PageTitle } from '@layout/page';
 import { PageHeader, Table } from 'antd';
 import { t } from 'i18next';
@@ -29,28 +28,26 @@ function PageBody() {
       />
       <PageContent>
         {/*
-         *  매입조정 현황
+         *  결제현황
          */}
-        <div css={cardsMargin}>
-          <TurtleCard
-            value={[
-              {
-                color: 'cyan',
-                title: '성공',
-                count:
-                  getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
+        <TurtleCard
+          value={[
+            {
+              color: 'cyan',
+              title: '성공',
+              count:
+                getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
 
-                price: 0,
-              },
-              {
-                color: 'orange',
-                title: '실패',
-                count: 0,
-                price: 0,
-              },
-            ]}
-          />
-        </div>
+              price: 0,
+            },
+            {
+              color: 'orange',
+              title: '실패',
+              count: 0,
+              price: 0,
+            },
+          ]}
+        />
 
         <Table
           size="small"
@@ -83,9 +80,5 @@ function PageBody() {
     </>
   );
 }
-
-const cardsMargin = css`
-  margin-bottom: 60px;
-`;
 
 export default PageBody;
