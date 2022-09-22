@@ -256,6 +256,7 @@ interface WholesalerStore {
 }
 
 export interface StoreOrder {
+  order_id: number;
   vendor_name: string;
   vendor_address: string;
   vendor_mobile: string;

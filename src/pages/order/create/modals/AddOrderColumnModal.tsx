@@ -80,7 +80,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }
             >
               거래처명
-              <PlusCircleOutlined style={{ backgroundColor: '#DDF3F5' }} />
+              <PlusCircleOutlined style={{ color: '#DDF3F5' }} />
             </Button>
           </Col>
           <Col>

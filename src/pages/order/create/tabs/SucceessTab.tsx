@@ -1,4 +1,4 @@
-import { StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import { TurtleTableTitle } from '@components/element';
 import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
@@ -35,13 +35,23 @@ function SuccessTab({ loading, ...props }: Props) {
               setSelectedRowOrder(undefined);
               return;
             }
-            setSelectedRowOrder(record);
+            setSelectedRowOrder({
+              rt_store_id: record.rt_store_id,
+              rt_store_name: record.rt_store_name,
+              orders: record.orders.map<StoreOrder>((order, index) => {
+                return {
+                  ...order,
+                  order_id: index,
+                };
+              }),
+            });
           },
           expandedRowRender: () => (
             <Table
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
               dataSource={selectedRowOrder?.orders}
+              rowKey={(record) => record.order_id}
               loading={selectedRowOrder === undefined}
               pagination={false}
               columns={[
@@ -57,7 +67,10 @@ function SuccessTab({ loading, ...props }: Props) {
                 {
                   title: '휴대전화번호',
                   width: 200,
-                  render: (_, record) => record.vendor_mobile,
+                  render: (_, record) =>
+                    record.vendor_mobile === ''
+                      ? record.ws_store_info[0].mobiles[0].phone
+                      : record.vendor_mobile,
                 },
                 {
                   title: '거래처 상품명',
