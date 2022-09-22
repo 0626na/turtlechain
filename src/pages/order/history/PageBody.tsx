@@ -1,13 +1,19 @@
 import orderAPI from '@apis/orderAPI';
 import { TeriaryButton, TurtleCard, TurtleIcon } from '@components/element';
+import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
-import { PageHeader, Table } from 'antd';
+import { Table } from 'antd';
+import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
+import DetailModal from './modals/DetailModal';
+import useModal from '@hooks/useModal';
 
 function PageBody() {
+  const [sheetId, setSheetId] = useState(0);
+  const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const getOrderSheetsQuery = useQuery('getOrderSheetsQuery', () =>
     orderAPI.getOrderSheets({
       start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
@@ -16,12 +22,18 @@ function PageBody() {
   );
   return (
     <>
+      <DetailModal
+        visible={detailModalVisible}
+        onclose={closeDetailModal}
+        sheetId={sheetId}
+      />
       <PageHeader title={`${t('order.history')}`} />
       <PageTitle
         title={`${t('order.present')}`}
         buttons={[
           <TeriaryButton
             text="발주서 다운"
+            disabled
             icon={<TurtleIcon name="download" />}
           />,
         ]}
@@ -38,7 +50,11 @@ function PageBody() {
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
 
-              price: 0,
+              price:
+                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                  (acc, sheet) => acc + sheet.order_price,
+                  0,
+                ) ?? 0,
             },
             {
               color: 'orange',
@@ -51,7 +67,23 @@ function PageBody() {
 
         <Table
           size="small"
+          rowKey={(record) => record.id}
           dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                setSheetId(record.id);
+                openDetailModal();
+              },
+            };
+          }}
+          title={() => (
+            <TurtleTableTitle
+              totalCount={
+                getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0
+              }
+            />
+          )}
           columns={[
             {
               ellipsis: true,

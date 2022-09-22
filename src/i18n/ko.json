@@ -58,12 +58,8 @@
     "": "결제",
     "create": "결제하기",
     "history": "결제내역",
-    "trade": "장부",
-    "status": {
-      "all": "전체",
-      "request": "요청",
-      "pending": "대기",
-      "complete": "완료"
+    "balance": {
+      "": "장부"
     }
   },
 

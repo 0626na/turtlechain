@@ -188,9 +188,11 @@ const create = async (data: {
 
 // 리스트
 export interface RequestGetOverpaidBalanceList {
-  rt_store_id: number | null;
+  rt_store_id?: number;
 
   balance_type: 'balance';
+
+  search_string: string;
 
   start_date?: string;
   end_date?: string;

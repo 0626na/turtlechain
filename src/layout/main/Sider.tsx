@@ -36,7 +36,7 @@ const pathnames = {
   clearing: {
     create: 'clearing/create',
     history: 'clearing/history',
-    trade: 'clearing/trade',
+    balance: 'clearing/balance',
   },
 
   etc: {
@@ -207,8 +207,8 @@ const menus = [
             style: mainMenuContentStyle,
           },
           {
-            key: pathnames.clearing.trade,
-            label: t('clearing.trade'),
+            key: pathnames.clearing.balance,
+            label: t('clearing.balance.'),
             style: lastMainMenuContentStyle,
           },
         ],
