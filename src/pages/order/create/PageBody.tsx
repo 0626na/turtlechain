@@ -19,7 +19,6 @@ import orderAPI, {
   CreatingOrdersItem,
   OrderItemList,
   PreParsingOrderList,
-  RequestCreateOrderItemExcelParsing,
 } from '@apis/orderAPI';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
@@ -27,7 +26,7 @@ import { TurtleContentModal } from '@components/combine';
 import { RcFile } from 'antd/lib/upload';
 
 function PageBody() {
-  const { cart, ready } = useOrderCart();
+  const { cart, ready, reset } = useOrderCart();
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [preParsingList, setPreParsingList] = useState<PreParsingOrderList>({
     first_order: [],
@@ -42,10 +41,7 @@ function PageBody() {
     useModal();
 
   const createOrderExcelParseMutation = useMutation(
-    ['sdfdsf'],
-    (data: RequestCreateOrderItemExcelParsing) => {
-      return orderAPI.createOrderExcelParsing(data);
-    },
+    orderAPI.createOrderExcelParsing,
     {
       onSuccess: (data) => {
         ready(data);
@@ -86,8 +82,10 @@ function PageBody() {
   //발주서 등록 (발주 Item)
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
-      if (data.msg === 'success')
+      if (data.msg === 'success') {
         message.success('발주서 등록이 완료되었습니다.');
+        reset();
+      }
     },
   });
 
@@ -99,7 +97,6 @@ function PageBody() {
         setPreParsingList(data.responseData.data);
         setFileList(data.files);
         if (data.responseData.data.third_order.length === 0) {
-          console.log('됨');
           createOrderExcelParseMutation.mutate({ files: data.files });
           return;
         }
