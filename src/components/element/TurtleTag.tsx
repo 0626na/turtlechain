@@ -56,6 +56,7 @@ const container = css`
 
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: 4px;
 
   font-weight: 400;
