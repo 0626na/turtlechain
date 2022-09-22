@@ -5,7 +5,6 @@ import { PageContent } from '@layout/page';
 import { Badge, Button, Col, Collapse, DatePicker, Row, Space } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { setDatasets } from 'react-chartjs-2/dist/utils';
 import ClearingPanel from './panels/ClearingPanel';
 import WarehousingPanel from './panels/WarehousingPanel';
 
@@ -49,7 +48,7 @@ function PageBody() {
                   cart.clearingRequestDate &&
                     moment().format('YYYY-MM-DD') !==
                       moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                    greenButton,
+                    greenDatePicker,
                 ]}
                 onChange={(_, date) => {
                   console.log(date);
