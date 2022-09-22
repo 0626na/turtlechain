@@ -188,7 +188,8 @@ const create = async (data: {
 
 // 리스트
 export interface RequestGetOverpaidBalanceList {
-  rt_store_id: number;
+  rt_store_id: number | null;
+
   balance_type: 'balance';
 
   start_date?: string;
@@ -197,6 +198,7 @@ export interface RequestGetOverpaidBalanceList {
   vendor_id?: number;
   subtract_amount?: number;
   refund_amount?: number;
+  page: number;
 }
 
 export interface ResponseGetOverpaidBalanceList {
