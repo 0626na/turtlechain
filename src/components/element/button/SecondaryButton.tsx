@@ -5,12 +5,12 @@ import { ReactComponent as Plusicon } from '@icons/plus.svg';
 import { ButtonProps } from 'antd/es/button';
 interface Props extends ButtonProps {
   children: React.ReactNode;
-  htmlType?: 'submit';
+  htmlType?: 'submit' | 'button';
 }
 
-function SecondaryButton({ children, ...props }: Props) {
+function SecondaryButton({ children, htmlType = 'button', ...props }: Props) {
   return (
-    <Button css={button} {...props}>
+    <Button css={button} htmlType={htmlType} {...props}>
       <Plusicon css={icon} />
       <TurtleText>{children}</TurtleText>
     </Button>

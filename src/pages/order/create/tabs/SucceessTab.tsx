@@ -47,6 +47,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '휴대전화번호',
+                  width: 200,
                   render: (_, record) => record.vendor_mobile,
                 },
                 {
@@ -63,6 +64,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '수량',
+                  width: 100,
                   align: 'center',
                   render: (_, record) => record.product_count,
                 },
