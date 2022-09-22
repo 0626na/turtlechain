@@ -392,11 +392,14 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
     },
   });
 
-  return response.data;
+  return {
+    files: data.files,
+    responseData: response.data,
+  };
 };
 
 /*
- * 발주서 내역조회
+ * 발주내역 조회
  */
 
 export interface OrderSheetList {
@@ -428,6 +431,53 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
   return response.data;
 };
 
+/*
+ *  발주내역 상세조회
+ */
+
+export interface OrderHistoryItem {
+  ws_store_id: number; //도매 ID
+  vendor_name: string; //거래처명
+  address: string; //거래처주소
+  mobile: string;
+  name: string; //상품명
+  option: string;
+  type: string; //분류
+  count: number; //요청수량
+  price: number; //공급가
+  memo: string;
+}
+
+export interface OrderHistorySheet {
+  rt_store_id: number;
+  rt_store_name: string;
+  created_time: string;
+  total_store_count: number;
+  total_item_subcount: number;
+  total_price: number;
+  total_item_count: number;
+}
+
+export interface RequestGetOrderItem {
+  sheet_id: number;
+}
+
+export interface ResponseGetOrderItem {
+  msg: string;
+  data: {
+    successes: OrderHistoryItem[];
+    fails: OrderHistoryItem[];
+    order_sheet: OrderHistorySheet;
+  };
+}
+
+const getOrderHistory = async (params: RequestGetOrderItem) => {
+  const url = 'order/item';
+  const response = await v2Axios.get<ResponseGetOrderItem>(url, { params });
+
+  return response.data;
+};
+
 const orderAPI = {
   getList,
   get,
@@ -440,6 +490,7 @@ const orderAPI = {
   createOrderItem,
   getOrderSheets,
   createPreParsing,
+  getOrderHistory,
 };
 
 export default orderAPI;
