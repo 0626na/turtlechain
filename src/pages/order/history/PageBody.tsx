@@ -78,7 +78,7 @@ function PageBody() {
           dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
           onRow={(record) => {
             return {
-              onDoubleClick: () => {
+              onClick: () => {
                 setSheetId(record.id);
                 openDetailModal();
               },
