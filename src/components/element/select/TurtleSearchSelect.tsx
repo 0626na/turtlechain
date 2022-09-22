@@ -7,7 +7,7 @@ import TurtleIcon from '../icon/TurtleIcon';
 interface Props {
   defaultValue?: string;
   value?: string;
-  onChange: (value: unknown) => void;
+  onChange: (value: string) => void;
   items: { value: string; name: string; icon?: React.ReactNode }[];
 }
 
