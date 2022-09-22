@@ -18,9 +18,7 @@ function TurtleCard({ value }: Props) {
     <div css={cardsContainer}>
       {value.map(({ color, title, count, price }) => (
         <div css={card} key={title}>
-          <div css={tagContainer}>
-            <TurtleTag color={color}>{title}</TurtleTag>
-          </div>
+          <TurtleTag color={color}>{title}</TurtleTag>
 
           <div css={metaContainer}>
             <TurtleText css={metaLeft}>{count}</TurtleText>
@@ -51,10 +49,6 @@ const card = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const tagContainer = css`
-  width: 37px;
 `;
 
 const metaContainer = css`
