@@ -12,6 +12,7 @@ import { ReactComponent as MoreIcon } from '@icons/more.svg';
 import { ReactComponent as WarningIcon } from '@icons/warning.svg';
 import { ReactComponent as SiderSelectIcon } from '@icons/siderSelect.svg';
 
+import { ReactComponent as DownLoadIcon } from '@icons/download.svg';
 import { ReactComponent as AddReserveIcon } from '@icons/addReserve.svg';
 import { ReactComponent as AddExchangeRefundIcon } from '@icons/addExchangeRefund.svg';
 
@@ -21,11 +22,13 @@ import { ReactComponent as ArrowRightIcon } from '@icons/arrowRight.svg';
 import { ReactComponent as ProcessIcon } from '@icons/process.svg';
 
 import { css } from '@emotion/react';
+import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
     | 'delete'
+    | 'download'
     | 'modalClose'
     | 'matching'
     | 'misMatching'
@@ -169,6 +172,13 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <ArrowRightIcon />
+      </div>
+    );
+  }
+  if (name === 'download') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <DownLoadIcon />
       </div>
     );
   }

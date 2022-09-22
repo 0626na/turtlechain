@@ -22,7 +22,8 @@
   "order": {
     "": "발주",
     "create": "발주등록",
-    "history": "발주내역"
+    "history": "발주내역",
+    "present": "발주현황"
   },
 
   "warehousing": {
@@ -66,7 +67,17 @@
   },
 
   "auth": {
-    "logout": "로그아웃"
+    "logout": "로그아웃",
+    "login": "로그인",
+    "autoLogin": "자동 로그인",
+    "id": "아이디",
+    "password": "비밀번호",
+    "findId": "아이디 찾기",
+    "resetPassword": "비밀번호 재설정",
+    "signUp": "서비스 가입",
+    "aboutMembership": "요금플랜 알아보기",
+    "wonderMembership": "다양한 요금제가 궁금하신가요?",
+    "notMember": "아직 회원이 아니신가요?"
   },
 
   "table": {
@@ -113,5 +124,12 @@
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기"
+  },
+
+  "message": {
+    "networkError": "네트워크가 불안정합니다. 새로고침 후 다시 시도해주세요.",
+    "enterId": "아이디를 입력해주세요.",
+    "enterPassword": "비밀번호를 입력해주세요.",
+    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요."
   }
 }

@@ -8,13 +8,18 @@ interface Props {
   children: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
-  htmlType?: 'submit';
+  htmlType?: 'submit' | 'button';
   href?: string;
   target?: string;
   onClick?: () => void;
 }
 
-function PrimaryButton({ size = 'default', children, ...props }: Props) {
+function PrimaryButton({
+  size = 'default',
+  children,
+  htmlType = 'button',
+  ...props
+}: Props) {
   if (size === 'large') {
     return (
       <Button css={largePrimary} {...props}>
@@ -33,7 +38,7 @@ function PrimaryButton({ size = 'default', children, ...props }: Props) {
 
   // default
   return (
-    <Button css={defaultPrimary} {...props}>
+    <Button css={defaultPrimary} htmlType={htmlType} {...props}>
       <TurtleText>{children}</TurtleText>
     </Button>
   );

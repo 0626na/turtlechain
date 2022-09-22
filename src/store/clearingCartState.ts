@@ -3,6 +3,7 @@ import { ClearingInfo } from '@apis/clearingAPI';
 // import { AdjustmentItemShow } from '@apis/adjustmentAPI';
 
 export interface ClearingCartState {
+  clearingRequestDate: string;
   resultList: ClearingInfo[];
   adjustmentSubtractList: ClearingInfo[];
   reserveSubtractList: ClearingInfo[];
@@ -13,6 +14,7 @@ export interface ClearingCartState {
 export const clearingCartState = atom<ClearingCartState>({
   key: 'clearingCart',
   default: {
+    clearingRequestDate: '',
     resultList: [],
     adjustmentSubtractList: [], // 매입차감
     reserveSubtractList: [], // 미송 차감
