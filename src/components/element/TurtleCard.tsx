@@ -6,7 +6,7 @@ import TurtleText from './TurtleText';
 
 interface Props {
   value: {
-    color: string;
+    color: 'orange' | 'cyan' | 'green';
     title: string;
     count: number;
     price: number;
@@ -37,6 +37,7 @@ function TurtleCard({ value }: Props) {
 const cardsContainer = css`
   display: flex;
   gap: 20px;
+  margin-bottom: 30px;
 `;
 
 const card = css`
