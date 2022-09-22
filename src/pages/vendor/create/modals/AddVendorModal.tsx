@@ -63,7 +63,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       }
       message.success('성공적으로 등록하였습니다.');
       form.resetFields();
-      navigate('/vendor/list');
+      navigate('/vendor/history');
     },
   });
 

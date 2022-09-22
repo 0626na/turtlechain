@@ -115,7 +115,7 @@
     "totalWarehousingCount": "입고 수량 합계",
     "isReserveWarehousing": "미송입고여부",
     "progressStatus": "진행 상태",
-    "createdDate": "등록 날짜"
+    "createdDate": "등록 일자"
   },
 
   "wholesaler": {},

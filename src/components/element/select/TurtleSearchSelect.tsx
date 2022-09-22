@@ -5,14 +5,16 @@ import { css } from '@emotion/react';
 import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props {
-  value: string;
+  defaultValue?: string;
+  value?: string;
   onChange: (value: unknown) => void;
   items: { value: string; name: string; icon?: React.ReactNode }[];
 }
 
-function TurtleSearchSelect({ items, onChange, value }: Props) {
+function TurtleSearchSelect({ items, onChange, value, defaultValue }: Props) {
   return (
     <Select
+      defaultValue={defaultValue}
       css={select}
       bordered={false}
       value={value}

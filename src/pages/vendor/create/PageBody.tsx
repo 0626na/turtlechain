@@ -36,7 +36,7 @@ function PageBody() {
   const navigate = useNavigate();
 
   const { store } = useStore();
-  const { cart, ready } = useVendorCart();
+  const { cart, setCart, ready } = useVendorCart();
 
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
@@ -146,6 +146,12 @@ function PageBody() {
               is_vat_included: vendor.isVatIncluded,
             })),
           );
+
+          setCart(() => ({
+            successList: [],
+            pendingList: [],
+            failList: [],
+          }));
         }}
         loading={inventoryMutation.isLoading}
       />
