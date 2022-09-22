@@ -1,3 +1,4 @@
+import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 // 주문 등록 추가 타입
@@ -185,11 +186,260 @@ const create = async function (data: {
   return itemResponse.data;
 };
 
+/*
+ * 발주서 양식 조회
+ */
+
+export interface ResponseGetOrderFormat {
+  msg: string;
+  data: {
+    vendor_name: string[];
+    vendor_address: string[];
+    vendor_mobile: string[];
+    product_name: string[];
+    product_option: string[];
+    product_count: string[];
+    product_price: string[];
+    order_type: string[];
+    memo: string[];
+  };
+}
+
+const getOrderFormat = async () => {
+  const url = 'order/format';
+  const response = await v2Axios.get<ResponseGetOrderFormat>(url);
+
+  return response.data;
+};
+
+/*
+ * 발주서 양식 생성
+ */
+
+export interface RequestCreateOrderFormat {
+  vendor_name: string[];
+  vendor_address: string[];
+  vendor_mobile: string[];
+  product_name: string[];
+  product_option: string[];
+  product_count: string[];
+  product_price: string[];
+  order_type: string[];
+  memo: string[];
+}
+
+export interface ResponseCreateOrderFormat {
+  msg: string;
+}
+
+const createOrderFormat = async (data: RequestCreateOrderFormat) => {
+  const url = 'order/format';
+  const response = await v2Axios.post<ResponseCreateOrderFormat>(url, data);
+
+  return response.data;
+};
+
+/*
+ * 발주서 엑셀 파싱
+ */
+
+interface WholesalerMobile {
+  id: number;
+  phone: string;
+}
+
+interface WholesalerStore {
+  id: number;
+  name: string;
+  address: string;
+  mobiles: WholesalerMobile[];
+}
+
+export interface StoreOrder {
+  vendor_name: string;
+  vendor_address: string;
+  vendor_mobile: string;
+  product_name: string;
+  product_option: string;
+  product_price: string;
+  product_count: string;
+  order_type: string;
+  memo: string;
+
+  ws_store_info: WholesalerStore[];
+}
+
+export interface StoreOrderItemExcelParsing {
+  rt_store_id: number;
+  rt_store_name: string;
+  orders: StoreOrder[];
+}
+
+export interface RequestCreateOrderItemExcelParsing {
+  files: RcFile[];
+}
+
+export interface ResponseCreateOrderItemExcelParsing {
+  msg: string;
+  data: {
+    successes: StoreOrderItemExcelParsing[];
+  };
+}
+
+const createOrderExcelParsing = async (
+  data: RequestCreateOrderItemExcelParsing,
+) => {
+  const url = 'order/parsing';
+  const formData = new FormData();
+  data.files.map((file) => formData.append('files', file));
+  const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
+    url,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+
+  return response.data;
+};
+
+/*
+ * 발주 등록
+ */
+
+export interface RequestCreateOrderSheet {
+  rt_store_ids: number[];
+}
+
+export interface ResponseCreateOrderSheet {
+  msg: string;
+}
+
+const createOrderSheet = async (data: RequestCreateOrderSheet) => {
+  const url = 'order/sheet';
+  const response = await v2Axios.post<ResponseCreateOrderSheet>(url, data);
+
+  return response.data;
+};
+
+export interface CreatingOrdersItem {
+  vendor_name: string;
+  vendor_address: string;
+  vendor_mobile: string;
+  product_name: string;
+  product_option: string;
+  product_count: number;
+  product_price: number;
+  order_type: string;
+  memo: string;
+  ws_store_id: number;
+}
+
+export interface OrderItemList {
+  rt_store_id: number;
+  orders: CreatingOrdersItem[];
+}
+
+export interface RequestCreateOrderItem {
+  rt_stores: OrderItemList[];
+}
+
+export interface ResponseCreateOrderItem {
+  msg: string;
+}
+
+const createOrderItem = async (data: RequestCreateOrderItem) => {
+  const url = 'order/item';
+  const response = await v2Axios.post<ResponseCreateOrderItem>(url, data);
+
+  return response.data;
+};
+
+/*
+ * 발주 등록 여부 확인
+ * 발주 등록은 쇼핑몰당 하루 2회 가능하다.
+ */
+
+interface PreParsingOrder {
+  rt_store_id: number;
+  rt_store_name: string;
+}
+
+export interface PreParsingOrderList {
+  first_order: PreParsingOrder[];
+  second_order: PreParsingOrder[];
+  third_order: PreParsingOrder[];
+}
+
+export interface RequestCreatePreParsing {
+  files: RcFile[];
+}
+
+export interface ResponseCreatePreParsing {
+  msg: string;
+  data: PreParsingOrderList;
+}
+
+const createPreParsing = async (data: RequestCreatePreParsing) => {
+  const url = 'order/parsing/pre-parsing';
+  const formData = new FormData();
+  await data.files.map((file) => formData.append('files', file));
+  const response = await v2Axios.post<ResponseCreatePreParsing>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data;
+};
+
+/*
+ * 발주서 내역조회
+ */
+
+export interface OrderSheetList {
+  id: number;
+  rt_store_name: string; //쇼핑몰명
+  is_inactive: boolean; //삭제여부
+  created_time: string;
+  total_store_count: number;
+  type: 'new' | 'modify'; //1차: new, 2차: modify
+}
+
+export interface RequestGetOrderSheet {
+  //rt_store_id: number;
+  start_date: string;
+  end_date: string;
+}
+
+export interface ResponseGetOrderSheet {
+  msg: string;
+  data: {
+    order_sheet_list: OrderSheetList[];
+  };
+}
+
+const getOrderSheets = async (params: RequestGetOrderSheet) => {
+  const url = 'order/sheet';
+  const response = await v2Axios.get<ResponseGetOrderSheet>(url, { params });
+
+  return response.data;
+};
+
 const orderAPI = {
   getList,
   get,
   getItem,
   create,
+  getOrderFormat,
+  createOrderFormat,
+  createOrderExcelParsing,
+  createOrderSheet,
+  createOrderItem,
+  getOrderSheets,
+  createPreParsing,
 };
 
 export default orderAPI;
