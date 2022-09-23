@@ -37,7 +37,7 @@ const container = css`
   height: 20px;
   padding: 0px 7px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border-radius: 4px;
 
