@@ -4,7 +4,7 @@ import { Pagination, Row, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { phonePattern } from '@utils/pattern';
-import vendorAPI, { RequestGet } from '@apis/vendorAPI';
+import vendorAPI, { RequestGet, Vendor } from '@apis/vendorAPI';
 import { TurtleTableTitle } from '@components/element';
 
 import { css } from '@emotion/react';
@@ -16,14 +16,15 @@ interface Props {
   visible: boolean;
   closeModal: () => void;
   onClickSelect: (
-    vendor_id: number,
-    vendor_name: string,
-    vendor_address: string,
-    vendor_phone: string,
-    is_vat_included?: boolean,
-    vendor_account_bank?: string,
-    vendor_account_number?: string,
-    vendor_account_holder?: string,
+    record: Vendor,
+    // vendor_id: number,
+    // vendor_name: string,
+    // vendor_address: string,
+    // vendor_phone: string,
+    // is_vat_included?: boolean,
+    // vendor_account_bank?: string,
+    // vendor_account_number?: string,
+    // vendor_account_holder?: string,
   ) => void;
 }
 
@@ -111,16 +112,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
               onClick: (event) => {
                 console.log(record);
 
-                onClickSelect(
-                  record.id,
-                  record.vendor_name,
-                  record.vendor_address,
-                  record.vendor_phone.phone,
-                  record.is_vat_included,
-                  record.vendor_account.bank,
-                  record.vendor_account.account_number,
-                  record.vendor_account.account_holder,
-                );
+                onClickSelect(record);
               },
             };
           }}

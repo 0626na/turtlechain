@@ -35,10 +35,10 @@ function TurtleTag({ children, color }: Props) {
 
 const container = css`
   height: 20px;
-  width: 37px;
+
   padding: 0px 7px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border-radius: 4px;
 

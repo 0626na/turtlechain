@@ -331,11 +331,7 @@ function PageBody() {
               render: (_, record) => {
                 const { is_cleared } = record;
                 return (
-                  <div
-                    css={css`
-                      width: 36.71px;
-                    `}
-                  >
+                  <div>
                     {is_cleared ? (
                       <TurtleTag color="cyan">마감</TurtleTag>
                     ) : (

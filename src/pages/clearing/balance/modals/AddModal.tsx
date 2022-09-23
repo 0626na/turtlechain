@@ -11,7 +11,7 @@ import {
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import vendorAPI from '@apis/vendorAPI';
+import vendorAPI, { Vendor } from '@apis/vendorAPI';
 import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
 import SearchVendorModal from '@components/combine/modal/SearchVendorModal';
@@ -42,24 +42,15 @@ function AddModal({ visible, closeModal }: Props) {
     },
   });
 
-  const selectVendor = (
-    vendor_id: number,
-    vendor_name: string,
-    vendor_address: string,
-    vendor_phone: string,
-    is_vat_included?: boolean,
-    vendor_account_bank?: string,
-    vendor_account_number?: string,
-    vendor_account_holder?: string,
-  ) => {
+  const selectVendor = (record: Vendor) => {
     form.setFieldsValue({
-      vendor_id,
-      vendor_name,
-      vendor_address,
-      vendor_phone,
-      vendor_account_bank,
-      vendor_account_number,
-      vendor_account_holder,
+      vendor_id: record.id,
+      vendor_name: record.vendor_name,
+      vendor_address: record.vendor_address,
+      vendor_phone: record.vendor_phone.phone,
+      vendor_account_bank: record.vendor_account.bank,
+      vendor_account_number: record.vendor_account.account_number,
+      vendor_account_holder: record.vendor_account.account_holder,
       //
     });
     closeVendorModal();
