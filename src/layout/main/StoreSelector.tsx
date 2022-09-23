@@ -4,6 +4,7 @@ import { TurtleIcon, TurtleImg } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
+import { t } from 'i18next';
 
 function StoreSelector() {
   const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
@@ -29,7 +30,7 @@ function StoreSelector() {
           css={menu}
           selectable
           onSelect={({ key }) => {
-            selectStore(Number(key), 'warning message');
+            selectStore(Number(key), t('message.warningChangeStore'));
           }}
           items={store.list.map((store) => ({
             style: menuItemContainer,

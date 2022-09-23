@@ -7,35 +7,29 @@ interface Props {
   size?: 'default' | 'large' | 'small';
   children: React.ReactNode;
   icon?: React.ReactNode;
-  onClick?: (e: any) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 function SelectButton({ children, size = 'default', icon, ...props }: Props) {
-  if (size === 'large') {
-    return (
-      <Button css={[button, { width: 129 }]} {...props}>
-        {children}
-        {icon && <div>{icon}</div>}
-      </Button>
-    );
-  }
-
-  if (size === 'small') {
-    return (
-      <Button css={[button, { width: 60 }]} {...props}>
-        {children}
-        {icon && <div>{icon}</div>}
-      </Button>
-    );
-  }
-
   return (
-    <Button css={[button, { width: 88 }]} {...props}>
+    <Button css={[button, sizes[size]]} {...props}>
       {children}
       {icon && <div>{icon}</div>}
     </Button>
   );
 }
+
+const sizes = {
+  large: css`
+    width: 129px;
+  `,
+  small: css`
+    width: 60px;
+  `,
+  default: css`
+    width: 88px;
+  `,
+};
 
 const button = css`
   height: 26px;

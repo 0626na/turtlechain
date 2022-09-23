@@ -52,7 +52,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     onSuccess: () => {
       // message.success(t('message.success create clearing'));
       clickCreate();
-      navigate('/clearing/list');
+      navigate('/clearing/history');
     },
   });
 
