@@ -11,7 +11,7 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Button, Form, Pagination, Row, Table, Tabs } from 'antd';
+import { Form, Pagination, Radio, Row, Select, Steps, Table, Tabs } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 
@@ -84,14 +84,44 @@ function PageBody() {
           background-color: #f9f9fa;
         `}
       >
-        <TurtleTabs color="dark">
+        <TurtleTabs color="dark" defaultActiveKey="1">
           <Tabs.TabPane key="0" tab="계정관리">
             <div css={tabContent}>
               <UserTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="1" tab="사업자 관리">
-            <div css={tabContent}>ㅁ</div>
+            <div css={tabContent}>
+              <Card title="사업자 정보" icon={<TurtleIcon name="user" />}>
+                <Form
+                  onValuesChange={(changedValues, allValues) => {
+                    console.log(changedValues, allValues); //  수정버튼 활성화.
+                  }}
+                  colon={false}
+                  labelCol={{ span: 7 }}
+                  wrapperCol={{ span: 17 }}
+                >
+                  <Form.Item label="사업자 종류" name="aaa">
+                    <Radio.Group>
+                      {['entity', 'personal', 'simple'].map((option) => (
+                        <Radio key={option} value={option}>
+                          {t(`biz ${option}`)}
+                        </Radio>
+                      ))}
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item label="사업자명(법인명)">
+                    <TurtleFormInput />
+                  </Form.Item>
+                  <Form.Item label="이메일">
+                    <TurtleFormInput />
+                  </Form.Item>
+                  <Form.Item label="휴대전화 번호">
+                    <TurtleFormInput />
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="2" tab="쇼핑몰 관리">
             <div css={tabContent}>ㅁ</div>
