@@ -134,37 +134,36 @@ function PageBody() {
             {
               ellipsis: true,
               width: 150,
-              align: 'center',
-              title: t('clearing.recent date'),
+
+              title: t('table.vendorName'),
               render: (_, record) =>
                 moment(record.created_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
-              title: t('vendor.name'),
+              title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              title: t('vendor.address'),
-              render: (_, record) => record.vendor_info.vendor_address,
+              align: 'right',
+              title: t('table.subtractAmount'),
+              // render: (_, record) => record.subtract_amount?.toLocaleString(),
+              render: (_, record) => '사용가능 금액',
             },
 
             {
               ellipsis: true,
-              title: '사용가능 금액',
-              render: (_, record) => record.overpaid_amount?.toLocaleString(),
+              align: 'right',
+              title: t('table.unpaidAmount'),
+              render: (_, record) => record.unpaid_amount?.toLocaleString(),
             },
 
-            // {
-            //   ellipsis: true,
-            //   title: '결제요청 금액',
-            //   render: (_, record) => record.overpaid_amount?.toLocaleString(),
-            // },
             {
               ellipsis: true,
-              title: '환불예정 금액',
-              render: (_, record) => record.refund_amount.toLocaleString(),
+              align: 'right',
+              title: t('table.refundAmount'),
+              render: (_, record) => record.refund_amount?.toLocaleString(),
             },
           ]}
         />
