@@ -1,22 +1,68 @@
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
-import { TurtleTableTitle } from '@components/element';
+import { SearchFilter } from '@components/combine';
+import {
+  TurtleSearchInput,
+  TurtleSearchSelect,
+  TurtleTableTitle,
+} from '@components/element';
+import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
-import { Table, TabPaneProps, Tabs } from 'antd';
-import { useState } from 'react';
+import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
+import { useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 
 function SuccessTab({ loading, ...props }: Props) {
+  const options = [
+    {
+      name: '쇼핑몰명',
+      value: 'name',
+    },
+    {
+      name: '거래처명',
+      value: 'vedor_name',
+    },
+    {
+      name: '휴대번호',
+      value: 'mobile',
+    },
+  ];
   const { cart } = useOrderCart();
+  const [searchQuery, setSearchQuery] = useState({
+    type: 'name',
+    search_string: '',
+  });
+  const filteredList = useMemo(
+    () =>
+      cart.successList.filter((item) => {
+        const { type, search_string } = searchQuery;
+        if (type === 'name') {
+          return item.rt_store_name.toLowerCase().includes(search_string);
+        }
+        if (type === 'vendor_name') {
+          return item.orders.filter((item) => {
+            return item.vendor_name.toLowerCase().includes(search_string);
+          });
+        }
+        if (type === 'mobile') {
+          return item.orders.filter((item) => {
+            return item.vendor_mobile.toLowerCase().includes(search_string);
+          });
+        }
+        return true;
+      }),
+    [cart.successList, searchQuery],
+  );
   const [selectedRowOrder, setSelectedRowOrder] =
     useState<StoreOrderItemExcelParsing>();
+
   return (
     <Tabs.TabPane {...props}>
       <Table
         scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
-        dataSource={cart.successList}
+        dataSource={filteredList}
         loading={loading}
         size="small"
         rowKey={(record) => record.rt_store_id}
@@ -25,7 +71,38 @@ function SuccessTab({ loading, ...props }: Props) {
           showSizeChanger: false,
         }}
         title={() => (
-          <TurtleTableTitle totalCount={cart.successList.length ?? 0} />
+          <TurtleTableTitle
+            totalCount={cart.successList.length ?? 0}
+            rightContent={
+              <Row>
+                <Col css={marginRight}>
+                  <TurtleSearchSelect
+                    value={searchQuery.type}
+                    onChange={(value) => {
+                      setSearchQuery({
+                        ...searchQuery,
+                        type: value,
+                      });
+                    }}
+                    items={options}
+                  />
+                </Col>
+
+                <Col>
+                  <TurtleSearchInput
+                    placeholder="검색어를 입력하세요"
+                    value={searchQuery.search_string}
+                    onChange={(e) => {
+                      setSearchQuery({
+                        ...searchQuery,
+                        search_string: e.currentTarget.value,
+                      });
+                    }}
+                  />
+                </Col>
+              </Row>
+            }
+          />
         )}
         expandable={{
           expandRowByClick: true,
@@ -142,5 +219,9 @@ function SuccessTab({ loading, ...props }: Props) {
     </Tabs.TabPane>
   );
 }
+
+const marginRight = css`
+  margin-right: 6px;
+`;
 
 export default SuccessTab;

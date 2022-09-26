@@ -10,6 +10,7 @@ const useOrderCart = () => {
     (data: ResponseCreateOrderItemExcelParsing) => {
       setCart({
         successList: data.data.successes,
+        failList: data.data.fails,
       });
     },
     [setCart],
@@ -18,8 +19,8 @@ const useOrderCart = () => {
   const reset = useCallback(() => {
     setCart({
       successList: [],
+      failList: [],
     });
-    console.log('리셋 실행됨');
   }, [setCart]);
 
   return {

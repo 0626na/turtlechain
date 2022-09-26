@@ -284,6 +284,7 @@ export interface ResponseCreateOrderItemExcelParsing {
   msg: string;
   data: {
     successes: StoreOrderItemExcelParsing[];
+    fails: StoreOrderItemExcelParsing[];
   };
 }
 

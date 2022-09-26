@@ -26,6 +26,7 @@ import { TurtleContentModal } from '@components/combine';
 import { RcFile } from 'antd/lib/upload';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import FailTab from './tabs/FailTab';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ function PageBody() {
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
-        message.success('발주서 등록이 완료되었습니다.');
+        message.success('발주서 등록이 완료되었습니다.', 4);
         closeConfirmModal();
         reset();
         navigate('/order/history');
@@ -180,7 +181,7 @@ function PageBody() {
       {/* 발주등록 확인 모달 */}
       <TurtleContentModal
         size="small"
-        title="정말 발주할까요"
+        title="정말 발주할까요?"
         visible={confirmModalVisible}
         onClose={closeConfirmModal}
       >
@@ -277,11 +278,11 @@ function PageBody() {
             tab={`성공(${cart.successList.length})`}
             loading={false}
           />
-          {/* <FailTab
+          <FailTab
             key="fail"
             tab={`실패(${cart.failList.length})`}
             loading={false}
-          /> */}
+          />
         </TurtleTabs>
       </PageContent>
 
