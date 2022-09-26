@@ -11,7 +11,7 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Form, Pagination, Row, Table, Tabs } from 'antd';
+import { Button, Form, Pagination, Row, Table, Tabs } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 
@@ -24,6 +24,7 @@ import moment from 'moment';
 import { css } from '@emotion/react';
 import { FileMarkdownFilled } from '@ant-design/icons';
 import Card from './Card';
+import UserTab from './tabs/UserTab';
 // import AddModal from './modals/AddModal';
 
 function PageBody() {
@@ -75,7 +76,7 @@ function PageBody() {
         onClose={detailModalClose}
       /> */}
 
-      <PageHeader title="설정" />
+      <PageHeader title="설정" />
 
       <div // pageContent
         css={css`
@@ -86,26 +87,7 @@ function PageBody() {
         <TurtleTabs color="dark">
           <Tabs.TabPane key="0" tab="계정관리">
             <div css={tabContent}>
-              <Card title="기본정보" icon={<TurtleIcon name="user" />}>
-                <Form
-                  colon={false}
-                  labelCol={{ span: 7 }}
-                  wrapperCol={{ span: 17 }}
-                >
-                  <Form.Item label="이름">
-                    <TurtleFormInput />
-                  </Form.Item>
-                  <Form.Item label="아이디">
-                    <TurtleFormInput />
-                  </Form.Item>
-                  <Form.Item label="이메일">
-                    <TurtleFormInput />
-                  </Form.Item>
-                  <Form.Item label="휴대전화 번호">
-                    <TurtleFormInput />
-                  </Form.Item>
-                </Form>
-              </Card>
+              <UserTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="1" tab="사업자 관리">
