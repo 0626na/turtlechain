@@ -16,6 +16,7 @@ import useStore from '@hooks/useStore';
 import useProductCart from '@hooks/useProductCart';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
+import { Vendor } from '@apis/vendorAPI';
 
 interface Props {
   visible: boolean;
@@ -47,12 +48,12 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   );
 
   const selectVendor = useCallback(
-    (vendor_id, vendor_name, vendor_address, vendor_phone) => {
+    (record: Vendor) => {
       form.setFieldsValue({
-        vendor_id,
-        vendor_name,
-        vendor_address,
-        vendor_phone,
+        vendor_id: record.id,
+        vendor_name: record.vendor_name,
+        vendor_address: record.vendor_address,
+        vendor_phone: record.vendor_phone.phone,
         product_code: undefined,
       });
       closeVendorModal();
