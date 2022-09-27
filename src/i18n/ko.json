@@ -132,7 +132,10 @@
     "paymentRequestDate": "결제 요청 일자",
     "paymentCompleteDate": "결제 완료 일자",
     "paymentPrice": "결제금액",
-    "totalVendorCount": "총 거래처 수"
+    "totalVendorCount": "총 거래처 수",
+    "subtract": "차감",
+    "refund": "환불",
+    "unpaid": "결제"
   },
 
   "wholesaler": {},
