@@ -27,6 +27,7 @@ import TurtleUpload from './TurtleUpload';
 import TurtleTabs from './TurtleTabs';
 import TurtleIcon from './icon/TurtleIcon';
 import MemoIcon from './icon/MemoIcon';
+import ArrowRightIcon from './icon/ArrowRightIcon';
 import TurtleFormSelect from './select/TurtleFormSelect';
 import AddButton from './button/AddButton';
 import TurtleCard from './TurtleCard';
@@ -66,6 +67,7 @@ export {
   //icon
   TurtleIcon,
   MemoIcon,
+  ArrowRightIcon,
 
   //
   TurtleDropdown,
