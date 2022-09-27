@@ -1,6 +1,6 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon, TurtleIcon, TurtleImg } from '@components/element';
+import { TurtleIcon, TurtleImg } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
