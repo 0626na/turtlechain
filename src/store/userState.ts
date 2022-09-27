@@ -1,13 +1,15 @@
+import { UserInfo } from '@apis/authAPI';
 import { atom } from 'recoil';
 
-interface UserState {
-  type: 'rt' | 'pi';
-  name: string;
-}
-export const userState = atom<UserState>({
+export const userState = atom<UserInfo>({
   key: 'user',
   default: {
-    type: 'rt',
+    id: undefined,
+    login_id: '',
     name: '',
+    email: '',
+    mobile_phone: '',
+    company_id: undefined,
+    type: 'rt',
   },
 });

@@ -17,7 +17,7 @@ import {
   LockOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import { useLogin } from '@hooks/index';
+import { useLogin, useUser } from '@hooks/index';
 import authAPI, { RequestLogin } from '@apis/authAPI';
 import { AxiosError } from 'axios';
 import { css } from '@emotion/react';
@@ -26,6 +26,7 @@ import { TurtleText } from '@components/element';
 function LoginForm() {
   const navigate = useNavigate();
   const { login, autoLogin } = useLogin();
+  const { setUser } = useUser();
   const [form] = Form.useForm();
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -55,9 +56,12 @@ function LoginForm() {
           return;
         }
       },
-      onSuccess: ({ token }) => {
+      onSuccess: ({ token, user_info }) => {
+        setUser({ ...user_info });
+
         if (form.getFieldValue('autoLogin')) {
           autoLogin(token);
+
           navigate('/home');
           return;
         }
