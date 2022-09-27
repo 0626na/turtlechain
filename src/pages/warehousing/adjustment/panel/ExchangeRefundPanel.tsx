@@ -3,6 +3,7 @@ import { AdjustmentItem } from '@apis/adjustmentAPI';
 import InputModal from '@components/combine/modal/InputModal';
 
 import {
+  ArrowRightIcon,
   MemoIcon,
   TurtleIcon,
   TurtleTableTitle,
@@ -114,7 +115,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
             {activeKey === '2' ? (
               <TurtleIcon name="arrowDown" />
             ) : (
-              <TurtleIcon name="arrowRight" />
+              <ArrowRightIcon />
             )}
           </TurtleText>
         }
