@@ -31,6 +31,7 @@ export interface ResponseVerify {
     email: string;
     mobile_phone: string;
     company_id: number;
+    type: 'rt' | 'pi';
   };
 }
 

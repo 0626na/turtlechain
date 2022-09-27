@@ -1,6 +1,7 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import clearingAPI from '@apis/clearingAPI';
 import {
+  ArrowRightIcon,
   PrimaryButton,
   TurtleIcon,
   TurtleTableTitle,
@@ -71,7 +72,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           {activeKey === '1' ? (
             <TurtleIcon name="arrowDown" />
           ) : (
-            <TurtleIcon name="arrowRight" />
+            <ArrowRightIcon />
           )}
         </TurtleText>
       }
