@@ -2,46 +2,29 @@ import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import StoreSelector from './StoreSelector';
+import StoreButton from './StoreButton';
 
 import { ReactComponent as Home } from '@icons/home.svg';
 import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
 import { ReactComponent as OrderIcon } from '@icons/order.svg';
-import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
-import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { ReactComponent as SettingIcon } from '@icons/setting.svg';
 import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
+
 import { css } from '@emotion/react';
 
 const pathnames = {
   vendor: {
-    create: 'vendor/create',
-  },
-
-  product: {
-    create: 'product/create',
+    create: '/picker/vendor/create',
   },
 
   order: {
-    create: 'order/create',
-    history: 'order/history',
-  },
-
-  warehousing: {
-    create: 'warehousing/create',
-    history: 'warehousing/history',
-    adjustment: 'warehousing/adjustment',
-  },
-
-  clearing: {
-    create: 'clearing/create',
-    history: 'clearing/history',
-    balance: 'clearing/balance',
+    create: '/picker/order/create',
+    history: '/picker/order/history',
   },
 
   etc: {
-    setting: 'setting',
-    tutorial: 'tutorial',
+    setting: '/picker/setting',
+    tutorial: '/picker/tutorial',
   },
 };
 
@@ -53,7 +36,7 @@ const mainMenuContainerStyle = {
   order: -1,
 };
 const mainMenuTitleStyle = {
-  marginTop: 16,
+  marginTop: 8,
   fontSize: 12,
   color: '#a1a2a6',
 };
@@ -132,22 +115,17 @@ const menus = [
         },
       },
       {
-        key: 'vendor&product',
-        label: '거래처/상품',
+        key: 'vendor',
+        label: '거래처',
         icon: <VendorProductIcon />,
         style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.vendor.create,
-            label: t('vendor.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.product.create,
-            label: t('product.create'),
-            style: mainMenuContentStyle,
-          },
-        ],
+        onMouseEnter: (e: info) => {
+          e.domEvent.currentTarget.style.color = '#EAECEF';
+          e.domEvent.currentTarget.style.backgroundColor = 'transparent';
+        },
+        onMouseLeave: (e: info) => {
+          e.domEvent.currentTarget.style.color = '#a1a2a6';
+        },
       },
       {
         key: 'order',
@@ -163,58 +141,13 @@ const menus = [
           {
             key: pathnames.order.history,
             label: t('order.history'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
-      {
-        key: 'warehousing',
-        label: t('warehousing.'),
-        icon: <WarehousingIcon />,
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.warehousing.create,
-            label: t('warehousing.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.warehousing.history,
-            label: t('warehousing.history'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.warehousing.adjustment,
-            label: t('warehousing.adjustment.'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
-      {
-        key: 'clearing',
-        label: t('clearing.'),
-        icon: <ClearingIcon />,
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.clearing.create,
-            label: t('clearing.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.clearing.history,
-            label: t('clearing.history'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.clearing.balance,
-            label: t('clearing.balance.'),
             style: lastMainMenuContentStyle,
           },
         ],
       },
     ],
   },
+
   {
     type: 'group',
     key: 'etcMenuContainer',
@@ -244,19 +177,14 @@ function Sider() {
   const [selectedPath, setSelectedPath] = useState('');
 
   useEffect(() => {
-    const [, firstPath, secondPath] = pathname.split('/');
-    if (firstPath === ('setting' || 'tutorial')) {
-      setSelectedPath(firstPath);
-      return;
-    }
-
-    setSelectedPath(firstPath + '/' + secondPath);
+    setSelectedPath(pathname);
+    return;
   }, [pathname]);
 
   return (
     <Layout.Sider css={siderLayout} width="240" trigger={null}>
       <div css={siderHeader}>
-        <StoreSelector />
+        <StoreButton />
       </div>
 
       <Menu
@@ -314,8 +242,6 @@ const menu = css`
     border-radius: 16px;
     border: 4px solid #242934;
   }
-
-  ////////////////
 
   flex-grow: 1;
   overflow-y: auto;

@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import MainLayout from '@layout/main';
+import RetailerMainLayout from '@layout/retailerMain';
+import PickerMainLayout from '@layout/pickerMain';
+
 import React from 'react';
 import {
   ClearingCreatePage,
@@ -20,9 +22,26 @@ import {
   WarehousingCreatePage,
   WarehousingHistoryPage,
   WarehousingAdjustmentPage,
+  PickerHomePage,
+  PickerVendorPage,
+  PickerOrderCreatePage,
+  PickerOrderHistoryPage,
+  PickerSettingPage,
 } from './pages';
+import authAPI from '@apis/authAPI';
+import { useQuery } from 'react-query';
+
+import useUser from '@hooks/useUser';
 
 function App() {
+  const { setUser } = useUser();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const getUserQuery = useQuery('getUserQuery', authAPI.verify, {
+    onSuccess: ({ user_info }) => {
+      setUser({ ...user_info }); // 사용자 셋팅(쇼핑몰 or 사입자)
+    },
+  });
+
   return (
     <Suspense fallback={<></>}>
       <Routes>
@@ -36,9 +55,13 @@ function App() {
         <Route path="/membership-info" element={<MembershipInfoPage />} />
          */}
 
-        <Route path="*" element={<NotFoundPage />} />
+        {/*
+         *
+         * 쇼핑몰
+         *
+         */}
 
-        <Route element={<MainLayout />}>
+        <Route element={<RetailerMainLayout />}>
           {/*
            * 메인
            */}
@@ -201,6 +224,60 @@ function App() {
             }
           />
         </Route>
+
+        {/*
+         *
+         * 사입자
+         *
+         */}
+
+        <Route path="/picker" element={<PickerMainLayout />}>
+          <Route
+            path="home"
+            element={
+              <Suspense fallback={<></>}>
+                <PickerHomePage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="order/create"
+            element={
+              <Suspense fallback={<></>}>
+                <PickerOrderCreatePage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="order/history"
+            element={
+              <Suspense fallback={<></>}>
+                <PickerOrderHistoryPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="vendor"
+            element={
+              <Suspense fallback={<></>}>
+                <PickerVendorPage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="setting"
+            element={
+              <Suspense fallback={<></>}>
+                <PickerSettingPage />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

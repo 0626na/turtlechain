@@ -61,6 +61,12 @@
     "balance": {
       "": "장부",
       "add": "과거매입 추가"
+    },
+    "status": {
+      "all": "전체",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
     }
   },
 
@@ -121,7 +127,12 @@
     "createdDate": "등록 일자",
     "subtractAmount": "사용가능 금액",
     "unpaidAmount": "결제요청 금액",
-    "refundAmount": "환불예정 금액"
+    "refundAmount": "환불예정 금액",
+    "paymentStatus": "결제 상태",
+    "paymentRequestDate": "결제 요청 일자",
+    "paymentCompleteDate": "결제 완료 일자",
+    "paymentPrice": "결제금액",
+    "totalVendorCount": "총 거래처 수"
   },
 
   "wholesaler": {},
@@ -136,6 +147,8 @@
     "networkError": "네트워크가 불안정합니다. 새로고침 후 다시 시도해주세요.",
     "enterId": "아이디를 입력해주세요.",
     "enterPassword": "비밀번호를 입력해주세요.",
-    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요."
+    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
+    "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
+    "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요."
   }
 }

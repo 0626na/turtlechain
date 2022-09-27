@@ -39,9 +39,6 @@ function PageBody() {
               >
                 오늘
               </Button>
-              {/* <Button css={$button} size="middle">
-                2022-08-18
-              </Button> */}
               <DatePicker
                 css={[
                   $datePicker,

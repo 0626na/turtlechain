@@ -6,6 +6,7 @@ import {
   TurtleTableTitle,
   TurtleText,
 } from '@components/element';
+import ArrowRightIcon from '@components/element/icon/ArrowRightIcon';
 import useClearingCart from '@hooks/useClearingCart';
 import useStore from '@hooks/useStore';
 import { pricePattern } from '@utils/pattern';
@@ -52,7 +53,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     onSuccess: () => {
       // message.success(t('message.success create clearing'));
       clickCreate();
-      navigate('/clearing/list');
+      navigate('/clearing/history');
     },
   });
 
@@ -83,7 +84,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
           {activeKey === '2' ? (
             <TurtleIcon name="arrowDown" />
           ) : (
-            <TurtleIcon name="arrowRight" />
+            <ArrowRightIcon />
           )}
         </TurtleText>
       }

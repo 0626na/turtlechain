@@ -1,5 +1,6 @@
 import warehousingAPI, { WarehousingItem } from '@apis/warehousingAPI';
 import {
+  ArrowRightIcon,
   TurtleFormSearchInput,
   TurtleIcon,
   TurtlePrimaryRangePicker,
@@ -74,7 +75,7 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
           {activeKey === '1' ? (
             <TurtleIcon name="arrowDown" />
           ) : (
-            <TurtleIcon name="arrowRight" />
+            <ArrowRightIcon />
           )}
         </TurtleText>
       }
