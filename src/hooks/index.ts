@@ -6,6 +6,7 @@ import useAdjustmentCart from './useAdjustmentCart';
 import useModal from './useModal';
 import useVendorCart from './useVendorCart';
 import useWarehousingCart from './useWarehousingCart';
+import useUser from './useUser';
 
 export {
   useLogin,
@@ -16,4 +17,5 @@ export {
   useModal,
   useVendorCart,
   useWarehousingCart,
+  useUser,
 };
