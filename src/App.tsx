@@ -37,8 +37,8 @@ function App() {
   const { setUser } = useUser();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getUserQuery = useQuery('getUserQuery', authAPI.verify, {
-    onSuccess: (data) => {
-      setUser({ type: data.type, name: data.name }); // 사용자 셋팅(쇼핑몰 or 사입자)
+    onSuccess: ({ user_info }) => {
+      setUser({ ...user_info }); // 사용자 셋팅(쇼핑몰 or 사입자)
     },
   });
 
