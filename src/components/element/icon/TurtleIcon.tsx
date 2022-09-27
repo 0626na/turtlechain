@@ -20,6 +20,11 @@ import { ReactComponent as ArrowDownIcon } from '@icons/arrowDown.svg';
 
 import { ReactComponent as ProcessIcon } from '@icons/process.svg';
 
+import { ReactComponent as UserIcon } from '@icons/user.svg';
+import { ReactComponent as CompanyIcon } from '@icons/company.svg';
+import { ReactComponent as StoreListIcon } from '@icons/storeList.svg';
+import { ReactComponent as MembershipIcon } from '@icons/membership.svg';
+
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -182,6 +187,34 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <ProcessIcon />
+      </div>
+    );
+  }
+  if (name === 'user') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <UserIcon />
+      </div>
+    );
+  }
+  if (name === 'membership') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <CompanyIcon />
+      </div>
+    );
+  }
+  if (name === 'company') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <StoreListIcon />
+      </div>
+    );
+  }
+  if (name === 'storeList') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <MembershipIcon />
       </div>
     );
   }

@@ -27,7 +27,13 @@ function TurtleTag({ children, color }: Props) {
   );
 
   return (
-    <div css={[container, colors[color]]}>
+    <div
+      css={container}
+      style={{
+        ['--color' as any]: colors[color].color,
+        ['--background-color' as any]: colors[color].backgroundColor,
+      }}
+    >
       <TurtleText>{children}</TurtleText>
     </div>
   );
@@ -44,6 +50,9 @@ const container = css`
 
   font-weight: 400;
   font-size: 12px;
+
+  background-color: var(--background-color);
+  color: var(--color);
 `;
 
 export default TurtleTag;
