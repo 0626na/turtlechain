@@ -571,7 +571,34 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
         <Button
           type="primary"
           style={{ marginBottom: 20, marginRight: 20, width: 200, height: 40 }}
-          onClick={() => createOrderFormatMutation.mutate(orderFormat)}
+          onClick={() => {
+            setOrderFormat({
+              vendor_name: orderFormat.vendor_name.filter(
+                (name) => name !== '',
+              ),
+              vendor_address: orderFormat.vendor_address.filter(
+                (address) => address !== '',
+              ),
+              vendor_mobile: orderFormat.vendor_mobile.filter(
+                (mobile) => mobile !== '',
+              ),
+              order_type: orderFormat.order_type.filter((type) => type !== ''),
+              product_count: orderFormat.product_count.filter(
+                (count) => count !== '',
+              ),
+              product_name: orderFormat.product_name.filter(
+                (name) => name !== '',
+              ),
+              product_option: orderFormat.product_option.filter(
+                (option) => option !== '',
+              ),
+              product_price: orderFormat.product_price.filter(
+                (price) => price !== '',
+              ),
+              memo: orderFormat.memo.filter((memo) => memo !== ''),
+            });
+            createOrderFormatMutation.mutate(orderFormat);
+          }}
         >
           저장하기
         </Button>
