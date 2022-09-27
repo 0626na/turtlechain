@@ -1,6 +1,6 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon, TurtleImg } from '@components/element';
+import { ArrowRightIcon, TurtleIcon, TurtleImg } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
@@ -55,7 +55,7 @@ function StoreSelector() {
           <span css={text}>{store.selected?.name}</span>
         </div>
         <div>
-          <ArrowRightIcon value="#AAADB3" />
+          <TurtleIcon name="siderSelect" />
         </div>
       </Button>
     </Dropdown>
