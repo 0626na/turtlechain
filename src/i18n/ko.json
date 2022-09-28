@@ -176,6 +176,7 @@
     "enterPassword": "비밀번호를 입력해주세요.",
     "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
-    "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요."
+    "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
+    "success update": "성공적으로 수정하였습니다."
   }
 }
