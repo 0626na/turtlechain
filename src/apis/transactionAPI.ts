@@ -75,7 +75,7 @@ interface ResponseCreateItem {
 
 const create = async (data: RequestCreateItem) => {
   const url = `accounting/transactions`;
-  const response = await v2Axios.post<ResponseCreateItem>(url, { data });
+  const response = await v2Axios.post<ResponseCreateItem>(url, data);
 
   return response.data;
 };
