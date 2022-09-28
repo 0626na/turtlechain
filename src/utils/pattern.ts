@@ -13,3 +13,6 @@ export const pricePattern = /\B(?=(\d{3})+(?!\d))/g;
 
 // 사업자번호 패턴
 export const bizNumPattern = /(\d{3})(\d{2})(\d{5})/;
+
+// 하이푼제거
+export const removeHyphen = /-/g;
