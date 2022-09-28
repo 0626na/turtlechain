@@ -17,6 +17,8 @@ import transactionAPI, { TransactionItem } from '@apis/transactionAPI';
 import DetailModal from './modals/DetailModal';
 import AddModal from './modals/AddModal';
 
+// 장부 페이지에서의 데이터는 많아봐야300개로 판단되어서 검색어를 입력할때마다
+// api를 요청해서 데이터를 가져오지않고 프론트에서 filterVendor함수를 통해 검색결과를 보여준다.
 function PageBody() {
   const { store } = useStore();
   const [itemList, setItemList] = useState<TransactionItem[]>([]);
