@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { TurtleFormInput, TurtleIcon, TurtleTabs } from '@components/element';
 
@@ -10,8 +10,16 @@ import { css } from '@emotion/react';
 
 import Card from './Card';
 import UserTab from './tabs/UserTab';
+import { useSearchParams } from 'react-router-dom';
 
 function PageBody() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    // 초기 진입시 user로 설정.
+    if (!searchParams.get('tab')) setSearchParams({ tab: 'user' });
+  }, [searchParams, setSearchParams]);
+
   return (
     <>
       <PageHeader title="설정" />
@@ -22,13 +30,20 @@ function PageBody() {
           background-color: #f9f9fa;
         `}
       >
-        <TurtleTabs color="dark" defaultActiveKey="1">
-          <Tabs.TabPane key="0" tab="계정관리">
+        <TurtleTabs
+          color="dark"
+          defaultActiveKey="0"
+          activeKey={searchParams.get('tab') as string}
+          onChange={(newKey) => {
+            setSearchParams({ tab: newKey });
+          }}
+        >
+          <Tabs.TabPane key="user" tab="계정관리">
             <div css={tabContent}>
               <UserTab />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="1" tab="사업자 관리">
+          <Tabs.TabPane key="company" tab="사업자 관리">
             <div css={tabContent}>
               <Card title="사업자 정보" icon={<TurtleIcon name="user" />}>
                 <Form
@@ -61,10 +76,10 @@ function PageBody() {
               </Card>
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="쇼핑몰 관리">
+          <Tabs.TabPane key="store" tab="쇼핑몰 관리">
             <div css={tabContent}>ㅁ</div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="3" tab="오입금 환불">
+          <Tabs.TabPane key="mistransferRefund" tab="오입금 환불">
             <div css={tabContent}>ㅁ</div>
           </Tabs.TabPane>
         </TurtleTabs>
