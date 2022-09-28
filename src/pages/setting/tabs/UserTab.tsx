@@ -1,14 +1,42 @@
+import retailerStoreAPI from '@apis/retailerStoreAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
+import useStore from '@hooks/useStore';
 import { Button, Form } from 'antd';
-import React from 'react';
+import { useForm } from 'antd/lib/form/Form';
+import React, { useEffect } from 'react';
+import { useQuery } from 'react-query';
 import Card from '../Card';
 
 function UserTab() {
+  const { store, fillStoreList, selectDefaultStore } = useStore();
+  const [form] = useForm();
+
+  const getStoreListQuery = useQuery(
+    ['getStoreListQuery'],
+    retailerStoreAPI.getList,
+    {
+      enabled: !store.selected,
+      onSuccess: (data) => {
+        fillStoreList(data.store_list);
+        selectDefaultStore(data.store_list);
+      },
+    },
+  );
+
+  useEffect(() => {
+    console.log(store);
+  }, []);
+
   return (
     <>
       <Card title="기본정보" icon={<TurtleIcon name="user" />}>
-        <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
+        <Form
+          form={form}
+          colon={false}
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 17 }}
+        >
           <Form.Item label="이름">
             <TurtleFormInput />
           </Form.Item>
