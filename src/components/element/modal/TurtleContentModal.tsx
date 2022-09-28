@@ -20,7 +20,7 @@ function TurtleContentModal({
   const width = {
     small: { width: 592 },
     middle: { width: 884, height: 640 },
-    large: { width: 1400 },
+    large: { width: '91.8vw', height: '100%' },
   };
 
   return (
@@ -56,7 +56,6 @@ const modal = {
 
   container: css({
     maxHeight: '92vh',
-    // height: '100%',
     position: 'absolute',
     top: '50%',
     left: '50%',
