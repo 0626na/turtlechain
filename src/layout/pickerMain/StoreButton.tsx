@@ -6,17 +6,19 @@ import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 
 import { useNavigate } from 'react-router-dom';
+import useUser from '@hooks/useUser';
 
 function StoreButton() {
   const navigate = useNavigate();
   const { store, fillStoreList, selectDefaultStore } = useStore();
+  const { user } = useUser();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
     ['getStoreListQuery'],
     retailerStoreAPI.getList,
     {
-      enabled: !store.selected,
+      enabled: !!user.id,
       onSuccess: (data) => {
         fillStoreList(data.store_list);
         selectDefaultStore(data.store_list);

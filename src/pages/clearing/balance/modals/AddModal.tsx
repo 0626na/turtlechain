@@ -76,7 +76,7 @@ function AddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('pastAdjustment.create')}
+        title={t('clearing.balance.add')}
         visible={visible}
         onClose={() => {
           form.resetFields();

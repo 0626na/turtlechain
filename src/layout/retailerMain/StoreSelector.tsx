@@ -5,16 +5,18 @@ import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 function StoreSelector() {
   const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
+  const { user } = useUser();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
     ['getStoreListQuery'],
     retailerStoreAPI.getList,
     {
-      enabled: !store.selected,
+      enabled: !!user.id,
       onSuccess: (data) => {
         fillStoreList(data.store_list);
         selectDefaultStore(data.store_list);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   SecondaryButton,
@@ -8,63 +8,58 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Pagination, Row, Table } from 'antd';
+import { Table } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 
-import clearingAPI, {
-  ClearingInfo,
-  RequestGetOverpaidBalanceList,
-} from '@apis/clearingAPI';
+import transactionAPI, { TransactionItem } from '@apis/transactionAPI';
+
 import DetailModal from './modals/DetailModal';
-import moment from 'moment';
 import AddModal from './modals/AddModal';
 
 function PageBody() {
-  const [selectedRow, setSelectedRow] = useState<ClearingInfo>();
   const { store } = useStore();
-  const [searchQuery, setSearchQuery] = useState<RequestGetOverpaidBalanceList>(
-    {
-      rt_store_id: undefined,
-      balance_type: 'balance',
-      search_string: '',
-      page: 1,
-    },
-  );
+  const [itemList, setItemList] = useState<TransactionItem[]>([]);
+  const [selectedRow, setSelectedRow] = useState<TransactionItem>();
 
   const [addModalVisible, addModalOpen, addModalClose] = useModal();
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
 
   // 장부 리스트 불러오기 요청
-  const getOverpaidBalanceListQuery = useQuery(
-    ['getOverpaidBalanceList', searchQuery],
-    () => clearingAPI.getOverpaidBalanceList(searchQuery),
+  const getTransactionListQuery = useQuery(
+    ['getTransactionList', store.selected?.id],
+    () => transactionAPI.getList({ rt_store_id: store.selected?.id }),
     {
-      enabled: !!searchQuery.rt_store_id,
+      enabled: !!store.selected?.id,
+      onSuccess: (data) => {
+        setItemList([...data.data]);
+      },
     },
   );
 
-  const loading = getOverpaidBalanceListQuery.isLoading;
+  // 거래처 검색(default : 전체)
+  const filterVendor = (searchString: string) => {
+    setItemList(() =>
+      (getTransactionListQuery?.data?.data as TransactionItem[]).filter(
+        (item) => item.vendor_name.includes(searchString),
+      ),
+    );
+  };
 
-  // 쇼핑몰 바뀔때 상품 리스트 재검색
-  useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
-      rt_store_id: store.selected?.id as number,
-    }));
-  }, [store.selected?.id]);
+  const loading = getTransactionListQuery.isLoading;
 
   return (
     <>
       {/*
-       * 과거매입 모달
+       * 과거매입 추가 모달
        */}
       <AddModal visible={addModalVisible} closeModal={addModalClose} />
+
       {/*
        * 상세보기 모달
        */}
       <DetailModal
-        selectedRow={selectedRow as ClearingInfo}
+        selectedRow={selectedRow as TransactionItem}
         visible={detailModalVisible}
         onClose={detailModalClose}
       />
@@ -88,83 +83,58 @@ function PageBody() {
         <Table
           size="small"
           loading={loading}
-          dataSource={getOverpaidBalanceListQuery.data?.item_list}
-          rowKey={(record) => String(record.vendor_info.id)}
+          dataSource={itemList}
+          rowKey={(record) => String(record.vendor_id)}
           onRow={(record) => ({
             onClick: () => {
-              setSelectedRow(record);
+              setSelectedRow({ ...record });
               detailModalOpen();
             },
           })}
           pagination={false}
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 1000, x: 1400 }}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getOverpaidBalanceListQuery.data?.item_list.length ?? 0
-              }
+              totalCount={itemList.length ?? 0}
               rightContent={
                 <TurtleSearchInput
                   placeholder="거래처명을 입력하세요"
                   onChange={(e) => {
-                    console.log(e.currentTarget.value);
-                    setSearchQuery((searchQuery) => ({
-                      ...searchQuery,
-                      search_string: e.currentTarget?.value,
-                    }));
+                    filterVendor(e.currentTarget?.value);
                   }}
                 />
               }
             />
           )}
-          footer={() => (
-            <Row justify="center">
-              <Pagination
-                size="small"
-                total={getOverpaidBalanceListQuery.data?.item_list.length ?? 0}
-                showSizeChanger={false}
-                current={searchQuery.page}
-                onChange={(page) => {
-                  setSearchQuery({ ...searchQuery, page });
-                }}
-              />
-            </Row>
-          )}
           columns={[
             {
               ellipsis: true,
               width: 150,
-              align: 'center',
-              title: t('clearing.recent date'),
-              render: (_, record) =>
-                moment(record.created_date).format('YYYY-MM-DD'),
+              title: t('table.vendorName'),
+              render: (_, record) => record.vendor_name,
             },
             {
               ellipsis: true,
-              title: t('vendor.name'),
-              render: (_, record) => record.vendor_info.vendor_name,
+              title: t('table.vendorAddress'),
+              render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
-              title: t('vendor.address'),
-              render: (_, record) => record.vendor_info.vendor_address,
+              align: 'right',
+              title: t('table.subtractAmount'),
+              render: (_, record) => record.subtract_amount.toLocaleString(),
             },
-
             {
               ellipsis: true,
-              title: '사용가능 금액',
-              render: (_, record) => record.overpaid_amount?.toLocaleString(),
+              align: 'right',
+              title: t('table.unpaidAmount'),
+              render: (_, record) => record.unpaid_amount?.toLocaleString(),
             },
-
-            // {
-            //   ellipsis: true,
-            //   title: '결제요청 금액',
-            //   render: (_, record) => record.overpaid_amount?.toLocaleString(),
-            // },
             {
               ellipsis: true,
-              title: '환불예정 금액',
-              render: (_, record) => record.refund_amount.toLocaleString(),
+              align: 'right',
+              title: t('table.refundAmount'),
+              render: (_, record) => record.refund_amount?.toLocaleString(),
             },
           ]}
         />
