@@ -17,7 +17,7 @@ function PageBody() {
 
   useEffect(() => {
     // 초기 진입시 user로 설정.
-    if (!searchParams.get('tab')) setSearchParams({ tab: 'user' });
+    if (!searchParams.get('tab')) setSearchParams({ tab: 'store' });
   }, [searchParams, setSearchParams]);
 
   return (
@@ -32,12 +32,14 @@ function PageBody() {
       >
         <TurtleTabs
           color="dark"
-          defaultActiveKey="0"
           activeKey={searchParams.get('tab') as string}
           onChange={(newKey) => {
             setSearchParams({ tab: newKey });
           }}
         >
+          <Tabs.TabPane key="store" tab="쇼핑몰 관리">
+            <div css={tabContent}>ㅁ</div>
+          </Tabs.TabPane>
           <Tabs.TabPane key="user" tab="계정관리">
             <div css={tabContent}>
               <UserTab />
@@ -76,9 +78,7 @@ function PageBody() {
               </Card>
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="store" tab="쇼핑몰 관리">
-            <div css={tabContent}>ㅁ</div>
-          </Tabs.TabPane>
+
           <Tabs.TabPane key="mistransferRefund" tab="오입금 환불">
             <div css={tabContent}>ㅁ</div>
           </Tabs.TabPane>
