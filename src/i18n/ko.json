@@ -59,7 +59,8 @@
     "create": "결제하기",
     "history": "결제내역",
     "balance": {
-      "": "장부"
+      "": "장부",
+      "add": "과거매입 추가"
     },
     "status": {
       "all": "전체",
@@ -124,11 +125,17 @@
     "isReserveWarehousing": "미송입고여부",
     "progressStatus": "진행 상태",
     "createdDate": "등록 일자",
+    "subtractAmount": "사용가능 금액",
+    "unpaidAmount": "결제요청 금액",
+    "refundAmount": "환불예정 금액",
     "paymentStatus": "결제 상태",
     "paymentRequestDate": "결제 요청 일자",
     "paymentCompleteDate": "결제 완료 일자",
     "paymentPrice": "결제금액",
-    "totalVendorCount": "총 거래처 수"
+    "totalVendorCount": "총 거래처 수",
+    "subtract": "차감",
+    "refund": "환불",
+    "unpaid": "결제"
   },
 
   "wholesaler": {},

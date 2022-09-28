@@ -11,6 +11,12 @@ interface Props {
   searchCount?: number;
   // 검색금액 합계 n원
   searchAmount?: number;
+  //누적 차감금액 합계 n원
+  totalSubstractAmount?: number;
+  //누적 환불금액 합계 n원
+  totalRefundAmount?: number;
+  //누적 결제금액 합계 n원
+  totalUnpaidAmount?: number;
 
   // 우측 children
   rightContent?: React.ReactNode;
@@ -22,6 +28,9 @@ function TurtleTableTitle({
   searchCount,
   searchAmount,
   rightContent,
+  totalSubstractAmount,
+  totalRefundAmount,
+  totalUnpaidAmount,
 }: Props) {
   return (
     <Row justify="space-between" align="middle" style={{ marginBottom: 12 }}>
@@ -46,6 +55,36 @@ function TurtleTableTitle({
             <Divider type="vertical" />
             검색금액 합계{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
+            원
+          </TurtleText>
+        )}
+        {!!totalSubstractAmount && totalSubstractAmount >= 0 && (
+          <TurtleText css={container}>
+            <Divider type="vertical" />
+            누적 차감금액 합계{' '}
+            <TurtleText css={count}>
+              {totalSubstractAmount.toLocaleString()}
+            </TurtleText>
+            원
+          </TurtleText>
+        )}
+        {!!totalRefundAmount && totalRefundAmount >= 0 && (
+          <TurtleText css={container}>
+            <Divider type="vertical" />
+            누적 환불금액 합계{' '}
+            <TurtleText css={count}>
+              {totalRefundAmount.toLocaleString()}
+            </TurtleText>
+            원
+          </TurtleText>
+        )}
+        {!!totalUnpaidAmount && totalUnpaidAmount >= 0 && (
+          <TurtleText css={container}>
+            <Divider type="vertical" />
+            누적 결제금액 합계{' '}
+            <TurtleText css={count}>
+              {totalUnpaidAmount.toLocaleString()}
+            </TurtleText>
             원
           </TurtleText>
         )}
