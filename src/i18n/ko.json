@@ -70,6 +70,26 @@
     }
   },
 
+  "transaction": {
+    "": "과거매입",
+    "warehousing": "입고",
+    "adjustment": "매입조정",
+    "reserve": "미송",
+    "subtract": "차감",
+    "refund": "환불",
+    "mistransfer": "오입금",
+    "clear_refund": "환불처리",
+    "reserve_payment": "미송결제",
+    "reserve_payment_subtract": "미송결제차감",
+    "reserve_warehousing": "미송입고",
+    "clearing_subtract": "매입차감",
+    "clearing": "정산",
+    "add_unpaid": "미결제 추가",
+    "remove_unpaid": "미결제 삭제",
+    "add_subtract": "차감 추가",
+    "remove_subtract": "차감 삭제"
+  },
+
   "etc": {
     "setting": "설정",
     "tutorial": "사용가이드"
@@ -127,6 +147,7 @@
     "createdDate": "등록 일자",
     "subtractAmount": "사용가능 금액",
     "unpaidAmount": "결제요청 금액",
+    "unpaidPayment": "미결제 금액",
     "refundAmount": "환불예정 금액",
     "paymentStatus": "결제 상태",
     "paymentRequestDate": "결제 요청 일자",
@@ -138,12 +159,15 @@
     "unpaid": "결제"
   },
 
+  "form": {},
+
   "wholesaler": {},
 
   "button": {
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
-    "addVendor": "거래처 추가하기"
+    "addVendor": "거래처 추가하기",
+    "addTransaction": "과거매입 추가하기"
   },
 
   "message": {
