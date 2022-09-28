@@ -1,31 +1,39 @@
 import retailerStoreAPI from '@apis/retailerStoreAPI';
+import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
-import useStore from '@hooks/useStore';
-import { Button, Form } from 'antd';
+
+import useUser from '@hooks/useUser';
+import { phonePattern } from '@utils/pattern';
+import { Button, Form, message } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import React, { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { t } from 'i18next';
+import React, { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
+
 import Card from '../Card';
 
 function UserTab() {
-  const { store, fillStoreList, selectDefaultStore } = useStore();
+  const { user } = useUser();
   const [form] = useForm();
 
-  const getStoreListQuery = useQuery(
-    ['getStoreListQuery'],
-    retailerStoreAPI.getList,
-    {
-      enabled: !store.selected,
-      onSuccess: (data) => {
-        fillStoreList(data.store_list);
-        selectDefaultStore(data.store_list);
-      },
+  const [buttonVisible, setButtonVisible] = useState(false);
+
+  const updateMutation = useMutation(userAPI.update, {
+    onSuccess: () => {
+      message.success(t('message.success update'));
+      // setIsUpdateMode(false);
+      // getQuery.refetch();
     },
-  );
+  });
 
   useEffect(() => {
-    console.log(store);
+    form.setFieldsValue({
+      name: user.name,
+      login_id: user.login_id,
+      email: user.email,
+      mobile_phone: user.mobile_phone.replace(phonePattern, `$1-$2-$3`),
+    });
   }, []);
 
   return (
@@ -37,16 +45,16 @@ function UserTab() {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
         >
-          <Form.Item label="이름">
+          <Form.Item label="이름" name="name">
             <TurtleFormInput />
           </Form.Item>
-          <Form.Item label="아이디">
+          <Form.Item label="아이디" name="login_id">
             <TurtleFormInput />
           </Form.Item>
-          <Form.Item label="이메일">
+          <Form.Item label="이메일" name="email">
             <TurtleFormInput />
           </Form.Item>
-          <Form.Item label="휴대전화 번호">
+          <Form.Item label="휴대전화 번호" name="mobile_phone">
             <TurtleFormInput />
           </Form.Item>
 
