@@ -35,6 +35,7 @@ import TurtleTag from './TurtleTag';
 import TurtlePanelTitle from './TurtlePanelTitle';
 import ProcessButton from './button/ProcessButton';
 import SelectButton from './button/SelectButton';
+import ArrowRightIcon from './icon/ArrowRightIcon';
 
 export {
   //buttons
