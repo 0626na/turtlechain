@@ -167,10 +167,14 @@ interface RequestUpdate {
   mobile_phone: string;
 }
 
-const update = async function (data: RequestUpdate) {
+const update = async (data: RequestUpdate) => {
   const url = `/provisioning/users/${data.user_id}`;
-  delete data.user_id;
-  const response = await v2Axios.patch(url, data);
+
+  const response = await v2Axios.patch(url, {
+    email: data.email,
+    mobile_phone: data.mobile_phone,
+  });
+
   return response.data;
 };
 
