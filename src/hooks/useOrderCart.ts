@@ -1,20 +1,102 @@
+import { RcFile } from 'antd/lib/upload';
+import { StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import { ResponseCreateOrderItemExcelParsing } from './../apis/orderAPI';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
 
+interface FailListState {
+  store_id: number;
+  store_name: string;
+  vendor_name: string;
+  vendor_address: string;
+  phone: string;
+  vendor_product: string;
+  product_option: string;
+  type: string;
+  count: string;
+  price: string;
+  memo: string;
+}
+
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
+  const [failList, setFailList] = useState<FailListState[]>([]);
+  const [uploadFiles, setuploadFiles] = useState<RcFile[]>([]);
 
   const ready = useCallback(
     (data: ResponseCreateOrderItemExcelParsing) => {
       setCart({
-        successList: data.data.successes,
+        successList: [...cart.successList, ...data.data.successes],
         failList: data.data.fails,
       });
     },
-    [setCart],
+    [cart.successList, setCart],
   );
+
+  const updateSuccess = useCallback(
+    (data: StoreOrderItemExcelParsing) => {
+      setCart({
+        successList: [...cart.successList, data],
+        failList: cart.failList,
+      });
+    },
+    [cart.failList, cart.successList, setCart],
+  );
+
+  const findSuccess = useCallback(
+    (data: StoreOrderItemExcelParsing) => {
+      if (
+        cart.successList.find((store) => store.rt_store_id === data.rt_store_id)
+      ) {
+        const findStore = cart.successList.find(
+          (store) => store.rt_store_id === data.rt_store_id,
+        );
+
+        findStore &&
+          setCart({
+            successList: [
+              ...cart.successList.filter(
+                (store) => store.rt_store_id !== findStore?.rt_store_id,
+              ),
+              {
+                rt_store_id: findStore?.rt_store_id,
+                rt_store_name: findStore?.rt_store_name,
+                orders: [...findStore?.orders, data.orders[0]],
+              },
+            ],
+            failList: [...cart.failList],
+          });
+
+        return true;
+      }
+      return false;
+    },
+    [cart.successList, cart.failList, setCart],
+  );
+
+  const fail = useCallback(() => {
+    cart.failList.map((failitem) =>
+      setFailList([
+        ...failitem.orders.map<FailListState>((value) => {
+          return {
+            store_id: failitem.rt_store_id,
+            store_name: failitem.rt_store_name,
+            vendor_name: value.vendor_name,
+            vendor_address: value.vendor_address,
+            phone: value.vendor_mobile,
+            vendor_product: value.product_name,
+            product_option: value.product_option,
+            type: value.order_type,
+            count: value.product_count,
+            price: value.product_price,
+            memo: value.memo,
+          };
+        }),
+      ]),
+    );
+    return failList;
+  }, [cart.failList, failList]);
 
   const reset = useCallback(() => {
     setCart({
@@ -25,8 +107,14 @@ const useOrderCart = () => {
 
   return {
     cart,
+    failList,
+    uploadFiles,
+    setuploadFiles,
+    fail,
     ready,
     reset,
+    updateSuccess,
+    findSuccess,
   };
 };
 

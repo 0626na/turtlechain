@@ -9,9 +9,7 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const { cart } = useOrderCart();
-  const [selectedRowOrder, setSelectedRowOrder] =
-    useState<StoreOrderItemExcelParsing>();
+  const { cart, fail, failList } = useOrderCart();
 
   return (
     <Tabs.TabPane {...props}>
@@ -19,8 +17,8 @@ function FailTab({ loading, ...props }: Props) {
         scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
         loading={loading}
         size="small"
-        rowKey={(record) => record.rt_store_id}
-        dataSource={cart.failList}
+        rowKey={(record) => record.store_id}
+        dataSource={failList}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
@@ -32,24 +30,44 @@ function FailTab({ loading, ...props }: Props) {
           {
             title: '쇼핑몰',
             width: 180,
-            render: (_, record) => record.rt_store_name,
+            render: (_, record) => record.store_name,
           },
           {
-            title: '거래처',
+            title: '거래처명',
             width: 200,
-            render: (_, record) =>
-              `${record.orders[0].vendor_name} 외 ${
-                record.orders.length - 1
-              }개`,
+            render: (_, record) => record.vendor_name,
           },
           {
-            title: '상품',
+            title: '거래처 주소',
+            render: (_, record) => record.vendor_address,
           },
           {
-            title: '수량 합계',
+            title: '휴대전화 번호',
+            render: (_, record) => record.phone,
           },
           {
-            title: '공급가 합계',
+            title: '거래처 상품명',
+            render: (_, record) => record.vendor_product,
+          },
+          {
+            title: '옵션',
+            render: (_, record) => record.product_option,
+          },
+          {
+            title: '분류',
+            render: (_, record) => record.type,
+          },
+          {
+            title: '요청 수량',
+            render: (_, record) => record.count,
+          },
+          {
+            title: '가격',
+            render: (_, record) => record.price,
+          },
+          {
+            title: '메모',
+            render: (_, record) => record.memo,
           },
         ]}
       />

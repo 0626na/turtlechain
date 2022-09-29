@@ -1,5 +1,4 @@
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
-import { SearchFilter } from '@components/combine';
 import {
   TurtleSearchInput,
   TurtleSearchSelect,
@@ -22,7 +21,7 @@ function SuccessTab({ loading, ...props }: Props) {
     },
     {
       name: '거래처명',
-      value: 'vedor_name',
+      value: 'vendor_name',
     },
     {
       name: '휴대번호',
@@ -30,10 +29,18 @@ function SuccessTab({ loading, ...props }: Props) {
     },
   ];
   const { cart } = useOrderCart();
+  const [selectedRowOrder, setSelectedRowOrder] =
+    useState<StoreOrderItemExcelParsing>({
+      rt_store_id: 0,
+      rt_store_name: '',
+      orders: [],
+    });
+
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
     search_string: '',
   });
+
   const filteredList = useMemo(
     () =>
       cart.successList.filter((item) => {
@@ -53,10 +60,8 @@ function SuccessTab({ loading, ...props }: Props) {
         }
         return true;
       }),
-    [cart.successList, searchQuery],
+    [searchQuery, cart.successList],
   );
-  const [selectedRowOrder, setSelectedRowOrder] =
-    useState<StoreOrderItemExcelParsing>();
 
   return (
     <Tabs.TabPane {...props}>
@@ -109,7 +114,11 @@ function SuccessTab({ loading, ...props }: Props) {
           expandedRowKeys: [selectedRowOrder?.rt_store_id ?? -1],
           onExpand: (onExpand, record) => {
             if (!onExpand) {
-              setSelectedRowOrder(undefined);
+              setSelectedRowOrder({
+                rt_store_id: 0,
+                rt_store_name: '',
+                orders: [],
+              });
               return;
             }
             setSelectedRowOrder({
@@ -128,7 +137,7 @@ function SuccessTab({ loading, ...props }: Props) {
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
               dataSource={selectedRowOrder?.orders}
-              rowKey={(record) => record.order_id}
+              rowKey={(record) => record.order_id!}
               loading={selectedRowOrder === undefined}
               pagination={false}
               columns={[
@@ -146,7 +155,8 @@ function SuccessTab({ loading, ...props }: Props) {
                   width: 200,
                   render: (_, record) =>
                     record.vendor_mobile === ''
-                      ? record.ws_store_info[0].mobiles[0].phone
+                      ? record.ws_store_info.length !== 0 &&
+                        record.ws_store_info[0].mobiles[0].phone
                       : record.vendor_mobile,
                 },
                 {
