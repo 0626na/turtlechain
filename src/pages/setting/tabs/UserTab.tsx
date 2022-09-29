@@ -9,8 +9,7 @@ import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-
-import Card from '../Card';
+import UserCard from '../card/UserCard';
 
 function UserTab() {
   const queryClient = useQueryClient();
@@ -46,7 +45,7 @@ function UserTab() {
 
   return (
     <>
-      <Card title="기본정보" icon={<TurtleIcon name="user" />}>
+      <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
           colon={false}
@@ -111,9 +110,9 @@ function UserTab() {
           )}
         </Form>
         {/*  */}
-      </Card>
+      </UserCard>
       <div css={marginTop}>
-        <Card title="맴버십 정보" icon={<TurtleIcon name="user" />}>
+        <UserCard title="맴버십 정보" icon={<TurtleIcon name="user" />}>
           <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
             <Form.Item label="결제">
               <Button
@@ -126,7 +125,7 @@ function UserTab() {
               </Button>
             </Form.Item>
           </Form>
-        </Card>
+        </UserCard>
       </div>
     </>
   );
