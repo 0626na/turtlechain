@@ -197,7 +197,7 @@ export interface CreatingOrdersItem {
   product_price: number;
   order_type: string;
   memo: string;
-  ws_store_id: number;
+  ws_store_id: number | null;
 }
 
 export interface OrderItemList {

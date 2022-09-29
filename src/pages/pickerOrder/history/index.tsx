@@ -1,18 +1,16 @@
 import React from 'react';
+
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-
-import { PageHeader } from '@layout/page';
 import PageBody from './PageBody';
 
-function PickerOrderHistory() {
+function OrderHistoryPage() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('helmet.home')}`} />
-      <PageHeader title="" />
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('order.history')}`} />
       <PageBody />
     </>
   );
 }
 
-export default PickerOrderHistory;
+export default OrderHistoryPage;
