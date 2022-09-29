@@ -110,8 +110,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
           onRow={(record) => {
             return {
               onClick: (event) => {
-                console.log(record);
-
                 onClickSelect(record);
               },
             };

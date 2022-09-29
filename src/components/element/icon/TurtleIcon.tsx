@@ -17,9 +17,13 @@ import { ReactComponent as AddReserveIcon } from '@icons/addReserve.svg';
 import { ReactComponent as AddExchangeRefundIcon } from '@icons/addExchangeRefund.svg';
 
 import { ReactComponent as ArrowDownIcon } from '@icons/arrowDown.svg';
-import { ReactComponent as ArrowRightIcon } from '@icons/arrowRight.svg';
 
 import { ReactComponent as ProcessIcon } from '@icons/process.svg';
+
+import { ReactComponent as UserIcon } from '@icons/user.svg';
+import { ReactComponent as CompanyIcon } from '@icons/company.svg';
+import { ReactComponent as StoreListIcon } from '@icons/storeList.svg';
+import { ReactComponent as MembershipIcon } from '@icons/membership.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -42,7 +46,10 @@ interface Props {
     | 'exchangeRefund'
     | 'reserve'
     | 'arrowDown'
-    | 'arrowRight'
+    | 'user'
+    | 'membership'
+    | 'company'
+    | 'storeList'
     | 'process';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -168,13 +175,6 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     );
   }
 
-  if (name === 'arrowRight') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <ArrowRightIcon />
-      </div>
-    );
-  }
   if (name === 'download') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
@@ -187,6 +187,34 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <ProcessIcon />
+      </div>
+    );
+  }
+  if (name === 'user') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <UserIcon />
+      </div>
+    );
+  }
+  if (name === 'membership') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <CompanyIcon />
+      </div>
+    );
+  }
+  if (name === 'company') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <StoreListIcon />
+      </div>
+    );
+  }
+  if (name === 'storeList') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <MembershipIcon />
       </div>
     );
   }

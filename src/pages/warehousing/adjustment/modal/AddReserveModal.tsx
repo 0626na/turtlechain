@@ -185,7 +185,6 @@ function AddReserveModal({ visible, closeModal }: Props) {
               <Form.Item
                 label={t('table.price')}
                 name="price"
-                // rules={[{}]}
                 rules={[
                   {
                     required: true,

@@ -8,16 +8,19 @@ import {
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtleFormSelect,
+  TurtleNumberInput,
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import vendorAPI, { Vendor } from '@apis/vendorAPI';
+import { Vendor } from '@apis/vendorAPI';
 import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
 import SearchVendorModal from '@components/combine/modal/SearchVendorModal';
 import useStore from '@hooks/useStore';
 
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
+import transactionAPI from '@apis/transactionAPI';
+import { pricePattern } from '@utils/pattern';
 
 interface Props {
   visible: boolean;
@@ -25,20 +28,18 @@ interface Props {
 }
 
 function AddModal({ visible, closeModal }: Props) {
+  const queryClient = useQueryClient();
   const { store } = useStore();
-
   const [form] = Form.useForm();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
 
-  // 거래처 등록
-  const createVendorMutation = useMutation(vendorAPI.create, {
+  // 과거매입 등록
+  const createTransactionMutation = useMutation(transactionAPI.create, {
     onSuccess: (data) => {
-      if (data.data.fail_count > 0) {
-        message.error('이미 등록된 거래처입니다.');
-        return;
-      }
       message.success('성공적으로 등록하였습니다.');
+      queryClient.refetchQueries(['getTransactionList'], { active: true });
       form.resetFields();
+      closeModal();
     },
   });
 
@@ -54,6 +55,14 @@ function AddModal({ visible, closeModal }: Props) {
       //
     });
     closeVendorModal();
+  };
+
+  const paymentValidation = (_: any, value: number) => {
+    if (!value) {
+      return Promise.reject(new Error('금액을 입력해주세요'));
+    }
+
+    return Promise.resolve();
   };
 
   useEffect(() => {
@@ -76,7 +85,7 @@ function AddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('pastAdjustment.create')}
+        title={t('clearing.balance.add')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -89,6 +98,19 @@ function AddModal({ visible, closeModal }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
+          onFinish={({
+            rt_store_id,
+            vendor_id,
+            subtract_amount,
+            unpaid_amount,
+          }) => {
+            createTransactionMutation.mutate({
+              rt_store_id,
+              vendor_id,
+              subtract_amount,
+              unpaid_amount,
+            });
+          }}
         >
           {/*  서버 전달용 데이터 */}
           <Form.Item name="rt_store_id" hidden>
@@ -146,34 +168,57 @@ function AddModal({ visible, closeModal }: Props) {
           <TurtleDivider marginBottom={37} marginTop={32} />
 
           <Form.Item
-            name="owner"
-            label={'사용할 금액'}
-            rules={[{ required: true }]}
+            label={t('table.subtractAmount')}
+            name="subtract_amount"
+            rules={[
+              {
+                required: true,
+                validator: paymentValidation,
+              },
+            ]}
           >
-            <TurtleFormInput placeholder="ex. 7,000" />
+            <TurtleNumberInput
+              step={1000}
+              min={0}
+              placeholder="ex. 7,000"
+              formatter={(value) => `${value}`.replace(pricePattern, ',')}
+            />
           </Form.Item>
-
           <Form.Item
-            name="memo"
-            label={t('미결제 금액')}
-            rules={[{ required: true }]}
+            label={t('table.unpaidPayment')}
+            name="unpaid_amount"
+            rules={[
+              {
+                required: true,
+                validator: paymentValidation,
+              },
+            ]}
           >
-            <TurtleFormInput placeholder="ex. 7,000" />
+            <TurtleNumberInput
+              step={1000}
+              min={0}
+              placeholder="ex. 7,000"
+              formatter={(value) => `${value}`.replace(pricePattern, ',')}
+            />
           </Form.Item>
 
-          <div css={marginTop}>
-            <PrimaryButton
-              size="large"
-              htmlType="submit"
-              onClick={() => {
-                form.validateFields().then(() => {
-                  createVendorMutation.mutate([{ ...form.getFieldsValue() }]);
-                });
-              }}
-            >
-              과거매입 추가하기
-            </PrimaryButton>
-          </div>
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldValue }) => (
+              <div css={marginTop}>
+                <PrimaryButton
+                  size="large"
+                  htmlType="submit"
+                  disabled={
+                    !getFieldValue('subtract_amount') ||
+                    !getFieldValue('unpaid_amount') ||
+                    !getFieldValue('vendor_name')
+                  }
+                >
+                  {t('button.addTransaction')}
+                </PrimaryButton>
+              </div>
+            )}
+          </Form.Item>
         </Form>
       </TurtleContentModal>
     </>

@@ -1,13 +1,13 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { useQuery } from 'react-query';
+
 import { Avatar, Col, Dropdown, Menu, Row, Button } from 'antd';
 import { t } from 'i18next';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
 import useLogin from '@hooks/useLogin';
-import authAPI from '@apis/authAPI';
+import useUser from '@hooks/useUser';
 
 interface Props {
   title: string;
@@ -17,8 +17,7 @@ interface Props {
 
 function PageHeader({ title, button, onClickBefore }: Props) {
   const { logout } = useLogin();
-
-  const getUserQuery = useQuery('getUserQuery', authAPI.verify);
+  const { user } = useUser();
 
   return (
     <>
@@ -57,7 +56,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
               style={{ backgroundColor: 'orange', cursor: 'pointer' }}
               size={36}
             >
-              <span css={name}>{getUserQuery.data?.name.split('')[0]}</span>
+              <span css={name}>{user.name.split('')[0]}</span>
             </Avatar>
           </Dropdown>
         </Col>
