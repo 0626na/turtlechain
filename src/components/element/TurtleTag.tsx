@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import React from 'react';
-import { useEffect } from 'react';
+
 import TurtleText from './TurtleText';
 
 interface Props {
