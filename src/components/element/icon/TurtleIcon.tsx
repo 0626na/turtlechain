@@ -25,6 +25,21 @@ import { ReactComponent as CompanyIcon } from '@icons/company.svg';
 import { ReactComponent as StoreListIcon } from '@icons/storeList.svg';
 import { ReactComponent as MembershipIcon } from '@icons/membership.svg';
 
+import { ReactComponent as AccountIcon } from '@icons/account.svg';
+import { ReactComponent as AtIcon } from '@icons/at.svg';
+import { ReactComponent as ClipIcon } from '@icons/clip.svg';
+import { ReactComponent as PencilIcon } from '@icons/pencil.svg';
+import { ReactComponent as PhoneIcon } from '@icons/phone.svg';
+import { ReactComponent as InfoIcon } from '@icons/info.svg';
+import { ReactComponent as ListIcon } from '@icons/list.svg';
+import { ReactComponent as ListViewIcon } from '@icons/listView.svg';
+
+import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
+import { ReactComponent as OrderIcon } from '@icons/order.svg';
+import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
+import { ReactComponent as SettingIcon } from '@icons/setting.svg';
+import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
+import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -50,7 +65,21 @@ interface Props {
     | 'membership'
     | 'company'
     | 'storeList'
-    | 'process';
+    | 'process'
+    | 'at'
+    | 'clip'
+    | 'pencil'
+    | 'phone'
+    | 'account'
+    | 'info'
+    | 'list'
+    | 'listView'
+    | 'vendorProduct'
+    | 'order'
+    | 'warehousing'
+    | 'clearing'
+    | 'setting'
+    | 'tutorial';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -59,6 +88,126 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'clearing') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ClearingIcon />
+      </div>
+    );
+  }
+
+  // if (name === 'grid') {
+  //   return (
+  //     <div css={iconContainer} onClick={handleClick}>
+  //       <GridIcon />
+  //     </div>
+  //   );
+  // }
+
+  if (name === 'vendorProduct') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <VendorProductIcon />
+      </div>
+    );
+  }
+
+  if (name === 'order') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <OrderIcon />
+      </div>
+    );
+  }
+
+  if (name === 'warehousing') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <WarehousingIcon />
+      </div>
+    );
+  }
+
+  if (name === 'setting') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <SettingIcon />
+      </div>
+    );
+  }
+
+  if (name === 'tutorial') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <TutorialIcon />
+      </div>
+    );
+  }
+
+  if (name === 'listView') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ListViewIcon />
+      </div>
+    );
+  }
+
+  if (name === 'list') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ListIcon />
+      </div>
+    );
+  }
+
+  if (name === 'account') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <AccountIcon />
+      </div>
+    );
+  }
+
+  if (name === 'info') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <InfoIcon />
+      </div>
+    );
+  }
+
+  if (name === 'at') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <AtIcon />
+      </div>
+    );
+  }
+
+  if (name === 'clip') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ClipIcon />
+      </div>
+    );
+  }
+
+  if (name === 'pencil') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <PencilIcon />
+      </div>
+    );
+  }
+
+  if (name === 'phone') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <PhoneIcon />
+      </div>
+    );
+  }
 
   if (name === 'delete') {
     return (

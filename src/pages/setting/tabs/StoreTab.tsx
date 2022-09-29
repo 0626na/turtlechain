@@ -1,19 +1,35 @@
+import retailerStoreAPI from '@apis/retailerStoreAPI';
 import {
   AddButton,
+  GridIcon,
   TurtleIcon,
   TurtleTableTitle,
+  TurtleTag,
   TurtleText,
 } from '@components/element';
 import { css } from '@emotion/react';
-import useStore from '@hooks/useStore';
+import useUser from '@hooks/useUser';
+
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
+import { phonePattern } from '@utils/pattern';
 import { Button, Col, Row, Table } from 'antd';
+import { t } from 'i18next';
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import StoreCard from '../card/StoreCard';
 
 function StoreTab() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
-  const { store } = useStore();
+  const { user } = useUser();
+
+  const getStoreListQuery = useQuery(
+    ['getStoreList'],
+    retailerStoreAPI.getList,
+    {
+      enabled: !!user.id,
+    },
+  );
+
   const changeMode = () => {
     setMode((mode) => {
       if (mode === 'cardView') return 'listView';
@@ -41,11 +57,12 @@ function StoreTab() {
             </Col>
             <Col
               css={css`
-                display: flex;
-                align-items: center;
+                font-size: 20px;
+                font-weight: 500;
+                color: #242934;
               `}
             >
-              <TurtleText css={$title}>쇼핑몰 정보</TurtleText>
+              <TurtleText>쇼핑몰 정보</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -53,96 +70,101 @@ function StoreTab() {
         <Col>
           <Button css={button}>
             <Plusicon css={icon} />
-
             <TurtleText>쇼핑몰 추가하기</TurtleText>
           </Button>
         </Col>
       </Row>
 
       <TurtleTableTitle
-        totalCount={store.list.length}
+        totalCount={getStoreListQuery.data?.store_list.length ?? 0}
         rightContent={
           <AddButton
+            icon={
+              mode === 'cardView' ? (
+                <TurtleIcon name="listView" />
+              ) : (
+                <GridIcon value="#6B6D73" />
+              )
+            }
             onClick={() => {
               changeMode();
             }}
           >
-            리스트로보기
+            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
           </AddButton>
         }
       />
 
       {mode === 'cardView' ? (
-        <div
-          css={css`
-            height: 600px;
-            /* padding-top: 10px; */
-            overflow: overlay;
-
-            display: flex;
-            /* align-items: center;
-            justify-content: center; */
-            flex-wrap: wrap;
-
-            gap: 19px;
-          `}
-        >
-          {store.list.map((item) => (
-            <StoreCard title={item.name} isOpen={true}>
-              <div>내용</div>
-            </StoreCard>
+        <Row gutter={[27, 27]} css={cardsContainer}>
+          {getStoreListQuery.data?.store_list.map((item, idx) => (
+            <Col key={idx} span={8}>
+              <StoreCard store={item} />
+            </Col>
           ))}
-        </div>
+        </Row>
       ) : (
         <Table
           size="small"
-          // loading={loading}
-          dataSource={[]}
-          // rowKey={(record) => record.product_code}
+          loading={getStoreListQuery.isLoading}
+          dataSource={getStoreListQuery.data?.store_list}
+          rowKey={(record) => record.id}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
           scroll={{ x: 1400, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
+              width: 20,
+              title: t('table.operatorStatus'),
+              render: (_, record) => {
+                const { is_closed } = record;
+                const color = is_closed ? 'gray' : 'skyblue';
+                const str = is_closed ? t('table.closed') : t('table.open');
+                return <TurtleTag color={color}>{str}</TurtleTag>;
+              },
             },
             {
               ellipsis: true,
               width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
+              title: t('table.retailerStoreName'),
+              render: (_, record) => record.name,
+            },
+            {
+              ellipsis: true,
+              width: 25,
+              title: t('table.mobile'),
+              render: (_, record) =>
+                record.store_phone[0]?.phone.replace(
+                  phonePattern,
+                  '$1-$2-$3',
+                ) ?? '',
             },
             {
               ellipsis: true,
               width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
+              title: t('table.paymentAccountInfo'),
+              render: (_, record) =>
+                `${record.store_account[0]?.bank ?? ''} ${
+                  record.store_account[0]?.account_number ?? ''
+                } ${record.store_account[0]?.account_holder ?? ''}`,
             },
             {
               ellipsis: true,
               width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
+              title: t('table.recipientPrint'),
+              render: (_, record) => record.recipient_print,
+            },
+            {
+              ellipsis: true,
+              width: 25,
+              title: t('table.inventory'),
+              render: (_, record) => t(`inventory.${record.inventory_type}.`),
             },
             {
               ellipsis: true,
               width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
-            },
-            {
-              ellipsis: true,
-              width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
-            },
-            {
-              ellipsis: true,
-              width: 50,
-              title: '이체내역 수신메일',
-              render: (_, record) => <div>df</div>,
+              title: t('table.transactionEmail'),
+              render: (_, record) => record.email,
             },
           ]}
         />
@@ -150,12 +172,6 @@ function StoreTab() {
     </>
   );
 }
-
-const $title = css`
-  font-size: 20px;
-  font-weight: 500;
-  color: #242934;
-`;
 
 const button = css`
   width: 160px;
@@ -174,7 +190,6 @@ const button = css`
 
   &:hover {
     color: #fff;
-    /* stroke: #fff; */
     border-color: linear-gradient(
       90deg,
       #00be90 0%,
@@ -207,4 +222,10 @@ const button = css`
 const icon = css`
   margin-right: 5px;
 `;
+
+const cardsContainer = css`
+  height: 70vh;
+  overflow: auto;
+`;
+
 export default StoreTab;

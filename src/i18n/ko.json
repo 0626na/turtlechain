@@ -90,6 +90,25 @@
     "remove_subtract": "차감 삭제"
   },
 
+  "inventory": {
+    "sellmate": {
+      "": "셀메이트",
+      "color": "orange"
+    },
+    "ezadmin": {
+      "": "이지어드민",
+      "color": "skyblue"
+    },
+    "turtlechain": {
+      "": "터틀체인",
+      "color": "gray"
+    },
+    "none": {
+      "": "없음",
+      "color": "gray"
+    }
+  },
+
   "etc": {
     "setting": "설정",
     "tutorial": "사용가이드"
@@ -110,6 +129,14 @@
   },
 
   "table": {
+    "operatorStatus": "운영상태",
+    "open": "운영",
+    "closed": "폐점",
+    "paymentAccountInfo": "결제 계좌정보",
+    "recipientPrint": "받는분 통장인쇄",
+    "transactionEmail": "이체내역 수신메일",
+    "inventory": "재고관리 프로그램",
+
     "vatIncluded": "부가세 입금",
     "accountInfo": "계좌 정보",
     "vendorName": "거래처명",
@@ -127,6 +154,8 @@
     "memo": "메모",
     "mobile": "휴대전화번호",
     "retailerStoreInput": "쇼핑몰 입력값",
+    "retailerStoreName": "쇼핑몰명",
+
     "matching": "매칭",
     "wsStoreNumber": "매장번호",
     "vendorEtcAddress": "기타 주소",

@@ -36,6 +36,7 @@ import TurtlePanelTitle from './TurtlePanelTitle';
 import ProcessButton from './button/ProcessButton';
 import SelectButton from './button/SelectButton';
 import ArrowRightIcon from './icon/ArrowRightIcon';
+import GridIcon from './icon/GridIcon';
 
 export {
   //buttons
@@ -69,6 +70,7 @@ export {
   TurtleIcon,
   MemoIcon,
   ArrowRightIcon,
+  GridIcon,
 
   //
   TurtleDropdown,

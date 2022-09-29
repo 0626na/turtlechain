@@ -4,13 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import StoreButton from './StoreButton';
 
-import { ReactComponent as Home } from '@icons/home.svg';
-import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
-import { ReactComponent as OrderIcon } from '@icons/order.svg';
-import { ReactComponent as SettingIcon } from '@icons/setting.svg';
-import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
-
 import { css } from '@emotion/react';
+import { GridIcon, TurtleIcon } from '@components/element';
 
 const pathnames = {
   vendor: {
@@ -95,6 +90,10 @@ type info = {
   domEvent: React.MouseEvent<HTMLElement>;
 };
 
+const iconContainer = css`
+  margin-right: -2px;
+`;
+
 const menus = [
   {
     type: 'group',
@@ -104,7 +103,11 @@ const menus = [
       {
         key: 'home',
         label: '홈',
-        icon: <Home />,
+        icon: (
+          <span css={iconContainer}>
+            <GridIcon />
+          </span>
+        ),
         style: mainMenuHomeStyle,
         onMouseEnter: (e: info) => {
           e.domEvent.currentTarget.style.color = '#EAECEF';
@@ -117,7 +120,11 @@ const menus = [
       {
         key: 'vendor',
         label: '거래처',
-        icon: <VendorProductIcon />,
+        icon: (
+          <span css={iconContainer}>
+            <TurtleIcon name="vendorProduct" />
+          </span>
+        ),
         style: mainMenuTitleStyle,
         onMouseEnter: (e: info) => {
           e.domEvent.currentTarget.style.color = '#EAECEF';
@@ -130,7 +137,11 @@ const menus = [
       {
         key: 'order',
         label: t('order.'),
-        icon: <OrderIcon />,
+        icon: (
+          <span css={iconContainer}>
+            <TurtleIcon name="order" />
+          </span>
+        ),
         style: mainMenuTitleStyle,
         children: [
           {
@@ -156,13 +167,21 @@ const menus = [
       {
         key: pathnames.etc.setting,
         label: t('etc.setting'),
-        icon: <SettingIcon />,
+        icon: (
+          <span css={iconContainer}>
+            <TurtleIcon name="setting" />
+          </span>
+        ),
         style: etcMenuTitleStyle,
       },
       {
         key: pathnames.etc.tutorial,
         label: t('etc.tutorial'),
-        icon: <TutorialIcon />,
+        icon: (
+          <span css={iconContainer}>
+            <TurtleIcon name="tutorial" />
+          </span>
+        ),
         style: etcMenuTitleStyle,
       },
     ],
