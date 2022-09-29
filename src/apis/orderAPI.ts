@@ -1,191 +1,6 @@
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
-// 주문 등록 추가 타입
-export interface OrderItemShow {
-  vendor_id: number;
-  product_id: number;
-  vendor_name: string;
-  vendor_address: string;
-  vendor_phone: string;
-  product_name: string;
-  product_code: string;
-  product_option: string;
-  count: number;
-  price: number;
-  type: string;
-  image_url: string;
-  memo: string;
-}
-
-// 주문서 타입
-export interface OrderSheet {
-  id: number;
-  status: string;
-  created_date: string;
-  order_case_count: number;
-  reserve_case_count: number;
-  takeback_case_count: number;
-  exchange_case_count: number;
-  sample_case_count: number;
-  pickup_case_count: number;
-  extra_case_count: number;
-  order_count: number;
-  order_price: number;
-  reserve_count: number;
-  reserve_price: number;
-  takeback_count: number;
-  takeback_price: number;
-  exchange_count: number;
-  exchange_price: number;
-  sample_count: number;
-  sample_price: number;
-  pickup_count: number;
-  pickup_price: number;
-  extra_count: number;
-  extra_price: number;
-  kakao: number;
-  sms: number;
-  fail: number;
-  total_store_count: number;
-  total_item_subcount: number;
-  total_price: number;
-}
-
-export interface OrderItem {
-  id: number;
-  product_info: {
-    vendor_info: {
-      vendor_name: string;
-      vendor_address: string;
-      vendor_phone: {
-        phone: string;
-      };
-    };
-    product_code: string;
-    name: string;
-    vendor_product_name: string;
-    price: number;
-    option: string;
-    memo: string;
-    image_url: string;
-  };
-  count: number;
-  price: number;
-  type: string;
-  memo: string;
-  image_url: string;
-}
-
-export interface RequestGetList {
-  rt_store_id: number;
-  start_date: string;
-  end_date: string;
-}
-
-export interface ResponseGetList {
-  msg: string;
-  data: {
-    order_sheet_list: Array<OrderSheet>;
-    total_count: number;
-  };
-}
-
-const getList = async function (query: RequestGetList) {
-  let url = `order/sheet?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetList>(url);
-  return response.data;
-};
-
-export interface RequestGet {
-  order_sheet_id: number;
-}
-
-export interface ResponseGet {
-  msg: string;
-  data: OrderSheet;
-}
-
-const get = async function (query: RequestGet) {
-  const url = `order/sheet/${query.order_sheet_id}`;
-  const response = await v2Axios.get<ResponseGet>(url);
-  return response.data;
-};
-
-export interface RequestGetItem {
-  sheet_id: number;
-}
-
-export interface ResponseGetItem {
-  msg: string;
-  data: {
-    order_item_list: Array<OrderItem>;
-    total_count: number;
-  };
-}
-
-const getItem = async function (query: RequestGetItem) {
-  let url = `order/item?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetItem>(url);
-  return response.data;
-};
-
-export interface RequestCreateSheet {
-  created_date: string;
-  rt_store_id: number;
-  status: 'N';
-  type: 'new' | 'add' | 'modify';
-}
-
-export interface Item {
-  vendor_id: number;
-  product_id: number;
-  count: number;
-  price: number;
-  type: string;
-  image_url: string;
-  memo: string;
-}
-
-export interface RequestCreateItem {
-  sheet_id?: number;
-  rt_store_id: number;
-  item_list: Array<Item>;
-}
-
-export interface ResponseCreateSheet {
-  msg: string;
-  data: number;
-}
-
-export interface ResponseCreateItem {
-  msg: string;
-  data: null;
-}
-
-const create = async function (data: {
-  sheet: RequestCreateSheet;
-  item: RequestCreateItem;
-}) {
-  let url = `order/sheet`;
-  const sheetResponse = await v2Axios.post<ResponseCreateSheet>(
-    url,
-    data.sheet,
-  );
-  url = `order/item`;
-  const itemResponse = await v2Axios.post<ResponseCreateItem>(url, {
-    ...data.item,
-    sheet_id: sheetResponse.data.data,
-  });
-  return itemResponse.data;
-};
-
 /*
  * 발주서 양식 조회
  */
@@ -256,7 +71,7 @@ interface WholesalerStore {
 }
 
 export interface StoreOrder {
-  order_id: number;
+  order_id?: number;
   vendor_name: string;
   vendor_address: string;
   vendor_mobile: string;
@@ -308,23 +123,69 @@ const createOrderExcelParsing = async (
 };
 
 /*
- * 발주 등록
+ * 발주 등록 여부 확인 (프리파싱)
+ * 발주 등록은 쇼핑몰당 하루 2회 가능하다.
  */
 
-export interface RequestCreateOrderSheet {
-  rt_store_ids: number[];
+interface PreParsingOrder {
+  rt_store_id: number;
+  rt_store_name: string;
 }
 
-export interface ResponseCreateOrderSheet {
+export interface PreParsingOrderList {
+  first_order: PreParsingOrder[];
+  second_order: PreParsingOrder[];
+  third_order: PreParsingOrder[];
+}
+
+export interface RequestCreatePreParsing {
+  files: RcFile[];
+}
+
+export interface ResponseCreatePreParsing {
   msg: string;
+  data: PreParsingOrderList;
 }
 
-const createOrderSheet = async (data: RequestCreateOrderSheet) => {
-  const url = 'order/sheet';
-  const response = await v2Axios.post<ResponseCreateOrderSheet>(url, data);
+const createPreParsing = async (data: RequestCreatePreParsing) => {
+  let url = 'order/parsing/pre-parsing';
+  let parsingResponse;
+  const formData = new FormData();
+  await data.files.map((file) => formData.append('files', file));
 
-  return response.data;
+  const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
+    url,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+
+  if (preParsingResponse.data.data.third_order.length === 0) {
+    url = 'order/parsing';
+    parsingResponse = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
+      url,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+  }
+
+  return {
+    files: data.files,
+    preParsingResult: preParsingResponse.data,
+    parsingData: parsingResponse?.data,
+  };
 };
+
+/*
+ * 발주 등록
+ */
 
 export interface CreatingOrdersItem {
   vendor_name: string;
@@ -357,47 +218,6 @@ const createOrderItem = async (data: RequestCreateOrderItem) => {
   const response = await v2Axios.post<ResponseCreateOrderItem>(url, data);
 
   return response.data;
-};
-
-/*
- * 발주 등록 여부 확인
- * 발주 등록은 쇼핑몰당 하루 2회 가능하다.
- */
-
-interface PreParsingOrder {
-  rt_store_id: number;
-  rt_store_name: string;
-}
-
-export interface PreParsingOrderList {
-  first_order: PreParsingOrder[];
-  second_order: PreParsingOrder[];
-  third_order: PreParsingOrder[];
-}
-
-export interface RequestCreatePreParsing {
-  files: RcFile[];
-}
-
-export interface ResponseCreatePreParsing {
-  msg: string;
-  data: PreParsingOrderList;
-}
-
-const createPreParsing = async (data: RequestCreatePreParsing) => {
-  const url = 'order/parsing/pre-parsing';
-  const formData = new FormData();
-  await data.files.map((file) => formData.append('files', file));
-  const response = await v2Axios.post<ResponseCreatePreParsing>(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  return {
-    files: data.files,
-    responseData: response.data,
-  };
 };
 
 /*
@@ -481,19 +301,68 @@ const getOrderHistory = async (params: RequestGetOrderItem) => {
   return response.data;
 };
 
+/*
+ * 사입삼촌 쇼핑몰 검색
+ */
+
+export interface PickerStore {
+  id: number;
+  name: string;
+  store_phone: {
+    phone: string;
+  }[];
+}
+
+export interface ResponseGetPickerStores {
+  msg: string;
+  data: {
+    store_list: PickerStore[];
+    total_count: number;
+  };
+}
+
+const getPickerStores = async () => {
+  const url = 'provisioning/picker/stores';
+  const response = await v2Axios.get<ResponseGetPickerStores>(url);
+
+  return response.data;
+};
+
+/*
+ * 발주 단건추가
+ */
+
+export interface RequestCreateStore {
+  rt_store_id: string;
+  name: string;
+  store_mobile: {
+    send_alimtalk: boolean;
+    mobile: string;
+    tag: string;
+  };
+}
+
+export interface ResponseGetRetailerStores {
+  msg: string;
+}
+
+const createSingleStore = async (data: RequestCreateStore) => {
+  const url = 'provisioning/picker/stores';
+  const response = await v2Axios.post<ResponseGetRetailerStores>(url, data);
+
+  return response.data;
+};
+
 const orderAPI = {
-  getList,
-  get,
-  getItem,
-  create,
   getOrderFormat,
   createOrderFormat,
   createOrderExcelParsing,
-  createOrderSheet,
   createOrderItem,
   getOrderSheets,
   createPreParsing,
   getOrderHistory,
+  createSingleStore,
+  getPickerStores,
 };
 
 export default orderAPI;
