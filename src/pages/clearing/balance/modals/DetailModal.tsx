@@ -116,6 +116,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           />
         )}
         size="small"
+        scroll={{ y: 500, x: 'auto' }}
         dataSource={getTransactionDetailQuery?.data?.data}
         rowKey={(record) => String(record?.id)}
         loading={getTransactionDetailQuery.isLoading}
@@ -123,35 +124,39 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         columns={[
           {
             ellipsis: true,
-            align: 'center',
             width: 120,
             title: t('table.createdDate'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
+            width: 140,
             title: t('table.type'),
-            render: (_, record) => record.transaction_type,
+            render: (_, record) => t(`transaction.${record.transaction_type}`),
           },
           {
             ellipsis: true,
+            width: 800,
             title: t('table.memo'),
             render: (_, record) => record.memo,
           },
           {
             ellipsis: true,
+            width: 200,
             align: 'right',
             title: t('table.subtract'),
             render: (_, record) => record.subtract_amount.toLocaleString(),
           },
           {
             ellipsis: true,
+            width: 200,
             align: 'right',
             title: t('table.refund'),
             render: (_, record) => record.refund_amount.toLocaleString(),
           },
           {
             ellipsis: true,
+            width: 200,
             align: 'right',
             title: t('table.unpaid'),
             render: (_, record) =>

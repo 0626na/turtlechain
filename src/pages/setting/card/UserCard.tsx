@@ -3,14 +3,14 @@ import React from 'react';
 
 interface Props {
   title: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }
 
-function Card({ title, icon, children }: Props) {
+function UserCard({ title, icon, children }: Props) {
   return (
     <div css={card}>
-      <div css={titleContent}>
+      <div css={titleContainer}>
         {icon && (
           <div
             css={css`
@@ -18,10 +18,9 @@ function Card({ title, icon, children }: Props) {
             `}
           >
             {icon}
-            {/* <TurtleIcon name="user" /> */}
           </div>
         )}
-        {title}
+        <div>{title}</div>
       </div>
       {children}
     </div>
@@ -36,12 +35,11 @@ const card = css`
   background-color: #fff;
 `;
 
-const titleContent = css`
+const titleContainer = css`
   margin-bottom: 32px;
   font-weight: 700;
   font-size: 20px;
   display: flex;
-  align-items: center;
 `;
 
-export default Card;
+export default UserCard;

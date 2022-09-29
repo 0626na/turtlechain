@@ -46,12 +46,12 @@ interface Props {
     | 'exchangeRefund'
     | 'reserve'
     | 'arrowDown'
-    | 'arrowRight'
-    | 'process'
     | 'user'
     | 'membership'
     | 'company'
-    | 'storeList';
+    | 'storeList'
+    | 'process';
+
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 

@@ -1,56 +1,131 @@
+import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
-import { Button, Form } from 'antd';
-import React from 'react';
-import Card from '../Card';
+
+import useUser from '@hooks/useUser';
+import { phonePattern, removeHyphen } from '@utils/pattern';
+import { Button, Col, Form, message, Row } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { t } from 'i18next';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import UserCard from '../card/UserCard';
 
 function UserTab() {
+  const queryClient = useQueryClient();
+  const { user } = useUser();
+  const [form] = useForm();
+
+  const [buttonsVisible, setButtonsVisible] = useState(false);
+
+  const showButtons = () => {
+    setButtonsVisible(true);
+  };
+
+  const hideButtons = () => {
+    setButtonsVisible(false);
+  };
+
+  const updateMutation = useMutation(userAPI.update, {
+    onSuccess: () => {
+      message.success(t('message.success update'));
+      queryClient.refetchQueries(['getUser'], { active: true });
+      hideButtons();
+    },
+  });
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: user.name,
+      login_id: user.login_id,
+      email: user.email,
+      mobile_phone: user.mobile_phone.replace(phonePattern, `$1-$2-$3`),
+    });
+  }, [form, user.email, user.login_id, user.mobile_phone, user.name]);
+
   return (
     <>
-      <Card title="기본정보" icon={<TurtleIcon name="user" />}>
-        <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
-          <Form.Item label="이름">
+      <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
+        <Form
+          form={form}
+          colon={false}
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 17 }}
+          onValuesChange={() => {
+            showButtons();
+          }}
+          onFinish={({ email, mobile_phone }) => {
+            updateMutation.mutate({
+              user_id: user.id,
+              email,
+              mobile_phone: mobile_phone.replace(removeHyphen, ''),
+            });
+          }}
+        >
+          <Form.Item label="이름" name="name">
+            <TurtleFormInput disabled />
+          </Form.Item>
+          <Form.Item label="아이디" name="login_id">
+            <TurtleFormInput disabled />
+          </Form.Item>
+          <Form.Item label="이메일" name="email">
             <TurtleFormInput />
           </Form.Item>
-          <Form.Item label="아이디">
-            <TurtleFormInput />
-          </Form.Item>
-          <Form.Item label="이메일">
-            <TurtleFormInput />
-          </Form.Item>
-          <Form.Item label="휴대전화 번호">
+          <Form.Item label="휴대전화 번호" name="mobile_phone">
             <TurtleFormInput />
           </Form.Item>
 
-          <div
-            css={css`
-              display: flex;
-              justify-content: flex-end;
-
-              margin-top: 32px;
-              margin-bottom: 8px;
-            `}
-          >
-            <AnswerButton type="NO" text="취소 " />
-
-            <div
+          {buttonsVisible && (
+            <Row
               css={css`
-                margin-left: 8px;
+                margin-top: 32px;
+                margin-bottom: 8px;
               `}
+              justify="end"
+              align="middle"
             >
-              <AnswerButton type="YES" text="저장" />
-            </div>
-          </div>
+              <Col>
+                <AnswerButton
+                  type="NO"
+                  text="취소 "
+                  onClick={() => {
+                    // 취소를 누르면 최초 값으로 초기화.
+                    form.setFieldsValue({
+                      name: user.name,
+                      login_id: user.login_id,
+                      email: user.email,
+                      mobile_phone: user.mobile_phone.replace(
+                        phonePattern,
+                        `$1-$2-$3`,
+                      ),
+                    });
+                    hideButtons();
+                  }}
+                />
+              </Col>
+              <Col css={marginleft}>
+                <AnswerButton type="YES" text="저장" htmlType="submit" />
+              </Col>
+            </Row>
+          )}
         </Form>
-      </Card>
+        {/*  */}
+      </UserCard>
       <div css={marginTop}>
-        <Card title="맴버십 정보" icon={<TurtleIcon name="user" />}>
+        <UserCard title="맴버십 정보" icon={<TurtleIcon name="user" />}>
           <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
             <Form.Item label="결제">
-              <Button css={button}>결제하기</Button>
+              <Button
+                css={button}
+                onClick={() => {
+                  message.warning('준비중입니다.');
+                }}
+              >
+                결제하기
+              </Button>
             </Form.Item>
           </Form>
-        </Card>
+        </UserCard>
       </div>
     </>
   );
@@ -85,16 +160,14 @@ const button = css`
     background-color: #00b3be;
     border-color: #00b3be;
   }
-
-  /* &.ant-btn[disabled] {
-    color: #00aab5;
-    stroke: #00aab5;
-    background-color: #ddf3f5;
-    opacity: 0.5;
-  } */
 `;
 
 const marginTop = css`
   margin-top: 24px;
 `;
+
+const marginleft = css`
+  margin-left: 8px;
+`;
+
 export default UserTab;

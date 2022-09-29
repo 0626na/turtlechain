@@ -22,7 +22,7 @@ function PrimaryButton({
 }: Props) {
   if (size === 'large') {
     return (
-      <Button css={largePrimary} {...props}>
+      <Button css={largePrimary} htmlType={htmlType} {...props}>
         <TurtleText>{children}</TurtleText>
       </Button>
     );
@@ -30,7 +30,7 @@ function PrimaryButton({
 
   if (size === 'small') {
     return (
-      <Button css={smallPrimary} {...props}>
+      <Button css={smallPrimary} htmlType={htmlType} {...props}>
         <TurtleText>{children}</TurtleText>
       </Button>
     );

@@ -36,7 +36,7 @@ import useUser from '@hooks/useUser';
 function App() {
   const { setUser } = useUser();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getUserQuery = useQuery('getUserQuery', authAPI.verify, {
+  const getUserQuery = useQuery('getUser', authAPI.verify, {
     onSuccess: ({ user_info }) => {
       setUser({ ...user_info }); // 사용자 셋팅(쇼핑몰 or 사입자)
     },
