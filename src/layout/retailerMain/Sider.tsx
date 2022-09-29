@@ -4,14 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import StoreSelector from './StoreSelector';
 
-import { ReactComponent as Home } from '@icons/home.svg';
-import { ReactComponent as VendorProductIcon } from '@icons/vendorProduct.svg';
-import { ReactComponent as OrderIcon } from '@icons/order.svg';
-import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
-import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
-import { ReactComponent as SettingIcon } from '@icons/setting.svg';
-import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
 import { css } from '@emotion/react';
+import { GridIcon, TurtleIcon } from '@components/element';
 
 const pathnames = {
   vendor: {
@@ -113,6 +107,10 @@ type info = {
   domEvent: React.MouseEvent<HTMLElement>;
 };
 
+const iconContainer = css`
+  margin-right: -2px;
+`;
+
 const menus = [
   {
     type: 'group',
@@ -122,7 +120,11 @@ const menus = [
       {
         key: 'home',
         label: '홈',
-        icon: <Home />,
+        icon: (
+          <span css={iconContainer}>
+            <GridIcon />
+          </span>
+        ),
         style: mainMenuHomeStyle,
         onMouseEnter: (e: info) => {
           e.domEvent.currentTarget.style.color = '#EAECEF';
@@ -135,7 +137,11 @@ const menus = [
       {
         key: 'vendor&product',
         label: '거래처/상품',
-        icon: <VendorProductIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="vendorProduct" />
+          </div>
+        ),
         style: mainMenuTitleStyle,
         children: [
           {
@@ -153,7 +159,11 @@ const menus = [
       {
         key: 'order',
         label: t('order.'),
-        icon: <OrderIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="order" />
+          </div>
+        ),
         style: mainMenuTitleStyle,
         children: [
           {
@@ -171,7 +181,11 @@ const menus = [
       {
         key: 'warehousing',
         label: t('warehousing.'),
-        icon: <WarehousingIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="warehousing" />
+          </div>
+        ),
         style: mainMenuTitleStyle,
         children: [
           {
@@ -194,7 +208,11 @@ const menus = [
       {
         key: 'clearing',
         label: t('clearing.'),
-        icon: <ClearingIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="clearing" />
+          </div>
+        ),
         style: mainMenuTitleStyle,
         children: [
           {
@@ -224,13 +242,21 @@ const menus = [
       {
         key: pathnames.etc.setting,
         label: t('etc.setting'),
-        icon: <SettingIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="setting" />
+          </div>
+        ),
         style: etcMenuTitleStyle,
       },
       {
         key: pathnames.etc.tutorial,
         label: t('etc.tutorial'),
-        icon: <TutorialIcon />,
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="tutorial" />
+          </div>
+        ),
         style: etcMenuTitleStyle,
       },
     ],
