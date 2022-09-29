@@ -35,12 +35,12 @@ export interface StoreShow {
   order_formats: number;
   email: string;
   recipient_print: string;
-  store_account: Array<{
+  store_account: {
     id: number;
     bank: string;
     account_number: string;
     account_holder: string;
-  }>;
+  }[];
   store_phone: {
     phone: string;
   }[];

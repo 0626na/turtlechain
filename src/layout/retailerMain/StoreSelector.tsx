@@ -13,7 +13,7 @@ function StoreSelector() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
-    ['getStoreListQuery'],
+    ['getStoreList'],
     retailerStoreAPI.getList,
     {
       enabled: !!user.id,

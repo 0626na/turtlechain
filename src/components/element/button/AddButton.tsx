@@ -5,11 +5,21 @@ import React from 'react';
 
 interface Props extends ButtonProps {
   disabled?: boolean;
+  icon?: React.ReactNode;
 }
 
-function AddButton({ children, disabled, ...props }: Props) {
+function AddButton({ icon, children, disabled, ...props }: Props) {
   return (
     <Button disabled={disabled} css={createCodeButton} {...props}>
+      {icon && (
+        <span
+          css={css`
+            margin-right: 4px;
+          `}
+        >
+          {icon}
+        </span>
+      )}
       <span
         css={[
           createCodeFont,
@@ -27,6 +37,10 @@ function AddButton({ children, disabled, ...props }: Props) {
 export default AddButton;
 
 const createCodeButton = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: #f0f3f6;
   min-width: 100px;
   height: 36px;

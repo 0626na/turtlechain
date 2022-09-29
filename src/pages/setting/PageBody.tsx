@@ -16,7 +16,7 @@ function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    // 초기 진입시 user로 설정.
+    // 초기 진입시 store로 설정.
     if (!searchParams.get('tab')) setSearchParams({ tab: 'store' });
   }, [searchParams, setSearchParams]);
 
@@ -39,23 +39,23 @@ function PageBody() {
           }}
         >
           <Tabs.TabPane key="store" tab="쇼핑몰 관리">
-            <div css={[storeTabContent]}>
+            <div css={[storeTabContainer]}>
               <StoreTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="user" tab="계정관리">
-            <div css={tabContent}>
+            <div css={tabContainer}>
               <UserTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="company" tab="사업자 관리">
-            <div css={tabContent}>
+            <div css={tabContainer}>
               <CompanyTab />
             </div>
           </Tabs.TabPane>
 
           <Tabs.TabPane key="mistransferRefund" tab="오입금 환불">
-            <div css={tabContent}>ㅁ</div>
+            <div css={tabContainer}>ㅁ</div>
           </Tabs.TabPane>
         </TurtleTabs>
       </div>
@@ -63,11 +63,11 @@ function PageBody() {
   );
 }
 
-const tabContent = css`
+const tabContainer = css`
   padding: 38px 36px 0px 36px;
 `;
 
-const storeTabContent = css`
+const storeTabContainer = css`
   padding: 30px 36px 0px 36px;
 `;
 

@@ -1,6 +1,6 @@
 import { Button } from 'antd';
-import { ReactComponent as ListIcon } from '@icons/list.svg';
-import { TurtleText } from '@components/element';
+
+import { TurtleIcon, TurtleText } from '@components/element';
 import { css } from '@emotion/react';
 
 interface Props {
@@ -14,7 +14,9 @@ interface Props {
 function HistoryButton({ text, ...props }: Props) {
   return (
     <Button css={button} {...props}>
-      <ListIcon css={icon} />
+      <div css={icon}>
+        <TurtleIcon name="list" />
+      </div>
       <TurtleText>{text}</TurtleText>
     </Button>
   );
