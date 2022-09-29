@@ -173,12 +173,6 @@ function StoreTab() {
   );
 }
 
-const $title = css`
-  font-size: 20px;
-  font-weight: 500;
-  color: #242934;
-`;
-
 const button = css`
   width: 160px;
   height: 40px;
