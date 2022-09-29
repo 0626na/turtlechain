@@ -1,32 +1,108 @@
+import { StoreShow } from '@apis/retailerStoreAPI';
+import { TurtleDivider, TurtleIcon, TurtleTag } from '@components/element';
 import { css } from '@emotion/react';
+import { phonePattern } from '@utils/pattern';
+import { Col, Row } from 'antd';
+import { t } from 'i18next';
 import React from 'react';
 
 interface Props {
-  title: string;
-  children: React.ReactNode;
-  isOpen?: boolean;
+  store: StoreShow;
 }
 
-function StoreCard({ title, isOpen = false, children }: Props) {
+function StoreCard({ store }: Props) {
   return (
     <div css={card}>
       <div css={titleContainer}>
-        <div css={$title}>{title}</div>
-        <div css={markContainer}>
-          {isOpen ? (
-            <>
-              <div css={openMark}></div>
-              <span css={marginLeft}>오픈</span>
-            </>
-          ) : (
-            <>
-              <div css={closeMark}></div>
-              <span css={marginLeft}>폐점</span>
-            </>
-          )}
+        <div css={$title}>{store.name}</div>
+        <div css={markCss.self}>
+          <div
+            css={markCss.status}
+            style={{
+              ['--backgroundColor' as any]: store.is_closed
+                ? '#a1a2a6'
+                : '#00b3be',
+            }}
+          />
+          <span css={marginLeft}>{store.is_closed ? '폐점' : '운영'}</span>
         </div>
       </div>
-      {children}
+
+      <Row css={marginBottom}>
+        <Col css={leftContentCss.self}>
+          <TurtleIcon name="phone" />
+          <span css={leftContentCss.title}>휴대전화 번호</span>
+        </Col>
+        <Col>
+          <span css={rightContentCss.self}>
+            {store?.store_phone[0]?.phone.replace(phonePattern, '$1-$2-$3') ??
+              ''}
+          </span>
+        </Col>
+      </Row>
+
+      <Row css={marginBottom}>
+        <Col css={leftContentCss.self}>
+          <TurtleIcon name="account" />
+
+          <span
+            css={leftContentCss.title}
+            style={{ ['--marginRight' as any]: '3px' }}
+          >
+            결제 계좌정보
+          </span>
+          <TurtleIcon name="info" />
+        </Col>
+        <Col>
+          <span css={rightContentCss.self}>{`${
+            store.store_account[0]?.bank ?? ''
+          } ${store.store_account[0]?.account_number ?? ''} ${
+            store.store_account[0]?.account_holder ?? ''
+          }`}</span>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col css={leftContentCss.self}>
+          <TurtleIcon name="pencil" />
+          <span
+            css={leftContentCss.title}
+            style={{ ['--marginRight' as any]: '3px' }}
+          >
+            받는분 통장인쇄
+          </span>
+          <TurtleIcon name="info" />
+        </Col>
+        <Col>
+          <TurtleTag color="gray">
+            <span css={rightContentCss.self}>{store.recipient_print}</span>
+          </TurtleTag>
+        </Col>
+      </Row>
+
+      <TurtleDivider marginTop={20} marginBottom={20} />
+
+      <Row css={marginBottom}>
+        <Col css={leftContentCss.self}>
+          <TurtleIcon name="clip" />
+          <span css={leftContentCss.title}>재고관리 프로그램</span>
+        </Col>
+        <Col>
+          <TurtleTag color={t(`inventory.${store.inventory_type}.color`)}>
+            {t(`inventory.${store.inventory_type}.`)}
+          </TurtleTag>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col css={leftContentCss.self}>
+          <TurtleIcon name="at" />
+          <span css={leftContentCss.title}>이체내역 수신메일</span>
+        </Col>
+        <Col>
+          <span css={rightContentCss.self}>{store.email}</span>
+        </Col>
+      </Row>
     </div>
   );
 }
@@ -54,31 +130,49 @@ const $title = css`
   color: #242934;
 `;
 
-const markContainer = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 400;
-  font-size: 14px;
-  color: #5b5d63;
-`;
+const markCss = {
+  self: css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontWeight: 400,
+    fontSize: 14,
+    color: '#5b5d63',
+  }),
 
-const openMark = css`
-  width: 8px;
-  height: 8px;
-  background-color: #00b3be;
-  border-radius: 50%;
-`;
-
-const closeMark = css`
-  width: 8px;
-  height: 8px;
-  background-color: #a1a2a6;
-  border-radius: 50%;
-`;
+  status: css({
+    width: 8,
+    height: 8,
+    backgroundColor: 'var(--backgroundColor)',
+    borderRadius: '50%',
+  }),
+};
 
 const marginLeft = css`
   margin-left: 7px;
 `;
+
+const marginBottom = css`
+  margin-bottom: 14px;
+`;
+
+const leftContentCss = {
+  self: css({
+    flexBasis: '42.2%',
+    display: 'flex',
+  }),
+
+  title: css({
+    color: '#999ba5',
+    marginLeft: 7,
+    marginRight: 'var(--marginRight)',
+  }),
+};
+
+const rightContentCss = {
+  self: css({
+    color: '#242934',
+  }),
+};
 
 export default StoreCard;
