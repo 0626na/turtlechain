@@ -142,14 +142,12 @@ const button = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   color: #fff;
-  /* stroke: #00aab5; */
+
   background-color: #00b3be;
 
   &:hover {
     color: #fff;
-    /* stroke: #00aab5; */
     background-color: #00b3be;
   }
 
