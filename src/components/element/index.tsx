@@ -37,6 +37,7 @@ import ProcessButton from './button/ProcessButton';
 import SelectButton from './button/SelectButton';
 import ArrowRightIcon from './icon/ArrowRightIcon';
 import GridIcon from './icon/GridIcon';
+import SpecialButton from './button/SpecialButton';
 
 export {
   //buttons
@@ -48,6 +49,7 @@ export {
   AddButton,
   ProcessButton,
   SelectButton,
+  SpecialButton,
 
   //inputs
   TurtleSearchInput,
