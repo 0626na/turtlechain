@@ -205,7 +205,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
           </Form.Item>
           {/* 휴대번호 */}
-          <Form.Item label={t('table.mobile')} name="vendor_phone" required>
+          <Form.Item label={t('table.mobile')} name="vendor_mobile" required>
             <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
           </Form.Item>
 
@@ -237,7 +237,7 @@ function AddNewOrderModal({ visible, close }: Props) {
               <Radio value="미송">미송</Radio>
               <Radio value="반품">반품</Radio>
               <Radio value="교환">교환</Radio>
-              <Radio value="발주">샘플</Radio>
+              <Radio value="샘플">샘플</Radio>
               <Radio value="픽업">픽업</Radio>
               <Radio value="기타">기타</Radio>
             </Radio.Group>

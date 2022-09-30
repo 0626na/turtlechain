@@ -53,16 +53,59 @@ const useOrderCart = () => {
           (store) => store.rt_store_id === data.rt_store_id,
         );
 
+        //이미 등록되어 있는 상품인경우
+        if (
+          findStore?.orders.find(
+            (order) => order.product_name === data.orders[0].product_name,
+          )
+        ) {
+          setCart({
+            successList: [
+              ...cart.successList.map((store) => {
+                if (store.rt_store_id === findStore.rt_store_id) {
+                  return {
+                    rt_store_id: findStore.rt_store_id,
+                    rt_store_name: findStore.rt_store_name,
+                    orders: [
+                      ...findStore.orders.map((order) => {
+                        if (
+                          order.product_name === data.orders[0].product_name
+                        ) {
+                          order = {
+                            ...order,
+                            product_count: `${
+                              Number(order.product_count) +
+                              Number(data.orders[0].product_count)
+                            }`,
+                          };
+                        }
+
+                        return order;
+                      }),
+                    ],
+                  };
+                }
+
+                return store;
+              }),
+            ],
+
+            failList: [...cart.failList],
+          });
+          console.log(cart);
+          return true;
+        }
+
         findStore &&
           setCart({
             successList: [
               ...cart.successList.filter(
-                (store) => store.rt_store_id !== findStore?.rt_store_id,
+                (store) => store.rt_store_id !== findStore.rt_store_id,
               ),
               {
-                rt_store_id: findStore?.rt_store_id,
-                rt_store_name: findStore?.rt_store_name,
-                orders: [...findStore?.orders, data.orders[0]],
+                rt_store_id: findStore.rt_store_id,
+                rt_store_name: findStore.rt_store_name,
+                orders: [...findStore.orders, data.orders[0]],
               },
             ],
             failList: [...cart.failList],
@@ -72,7 +115,7 @@ const useOrderCart = () => {
       }
       return false;
     },
-    [cart.successList, cart.failList, setCart],
+    [cart, setCart],
   );
 
   const fail = useCallback(() => {
