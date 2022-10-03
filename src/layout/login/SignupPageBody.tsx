@@ -1,6 +1,8 @@
 import { useLogin } from '@hooks/index';
 import { Navigate } from 'react-router-dom';
-import styled from '@emotion/styled';
+
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface Props {
   children?: React.ReactNode;
@@ -13,13 +15,13 @@ function SignupPageBody({ children }: Props) {
     return <Navigate to="/home" replace={true} />;
   }
 
-  return <Container>{children}</Container>;
+  return <div css={container}>{children}</div>;
 }
 
-const Container = styled.div`
-  width: 400px;
-  margin: 0 auto;
-  padding: 30px 0;
-`;
+const container = css({
+  width: 720,
+  height: '100vh',
+  margin: '20px auto 0px',
+});
 
 export default SignupPageBody;
