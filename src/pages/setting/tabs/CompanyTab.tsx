@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   AddButton,
   AnswerButton,
@@ -15,8 +15,10 @@ import retailerCompanyAPI, { Company } from '@apis/retailerCompanyAPI';
 import { css } from '@emotion/react';
 import { bizNumPattern } from '@utils/pattern';
 import { DaumPostcodeModal } from '@components/combine';
+import { useSearchParams } from 'react-router-dom';
 
 function CompanyTab() {
+  const [searchParams] = useSearchParams();
   const [form] = Form.useForm();
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
@@ -73,26 +75,41 @@ function CompanyTab() {
     return e && e.fileList;
   };
 
-  const resetStates = (data: Company) => {
-    form.setFieldsValue({
-      company_id: data.id,
-      biz_type: data.biz_type,
-      biz_num: data.biz_num.replace(bizNumPattern, '$1-$2-$3'),
-      name: data?.name,
-      address_main: data?.address.split('::')[0],
-      address_sub: data?.address.split('::')[1],
-      email: data?.email,
-      memo: data?.memo,
-      biz_license_file: [
-        {
-          uid: '1',
-          name: data?.biz_license_path.split('/').pop()!,
-          status: 'done',
-          url: `${data?.biz_license_path}?_=${+new Date()}`,
-        },
-      ],
-    });
-  };
+  const resetStates = useCallback(
+    (data: Company) => {
+      form.setFieldsValue({
+        company_id: data?.id,
+        biz_type: data?.biz_type,
+        biz_num: data?.biz_num.replace(bizNumPattern, '$1-$2-$3'),
+        name: data?.name,
+        address_main: data?.address.split('::')[0],
+        address_sub: data?.address.split('::')[1],
+        email: data?.email,
+        memo: data?.memo,
+        biz_license_file: [
+          {
+            uid: '1',
+            name: data?.biz_license_path.split('/').pop()!,
+            status: 'done',
+            url: `${data?.biz_license_path}?_=${+new Date()}`,
+          },
+        ],
+      });
+    },
+    [form],
+  );
+
+  useEffect(() => {
+    resetStates(getCompanyQuery.data as Company);
+  }, [getCompanyQuery.data, resetStates]);
+
+  useEffect(() => {
+    if (searchParams.get('tab') !== 'company') {
+      hideButtons();
+      resetStates(getCompanyQuery.data as Company);
+      return;
+    }
+  }, [getCompanyQuery.data, resetStates, searchParams]);
 
   return (
     <>
