@@ -99,7 +99,10 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     <TurtleContentModal
       title={t('store.info')}
       visible={visible}
-      onClose={closeModal}
+      onClose={() => {
+        closeModal();
+        hideButtons();
+      }}
     >
       <Form
         layout="horizontal"
