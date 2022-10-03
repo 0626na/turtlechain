@@ -219,6 +219,28 @@
     "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
-    "success update": "성공적으로 수정하였습니다."
-  }
+    "success update": "성공적으로 수정하였습니다.",
+    "success signup": "가입 신청이 완료 되었습니다."
+  },
+
+  "biz role": "직책",
+  "biz type": "사업자 종류",
+  "biz entity": "법인 사업자",
+  "biz personal": "개인 사업자",
+  "biz simple": "간이 사업자",
+  "biz name": "사업자명",
+  "biz num": "사업자번호",
+  "biz address": "사업자주소",
+  "biz detail address": "사업자 상세주소",
+  "biz license": "사업자등록증",
+
+  "go home": "홈으로 돌아가기",
+  "next": "다음",
+  "signup": "가입 신청하기",
+  "phone": "휴대전화 번호",
+  "id": "아이디",
+  "password": "비밀번호",
+  "confirm password": "비밀번호 확인",
+  "email": "이메일",
+  "user name": "사용자명"
 }
