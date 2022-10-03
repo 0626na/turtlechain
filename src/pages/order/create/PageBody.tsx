@@ -3,7 +3,7 @@ import {
   AnswerButton,
   PrimaryButton,
   SecondaryButton,
-  TeriaryButton,
+  TertiaryButton,
   TurtleDropdown,
   TurtleIcon,
 } from '@components/element';
@@ -236,7 +236,10 @@ function PageBody() {
       <PageTitle
         title="발주서 미리보기"
         buttons={[
-          <TeriaryButton text="발주서 설정" onClick={openSettingColumnModal} />,
+          <TertiaryButton
+            text="발주서 설정"
+            onClick={openSettingColumnModal}
+          />,
           <TurtleDropdown
             triggerButton={<SecondaryButton>발주 추가하기</SecondaryButton>}
             items={[

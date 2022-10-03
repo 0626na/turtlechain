@@ -1,6 +1,6 @@
 import PrimaryButton from './button/PrimaryButton';
 import SecondaryButton from './button/SecondaryButton';
-import TeriaryButton from './button/TeriaryButton';
+import TertiaryButton from './button/TertiaryButton';
 import AnswerButton from './button/AnswerButton';
 import HistoryButton from './button/HistoryButton';
 
@@ -43,7 +43,7 @@ export {
   //buttons
   PrimaryButton,
   SecondaryButton,
-  TeriaryButton,
+  TertiaryButton,
   AnswerButton,
   HistoryButton,
   AddButton,

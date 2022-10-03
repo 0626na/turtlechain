@@ -2,7 +2,7 @@ import React from 'react';
 import {
   PrimaryButton,
   SecondaryButton,
-  TeriaryButton,
+  TertiaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
   TurtleIcon,
@@ -131,7 +131,7 @@ function PageBody() {
       <PageTitle
         title="입고서 미리보기"
         buttons={[
-          <TeriaryButton
+          <TertiaryButton
             text="재고프로그램 연동"
             onClick={() => {
               openInventoryModal();

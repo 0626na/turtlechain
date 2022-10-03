@@ -2,7 +2,7 @@ import React from 'react';
 import {
   PrimaryButton,
   SecondaryButton,
-  TeriaryButton,
+  TertiaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
   TurtleIcon,
@@ -121,7 +121,7 @@ function PageBody() {
         title="상품등록 미리보기"
         subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."
         buttons={[
-          <TeriaryButton
+          <TertiaryButton
             text="재고프로그램 연동"
             onClick={() => {
               openInventoryModal();

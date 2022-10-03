@@ -5,7 +5,7 @@ import clearingAPI, {
 import { RangeDateModal } from '@components/combine';
 import {
   SelectButton,
-  TeriaryButton,
+  TertiaryButton,
   TurtleCard,
   TurtleConfirmModal,
   TurtleIcon,
@@ -93,7 +93,7 @@ function PageBody() {
       <PageTitle
         title="결제현황"
         buttons={[
-          <TeriaryButton
+          <TertiaryButton
             text="결제내역 다운"
             icon={<TurtleIcon name="download" />}
             onClick={() => {
