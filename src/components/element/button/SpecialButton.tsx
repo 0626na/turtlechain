@@ -88,6 +88,7 @@ const button = css`
 `;
 
 const defaultSpecial = css([button, { width: 160, height: 40 }]);
+
 const largeSpecial = css([button, { width: 512, height: 48 }]);
 
 export default SpecialButton;
