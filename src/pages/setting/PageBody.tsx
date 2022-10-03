@@ -25,9 +25,9 @@ function PageBody() {
       <PageHeader title="설정" />
 
       <div // pageContent
-        css={{
-          flexGrow: 1,
-          backgroundColor:
+        css={pageContent}
+        style={{
+          ['--background-color' as any]:
             searchParams.get('tab') === 'store' ? '#fff' : '#f9f9fa',
         }}
       >
@@ -55,13 +55,18 @@ function PageBody() {
           </Tabs.TabPane>
 
           <Tabs.TabPane key="mistransferRefund" tab="오입금 환불">
-            <div css={tabContainer}>ㅁ</div>
+            <div css={tabContainer}>준비중입니다.</div>
           </Tabs.TabPane>
         </TurtleTabs>
       </div>
     </>
   );
 }
+
+const pageContent = css({
+  flexGrow: 1,
+  backgroundColor: 'var(--background-color)',
+});
 
 const tabContainer = css`
   padding: 38px 36px 0px 36px;
