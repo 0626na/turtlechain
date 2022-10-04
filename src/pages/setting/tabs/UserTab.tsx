@@ -1,3 +1,4 @@
+import { UserInfo } from '@apis/authAPI';
 import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
@@ -7,11 +8,13 @@ import { phonePattern, removeHyphen } from '@utils/pattern';
 import { Button, Col, Form, message, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 import UserCard from '../card/UserCard';
 
 function UserTab() {
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const { user } = useUser();
   const [form] = useForm();
@@ -34,14 +37,29 @@ function UserTab() {
     },
   });
 
+  const resetStates = useCallback(
+    (user: UserInfo) => {
+      form.setFieldsValue({
+        name: user.name,
+        login_id: user.login_id,
+        email: user.email,
+        mobile_phone: user.mobile_phone.replace(phonePattern, `$1-$2-$3`),
+      });
+    },
+    [form],
+  );
+
   useEffect(() => {
-    form.setFieldsValue({
-      name: user.name,
-      login_id: user.login_id,
-      email: user.email,
-      mobile_phone: user.mobile_phone.replace(phonePattern, `$1-$2-$3`),
-    });
-  }, [form, user.email, user.login_id, user.mobile_phone, user.name]);
+    resetStates(user);
+  }, [resetStates, user]);
+
+  useEffect(() => {
+    if (searchParams.get('tab') !== 'user') {
+      hideButtons();
+      resetStates(user);
+      return;
+    }
+  }, [resetStates, searchParams, user]);
 
   return (
     <>
@@ -90,15 +108,7 @@ function UserTab() {
                   text="취소 "
                   onClick={() => {
                     // 취소를 누르면 최초 값으로 초기화.
-                    form.setFieldsValue({
-                      name: user.name,
-                      login_id: user.login_id,
-                      email: user.email,
-                      mobile_phone: user.mobile_phone.replace(
-                        phonePattern,
-                        `$1-$2-$3`,
-                      ),
-                    });
+                    resetStates(user);
                     hideButtons();
                   }}
                 />
@@ -142,21 +152,19 @@ const button = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   color: #fff;
-  /* stroke: #00aab5; */
+
   background-color: #00b3be;
 
   &:hover {
     color: #fff;
-    /* stroke: #00aab5; */
     background-color: #00b3be;
   }
 
   // active 상태
   &.ant-btn:focus {
     color: #fff;
-    /* stroke: #00aab5; */
+
     background-color: #00b3be;
     border-color: #00b3be;
   }

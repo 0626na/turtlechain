@@ -13,7 +13,7 @@ interface Props {
   onClick?: () => void;
 }
 
-function TeriaryButton({ text, icon, ...props }: Props) {
+function TertiaryButton({ text, icon, ...props }: Props) {
   return (
     <Button css={button} {...props}>
       {icon && <IconContainer>{icon}</IconContainer>}
@@ -66,4 +66,4 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-export default TeriaryButton;
+export default TertiaryButton;

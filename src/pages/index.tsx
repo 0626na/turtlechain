@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
 export const LoginPage = lazy(() => import('./auth/login'));
+export const SignupPage = lazy(() => import('./auth/signup'));
 export const NotFoundPage = lazy(() => import('./notFound'));
 
 // 쇼핑몰Page

@@ -57,9 +57,10 @@ export interface ResponseGetList {
   };
 }
 
-const getList = async function () {
-  let url = '/provisioning/retailer/stores';
+const getList = async () => {
+  const url = '/provisioning/retailer/stores';
   const response = await v2Axios.get<ResponseGetList>(url);
+
   return response.data.data;
 };
 
@@ -72,9 +73,10 @@ export interface ResponseGet {
   data: StoreShow;
 }
 
-const get = async function (data: RequestGet) {
-  let url = `/provisioning/retailer_store/${data.store_id}`;
+const get = async (data: RequestGet) => {
+  const url = `/provisioning/retailer_store/${data.store_id}`;
   const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data;
 };
 
@@ -104,10 +106,11 @@ export interface ResponseUpdate {
   data: null;
 }
 
-const update = async function (data: RequestUpdate) {
-  let url = `/provisioning/retailer_store/${data.store_id}`;
+const update = async (data: RequestUpdate) => {
+  const url = `/provisioning/retailer_store/${data.store_id}`;
   delete data.store_id;
   const response = await v2Axios.patch<ResponseUpdate>(url, data);
+
   return response.data;
 };
 
@@ -119,8 +122,9 @@ export interface ResponseCreate {
 }
 
 const create = async (data: RequestCreate) => {
-  let url = `/provisioning/retailer/stores`;
+  const url = `/provisioning/retailer/stores`;
   const response = await v2Axios.post<ResponseCreate>(url, data);
+
   return response.data;
 };
 

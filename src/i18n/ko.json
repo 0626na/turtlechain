@@ -128,6 +128,20 @@
     "notMember": "아직 회원이 아니신가요?"
   },
 
+  "store": {
+    "": "쇼핑몰",
+    "lists": "쇼핑몰 리스트",
+    "name": "쇼핑몰명",
+    "info": "쇼핑몰 정보",
+    "alimtalk name": "알림톡명",
+    "url": "쇼핑몰 URL",
+    "phone": "쇼핑몰 휴대번호",
+    "create": "쇼핑몰 추가하기",
+    "update": "쇼핑몰 수정하기",
+    "address": "쇼핑몰 주소",
+    "management": "쇼핑몰 관리"
+  },
+
   "table": {
     "operatorStatus": "운영상태",
     "open": "운영",
@@ -139,12 +153,15 @@
 
     "vatIncluded": "부가세 입금",
     "accountInfo": "계좌 정보",
+
     "vendorName": "거래처명",
     "useVendorName": "사용할 거래처명",
     "vendorAddress": "거래처 주소",
     "vendorCode": "거래처코드",
     "productName": "상품명",
+    "supplyPriceRecord": "공급가 표시",
     "vendorProductName": "거래처 상품명",
+    "alimtalkName": "알림톡명",
     "productCode": "상품 바코드",
     "option": "옵션",
     "imageUrl": "이미지 URL",
@@ -154,8 +171,8 @@
     "memo": "메모",
     "mobile": "휴대전화번호",
     "retailerStoreInput": "쇼핑몰 입력값",
-    "retailerStoreName": "쇼핑몰명",
 
+    "retailerStoreURL": "쇼핑몰 URL",
     "matching": "매칭",
     "wsStoreNumber": "매장번호",
     "vendorEtcAddress": "기타 주소",
@@ -188,10 +205,6 @@
     "unpaid": "결제"
   },
 
-  "form": {},
-
-  "wholesaler": {},
-
   "button": {
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
@@ -206,6 +219,28 @@
     "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
-    "success update": "성공적으로 수정하였습니다."
-  }
+    "success update": "성공적으로 수정하였습니다.",
+    "success signup": "가입 신청이 완료 되었습니다."
+  },
+
+  "biz role": "직책",
+  "biz type": "사업자 종류",
+  "biz entity": "법인 사업자",
+  "biz personal": "개인 사업자",
+  "biz simple": "간이 사업자",
+  "biz name": "사업자명",
+  "biz num": "사업자번호",
+  "biz address": "사업자주소",
+  "biz detail address": "사업자 상세주소",
+  "biz license": "사업자등록증",
+
+  "go home": "홈으로 돌아가기",
+  "next": "다음",
+  "signup": "가입 신청하기",
+  "phone": "휴대전화 번호",
+  "id": "아이디",
+  "password": "비밀번호",
+  "confirm password": "비밀번호 확인",
+  "email": "이메일",
+  "user name": "사용자명"
 }

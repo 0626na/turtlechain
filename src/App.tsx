@@ -27,6 +27,7 @@ import {
   PickerOrderCreatePage,
   PickerOrderHistoryPage,
   PickerSettingPage,
+  SignupPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -46,14 +47,11 @@ function App() {
     <Suspense fallback={<></>}>
       <Routes>
         <Route index element={<LoginPage />} />
-        {/* 
-        <Route index element={<LoginPage />} />
-        <Route path="/find-id" element={<FindIdPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        {/* <Route path="/find-id" element={<FindIdPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/membership-info" element={<MembershipInfoPage />} />
-         */}
+        <Route path="/membership-info" element={<MembershipInfoPage />} /> */}
 
         {/*
          *

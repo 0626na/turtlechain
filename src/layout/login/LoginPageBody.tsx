@@ -1,7 +1,6 @@
 import { useLogin } from '@hooks/index';
-import { Card } from 'antd';
 import { Navigate } from 'react-router-dom';
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 interface Props {
   children: React.ReactNode;
@@ -15,27 +14,27 @@ function LoginPageBody({ children }: Props) {
   }
 
   return (
-    <Container>
-      <StyledCard>{children}</StyledCard>
-    </Container>
+    <div css={Container}>
+      <div css={card}>{children}</div>
+    </div>
   );
 }
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fbfcfd;
-`;
+const Container = css({
+  width: '100%',
+  height: '100vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  background: '#fbfcfd',
+});
 
-const StyledCard = styled(Card)`
-  padding: 80px 40px 20px 40px;
-  background: #ffffff;
-  box-shadow: 0px 10px 30px rgba(41, 77, 119, 0.08);
-  border-radius: 20px;
-  border: none;
-`;
+const card = css({
+  padding: '100px 64px 40px',
+  background: '#ffffff',
+  boxShadow: '0px 10px 30px rgba(41, 77, 119, 0.08)',
+  borderRadius: '20px',
+  border: 'none',
+});
 
 export default LoginPageBody;

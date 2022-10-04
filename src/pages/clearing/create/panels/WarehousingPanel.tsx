@@ -7,6 +7,7 @@ import {
   TurtleTableTitle,
   TurtleText,
 } from '@components/element';
+import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useStore from '@hooks/useStore';
 import { pricePattern } from '@utils/pattern';
@@ -65,6 +66,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       style={{
         border: activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
+        // height: '100%',
       }}
       showArrow={false}
       extra={
@@ -191,9 +193,17 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
        *  미송
        */}
 
-      <div>
-        <h3>이번 결제에 포함해요</h3>
-      </div>
+      <span
+        css={css`
+          /* margin-top: 40px; */
+          display: inline-block;
+          font-weight: 700;
+          font-size: 18px;
+          color: #242934;
+        `}
+      >
+        이번 결제에 포함해요
+      </span>
       <Table
         size="small"
         pagination={false}
