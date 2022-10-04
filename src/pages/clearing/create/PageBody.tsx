@@ -1,4 +1,3 @@
-import { TurtleText } from '@components/element';
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import { PageContent } from '@layout/page';
