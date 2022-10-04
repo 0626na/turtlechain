@@ -11,12 +11,12 @@ import {
   HomePage,
   LoginPage,
   NotFoundPage,
-  OrderCreatePage,
-  OrderHistoryPage,
+  // OrderCreatePage,
+  // OrderHistoryPage,
   ProductCreatePage,
   ProductHistoryPage,
   SettingPage,
-  TutorialPage,
+  // TutorialPage,
   VendorCreatePage,
   VendorHistoryPage,
   WarehousingCreatePage,
@@ -117,7 +117,7 @@ function App() {
            * 발주
            */}
 
-          <Route
+          {/* <Route
             path="order/create"
             element={
               <Suspense fallback={<></>}>
@@ -133,7 +133,7 @@ function App() {
                 <OrderHistoryPage />
               </Suspense>
             }
-          />
+          /> */}
 
           {/*
            * 입고
@@ -213,14 +213,14 @@ function App() {
            * 사용자가이드
            */}
 
-          <Route
+          {/* <Route
             path="tutorial"
             element={
               <Suspense fallback={<></>}>
                 <TutorialPage />
               </Suspense>
             }
-          />
+          /> */}
         </Route>
 
         {/*
