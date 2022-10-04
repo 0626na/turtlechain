@@ -1,5 +1,5 @@
 import orderAPI from '@apis/orderAPI';
-import { TeriaryButton, TurtleCard, TurtleIcon } from '@components/element';
+import { TertiaryButton, TurtleCard, TurtleIcon } from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
@@ -31,7 +31,7 @@ function PageBody() {
       <PageTitle
         title={`${t('order.present')}`}
         buttons={[
-          <TeriaryButton
+          <TertiaryButton
             text="발주서 다운"
             disabled
             icon={<TurtleIcon name="download" />}
