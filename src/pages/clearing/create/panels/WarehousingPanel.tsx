@@ -3,6 +3,7 @@ import clearingAPI from '@apis/clearingAPI';
 import {
   ArrowRightIcon,
   PrimaryButton,
+  TurtleDivider,
   TurtleIcon,
   TurtleTableTitle,
   TurtleText,
@@ -66,7 +67,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {...props}
       style={{
         border: activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
-        // height: '100%',
       }}
       showArrow={false}
       extra={
@@ -82,6 +82,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {/*
        *  차감
        */}
+      <TurtleDivider marginBottom={36} />
       <div>
         <h3>이번 결제에서 제외해요</h3>
       </div>

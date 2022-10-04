@@ -239,10 +239,15 @@ const collapse = css`
     border-radius: 12px;
   }
 
+  &.ant-collapse
+    > .ant-collapse-item.ant-collapse-no-arrow
+    > .ant-collapse-header {
+    padding: 23px 36px;
+  }
+
   .ant-collapse-content-box {
-    height: 580px;
     background-color: #fff;
-    padding: 24px 24px 28px 24px !important;
+    padding: 0px 36px 36px 36px !important;
   }
 `;
 
