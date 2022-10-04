@@ -19,7 +19,7 @@ const pathnames = {
 
   etc: {
     setting: '/picker/setting',
-    tutorial: '/picker/tutorial',
+    // tutorial: '/picker/tutorial',
   },
 };
 
@@ -174,16 +174,16 @@ const menus = [
         ),
         style: etcMenuTitleStyle,
       },
-      {
-        key: pathnames.etc.tutorial,
-        label: t('etc.tutorial'),
-        icon: (
-          <span css={iconContainer}>
-            <TurtleIcon name="tutorial" />
-          </span>
-        ),
-        style: etcMenuTitleStyle,
-      },
+      // {
+      //   key: pathnames.etc.tutorial,
+      //   label: t('etc.tutorial'),
+      //   icon: (
+      //     <span css={iconContainer}>
+      //       <TurtleIcon name="tutorial" />
+      //     </span>
+      //   ),
+      //   style: etcMenuTitleStyle,
+      // },
     ],
   },
 ];
