@@ -17,6 +17,7 @@ import {
   ProductHistoryPage,
   SettingPage,
   // TutorialPage,
+  FindIdPage,
   VendorCreatePage,
   VendorHistoryPage,
   WarehousingCreatePage,
@@ -28,6 +29,7 @@ import {
   PickerOrderHistoryPage,
   PickerSettingPage,
   SignupPage,
+  ResetPasswordPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -48,10 +50,10 @@ function App() {
       <Routes>
         <Route index element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* <Route path="/find-id" element={<FindIdPage />} />
+        <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/membership-info" element={<MembershipInfoPage />} /> */}
+        {/* <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/membership-info" element={<MembershipInfoPage />} />  */}
 
         {/*
          *
