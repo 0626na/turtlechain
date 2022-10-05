@@ -170,7 +170,7 @@ const logoImage = css`
   height: 20px;
   display: block;
   margin: 0 auto;
-  margin-bottom: 60px;
+  margin-bottom: 68px;
 `;
 
 const input = css`

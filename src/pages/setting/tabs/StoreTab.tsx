@@ -1,26 +1,32 @@
-import retailerStoreAPI from '@apis/retailerStoreAPI';
+import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
 import {
   AddButton,
   GridIcon,
+  SpecialButton,
   TurtleIcon,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
 } from '@components/element';
 import { css } from '@emotion/react';
+import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 
-import { ReactComponent as Plusicon } from '@icons/plus.svg';
 import { phonePattern } from '@utils/pattern';
-import { Button, Col, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import StoreCard from '../card/StoreCard';
+import AddModal from '../modal/AddModal';
+import DetailModal from '../modal/DetailModal';
 
 function StoreTab() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
   const { user } = useUser();
+  const [selectedRow, setSelectedRow] = useState<StoreShow>();
+  const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
+  const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
   const getStoreListQuery = useQuery(
     ['getStoreList'],
@@ -39,6 +45,20 @@ function StoreTab() {
 
   return (
     <>
+      {/*
+       * 쇼핑몰 상세보기 모달
+       */}
+      <DetailModal
+        visible={detailModalVisible}
+        closeModal={closeDetailModal}
+        selectedRow={selectedRow}
+      />
+
+      {/*
+       * 쇼핑몰 추가 모달
+       */}
+      <AddModal visible={addModalVisible} closeModal={closeAddDetailModal} />
+
       <Row
         align="middle"
         justify="space-between"
@@ -68,10 +88,13 @@ function StoreTab() {
         </Col>
 
         <Col>
-          <Button css={button}>
-            <Plusicon css={icon} />
+          <SpecialButton
+            onClick={() => {
+              openAddDetailModal();
+            }}
+          >
             <TurtleText>쇼핑몰 추가하기</TurtleText>
-          </Button>
+          </SpecialButton>
         </Col>
       </Row>
 
@@ -98,7 +121,17 @@ function StoreTab() {
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
           {getStoreListQuery.data?.store_list.map((item, idx) => (
-            <Col key={idx} span={8}>
+            <Col
+              key={idx}
+              span={8}
+              onClick={() => {
+                setSelectedRow({ ...item });
+                openDetailModal();
+              }}
+              css={css`
+                cursor: pointer;
+              `}
+            >
               <StoreCard store={item} />
             </Col>
           ))}
@@ -109,6 +142,12 @@ function StoreTab() {
           loading={getStoreListQuery.isLoading}
           dataSource={getStoreListQuery.data?.store_list}
           rowKey={(record) => record.id}
+          onRow={(record) => ({
+            onClick: () => {
+              setSelectedRow({ ...record });
+              openDetailModal();
+            },
+          })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
           scroll={{ x: 1400, y: 'auto' }}
           columns={[
@@ -172,56 +211,6 @@ function StoreTab() {
     </>
   );
 }
-
-const button = css`
-  width: 160px;
-  height: 40px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 40px;
-  font-weight: 700;
-
-  color: #fff;
-  stroke: #fff;
-  background: linear-gradient(90deg, #00be90 0%, #00b3be 77.08%, #00b3be 100%);
-
-  &:hover {
-    color: #fff;
-    border-color: linear-gradient(
-      90deg,
-      #00be90 0%,
-      #00b3be 77.08%,
-      #00b3be 100%
-    );
-
-    background: linear-gradient(
-      90deg,
-      #009773 0%,
-      #008f98 77.08%,
-      #008f98 100%
-    );
-  }
-
-  // active 상태
-  &.ant-btn:focus {
-    color: #fff;
-    stroke: #fff;
-
-    background: linear-gradient(
-      90deg,
-      #00be90 0%,
-      #00b3be 77.08%,
-      #00b3be 100%
-    );
-  }
-`;
-
-const icon = css`
-  margin-right: 5px;
-`;
 
 const cardsContainer = css`
   height: 70vh;

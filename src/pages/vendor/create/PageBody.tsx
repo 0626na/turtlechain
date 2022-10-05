@@ -14,7 +14,7 @@ import {
   HistoryButton,
   PrimaryButton,
   SecondaryButton,
-  TeriaryButton,
+  TertiaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
   TurtleIcon,
@@ -171,7 +171,7 @@ function PageBody() {
       <PageTitle
         title="거래처등록 미리보기"
         buttons={[
-          <TeriaryButton
+          <TertiaryButton
             text="재고프로그램 연동"
             onClick={() => {
               openInventoryModal();

@@ -40,6 +40,8 @@ import { ReactComponent as WarehousingIcon } from '@icons/warehousing.svg';
 import { ReactComponent as SettingIcon } from '@icons/setting.svg';
 import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
 import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
+import { ReactComponent as PlusIcon } from '@icons/plus.svg';
+
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -79,7 +81,8 @@ interface Props {
     | 'warehousing'
     | 'clearing'
     | 'setting'
-    | 'tutorial';
+    | 'tutorial'
+    | 'plus';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -89,6 +92,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     onClick && onClick(e);
   };
 
+  if (name === 'plus') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <PlusIcon />
+      </div>
+    );
+  }
+
   if (name === 'clearing') {
     return (
       <div css={iconContainer} onClick={handleClick}>
@@ -96,14 +107,6 @@ function TurtleIcon({ name, onClick, danger }: Props) {
       </div>
     );
   }
-
-  // if (name === 'grid') {
-  //   return (
-  //     <div css={iconContainer} onClick={handleClick}>
-  //       <GridIcon />
-  //     </div>
-  //   );
-  // }
 
   if (name === 'vendorProduct') {
     return (

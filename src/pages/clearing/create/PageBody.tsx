@@ -1,4 +1,3 @@
-import { TurtleText } from '@components/element';
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import { PageContent } from '@layout/page';
@@ -56,7 +55,6 @@ function PageBody() {
               />
             </Space>
           </Col>
-          <Col>과거매입함께 결제</Col>
         </Row>
       </div>
       <PageContent gray>
@@ -78,7 +76,12 @@ function PageBody() {
               setActiveKey('2');
             }}
             header={
-              <>
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
                 <Badge
                   count={1}
                   style={{
@@ -89,12 +92,31 @@ function PageBody() {
                     fontSize: 16,
                   }}
                 />
-                <h3>매입조정 확인하기</h3>
-                <br />
-                <TurtleText>
-                  결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
-                </TurtleText>
-              </>
+                <div
+                  css={css`
+                    margin-left: 25px;
+                  `}
+                >
+                  <div
+                    css={css`
+                      color: #242934;
+                      font-weight: 700;
+                      font-size: 20px;
+                    `}
+                  >
+                    매입조정 확인하기
+                  </div>
+
+                  <div
+                    css={css`
+                      color: #6b6d73;
+                      font-weight: 500;
+                    `}
+                  >
+                    결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
+                  </div>
+                </div>
+              </div>
             }
           />
           <ClearingPanel
@@ -104,7 +126,12 @@ function PageBody() {
               setActiveKey('0');
             }}
             header={
-              <>
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
                 <Badge
                   count={2}
                   style={{
@@ -115,12 +142,31 @@ function PageBody() {
                     fontSize: 16,
                   }}
                 />
-                <h3>결제금액 미리보기</h3>
-                <br />
-                <TurtleText>
-                  거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
-                </TurtleText>
-              </>
+                <div
+                  css={css`
+                    margin-left: 25px;
+                  `}
+                >
+                  <div
+                    css={css`
+                      color: #242934;
+                      font-weight: 700;
+                      font-size: 20px;
+                    `}
+                  >
+                    결제금액 미리보기
+                  </div>
+
+                  <div
+                    css={css`
+                      color: #6b6d73;
+                      font-weight: 500;
+                    `}
+                  >
+                    거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
+                  </div>
+                </div>
+              </div>
             }
           />
         </Collapse>
@@ -180,21 +226,28 @@ const greenDatePicker = css`
 `;
 
 const collapse = css`
-  background-color: #fff;
   margin-top: 36px;
   margin-bottom: 36px;
 
-  .ant-collapse-item {
+  .ant-collapse-item,
+  .ant-collapse-item.ant-collapse-no-arrow {
     margin-bottom: 12px;
     background-color: #fff;
     border: none;
-    border-radius: 10px;
+
+    box-shadow: 0px 2px 12px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+  }
+
+  &.ant-collapse
+    > .ant-collapse-item.ant-collapse-no-arrow
+    > .ant-collapse-header {
+    padding: 23px 36px;
   }
 
   .ant-collapse-content-box {
-    height: 580px;
     background-color: #fff;
-    padding: 24px 24px 28px 24px !important;
+    padding: 0px 36px 36px 36px !important;
   }
 `;
 

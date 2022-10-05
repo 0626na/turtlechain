@@ -1,6 +1,19 @@
 import { v2Axios } from '.';
 import { RcFile } from 'antd/lib/upload';
 
+export interface Company {
+  id: number;
+  biz_type: string;
+  biz_num: string;
+  name: string;
+  type: number;
+  email: string[];
+  address: string;
+  memo: string;
+  owner: string;
+  biz_license_path: string;
+}
+
 /*
  *  사업자 정보
  */
@@ -8,18 +21,7 @@ import { RcFile } from 'antd/lib/upload';
 interface ResponseGet {
   msg: string;
   data: {
-    company_list: Array<{
-      id: number;
-      biz_type: string;
-      biz_num: string;
-      name: string;
-      type: number;
-      email: string[];
-      address: string;
-      memo: string;
-      owner: string;
-      biz_license_path: string;
-    }>;
+    company_list: Company[];
   };
 }
 

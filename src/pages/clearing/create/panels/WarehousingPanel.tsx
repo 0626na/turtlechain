@@ -3,10 +3,12 @@ import clearingAPI from '@apis/clearingAPI';
 import {
   ArrowRightIcon,
   PrimaryButton,
+  TurtleDivider,
   TurtleIcon,
   TurtleTableTitle,
   TurtleText,
 } from '@components/element';
+import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useStore from '@hooks/useStore';
 import { pricePattern } from '@utils/pattern';
@@ -80,6 +82,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
       {/*
        *  차감
        */}
+      <TurtleDivider marginBottom={36} />
       <div>
         <h3>이번 결제에서 제외해요</h3>
       </div>
@@ -191,9 +194,17 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
        *  미송
        */}
 
-      <div>
-        <h3>이번 결제에 포함해요</h3>
-      </div>
+      <span
+        css={css`
+          /* margin-top: 40px; */
+          display: inline-block;
+          font-weight: 700;
+          font-size: 18px;
+          color: #242934;
+        `}
+      >
+        이번 결제에 포함해요
+      </span>
       <Table
         size="small"
         pagination={false}

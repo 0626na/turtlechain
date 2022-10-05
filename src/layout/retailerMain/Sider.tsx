@@ -35,7 +35,7 @@ const pathnames = {
 
   etc: {
     setting: '/setting',
-    tutorial: '/tutorial',
+    // tutorial: '/tutorial',
   },
 };
 
@@ -45,7 +45,6 @@ const pathnames = {
 
 const mainMenuContainerStyle = {
   order: -1,
-  // marginBottom: 100,
 };
 const mainMenuTitleStyle = {
   marginTop: 16,
@@ -156,28 +155,28 @@ const menus = [
           },
         ],
       },
-      {
-        key: 'order',
-        label: t('order.'),
-        icon: (
-          <div css={iconContainer}>
-            <TurtleIcon name="order" />
-          </div>
-        ),
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.order.create,
-            label: t('order.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.order.history,
-            label: t('order.history'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
+      // {
+      //   key: 'order',
+      //   label: t('order.'),
+      //   icon: (
+      //     <div css={iconContainer}>
+      //       <TurtleIcon name="order" />
+      //     </div>
+      //   ),
+      //   style: mainMenuTitleStyle,
+      //   children: [
+      //     {
+      //       key: pathnames.order.create,
+      //       label: t('order.create'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //     {
+      //       key: pathnames.order.history,
+      //       label: t('order.history'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //   ],
+      // },
       {
         key: 'warehousing',
         label: t('warehousing.'),
@@ -249,16 +248,16 @@ const menus = [
         ),
         style: etcMenuTitleStyle,
       },
-      {
-        key: pathnames.etc.tutorial,
-        label: t('etc.tutorial'),
-        icon: (
-          <div css={iconContainer}>
-            <TurtleIcon name="tutorial" />
-          </div>
-        ),
-        style: etcMenuTitleStyle,
-      },
+      // {
+      //   key: pathnames.etc.tutorial,
+      //   label: t('etc.tutorial'),
+      //   icon: (
+      //     <div css={iconContainer}>
+      //       <TurtleIcon name="tutorial" />
+      //     </div>
+      //   ),
+      //   style: etcMenuTitleStyle,
+      // },
     ],
   },
 ];

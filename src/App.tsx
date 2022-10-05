@@ -11,12 +11,12 @@ import {
   HomePage,
   LoginPage,
   NotFoundPage,
-  OrderCreatePage,
-  OrderHistoryPage,
+  // OrderCreatePage,
+  // OrderHistoryPage,
   ProductCreatePage,
   ProductHistoryPage,
   SettingPage,
-  TutorialPage,
+  // TutorialPage,
   VendorCreatePage,
   VendorHistoryPage,
   WarehousingCreatePage,
@@ -27,6 +27,7 @@ import {
   PickerOrderCreatePage,
   PickerOrderHistoryPage,
   PickerSettingPage,
+  SignupPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -46,14 +47,11 @@ function App() {
     <Suspense fallback={<></>}>
       <Routes>
         <Route index element={<LoginPage />} />
-        {/* 
-        <Route index element={<LoginPage />} />
-        <Route path="/find-id" element={<FindIdPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        {/* <Route path="/find-id" element={<FindIdPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/membership-info" element={<MembershipInfoPage />} />
-         */}
+        <Route path="/membership-info" element={<MembershipInfoPage />} /> */}
 
         {/*
          *
@@ -119,7 +117,7 @@ function App() {
            * 발주
            */}
 
-          <Route
+          {/* <Route
             path="order/create"
             element={
               <Suspense fallback={<></>}>
@@ -135,7 +133,7 @@ function App() {
                 <OrderHistoryPage />
               </Suspense>
             }
-          />
+          /> */}
 
           {/*
            * 입고
@@ -215,14 +213,14 @@ function App() {
            * 사용자가이드
            */}
 
-          <Route
+          {/* <Route
             path="tutorial"
             element={
               <Suspense fallback={<></>}>
                 <TutorialPage />
               </Suspense>
             }
-          />
+          /> */}
         </Route>
 
         {/*
