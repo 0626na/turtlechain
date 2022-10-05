@@ -3,6 +3,7 @@ import { lazy } from 'react';
 export const LoginPage = lazy(() => import('./auth/login'));
 export const SignupPage = lazy(() => import('./auth/signup'));
 export const NotFoundPage = lazy(() => import('./notFound'));
+export const MembershipInfoPage = lazy(() => import('./auth/membership-info'));
 
 // 쇼핑몰Page
 export const HomePage = lazy(() => import('./home'));

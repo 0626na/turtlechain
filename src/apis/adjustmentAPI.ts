@@ -62,8 +62,8 @@ export interface RequestGetList {
   end_date: string;
   start_date: string;
 
-  type: 'name' | 'vendor_name' | 'product_name';
-  search_string: string;
+  type?: 'name' | 'vendor_name' | 'product_name';
+  search_string?: string;
 
   page?: number;
 }
