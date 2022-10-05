@@ -28,7 +28,7 @@ function useClearingCart() {
       .map((item) => ({
         ...item,
         id: index++,
-        type: 'reserve_payment' as 'reserve_payment',
+        type: 'reserve_payment' as const,
       }));
   };
 
@@ -42,7 +42,7 @@ function useClearingCart() {
     return balanceList.filter(isReserveSubtract).map((item) => ({
       ...item,
       id: index++,
-      type: 'reserve_subtract' as 'reserve_subtract',
+      type: 'reserve_subtract' as const,
     }));
   };
 
@@ -68,7 +68,7 @@ function useClearingCart() {
     return balanceList.filter(isAdjustmentSubtract).map((item) => ({
       ...item,
       id: index++,
-      type: 'adjustment_subtract' as 'adjustment_subtract',
+      type: 'adjustment_subtract' as const,
       overpaid_amount:
         item.overpaid_amount > totalPaymentAmount(item)
           ? totalPaymentAmount(item)
@@ -90,7 +90,7 @@ function useClearingCart() {
     return balanceList.filter(existPayment).map((item) => ({
       ...item,
       id: index++,
-      type: 'warehousing' as 'warehousing',
+      type: 'warehousing' as const,
     }));
   };
 

@@ -74,7 +74,6 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
         memo: '',
       })),
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey]);
 
   return (

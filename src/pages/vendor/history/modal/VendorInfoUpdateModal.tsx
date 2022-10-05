@@ -91,7 +91,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
   useEffect(() => {
     if (visible) fieldsFillIn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   return (

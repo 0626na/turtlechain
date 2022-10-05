@@ -89,7 +89,7 @@ function CompanyTab() {
         biz_license_file: [
           {
             uid: '1',
-            name: data?.biz_license_path.split('/').pop()!,
+            name: data?.biz_license_path.split('/').pop(),
             status: 'done',
             url: `${data?.biz_license_path}?_=${+new Date()}`,
           },

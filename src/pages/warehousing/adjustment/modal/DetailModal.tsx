@@ -18,8 +18,8 @@ interface Props {
 function DetailModal({ visible, onClose, selectedRow }: Props) {
   // 매입조정 상세내역 요청
   const getAdjustmentDetailHistoryQuery = useQuery(
-    ['getAdjustmentDetailHistory', selectedRow?.id!],
-    () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id! }),
+    ['getAdjustmentDetailHistory', selectedRow?.id],
+    () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id as number }),
     {
       enabled: !!visible,
     },

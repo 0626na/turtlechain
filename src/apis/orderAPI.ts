@@ -151,7 +151,7 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
   let url = 'order/parsing/pre-parsing';
   let parsingResponse;
   const formData = new FormData();
-  await data.files.map((file) => formData.append('files', file));
+  data.files.map((file) => formData.append('files', file));
 
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,

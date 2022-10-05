@@ -69,7 +69,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   useEffect(() => {
     if (activeKey !== '2') return;
     calculateClearingAmount();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey]);
 
   return (
@@ -221,15 +220,15 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 placeholder="금액 입력"
                 value={
-                  record.clearing_payment_amount! > 0
-                    ? record.clearing_payment_amount!
+                  (record.clearing_payment_amount as number) > 0
+                    ? record.clearing_payment_amount
                     : undefined
                 }
                 step={1000}
-                max={record.clearing_amount!}
+                max={record.clearing_amount}
                 min={Math.max(
                   record.reserve_payment_amount -
-                    (record.overpaid_payment_amount! ?? 0) -
+                    (record.overpaid_payment_amount ?? 0) -
                     record.reserve_subtract_amount,
                   0,
                 )}

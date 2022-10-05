@@ -11,7 +11,6 @@ function StoreSelector() {
   const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
   const { user } = useUser();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(
     ['getStoreList'],
     retailerStoreAPI.getList,
@@ -42,7 +41,7 @@ function StoreSelector() {
             onMouseLeave: (e) => {
               e.domEvent.currentTarget.style.backgroundColor = '#fff';
             },
-            key: store.id!,
+            key: store.id,
             label: <span css={menuItemText}>{store.name}</span>,
             icon: <TurtleImg css={logo} name="Logo" />,
           }))}

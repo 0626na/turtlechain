@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
 import { PendingItem, SelectedWholesale } from '@store/vendorCartState';
 import { Input, message, Popover, Radio, Space, Switch, Table } from 'antd';
-
 import { ReactComponent as MemoIcon } from '@icons/memo.svg';
 import { TurtleIcon } from '@components/element';
-
 import { Wholesale, VendorAccount } from '@apis/vendorAPI';
 import { css } from '@emotion/react';
-
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
@@ -127,8 +124,6 @@ function PendingTab({ isLoading }: Props) {
           : item,
       ),
     }));
-
-    return;
   };
 
   const convertToSuccessItem = (target: PendingItem) => {
@@ -137,7 +132,9 @@ function PendingTab({ isLoading }: Props) {
       ws_store_info: [
         {
           ...target.selectedWsStoreInfo!,
-          store_account: [target.selectedWsStoreInfo?.selectedAccount!],
+          store_account: [
+            target.selectedWsStoreInfo?.selectedAccount as VendorAccount,
+          ],
         },
       ],
     };

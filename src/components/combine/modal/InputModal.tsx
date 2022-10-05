@@ -1,6 +1,6 @@
 import { TurtleConfirmModal, TurtleFormInput } from '@components/element';
 import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 interface Props {
   visible: boolean;

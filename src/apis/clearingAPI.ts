@@ -308,7 +308,7 @@ export interface ResponseRemoveSheet {
 }
 
 const removeSheet = async function (data: RequestRemoveSheet) {
-  let url = `clearing/sheet/${data.id}`;
+  const url = `clearing/sheet/${data.id}`;
   const response = await v2Axios.patch<ResponseRemoveSheet>(url, data);
   return response.data;
 };
@@ -458,14 +458,13 @@ export interface RequestCreateParse {
 
 export interface ResponseCreateParse {
   msg: string;
-  data: {};
 }
 
 const createParse = async (data: RequestCreateParse) => {
   const url = `clearing/credit_group`;
   const response = await v2Axios.post<ResponseCreateParse>(url, data);
 
-  return response.data.data;
+  return response.data;
 };
 
 const clearingAPI = {

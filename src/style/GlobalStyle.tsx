@@ -3,6 +3,33 @@ import { Global, css } from '@emotion/react';
 const GlobalStyle = () => (
   <Global
     styles={css`
+      @font-face {
+        font-family: 'Spoqa Han Sans Neo';
+        src: url(/assets/font/SpoqaHanSansNeo-Light.ttf) format('truetype');
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: 'Spoqa Han Sans Neo';
+        src: url(/assets/font/SpoqaHanSansNeo-Regular.ttf) format('truetype');
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: 'Spoqa Han Sans Neo';
+        src: url(/assets/font/SpoqaHanSansNeo-Medium.ttf) format('truetype');
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: 'Spoqa Han Sans Neo';
+        src: url(/assets/font/SpoqaHanSansNeo-Bold.ttf) format('truetype');
+        font-weight: 700;
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: 'Spoqa Han Sans';
+      }
+
       /* Typography */
       h1 {
         margin: 0;
@@ -24,7 +51,6 @@ const GlobalStyle = () => (
       }
 
       /* Table */
-
       .ant-table-title {
         padding: 0px !important;
       }
@@ -86,27 +112,6 @@ const GlobalStyle = () => (
       ::-webkit-scrollbar-button {
         display: none;
       }
-
-      /* 
-      .ant-message-error .anticon {
-      color: #FFFFFF !important;
-      }
-      .ant-message-warning .anticon {
-      color: #FFFFFF !important;
-      }
-
-      .ant-message-info .anticon {
-      color: #FFFFFF !important;
-      }
-      .ant-message-success .anticon {
-      color: #FFFFFF !important;
-      } */
-
-      /* badge status 마진값 제거 */
-      /* .ant-badge-status-text {
-      margin-left: 4px;
-      color: #5B5D63;
-      } */
     `}
   />
 );
