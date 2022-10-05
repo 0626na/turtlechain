@@ -1,21 +1,23 @@
 import userAPI from '@apis/userAPI';
-import { PhoneAuthModal } from '@components/combine';
+import { PhoneAuthForm } from '@components/combine';
+import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { Button, Form, FormInstance, Input, message, Row } from 'antd';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import Agree from './Agree';
 
 interface Props {
   visible: boolean;
   loading: boolean;
-  onClickPrev: () => void;
   form: FormInstance;
 }
 
-function UserStep({ visible, loading, onClickPrev, form }: Props) {
-  const [phoneAuthModalVisible, setPhoneAuthModalVisible] = useState(false);
+function UserStep({ visible, loading, form }: Props) {
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
   // 아이디 중복체크 요청
@@ -64,12 +66,24 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
 
   return (
     <div css={{ display: visible ? '' : 'none' }}>
-      {/*
-       *  휴대전화 번호 인증 모달
-       */}
-      <PhoneAuthModal
-        visible={phoneAuthModalVisible}
-        onClose={() => setPhoneAuthModalVisible(false)}
+      <Form.Item
+        rules={[{ required: true }]}
+        name="user_name"
+        label={t('user name')}
+      >
+        <Input css={input} placeholder="ex. 김거북" />
+      </Form.Item>
+
+      <Form.Item
+        rules={[{ required: true }]}
+        name="user_email"
+        label={t('email')}
+      >
+        <Input css={input} placeholder="ex. gbkim@gmail.com" />
+      </Form.Item>
+
+      <PhoneAuthForm
+        type="signup"
         onSuccess={(data) => {
           form.setFieldsValue({
             ...form.getFieldsValue(),
@@ -78,76 +92,20 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
         }}
       />
 
-      {/* <Form.Item
-        css={marginBottom}
-        name="company_biz_type"
-        label={t('biz role')}
-        rules={[{ required: true }]}
-      >
-        <Radio.Group>
-          {['entity', 'personal', 'simple'].map((option) => (
-            <Radio key={option} value={option}>
-              {t(`biz ${option}`)}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </Form.Item> */}
-
-      <Form.Item
-        css={marginBottom}
-        name="user_name"
-        label={t('user name')}
-        rules={[{ required: true }]}
-      >
-        <Input css={input} />
-      </Form.Item>
-
-      <Form.Item
-        css={marginBottom}
-        name="user_email"
-        label={t('email')}
-        rules={[{ required: true }]}
-      >
-        <Input css={input} />
-      </Form.Item>
-
-      <Form.Item css={marginBottom} label={t('phone')} required={true}>
-        <Form.Item
-          noStyle
-          name="user_mobile"
-          rules={[{ required: true, message: '휴대번호를 인증해주세요.' }]}
-        >
-          <Input
-            css={input}
-            readOnly
-            onClick={() => setPhoneAuthModalVisible(true)}
-            suffix={
-              <Button
-                css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
-                type="link"
-                onClick={() => setPhoneAuthModalVisible(true)}
-              >
-                인증하기
-              </Button>
-            }
-          />
-        </Form.Item>
-      </Form.Item>
-
       <Form.Item shouldUpdate noStyle>
         {({ getFieldError, getFieldValue }) => (
           <Form.Item
-            css={marginBottom}
+            rules={[{ validator: idValidation }]}
+            required
             label={t('id')}
             name="user_login_id"
-            required
-            rules={[{ validator: idValidation }]}
           >
             <Input
               css={input}
               onChange={() => {
                 setCheckDuplicated(false);
               }}
+              placeholder="아이디를 입력해주세요"
               suffix={
                 <Button
                   css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
@@ -172,28 +130,41 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
           </Form.Item>
         )}
       </Form.Item>
+
       <Form.Item
-        css={marginBottom}
+        rules={[{ required: true }]}
         name="user_password"
         label={t('password')}
-        rules={[{ required: true }]}
       >
-        <Input.Password css={input} />
+        <Input.Password
+          css={input}
+          placeholder="문자, 숫자, 기호를 조합해 8자 이상"
+        />
       </Form.Item>
+
       <Form.Item
-        css={marginBottom}
+        rules={[{ validator: passwordValidation }]}
+        required
         name="confirm_password"
         label={t('confirm password')}
         dependencies={['user_password']}
-        required={true}
-        rules={[{ validator: passwordValidation }]}
       >
-        <Input.Password css={input} />
+        <Input.Password
+          css={input}
+          placeholder="비밀번호를 다시 한번 입력해주세요"
+        />
       </Form.Item>
 
+      <Agree
+        plainOptions={['Apple', 'Pear', 'Orange']}
+        onChange={(list: CheckboxValueType[]) => {
+          console.log(list);
+        }}
+      />
+
       <Row css={{ marginTop: 40 }}>
-        <Button
-          css={button}
+        <SpecialButton
+          size="middle"
           htmlType="submit"
           onClick={async () => {
             try {
@@ -212,7 +183,7 @@ function UserStep({ visible, loading, onClickPrev, form }: Props) {
           loading={loading}
         >
           {t('signup')}
-        </Button>
+        </SpecialButton>
       </Row>
     </div>
   );
@@ -222,37 +193,5 @@ const input = css`
   height: 44px;
   border-radius: 8px;
 `;
-
-const button = css`
-  width: 352px;
-  height: 48px;
-
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-
-  background-color: #00b3be;
-
-  &:hover {
-    color: #fff;
-    background-color: #00b3be;
-  }
-
-  // active 상태
-  &.ant-btn:focus {
-    color: #fff;
-    background-color: #00b3be;
-    border-color: #00b3be;
-  }
-`;
-
-const marginBottom = css({
-  marginBottom: 28,
-});
 
 export default UserStep;

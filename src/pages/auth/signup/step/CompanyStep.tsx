@@ -89,7 +89,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       />
 
       <Form.Item
-        css={marginBottom}
         name="company_biz_type"
         label={t('biz type')}
         rules={[{ required: true }]}
@@ -104,7 +103,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       </Form.Item>
 
       <Form.Item
-        css={marginBottom}
         name="company_name"
         label={t('biz name')}
         rules={[{ required: true }]}
@@ -151,7 +149,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         )}
       </Form.Item>
 
-      <Form.Item css={marginBottom} label={t('biz address')} required>
+      <Form.Item label={t('biz address')} required>
         <Form.Item
           noStyle
           name="company_main_address"
@@ -175,7 +173,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       </Form.Item>
 
       <Form.Item
-        css={marginBottom}
         name="company_sub_address"
         label={t('biz detail address')}
         initialValue=""
@@ -184,7 +181,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       </Form.Item>
 
       <Form.Item
-        css={marginBottom}
         name="company_biz_license_file"
         label={t('biz license')}
         valuePropName="fileList"
@@ -202,7 +198,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
       </Form.Item>
 
       <Form.Item
-        css={marginBottom}
         name="company_store_url"
         label={t('store.url')}
         rules={[{ required: true }]}
@@ -238,10 +233,6 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
     </div>
   );
 }
-
-const marginBottom = css({
-  marginBottom: 28,
-});
 
 const input = css`
   height: 44px;
