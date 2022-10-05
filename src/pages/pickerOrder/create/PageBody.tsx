@@ -24,7 +24,7 @@ import { useMutation } from 'react-query';
 import orderAPI from '@apis/orderAPI';
 
 function PageBody() {
-  const { cart, ready } = useOrderCart();
+  const { cart, ready, failList } = useOrderCart();
 
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
@@ -131,7 +131,7 @@ function PageBody() {
           />
           <FailTab
             key="fail"
-            tab={`실패(${cart.failList.length})`}
+            tab={`실패(${failList.length})`}
             loading={false}
           />
         </TurtleTabs>

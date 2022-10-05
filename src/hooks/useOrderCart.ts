@@ -152,6 +152,7 @@ const useOrderCart = () => {
 
   return {
     cart,
+    setCart,
     failList,
     uploadFiles,
     setuploadFiles,

@@ -80,6 +80,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
                       vendor_name: order.vendor_name,
                       vendor_address: order.vendor_address,
                       vendor_mobile: order.vendor_mobile,
+                      mobile: order.vendor_mobile,
                       product_name: order.product_name,
                       product_option: order.product_option,
                       product_count: Number(order.product_count),
