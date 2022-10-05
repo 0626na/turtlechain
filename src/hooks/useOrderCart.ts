@@ -1,11 +1,12 @@
 import { RcFile } from 'antd/lib/upload';
 import { StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import { ResponseCreateOrderItemExcelParsing } from './../apis/orderAPI';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
 
 interface FailListState {
+  id: number;
   store_id: number;
   store_name: string;
   vendor_name: string;
@@ -92,7 +93,7 @@ const useOrderCart = () => {
 
             failList: [...cart.failList],
           });
-          console.log(cart);
+
           return true;
         }
 
@@ -118,11 +119,20 @@ const useOrderCart = () => {
     [cart, setCart],
   );
 
-  const fail = useCallback(() => {
+  const reset = useCallback(() => {
+    setCart({
+      successList: [],
+      failList: [],
+    });
+  }, [setCart]);
+
+  //실패 케이스 데이터 생성
+  useMemo(() => {
     cart.failList.map((failitem) =>
       setFailList([
-        ...failitem.orders.map<FailListState>((value) => {
+        ...failitem.orders.map<FailListState>((value, index) => {
           return {
+            id: index,
             store_id: failitem.rt_store_id,
             store_name: failitem.rt_store_name,
             vendor_name: value.vendor_name,
@@ -138,22 +148,13 @@ const useOrderCart = () => {
         }),
       ]),
     );
-    return failList;
-  }, [cart.failList, failList]);
-
-  const reset = useCallback(() => {
-    setCart({
-      successList: [],
-      failList: [],
-    });
-  }, [setCart]);
+  }, [cart.failList]);
 
   return {
     cart,
     failList,
     uploadFiles,
     setuploadFiles,
-    fail,
     ready,
     reset,
     updateSuccess,
