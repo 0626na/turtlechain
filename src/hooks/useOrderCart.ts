@@ -1,11 +1,12 @@
 import { RcFile } from 'antd/lib/upload';
 import { StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import { ResponseCreateOrderItemExcelParsing } from './../apis/orderAPI';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
 
 interface FailListState {
+  id: number;
   store_id: number;
   store_name: string;
   vendor_name: string;
@@ -53,16 +54,59 @@ const useOrderCart = () => {
           (store) => store.rt_store_id === data.rt_store_id,
         );
 
+        //이미 등록되어 있는 상품인경우
+        if (
+          findStore?.orders.find(
+            (order) => order.product_name === data.orders[0].product_name,
+          )
+        ) {
+          setCart({
+            successList: [
+              ...cart.successList.map((store) => {
+                if (store.rt_store_id === findStore.rt_store_id) {
+                  return {
+                    rt_store_id: findStore.rt_store_id,
+                    rt_store_name: findStore.rt_store_name,
+                    orders: [
+                      ...findStore.orders.map((order) => {
+                        if (
+                          order.product_name === data.orders[0].product_name
+                        ) {
+                          order = {
+                            ...order,
+                            product_count: `${
+                              Number(order.product_count) +
+                              Number(data.orders[0].product_count)
+                            }`,
+                          };
+                        }
+
+                        return order;
+                      }),
+                    ],
+                  };
+                }
+
+                return store;
+              }),
+            ],
+
+            failList: [...cart.failList],
+          });
+
+          return true;
+        }
+
         findStore &&
           setCart({
             successList: [
               ...cart.successList.filter(
-                (store) => store.rt_store_id !== findStore?.rt_store_id,
+                (store) => store.rt_store_id !== findStore.rt_store_id,
               ),
               {
-                rt_store_id: findStore?.rt_store_id,
-                rt_store_name: findStore?.rt_store_name,
-                orders: [...findStore?.orders, data.orders[0]],
+                rt_store_id: findStore.rt_store_id,
+                rt_store_name: findStore.rt_store_name,
+                orders: [...findStore.orders, data.orders[0]],
               },
             ],
             failList: [...cart.failList],
@@ -72,14 +116,23 @@ const useOrderCart = () => {
       }
       return false;
     },
-    [cart.successList, cart.failList, setCart],
+    [cart, setCart],
   );
 
-  const fail = useCallback(() => {
+  const reset = useCallback(() => {
+    setCart({
+      successList: [],
+      failList: [],
+    });
+  }, [setCart]);
+
+  //실패 케이스 데이터 생성
+  useMemo(() => {
     cart.failList.map((failitem) =>
       setFailList([
-        ...failitem.orders.map<FailListState>((value) => {
+        ...failitem.orders.map<FailListState>((value, index) => {
           return {
+            id: index,
             store_id: failitem.rt_store_id,
             store_name: failitem.rt_store_name,
             vendor_name: value.vendor_name,
@@ -95,22 +148,13 @@ const useOrderCart = () => {
         }),
       ]),
     );
-    return failList;
-  }, [cart.failList, failList]);
-
-  const reset = useCallback(() => {
-    setCart({
-      successList: [],
-      failList: [],
-    });
-  }, [setCart]);
+  }, [cart.failList]);
 
   return {
     cart,
     failList,
     uploadFiles,
     setuploadFiles,
-    fail,
     ready,
     reset,
     updateSuccess,

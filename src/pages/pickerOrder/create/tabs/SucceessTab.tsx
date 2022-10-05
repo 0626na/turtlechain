@@ -1,4 +1,3 @@
-import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import {
   TurtleSearchInput,
   TurtleSearchSelect,
@@ -29,12 +28,7 @@ function SuccessTab({ loading, ...props }: Props) {
     },
   ];
   const { cart } = useOrderCart();
-  const [selectedRowOrder, setSelectedRowOrder] =
-    useState<StoreOrderItemExcelParsing>({
-      rt_store_id: 0,
-      rt_store_name: '',
-      orders: [],
-    });
+  const [selectedRowId, setSelectedRowId] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
@@ -111,34 +105,29 @@ function SuccessTab({ loading, ...props }: Props) {
         )}
         expandable={{
           expandRowByClick: true,
-          expandedRowKeys: [selectedRowOrder?.rt_store_id ?? -1],
+          expandedRowKeys: [selectedRowId],
           onExpand: (onExpand, record) => {
             if (!onExpand) {
-              setSelectedRowOrder({
-                rt_store_id: 0,
-                rt_store_name: '',
-                orders: [],
-              });
+              setSelectedRowId(0);
               return;
             }
-            setSelectedRowOrder({
-              rt_store_id: record.rt_store_id,
-              rt_store_name: record.rt_store_name,
-              orders: record.orders.map<StoreOrder>((order, index) => {
-                return {
-                  ...order,
-                  order_id: index,
-                };
-              }),
-            });
+            setSelectedRowId(record.rt_store_id);
           },
-          expandedRowRender: () => (
+          expandedRowRender: (record) => (
             <Table
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
-              dataSource={selectedRowOrder?.orders}
+              dataSource={
+                cart.successList.find(
+                  (item) => item.rt_store_id === record.rt_store_id,
+                )?.orders
+              }
               rowKey={(record) => record.order_id!}
-              loading={selectedRowOrder === undefined}
+              loading={
+                cart.successList.find(
+                  (item) => item.rt_store_id === record.rt_store_id,
+                ) === undefined
+              }
               pagination={false}
               columns={[
                 {
