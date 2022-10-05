@@ -59,6 +59,7 @@ function SuccessTab({ loading, ...props }: Props) {
     [searchQuery, cart.successList],
   );
 
+  console.log('전체리스트', filteredList);
   return (
     <Tabs.TabPane {...props}>
       <Table
@@ -120,7 +121,7 @@ function SuccessTab({ loading, ...props }: Props) {
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
               dataSource={expandedRecord.orders}
-              rowKey={(record) => record.order_id!}
+              rowKey={(record) => record.order_id?.toString()!}
               loading={expandedRecord === undefined}
               pagination={false}
               columns={[
@@ -186,6 +187,26 @@ function SuccessTab({ loading, ...props }: Props) {
                         },
                       ]}
                       value={record.order_type}
+                      onChange={(value: string) => {
+                        setCart({
+                          failList: cart.failList,
+                          successList: cart.successList.map((successItem) => ({
+                            rt_store_id: successItem.rt_store_id,
+                            rt_store_name: successItem.rt_store_name,
+                            orders:
+                              successItem.rt_store_id ===
+                              expandedRecord.rt_store_id
+                                ? successItem.orders.map((order) => ({
+                                    ...order,
+                                    order_type:
+                                      order.order_id === record.order_id
+                                        ? value
+                                        : order.order_type,
+                                  }))
+                                : successItem.orders,
+                          })),
+                        });
+                      }}
                     />
                   ),
                 },

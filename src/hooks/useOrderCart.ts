@@ -28,7 +28,16 @@ const useOrderCart = () => {
   const ready = useCallback(
     (data: ResponseCreateOrderItemExcelParsing) => {
       setCart({
-        successList: [...cart.successList, ...data.data.successes],
+        successList: [
+          ...cart.successList,
+          ...data.data.successes.map((item) => ({
+            ...item,
+            orders: item.orders.map((order, index) => ({
+              ...order,
+              order_id: index,
+            })),
+          })),
+        ],
         failList: data.data.fails,
       });
     },
