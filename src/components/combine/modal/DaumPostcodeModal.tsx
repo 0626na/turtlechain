@@ -1,8 +1,8 @@
 import DaumPostcode, { Address } from 'react-daum-postcode';
-// antd
-import { Modal, Button } from 'antd';
-// lang
-import { t } from 'i18next';
+
+import { AnswerButton } from '@components/element';
+import TurtleContentModal from '@components/element/modal/TurtleContentModal';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
@@ -31,20 +31,20 @@ function DaumPostcodeModal({ visible, onClose, onGetAddress }: Props) {
   };
 
   return (
-    <Modal
-      closable={false}
-      visible={visible}
-      destroyOnClose={true}
-      title={t('find address')}
-      footer={[
-        <Button key="close" onClick={onClose}>
-          {t('close')}
-        </Button>,
-      ]}
-    >
+    <TurtleContentModal visible={visible} onClose={onClose} title={'주소찾기'}>
       <DaumPostcode onComplete={handleComplete} />
-    </Modal>
+
+      <div css={buttonContainer}>
+        <AnswerButton text="닫기" onClick={onClose} />
+      </div>
+    </TurtleContentModal>
   );
 }
+
+const buttonContainer = css({
+  display: 'flex',
+  justifyContent: 'end',
+  marginTop: 20,
+});
 
 export default DaumPostcodeModal;

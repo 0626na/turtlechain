@@ -50,7 +50,7 @@ const modal = {
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 1,
+    zIndex: 2,
     background: 'rgba(0, 0, 0, 0.45)',
   }),
 
@@ -59,7 +59,6 @@ const modal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    zIndex: 1,
     transform: 'translate(-50%, -50%)',
     display: 'flex',
     flexDirection: 'column',
