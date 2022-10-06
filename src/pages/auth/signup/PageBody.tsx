@@ -77,9 +77,22 @@ function Pagebody() {
               form={form}
               onFinish={(value) => {
                 createUserMutatin.mutate({
-                  ...value,
+                  user_name: value.user_name,
+                  user_email: value.user_email,
+                  user_mobile: value.user_mobile,
+                  user_login_id: value.user_login_id,
+                  user_password: value.user_password,
+                  user_type: value.user_type,
+                  company_biz_type: value.company_biz_type,
+                  company_owner: '없음', // 추후 사라질 필드.
+                  company_name: value.company_name,
+                  company_biz_num: value.company_biz_num,
+                  company_main_address: value.company_main_address,
+                  company_sub_address: value.company_sub_address,
+                  company_store_url: value.company_store_url,
                   company_biz_license_file:
                     value.company_biz_license_file[0].originFileObj,
+                  agreement: value.agreement,
                 });
               }}
             >
