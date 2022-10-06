@@ -1,43 +1,31 @@
+import { OrderHistoryItem } from '@apis/orderAPI';
 import { TurtleTableTitle } from '@components/element';
-import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
 
 interface Props extends TabPaneProps {
+  data: OrderHistoryItem[];
   loading: boolean;
 }
 
-function FailTab({ loading, ...props }: Props) {
-  const { cart, failList } = useOrderCart();
-
+function SuccessTab({ data, loading, ...props }: Props) {
   return (
     <Tabs.TabPane {...props}>
       <Table
-        scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
         loading={loading}
-        size="small"
-        rowKey={(record) => record.store_id}
-        dataSource={failList}
+        dataSource={data}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        title={() => (
-          <TurtleTableTitle totalCount={cart.failList.length ?? 0} />
-        )}
+        title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
         columns={[
           {
-            title: '쇼핑몰',
-            width: 180,
-            render: (_, record) => record.store_name,
-          },
-          {
             title: '거래처명',
-            width: 200,
             render: (_, record) => record.vendor_name,
           },
           {
             title: '거래처 주소',
-            render: (_, record) => record.vendor_address,
+            render: (_, record) => record.address,
           },
           {
             title: '휴대전화 번호',
@@ -45,11 +33,11 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             title: '거래처 상품명',
-            render: (_, record) => record.vendor_product,
+            render: (_, record) => record.name,
           },
           {
             title: '옵션',
-            render: (_, record) => record.product_option,
+            render: (_, record) => record.option,
           },
           {
             title: '분류',
@@ -57,15 +45,14 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             title: '요청 수량',
-            render: (_, record) => record.count,
+            render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: '가격',
-            render: (_, record) => record.price,
+            title: '공급가',
+            render: (_, record) => record.price.toLocaleString(),
           },
           {
             title: '메모',
-            render: (_, record) => record.memo,
           },
         ]}
       />
@@ -73,4 +60,4 @@ function FailTab({ loading, ...props }: Props) {
   );
 }
 
-export default FailTab;
+export default SuccessTab;

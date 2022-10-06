@@ -65,7 +65,8 @@ function AddNewOrderModal({ visible, close }: Props) {
                   {
                     vendor_name: values.vendor_name,
                     vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: values.vendor_mobile,
+                    vendor_mobile: '',
+                    mobile: values.mobile,
                     product_name: values.vendor_product_name,
                     product_option: values.option ?? '',
                     order_type: values.type,
@@ -85,7 +86,8 @@ function AddNewOrderModal({ visible, close }: Props) {
                   {
                     vendor_name: values.vendor_name,
                     vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: values.vendor_mobile,
+                    vendor_mobile: '',
+                    mobile: values.mobile,
                     product_name: values.vendor_product_name,
                     product_option: values.option ?? '',
                     order_type: values.type,
@@ -205,7 +207,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
           </Form.Item>
           {/* 휴대번호 */}
-          <Form.Item label={t('table.mobile')} name="vendor_mobile" required>
+          <Form.Item label={t('table.mobile')} name="mobile" required>
             <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
           </Form.Item>
 

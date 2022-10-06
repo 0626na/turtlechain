@@ -72,29 +72,70 @@ function ConfirmOrderModal({ visible, close }: Props) {
             <AnswerButton
               type="YES"
               text="요청"
-              onClick={() =>
+              onClick={() => {
                 createOrderItemMutation.mutate({
                   rt_stores: cart.successList.map<OrderItemList>((store) => ({
                     rt_store_id: store.rt_store_id,
-                    orders: store.orders.map<CreatingOrdersItem>((order) => ({
-                      vendor_name: order.vendor_name,
-                      vendor_address: order.vendor_address,
-                      vendor_mobile: order.vendor_mobile,
-                      mobile: order.vendor_mobile,
-                      product_name: order.product_name,
-                      product_option: order.product_option,
-                      product_count: Number(order.product_count),
-                      product_price: Number(order.product_price),
-                      order_type: order.order_type,
-                      memo: order.memo,
-                      ws_store_id:
-                        order.ws_store_info.length !== 0
-                          ? order.ws_store_info[0].id
-                          : null,
-                    })),
+                    orders: [
+                      ...store.orders.map<CreatingOrdersItem>((order) => ({
+                        vendor_name: order.vendor_name,
+                        vendor_address: order.vendor_address,
+                        vendor_mobile: order.vendor_mobile,
+                        mobile: order.mobile,
+                        product_name: order.product_name,
+                        product_option: order.product_option,
+                        product_count: Number(order.product_count),
+                        product_price: Number(order.product_price),
+                        order_type: order.order_type,
+                        memo: order.memo,
+                        ws_store_id:
+                          order.ws_store_info.length !== 0
+                            ? order.ws_store_info[0].id
+                            : null,
+                      })),
+                      ...(cart.failList
+                        .find((item) => store.rt_store_id === item.rt_store_id)
+                        ?.orders.map<CreatingOrdersItem>((order) => ({
+                          vendor_name: order.vendor_name,
+                          vendor_address: order.vendor_address,
+                          vendor_mobile: order.vendor_mobile,
+                          mobile: order.mobile,
+                          product_name: order.product_name,
+                          product_option: order.product_option,
+                          product_count: Number(order.product_count),
+                          product_price: Number(order.product_price),
+                          order_type: order.order_type,
+                          memo: order.memo,
+                          ws_store_id:
+                            order.ws_store_info.length !== 0
+                              ? order.ws_store_info[0].id
+                              : null,
+                        })) ?? []),
+                    ],
                   })),
-                })
-              }
+                });
+                // createOrderItemMutation.mutate({
+                //   rt_stores: cart.successList.map<OrderItemList>((store) => ({
+                //     rt_store_id: store.rt_store_id,
+                //     orders: store.orders.map<CreatingOrdersItem>((order) => ({
+                //       vendor_name: order.vendor_name,
+                //       vendor_address: order.vendor_address,
+                //       vendor_mobile: order.vendor_mobile,
+                //       mobile: order.mobile,
+                //       product_name: order.product_name,
+                //       product_option: order.product_option,
+                //       product_count: Number(order.product_count),
+                //       product_price: Number(order.product_price),
+                //       order_type: order.order_type,
+                //       memo: order.memo,
+                //       ws_store_id:
+                //         order.ws_store_info.length !== 0
+                //           ? order.ws_store_info[0].id
+                //           : null,
+                //     })),
+                //   })),
+                // });
+              }}
             />
           </Col>
         </Row>
