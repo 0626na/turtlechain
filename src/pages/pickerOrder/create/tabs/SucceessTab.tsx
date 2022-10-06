@@ -1,5 +1,6 @@
 import {
   TurtleFormSelect,
+  TurtleIcon,
   TurtleNumberInput,
   TurtleSearchInput,
   TurtleSearchSelect,
@@ -7,7 +8,7 @@ import {
 } from '@components/element';
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
+import { Col, Popconfirm, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
@@ -59,7 +60,6 @@ function SuccessTab({ loading, ...props }: Props) {
     [searchQuery, cart.successList],
   );
 
-  console.log('전체리스트', filteredList);
   return (
     <Tabs.TabPane {...props}>
       <Table
@@ -107,7 +107,6 @@ function SuccessTab({ loading, ...props }: Props) {
           />
         )}
         expandable={{
-          expandRowByClick: true,
           expandedRowKeys: [selectedRowId],
           onExpand: (onExpand, record) => {
             if (!onExpand) {
@@ -247,6 +246,34 @@ function SuccessTab({ loading, ...props }: Props) {
                   render: (_, record) =>
                     Number(record.product_price).toLocaleString(),
                 },
+                {
+                  width: 30,
+                  align: 'center',
+                  render: (_, record) => (
+                    <Popconfirm
+                      title="정말 삭제하시겠습니까?"
+                      okText="네"
+                      cancelText="취소"
+                      onCancel={(e) => {
+                        e?.stopPropagation();
+                      }}
+                      onConfirm={(e) => {
+                        e?.stopPropagation();
+                        setCart({
+                          ...cart,
+                          successList: cart.successList.map((item) => ({
+                            ...item,
+                            orders: item.orders.filter(
+                              (order) => order.order_id !== record.order_id,
+                            ),
+                          })),
+                        });
+                      }}
+                    >
+                      <TurtleIcon name="delete" />
+                    </Popconfirm>
+                  ),
+                },
               ]}
             />
           ),
@@ -287,6 +314,31 @@ function SuccessTab({ loading, ...props }: Props) {
               record.orders
                 .reduce((acc, order) => acc + Number(order.product_price), 0)
                 .toLocaleString(),
+          },
+          {
+            width: 30,
+            align: 'center',
+            render: (_, record) => (
+              <Popconfirm
+                title="정말 삭제하시겠습니까?"
+                okText="네"
+                cancelText="취소"
+                onCancel={(e) => {
+                  e?.stopPropagation();
+                }}
+                onConfirm={(e) => {
+                  e?.stopPropagation();
+                  setCart({
+                    ...cart,
+                    successList: cart.successList.filter(
+                      (item) => item.rt_store_id !== record.rt_store_id,
+                    ),
+                  });
+                }}
+              >
+                <TurtleIcon name="delete" />
+              </Popconfirm>
+            ),
           },
         ]}
       />
