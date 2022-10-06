@@ -1,5 +1,6 @@
-import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import {
+  TurtleFormSelect,
+  TurtleNumberInput,
   TurtleSearchInput,
   TurtleSearchSelect,
   TurtleTableTitle,
@@ -28,13 +29,8 @@ function SuccessTab({ loading, ...props }: Props) {
       value: 'mobile',
     },
   ];
-  const { cart } = useOrderCart();
-  const [selectedRowOrder, setSelectedRowOrder] =
-    useState<StoreOrderItemExcelParsing>({
-      rt_store_id: 0,
-      rt_store_name: '',
-      orders: [],
-    });
+  const { cart, setCart } = useOrderCart();
+  const [selectedRowId, setSelectedRowId] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
@@ -111,34 +107,21 @@ function SuccessTab({ loading, ...props }: Props) {
         )}
         expandable={{
           expandRowByClick: true,
-          expandedRowKeys: [selectedRowOrder?.rt_store_id ?? -1],
+          expandedRowKeys: [selectedRowId],
           onExpand: (onExpand, record) => {
             if (!onExpand) {
-              setSelectedRowOrder({
-                rt_store_id: 0,
-                rt_store_name: '',
-                orders: [],
-              });
+              setSelectedRowId(0);
               return;
             }
-            setSelectedRowOrder({
-              rt_store_id: record.rt_store_id,
-              rt_store_name: record.rt_store_name,
-              orders: record.orders.map<StoreOrder>((order, index) => {
-                return {
-                  ...order,
-                  order_id: index,
-                };
-              }),
-            });
+            setSelectedRowId(record.rt_store_id);
           },
-          expandedRowRender: () => (
+          expandedRowRender: (expandedRecord) => (
             <Table
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
-              dataSource={selectedRowOrder?.orders}
+              dataSource={expandedRecord.orders}
               rowKey={(record) => record.order_id!}
-              loading={selectedRowOrder === undefined}
+              loading={expandedRecord === undefined}
               pagination={false}
               columns={[
                 {
@@ -170,12 +153,72 @@ function SuccessTab({ loading, ...props }: Props) {
                 {
                   title: '분류',
                   width: 100,
-                  render: (_, record) => record.order_type,
+                  render: (_, record) => (
+                    <TurtleFormSelect
+                      items={[
+                        {
+                          value: '발주',
+                          name: '발주',
+                        },
+                        {
+                          value: '미송',
+                          name: '미송',
+                        },
+                        {
+                          value: '반품',
+                          name: '반품',
+                        },
+                        {
+                          value: '교환',
+                          name: '교환',
+                        },
+                        {
+                          value: '샘플',
+                          name: '샘플',
+                        },
+                        {
+                          value: '픽업',
+                          name: '픽업',
+                        },
+                        {
+                          value: '기타',
+                          name: '기타',
+                        },
+                      ]}
+                      value={record.order_type}
+                    />
+                  ),
                 },
                 {
                   title: '수량',
                   width: 100,
-                  render: (_, record) => record.product_count,
+                  render: (_, record) => (
+                    <TurtleNumberInput
+                      value={record.product_count}
+                      onChange={(value) => {
+                        setCart({
+                          failList: cart.failList,
+                          successList: cart.successList.map((successItem) => ({
+                            rt_store_id: successItem.rt_store_id,
+                            rt_store_name: successItem.rt_store_name,
+                            orders:
+                              successItem.rt_store_id ===
+                              expandedRecord.rt_store_id
+                                ? successItem.orders.map((item) => ({
+                                    ...item,
+                                    product_count:
+                                      item.order_id === record.order_id
+                                        ? value !== null
+                                          ? value.toString()
+                                          : '0'
+                                        : item.product_count,
+                                  }))
+                                : successItem.orders,
+                          })),
+                        });
+                      }}
+                    />
+                  ),
                 },
                 {
                   title: '공급가',

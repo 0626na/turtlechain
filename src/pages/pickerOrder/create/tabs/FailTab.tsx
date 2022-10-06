@@ -15,7 +15,7 @@ function FailTab({ loading, ...props }: Props) {
         scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
         loading={loading}
         size="small"
-        rowKey={(record) => record.store_id}
+        rowKey={(record) => record.id}
         dataSource={failList}
         pagination={{
           position: ['bottomCenter'],
@@ -25,11 +25,6 @@ function FailTab({ loading, ...props }: Props) {
           <TurtleTableTitle totalCount={cart.failList.length ?? 0} />
         )}
         columns={[
-          {
-            title: '쇼핑몰',
-            width: 180,
-            render: (_, record) => record.store_name,
-          },
           {
             title: '거래처명',
             width: 200,

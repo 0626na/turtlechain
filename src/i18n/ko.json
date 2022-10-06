@@ -1,7 +1,8 @@
 {
   "helmet": {
     "turtleChain": "터틀체인",
-    "home": "HOME"
+    "home": "HOME",
+    "membershipInfo": "멤버십 정보"
   },
 
   "vendor": {
@@ -202,7 +203,8 @@
     "totalVendorCount": "총 거래처 수",
     "subtract": "차감",
     "refund": "환불",
-    "unpaid": "결제"
+    "unpaid": "결제",
+    "storeName": "쇼핑몰명"
   },
 
   "button": {
