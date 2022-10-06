@@ -35,6 +35,9 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
       const phone = form.getFieldValue('phone');
 
       onSuccess && onSuccess({ token, phone });
+      setSessionKey('');
+      setExpireTime(null);
+      form.setFieldsValue({ ...form.getFieldsValue(), otp_code: '' });
     },
     onError: () => {
       message.warn('인증번호가 일치하지 않습니다.');
@@ -69,7 +72,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
 
         setExpireTime(null);
         clearTimeout(countdown);
-        message.success(t('message.expired auth time'));
+        message.warning(t('message.expired auth time'));
       }, 1000);
 
       return () => {
@@ -136,7 +139,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                   loading={verifyOTPQuery.isLoading}
                   onClick={handleVerify}
                 >
-                  {!verifyOTPQuery.isLoading && '확인'}
+                  확인
                 </Button>
               </Row>
             )}
