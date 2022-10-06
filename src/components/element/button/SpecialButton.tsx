@@ -4,7 +4,7 @@ import TurtleText from '../TurtleText';
 
 import TurtleIcon from '../icon/TurtleIcon';
 interface Props {
-  size?: 'default' | 'large';
+  size?: 'default' | 'middle' | 'large';
   children: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
@@ -22,6 +22,14 @@ function SpecialButton({
   if (size === 'large') {
     return (
       <Button css={largeSpecial} htmlType={htmlType} {...props}>
+        <TurtleText>{children}</TurtleText>
+      </Button>
+    );
+  }
+
+  if (size === 'middle') {
+    return (
+      <Button css={middleSpecial} htmlType={htmlType} {...props}>
         <TurtleText>{children}</TurtleText>
       </Button>
     );
@@ -88,7 +96,7 @@ const button = css`
 `;
 
 const defaultSpecial = css([button, { width: 160, height: 40 }]);
-
+const middleSpecial = css([button, { width: 352, height: 48 }]);
 const largeSpecial = css([button, { width: 512, height: 48 }]);
 
 export default SpecialButton;

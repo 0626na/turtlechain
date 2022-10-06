@@ -18,6 +18,13 @@ const GlobalStyle = () => (
         border-radius: 8px;
       }
 
+      // 인풋 suffix 버튼일시 오른쪽 패딩 제거
+      .ant-input-suffix {
+        .ant-btn {
+          padding-right: 0px;
+        }
+      }
+
       /* dropdown */
       .ant-dropdown-menu-item:hover {
         background-color: #edeff1;

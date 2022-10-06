@@ -16,10 +16,12 @@ function Pagebody() {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
 
-  const createUserQuery = useMutation('createUser', userAPI.create, {
+  // 가입 신청
+  const createUserMutatin = useMutation(userAPI.create, {
     onSuccess: () => {
       setCurrentStep(2);
     },
+
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
     },
@@ -27,50 +29,19 @@ function Pagebody() {
 
   return (
     <>
-      <div css={{ display: currentStep === 2 ? 'none' : '' }}>
-        <div
-          css={css`
-            position: relative;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-          `}
-        >
+      <div style={{ display: currentStep === 2 ? 'none' : '' }}>
+        <div css={logoCss.self}>
           <img
-            css={css`
-              position: absolute;
-              height: 100px;
-            `}
+            css={logoCss.img}
             src={`${process.env.PUBLIC_URL}/assets/img/background_signup.png`}
             alt="signup_logo"
           />
-          <div
-            css={css`
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-            `}
-          >
-            <span
-              css={css`
-                font-weight: 700;
-                color: #141720;
-                font-size: 20px;
-                text-align: center;
-              `}
-            >
+          <div css={logoCss.container}>
+            <span css={logoCss.title}>
               쉽고 똑똑한 <br />
               쇼핑몰 업무의 시작
             </span>
-            <span
-              css={css`
-                font-weight: 400;
-                font-size: 14px;
-                color: #5b5d63;
-              `}
-            >
-              지금, 터틀체인과 함께해요
-            </span>
+            <span css={logoCss.subTitle}>지금, 터틀체인과 함께해요</span>
           </div>
         </div>
 
@@ -101,19 +72,18 @@ function Pagebody() {
 
           <div css={content}>
             <Form
+              css={formItemMargin}
               layout="vertical"
               form={form}
               onFinish={(value) => {
-                createUserQuery.mutate({
+                createUserMutatin.mutate({
                   ...value,
-                  user_type: 'rt',
                   company_biz_license_file:
                     value.company_biz_license_file[0].originFileObj,
                 });
               }}
             >
               <CompanyStep
-                form={form}
                 visible={currentStep === 0}
                 onClickNext={() => {
                   setCurrentStep((currentStep) => currentStep + 1);
@@ -121,12 +91,8 @@ function Pagebody() {
               />
 
               <UserStep
-                form={form}
                 visible={currentStep === 1}
-                onClickPrev={() => {
-                  setCurrentStep((currentStep) => currentStep - 1);
-                }}
-                loading={createUserQuery.isLoading}
+                loading={createUserMutatin.isLoading}
               />
             </Form>
           </div>
@@ -170,6 +136,45 @@ const tab = css({
   height: 8,
   borderRadius: 10,
   backgroundColor: 'var(--background-color)',
+});
+
+const logoCss = {
+  self: css({
+    position: 'relative',
+    height: 100,
+    display: 'flex',
+    justifyContent: 'center',
+  }),
+
+  img: css({
+    position: 'absolute',
+    height: 100,
+  }),
+
+  container: css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }),
+
+  title: css({
+    fontWeight: 700,
+    color: '#141720',
+    fontSize: 20,
+    textAlign: 'center',
+  }),
+
+  subTitle: css({
+    fontWeight: 400,
+    fontSize: 14,
+    color: '#5b5d63',
+  }),
+};
+
+const formItemMargin = css({
+  '.ant-form-item': {
+    marginBottom: 28,
+  },
 });
 
 export default Pagebody;
