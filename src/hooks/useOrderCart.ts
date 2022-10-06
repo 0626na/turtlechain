@@ -11,7 +11,7 @@ interface FailListState {
   store_name: string;
   vendor_name: string;
   vendor_address: string;
-  phone: string;
+  mobile: string;
   vendor_product: string;
   product_option: string;
   type: string;
@@ -146,7 +146,7 @@ const useOrderCart = () => {
             store_name: failitem.rt_store_name,
             vendor_name: value.vendor_name,
             vendor_address: value.vendor_address,
-            phone: value.vendor_mobile,
+            mobile: value.mobile,
             vendor_product: value.product_name,
             product_option: value.product_option,
             type: value.order_type,

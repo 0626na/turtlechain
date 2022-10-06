@@ -136,11 +136,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 {
                   title: '휴대전화번호',
                   width: 200,
-                  render: (_, record) =>
-                    record.vendor_mobile === ''
-                      ? record.ws_store_info.length !== 0 &&
-                        record.ws_store_info[0].mobiles[0].phone
-                      : record.vendor_mobile,
+                  render: (_, record) => record.mobile,
                 },
                 {
                   title: '거래처 상품명',
