@@ -53,7 +53,8 @@ function AddModal({ visible, closeModal }: Props) {
   };
 
   useEffect(() => {
-    resetFields();
+    if (!visible) return;
+    // resetFields();
   }, [visible, resetFields]);
 
   return (

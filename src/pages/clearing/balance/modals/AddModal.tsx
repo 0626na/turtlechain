@@ -66,7 +66,7 @@ function AddModal({ visible, closeModal }: Props) {
   };
 
   useEffect(() => {
-    if (visible) return;
+    if (!visible) return;
 
     form.setFieldsValue({
       rt_store_id: store.selected?.id as number,
