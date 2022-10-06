@@ -2,17 +2,9 @@ import userAPI from '@apis/userAPI';
 import { DaumPostcodeModal } from '@components/combine';
 import { AddButton } from '@components/element';
 import { css } from '@emotion/react';
-import {
-  Button,
-  Col,
-  Form,
-  FormInstance,
-  Input,
-  message,
-  Radio,
-  Row,
-  Upload,
-} from 'antd';
+import useModal from '@hooks/useModal';
+import { Button, Form, Input, message, Radio, Row, Upload } from 'antd';
+
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
@@ -21,15 +13,16 @@ import { useMutation } from 'react-query';
 interface Props {
   visible: boolean;
   onClickNext: () => void;
-  form: FormInstance;
 }
 
-function CompanyStep({ visible, onClickNext, form }: Props) {
-  const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
+function CompanyStep({ visible, onClickNext }: Props) {
+  const form = Form.useFormInstance();
+  const [postcodeModalVisible, postcodeModalOpen, postcodeModalClose] =
+    useModal();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
   // 사업자번호 중복체크 요청
-  const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
+  const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
       message.success(data.msg);
       setCheckDuplicated(true);
@@ -40,6 +33,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         },
       ]);
     },
+
     onError: (data: AxiosError) => {
       message.warn(data.response?.data.msg);
       setCheckDuplicated(false);
@@ -54,7 +48,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
   };
 
   // 사업자번호 유효성 검사
-  const handleBizNumValidationCheck = (_: any, value: any) => {
+  const bizNumValidation = (_: any, value: number) => {
     if (!value) {
       return Promise.reject(new Error('사업자 번호 입력해주세요'));
     }
@@ -67,7 +61,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
   };
 
   // 사업자 주소 유효성 검사
-  const handleBizAddressValidationCheck = (_: any, value: any) => {
+  const bizAddressValidation = (_: any, value: string) => {
     if (!value) {
       return Promise.reject(new Error('사업자주소 입력해주세요'));
     }
@@ -76,10 +70,12 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
   };
 
   return (
-    <div css={{ display: visible ? '' : 'none' }}>
+    <div style={{ display: visible ? '' : 'none' }}>
       <DaumPostcodeModal
         visible={postcodeModalVisible}
-        onClose={() => setPostcodeModalVisible(false)}
+        onClose={() => {
+          postcodeModalClose();
+        }}
         onGetAddress={(company_main_address) => {
           form.setFieldsValue({
             ...form.getFieldsValue(),
@@ -107,7 +103,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         label={t('biz name')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder={t('auth.id')} />
+        <Input css={input} placeholder="ex. (주)터틀샵" />
       </Form.Item>
 
       <Form.Item noStyle shouldUpdate>
@@ -116,14 +112,14 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
             label={t('biz num')}
             required
             name="company_biz_num"
-            rules={[{ validator: handleBizNumValidationCheck }]}
+            rules={[{ validator: bizNumValidation }]}
           >
             <Input
               onChange={() => {
                 setCheckDuplicated(false);
               }}
               css={input}
-              placeholder={t('auth.id')}
+              placeholder="ex. 123-45-67890"
               suffix={
                 <Button
                   css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
@@ -136,7 +132,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
                     checkDuplicated
                   }
                   onClick={() => {
-                    dupCheckQuery.mutate({
+                    dupCheckMutation.mutate({
                       biz_num: form.getFieldValue('company_biz_num'),
                     });
                   }}
@@ -153,17 +149,20 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         <Form.Item
           noStyle
           name="company_main_address"
-          rules={[{ validator: handleBizAddressValidationCheck }]}
+          rules={[{ validator: bizAddressValidation }]}
         >
           <Input
             css={input}
             readOnly
-            onClick={() => setPostcodeModalVisible(true)}
+            onClick={() => {
+              postcodeModalOpen();
+            }}
+            placeholder="사업자 주소를 입력해주세요"
             suffix={
               <Button
-                css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
+                css={findAddressButton}
                 type="link"
-                onClick={() => setPostcodeModalVisible(true)}
+                onClick={() => postcodeModalOpen()}
               >
                 주소 찾기
               </Button>
@@ -177,7 +176,7 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         label={t('biz detail address')}
         initialValue=""
       >
-        <Input css={input} />
+        <Input css={input} placeholder="사업자 상세주소를 입력해주세요" />
       </Form.Item>
 
       <Form.Item
@@ -202,82 +201,89 @@ function CompanyStep({ visible, onClickNext, form }: Props) {
         label={t('store.url')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder="운영중인 쇼핑몰 url을 입력해주세요." />
+        <Input css={input} placeholder="ex. www.turtleshop.com" />
       </Form.Item>
 
-      <Row css={{ marginTop: 40 }}>
-        <Col span={24}>
-          <Button
-            css={button}
-            onClick={async () => {
-              try {
-                await form.validateFields([
-                  'company_biz_type',
-                  'company_owner',
-                  'company_name',
-                  'company_biz_num',
-                  'company_main_address',
-                  'company_biz_license_file',
-                  'company_store_url',
-                ]);
-                onClickNext();
-              } catch (error) {
-                return;
+      <Form.Item noStyle shouldUpdate>
+        {({ getFieldValue }) => (
+          <Row css={marginTop}>
+            <Button
+              disabled={
+                !getFieldValue('company_biz_type') ||
+                !getFieldValue('company_name') ||
+                !getFieldValue('company_biz_num') ||
+                !getFieldValue('company_main_address') ||
+                !getFieldValue('company_biz_license_file') ||
+                !getFieldValue('company_store_url') ||
+                !checkDuplicated
               }
-            }}
-          >
-            {t('next')}
-          </Button>
-        </Col>
-      </Row>
+              css={button}
+              onClick={() => {
+                onClickNext();
+              }}
+            >
+              {t('next')}
+            </Button>
+          </Row>
+        )}
+      </Form.Item>
     </div>
   );
 }
 
-const input = css`
-  height: 44px;
-  border-radius: 8px;
-`;
+const input = css({
+  height: 44,
+  borderRadius: 8,
+});
 
-const button = css`
-  width: 352px;
-  height: 48px;
+const findAddressButton = css({
+  color: '#1A66F9',
+  '&:hover': { color: '#1A66F9' },
+});
 
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
+const button = css({
+  width: 352,
+  height: 48,
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
+  fontWeight: 700,
+  border: 'none',
+  borderRadius: 8,
 
-  background-color: #00b3be;
+  display: 'inlineFlex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#fff',
 
-  &:hover {
-    color: #fff;
-    background-color: #00b3be;
-  }
+  backgroundColor: '#00b3be',
+
+  '&:hover': {
+    color: '#fff',
+    backgroundColor: '#00b3be',
+  },
 
   // active 상태
-  &.ant-btn:focus {
-    color: #fff;
-    background-color: #00b3be;
-    border-color: #00b3be;
-  }
-`;
+  '&.ant-btn:focus': {
+    color: '#fff',
+    backgroundColor: '#00b3be',
+    borderColor: '#00b3be',
+  },
+});
 
-const upload = css`
-  display: flex;
+const marginTop = css({
+  marginTop: 40,
+});
 
-  .ant-upload-list {
-    margin-left: 12px;
-  }
+const upload = css({
+  display: 'flex',
 
-  .ant-upload-list-item-name {
-    color: #a1a2a6;
-    width: 200px;
-  }
-`;
+  '.ant-upload-list': {
+    marginLeft: 12,
+  },
+
+  '.ant-upload-list-item-name': {
+    color: '#a1a2a6',
+    width: 200,
+  },
+});
 
 export default CompanyStep;
