@@ -4,7 +4,7 @@ import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props {
   visible: boolean;
-  title: string;
+  title?: string;
   children?: React.ReactNode;
   onClose: () => void;
   size?: 'small' | 'middle' | 'large';

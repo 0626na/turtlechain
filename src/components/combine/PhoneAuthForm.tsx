@@ -1,19 +1,19 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import { useState, useEffect } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Row } from 'antd';
 import { useMutation } from 'react-query';
 import authAPI from '@apis/authAPI';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
-  type?: 'signup';
+  type?: 'signup'; // 회원가입에서의 버튼 색상이 다르기때문.
   onSuccess?: (data: { phone: string; token: string }) => void; // 인증 성공 콜백
 }
 
 function PhoneAuthModal({ onSuccess, type }: Props) {
-  const [form] = Form.useForm();
+  const form = Form.useFormInstance();
   const [session_key, setSessionKey] = useState('');
   const [expire_time, setExpireTime] = useState<null | number>(null);
 
@@ -64,11 +64,12 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
       const countdown = setTimeout(() => {
         if (expire_time > 0) {
           setExpireTime(expire_time - 1000);
-        } else {
-          setExpireTime(null);
-          clearTimeout(countdown);
-          message.success(t('message.expired auth time'));
+          return;
         }
+
+        setExpireTime(null);
+        clearTimeout(countdown);
+        message.success(t('message.expired auth time'));
       }, 1000);
 
       return () => {
@@ -78,33 +79,33 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
   }, [expire_time]);
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      css={css`
-        .ant-form-item {
-          margin-bottom: 16px;
-        }
-      `}
-    >
-      <Form.Item name="phone" label={t('phone')}>
-        <Input
-          css={input}
-          placeholder="ex. 010-1234-5678"
-          suffix={
-            <Button
-              css={{
-                color: '#1A66F9',
-                '&:hover': { color: '#1A66F9' },
-              }}
-              type="link"
-              onClick={handleCreate}
-              loading={createOTPQuery.isLoading}
-            >
-              {createOTPQuery.status === 'success' ? '재발송' : t('auth phone')}
-            </Button>
-          }
-        />
+    <>
+      <Form.Item noStyle shouldUpdate>
+        {({ getFieldValue }) => (
+          <Form.Item
+            name="phone"
+            label={t('phone')}
+            rules={[{ required: type && true }]}
+          >
+            <Input
+              css={input}
+              placeholder="ex. 010-1234-5678"
+              suffix={
+                <Button
+                  disabled={!getFieldValue('phone')}
+                  css={validateText}
+                  type="link"
+                  onClick={handleCreate}
+                  loading={createOTPQuery.isLoading}
+                >
+                  {createOTPQuery.status === 'success'
+                    ? '재발송'
+                    : t('auth phone')}
+                </Button>
+              }
+            />
+          </Form.Item>
+        )}
       </Form.Item>
 
       {expire_time && (
@@ -114,11 +115,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
               placeholder="인증번호 입력"
               css={input}
               suffix={
-                <span
-                  css={css`
-                    color: #fa5252;
-                  `}
-                >
+                <span css={otpText}>
                   {expire_time && moment(expire_time).format('mm:ss')}
                 </span>
               }
@@ -127,13 +124,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
 
           <Form.Item noStyle shouldUpdate>
             {({ getFieldValue }) => (
-              <div
-                css={css`
-                  display: flex;
-                  justify-content: end;
-                  /* margin */
-                `}
-              >
+              <Row justify="end">
                 <Button
                   css={button}
                   style={{
@@ -147,43 +138,51 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                 >
                   {!verifyOTPQuery.isLoading && '확인'}
                 </Button>
-              </div>
+              </Row>
             )}
           </Form.Item>
         </>
       )}
-    </Form>
+    </>
   );
 }
 
-const input = css`
-  height: 44px;
-  border-radius: 8px;
-`;
+const input = css({
+  height: 44,
+  borderRadius: 8,
+});
 
-const button = css`
-  background: var(--background-color);
-  color: var(--color);
-  width: 58px;
-  height: 36px;
+const button = css({
+  backgroundColor: 'var(--background-color)',
+  color: 'var(--color)',
+  width: 58,
+  height: 36,
 
-  &:hover {
-    color: var(--color);
-    background: var(--background-color);
-  }
+  '&:hover': {
+    color: 'var(--color)',
+    background: 'var(--background-color)',
+  },
 
   // active 상태
-  &.ant-btn:focus {
-    color: var(--color);
-    background: var(--background-color);
-  }
+  '&.ant-btn:focus': {
+    color: 'var(--color)',
+    backgroundColor: 'var(--background-color)',
+  },
 
-  &.ant-btn[disabled] {
-    background: var(--background-color);
-    opacity: 0.5;
+  '&.ant-btn[disabled]': {
+    backgroundColor: 'var(--background-color)',
+    opacity: 0.5,
 
-    color: var(--color);
-    border-color: var(--background-color);
-  }
-`;
+    color: 'var(--color)',
+    borderColor: 'var(--background-color)',
+  },
+});
+
+const validateText = css({
+  color: '#1A66F9',
+  '&:hover': { color: '#1A66F9' },
+});
+
+const otpText = css({ color: '#fa5252' });
+
 export default PhoneAuthModal;
