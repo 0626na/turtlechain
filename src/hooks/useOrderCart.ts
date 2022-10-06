@@ -163,6 +163,7 @@ const useOrderCart = () => {
     cart,
     setCart,
     failList,
+    setFailList,
     uploadFiles,
     setuploadFiles,
     ready,

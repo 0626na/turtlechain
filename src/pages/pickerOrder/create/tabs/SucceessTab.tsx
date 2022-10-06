@@ -227,10 +227,9 @@ function SuccessTab({ loading, ...props }: Props) {
                                 ? successItem.orders.map((item) => ({
                                     ...item,
                                     product_count:
-                                      item.order_id === record.order_id
-                                        ? value !== null
-                                          ? value.toString()
-                                          : '0'
+                                      item.order_id === record.order_id &&
+                                      value !== null
+                                        ? value.toString()
                                         : item.product_count,
                                   }))
                                 : successItem.orders,
