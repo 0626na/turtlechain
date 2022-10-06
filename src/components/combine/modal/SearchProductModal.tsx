@@ -56,7 +56,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
   return (
     <div
       css={css`
-        z-index: 2;
+        z-index: 3;
       `}
     >
       <TurtleContentModal
