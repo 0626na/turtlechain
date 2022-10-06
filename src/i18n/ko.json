@@ -262,5 +262,18 @@
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다."
+  },
+  "user": {
+    "": "직책",
+    "rt": "대표",
+    "ub": "직원",
+    "pi": "사입"
+  },
+  "agreement": {
+    "all": "전체 동의",
+    "service_use": "서비스 이용약관 동의(필수)",
+    "personal_information": "개인정보 수집 및 이용 동의(필수)",
+    "third_party": "제 3자 정보제공 동의",
+    "event_notificaton": "이벤트 소식 등 알림 정보받기"
   }
 }
