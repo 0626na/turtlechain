@@ -16,10 +16,12 @@ function Pagebody() {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
 
-  const createUserQuery = useMutation('createUser', userAPI.create, {
+  // 가입 신청
+  const createUserMutatin = useMutation(userAPI.create, {
     onSuccess: () => {
       setCurrentStep(2);
     },
+
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
     },
@@ -27,7 +29,7 @@ function Pagebody() {
 
   return (
     <>
-      <div css={{ display: currentStep === 2 ? 'none' : '' }}>
+      <div style={{ display: currentStep === 2 ? 'none' : '' }}>
         <div css={logoCss.self}>
           <img
             css={logoCss.img}
@@ -74,16 +76,14 @@ function Pagebody() {
               layout="vertical"
               form={form}
               onFinish={(value) => {
-                createUserQuery.mutate({
+                createUserMutatin.mutate({
                   ...value,
-                  user_type: 'rt',
                   company_biz_license_file:
                     value.company_biz_license_file[0].originFileObj,
                 });
               }}
             >
               <CompanyStep
-                form={form}
                 visible={currentStep === 0}
                 onClickNext={() => {
                   setCurrentStep((currentStep) => currentStep + 1);
@@ -91,9 +91,8 @@ function Pagebody() {
               />
 
               <UserStep
-                form={form}
                 visible={currentStep === 1}
-                loading={createUserQuery.isLoading}
+                loading={createUserMutatin.isLoading}
               />
             </Form>
           </div>
