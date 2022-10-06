@@ -2,6 +2,7 @@ import userAPI from '@apis/userAPI';
 import { PhoneAuthForm } from '@components/combine';
 import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
+import { emailPattern } from '@utils/pattern';
 import { Button, Form, Input, message, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
@@ -44,8 +45,21 @@ function UserStep({ visible, loading }: Props) {
       return Promise.reject(new Error('아이디를 입력해주세요.'));
     }
 
-    if (!checkDuplicated && form.getFieldValue('user_login_id')) {
+    if (!checkDuplicated && value) {
       return Promise.reject(new Error('아이디 중복확인을 해주세요'));
+    }
+
+    return Promise.resolve();
+  };
+
+  //이메일 유효성 검사
+  const emailValidation = (_: any, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error('이메일을 입력해주세요.'));
+    }
+
+    if (!emailPattern.test(value)) {
+      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
     }
 
     return Promise.resolve();
@@ -101,7 +115,8 @@ function UserStep({ visible, loading }: Props) {
       </Form.Item>
 
       <Form.Item
-        rules={[{ required: true }]}
+        required
+        rules={[{ validator: emailValidation }]}
         name="user_email"
         label={t('email')}
       >
@@ -112,6 +127,7 @@ function UserStep({ visible, loading }: Props) {
       <Form.Item name="user_mobile" hidden>
         <Input />
       </Form.Item>
+
       <PhoneAuthForm
         type="signup"
         onSuccess={(data) => {

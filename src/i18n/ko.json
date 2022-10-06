@@ -223,7 +223,10 @@
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
     "success update": "성공적으로 수정하였습니다.",
     "success signup": "가입 신청이 완료 되었습니다.",
-    "not match password": "비밀번호가 일치하지 않습니다."
+    "not match password": "비밀번호가 일치하지 않습니다.",
+    "success create auth num": "인증번호를 생성하였습니다.",
+    "success verify auth num": "인증번호를 확인하였습니다.",
+    "expired auth time": "인증시간이 만료되었습니다."
   },
 
   "biz role": "직책",
