@@ -1,11 +1,22 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon, TurtleImg } from '@components/element';
+import { ArrowRightIcon } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 import { t } from 'i18next';
 import useUser from '@hooks/useUser';
+
+import { ReactComponent as StoreIcon } from '@icons/store.svg';
+
+const color = [
+  '#13BCB2',
+  '#89D776',
+  '#799CF5',
+  '#5EE4C4',
+  '#62CCEE',
+  '#9F8BF0',
+];
 
 function StoreSelector() {
   const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
@@ -34,8 +45,8 @@ function StoreSelector() {
           onSelect={({ key }) => {
             selectStore(Number(key), t('message.warningChangeStore'));
           }}
-          items={store.list.map((store) => ({
-            style: menuItemContainer,
+          items={store.list.map((store, idx) => ({
+            style: menuItemCss.self,
             onMouseEnter: (e) => {
               e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
             },
@@ -43,19 +54,39 @@ function StoreSelector() {
               e.domEvent.currentTarget.style.backgroundColor = '#fff';
             },
             key: store.id!,
-            label: <span css={menuItemText}>{store.name}</span>,
-            icon: <TurtleImg css={logo} name="Logo" />,
+            label: <span css={menuItemCss.text}>{store.name}</span>,
+            icon: (
+              <div css={menuItemCss.logoContainer}>
+                <div css={menuItemCss.logo}>
+                  <StoreIcon style={{ fill: color[idx % color.length] }} />
+                </div>
+              </div>
+            ),
           }))}
         />
       }
     >
-      <Button css={selectorButton}>
-        <div css={selectorButtonLeft}>
-          <div>
-            <TurtleImg css={buttonImg} name="Logo" />
+      <Button css={buttonCss.self}>
+        <div css={buttonCss.container}>
+          <div css={buttonCss.logoContainer}>
+            <div css={buttonCss.logo}>
+              <StoreIcon
+                css={buttonCss.icon}
+                style={{
+                  ['--fill-color' as any]:
+                    color[
+                      store.list.findIndex(
+                        (item) => item.name === store.selected?.name,
+                      ) % color.length
+                    ],
+                }}
+              />
+            </div>
           </div>
-          <span css={text}>{store.selected?.name}</span>
+
+          <span css={buttonCss.text}>{store.selected?.name}</span>
         </div>
+
         <div>
           <ArrowRightIcon value="#AAADB3" />
         </div>
@@ -64,78 +95,107 @@ function StoreSelector() {
   );
 }
 
-const menu = css`
-  width: 196px;
-  max-height: 150px;
-  overflow-y: scroll;
+const menu = css({
+  width: 196,
+  maxHeight: 150,
+  position: 'absolute',
+  top: 0,
+  left: 20,
+  overflowY: 'scroll',
 
-  padding: 8px;
+  padding: 8,
 
-  position: absolute;
-  top: 0px;
-  left: 20px;
+  boxShadow: '0px 4px 18px rgba(34, 44, 56, 0.4)',
+  borderRadius: 8,
+});
 
-  box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.4);
-  border-radius: 8px;
-`;
+const menuItemCss = {
+  self: {
+    color: '#5b5d63',
+    fontWeight: 500,
 
-const menuItemContainer = {
-  color: '#5b5d63',
-  fontWeight: 500,
+    padding: '6px 12px',
+    borderRadius: '6px',
+  },
 
-  padding: '6px 12px',
-  borderRadius: '6px',
+  text: css({
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+    width: 90,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    marginLeft: 8,
+  }),
+
+  logoContainer: css({
+    width: 28,
+    height: 28,
+    overflow: 'hidden',
+    position: 'relative',
+    borderRadius: '50%',
+    background: '#363b45',
+  }),
+
+  logo: css({
+    position: 'absolute',
+    top: 7,
+    left: 5,
+  }),
 };
 
-const menuItemText = css`
-  margin-left: 8px;
-`;
+const buttonCss = {
+  self: css({
+    color: '#fff',
+    padding: '8px 12px',
+    width: 216,
+    height: 60,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
 
-const logo = css`
-  border-radius: 50%;
-  background: red;
-  width: 28px;
-  height: 28px;
-  object-fit: cover;
-`;
+    // antd 기본 스타일 제거
+    '&:focus,&:hover': {
+      color: '#fff',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  }),
 
-const selectorButton = css`
-  color: #fff;
-  padding: 8px 12px;
-  width: 216px;
-  height: 60px;
+  container: css({
+    display: 'flex',
+    alignItems: 'center',
+  }),
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  text: css({
+    display: 'inline-block',
+    width: 120,
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    marginLeft: 12,
+  }),
 
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.1);
-
-  // antd 기본 스타일 제거
-  &:focus,
-  &:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
-const selectorButtonLeft = css`
-  display: flex;
-  align-items: center;
-`;
-
-const text = css`
-  margin-left: 12px;
-`;
-
-const buttonImg = css`
-  border-radius: 50%;
-  background: yellow;
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-`;
+  logoContainer: css({
+    position: 'relative',
+    borderRadius: '50%',
+    background: '#fff',
+    width: 44,
+    height: 44,
+    overflow: 'hidden',
+  }),
+  logo: css({
+    position: 'absolute',
+    top: 11,
+    left: 8,
+  }),
+  icon: css({
+    width: 34,
+    height: 34,
+    fill: 'var(--fill-color)',
+  }),
+};
 
 export default StoreSelector;
