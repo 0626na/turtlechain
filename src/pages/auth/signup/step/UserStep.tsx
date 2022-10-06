@@ -2,26 +2,26 @@ import userAPI from '@apis/userAPI';
 import { PhoneAuthForm } from '@components/combine';
 import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
-import { Button, Form, FormInstance, Input, message, Row } from 'antd';
+import { Button, Form, Input, message, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import Agree from './Agree';
+import AgreementCheckbox from '../agreement/AgreementCheckbox';
 
 interface Props {
   visible: boolean;
   loading: boolean;
-  form: FormInstance;
 }
 
-function UserStep({ visible, loading, form }: Props) {
+function UserStep({ visible, loading }: Props) {
+  const form = Form.useFormInstance();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
   // 아이디 중복체크 요청
-  const dupCheckQuery = useMutation(['dupCheck'], userAPI.dupCheck, {
+  const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
       message.success(data.msg);
       setCheckDuplicated(true);
@@ -39,7 +39,7 @@ function UserStep({ visible, loading, form }: Props) {
   });
 
   // 아이디 유효성 검사
-  const idValidation = (_: any, value: any) => {
+  const idValidation = (_: any, value: string) => {
     if (!value) {
       return Promise.reject(new Error('아이디를 입력해주세요.'));
     }
@@ -52,7 +52,7 @@ function UserStep({ visible, loading, form }: Props) {
   };
 
   // 비밀번호 확인 유효성 검사
-  const passwordValidation = (_: any, value: any) => {
+  const passwordValidation = (_: any, value: number) => {
     if (!value) {
       return Promise.reject(new Error('비밀번호 입력해주세요.'));
     }
@@ -64,8 +64,34 @@ function UserStep({ visible, loading, form }: Props) {
     return Promise.resolve();
   };
 
+  //약관동의 유효성 검사
+  const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
+    if (
+      !value.includes('service_use') ||
+      !value.includes('personal_information')
+    ) {
+      return Promise.reject(new Error('필수항목을 체크해주세요.'));
+    }
+
+    return Promise.resolve();
+  };
+
   return (
-    <div css={{ display: visible ? '' : 'none' }}>
+    <div style={{ display: visible ? '' : 'none' }}>
+      <Form.Item
+        name="user_type"
+        label={t('user.')}
+        rules={[{ required: true }]}
+      >
+        <Radio.Group>
+          {['rt', 'ub', 'pi'].map((option) => (
+            <Radio key={option} value={option}>
+              {t(`user.${option}`)}
+            </Radio>
+          ))}
+        </Radio.Group>
+      </Form.Item>
+
       <Form.Item
         rules={[{ required: true }]}
         name="user_name"
@@ -82,6 +108,10 @@ function UserStep({ visible, loading, form }: Props) {
         <Input css={input} placeholder="ex. gbkim@gmail.com" />
       </Form.Item>
 
+      {/* 유효성 검사를 위해 user_mobile 폼아이템 태그를 만들어줌. */}
+      <Form.Item name="user_mobile" hidden>
+        <Input />
+      </Form.Item>
       <PhoneAuthForm
         type="signup"
         onSuccess={(data) => {
@@ -118,7 +148,7 @@ function UserStep({ visible, loading, form }: Props) {
                     checkDuplicated
                   }
                   onClick={() => {
-                    dupCheckQuery.mutate({
+                    dupCheckMutation.mutate({
                       login_id: form.getFieldValue('user_login_id'),
                     });
                   }}
@@ -155,39 +185,54 @@ function UserStep({ visible, loading, form }: Props) {
         />
       </Form.Item>
 
-      <Agree
-        plainOptions={['Apple', 'Pear', 'Orange']}
-        onChange={(list: CheckboxValueType[]) => {
-          console.log(list);
-        }}
-      />
-
-      <Row css={{ marginTop: 40 }}>
-        <SpecialButton
-          size="middle"
-          htmlType="submit"
-          onClick={async () => {
-            try {
-              await form.validateFields([
-                'user_name',
-                'user_email',
-                'user_mobile',
-                'user_login_id',
-                'user_password',
-                'confirm_password',
-              ]);
-            } catch (error) {
-              return;
-            }
+      <Form.Item name="agreement" rules={[{ validator: agreementValidation }]}>
+        <AgreementCheckbox
+          plainOptions={[
+            'service_use',
+            'personal_information',
+            'third_party',
+            'event_notificaton',
+          ]}
+          onChange={(data: CheckboxValueType[]) => {
+            form.setFieldsValue({
+              ...form.getFieldsValue(),
+              agreement: data,
+            });
           }}
-          loading={loading}
-        >
-          {t('signup')}
-        </SpecialButton>
-      </Row>
+        />
+      </Form.Item>
+
+      <Form.Item noStyle shouldUpdate>
+        {({ getFieldValue }) => (
+          <Row css={marginTop}>
+            <SpecialButton
+              size="middle"
+              htmlType="submit"
+              disabled={
+                !getFieldValue('user_name') ||
+                !getFieldValue('user_email') ||
+                !getFieldValue('user_mobile') ||
+                !getFieldValue('user_login_id') ||
+                !getFieldValue('user_password') ||
+                !getFieldValue('confirm_password') ||
+                !(
+                  getFieldValue('agreement')?.includes('service_use') &&
+                  getFieldValue('agreement')?.includes('personal_information')
+                ) ||
+                !checkDuplicated
+              }
+              loading={loading}
+            >
+              {t('signup')}
+            </SpecialButton>
+          </Row>
+        )}
+      </Form.Item>
     </div>
   );
 }
+
+const marginTop = css({ marginTop: 31 });
 
 const input = css`
   height: 44px;
