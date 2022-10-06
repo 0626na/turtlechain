@@ -17,7 +17,7 @@ function ResultStep({ visible }: Props) {
 
   return (
     <div
-      css={{
+      style={{
         display: visible ? '' : 'none',
       }}
     >

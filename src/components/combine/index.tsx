@@ -4,7 +4,7 @@ import SearchVendorModal from './modal/SearchVendorModal';
 import RangeDateModal from './modal/RangeDateModal';
 import SearchFilter from './SearchFilter';
 import DaumPostcodeModal from './modal/DaumPostcodeModal';
-import PhoneAuthModal from './modal/PhoneAuthModal';
+import PhoneAuthForm from './PhoneAuthForm';
 
 export {
   Notification,
@@ -13,5 +13,5 @@ export {
   SearchVendorModal,
   SearchFilter,
   DaumPostcodeModal,
-  PhoneAuthModal,
+  PhoneAuthForm,
 };

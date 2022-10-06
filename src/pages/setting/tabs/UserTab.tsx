@@ -50,15 +50,12 @@ function UserTab() {
   );
 
   useEffect(() => {
-    resetStates(user);
-  }, [resetStates, user]);
-
-  useEffect(() => {
-    if (searchParams.get('tab') !== 'user') {
-      hideButtons();
+    if (searchParams.get('tab') === 'user') {
       resetStates(user);
       return;
     }
+
+    hideButtons();
   }, [resetStates, searchParams, user]);
 
   return (

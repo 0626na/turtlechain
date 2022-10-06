@@ -47,7 +47,6 @@ function PageBody() {
                     greenDatePicker,
                 ]}
                 onChange={(_, date) => {
-                  console.log(date);
                   selectDate(date);
                 }}
                 allowClear={false}

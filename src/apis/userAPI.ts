@@ -27,13 +27,19 @@ const dupCheck = async function (params: RequestDupCheck) {
  *  회원가입
  */
 
+type AgreementItem =
+  | 'service_use'
+  | 'personal_information'
+  | 'event_notificaton'
+  | 'third_party';
+
 export interface RequestCreate {
   user_name: string;
   user_email: string;
   user_mobile: string;
   user_login_id: string;
   user_password: string;
-  user_type: 'rt';
+  user_type: 'rt' | 'pi' | 'ub';
 
   company_biz_type: 'entity' | 'personal' | 'simple';
   company_owner: string;
@@ -43,19 +49,22 @@ export interface RequestCreate {
   company_sub_address: string;
   company_store_url: string;
   company_biz_license_file: RcFile;
+
+  agreement: AgreementItem[];
 }
 
 interface ResponseCreate {
   msg: string;
 }
 
-const create = async function (data: RequestCreate) {
+const create = async (data: RequestCreate) => {
   const url = '/provisioning/registration';
   const formData = new FormData();
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);
   }
   const response = await v2Axios.post<ResponseCreate>(url, formData);
+
   return response.data;
 };
 
