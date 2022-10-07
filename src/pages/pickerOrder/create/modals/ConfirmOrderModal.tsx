@@ -14,7 +14,7 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset } = useOrderCart();
+  const { cart, reset, failList } = useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록

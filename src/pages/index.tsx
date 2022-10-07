@@ -13,8 +13,8 @@ export const VendorCreatePage = lazy(() => import('./vendor/create'));
 export const VendorHistoryPage = lazy(() => import('./vendor/history'));
 export const ProductCreatePage = lazy(() => import('./product/create'));
 export const ProductHistoryPage = lazy(() => import('./product/history'));
-// export const OrderCreatePage = lazy(() => import('./order/create'));
-// export const OrderHistoryPage = lazy(() => import('./order/history'));
+export const OrderCreatePage = lazy(() => import('./order/create'));
+export const OrderHistoryPage = lazy(() => import('./order/history'));
 export const WarehousingCreatePage = lazy(() => import('./warehousing/create'));
 export const WarehousingHistoryPage = lazy(
   () => import('./warehousing/history'),

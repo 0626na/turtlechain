@@ -5,7 +5,7 @@ import { useCallback, useState, useMemo } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
 
-interface FailListState {
+export interface FailListState {
   id: number;
   store_id: number;
   store_name: string;
