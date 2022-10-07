@@ -6,7 +6,7 @@ import {
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
