@@ -11,7 +11,7 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const { cart, failList, setFailList } = useOrderCart();
+  const { cart, setCart, failList, setFailList } = useOrderCart();
 
   return (
     <Tabs.TabPane {...props}>
@@ -86,12 +86,31 @@ function FailTab({ loading, ...props }: Props) {
                 ]}
                 value={record.type}
                 onChange={(value: string) => {
+                  //보여지는 실패케이스 테이블 데이터
                   setFailList([
                     ...failList.map((item) => ({
                       ...item,
                       type: record.id === item.id ? value : item.type,
                     })),
                   ]);
+
+                  //실제로 보내는 데이터
+                  setCart({
+                    successList: cart.successList,
+                    failList: cart.failList.map((item) => ({
+                      ...item,
+                      orders:
+                        item.rt_store_id === record.store_id
+                          ? item.orders.map((order) => ({
+                              ...order,
+                              order_type:
+                                order.vendor_name === record.vendor_name
+                                  ? value
+                                  : order.order_type,
+                            }))
+                          : item.orders,
+                    })),
+                  });
                 }}
               />
             ),
@@ -102,7 +121,7 @@ function FailTab({ loading, ...props }: Props) {
               <TurtleNumberInput
                 step={1}
                 value={record.count}
-                onChange={(value) =>
+                onChange={(value) => {
                   setFailList([
                     ...failList.map((item) => ({
                       ...item,
@@ -111,8 +130,8 @@ function FailTab({ loading, ...props }: Props) {
                           ? value.toString()
                           : item.count,
                     })),
-                  ])
-                }
+                  ]);
+                }}
               />
             ),
           },
