@@ -2,23 +2,18 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { TurtleDivider, TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
-import { Col, Divider, Row, Space } from 'antd';
 
 interface Props {
   visible: boolean;
-  title?: string;
-  children?: React.ReactNode;
   onClose: () => void;
-  size?: 'small' | 'middle' | 'large';
   selectedRow: ClearingInfo;
 }
 
 function DetailModal({
   visible = false,
   onClose,
-  title,
+
   selectedRow,
-  size = 'small',
 }: Props) {
   return (
     <>
@@ -32,14 +27,18 @@ function DetailModal({
             <div css={modalTopContentCss.self}>
               <div css={modalTopContentCss.title}>2020-07-19</div>
               <div css={modalTopContentCss.content}>
-                <div css={modalTopContentCss.item}>
+                <div
+                  css={[modalTopContentCss.item, modalTopContentCss.firstItem]}
+                >
                   <span>거래처명</span>
                   <span>{selectedRow.vendor_info.vendor_name}</span>
                 </div>
-                <div css={modalTopContentCss.item}>
+                <div
+                  css={[modalTopContentCss.item, modalTopContentCss.secondItem]}
+                >
                   <span>결제요청 금액</span>
                   <span>
-                    {selectedRow.clearing_amount?.toLocaleString() ?? 0}
+                    {selectedRow.clearing_amount?.toLocaleString() ?? 0}원
                   </span>
                 </div>
               </div>
@@ -51,7 +50,7 @@ function DetailModal({
               <div css={modalBottomContentCss.title}>상세내역</div>
 
               <ul css={modalBottomContentCss.content}>
-                <li css={modalBottomContentCss.item}>
+                <li css={[modalBottomContentCss.item]}>
                   <span>교환/반품</span>
                   <span>
                     -{' '}
@@ -73,7 +72,6 @@ function DetailModal({
                 <li css={modalBottomContentCss.item}>
                   <span>당일입고</span>
                   <span>
-                    -
                     {(
                       selectedRow.warehousing_amount +
                       selectedRow.reserve_subtract_amount
@@ -82,59 +80,10 @@ function DetailModal({
                 </li>
                 <li css={modalBottomContentCss.item}>
                   <span>미결제</span>
-                  <span>- {selectedRow.unpaid_amount.toLocaleString()}</span>
+                  <span>{selectedRow.unpaid_amount.toLocaleString()}</span>
                 </li>
               </ul>
             </div>
-
-            {/* <Space
-                direction="vertical"
-                size={2}
-                style={{
-                  color: '#DCE0E4',
-                }}
-              >
-                <Row justify="space-between">
-                  <Col style={{ marginRight: 59 }}>미결제</Col>
-                  <Col>{selectedRow.unpaid_amount.toLocaleString()}</Col>
-                </Row>
-                <Row justify="space-between">
-                  <Col style={{ marginRight: 59 }}>당일 입고</Col>
-                  <Col>
-                    {(
-                      selectedRow.warehousing_amount +
-                      selectedRow.reserve_subtract_amount
-                    ).toLocaleString()}
-                  </Col>
-                </Row>
-                <Row justify="space-between">
-                  <Col style={{ marginRight: 59 }}>당일 미송</Col>
-                  <Col>
-                    {selectedRow.reserve_payment_amount.toLocaleString()}
-                  </Col>
-                </Row>
-                <Divider
-                  style={{
-                    borderTopColor: '#5B5D63',
-                    marginTop: 10,
-                    marginBottom: 10,
-                  }}
-                />
-                <Row justify="space-between">
-                  <Col style={{ marginRight: 59 }}>매입 차감</Col>
-                  <Col>
-                    -{' '}
-                    {selectedRow.overpaid_payment_amount?.toLocaleString() ?? 0}
-                  </Col>
-                </Row>
-
-                <Row justify="space-between">
-                  <Col style={{ marginRight: 59 }}>미송 차감</Col>
-                  <Col>
-                    - {selectedRow.reserve_subtract_amount.toLocaleString()}
-                  </Col>
-                </Row>
-              </Space> */}
           </div>
         </div>
       )}
@@ -168,7 +117,7 @@ const modalCss = {
 
     display: 'flex',
     flexDirection: 'column',
-
+    boxShadow: '0px 8px 28px rgba(34, 44, 56, 0.28)',
     background: '#fff',
     borderRadius: 4,
   }),
@@ -186,6 +135,7 @@ const modalTopContentCss = {
 
   title: css({
     color: '#A1A2A6',
+    fontWeight: 500,
     marginBottom: 40,
   }),
 
@@ -198,12 +148,33 @@ const modalTopContentCss = {
   item: css({
     display: 'flex',
     justifyContent: 'space-between',
+    'span:first-child': {
+      color: '#A1A2A6',
+      fontWeight: 500,
+    },
+  }),
+
+  firstItem: css({
+    'span:last-child': {
+      color: '#242934',
+      fontWeight: 700,
+    },
+  }),
+
+  secondItem: css({
+    alignItems: 'center',
+    'span:last-child': {
+      color: '#00B3BE',
+      fontWeight: 700,
+      fontSize: 28,
+    },
   }),
 };
 
 const modalBottomContentCss = {
   title: css({
     color: '#A1A2A6',
+    fontWeight: 500,
     marginBottom: 24,
   }),
 
@@ -216,8 +187,13 @@ const modalBottomContentCss = {
   item: css({
     display: 'flex',
     justifyContent: 'space-between',
+
+    'span:first-child': {
+      color: '#5B5D63',
+      fontWeight: 500,
+    },
     'span:last-child': {
-      color: 'red',
+      color: '#242934',
     },
   }),
 };

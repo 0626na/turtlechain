@@ -8,6 +8,12 @@ const GlobalStyle = () => (
         margin: 0;
       }
 
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
       p {
         margin: 0;
       }

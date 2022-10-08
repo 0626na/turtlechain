@@ -84,6 +84,10 @@ function PageBody() {
                 <Badge
                   count={1}
                   style={{
+                    width: 36,
+                    height: 36,
+                    lineHeight: '36px',
+                    borderRadius: '50%',
                     backgroundColor:
                       Number(activeKey) >= 1 ? '#DDF3F5' : '#F0F3F6',
                     color: Number(activeKey) >= 1 ? '#00AAB5' : '#A1A2A6',
@@ -134,6 +138,10 @@ function PageBody() {
                 <Badge
                   count={2}
                   style={{
+                    width: 36,
+                    height: 36,
+                    lineHeight: '36px',
+                    borderRadius: '50%',
                     backgroundColor:
                       Number(activeKey) >= 2 ? '#DDF3F5' : '#F0F3F6',
                     color: Number(activeKey) >= 2 ? '#00AAB5' : '#A1A2A6',
@@ -180,6 +188,8 @@ const inner = css`
 `;
 
 const $button = css`
+  width: 60px;
+  height: 40px;
   color: #6b6d73;
   background-color: #f0f3f6;
 
@@ -210,6 +220,8 @@ const greenButton = css`
 `;
 
 const $datePicker = css`
+  width: 137px;
+  height: 40px;
   background-color: #f0f3f6;
   color: #6b6d73;
   border: none;
@@ -219,7 +231,8 @@ const $datePicker = css`
 const greenDatePicker = css`
   background-color: #00b3be;
 
-  input {
+  input,
+  .ant-picker-suffix {
     color: #fff;
   }
 `;
@@ -241,7 +254,7 @@ const collapse = css`
   &.ant-collapse
     > .ant-collapse-item.ant-collapse-no-arrow
     > .ant-collapse-header {
-    padding: 23px 36px;
+    padding: 27px 36px;
   }
 
   .ant-collapse-content-box {

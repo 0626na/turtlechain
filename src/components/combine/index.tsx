@@ -5,13 +5,15 @@ import RangeDateModal from './modal/RangeDateModal';
 import SearchFilter from './SearchFilter';
 import DaumPostcodeModal from './modal/DaumPostcodeModal';
 import PhoneAuthForm from './PhoneAuthForm';
+import CreateModal from './modal/CreateModal';
 
 export {
   Notification,
+  SearchFilter,
+  CreateModal,
   TurtleContentModal,
   RangeDateModal,
   SearchVendorModal,
-  SearchFilter,
   DaumPostcodeModal,
   PhoneAuthForm,
 };
