@@ -11,6 +11,7 @@ import UserTab from './tabs/UserTab';
 import { useSearchParams } from 'react-router-dom';
 import CompanyTab from './tabs/CompanyTab';
 import StoreTab from './tabs/StoreTab';
+import MistransferTab from './tabs/mistransferTab';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,7 +29,10 @@ function PageBody() {
         css={pageContent}
         style={{
           ['--background-color' as any]:
-            searchParams.get('tab') === 'store' ? '#fff' : '#f9f9fa',
+            searchParams.get('tab') === 'store' ||
+            searchParams.get('tab') === 'mistransfer'
+              ? '#fff'
+              : '#f9f9fa',
         }}
       >
         <TurtleTabs
@@ -39,23 +43,24 @@ function PageBody() {
           }}
         >
           <Tabs.TabPane key="store" tab="쇼핑몰 관리">
-            <div css={[storeTabContainer]}>
+            <div css={whiteContainer}>
               <StoreTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="user" tab="계정관리">
-            <div css={tabContainer}>
+            <div css={greyContainer}>
               <UserTab />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane key="company" tab="사업자 관리">
-            <div css={tabContainer}>
+            <div css={greyContainer}>
               <CompanyTab />
             </div>
           </Tabs.TabPane>
-
-          <Tabs.TabPane key="mistransferRefund" tab="오입금 환불">
-            <div css={tabContainer}>준비중입니다.</div>
+          <Tabs.TabPane key="mistransfer" tab="오입금 환불">
+            <div css={whiteContainer}>
+              <MistransferTab />
+            </div>
           </Tabs.TabPane>
         </TurtleTabs>
       </div>
@@ -68,11 +73,11 @@ const pageContent = css({
   backgroundColor: 'var(--background-color)',
 });
 
-const tabContainer = css`
+const greyContainer = css`
   padding: 38px 36px 0px 36px;
 `;
 
-const storeTabContainer = css`
+const whiteContainer = css`
   padding: 30px 36px 0px 36px;
 `;
 

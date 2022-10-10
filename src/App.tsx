@@ -31,6 +31,7 @@ import {
   SignupPage,
   ResetPasswordPage,
   MembershipInfoPage,
+  RegistrationPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -53,7 +54,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        {/* <Route path="/registration" element={<RegistrationPage />} /> */}
+        <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/membership-info" element={<MembershipInfoPage />} />
 
         {/*
