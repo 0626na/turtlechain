@@ -9,6 +9,8 @@ function useClearingCart() {
   // 결제요청일을 선택한다.
   const selectDate = (date: string) => {
     setCart({
+      // 리스트들을 비우는 이유?
+      // "오늘"버튼 동일하게 눌렀을떄 항목들이 사라짐.
       clearingRequestDate: date,
       reservePaymentList: [],
       reserveSubtractList: [],
