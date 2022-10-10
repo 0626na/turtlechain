@@ -1,7 +1,18 @@
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
+import useStore from '@hooks/useStore';
 import { PageContent } from '@layout/page';
-import { Badge, Button, Col, Collapse, DatePicker, Row, Space } from 'antd';
+import {
+  Badge,
+  Button,
+  Col,
+  Collapse,
+  DatePicker,
+  Row,
+  Space,
+  Tooltip,
+} from 'antd';
+
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ClearingPanel from './panels/ClearingPanel';
@@ -9,15 +20,14 @@ import WarehousingPanel from './panels/WarehousingPanel';
 
 function PageBody() {
   const [activeKey, setActiveKey] = useState('0');
+  const { store } = useStore();
   const { cart, selectDate } = useClearingCart();
 
-  // 결제요청일자가 선택되면 첫번째 패널을 연다.
+  // 날짜선택, 쇼핑몰 변경시 교환/반품/미송 패널 보여준다.
   useEffect(() => {
-    if (cart.clearingRequestDate === '') return;
-
     setActiveKey('1');
-  }, [cart.clearingRequestDate]);
-
+  }, [cart.clearingRequestDate, store.selected?.id]);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   return (
     <>
       <div css={inner}>
@@ -38,20 +48,28 @@ function PageBody() {
               >
                 오늘
               </Button>
-              <DatePicker
-                css={[
-                  $datePicker,
-                  cart.clearingRequestDate &&
-                    moment().format('YYYY-MM-DD') !==
-                      moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                    greenDatePicker,
-                ]}
-                onChange={(_, date) => {
-                  selectDate(date);
-                }}
-                allowClear={false}
-                placeholder="다른 일자선택"
-              />
+
+              <Tooltip
+                visible={tooltipVisible}
+                placement="bottom"
+                title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+              >
+                <DatePicker
+                  onClick={() => setTooltipVisible(false)}
+                  css={[
+                    $datePicker,
+                    cart.clearingRequestDate &&
+                      moment().format('YYYY-MM-DD') !==
+                        moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                      greenDatePicker,
+                  ]}
+                  onChange={(_, date) => {
+                    selectDate(date);
+                  }}
+                  allowClear={false}
+                  placeholder="다른 일자선택"
+                />
+              </Tooltip>
             </Space>
           </Col>
         </Row>
@@ -60,8 +78,7 @@ function PageBody() {
         <Collapse
           css={collapse}
           onChange={(key) => {
-            if (!key) return;
-
+            if (!key || key[0] === '2') return;
             setActiveKey(key[0]);
           }}
           activeKey={activeKey}
