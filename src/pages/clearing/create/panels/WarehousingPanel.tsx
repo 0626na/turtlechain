@@ -55,7 +55,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         clearing_request_date: cart.clearingRequestDate,
       }),
     {
-      enabled: activeKey === '1',
+      enabled: activeKey === '1' && !!store.selected?.id,
       onSuccess: (data) => {
         separate(data.item_list);
       },
@@ -91,6 +91,8 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         </div>
 
         <Table
+          // css={{ height: 313 }}
+          scroll={{ y: 80 }}
           size="small"
           pagination={false}
           loading={getStoreClearingQuery.isLoading}
@@ -98,7 +100,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             ...cart.adjustmentSubtractList,
             ...cart.reserveSubtractList,
           ]}
-          rowKey={(record) => record.id!}
+          rowKey={(record) => record.id as number}
           title={() => (
             <TurtleTableTitle
               totalCount={
@@ -197,6 +199,8 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
       </div>
       <Table
+        // css={{ height: 313 }}
+        scroll={{ y: 80 }}
         size="small"
         pagination={false}
         loading={getStoreClearingQuery.isLoading}
