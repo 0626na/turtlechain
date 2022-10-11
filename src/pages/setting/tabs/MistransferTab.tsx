@@ -1,8 +1,6 @@
 import mistransferAPI from '@apis/mistransferAPI';
-import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
+
 import {
-  AddButton,
-  GridIcon,
   SpecialButton,
   TurtleIcon,
   TurtleTableTitle,
@@ -12,32 +10,19 @@ import {
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
-import useUser from '@hooks/useUser';
 
-import { phonePattern } from '@utils/pattern';
 import { Col, message, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import AddModal from '../modal/AddModal';
-import DetailModal from '../modal/DetailModal';
 
+// 진행중
 function MistransferTab() {
-  // const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
-
   const { store } = useStore();
-  const [selectedRow, setSelectedRow] = useState<StoreShow>();
-  // const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
-  const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
-  // const getQuery = useQuery(
-  //   ['getStoreList'],
-  //   retailerStoreAPI.getList,
-  //   {
-  //     enabled: !!user.id,
-  //   },
-  // );
+  const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
   const getQuery = useQuery(
     ['getMistransfer', store.selected?.id],
@@ -80,25 +65,14 @@ function MistransferTab() {
           margin-bottom: 16px;
         `}
       >
-        <Col>
-          <Row align="middle">
-            <Col
-              css={css`
-                margin-right: 12px;
-              `}
-            >
-              <TurtleIcon name="storeList" />
-            </Col>
-            <Col
-              css={css`
-                font-size: 20px;
-                font-weight: 500;
-                color: #242934;
-              `}
-            >
-              <TurtleText>쇼핑몰 정보</TurtleText>
-            </Col>
-          </Row>
+        <Col
+          css={css`
+            font-size: 20px;
+            font-weight: 500;
+            color: #242934;
+          `}
+        >
+          오입금 환불내역
         </Col>
 
         <Col>
@@ -207,10 +181,5 @@ function MistransferTab() {
     </>
   );
 }
-
-const cardsContainer = css`
-  height: 70vh;
-  overflow: auto;
-`;
 
 export default MistransferTab;

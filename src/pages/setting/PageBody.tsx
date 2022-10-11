@@ -11,7 +11,7 @@ import UserTab from './tabs/UserTab';
 import { useSearchParams } from 'react-router-dom';
 import CompanyTab from './tabs/CompanyTab';
 import StoreTab from './tabs/StoreTab';
-import MistransferTab from './tabs/mistransferTab';
+import MistransferTab from './tabs/MistransferTab';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
