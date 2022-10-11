@@ -3,9 +3,37 @@ import { Button } from 'antd';
 import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
 
+const sizeCss = {
+  small: {
+    width: '138px',
+    height: '36px',
+    fontSize: '14px',
+    background: '#1a66f9',
+    hoverColor: '#1553ca',
+  },
+
+  default: {
+    width: '200px',
+    height: '46px',
+    fontSize: '16px',
+    background:
+      'linear-gradient(90deg, #1A66F9 0%, #1A66F9 32.29%, #605CFF 100%)',
+    hoverColor:
+      'linear-gradient(90deg, #1553CA 0%, #1553CA 32.29%, #4C4AC7 100%)',
+  },
+
+  large: {
+    width: '512px',
+    height: '48px',
+    fontSize: '16px',
+    background: '#1a66f9',
+    hoverColor: '#1553ca',
+  },
+};
 interface Props {
   size?: 'default' | 'large' | 'small';
   children: React.ReactNode;
+  icon?: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
   htmlType?: 'submit' | 'button';
@@ -18,54 +46,66 @@ function PrimaryButton({
   size = 'default',
   children,
   htmlType = 'button',
+  icon,
   ...props
 }: Props) {
-  if (size === 'large') {
-    return (
-      <Button css={largePrimary} htmlType={htmlType} {...props}>
-        <TurtleText>{children}</TurtleText>
-      </Button>
-    );
-  }
-
-  if (size === 'small') {
-    return (
-      <Button css={smallPrimary} htmlType={htmlType} {...props}>
-        <TurtleText>{children}</TurtleText>
-      </Button>
-    );
-  }
-
-  // default
   return (
-    <Button css={defaultPrimary} htmlType={htmlType} {...props}>
+    <Button
+      css={buttonCss.self}
+      style={{
+        ['--font-size' as any]: sizeCss[size].fontSize,
+        ['--size-width' as any]: sizeCss[size].width,
+        ['--size-height' as any]: sizeCss[size].height,
+        ['--background-color' as any]: sizeCss[size].background,
+        ['--hover-color' as any]: sizeCss[size].hoverColor,
+      }}
+      htmlType={htmlType}
+      {...props}
+    >
       <TurtleText>{children}</TurtleText>
+      {icon && <div css={buttonCss.icon}>{icon}</div>}
     </Button>
   );
 }
 
-const button = css`
-  font-size: 16px;
-  font-weight: 500;
+const buttonCss = {
+  self: css({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
-  border: none;
-  color: #fff;
-  background-color: #1a66f9;
+    fontWeight: 500,
 
-  &:hover {
-    color: #fff;
-    background-color: #1553ca;
-  }
+    border: 'none',
+    color: '#fff',
 
-  // active 상태
-  &.ant-btn:focus {
-    color: #fff;
-    background-color: #1a66f9;
-  }
-`;
+    '&:hover': {
+      color: '#fff',
+      background: 'var(--hover-color)',
+    },
 
-const defaultPrimary = css([button, { width: 200, height: 48 }]);
-const largePrimary = css([button, { width: 512, height: 48 }]);
-const smallPrimary = css([button, { width: 140, height: 36, fontSize: 14 }]);
+    // active 상태
+    '&.ant-btn:focus': {
+      color: '#fff',
+      background: 'var(--background-color)',
+    },
+
+    //disabled
+    '&.ant-btn[disabled]': {
+      color: '#fff',
+      background: '#C3C4C6',
+    },
+
+    background: 'var(--background-color)',
+    fontSize: 'var(--font-size)',
+    width: 'var(--size-width)',
+    height: 'var(--size-height)',
+  }),
+
+  icon: css({
+    display: 'inline',
+    marginLeft: 7,
+  }),
+};
 
 export default PrimaryButton;

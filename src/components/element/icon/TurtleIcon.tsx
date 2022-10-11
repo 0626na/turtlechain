@@ -42,6 +42,10 @@ import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
 import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { ReactComponent as PlusIcon } from '@icons/plus.svg';
 
+import { ReactComponent as ExcludeWonIcon } from '@icons/excludeWon.svg';
+import { ReactComponent as IncludeWonIcon } from '@icons/includeWon.svg';
+import { ReactComponent as CoinIcon } from '@icons/coin.svg';
+import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -82,7 +86,11 @@ interface Props {
     | 'clearing'
     | 'setting'
     | 'tutorial'
-    | 'plus';
+    | 'plus'
+    | 'includeWon'
+    | 'excludeWon'
+    | 'coin'
+    | 'rightTriangle';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -91,6 +99,38 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'rightTriangle') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <RightTriangleIcon />
+      </div>
+    );
+  }
+
+  if (name === 'coin') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <CoinIcon />
+      </div>
+    );
+  }
+
+  if (name === 'includeWon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <IncludeWonIcon />
+      </div>
+    );
+  }
+
+  if (name === 'excludeWon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ExcludeWonIcon />
+      </div>
+    );
+  }
 
   if (name === 'plus') {
     return (

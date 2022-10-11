@@ -6,6 +6,7 @@ import {
   ArrowRightIcon,
   MemoIcon,
   TurtleIcon,
+  TurtleTableNumberInput,
   TurtleTableTitle,
   TurtleText,
 } from '@components/element';
@@ -17,7 +18,6 @@ import { Collapse, CollapsePanelProps, Select, Table } from 'antd';
 
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
-import NumberInput from './NumberInput';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
@@ -172,7 +172,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               align: 'right',
               title: t('table.price'),
               render: (_, record) => (
-                <NumberInput
+                <TurtleTableNumberInput
                   defaultValue={record.product_price}
                   onChange={(value) => {
                     handleExchangeRefundItemUpdate(
@@ -190,7 +190,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               title: t('table.count'),
               render: (_, record) => {
                 return (
-                  <NumberInput
+                  <TurtleTableNumberInput
                     defaultValue={record.product_count}
                     max={record.product_count_max}
                     onChange={(value) => {

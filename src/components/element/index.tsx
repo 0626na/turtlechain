@@ -38,6 +38,7 @@ import SelectButton from './button/SelectButton';
 import ArrowRightIcon from './icon/ArrowRightIcon';
 import GridIcon from './icon/GridIcon';
 import SpecialButton from './button/SpecialButton';
+import TurtleTableNumberInput from './input/TurtleTableNumberInput';
 
 export {
   //buttons
@@ -56,7 +57,7 @@ export {
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtleNumberInput,
-
+  TurtleTableNumberInput,
   //RangePicker
   TurtlePrimaryRangePicker,
   TurtleSecondaryRangePicker,

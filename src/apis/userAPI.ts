@@ -98,6 +98,8 @@ export interface ResponseGetRegistration {
         user_mobile: string;
         user_login_id: string;
         user_password: string;
+        user_type: 'rt' | 'pi' | 'ub';
+        agreement: AgreementItem[];
       },
     ];
   };
@@ -137,6 +139,8 @@ export interface RequestUpdateRegistration {
     user_mobile: string;
     user_login_id: string;
     user_password: string;
+    user_type: 'rt' | 'pi' | 'ub';
+    agreement: AgreementItem[];
   };
 }
 

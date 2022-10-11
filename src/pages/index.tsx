@@ -2,6 +2,7 @@ import { lazy } from 'react';
 
 export const LoginPage = lazy(() => import('./auth/login'));
 export const SignupPage = lazy(() => import('./auth/signup'));
+export const RegistrationPage = lazy(() => import('./auth/registration'));
 export const FindIdPage = lazy(() => import('./auth/find-id'));
 export const ResetPasswordPage = lazy(() => import('./auth/reset-password'));
 export const NotFoundPage = lazy(() => import('./notFound'));
