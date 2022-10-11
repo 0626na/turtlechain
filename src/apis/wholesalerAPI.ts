@@ -9,7 +9,7 @@ interface WholesalerStore {
   lc: string;
   ext: string;
   store_phone: {
-    mobile: string;
+    phone: string;
   }[];
   store_account: {
     id: number;
@@ -20,6 +20,11 @@ interface WholesalerStore {
   memo: string;
 }
 
+export interface RequestGetList {
+  page: number;
+  page_size: number;
+}
+
 export interface ResponseGetList {
   msg: string;
   data: {
@@ -28,9 +33,9 @@ export interface ResponseGetList {
   };
 }
 
-const getList = async () => {
+const getList = async (params: RequestGetList) => {
   const url = 'provisioning/wholesaler/stores';
-  const response = await v2Axios.get<ResponseGetList>(url);
+  const response = await v2Axios.get<ResponseGetList>(url, { params });
   return response.data;
 };
 
