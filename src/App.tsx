@@ -23,7 +23,6 @@ import {
   WarehousingCreatePage,
   WarehousingHistoryPage,
   WarehousingAdjustmentPage,
-  PickerHomePage,
   PickerVendorPage,
   PickerOrderCreatePage,
   PickerOrderHistoryPage,
@@ -235,10 +234,10 @@ function App() {
 
         <Route path="/picker" element={<PickerMainLayout />}>
           <Route
-            path="home"
+            path="vendor"
             element={
               <Suspense fallback={<></>}>
-                <PickerHomePage />
+                <PickerVendorPage />
               </Suspense>
             }
           />
@@ -257,14 +256,6 @@ function App() {
             element={
               <Suspense fallback={<></>}>
                 <PickerOrderHistoryPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="vendor"
-            element={
-              <Suspense fallback={<></>}>
-                <PickerVendorPage />
               </Suspense>
             }
           />
