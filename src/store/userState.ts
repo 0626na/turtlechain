@@ -10,6 +10,6 @@ export const userState = atom<UserInfo>({
     email: '',
     mobile_phone: '',
     company_id: undefined,
-    type: 'rt',
+    type: '',
   },
 });

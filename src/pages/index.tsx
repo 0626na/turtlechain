@@ -30,7 +30,6 @@ export const SettingPage = lazy(() => import('./setting'));
 // export const TutorialPage = lazy(() => import('./tutorial'));
 
 // 사입자Page
-export const PickerHomePage = lazy(() => import('./pickerHome'));
 export const PickerOrderCreatePage = lazy(() => import('./pickerOrder/create'));
 export const PickerOrderHistoryPage = lazy(
   () => import('./pickerOrder/history'),

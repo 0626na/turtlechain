@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Col, Form, message, Popconfirm, Radio, Row } from 'antd';
 import {
   AnswerButton,
-  TurtleDivider,
   TurtleFormInput,
   TurtleFormSelect,
 } from '@components/element';
@@ -20,7 +19,7 @@ interface Props {
   selectedRow?: StoreShow;
 }
 
-function DetailModal({ visible, closeModal, selectedRow }: Props) {
+function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
@@ -184,73 +183,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             </Form.Item>
           </div>
         </Form.Item>
-
-        <TurtleDivider marginTop={32} marginBottom={32} />
-
-        <Form.Item
-          name="inventory_is_vat_included"
-          label={t('table.supplyPriceRecord')}
-        >
-          <Radio.Group>
-            <Radio disabled value={false}>
-              공급가만
-            </Radio>
-            <Radio disabled value={true}>
-              공급가 + 부가세 합산금액
-            </Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item //
-          name="inventory_type"
-          label="재고관리 프로그램"
-          rules={[{ required: true }]}
-        >
-          <TurtleFormSelect
-            disabled
-            placeholder="재고관리 프로그램을 선택하세요."
-            items={[
-              { value: 'sellmate', name: '셀메이트' },
-              { value: 'ezadmin', name: '이지어드민' },
-              { value: 'turtlechain', name: '터틀체인' },
-              { value: 'etc', name: '기타' },
-              { value: 'none', name: '사용안함' },
-            ]}
-          />
-        </Form.Item>
-
-        <Form.Item label="재고프로그램 연동키">
-          <Row gutter={[4, 0]}>
-            <Col span={11}>
-              <Form.Item name="inventory_domain" noStyle label="도메인">
-                <TurtleFormInput placeholder="도메인" disabled />
-              </Form.Item>
-            </Col>
-            <Col span={13}>
-              <Form.Item name="inventory_key" noStyle label="연동 key">
-                <TurtleFormInput placeholder="연동키" disabled />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form.Item>
-
-        <TurtleDivider marginTop={32} marginBottom={32} />
-
-        <Form.Item
-          name="email"
-          label={t('table.transactionEmail')}
-          required={false}
-        >
-          <TurtleFormInput placeholder="이체내역 수신 메일을 입력하세요." />
-        </Form.Item>
-
-        <Form.Item
-          name="alimtalk_name"
-          label={t('table.alimtalkName')}
-          required={false}
-        >
-          <TurtleFormInput placeholder={t('placeholder.alimtalk')} />
-        </Form.Item>
       </Form>
 
       {buttonsVisible && (
@@ -326,4 +258,4 @@ const marginleft = css`
   margin-left: 8px;
 `;
 
-export default DetailModal;
+export default DetailPickerModal;

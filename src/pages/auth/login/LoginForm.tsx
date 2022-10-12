@@ -62,10 +62,20 @@ function LoginForm() {
         if (form.getFieldValue('autoLogin')) {
           autoLogin(token);
 
+          if (user_info.type === 'pi') {
+            navigate('/picker/vendor');
+            return;
+          }
+
           navigate('/home');
+        }
+
+        login(token);
+        if (user_info.type === 'pi') {
+          navigate('/picker/vendor');
           return;
         }
-        login(token);
+
         navigate('/home');
       },
     },

@@ -5,7 +5,7 @@ import { Layout, Menu } from 'antd';
 import StoreButton from './StoreButton';
 
 import { css } from '@emotion/react';
-import { GridIcon, TurtleIcon } from '@components/element';
+import { TurtleIcon } from '@components/element';
 
 const pathnames = {
   vendor: {
@@ -32,11 +32,6 @@ const mainMenuContainerStyle = {
 };
 const mainMenuTitleStyle = {
   marginTop: 8,
-  fontSize: 12,
-  color: '#a1a2a6',
-};
-
-const mainMenuHomeStyle = {
   fontSize: 12,
   color: '#a1a2a6',
 };
@@ -100,23 +95,6 @@ const menus = [
     key: 'mainMenuContainer',
     style: mainMenuContainerStyle,
     children: [
-      {
-        key: 'home',
-        label: '홈',
-        icon: (
-          <span css={iconContainer}>
-            <GridIcon />
-          </span>
-        ),
-        style: mainMenuHomeStyle,
-        onMouseEnter: (e: info) => {
-          e.domEvent.currentTarget.style.color = '#EAECEF';
-          e.domEvent.currentTarget.style.backgroundColor = 'transparent';
-        },
-        onMouseLeave: (e: info) => {
-          e.domEvent.currentTarget.style.color = '#a1a2a6';
-        },
-      },
       {
         key: 'vendor',
         label: '거래처',
