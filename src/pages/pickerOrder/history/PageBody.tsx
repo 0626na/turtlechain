@@ -67,6 +67,7 @@ function PageBody() {
 
         <Table
           size="small"
+          scroll={{ y: 432, x: 1608 }}
           rowKey={(record) => record.id}
           dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
           onRow={(record) => {
@@ -87,25 +88,30 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
+              width: '116px',
               title: '분류',
               render: (_, record) => (record.type === 'new' ? '1차' : '2차'),
             },
             {
               ellipsis: true,
+              width: '160px',
               title: '발주 일자',
               render: (_, record) =>
                 moment(record.created_time).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
+              width: '160px',
               title: '쇼핑몰',
               render: (_, record) => record.rt_store_name,
             },
             {
               ellipsis: true,
+              width: '120px',
               title: '거래처 수',
               render: (_, record) => record.total_store_count,
             },
+            {},
           ]}
         />
       </PageContent>

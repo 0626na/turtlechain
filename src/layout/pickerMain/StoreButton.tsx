@@ -2,12 +2,12 @@ import { Button } from 'antd';
 import { useQuery } from 'react-query';
 import { ArrowRightIcon } from '@components/element';
 import { css } from '@emotion/react';
-import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 
 import { useNavigate } from 'react-router-dom';
 import useUser from '@hooks/useUser';
 import { ReactComponent as StoreIcon } from '@icons/store.svg';
+import pickerAPI from '@apis/pickerAPI';
 
 function StoreButton() {
   const navigate = useNavigate();
@@ -15,17 +15,13 @@ function StoreButton() {
   const { user } = useUser();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getStoreListQuery = useQuery(
-    ['getStoreList'],
-    retailerStoreAPI.getList,
-    {
-      enabled: !!user.id,
-      onSuccess: (data) => {
-        fillStoreList(data.store_list);
-        selectDefaultStore(data.store_list);
-      },
+  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+    enabled: !!user.id,
+    onSuccess: (data) => {
+      fillStoreList(data.data.store_list);
+      selectDefaultStore(data.data.store_list);
     },
-  );
+  });
 
   return (
     <Button

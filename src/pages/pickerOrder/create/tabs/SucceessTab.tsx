@@ -1,4 +1,5 @@
 import {
+  MemoIcon,
   TurtleFormSelect,
   TurtleIcon,
   TurtleNumberInput,
@@ -63,7 +64,7 @@ function SuccessTab({ loading, ...props }: Props) {
   return (
     <Tabs.TabPane {...props}>
       <Table
-        scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
+        scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
         dataSource={filteredList}
         loading={loading}
         size="small"
@@ -125,30 +126,36 @@ function SuccessTab({ loading, ...props }: Props) {
               pagination={false}
               columns={[
                 {
+                  width: '184px',
+                },
+                {
                   title: '거래처명',
+                  width: '136px',
                   render: (_, record) => record.vendor_name,
                 },
                 {
                   title: '거래처 주소',
-                  width: 200,
+                  width: '196px',
                   render: (_, record) => record.vendor_address,
                 },
                 {
                   title: '휴대전화번호',
-                  width: 200,
+                  width: '156px',
                   render: (_, record) => record.mobile,
                 },
                 {
                   title: '거래처 상품명',
+                  width: '216px',
                   render: (_, record) => record.product_name,
                 },
                 {
                   title: '옵션',
+                  width: '136px',
                   render: (_, record) => record.product_option,
                 },
                 {
                   title: '분류',
-                  width: 100,
+                  width: '136px',
                   render: (_, record) => (
                     <TurtleFormSelect
                       items={[
@@ -207,7 +214,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '수량',
-                  width: 100,
+                  width: '136px',
                   render: (_, record) => (
                     <TurtleNumberInput
                       value={record.product_count}
@@ -237,36 +244,45 @@ function SuccessTab({ loading, ...props }: Props) {
                 },
                 {
                   title: '공급가',
-                  width: 100,
+                  width: '136px',
                   render: (_, record) =>
                     Number(record.product_price).toLocaleString(),
                 },
                 {
-                  width: 30,
-                  align: 'center',
+                  title: '메모',
+                  width: '136px',
                   render: (_, record) => (
-                    <Popconfirm
-                      title="정말 삭제하시겠습니까?"
-                      okText="네"
-                      cancelText="취소"
-                      onCancel={(e) => {
-                        e?.stopPropagation();
-                      }}
-                      onConfirm={(e) => {
-                        e?.stopPropagation();
-                        setCart({
-                          ...cart,
-                          successList: cart.successList.map((item) => ({
-                            ...item,
-                            orders: item.orders.filter(
-                              (order) => order.order_id !== record.order_id,
-                            ),
-                          })),
-                        });
-                      }}
+                    <div
+                      css={css`
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      `}
                     >
-                      <TurtleIcon name="delete" />
-                    </Popconfirm>
+                      <MemoIcon value="" />
+                      <Popconfirm
+                        title="정말 삭제하시겠습니까?"
+                        okText="네"
+                        cancelText="취소"
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          setCart({
+                            ...cart,
+                            successList: cart.successList.map((item) => ({
+                              ...item,
+                              orders: item.orders.filter(
+                                (order) => order.order_id !== record.order_id,
+                              ),
+                            })),
+                          });
+                        }}
+                      >
+                        <TurtleIcon name="delete" />
+                      </Popconfirm>
+                    </div>
                   ),
                 },
               ]}
@@ -276,11 +292,12 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             title: '쇼핑몰',
-            width: 180,
+            width: '184px',
             render: (_, record) => record.rt_store_name,
           },
           {
             title: '거래처',
+            width: '488px',
             render: (_, record) =>
               `${record.orders[0].vendor_name} 외 ${
                 record.orders.length - 1
@@ -288,6 +305,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '상품',
+            width: '488px',
             render: (_, record) =>
               `${record.orders[0].product_name} 외 ${
                 record.orders.length - 1
@@ -295,7 +313,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '수량 합계',
-            width: 140,
+            width: '136px',
             render: (_, record) =>
               record.orders.reduce(
                 (acc, order) => acc + Number(order.product_count),
@@ -304,15 +322,14 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '공급가 합계',
-            width: 140,
+            width: '128px',
             render: (_, record) =>
               record.orders
                 .reduce((acc, order) => acc + Number(order.product_price), 0)
                 .toLocaleString(),
           },
           {
-            width: 30,
-            align: 'center',
+            width: '124px',
             render: (_, record) => (
               <Popconfirm
                 title="정말 삭제하시겠습니까?"

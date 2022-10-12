@@ -1,4 +1,5 @@
-import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
+import pickerAPI from '@apis/pickerAPI';
+import { StoreShow } from '@apis/retailerStoreAPI';
 import {
   AddButton,
   GridIcon,
@@ -12,15 +13,14 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
-import StoreCard from '@pages/setting/card/StoreCard';
-import AddModal from '@pages/setting/modal/AddModal';
-import DetailModal from '@pages/setting/modal/DetailModal';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
+import StorePickerCard from './card/StorePickerCard';
+import AddPickerModal from './modals/AddPickerModal';
+import DetailPickerModal from './modals/DetailPickerModal';
 
 function PageBody() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
@@ -29,13 +29,9 @@ function PageBody() {
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
-  const getStoreListQuery = useQuery(
-    ['getStoreList'],
-    retailerStoreAPI.getList,
-    {
-      enabled: !!user.id,
-    },
-  );
+  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+    enabled: !!user.id,
+  });
 
   const changeMode = () => {
     setMode((mode) => {
@@ -49,7 +45,7 @@ function PageBody() {
       {/*
        * 쇼핑몰 상세보기 모달
        */}
-      <DetailModal
+      <DetailPickerModal
         visible={detailModalVisible}
         closeModal={closeDetailModal}
         selectedRow={selectedRow}
@@ -58,7 +54,10 @@ function PageBody() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <AddModal visible={addModalVisible} closeModal={closeAddDetailModal} />
+      <AddPickerModal
+        visible={addModalVisible}
+        closeModal={closeAddDetailModal}
+      />
 
       <Row
         align="middle"
@@ -100,7 +99,7 @@ function PageBody() {
       </Row>
 
       <TurtleTableTitle
-        totalCount={getStoreListQuery.data?.store_list.length ?? 0}
+        totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
         rightContent={
           <AddButton
             icon={
@@ -121,7 +120,7 @@ function PageBody() {
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {getStoreListQuery.data?.store_list.map((item, idx) => (
+          {getStoreListQuery.data?.data.store_list.map((item, idx) => (
             <Col
               key={idx}
               span={8}
@@ -133,7 +132,7 @@ function PageBody() {
                 cursor: pointer;
               `}
             >
-              <StoreCard store={item} />
+              <StorePickerCard store={item} />
             </Col>
           ))}
         </Row>
@@ -141,7 +140,7 @@ function PageBody() {
         <Table
           size="small"
           loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.store_list}
+          dataSource={getStoreListQuery.data?.data.store_list}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
@@ -178,33 +177,6 @@ function PageBody() {
                   phonePattern,
                   '$1-$2-$3',
                 ) ?? '',
-            },
-            {
-              ellipsis: true,
-              width: 50,
-              title: t('table.paymentAccountInfo'),
-              render: (_, record) =>
-                `${record.store_account[0]?.bank ?? ''} ${
-                  record.store_account[0]?.account_number ?? ''
-                } ${record.store_account[0]?.account_holder ?? ''}`,
-            },
-            {
-              ellipsis: true,
-              width: 50,
-              title: t('table.recipientPrint'),
-              render: (_, record) => record.recipient_print,
-            },
-            {
-              ellipsis: true,
-              width: 25,
-              title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}.`),
-            },
-            {
-              ellipsis: true,
-              width: 50,
-              title: t('table.transactionEmail'),
-              render: (_, record) => record.email,
             },
           ]}
         />
