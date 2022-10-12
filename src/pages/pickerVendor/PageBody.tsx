@@ -20,6 +20,7 @@ function PageBody() {
           scroll={{ y: 'auto', x: 1400 }}
           loading={getWholesalerStoreListQuery.isLoading}
           dataSource={getWholesalerStoreListQuery.data?.data.store_list}
+          rowKey={(record) => record.id}
           pagination={false}
           footer={() => (
             <Row justify="center">
