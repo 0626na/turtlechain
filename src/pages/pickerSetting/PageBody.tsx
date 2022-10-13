@@ -13,7 +13,7 @@ import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
 import StoreCard from '@pages/setting/card/StoreCard';
-import AddModal from '@pages/setting/modal/AddModal';
+import AddModal from '@pages/setting/modal/StoreAddModal';
 import DetailModal from '@pages/setting/modal/DetailModal';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
