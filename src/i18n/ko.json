@@ -68,7 +68,9 @@
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
-    }
+    },
+    "complete date": "결제완료 일자",
+    "price": "결제 금액"
   },
 
   "transaction": {
@@ -92,22 +94,10 @@
   },
 
   "inventory": {
-    "sellmate": {
-      "": "셀메이트",
-      "color": "orange"
-    },
-    "ezadmin": {
-      "": "이지어드민",
-      "color": "skyblue"
-    },
-    "turtlechain": {
-      "": "터틀체인",
-      "color": "gray"
-    },
-    "none": {
-      "": "없음",
-      "color": "gray"
-    }
+    "sellmate": "셀메이트",
+    "ezadmin": "이지어드민",
+    "turtlechain": "터틀체인",
+    "none": "없음"
   },
 
   "etc": {
@@ -152,7 +142,7 @@
     "transactionEmail": "이체내역 수신메일",
     "inventory": "재고관리 프로그램",
 
-    "vatIncluded": "부가세 입금",
+    "vatIncluded": "부가세 바로전달",
     "accountInfo": "계좌 정보",
 
     "vendorName": "거래처명",
@@ -257,7 +247,10 @@
     "store url": "쇼핑몰 url을 입력하세요.",
     "store": "쇼핑몰명을 입력하세요.",
     "alimtalk": "알림톡명을 입력하세요.",
-    "mobile": "휴대번호를 입력하세요."
+    "mobile": "휴대번호를 입력하세요.",
+    "mistransfer refund_amt": "오입금 환불 요청금액을 입력해주세요",
+    "request memo": "오입금 환불 요청사유를 입력해주세요",
+    "vendorName": "거래처명을 입력해주세요"
   },
 
   "find id": "아이디 찾기",
@@ -267,7 +260,8 @@
 
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
-    "required item": "필수 입력값입니다."
+    "required item": "필수 입력값입니다.",
+    "really delete": "정말 삭제하시겠습니까?"
   },
   "user": {
     "": "직책",
@@ -281,5 +275,29 @@
     "personal_information": "개인정보 수집 및 이용 동의(필수)",
     "third_party": "제 3자 정보제공 동의",
     "event_notificaton": "이벤트 소식 등 알림 정보받기"
+  },
+
+  "mistransfer": {
+    "list": "오입금 환불내역",
+    "create": "오입금 환불요청",
+    "status": {
+      "": "진행상태",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
+    },
+    "created date": "요청일자",
+    "accountInfo": "오입금 계좌정보",
+    "recipient_accountInfo": "환불받을 계좌정보",
+    "recipient print": "받는분 통장인쇄",
+    "refund_memo": "환불 사유",
+    "request memo": "요청 사유",
+    "request price": "요청 금액",
+
+    "management": "오입금 반환 관리",
+    "complete date": "오입금 환불 처리날짜",
+
+    "yes": "예",
+    "no": "아니오"
   }
 }

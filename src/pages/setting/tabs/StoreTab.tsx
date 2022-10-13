@@ -18,12 +18,13 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import StoreCard from '../card/StoreCard';
-import AddModal from '../modal/AddModal';
+import StoreAddModal from '../modal/StoreAddModal';
 import DetailModal from '../modal/DetailModal';
 
 function StoreTab() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
   const { user } = useUser();
+
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
@@ -57,7 +58,10 @@ function StoreTab() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <AddModal visible={addModalVisible} closeModal={closeAddDetailModal} />
+      <StoreAddModal
+        visible={addModalVisible}
+        closeModal={closeAddDetailModal}
+      />
 
       <Row
         align="middle"

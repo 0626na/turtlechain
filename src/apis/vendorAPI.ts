@@ -139,7 +139,7 @@ const excel = async (data: RequestExcel) => {
 
 export interface RequestGet {
   page: number;
-  type: string;
+  type?: string;
   search_string: string;
   rt_store_id?: number;
 }
