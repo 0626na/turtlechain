@@ -3,7 +3,6 @@ import mistransferAPI from '@apis/mistransferAPI';
 import {
   SecondaryButton,
   SelectButton,
-  TurtleIcon,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -94,12 +93,6 @@ function MistransferTab() {
           />
         )}
         rowKey={(record) => record.id}
-        // onRow={(record) => ({
-        //   onClick: () => {
-        //     // setSelectedRow({ ...record });
-        //     // openDetailModal();
-        //   },
-        // })}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         scroll={{ x: 1400, y: 'auto' }}
         columns={[
@@ -157,8 +150,8 @@ function MistransferTab() {
                 {record.status === 'request' && (
                   <Popconfirm
                     title={t('description.really delete')}
-                    okText="예"
-                    cancelText="아니오"
+                    okText={t('yes')}
+                    cancelText={t('no')}
                     onCancel={(e) => {
                       e?.stopPropagation();
                     }}
