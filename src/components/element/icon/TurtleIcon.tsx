@@ -255,7 +255,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   if (name === 'delete') {
     return (
       <div
-        css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
+        css={[removeIconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
         onClick={handleClick}
       >
         <RemoveIcon />
@@ -421,5 +421,11 @@ const iconContainer = css`
   justify-content: center;
   cursor: pointer;
 `;
-
+const removeIconContainer = css`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+`;
 export default TurtleIcon;

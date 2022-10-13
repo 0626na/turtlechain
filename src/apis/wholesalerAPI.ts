@@ -22,7 +22,6 @@ interface WholesalerStore {
 
 export interface RequestGetList {
   page: number;
-  page_size: number;
 }
 
 export interface ResponseGetList {

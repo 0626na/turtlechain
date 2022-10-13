@@ -1,5 +1,6 @@
 import wholesalerAPI from '@apis/wholesalerAPI';
 import { PageContent } from '@layout/page';
+import { phonePattern } from '@utils/pattern';
 import { Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useState } from 'react';
@@ -9,7 +10,7 @@ function PageBody() {
   const [page, setPage] = useState(1);
   const getWholesalerStoreListQuery = useQuery(
     ['getWholesalerStoreListQuery', page],
-    () => wholesalerAPI.getList({ page, page_size: 10 }),
+    () => wholesalerAPI.getList({ page }),
   );
 
   return (
@@ -17,7 +18,7 @@ function PageBody() {
       <PageContent>
         <Table
           size="small"
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 648, x: 1608 }}
           loading={getWholesalerStoreListQuery.isLoading}
           dataSource={getWholesalerStoreListQuery.data?.data.store_list}
           rowKey={(record) => record.id}
@@ -38,33 +39,44 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 150,
+              width: '160px',
               title: t('table.vendorName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 150,
+              width: '160px',
               title: t('table.vendorAddress'),
-              render: (_, record) =>
-                `${record.building} ${record.floor} ${record.col ?? ''} ${
-                  record.lc ?? ''
-                }`,
+              render: (_, record) => {
+                if (record.ext !== '') {
+                  return record.ext;
+                }
+                return (
+                  `${record.building} ${record.floor}층 ${record.col ?? ''} ${
+                    record.lc ?? ''
+                  }` ?? ''
+                );
+              },
             },
+
             {
               ellipsis: true,
-              width: 200,
+              width: '160px',
               title: t('table.mobile'),
               render: (_, record) => {
-                if (record.store_phone.length !== 0)
-                  return record.store_phone[0].phone;
+                if (record.store_phone.length !== 0) {
+                  return record.store_phone[0].phone.replace(
+                    phonePattern,
+                    '$1-$2-$3',
+                  );
+                }
 
                 return '';
               },
             },
             {
               ellipsis: true,
-              width: 200,
+              width: '260px',
               title: t('table.accountInfo'),
               render: (_, record) => {
                 if (record.store_account.length !== 0)
