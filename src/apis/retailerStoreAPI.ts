@@ -1,5 +1,6 @@
 import { v2Axios } from '.';
 
+export type InventoryType = 'sellmate' | 'ezadmin' | 'turtlechain' | 'none';
 export interface Store {
   name: string;
   email: string;
@@ -15,8 +16,7 @@ export interface Store {
     mobile: string;
     tag: string;
   };
-  // 1: 셀메이트, 2: 이지어드민, 3: 터틀체인
-  inventory_type: 'sellmate' | 'ezadmin' | 'turtlechain';
+  inventory_type: InventoryType;
   inventory_domain: string;
   inventory_key: string;
   inventory_is_vat_included: boolean;
@@ -26,7 +26,7 @@ export interface StoreShow {
   id: number;
   name: string;
   store_url: string;
-  inventory_type: 'sellmate' | 'ezadmin' | 'turtlechain';
+  inventory_type: InventoryType;
   inventory_domain: string;
   inventory_key: string;
   inventory_is_vat_included: boolean;
