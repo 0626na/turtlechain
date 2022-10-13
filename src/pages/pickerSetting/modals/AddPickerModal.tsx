@@ -50,6 +50,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
     if (searchStore === undefined) {
       message.info('신규쇼핑몰입니다. 값을 입력해주세요');
       form.setFieldsValue({
+        store_id: '',
         store_url: '',
         store_mobile: '',
       });
@@ -57,6 +58,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
     }
 
     form.setFieldsValue({
+      store_id: searchStore.id,
       store_url: searchStore.store_url,
       store_mobile: {
         mobile:
@@ -129,8 +131,9 @@ function AddPickerModal({ visible, closeModal }: Props) {
             onConfirm={() => {
               form.validateFields().then((value) => {
                 createMutation.mutate({
-                  ...value,
-                  rt_store_id: '',
+                  name: value.name,
+                  store_url: value.store_url,
+                  rt_store_id: value.store_id,
                   store_mobile: {
                     send_alimtalk: false,
                     mobile: value.store_mobile.mobile,
