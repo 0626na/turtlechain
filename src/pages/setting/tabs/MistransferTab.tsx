@@ -20,7 +20,7 @@ import MistransferAddModal from '../modal/MistransferAddModal';
 const tagColors = {
   request: 'green',
   pending: 'orange',
-  completed: 'cyan',
+  complete: 'cyan',
 } as const;
 
 function MistransferTab() {
