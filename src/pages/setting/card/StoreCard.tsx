@@ -10,6 +10,21 @@ interface Props {
   store: StoreShow;
 }
 
+const colors = {
+  sellmate: {
+    color: 'orange',
+  },
+  ezadmin: {
+    color: 'skyblue',
+  },
+  turtlechain: {
+    color: 'gray',
+  },
+  none: {
+    color: 'gray',
+  },
+} as const;
+
 function StoreCard({ store }: Props) {
   return (
     <div css={card}>
@@ -88,8 +103,8 @@ function StoreCard({ store }: Props) {
           <span css={leftContentCss.title}>재고관리 프로그램</span>
         </Col>
         <Col>
-          <TurtleTag color={t(`inventory.${store.inventory_type}.color`)}>
-            {t(`inventory.${store.inventory_type}.`)}
+          <TurtleTag color={colors[store.inventory_type].color}>
+            {t(`inventory.${store.inventory_type}`)}
           </TurtleTag>
         </Col>
       </Row>

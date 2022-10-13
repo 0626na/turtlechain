@@ -20,7 +20,7 @@ function MainLayout() {
   }
 
   return (
-    <Layout>
+    <Layout css={{ minWidth: 1500 }}>
       <Sider />
       <Content>
         <Outlet />

@@ -6,7 +6,7 @@ import { SearchFilter } from '@components/combine';
 import InputModal from '@components/combine/modal/InputModal';
 import {
   MemoIcon,
-  SecondaryButton,
+  SecondaryIconButton,
   TurtleCard,
   TurtleDivider,
   TurtleDropdown,
@@ -189,7 +189,9 @@ function PageBody() {
                 },
               },
             ]}
-            triggerButton={<SecondaryButton>매입조정 추가</SecondaryButton>}
+            triggerButton={
+              <SecondaryIconButton>매입조정 추가</SecondaryIconButton>
+            }
           />,
         ]}
       />

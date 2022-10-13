@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import {
-  SecondaryButton,
+  SecondaryIconButton,
   TurtleSearchInput,
   TurtleTableTitle,
 } from '@components/element';
@@ -72,13 +72,13 @@ function PageBody() {
         title="장부 리스트"
         subTitle="거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요."
         buttons={[
-          <SecondaryButton
+          <SecondaryIconButton
             onClick={() => {
               addModalOpen();
             }}
           >
             과거매입 추가
-          </SecondaryButton>,
+          </SecondaryIconButton>,
         ]}
       />
       <PageContent>
