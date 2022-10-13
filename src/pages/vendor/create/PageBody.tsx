@@ -13,7 +13,7 @@ import {
 import {
   HistoryButton,
   PrimaryButton,
-  SecondaryButton,
+  SecondaryIconButton,
   TertiaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
@@ -202,7 +202,9 @@ function PageBody() {
                 },
               },
             ]}
-            triggerButton={<SecondaryButton>거래처 추가하기</SecondaryButton>}
+            triggerButton={
+              <SecondaryIconButton>거래처 추가하기</SecondaryIconButton>
+            }
           />,
         ]}
       />
