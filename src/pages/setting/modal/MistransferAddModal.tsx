@@ -30,7 +30,7 @@ interface Props {
 function MistransferAddModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
   const { store } = useStore();
-  console.log(store);
+
   const queryClient = useQueryClient();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
 
