@@ -61,7 +61,7 @@ export interface ResponseUpdate {}
 
 const update = async function (data: RequestUpdate) {
   const url = `mistransfer/items/${data.item_id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 
