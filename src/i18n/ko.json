@@ -259,7 +259,8 @@
 
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
-    "required item": "필수 입력값입니다."
+    "required item": "필수 입력값입니다.",
+    "really delete": "정말 삭제하시겠습니까?"
   },
   "user": {
     "": "직책",
@@ -293,6 +294,9 @@
     "request price": "요청 금액",
 
     "management": "오입금 반환 관리",
-    "complete date": "오입금 환불 처리날짜"
+    "complete date": "오입금 환불 처리날짜",
+
+    "yes": "예",
+    "no": "아니오"
   }
 }
