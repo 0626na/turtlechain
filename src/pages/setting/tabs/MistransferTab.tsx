@@ -1,7 +1,8 @@
 import mistransferAPI from '@apis/mistransferAPI';
 
 import {
-  SpecialButton,
+  SecondaryButton,
+  SelectButton,
   TurtleIcon,
   TurtleTableTitle,
   TurtleTag,
@@ -15,22 +16,23 @@ import { Col, message, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React from 'react';
 import { useMutation, useQuery } from 'react-query';
+import MistransferAddModal from '../modal/MistransferAddModal';
 
-import AddModal from '../modal/AddModal';
+const tagColors = {
+  request: 'green',
+  pending: 'orange',
+  completed: 'cyan',
+} as const;
 
-// 진행중
 function MistransferTab() {
   const { store } = useStore();
-
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
-  const getQuery = useQuery(
-    ['getMistransfer', store.selected?.id],
+  const getMistransferQuery = useQuery(
+    ['getMistransferQuery', store.selected?.id],
     () =>
       mistransferAPI.get({
         rt_store_id: store.selected?.id,
-        start_date: '',
-        end_date: '',
         type: 'mistransfer',
       }),
     {
@@ -38,28 +40,24 @@ function MistransferTab() {
     },
   );
 
-  const updateQuery = useMutation('updateMistransfer', mistransferAPI.update, {
+  // 요청상태일시 삭제가능.
+  const deleteMudation = useMutation(mistransferAPI.update, {
     onSuccess: () => {
-      getQuery.refetch();
+      getMistransferQuery.refetch();
       message.success(t('message.success delete mistransfer'));
     },
   });
+
   return (
     <>
       {/*
-       * 쇼핑몰 상세보기 모달
+       * 오입금 추가 모달
        */}
-      {/* <DetailModal
-        visible={detailModalVisible}
-        closeModal={closeDetailModal}
-        selectedRow={selectedRow}
-      /> */}
-      {/*
-       * 쇼핑몰 추가 모달
-       */}
-      <AddModal visible={addModalVisible} closeModal={closeAddDetailModal} />
+      <MistransferAddModal
+        visible={addModalVisible}
+        closeModal={closeAddDetailModal}
+      />
       <Row
-        align="middle"
         justify="space-between"
         css={css`
           margin-bottom: 16px;
@@ -76,79 +74,81 @@ function MistransferTab() {
         </Col>
 
         <Col>
-          <SpecialButton
+          <SecondaryButton
             onClick={() => {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
-          </SpecialButton>
+            <TurtleText>오입금 환불요청</TurtleText>
+          </SecondaryButton>
         </Col>
       </Row>
 
       <Table
         size="small"
-        loading={getQuery.isLoading}
-        dataSource={getQuery.data?.data.refund_list}
+        loading={getMistransferQuery.isLoading}
+        dataSource={getMistransferQuery.data?.data.refund_list}
         title={() => (
-          <TurtleTableTitle totalCount={getQuery.data?.data.total_count ?? 0} />
+          <TurtleTableTitle
+            totalCount={getMistransferQuery.data?.data.total_count ?? 0}
+          />
         )}
         rowKey={(record) => record.id}
-        onRow={(record) => ({
-          onClick: () => {
-            // setSelectedRow({ ...record });
-            // openDetailModal();
-          },
-        })}
+        // onRow={(record) => ({
+        //   onClick: () => {
+        //     // setSelectedRow({ ...record });
+        //     // openDetailModal();
+        //   },
+        // })}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         scroll={{ x: 1400, y: 'auto' }}
         columns={[
           {
             ellipsis: true,
-            width: 20,
-            title: t('table.operatorStatus'),
-            render: (_, record) => {
-              const { status } = record;
-              const color =
-                status === 'request'
-                  ? 'green'
-                  : status === 'pending'
-                  ? 'orange'
-                  : 'cyan';
-              const text = t(`mistransfer.status.${status}`);
-              return <TurtleTag color={color}>{text}</TurtleTag>;
-            },
+            width: 100,
+            title: t('mistransfer.status.'),
+            render: (_, record) => (
+              <TurtleTag color={tagColors[record.status]}>
+                {t(`mistransfer.status.${record.status}`)}
+              </TurtleTag>
+            ),
           },
           {
             ellipsis: true,
+            width: 150,
             title: t('mistransfer.created date'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
-            title: t('vendor.name'),
+            width: 150,
+            title: t('table.vendorName'),
             render: (_, record) => record.ws_store_name,
           },
           {
             ellipsis: true,
-            title: t('vendor.address'),
+            width: 250,
+            title: t('mistransfer.accountInfo'),
             render: (_, { ws_bank, ws_account_number, ws_account_holder }) =>
               `${ws_bank} ${ws_account_number} ${ws_account_holder}`,
           },
           {
             ellipsis: true,
-            title: t('mistransfer.deposit price'),
-            render: (_, record) => record.transfer_amount.toLocaleString(),
-          },
-          {
-            ellipsis: true,
+            width: 150,
             title: t('mistransfer.recipient print'),
             render: (_, record) => record.recipient_print,
           },
           {
             ellipsis: true,
-            title: t('mistransfer.memo'),
+            width: 150,
+            title: t('mistransfer.refund_memo'),
             render: (_, record) => record.memo,
+          },
+          {
+            ellipsis: true,
+            width: 150,
+            title: t('mistransfer.request price'),
+            render: (_, record) => record.transfer_amount.toLocaleString(),
           },
           {
             ellipsis: true,
@@ -157,20 +157,20 @@ function MistransferTab() {
                 {record.status === 'request' && (
                   <Popconfirm
                     title={t('description.really delete')}
-                    okText={t('yes')}
-                    cancelText={t('no')}
+                    okText="예"
+                    cancelText="아니오"
                     onCancel={(e) => {
                       e?.stopPropagation();
                     }}
                     onConfirm={(e) => {
                       e?.stopPropagation();
-                      updateQuery.mutate({
+                      deleteMudation.mutate({
                         item_id: record.id,
                         is_inactive: 1,
                       });
                     }}
                   >
-                    <TurtleIcon name="delete" />
+                    <SelectButton>요청취소</SelectButton>
                   </Popconfirm>
                 )}
               </>
