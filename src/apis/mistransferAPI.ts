@@ -29,7 +29,7 @@ export interface ResponseGet {
   data: {
     refund_list: Array<{
       id: number;
-      status: 'request' | 'completed' | 'pending';
+      status: 'request' | 'complete' | 'pending';
       created_date: string;
       complete_date: string;
       ws_store_name: string;
