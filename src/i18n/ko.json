@@ -199,6 +199,8 @@
 
   "button": {
     "uploadExcel": "엑셀 업로드",
+    "at a time": "한번에 추가",
+    "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
     "addTransaction": "과거매입 추가하기"
