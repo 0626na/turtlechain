@@ -54,7 +54,7 @@ function App() {
         <Route index element={<LoginPage />} />
 
         <Route path="/registration" element={<RegistrationLayout />}>
-          <Route path="new" element={<NewPage />} />
+          <Route index element={<NewPage />} />
           <Route path="retailer" element={<RetailerPage />} />
           {/* <Route path="retailer/return" element={<RetailerReturnPage/>} /> */}
           <Route path="picker" element={<PickerPage />} />
