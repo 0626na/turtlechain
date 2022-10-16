@@ -1,40 +1,39 @@
 import { useLogin } from '@hooks/index';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useSearchParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 function RegistrationPageBody() {
   const { isLogin } = useLogin();
-  const { pathname } = useLocation();
-  console.log(pathname);
-  if (isLogin) {
-    return <Navigate to="/home" replace={true} />;
-  }
+  const [searchParams] = useSearchParams();
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  useEffect(() => {
+    // 가입 완료 페이지면 로고 이미지 없앤다.
+    if (searchParams.get('step') === 'completed') setIsCompleted(true);
+  }, [searchParams]);
+
+  if (isLogin) return <Navigate to="/home" replace={true} />;
 
   return (
     <div css={container}>
-      <div
-        css={logoCss.self}
-        style={{
-          ['--display' as any]: pathname.includes('completed')
-            ? 'none'
-            : 'flex',
-        }}
-      >
-        <img
-          css={logoCss.img}
-          src={`${process.env.PUBLIC_URL}/assets/img/background_signup.png`}
-          alt="signup_logo"
-        />
-        <div css={logoCss.container}>
-          <span css={logoCss.title}>
-            쉽고 똑똑한 <br />
-            쇼핑몰 업무의 시작
-          </span>
-          <span css={logoCss.subTitle}>지금, 터틀체인과 함께해요</span>
+      {!isCompleted && (
+        <div css={logoCss.self}>
+          <img
+            css={logoCss.img}
+            src={`${process.env.PUBLIC_URL}/assets/img/background_signup.png`}
+            alt="signup_logo"
+          />
+          <div css={logoCss.container}>
+            <span css={logoCss.title}>
+              쉽고 똑똑한 <br />
+              쇼핑몰 업무의 시작
+            </span>
+            <span css={logoCss.subTitle}>지금, 터틀체인과 함께해요</span>
+          </div>
         </div>
-      </div>
+      )}
       <Outlet />
     </div>
   );
@@ -50,7 +49,7 @@ const logoCss = {
   self: css({
     position: 'relative',
     height: 100,
-    display: 'var(--display)',
+    display: 'flex',
     justifyContent: 'center',
   }),
 

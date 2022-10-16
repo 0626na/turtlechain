@@ -1,29 +1,67 @@
 import { Button, Form, Input, message, Row } from 'antd';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import React from 'react';
 
 import userAPI from '@apis/userAPI';
 
 import { css } from '@emotion/react';
-import { emailPattern } from '@utils/pattern';
+import { emailPattern, phonePattern } from '@utils/pattern';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { t } from 'i18next';
 import { PhoneAuthForm } from '@components/combine';
-import AgreementCheckbox from '../AgreementCheckbox';
+
 import { SpecialButton } from '@components/element';
-import Completed from '../Completed';
+import AgreementCheckbox from '../../AgreementCheckbox';
+import Completed from '../../Completed';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function Pagebody() {
   const [form] = Form.useForm();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
-  // 가입 신청
-  const registrationMutation = useMutation(userAPI.createRegistration, {
+  // 가입정보 불러오기
+  const registrationQuery = useQuery(
+    ['registrationQuery'],
+    () =>
+      userAPI.getRegistration({
+        encrypted_text: searchParams.get('encrypted_text')!,
+      }),
+    {
+      onSuccess: (data) => {
+        form.setFieldsValue({
+          // 계정 정보
+          user_name: data.data.registration_list[0].user_name,
+          user_email: data.data.registration_list[0].user_email,
+          user_mobile: data.data.registration_list[0].user_mobile,
+          phone: data.data.registration_list[0].user_mobile.replace(
+            phonePattern,
+            '$1-$2-$3',
+          ),
+          user_login_id: data.data.registration_list[0].user_login_id,
+          agreements: data.data.registration_list[0].agreements,
+        });
+      },
+      onError: (error: AxiosError) => {
+        if (error.response?.data.msg) {
+          message.warn(error.response?.data.msg);
+          return;
+        }
+
+        // 404
+        navigate('/not-found');
+      },
+    },
+  );
+
+  // 재가입 신청
+  const updateRegistrationMutation = useMutation(userAPI.updateRegistration, {
     onSuccess: () => {
-      setCurrentStep((currentStep) => currentStep + 1);
+      setCurrentStep(2);
     },
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
@@ -111,17 +149,28 @@ function Pagebody() {
               layout="vertical"
               form={form}
               onFinish={(value) => {
-                registrationMutation.mutate({
-                  user_type: 'pi',
-                  user_name: value.user_name,
-                  user_email: value.user_email,
-                  user_mobile: value.user_mobile,
-                  user_login_id: value.user_login_id,
-                  user_password: value.user_password,
-                  agreements: value.agreements,
+                updateRegistrationMutation.mutate({
+                  id: registrationQuery?.data?.data.registration_list[0]
+                    .id as number,
+                  data: {
+                    encrypted_text: searchParams.get(
+                      'encrypted_text',
+                    ) as string,
+                    user_type: 'pi',
+                    user_name: value.user_name,
+                    user_email: value.user_email,
+                    user_mobile: value.user_mobile,
+                    user_login_id: value.user_login_id,
+                    user_password: value.user_password,
+                    agreements: value.agreements,
+                  },
                 });
               }}
             >
+              <Form.Item name="user_type" hidden>
+                <Input />
+              </Form.Item>
+
               <Form.Item
                 rules={[{ required: true }]}
                 name="user_name"
@@ -257,7 +306,7 @@ function Pagebody() {
                         ) ||
                         !checkDuplicated
                       }
-                      loading={registrationMutation.isLoading}
+                      loading={updateRegistrationMutation.isLoading}
                     >
                       {t('signUp')}
                     </SpecialButton>
@@ -299,7 +348,7 @@ const formItemMargin = css({
   },
 });
 
-const marginTop = css({ marginTop: 40 });
+const marginTop = css({ marginTop: 31 });
 
 const input = css`
   height: 44px;

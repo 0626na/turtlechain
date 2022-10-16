@@ -63,13 +63,13 @@ function CompanyStep({ visible, loading }: Props) {
   };
 
   // 사업자 주소 유효성 검사
-  const bizAddressValidation = (_: any, value: string) => {
-    if (!value) {
-      return Promise.reject(new Error('사업자주소 입력해주세요'));
-    }
+  // const bizAddressValidation = (_: any, value: string) => {
+  //   if (!value) {
+  //     return Promise.reject(new Error('사업자주소 입력해주세요'));
+  //   }
 
-    return Promise.resolve();
-  };
+  //   return Promise.resolve();
+  // };
 
   //약관동의 유효성 검사
   const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
@@ -83,7 +83,10 @@ function CompanyStep({ visible, loading }: Props) {
     return Promise.resolve();
   };
   return (
-    <div style={{ display: visible ? '' : 'none' }}>
+    <div style={{ display: visible ? 'block' : 'none' }}>
+      {/*
+       * 주소찾기 모달
+       */}
       <DaumPostcodeModal
         visible={postcodeModalVisible}
         onClose={() => {
@@ -120,7 +123,7 @@ function CompanyStep({ visible, loading }: Props) {
       </Form.Item>
 
       <Form.Item noStyle shouldUpdate>
-        {({ getFieldError, getFieldValue }) => (
+        {({ getFieldValue }) => (
           <Form.Item
             label={t('biz num')}
             required
@@ -138,11 +141,7 @@ function CompanyStep({ visible, loading }: Props) {
                   css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
                   type="link"
                   disabled={
-                    !getFieldValue('company_biz_num') ||
-                    getFieldError('company_biz_num').includes(
-                      '사업자번호 입력해 주세요.',
-                    ) ||
-                    checkDuplicated
+                    !getFieldValue('company_biz_num') || checkDuplicated
                   }
                   onClick={() => {
                     dupCheckMutation.mutate({
@@ -158,37 +157,31 @@ function CompanyStep({ visible, loading }: Props) {
         )}
       </Form.Item>
 
-      <Form.Item label={t('biz address')} required>
-        <Form.Item
-          noStyle
-          name="company_main_address"
-          rules={[{ validator: bizAddressValidation }]}
-        >
-          <Input
-            css={input}
-            readOnly
-            onClick={() => {
-              postcodeModalOpen();
-            }}
-            placeholder="사업자 주소를 입력해주세요"
-            suffix={
-              <Button
-                css={findAddressButton}
-                type="link"
-                onClick={() => postcodeModalOpen()}
-              >
-                주소 찾기
-              </Button>
-            }
-          />
-        </Form.Item>
+      <Form.Item
+        rules={[{ required: true }]}
+        label={t('biz address')}
+        name="company_main_address"
+      >
+        <Input
+          css={input}
+          readOnly
+          onClick={() => {
+            postcodeModalOpen();
+          }}
+          placeholder="사업자 주소를 입력해주세요"
+          suffix={
+            <Button
+              css={findAddressButton}
+              type="link"
+              onClick={() => postcodeModalOpen()}
+            >
+              {t('button.findAddress')}
+            </Button>
+          }
+        />
       </Form.Item>
 
-      <Form.Item
-        name="company_sub_address"
-        label={t('biz detail address')}
-        initialValue=""
-      >
+      <Form.Item name="company_sub_address" label={t('biz detail address')}>
         <Input css={input} placeholder="사업자 상세주소를 입력해주세요" />
       </Form.Item>
 
@@ -205,7 +198,7 @@ function CompanyStep({ visible, loading }: Props) {
           accept=".jpg, .png, .jpeg, .pdf"
           beforeUpload={() => false}
         >
-          <AddButton>파일 첨부하기</AddButton>
+          <AddButton>{t('button.uploadFile')}</AddButton>
         </Upload>
       </Form.Item>
 
@@ -228,7 +221,7 @@ function CompanyStep({ visible, loading }: Props) {
           onChange={(data: CheckboxValueType[]) => {
             form.setFieldsValue({
               ...form.getFieldsValue(),
-              agreement: data,
+              agreements: data,
             });
           }}
         />
@@ -236,28 +229,26 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
-          <Row css={marginTop}>
-            <Button
-              htmlType="submit"
-              disabled={
-                !getFieldValue('company_biz_type') ||
-                !getFieldValue('company_name') ||
-                !getFieldValue('company_biz_num') ||
-                !getFieldValue('company_main_address') ||
-                !getFieldValue('company_biz_license_file') ||
-                !getFieldValue('company_store_url') ||
-                !(
-                  getFieldValue('agreement')?.includes('service_use') &&
-                  getFieldValue('agreement')?.includes('personal_information')
-                ) ||
-                !checkDuplicated
-              }
-              css={button}
-              loading={loading}
-            >
-              {t('signup')}
-            </Button>
-          </Row>
+          <Button
+            htmlType="submit"
+            disabled={
+              !getFieldValue('company_biz_type') ||
+              !getFieldValue('company_name') ||
+              !getFieldValue('company_biz_num') ||
+              !getFieldValue('company_main_address') ||
+              !getFieldValue('company_biz_license_file') ||
+              !getFieldValue('company_store_url') ||
+              !(
+                getFieldValue('agreement')?.includes('service_use') &&
+                getFieldValue('agreement')?.includes('personal_information')
+              ) ||
+              !checkDuplicated
+            }
+            css={button}
+            loading={loading}
+          >
+            {t('signUp')}
+          </Button>
         )}
       </Form.Item>
     </div>
@@ -275,6 +266,7 @@ const findAddressButton = css({
 });
 
 const button = css({
+  marginTop: 40,
   width: 352,
   height: 48,
 
@@ -300,10 +292,6 @@ const button = css({
     backgroundColor: '#00b3be',
     borderColor: '#00b3be',
   },
-});
-
-const marginTop = css({
-  marginTop: 40,
 });
 
 const upload = css({
