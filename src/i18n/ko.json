@@ -201,7 +201,10 @@
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
-    "addTransaction": "과거매입 추가하기"
+    "addTransaction": "과거매입 추가하기",
+    "uploadFile": "파일 첨부하기",
+    "findAddress": "주소 찾기",
+    "duplicatedCheck": "중복확인"
   },
 
   "message": {
