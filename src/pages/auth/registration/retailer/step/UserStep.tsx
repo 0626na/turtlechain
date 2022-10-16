@@ -4,20 +4,18 @@ import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
 import { Button, Form, Input, message, Radio, Row } from 'antd';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import AgreementCheckbox from '../../AgreementCheckbox';
 
 interface Props {
   visible: boolean;
-  loading: boolean;
+  onClickNext: () => void;
 }
 
-function UserStep({ visible, loading }: Props) {
+function UserStep({ visible, onClickNext }: Props) {
   const form = Form.useFormInstance();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
@@ -73,18 +71,6 @@ function UserStep({ visible, loading }: Props) {
 
     if (value && value !== form.getFieldValue('user_password')) {
       return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
-    }
-
-    return Promise.resolve();
-  };
-
-  //약관동의 유효성 검사
-  const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
-    if (
-      !value.includes('service_use') ||
-      !value.includes('personal_information')
-    ) {
-      return Promise.reject(new Error('필수항목을 체크해주세요.'));
     }
 
     return Promise.resolve();
@@ -201,23 +187,6 @@ function UserStep({ visible, loading }: Props) {
         />
       </Form.Item>
 
-      <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
-        <AgreementCheckbox
-          plainOptions={[
-            'service_use',
-            'personal_information',
-            'third_party',
-            'event_notificaton',
-          ]}
-          onChange={(data: CheckboxValueType[]) => {
-            form.setFieldsValue({
-              ...form.getFieldsValue(),
-              agreement: data,
-            });
-          }}
-        />
-      </Form.Item>
-
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Row css={marginTop}>
@@ -231,15 +200,13 @@ function UserStep({ visible, loading }: Props) {
                 !getFieldValue('user_login_id') ||
                 !getFieldValue('user_password') ||
                 !getFieldValue('confirm_password') ||
-                !(
-                  getFieldValue('agreement')?.includes('service_use') &&
-                  getFieldValue('agreement')?.includes('personal_information')
-                ) ||
                 !checkDuplicated
               }
-              loading={loading}
+              onClick={() => {
+                onClickNext();
+              }}
             >
-              {t('signup')}
+              {t('next')}
             </SpecialButton>
           </Row>
         )}

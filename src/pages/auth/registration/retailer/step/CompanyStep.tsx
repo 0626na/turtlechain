@@ -4,18 +4,20 @@ import { AddButton } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { Button, Form, Input, message, Radio, Row, Upload } from 'antd';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import AgreementCheckbox from '../../AgreementCheckbox';
 
 interface Props {
   visible: boolean;
-  onClickNext: () => void;
+  loading: boolean;
 }
 
-function CompanyStep({ visible, onClickNext }: Props) {
+function CompanyStep({ visible, loading }: Props) {
   const form = Form.useFormInstance();
   const [postcodeModalVisible, postcodeModalOpen, postcodeModalClose] =
     useModal();
@@ -69,6 +71,17 @@ function CompanyStep({ visible, onClickNext }: Props) {
     return Promise.resolve();
   };
 
+  //약관동의 유효성 검사
+  const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
+    if (
+      !value.includes('service_use') ||
+      !value.includes('personal_information')
+    ) {
+      return Promise.reject(new Error('필수항목을 체크해주세요.'));
+    }
+
+    return Promise.resolve();
+  };
   return (
     <div style={{ display: visible ? '' : 'none' }}>
       <DaumPostcodeModal
@@ -204,10 +217,28 @@ function CompanyStep({ visible, onClickNext }: Props) {
         <Input css={input} placeholder="ex. www.turtleshop.com" />
       </Form.Item>
 
+      <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
+        <AgreementCheckbox
+          plainOptions={[
+            'service_use',
+            'personal_information',
+            'third_party',
+            'event_notificaton',
+          ]}
+          onChange={(data: CheckboxValueType[]) => {
+            form.setFieldsValue({
+              ...form.getFieldsValue(),
+              agreement: data,
+            });
+          }}
+        />
+      </Form.Item>
+
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Row css={marginTop}>
             <Button
+              htmlType="submit"
               disabled={
                 !getFieldValue('company_biz_type') ||
                 !getFieldValue('company_name') ||
@@ -215,14 +246,16 @@ function CompanyStep({ visible, onClickNext }: Props) {
                 !getFieldValue('company_main_address') ||
                 !getFieldValue('company_biz_license_file') ||
                 !getFieldValue('company_store_url') ||
+                !(
+                  getFieldValue('agreement')?.includes('service_use') &&
+                  getFieldValue('agreement')?.includes('personal_information')
+                ) ||
                 !checkDuplicated
               }
               css={button}
-              onClick={() => {
-                onClickNext();
-              }}
+              loading={loading}
             >
-              {t('next')}
+              {t('signup')}
             </Button>
           </Row>
         )}
