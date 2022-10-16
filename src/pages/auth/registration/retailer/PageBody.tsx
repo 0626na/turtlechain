@@ -7,19 +7,20 @@ import React from 'react';
 import userAPI from '@apis/userAPI';
 
 import CompanyStep from './step/CompanyStep';
-import ResultStep from './step/ResultStep';
 import UserStep from './step/UserStep';
 
 import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
+import Completed from '../Completed';
 
 function Pagebody() {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
-
+  const navigate = useNavigate();
   // 가입 신청
-  const createUserMutatin = useMutation(userAPI.create, {
+  const registrationMutation = useMutation(userAPI.createRegistration, {
     onSuccess: () => {
-      setCurrentStep(2);
+      navigate('/registration/completed');
     },
 
     onError: (error: AxiosError) => {
@@ -29,27 +30,14 @@ function Pagebody() {
 
   return (
     <>
-      <div style={{ display: currentStep === 2 ? 'none' : '' }}>
-        <div css={logoCss.self}>
-          <img
-            css={logoCss.img}
-            src={`${process.env.PUBLIC_URL}/assets/img/background_signup.png`}
-            alt="signup_logo"
-          />
-          <div css={logoCss.container}>
-            <span css={logoCss.title}>
-              쉽고 똑똑한 <br />
-              쇼핑몰 업무의 시작
-            </span>
-            <span css={logoCss.subTitle}>지금, 터틀체인과 함께해요</span>
-          </div>
-        </div>
-
-        {/*
-         * 탭
-         */}
-
-        <div css={container}>
+      <div>
+        <div
+          css={container}
+          style={{ ['--display' as any]: currentStep === 2 ? 'none' : 'block' }}
+        >
+          {/*
+           * 탭
+           */}
           <div css={tabContainer}>
             <div
               css={tab}
@@ -76,7 +64,7 @@ function Pagebody() {
               layout="vertical"
               form={form}
               onFinish={(value) => {
-                createUserMutatin.mutate({
+                registrationMutation.mutate({
                   user_name: value.user_name,
                   user_email: value.user_email,
                   user_mobile: value.user_mobile,
@@ -92,7 +80,7 @@ function Pagebody() {
                   company_store_url: value.company_store_url,
                   company_biz_license_file:
                     value.company_biz_license_file[0].originFileObj,
-                  agreement: value.agreement,
+                  agreements: value.agreements,
                 });
               }}
             >
@@ -105,18 +93,22 @@ function Pagebody() {
 
               <UserStep
                 visible={currentStep === 1}
-                loading={createUserMutatin.isLoading}
+                loading={registrationMutation.isLoading}
               />
             </Form>
           </div>
         </div>
-      </div>
 
-      <ResultStep visible={currentStep === 2} />
+        <Completed visible={currentStep === 2} />
+      </div>
     </>
   );
 }
-const container = css({ width: 472, margin: '20px auto 0px' });
+const container = css({
+  width: 472,
+  margin: '20px auto 0px',
+  display: 'var(--display)',
+});
 
 const header = css({
   textAlign: 'center',

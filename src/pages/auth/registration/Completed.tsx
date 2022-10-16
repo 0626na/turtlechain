@@ -7,8 +7,7 @@ import { TertiaryButton } from '@components/element';
 interface Props {
   visible: boolean;
 }
-
-function ResultStep({ visible }: Props) {
+function Completed({ visible }: Props) {
   const navigate = useNavigate();
 
   const onClickGoHome = () => {
@@ -17,24 +16,21 @@ function ResultStep({ visible }: Props) {
 
   return (
     <div
-      style={{
-        display: visible ? '' : 'none',
-      }}
+      css={Container}
+      style={{ ['--display' as any]: visible ? 'flex' : 'none' }}
     >
-      <div css={Container}>
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/img/approve.png`}
-          alt="approve"
-        />
-        <span css={title}>{t('message.success signup')}</span>
-        <span css={description}>
-          감사합니다. 가입승인 후 서비스를 이용하실 수 있습니다.
-          <br /> 신청시 입력한 메일주소로 가입승인 여부에 대한 안내메일이
-          발송됩니다.
-        </span>
+      <img
+        src={`${process.env.PUBLIC_URL}/assets/img/approve.png`}
+        alt="approve"
+      />
+      <span css={title}>{t('message.success signup')}</span>
+      <span css={description}>
+        감사합니다. 가입승인 후 서비스를 이용하실 수 있습니다.
+        <br /> 신청시 입력한 메일주소로 가입승인 여부에 대한 안내메일이
+        발송됩니다.
+      </span>
 
-        <TertiaryButton text={t('go home')} onClick={onClickGoHome} />
-      </div>
+      <TertiaryButton text={t('go home')} onClick={onClickGoHome} />
     </div>
   );
 }
@@ -46,7 +42,7 @@ const Container = css({
   left: '50%',
   transform: 'translate(-50%,-50%)',
 
-  display: 'flex',
+  display: 'var(--display)',
   flexDirection: 'column',
   alignItems: 'center',
 });
@@ -68,4 +64,4 @@ const description = css({
   color: '#5b5d63',
 });
 
-export default ResultStep;
+export default Completed;

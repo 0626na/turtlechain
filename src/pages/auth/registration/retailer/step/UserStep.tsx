@@ -2,7 +2,6 @@ import userAPI from '@apis/userAPI';
 import { PhoneAuthForm } from '@components/combine';
 import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
-import AgreementCheckbox from '@pages/auth/signup/agreement/AgreementCheckbox';
 import { emailPattern } from '@utils/pattern';
 import { Button, Form, Input, message, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
@@ -11,6 +10,7 @@ import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import AgreementCheckbox from '../../AgreementCheckbox';
 
 interface Props {
   visible: boolean;
@@ -201,7 +201,7 @@ function UserStep({ visible, loading }: Props) {
         />
       </Form.Item>
 
-      <Form.Item name="agreement" rules={[{ validator: agreementValidation }]}>
+      <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
         <AgreementCheckbox
           plainOptions={[
             'service_use',
