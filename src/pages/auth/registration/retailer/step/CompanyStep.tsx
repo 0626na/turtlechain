@@ -224,8 +224,8 @@ function CompanyStep({ visible, loading }: Props) {
               !getFieldValue('company_biz_license_file') ||
               !getFieldValue('company_store_url') ||
               !(
-                getFieldValue('agreement')?.includes('service_use') &&
-                getFieldValue('agreement')?.includes('personal_information')
+                getFieldValue('agreements')?.includes('service_use') &&
+                getFieldValue('agreements')?.includes('personal_information')
               ) ||
               !checkDuplicated
             }
