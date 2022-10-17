@@ -61,9 +61,11 @@ interface ResponseCreateRegistration {
 const createRegistration = async (data: RequestCreateRegistration) => {
   const url = '/provisioning/registration';
   const formData = new FormData();
-  for (const [key, value] of Object.entries(data)) {
+  for (let [key, value] of Object.entries(data)) {
+    if (key === 'agreements') value = JSON.stringify(value);
     formData.append(key, value);
   }
+
   const response = await v2Axios.post<ResponseCreateRegistration>(
     url,
     formData,
