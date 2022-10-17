@@ -27,11 +27,12 @@ const dupCheck = async function (params: RequestDupCheck) {
  *  회원가입
  */
 
-type AgreementItem =
-  | 'service_use'
-  | 'personal_information'
-  | 'event_notificaton'
-  | 'third_party';
+type AgreementsType = {
+  service_use: boolean;
+  personal_information: boolean;
+  event_notificaton: boolean;
+  third_party: boolean;
+};
 
 export interface RequestCreateRegistration {
   user_type: 'rt' | 'pi' | 'ub';
@@ -50,7 +51,7 @@ export interface RequestCreateRegistration {
   company_store_url?: string;
   company_biz_license_file?: RcFile;
 
-  agreements: AgreementItem[];
+  agreements: AgreementsType;
 }
 
 interface ResponseCreateRegistration {
@@ -102,7 +103,7 @@ export interface ResponseGetRegistration {
         user_login_id: string;
         user_password: string;
         user_type: 'rt' | 'pi' | 'ub';
-        agreements: AgreementItem[];
+        agreements: AgreementsType;
       },
     ];
   };
@@ -143,7 +144,7 @@ export interface RequestUpdateRegistration {
     company_biz_license_file?: RcFile;
     company_store_url?: string;
 
-    agreements: AgreementItem[];
+    agreements: AgreementsType;
   };
 }
 
