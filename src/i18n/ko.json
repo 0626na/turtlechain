@@ -220,7 +220,9 @@
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
-    "expired auth time": "인증시간이 만료되었습니다."
+    "expired auth time": "인증시간이 만료되었습니다.",
+    "success delete mistransfer": "오입금 반환내역을 삭제했습니다.",
+    "success create mistransfer": "오입금 반환요청을 성공했습니다."
   },
 
   "biz role": "직책",
@@ -264,7 +266,7 @@
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다.",
-    "really delete": "정말 삭제하시겠습니까?"
+    "really delete": "정말 취소할까요?"
   },
   "user": {
     "": "직책",
@@ -289,7 +291,7 @@
       "pending": "대기",
       "complete": "완료"
     },
-    "created date": "요청일자",
+    "created date": "요청 일자",
     "accountInfo": "오입금 계좌정보",
     "recipient_accountInfo": "환불받을 계좌정보",
     "recipient print": "받는분 통장인쇄",
@@ -298,9 +300,9 @@
     "request price": "요청 금액",
 
     "management": "오입금 반환 관리",
-    "complete date": "오입금 환불 처리날짜",
+    "complete date": "오입금 환불 처리날짜"
+  },
 
-    "yes": "예",
-    "no": "아니오"
-  }
+  "yes": "네",
+  "no": "아니요"
 }

@@ -17,9 +17,9 @@ import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import StoreCard from '../card/StoreCard';
-import StoreAddModal from '../modal/StoreAddModal';
-import DetailModal from '../modal/DetailModal';
+import StoreCard from '../cards/StoreCard';
+import StoreAddModal from '../modals/StoreAddModal';
+import DetailModal from '../modals/DetailModal';
 
 function StoreTab() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');

@@ -15,7 +15,7 @@ import { Col, message, Popconfirm, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React from 'react';
 import { useMutation, useQuery } from 'react-query';
-import MistransferAddModal from '../modal/MistransferAddModal';
+import MistransferAddModal from '../modals/MistransferAddModal';
 
 const tagColors = {
   request: 'green',
@@ -151,7 +151,7 @@ function MistransferTab() {
                   <Popconfirm
                     title={t('description.really delete')}
                     okText={t('yes')}
-                    cancelText={t('no')}
+                    cancelText={`${t('no')}`}
                     onCancel={(e) => {
                       e?.stopPropagation();
                     }}
