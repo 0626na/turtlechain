@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import { FindIdPageBody } from '@layout/login';
+import { FindIdPageBody } from '@layout/auth';
 import ResetPasswordForm from './ResetPasswordForm';
 import React from 'react';
 function ResetPassword() {

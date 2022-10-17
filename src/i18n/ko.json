@@ -1,9 +1,9 @@
 {
-  "helmet": {
-    "turtleChain": "터틀체인",
-    "home": "HOME",
-    "membershipInfo": "멤버십 정보"
-  },
+  "turtleChain": "터틀체인",
+
+  "retailer": "쇼핑몰",
+  "home": "HOME",
+  "membershipInfo": "멤버십 정보",
 
   "vendor": {
     "create": "거래처등록",
@@ -201,7 +201,10 @@
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
-    "addTransaction": "과거매입 추가하기"
+    "addTransaction": "과거매입 추가하기",
+    "uploadFile": "파일 첨부하기",
+    "findAddress": "주소 찾기",
+    "duplicatedCheck": "중복확인"
   },
 
   "message": {
@@ -233,7 +236,7 @@
 
   "go home": "홈으로 돌아가기",
   "next": "다음",
-  "signup": "가입 신청하기",
+  "signUp": "가입 신청하기",
   "phone": "휴대전화 번호",
   "id": "아이디",
   "password": "비밀번호",

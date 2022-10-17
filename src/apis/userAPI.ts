@@ -33,37 +33,40 @@ type AgreementItem =
   | 'event_notificaton'
   | 'third_party';
 
-export interface RequestCreate {
+export interface RequestCreateRegistration {
+  user_type: 'rt' | 'pi' | 'ub';
   user_name: string;
   user_email: string;
   user_mobile: string;
   user_login_id: string;
   user_password: string;
-  user_type: 'rt' | 'pi' | 'ub';
 
-  company_biz_type: 'entity' | 'personal' | 'simple';
-  company_owner: string;
-  company_name: string;
-  company_biz_num: string;
-  company_main_address: string;
-  company_sub_address: string;
-  company_store_url: string;
-  company_biz_license_file: RcFile;
+  company_biz_type?: 'entity' | 'personal' | 'simple';
+  company_owner?: string;
+  company_name?: string;
+  company_biz_num?: string;
+  company_main_address?: string;
+  company_sub_address?: string;
+  company_store_url?: string;
+  company_biz_license_file?: RcFile;
 
-  agreement: AgreementItem[];
+  agreements: AgreementItem[];
 }
 
-interface ResponseCreate {
+interface ResponseCreateRegistration {
   msg: string;
 }
 
-const create = async (data: RequestCreate) => {
+const createRegistration = async (data: RequestCreateRegistration) => {
   const url = '/provisioning/registration';
   const formData = new FormData();
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);
   }
-  const response = await v2Axios.post<ResponseCreate>(url, formData);
+  const response = await v2Axios.post<ResponseCreateRegistration>(
+    url,
+    formData,
+  );
 
   return response.data;
 };
@@ -99,7 +102,7 @@ export interface ResponseGetRegistration {
         user_login_id: string;
         user_password: string;
         user_type: 'rt' | 'pi' | 'ub';
-        agreement: AgreementItem[];
+        agreements: AgreementItem[];
       },
     ];
   };
@@ -123,24 +126,24 @@ export interface RequestUpdateRegistration {
   id: number;
   data: {
     encrypted_text: string;
-    // 사업자 정보
-    company_biz_type: 'entity' | 'personal' | 'simple';
-    company_owner: string;
-    company_name: string;
-    company_biz_num: string;
-    company_main_address: string;
-    company_sub_address: string;
-    company_biz_license_file: RcFile;
-    company_store_url: string;
-
     // 관리자 계정
+    user_type: 'rt' | 'pi' | 'ub';
     user_name: string;
     user_email: string;
     user_mobile: string;
     user_login_id: string;
     user_password: string;
-    user_type: 'rt' | 'pi' | 'ub';
-    agreement: AgreementItem[];
+    // 사업자 정보
+    company_biz_type?: 'entity' | 'personal' | 'simple';
+    company_owner?: string;
+    company_name?: string;
+    company_biz_num?: string;
+    company_main_address?: string;
+    company_sub_address?: string;
+    company_biz_license_file?: RcFile;
+    company_store_url?: string;
+
+    agreements: AgreementItem[];
   };
 }
 
@@ -237,7 +240,7 @@ const resetPassword = async function (data: RequestResetPassword) {
 
 const userAPI = {
   dupCheck,
-  create,
+  createRegistration,
   update,
   getID,
   resetPassword,

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet';
 import { t } from 'i18next';
 import FindIdForm from './FindIdForm';
-import { FindIdPageBody } from '@layout/login';
+import { FindIdPageBody } from '@layout/auth';
 import React from 'react';
 
 function FindIdPage() {

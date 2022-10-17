@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import RetailerMainLayout from '@layout/retailerMain';
 import PickerMainLayout from '@layout/pickerMain';
+import RegistrationLayout from '@layout/auth/RegistrationLayout';
 
 import React from 'react';
 import {
@@ -27,10 +28,11 @@ import {
   PickerOrderCreatePage,
   PickerOrderHistoryPage,
   PickerSettingPage,
-  SignupPage,
   ResetPasswordPage,
   MembershipInfoPage,
-  RegistrationPage,
+  RetailerPage,
+  PickerPage,
+  NewPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -50,10 +52,18 @@ function App() {
     <Suspense fallback={<></>}>
       <Routes>
         <Route index element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+
+        <Route path="/registration" element={<RegistrationLayout />}>
+          <Route index element={<NewPage />} />
+          <Route path="retailer" element={<RetailerPage />} />
+          {/* <Route path="retailer/return" element={<RetailerReturnPage/>} /> */}
+          <Route path="picker" element={<PickerPage />} />
+          {/* <Route path="retailer/return" element={<PickerReturnPage />} /> */}
+        </Route>
+
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
+
         <Route path="/membership-info" element={<MembershipInfoPage />} />
 
         {/*
