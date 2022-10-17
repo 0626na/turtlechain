@@ -161,7 +161,9 @@ const updateRegistration = async (requestData: RequestUpdateRegistration) => {
   const url = `/provisioning/registration/${requestData.id}`;
 
   const formData = new FormData();
-  for (const [key, value] of Object.entries(requestData.data)) {
+  for (let [key, value] of Object.entries(requestData.data)) {
+    if (key === 'agreements') value = JSON.stringify(value);
+
     formData.append(key, value as string);
   }
 
