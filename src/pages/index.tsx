@@ -3,10 +3,10 @@ import { lazy } from 'react';
 export const LoginPage = lazy(() => import('./auth/login'));
 export const NewPage = lazy(() => import('./auth/registration/new'));
 export const RetailerPage = lazy(() => import('./auth/registration/retailer'));
+export const RetailerReturnPage = lazy(
+  () => import('./auth/registration/retailer/return'),
+);
 export const PickerPage = lazy(() => import('./auth/registration/picker'));
-// export const CompletedPage = lazy(
-//   () => import('./auth/registration/completed'),
-// );
 
 export const FindIdPage = lazy(() => import('./auth/find-id'));
 export const ResetPasswordPage = lazy(() => import('./auth/reset-password'));

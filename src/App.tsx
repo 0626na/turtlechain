@@ -33,6 +33,7 @@ import {
   RetailerPage,
   PickerPage,
   NewPage,
+  RetailerReturnPage,
 } from './pages';
 import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
@@ -56,9 +57,8 @@ function App() {
         <Route path="/registration" element={<RegistrationLayout />}>
           <Route index element={<NewPage />} />
           <Route path="retailer" element={<RetailerPage />} />
-          {/* <Route path="retailer/return" element={<RetailerReturnPage/>} /> */}
+          <Route path="retailer/return" element={<RetailerReturnPage />} />
           <Route path="picker" element={<PickerPage />} />
-          {/* <Route path="retailer/return" element={<PickerReturnPage />} /> */}
         </Route>
 
         <Route path="/find-id" element={<FindIdPage />} />
