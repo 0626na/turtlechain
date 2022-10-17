@@ -212,12 +212,7 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
         <AgreementCheckbox
-          plainOptions={[
-            'service_use',
-            'personal_information',
-            'third_party',
-            'event_notificaton',
-          ]}
+          defaultValue={form.getFieldValue('agreements')}
           onChange={(data: CheckboxValueType[]) => {
             form.setFieldsValue({
               ...form.getFieldsValue(),
