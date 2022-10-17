@@ -3,7 +3,7 @@ import { DaumPostcodeModal } from '@components/combine';
 import { AddButton } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
-import { Button, Form, Input, message, Radio, Row, Upload } from 'antd';
+import { Button, Form, Input, message, Radio, Upload } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import { AxiosError } from 'axios';
@@ -61,15 +61,6 @@ function CompanyStep({ visible, loading }: Props) {
 
     return Promise.resolve();
   };
-
-  // 사업자 주소 유효성 검사
-  // const bizAddressValidation = (_: any, value: string) => {
-  //   if (!value) {
-  //     return Promise.reject(new Error('사업자주소 입력해주세요'));
-  //   }
-
-  //   return Promise.resolve();
-  // };
 
   //약관동의 유효성 검사
   const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
