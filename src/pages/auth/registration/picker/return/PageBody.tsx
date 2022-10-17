@@ -43,7 +43,7 @@ function Pagebody() {
             '$1-$2-$3',
           ),
           user_login_id: data.data.registration_list[0].user_login_id,
-          agreements: data.data.registration_list[0].agreements,
+          agreements: Object.keys(data.data.registration_list[0].agreements),
         });
       },
       onError: (error: AxiosError) => {
@@ -270,12 +270,7 @@ function Pagebody() {
                 rules={[{ validator: agreementValidator }]}
               >
                 <AgreementCheckbox
-                  plainOptions={[
-                    'service_use',
-                    'personal_information',
-                    'third_party',
-                    'event_notificaton',
-                  ]}
+                  defaultValue={form.getFieldValue('agreements')}
                   onChange={(data: CheckboxValueType[]) => {
                     form.setFieldsValue({
                       ...form.getFieldsValue(),
@@ -299,8 +294,10 @@ function Pagebody() {
                         !getFieldValue('user_password') ||
                         !getFieldValue('confirm_password') ||
                         !(
-                          getFieldValue('agreement')?.includes('service_use') &&
-                          getFieldValue('agreement')?.includes(
+                          getFieldValue('agreements')?.includes(
+                            'service_use',
+                          ) &&
+                          getFieldValue('agreements')?.includes(
                             'personal_information',
                           )
                         ) ||

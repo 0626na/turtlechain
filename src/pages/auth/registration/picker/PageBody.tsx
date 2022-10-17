@@ -118,7 +118,15 @@ function Pagebody() {
                   user_mobile: value.user_mobile,
                   user_login_id: value.user_login_id,
                   user_password: value.user_password,
-                  agreements: value.agreements,
+                  agreements: {
+                    service_use: value.agreements.includes('service_use'),
+                    personal_information: value.agreements.includes(
+                      'personal_information',
+                    ),
+                    event_notificaton:
+                      value.agreements.includes('event_notificaton'),
+                    third_party: value.agreements.includes('third_party'),
+                  },
                 });
               }}
             >
@@ -221,12 +229,6 @@ function Pagebody() {
                 rules={[{ validator: agreementValidator }]}
               >
                 <AgreementCheckbox
-                  plainOptions={[
-                    'service_use',
-                    'personal_information',
-                    'third_party',
-                    'event_notificaton',
-                  ]}
                   onChange={(data: CheckboxValueType[]) => {
                     form.setFieldsValue({
                       ...form.getFieldsValue(),

@@ -62,7 +62,7 @@ function Pagebody() {
             },
           ],
           company_store_url: data.data.registration_list[0].company_store_url,
-          agreements: data.data.registration_list[0].agreements,
+          agreements: Object.keys(data.data.registration_list[0].agreements),
         });
       },
       onError: (error: AxiosError) => {
