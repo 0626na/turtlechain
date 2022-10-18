@@ -126,7 +126,7 @@ const GlobalStyle = () => (
         border-spacing: 0;
       }
       /** font */
-      @font-face {
+      /* @font-face {
         font-family: ‘Spoqa Han Sans Neo’;
         src: url(/assets/font/SpoqaHanSansNeo-Light.ttf) format(‘truetype’);
         font-weight: 300;
@@ -145,9 +145,9 @@ const GlobalStyle = () => (
         font-family: ‘Spoqa Han Sans Neo’;
         src: url(/assets/font/SpoqaHanSansNeo-Bold.ttf) format(‘truetype’);
         font-weight: 700;
-      }
+      } */
       body {
-        font-family: ‘Spoqa Han Sans’;
+        /* font-family: ‘Spoqa Han Sans’; */
         line-height: 1;
       }
 
@@ -157,6 +157,10 @@ const GlobalStyle = () => (
       .ant-btn {
         border: none;
         border-radius: 8px;
+      }
+
+      .ant-tabs {
+        line-height: 1;
       }
 
       // 인풋 suffix 버튼일시 오른쪽 패딩 제거
