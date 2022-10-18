@@ -1,8 +1,9 @@
-import mistransferAPI from '@apis/mistransferAPI';
+import mistransferAPI, { RefundItem } from '@apis/mistransferAPI';
 
 import {
   SecondaryButton,
   SelectButton,
+  TurtleConfirmModal,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -11,9 +12,9 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 
-import { Col, message, Popconfirm, Row, Table } from 'antd';
+import { Col, message, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import MistransferAddModal from '../modals/MistransferAddModal';
 
@@ -26,7 +27,8 @@ const tagColors = {
 function MistransferTab() {
   const { store } = useStore();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
-
+  const [selectedRow, setSelectedRow] = useState<RefundItem>();
+  const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
   const getMistransferQuery = useQuery(
     ['getMistransferQuery', store.selected?.id],
     () =>
@@ -40,10 +42,11 @@ function MistransferTab() {
   );
 
   // 요청상태일시 삭제가능.
-  const deleteMudation = useMutation(mistransferAPI.update, {
+  const removeMudation = useMutation(mistransferAPI.update, {
     onSuccess: () => {
       getMistransferQuery.refetch();
       message.success(t('message.success delete mistransfer'));
+      closeRemoveModal();
     },
   });
 
@@ -55,6 +58,27 @@ function MistransferTab() {
       <MistransferAddModal
         visible={addModalVisible}
         closeModal={closeAddDetailModal}
+      />
+      {/*
+       * 오입금요청 취소모달
+       */}
+      <TurtleConfirmModal
+        title={t('description.really delete')}
+        description={[
+          t(
+            'description.You can not go back to the past after the cancellation.',
+          ),
+        ]}
+        okText={t('yes')}
+        visible={removeModalVisible}
+        loading={removeMudation.isLoading}
+        onCancel={closeRemoveModal}
+        onOk={() => {
+          removeMudation.mutate({
+            item_id: selectedRow?.id as number,
+            is_inactive: 1,
+          });
+        }}
       />
       <Row
         justify="space-between"
@@ -93,6 +117,13 @@ function MistransferTab() {
           />
         )}
         rowKey={(record) => record.id}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              setSelectedRow(record);
+            },
+          };
+        }}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         scroll={{ x: 1400, y: 'auto' }}
         columns={[
@@ -140,6 +171,7 @@ function MistransferTab() {
           {
             ellipsis: true,
             width: 150,
+            align: 'right',
             title: t('mistransfer.request price'),
             render: (_, record) => record.transfer_amount.toLocaleString(),
           },
@@ -148,23 +180,13 @@ function MistransferTab() {
             render: (_, record) => (
               <>
                 {record.status === 'request' && (
-                  <Popconfirm
-                    title={t('description.really delete')}
-                    okText={t('yes')}
-                    cancelText={`${t('no')}`}
-                    onCancel={(e) => {
-                      e?.stopPropagation();
-                    }}
-                    onConfirm={(e) => {
-                      e?.stopPropagation();
-                      deleteMudation.mutate({
-                        item_id: record.id,
-                        is_inactive: 1,
-                      });
+                  <SelectButton
+                    onClick={() => {
+                      openRemoveModal();
                     }}
                   >
-                    <SelectButton>요청취소</SelectButton>
-                  </Popconfirm>
+                    요청취소
+                  </SelectButton>
                 )}
               </>
             ),
