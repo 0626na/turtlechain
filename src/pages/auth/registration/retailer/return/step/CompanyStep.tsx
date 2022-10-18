@@ -4,7 +4,7 @@ import { AddButton } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import AgreementCheckbox from '@pages/auth/registration/AgreementCheckbox';
-import { Button, Form, Input, message, Radio, Row, Upload } from 'antd';
+import { Button, Form, Input, message, Radio, Upload } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import { AxiosError } from 'axios';

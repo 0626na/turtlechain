@@ -3,7 +3,7 @@ import { PhoneAuthForm } from '@components/combine';
 import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
-import { Button, Form, Input, message, Radio, Row } from 'antd';
+import { Button, Form, Input, message, Row } from 'antd';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
