@@ -252,8 +252,10 @@ function Pagebody() {
                         !getFieldValue('user_password') ||
                         !getFieldValue('confirm_password') ||
                         !(
-                          getFieldValue('agreement')?.includes('service_use') &&
-                          getFieldValue('agreement')?.includes(
+                          getFieldValue('agreements')?.includes(
+                            'service_use',
+                          ) &&
+                          getFieldValue('agreements')?.includes(
                             'personal_information',
                           )
                         ) ||
