@@ -145,7 +145,15 @@ function Pagebody() {
                     company_store_url: value.company_store_url,
                     company_biz_license_file:
                       value.company_biz_license_file[0].originFileObj,
-                    agreements: value.agreements,
+                    agreements: {
+                      service_use: value.agreements.includes('service_use'),
+                      personal_information: value.agreements.includes(
+                        'personal_information',
+                      ),
+                      event_notificaton:
+                        value.agreements.includes('event_notificaton'),
+                      third_party: value.agreements.includes('third_party'),
+                    },
                   },
                 });
               }}
