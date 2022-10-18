@@ -24,22 +24,23 @@ export interface RequestGet {
   type: 'mistransfer';
 }
 
+export interface RefundItem {
+  id: number;
+  status: 'request' | 'complete' | 'pending';
+  created_date: string;
+  complete_date: string;
+  ws_store_name: string;
+  ws_bank: string;
+  ws_account_number: string;
+  ws_account_holder: string;
+  transfer_amount: number;
+  recipient_print: string;
+  memo: string;
+}
 export interface ResponseGet {
   msg: string;
   data: {
-    refund_list: Array<{
-      id: number;
-      status: 'request' | 'complete' | 'pending';
-      created_date: string;
-      complete_date: string;
-      ws_store_name: string;
-      ws_bank: string;
-      ws_account_number: string;
-      ws_account_holder: string;
-      transfer_amount: number;
-      recipient_print: string;
-      memo: string;
-    }>;
+    refund_list: Array<RefundItem>;
     total_count: number;
   };
 }

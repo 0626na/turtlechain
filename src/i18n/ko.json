@@ -221,7 +221,7 @@
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
     "expired auth time": "인증시간이 만료되었습니다.",
-    "success delete mistransfer": "오입금 반환내역을 삭제했습니다.",
+    "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다."
   },
 
@@ -266,8 +266,10 @@
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다.",
-    "really delete": "정말 취소할까요?"
+    "really delete": "정말 취소할까요?",
+    "You can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요."
   },
+
   "user": {
     "": "직책",
     "rt": "대표",
