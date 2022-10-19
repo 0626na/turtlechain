@@ -1,6 +1,8 @@
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
+type UserType = 'rt' | 'pi' | 'ub';
+
 /*
  * 아이디,사업자정보 중복 체크
  */
@@ -9,6 +11,7 @@ interface RequestDupCheck {
   login_id?: string;
   biz_num?: string;
   encrypted_text?: string;
+  user_type?: UserType;
 }
 
 interface ResponseDupCheck {
@@ -35,7 +38,7 @@ type AgreementsType = {
 };
 
 export interface RequestCreateRegistration {
-  user_type: 'rt' | 'pi' | 'ub';
+  user_type: UserType;
   user_name: string;
   user_email: string;
   user_mobile: string;
@@ -104,7 +107,7 @@ export interface ResponseGetRegistration {
         user_mobile: string;
         user_login_id: string;
         user_password: string;
-        user_type: 'rt' | 'pi' | 'ub';
+        user_type: UserType;
         agreements: AgreementsType;
       },
     ];
@@ -130,7 +133,7 @@ export interface RequestUpdateRegistration {
   data: {
     encrypted_text: string;
     // 관리자 계정
-    user_type: 'rt' | 'pi' | 'ub';
+    user_type: UserType;
     user_name: string;
     user_email: string;
     user_mobile: string;
