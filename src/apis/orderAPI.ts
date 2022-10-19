@@ -87,6 +87,7 @@ export interface StoreOrder {
 }
 
 export interface StoreOrderItemExcelParsing {
+  id?: number;
   rt_store_id: number;
   rt_store_name: string;
   orders: StoreOrder[];
