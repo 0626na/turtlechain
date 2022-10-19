@@ -19,7 +19,7 @@ interface ResponseDupCheck {
   data: null;
 }
 
-const dupCheck = async function (params: RequestDupCheck) {
+const dupCheck = async (params: RequestDupCheck) => {
   const url = '/provisioning/registration/duplication-check';
   const response = await v2Axios.get<ResponseDupCheck>(url, { params });
 

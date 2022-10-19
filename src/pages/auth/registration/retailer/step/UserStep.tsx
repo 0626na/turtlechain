@@ -132,6 +132,7 @@ function UserStep({ visible, onClickNext }: Props) {
                   onClick={() => {
                     dupCheckMutation.mutate({
                       login_id: form.getFieldValue('user_login_id'),
+                      user_type: 'rt',
                     });
                   }}
                 >

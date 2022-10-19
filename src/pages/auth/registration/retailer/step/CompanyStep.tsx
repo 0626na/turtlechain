@@ -137,6 +137,7 @@ function CompanyStep({ visible, loading }: Props) {
                   onClick={() => {
                     dupCheckMutation.mutate({
                       biz_num: form.getFieldValue('company_biz_num'),
+                      user_type: 'rt',
                     });
                   }}
                 >
