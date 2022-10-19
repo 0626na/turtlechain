@@ -1,8 +1,7 @@
+import React from 'react';
 import { css } from '@emotion/react';
 import { pricePattern } from '@utils/pattern';
 import { InputNumber, InputNumberProps } from 'antd';
-import React from 'react';
-
 interface Props extends InputNumberProps {
   defaultValue?: number;
   min?: number;
