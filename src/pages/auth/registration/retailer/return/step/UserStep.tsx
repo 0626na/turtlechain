@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -18,7 +19,7 @@ interface Props {
 function UserStep({ visible, onClickNext }: Props) {
   const form = Form.useFormInstance();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
-
+  const [searchParams] = useSearchParams();
   // 아이디 중복체크 요청
   const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
@@ -131,6 +132,9 @@ function UserStep({ visible, onClickNext }: Props) {
                   disabled={!getFieldValue('user_login_id') || checkDuplicated}
                   onClick={() => {
                     dupCheckMutation.mutate({
+                      encrypted_text: searchParams.get(
+                        'encrypted_text',
+                      ) as string,
                       login_id: form.getFieldValue('user_login_id'),
                     });
                   }}

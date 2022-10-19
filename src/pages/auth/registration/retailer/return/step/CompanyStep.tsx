@@ -11,6 +11,7 @@ import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -22,7 +23,7 @@ function CompanyStep({ visible, loading }: Props) {
   const [postcodeModalVisible, postcodeModalOpen, postcodeModalClose] =
     useModal();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
-
+  const [searchParams] = useSearchParams();
   // 사업자번호 중복체크 요청
   const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
@@ -145,6 +146,9 @@ function CompanyStep({ visible, loading }: Props) {
                   }
                   onClick={() => {
                     dupCheckMutation.mutate({
+                      encrypted_text: searchParams.get(
+                        'encrypted_text',
+                      ) as string,
                       biz_num: form.getFieldValue('company_biz_num'),
                     });
                   }}
