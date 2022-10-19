@@ -62,6 +62,7 @@ const logoCss = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    lineHeight: 1.4,
   }),
 
   title: css({
