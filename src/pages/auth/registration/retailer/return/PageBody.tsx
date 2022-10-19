@@ -21,6 +21,13 @@ function Pagebody() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
 
+  const agreementOptions = [
+    'service_use',
+    'personal_information',
+    'third_party',
+    'event_notificaton',
+  ] as const;
+
   // 가입정보 불러오기
   const registrationQuery = useQuery(
     ['registrationQuery'],
@@ -62,7 +69,9 @@ function Pagebody() {
             },
           ],
           company_store_url: data.data.registration_list[0].company_store_url,
-          agreements: Object.keys(data.data.registration_list[0].agreements),
+          agreements: agreementOptions.filter(
+            (option) => data.data.registration_list[0].agreements[option],
+          ),
         });
       },
       onError: (error: AxiosError) => {
