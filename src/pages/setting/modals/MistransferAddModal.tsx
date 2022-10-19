@@ -238,7 +238,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             ]}
           >
             <TurtleNumberInput
-              placeholder={t('placeholder.mistransfer refund_amt')}
+              placeholder={t('placeholder.mistransfer refundAmt')}
               step={1000}
               min={0}
               formatter={(value) => `${value}`.replace(pricePattern, ',')}
