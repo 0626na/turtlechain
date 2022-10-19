@@ -219,7 +219,10 @@
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
-    "expired auth time": "인증시간이 만료되었습니다."
+    "expired auth time": "인증시간이 만료되었습니다.",
+    "successAddOrder": "단건추가가 완료되었습니다.",
+    "successMemoInput": "메모가 추가되었습니다.",
+    "successDelete": "삭제되었습니다."
   },
 
   "biz role": "직책",
@@ -263,7 +266,9 @@
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다.",
-    "really delete": "정말 삭제하시겠습니까?"
+    "really delete": "정말 삭제하시겠습니까?",
+    "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
+    "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요."
   },
   "user": {
     "": "직책",
