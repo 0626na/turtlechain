@@ -213,10 +213,8 @@ function CompanyStep({ visible, loading }: Props) {
       >
         <Input css={input} placeholder="ex. www.turtleshop.com" />
       </Form.Item>
-
       <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
         <AgreementCheckbox
-          defaultValue={form.getFieldValue('agreements')}
           onChange={(data: CheckboxValueType[]) => {
             form.setFieldsValue({
               ...form.getFieldsValue(),
@@ -225,7 +223,6 @@ function CompanyStep({ visible, loading }: Props) {
           }}
         />
       </Form.Item>
-
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Button

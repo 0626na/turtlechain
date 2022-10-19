@@ -5,12 +5,12 @@ import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AgreementModal from './AgreementModal';
 
 interface Props {
   onChange: (list: CheckboxValueType[]) => void;
-  defaultValue?: CheckboxValueType[];
+  value?: CheckboxValueType[];
 }
 
 const options = [
@@ -20,10 +20,8 @@ const options = [
   'event_notificaton',
 ];
 
-function AgreeCheckbox({ onChange, defaultValue }: Props) {
-  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(
-    defaultValue ?? [],
-  );
+function AgreeCheckbox({ onChange, value = [] }: Props) {
+  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([]);
   const [checkAll, setCheckAll] = useState(false);
   const [modalVisible, modalOpen, modalClose] = useModal();
 
@@ -38,6 +36,10 @@ function AgreeCheckbox({ onChange, defaultValue }: Props) {
     setCheckedList(e.target.checked ? options : []);
     setCheckAll(e.target.checked);
   };
+
+  useEffect(() => {
+    setCheckedList([...value]);
+  }, [value]);
 
   return (
     <>
