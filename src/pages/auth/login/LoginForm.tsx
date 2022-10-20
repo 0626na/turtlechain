@@ -169,7 +169,7 @@ function LoginForm() {
             font-weight: 400;
           `}
         >
-          © Turtleship Corp.
+          © Turtleship Inc.
         </TurtleText>
       </Row>
     </Form>
