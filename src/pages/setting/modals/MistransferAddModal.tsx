@@ -12,7 +12,7 @@ import {
 } from '@components/element';
 
 import { pricePattern } from '@utils/pattern';
-import { TurtleContentModal } from '@components/combine';
+import { TooltipColumn, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 
@@ -21,6 +21,7 @@ import React from 'react';
 import useStore from '@hooks/useStore';
 import SearchClearingModal from './SearchClearingModal';
 import { ClearingItemShow } from '@apis/clearingAPI';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -155,21 +156,26 @@ function MistransferAddModal({ visible, closeModal }: Props) {
 
           <Form.Item label={t('table.vendorAddress')}>
             <div css={flexGap}>
-              <Form.Item name={['vendor_address', 'building']} noStyle>
-                <TurtleFormSelect placeholder="상가" disabled />
-              </Form.Item>
-
-              <Form.Item name={['vendor_address', 'floor']} noStyle>
-                <TurtleFormInput placeholder="층" disabled />
-              </Form.Item>
-
-              <Form.Item name={['vendor_address', 'col']} noStyle>
-                <TurtleFormInput placeholder="열" disabled />
-              </Form.Item>
-
-              <Form.Item name={['vendor_address', 'loc']} noStyle>
-                <TurtleFormInput placeholder="호" disabled />
-              </Form.Item>
+              <div css={{ flexBasis: '45%' }}>
+                <Form.Item name={['vendor_address', 'building']} noStyle>
+                  <TurtleFormSelect placeholder="상가" disabled />
+                </Form.Item>
+              </div>
+              <div css={{ flexBasis: '15%' }}>
+                <Form.Item name={['vendor_address', 'floor']} noStyle>
+                  <TurtleFormInput placeholder="층" disabled />
+                </Form.Item>
+              </div>
+              <div css={{ flexBasis: '15%' }}>
+                <Form.Item name={['vendor_address', 'col']} noStyle>
+                  <TurtleFormInput placeholder="열" disabled />
+                </Form.Item>
+              </div>
+              <div css={{ flexBasis: '25%' }}>
+                <Form.Item name={['vendor_address', 'loc']} noStyle>
+                  <TurtleFormInput placeholder="호" disabled />
+                </Form.Item>
+              </div>
             </div>
           </Form.Item>
 
@@ -203,7 +209,16 @@ function MistransferAddModal({ visible, closeModal }: Props) {
            */}
           <Form.Item
             name="is_vat_included"
-            label={t('table.vatIncluded')}
+            label={
+              <TooltipColumn
+                title={[
+                  '당일결제 시, 부가세도 그 날에 함께',
+                  '전달되어야 하는 거래처를 체크해주세요.',
+                ]}
+              >
+                {t('table.vatIncluded')}
+              </TooltipColumn>
+            }
             valuePropName="checked"
           >
             <Switch css={$switch} disabled />
@@ -224,7 +239,10 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             </div>
           </Form.Item>
           <Form.Item name="recipient_print" label="받는분 통장인쇄">
-            <TurtleFormInput disabled />
+            <TurtleFormInput
+              disabled
+              placeholder={`${moment().format('MMDD')}터틀환불`}
+            />
           </Form.Item>
 
           <Form.Item
