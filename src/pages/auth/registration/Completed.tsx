@@ -68,7 +68,7 @@ const title = css({
 const description = css({
   marginTop: 16,
   marginBottom: 60,
-
+  lineHeight: 1.8,
   fontWeight: 400,
   fontSize: 14,
   textAlign: 'center',
