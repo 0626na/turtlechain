@@ -111,7 +111,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('store.url')}
           >
-            <TurtleFormInput placeholder={t('placeholder.store url')} />
+            <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
           </Form.Item>
 
           <Form.Item

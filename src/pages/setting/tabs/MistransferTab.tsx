@@ -1,4 +1,5 @@
 import mistransferAPI, { RefundItem } from '@apis/mistransferAPI';
+import TooltipColumn from '@components/combine/TooltipColumn';
 
 import {
   SecondaryButton,
@@ -65,9 +66,7 @@ function MistransferTab() {
       <TurtleConfirmModal
         title={t('description.really delete')}
         description={[
-          t(
-            'description.You can not go back to the past after the cancellation.',
-          ),
+          t('description.can not go back to the past after the cancellation.'),
         ]}
         okText={t('yes')}
         visible={removeModalVisible}
@@ -139,32 +138,42 @@ function MistransferTab() {
           },
           {
             ellipsis: true,
-            width: 150,
+            width: 100,
             title: t('mistransfer.created date'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
-            width: 150,
+            width: 200,
             title: t('table.vendorName'),
             render: (_, record) => record.ws_store_name,
           },
           {
             ellipsis: true,
-            width: 250,
+            width: 200,
             title: t('mistransfer.accountInfo'),
             render: (_, { ws_bank, ws_account_number, ws_account_holder }) =>
               `${ws_bank} ${ws_account_number} ${ws_account_holder}`,
           },
           {
             ellipsis: true,
-            width: 150,
-            title: t('mistransfer.recipient print'),
+            width: 200,
+            title: (
+              <TooltipColumn
+                title={[
+                  t(
+                    'description.displayed in the vendor`s account when transferring money.',
+                  ),
+                ]}
+              >
+                {t('mistransfer.recipient print')}
+              </TooltipColumn>
+            ),
             render: (_, record) => record.recipient_print,
           },
           {
             ellipsis: true,
-            width: 150,
+            width: 250,
             title: t('mistransfer.refund_memo'),
             render: (_, record) => record.memo,
           },
@@ -177,6 +186,8 @@ function MistransferTab() {
           },
           {
             ellipsis: true,
+            align: 'center',
+            width: 150,
             render: (_, record) => (
               <>
                 {record.status === 'request' && (

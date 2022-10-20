@@ -211,7 +211,7 @@ const GlobalStyle = () => (
         font-size: 13px;
         font-weight: 400;
         border-radius: 12px;
-        width: 250px;
+        background-color: #30333b;
       }
 
       /* window에서도 스크롤바 mac처럼 둥글게 */

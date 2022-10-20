@@ -63,15 +63,6 @@ function CompanyStep({ visible, loading }: Props) {
     return Promise.resolve();
   };
 
-  // 사업자 주소 유효성 검사
-  // const bizAddressValidation = (_: any, value: string) => {
-  //   if (!value) {
-  //     return Promise.reject(new Error('사업자주소 입력해주세요'));
-  //   }
-
-  //   return Promise.resolve();
-  // };
-
   //약관동의 유효성 검사
   const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
     if (
@@ -213,6 +204,7 @@ function CompanyStep({ visible, loading }: Props) {
       >
         <Input css={input} placeholder="ex. www.turtleshop.com" />
       </Form.Item>
+
       <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
         <AgreementCheckbox
           onChange={(data: CheckboxValueType[]) => {
@@ -223,6 +215,7 @@ function CompanyStep({ visible, loading }: Props) {
           }}
         />
       </Form.Item>
+
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Button
