@@ -11,7 +11,6 @@ interface RequestDupCheck {
   login_id?: string;
   biz_num?: string;
   encrypted_text?: string;
-  user_type?: UserType;
 }
 
 interface ResponseDupCheck {
