@@ -1,264 +1,119 @@
 import { Global, css } from '@emotion/react';
-
+import { reset } from '@styles/reset';
 const GlobalStyle = () => (
   <Global
-    styles={css`
-      /* reset Css */
-      html,
-      body,
-      div,
-      span,
-      applet,
-      object,
-      iframe,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      p,
-      blockquote,
-      pre,
-      a,
-      abbr,
-      acronym,
-      address,
-      big,
-      cite,
-      code,
-      del,
-      dfn,
-      em,
-      img,
-      ins,
-      kbd,
-      q,
-      s,
-      samp,
-      small,
-      strike,
-      strong,
-      sub,
-      sup,
-      tt,
-      var,
-      b,
-      u,
-      i,
-      center,
-      dl,
-      dt,
-      dd,
-      ol,
-      ul,
-      li,
-      fieldset,
-      form,
-      label,
-      legend,
-      table,
-      caption,
-      tbody,
-      tfoot,
-      thead,
-      tr,
-      th,
-      td,
-      article,
-      aside,
-      canvas,
-      details,
-      embed,
-      figure,
-      figcaption,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      output,
-      ruby,
-      section,
-      summary,
-      time,
-      mark,
-      audio,
-      video {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        font-size: 100%;
-        font: inherit;
-        vertical-align: baseline;
-      }
-      /* HTML5 display-role reset for older browsers */
-      article,
-      aside,
-      details,
-      figcaption,
-      figure,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      section {
-        display: block;
-      }
-      ol,
-      ul {
-        list-style: none;
-      }
-      blockquote,
-      q {
-        quotes: none;
-      }
-      blockquote:before,
-      blockquote:after,
-      q:before,
-      q:after {
-        content: ‘’;
-        content: none;
-      }
-      table {
-        border-collapse: collapse;
-        border-spacing: 0;
-      }
-      /** font */
-      /* @font-face {
-        font-family: ‘Spoqa Han Sans Neo’;
-        src: url(/assets/font/SpoqaHanSansNeo-Light.ttf) format(‘truetype’);
-        font-weight: 300;
-      }
-      @font-face {
-        font-family: ‘Spoqa Han Sans Neo’;
-        src: url(/assets/font/SpoqaHanSansNeo-Regular.ttf) format(‘truetype’);
-        font-weight: 400;
-      }
-      @font-face {
-        font-family: ‘Spoqa Han Sans Neo’;
-        src: url(/assets/font/SpoqaHanSansNeo-Medium.ttf) format(‘truetype’);
-        font-weight: 500;
-      }
-      @font-face {
-        font-family: ‘Spoqa Han Sans Neo’;
-        src: url(/assets/font/SpoqaHanSansNeo-Bold.ttf) format(‘truetype’);
-        font-weight: 700;
-      } */
-      body {
-        /* font-family: ‘Spoqa Han Sans’; */
-        line-height: 1;
-      }
+    styles={[
+      reset,
+      css`
+        /* Typography */
 
-      /* Typography */
-
-      /* button */
-      .ant-btn {
-        border: none;
-        border-radius: 8px;
-      }
-
-      .ant-tabs {
-        line-height: 1;
-      }
-
-      // 인풋 suffix 버튼일시 오른쪽 패딩 제거
-      .ant-input-suffix {
+        /* button */
         .ant-btn {
-          padding-right: 0px;
+          border: none;
+          border-radius: 8px;
         }
-      }
 
-      /* dropdown */
-      .ant-dropdown-menu-item:hover {
-        background-color: #edeff1;
-      }
+        .ant-tabs {
+          line-height: 1;
+        }
 
-      /* Table */
-      .ant-table-title {
-        padding: 0px !important;
-      }
+        // 인풋 suffix 버튼일시 오른쪽 패딩 제거
+        .ant-input-suffix {
+          .ant-btn {
+            padding-right: 0px;
+          }
+        }
 
-      /* form label 왼쪽 정렬 */
-      .ant-form-item-label {
-        text-align: left;
-      }
+        /* dropdown */
+        .ant-dropdown-menu-item:hover {
+          background-color: #edeff1;
+        }
 
-      /* form item 기본 margin-bottom */
-      .ant-form-item {
-        margin-bottom: 16px;
-      }
+        /* Table */
+        .ant-table-title {
+          padding: 0px !important;
+        }
 
-      /* message 색상 변경 */
-      .ant-message {
-        color: #ffffff !important;
-      }
+        /* form label 왼쪽 정렬 */
+        .ant-form-item-label {
+          text-align: left;
+        }
 
-      .ant-message-notice {
-        text-align: right;
-        margin-right: 30px;
-      }
+        /* form item 기본 margin-bottom */
+        .ant-form-item {
+          margin-bottom: 16px;
+        }
 
-      /* message 박스 크기 설정 */
-      .ant-message-notice-content {
-        border-radius: 12px;
-        width: 360px;
-        text-align: left;
-      }
+        /* message 색상 변경 */
+        .ant-message {
+          color: #ffffff !important;
+        }
 
-      .ant-tooltip-inner {
-        font-size: 13px;
-        font-weight: 400;
-        border-radius: 12px;
-        background-color: #30333b;
-      }
+        .ant-message-notice {
+          text-align: right;
+          margin-right: 30px;
+        }
 
-      /* window에서도 스크롤바 mac처럼 둥글게 */
-      /* total width */
-      ::-webkit-scrollbar {
-        background-color: #fff;
-        width: 16px;
-      }
+        /* message 박스 크기 설정 */
+        .ant-message-notice-content {
+          border-radius: 12px;
+          width: 360px;
+          text-align: left;
+        }
 
-      /* background of the scrollbar except button or resizer */
-      ::-webkit-scrollbar-track {
-        background-color: #fff;
-      }
+        .ant-tooltip-inner {
+          font-size: 13px;
+          font-weight: 400;
+          border-radius: 12px;
+          background-color: #30333b;
+        }
 
-      /* scrollbar itself */
-      ::-webkit-scrollbar-thumb {
-        background-color: #babac0;
-        border-radius: 16px;
-        border: 4px solid #fff;
-      }
+        /* window에서도 스크롤바 mac처럼 둥글게 */
+        /* total width */
+        ::-webkit-scrollbar {
+          background-color: #fff;
+          width: 16px;
+        }
 
-      /* set button(top and bottom of the scrollbar) */
-      ::-webkit-scrollbar-button {
-        display: none;
-      }
+        /* background of the scrollbar except button or resizer */
+        ::-webkit-scrollbar-track {
+          background-color: #fff;
+        }
 
-      /* 
-      .ant-message-error .anticon {
-      color: #FFFFFF !important;
-      }
-      .ant-message-warning .anticon {
-      color: #FFFFFF !important;
-      }
+        /* scrollbar itself */
+        ::-webkit-scrollbar-thumb {
+          background-color: #babac0;
+          border-radius: 16px;
+          border: 4px solid #fff;
+        }
 
-      .ant-message-info .anticon {
-      color: #FFFFFF !important;
-      }
-      .ant-message-success .anticon {
-      color: #FFFFFF !important;
-      } */
+        /* set button(top and bottom of the scrollbar) */
+        ::-webkit-scrollbar-button {
+          display: none;
+        }
 
-      /* badge status 마진값 제거 */
-      /* .ant-badge-status-text {
-      margin-left: 4px;
-      color: #5B5D63;
-      } */
-    `}
+        /* 
+    .ant-message-error .anticon {
+    color: #FFFFFF !important;
+    }
+    .ant-message-warning .anticon {
+    color: #FFFFFF !important;
+    }
+
+    .ant-message-info .anticon {
+    color: #FFFFFF !important;
+    }
+    .ant-message-success .anticon {
+    color: #FFFFFF !important;
+    } */
+
+        /* badge status 마진값 제거 */
+        /* .ant-badge-status-text {
+    margin-left: 4px;
+    color: #5B5D63;
+    } */
+      `,
+    ]}
   />
 );
 
