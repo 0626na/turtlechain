@@ -14,7 +14,8 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset } = useOrderCart();
+  const { cart, reset, calculateTotalPrice, integrationOrderList } =
+    useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록
@@ -51,19 +52,8 @@ function ConfirmOrderModal({ visible, close }: Props) {
           >{`총 발주수량:  ${cart.successList.length}개  `}</Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주금액: ${cart.successList
-            .reduce(
-              (acc, store) =>
-                acc +
-                store.orders.reduce(
-                  (acc, order) => acc + Number(order.product_price),
-                  0,
-                ),
-              0,
-            )
-            .toLocaleString()}원`}</Typography.Text>
+          >{`총 발주금액: ${calculateTotalPrice().toLocaleString()}원`}</Typography.Text>
         </Space>
-
         <Row justify="end">
           <Col style={{ marginRight: 10 }}>
             <AnswerButton type="NO" text="취소" onClick={close} />
@@ -74,45 +64,27 @@ function ConfirmOrderModal({ visible, close }: Props) {
               text="요청"
               onClick={() => {
                 createOrderItemMutation.mutate({
-                  rt_stores: cart.successList.map<OrderItemList>((store) => ({
-                    rt_store_id: store.rt_store_id,
-                    orders: [
-                      ...store.orders.map<CreatingOrdersItem>((order) => ({
-                        vendor_name: order.vendor_name,
-                        vendor_address: order.vendor_address,
-                        vendor_mobile: order.vendor_mobile,
-                        mobile: order.mobile,
-                        product_name: order.product_name,
-                        product_option: order.product_option,
-                        product_count: Number(order.product_count),
-                        product_price: Number(order.product_price),
-                        order_type: order.order_type,
-                        memo: order.memo,
+                  rt_stores: [
+                    ...integrationOrderList().map<OrderItemList>((order) => ({
+                      rt_store_id: order.rt_store_id,
+                      orders: order.orders.map<CreatingOrdersItem>((item) => ({
+                        vendor_name: item.vendor_name,
+                        vendor_address: item.vendor_address,
+                        vendor_mobile: item.vendor_mobile,
+                        mobile: item.mobile,
+                        product_name: item.product_name,
+                        product_option: item.product_option,
+                        product_count: Number(item.product_count),
+                        product_price: Number(item.product_price),
+                        order_type: item.order_type,
+                        memo: item.memo,
                         ws_store_id:
-                          order.ws_store_info.length !== 0
-                            ? order.ws_store_info[0].id
+                          item.ws_store_info.length !== 0
+                            ? item.ws_store_info[0].id
                             : null,
                       })),
-                      ...(cart.failList
-                        .find((item) => store.rt_store_id === item.rt_store_id)
-                        ?.orders.map<CreatingOrdersItem>((order) => ({
-                          vendor_name: order.vendor_name,
-                          vendor_address: order.vendor_address,
-                          vendor_mobile: order.vendor_mobile,
-                          mobile: order.mobile,
-                          product_name: order.product_name,
-                          product_option: order.product_option,
-                          product_count: Number(order.product_count),
-                          product_price: Number(order.product_price),
-                          order_type: order.order_type,
-                          memo: order.memo,
-                          ws_store_id:
-                            order.ws_store_info.length !== 0
-                              ? order.ws_store_info[0].id
-                              : null,
-                        })) ?? []),
-                    ],
-                  })),
+                    })),
+                  ],
                 });
               }}
             />
