@@ -1,9 +1,10 @@
 import { TurtleConfirmModal, TurtleText } from '@components/element';
-import { FailListState } from '@hooks/useOrderCart';
+import { FailListForOutput } from '@hooks/useOrderCart';
+
 interface Props {
   visible: boolean;
   title: string;
-  failData: { data: FailListState; mobile: string };
+  failData: { record: FailListForOutput; mobile: string };
   description: string[];
   onCancel: () => void;
   onOk: () => void;
@@ -26,9 +27,11 @@ function AddOrderFailtoSuccessModal({
     >
       <div>
         <br />
-        <TurtleText>{`쇼핑몰: ${failData.data.store_name}`}</TurtleText> <br />
-        <TurtleText>{`거래처: ${failData.data.vendor_name}`}</TurtleText> <br />
-        <TurtleText>{`주소: ${failData.data.vendor_address}`}</TurtleText>{' '}
+        <TurtleText>{`쇼핑몰: ${failData.record.rt_store_name}`}</TurtleText>{' '}
+        <br />
+        <TurtleText>{`거래처: ${failData.record.vendor_name}`}</TurtleText>{' '}
+        <br />
+        <TurtleText>{`주소: ${failData.record.vendor_address}`}</TurtleText>{' '}
         <br />
         <TurtleText>{`휴대전화번호: ${failData.mobile}`}</TurtleText> <br />
       </div>
