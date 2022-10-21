@@ -9,25 +9,28 @@ import React, { useState } from 'react';
 import AgreementModal from './AgreementModal';
 
 interface Props {
-  plainOptions: string[];
   onChange: (list: CheckboxValueType[]) => void;
+  value?: CheckboxValueType[];
 }
 
-function AgreeCheckbox({ plainOptions, onChange }: Props) {
-  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
-  const [checkAll, setCheckAll] = useState(false);
+const options = [
+  'service_use',
+  'personal_information',
+  'third_party',
+  'event_notificaton',
+];
 
+function AgreeCheckbox({ onChange, value = [] }: Props) {
+  const [checkAll, setCheckAll] = useState(false);
   const [modalVisible, modalOpen, modalClose] = useModal();
 
   const handleChange = (list: CheckboxValueType[]) => {
     onChange(list);
-    setCheckedList(list);
-    setCheckAll(list.length === plainOptions.length);
+    setCheckAll(list.length === options.length);
   };
 
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
-    onChange(e.target.checked ? plainOptions : []);
-    setCheckedList(e.target.checked ? plainOptions : []);
+    onChange(e.target.checked ? options : []);
     setCheckAll(e.target.checked);
   };
 
@@ -42,12 +45,8 @@ function AgreeCheckbox({ plainOptions, onChange }: Props) {
 
       <TurtleDivider marginTop={16} marginBottom={16} />
 
-      <Checkbox.Group
-        css={checkboxGroup}
-        value={checkedList}
-        onChange={handleChange}
-      >
-        {plainOptions.map((option, idx) => (
+      <Checkbox.Group css={checkboxGroup} value={value} onChange={handleChange}>
+        {options.map((option, idx) => (
           <Checkbox key={idx} css={item} value={option}>
             <div>{t(`agreement.${option}`)}</div>
             <div

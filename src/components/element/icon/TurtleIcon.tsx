@@ -46,6 +46,8 @@ import { ReactComponent as ExcludeWonIcon } from '@icons/excludeWon.svg';
 import { ReactComponent as IncludeWonIcon } from '@icons/includeWon.svg';
 import { ReactComponent as CoinIcon } from '@icons/coin.svg';
 import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
+import { ReactComponent as UserCheckIcon } from '@icons/userCheck.svg';
+import { ReactComponent as UserLineIcon } from '@icons/userLine.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -90,7 +92,9 @@ interface Props {
     | 'includeWon'
     | 'excludeWon'
     | 'coin'
-    | 'rightTriangle';
+    | 'rightTriangle'
+    | 'userCheck'
+    | 'userLine';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -104,6 +108,22 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={iconContainer} onClick={handleClick}>
         <RightTriangleIcon />
+      </div>
+    );
+  }
+
+  if (name === 'userCheck') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UserCheckIcon />
+      </div>
+    );
+  }
+
+  if (name === 'userLine') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UserLineIcon />
       </div>
     );
   }
@@ -214,7 +234,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'info') {
     return (
-      <div css={iconContainer} onClick={handleClick}>
+      <div css={infoIconContainer} onClick={handleClick}>
         <InfoIcon />
       </div>
     );
@@ -421,6 +441,13 @@ const iconContainer = css`
   justify-content: center;
   cursor: pointer;
 `;
+const infoIconContainer = css`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
 const removeIconContainer = css`
   display: flex;
   height: 100%;

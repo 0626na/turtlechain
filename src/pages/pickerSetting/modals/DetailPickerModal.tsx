@@ -16,7 +16,7 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
 
   const resetStates = useCallback(() => {
     const { id, store_url, is_closed, name } = selectedRow || {};
-    console.log(selectedRow);
+
     form.setFieldsValue({
       store_id: id,
       is_closed,

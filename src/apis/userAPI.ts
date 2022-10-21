@@ -1,6 +1,8 @@
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
+type UserType = 'rt' | 'pi' | 'ub';
+
 /*
  * 아이디,사업자정보 중복 체크
  */
@@ -16,7 +18,7 @@ interface ResponseDupCheck {
   data: null;
 }
 
-const dupCheck = async function (params: RequestDupCheck) {
+const dupCheck = async (params: RequestDupCheck) => {
   const url = '/provisioning/registration/duplication-check';
   const response = await v2Axios.get<ResponseDupCheck>(url, { params });
 
@@ -27,43 +29,49 @@ const dupCheck = async function (params: RequestDupCheck) {
  *  회원가입
  */
 
-type AgreementItem =
-  | 'service_use'
-  | 'personal_information'
-  | 'event_notificaton'
-  | 'third_party';
+type AgreementsType = {
+  service_use: boolean;
+  personal_information: boolean;
+  event_notificaton: boolean;
+  third_party: boolean;
+};
 
-export interface RequestCreate {
+export interface RequestCreateRegistration {
+  user_type: UserType;
   user_name: string;
   user_email: string;
   user_mobile: string;
   user_login_id: string;
   user_password: string;
-  user_type: 'rt' | 'pi' | 'ub';
 
-  company_biz_type: 'entity' | 'personal' | 'simple';
-  company_owner: string;
-  company_name: string;
-  company_biz_num: string;
-  company_main_address: string;
-  company_sub_address: string;
-  company_store_url: string;
-  company_biz_license_file: RcFile;
+  company_biz_type?: 'entity' | 'personal' | 'simple';
+  company_owner?: string;
+  company_name?: string;
+  company_biz_num?: string;
+  company_main_address?: string;
+  company_sub_address?: string;
+  company_store_url?: string;
+  company_biz_license_file?: RcFile;
 
-  agreement: AgreementItem[];
+  agreements: AgreementsType;
 }
 
-interface ResponseCreate {
+interface ResponseCreateRegistration {
   msg: string;
 }
 
-const create = async (data: RequestCreate) => {
+const createRegistration = async (data: RequestCreateRegistration) => {
   const url = '/provisioning/registration';
   const formData = new FormData();
-  for (const [key, value] of Object.entries(data)) {
+  for (let [key, value] of Object.entries(data)) {
+    if (key === 'agreements') value = JSON.stringify(value);
     formData.append(key, value);
   }
-  const response = await v2Axios.post<ResponseCreate>(url, formData);
+
+  const response = await v2Axios.post<ResponseCreateRegistration>(
+    url,
+    formData,
+  );
 
   return response.data;
 };
@@ -98,8 +106,8 @@ export interface ResponseGetRegistration {
         user_mobile: string;
         user_login_id: string;
         user_password: string;
-        user_type: 'rt' | 'pi' | 'ub';
-        agreement: AgreementItem[];
+        user_type: UserType;
+        agreements: AgreementsType;
       },
     ];
   };
@@ -123,24 +131,24 @@ export interface RequestUpdateRegistration {
   id: number;
   data: {
     encrypted_text: string;
-    // 사업자 정보
-    company_biz_type: 'entity' | 'personal' | 'simple';
-    company_owner: string;
-    company_name: string;
-    company_biz_num: string;
-    company_main_address: string;
-    company_sub_address: string;
-    company_biz_license_file: RcFile;
-    company_store_url: string;
-
     // 관리자 계정
+    user_type: UserType;
     user_name: string;
     user_email: string;
     user_mobile: string;
     user_login_id: string;
     user_password: string;
-    user_type: 'rt' | 'pi' | 'ub';
-    agreement: AgreementItem[];
+    // 사업자 정보
+    company_biz_type?: 'entity' | 'personal' | 'simple';
+    company_owner?: string;
+    company_name?: string;
+    company_biz_num?: string;
+    company_main_address?: string;
+    company_sub_address?: string;
+    company_biz_license_file?: RcFile;
+    company_store_url?: string;
+
+    agreements: AgreementsType;
   };
 }
 
@@ -155,7 +163,9 @@ const updateRegistration = async (requestData: RequestUpdateRegistration) => {
   const url = `/provisioning/registration/${requestData.id}`;
 
   const formData = new FormData();
-  for (const [key, value] of Object.entries(requestData.data)) {
+  for (let [key, value] of Object.entries(requestData.data)) {
+    if (key === 'agreements') value = JSON.stringify(value);
+
     formData.append(key, value as string);
   }
 
@@ -237,7 +247,7 @@ const resetPassword = async function (data: RequestResetPassword) {
 
 const userAPI = {
   dupCheck,
-  create,
+  createRegistration,
   update,
   getID,
   resetPassword,

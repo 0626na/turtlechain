@@ -3,25 +3,164 @@ import { Global, css } from '@emotion/react';
 const GlobalStyle = () => (
   <Global
     styles={css`
-      /* Typography */
-      h1 {
-        margin: 0;
-      }
-
-      ul {
-        list-style: none;
+      /* reset Css */
+      html,
+      body,
+      div,
+      span,
+      applet,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      a,
+      abbr,
+      acronym,
+      address,
+      big,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      s,
+      samp,
+      small,
+      strike,
+      strong,
+      sub,
+      sup,
+      tt,
+      var,
+      b,
+      u,
+      i,
+      center,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      embed,
+      figure,
+      figcaption,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      output,
+      ruby,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
         margin: 0;
         padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: ‘’;
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      /** font */
+      /* @font-face {
+        font-family: ‘Spoqa Han Sans Neo’;
+        src: url(/assets/font/SpoqaHanSansNeo-Light.ttf) format(‘truetype’);
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: ‘Spoqa Han Sans Neo’;
+        src: url(/assets/font/SpoqaHanSansNeo-Regular.ttf) format(‘truetype’);
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: ‘Spoqa Han Sans Neo’;
+        src: url(/assets/font/SpoqaHanSansNeo-Medium.ttf) format(‘truetype’);
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: ‘Spoqa Han Sans Neo’;
+        src: url(/assets/font/SpoqaHanSansNeo-Bold.ttf) format(‘truetype’);
+        font-weight: 700;
+      } */
+      body {
+        /* font-family: ‘Spoqa Han Sans’; */
+        line-height: 1;
       }
 
-      p {
-        margin: 0;
-      }
+      /* Typography */
 
       /* button */
       .ant-btn {
         border: none;
         border-radius: 8px;
+      }
+
+      .ant-tabs {
+        line-height: 1;
       }
 
       // 인풋 suffix 버튼일시 오른쪽 패딩 제거
@@ -37,7 +176,6 @@ const GlobalStyle = () => (
       }
 
       /* Table */
-
       .ant-table-title {
         padding: 0px !important;
       }
@@ -73,7 +211,7 @@ const GlobalStyle = () => (
         font-size: 13px;
         font-weight: 400;
         border-radius: 12px;
-        width: 250px;
+        background-color: #30333b;
       }
 
       /* window에서도 스크롤바 mac처럼 둥글게 */

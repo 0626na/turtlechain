@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
-  type?: 'signup'; // 회원가입에서의 버튼 색상이 다르기때문.
+  type?: 'registration'; // 회원가입에서의 버튼 색상이 다르기때문.
   onSuccess?: (data: { phone: string; token: string }) => void; // 인증 성공 콜백
 }
 
@@ -131,9 +131,10 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                 <Button
                   css={button}
                   style={{
-                    ['--color' as any]: type === 'signup' ? '#6B6D73' : '#fff',
+                    ['--color' as any]:
+                      type === 'registration' ? '#6B6D73' : '#fff',
                     ['--background-color' as any]:
-                      type === 'signup' ? '#F0F3F6' : '#00b3be',
+                      type === 'registration' ? '#F0F3F6' : '#00b3be',
                   }}
                   disabled={!expire_time || !getFieldValue('otp_code')}
                   loading={verifyOTPQuery.isLoading}

@@ -48,8 +48,8 @@ function StoreCard({ store }: Props) {
           <TurtleIcon name="phone" />
           <span css={leftContentCss.title}>휴대전화 번호</span>
         </Col>
-        <Col>
-          <span css={rightContentCss.self}>
+        <Col css={rightContentCss.self}>
+          <span>
             {store?.store_phone[0]?.phone.replace(phonePattern, '$1-$2-$3') ??
               ''}
           </span>
@@ -59,7 +59,6 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="account" />
-
           <span
             css={leftContentCss.title}
             style={{ ['--marginRight' as any]: '3px' }}
@@ -68,12 +67,10 @@ function StoreCard({ store }: Props) {
           </span>
           <TurtleIcon name="info" />
         </Col>
-        <Col>
-          <span css={rightContentCss.self}>{`${
-            store.store_account[0]?.bank ?? ''
-          } ${store.store_account[0]?.account_number ?? ''} ${
-            store.store_account[0]?.account_holder ?? ''
-          }`}</span>
+        <Col css={rightContentCss.self}>
+          <span>{`${store.store_account[0]?.bank ?? ''} ${
+            store.store_account[0]?.account_number ?? ''
+          } ${store.store_account[0]?.account_holder ?? ''}`}</span>
         </Col>
       </Row>
 
@@ -175,6 +172,7 @@ const leftContentCss = {
   self: css({
     flexBasis: '42.2%',
     display: 'flex',
+    alignItems: 'center',
   }),
 
   title: css({
