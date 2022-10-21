@@ -1,13 +1,14 @@
 import { TurtleTableTitle } from '@components/element';
 import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
+import { useEffect } from 'react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const { cart, failList } = useOrderCart();
+  const { cart, failListOutput } = useOrderCart();
 
   return (
     <Tabs.TabPane {...props}>
@@ -15,8 +16,8 @@ function FailTab({ loading, ...props }: Props) {
         scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
         loading={loading}
         size="small"
-        rowKey={(record) => record.store_id}
-        dataSource={failList}
+        dataSource={failListOutput()}
+        rowKey={(record) => record.id}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
@@ -28,7 +29,7 @@ function FailTab({ loading, ...props }: Props) {
           {
             title: '쇼핑몰',
             width: 180,
-            render: (_, record) => record.store_name,
+            render: (_, record) => record.rt_store_name,
           },
           {
             title: '거래처명',
@@ -45,7 +46,7 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             title: '거래처 상품명',
-            render: (_, record) => record.vendor_product,
+            render: (_, record) => record.product_name,
           },
           {
             title: '옵션',
@@ -53,19 +54,18 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             title: '분류',
-            render: (_, record) => record.type,
+            render: (_, record) => record.order_type,
           },
           {
             title: '요청 수량',
-            render: (_, record) => record.count,
+            render: (_, record) => record.product_count,
           },
           {
             title: '가격',
-            render: (_, record) => record.price,
+            render: (_, record) => record.product_price,
           },
           {
             title: '메모',
-            render: (_, record) => record.memo,
           },
         ]}
       />

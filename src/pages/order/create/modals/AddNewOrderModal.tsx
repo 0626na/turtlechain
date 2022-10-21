@@ -29,6 +29,7 @@ function AddNewOrderModal({ visible, close }: Props) {
       },
     ],
   });
+  const { updateSuccess } = useOrderCart();
   const [floor, setFloor] = useState('');
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
@@ -54,6 +55,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
+          onFinish={(values) => {}}
         >
           {/* 쇼핑몰 */}
           <Form.Item
