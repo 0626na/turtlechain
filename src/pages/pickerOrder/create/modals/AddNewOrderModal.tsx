@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TurtleContentModal } from '@components/combine';
 import {
   PrimaryButton,
@@ -7,7 +7,7 @@ import {
   TurtleFormSelect,
 } from '@components/element';
 import { css } from '@emotion/react';
-import { Form, Radio, Row } from 'antd';
+import { Form, message, Radio, Row } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
@@ -29,8 +29,8 @@ function AddNewOrderModal({ visible, close }: Props) {
       },
     ],
   });
-  const { updateSuccess, findSuccess } = useOrderCart();
-  const [floor, setFloor] = useState('');
+  const { updateSuccess } = useOrderCart();
+  const [building, setBuilding] = useState('');
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
     'getPickerStores',
@@ -42,6 +42,7 @@ function AddNewOrderModal({ visible, close }: Props) {
 
   const getBuildingQuery = useQuery('getBuildingQuery', presetAPI.getBuilding);
 
+  useEffect(() => form.resetFields(), [form, visible]);
   return (
     <>
       <TurtleContentModal
@@ -56,49 +57,30 @@ function AddNewOrderModal({ visible, close }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            if (
-              // 단건 추가하려는 쇼핑몰이 이미 등록되어 있는 경우
-              !findSuccess({
-                rt_store_id: selectStore.id,
-                rt_store_name: selectStore.name,
-                orders: [
-                  {
-                    vendor_name: values.vendor_name,
-                    vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: '',
-                    mobile: values.mobile,
-                    product_name: values.vendor_product_name,
-                    product_option: values.option ?? '',
-                    order_type: values.type,
-                    product_price: values.price,
-                    product_count: values.count,
-                    memo: values.memo,
-                    ws_store_info: [],
-                  },
-                ],
-              })
-            ) {
-              //새로운 쇼핑몰 인경우
-              updateSuccess({
-                rt_store_id: selectStore.id,
-                rt_store_name: selectStore.name,
-                orders: [
-                  {
-                    vendor_name: values.vendor_name,
-                    vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: '',
-                    mobile: values.mobile,
-                    product_name: values.vendor_product_name,
-                    product_option: values.option ?? '',
-                    order_type: values.type,
-                    product_price: values.price,
-                    product_count: values.count,
-                    memo: values.memo,
-                    ws_store_info: [],
-                  },
-                ],
-              });
-            }
+            updateSuccess({
+              rt_store_id: selectStore.id,
+              rt_store_name: selectStore.name,
+              orders: [
+                {
+                  vendor_name: values.vendor_name,
+                  vendor_address: values.vendor_address_building
+                    ? `${values.vendor_address_building} ${values.vendor_address_floor}층 ${values.vendor_address_col}`
+                    : values.ext,
+                  vendor_mobile: '',
+                  mobile: values.mobile,
+                  product_name: values.vendor_product_name,
+                  product_option: values.option,
+                  product_count: values.count,
+                  product_price: values.price,
+                  order_type: values.type,
+                  memo: values.memo,
+                  ws_store_info: [],
+                },
+              ],
+            });
+
+            message.success(t('message.successAddOrder'));
+            close();
           }}
         >
           {/* 쇼핑몰 */}
@@ -152,7 +134,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                 <Form.Item name="vendor_address_buliding" noStyle>
                   <TurtleFormSelect
                     placeholder="상가"
-                    onChange={(value) => setFloor(value)}
+                    onChange={(value) => setBuilding(value)}
                     items={
                       getBuildingQuery.data &&
                       Object.keys(getBuildingQuery.data.data).map((name) => {
@@ -174,8 +156,8 @@ function AddNewOrderModal({ visible, close }: Props) {
                   <TurtleFormSelect
                     placeholder="층"
                     items={
-                      floor !== ''
-                        ? Object.keys(getBuildingQuery.data.data[floor]).map(
+                      building !== ''
+                        ? Object.keys(getBuildingQuery.data.data[building]).map(
                             (building) => {
                               return {
                                 value: building,
@@ -204,7 +186,10 @@ function AddNewOrderModal({ visible, close }: Props) {
             name="vendor_address_ext"
             label={t('table.vendorEtcAddress')}
           >
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
+            <TurtleFormInput
+              placeholder="기타 주소를 입력해주세요"
+              disabled={building === '기타' ? false : true}
+            />
           </Form.Item>
           {/* 휴대번호 */}
           <Form.Item label={t('table.mobile')} name="mobile" required>
