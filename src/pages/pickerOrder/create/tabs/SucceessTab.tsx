@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useOrderCart from '@hooks/useOrderCart';
 import DeleteOrderModal from '@pages/order/create/modals/DeleteOrderModal';
-import { message, Popconfirm, Table, TabPaneProps, Tabs } from 'antd';
+import { message, Table, TabPaneProps, Tabs } from 'antd';
 import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../modals/OrderMemoModal';
@@ -18,6 +18,37 @@ import OrderMemoModal from '../modals/OrderMemoModal';
 interface Props extends TabPaneProps {
   loading: boolean;
 }
+
+export const category = [
+  {
+    value: '발주',
+    name: '발주',
+  },
+  {
+    value: '미송',
+    name: '미송',
+  },
+  {
+    value: '반품',
+    name: '반품',
+  },
+  {
+    value: '교환',
+    name: '교환',
+  },
+  {
+    value: '샘플',
+    name: '샘플',
+  },
+  {
+    value: '픽업',
+    name: '픽업',
+  },
+  {
+    value: '기타',
+    name: '기타',
+  },
+];
 
 function SuccessTab({ loading, ...props }: Props) {
   // const options = [
@@ -35,36 +66,6 @@ function SuccessTab({ loading, ...props }: Props) {
   //   },
   // ];
 
-  const category = [
-    {
-      value: '발주',
-      name: '발주',
-    },
-    {
-      value: '미송',
-      name: '미송',
-    },
-    {
-      value: '반품',
-      name: '반품',
-    },
-    {
-      value: '교환',
-      name: '교환',
-    },
-    {
-      value: '샘플',
-      name: '샘플',
-    },
-    {
-      value: '픽업',
-      name: '픽업',
-    },
-    {
-      value: '기타',
-      name: '기타',
-    },
-  ];
   const { cart, setCart } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
   const [selectOrderRowID, setSelectOrderRowID] = useState(0);
@@ -307,7 +308,7 @@ function SuccessTab({ loading, ...props }: Props) {
                         `}
                       >
                         <MemoIcon
-                          value=""
+                          value={record.memo ?? ''}
                           onClick={() => {
                             setSelectOrderRowID(record.order_id!);
                             openMemoModal();
