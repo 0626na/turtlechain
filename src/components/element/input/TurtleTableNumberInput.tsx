@@ -5,9 +5,15 @@ import { InputNumber, InputNumberProps } from 'antd';
 interface Props extends InputNumberProps {
   defaultValue?: number;
   min?: number;
+  step: number;
 }
 
-function TurtleTableNumberInput({ defaultValue, min = 0, ...props }: Props) {
+function TurtleTableNumberInput({
+  defaultValue,
+  min = 0,
+  step = 1000,
+  ...props
+}: Props) {
   return (
     <InputNumber
       {...props}
@@ -15,7 +21,7 @@ function TurtleTableNumberInput({ defaultValue, min = 0, ...props }: Props) {
       defaultValue={defaultValue}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}
       min={min}
-      step={1000}
+      step={step}
       size="small"
       css={input}
     />

@@ -173,6 +173,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               title: t('table.price'),
               render: (_, record) => (
                 <TurtleTableNumberInput
+                  step={1000}
                   defaultValue={record.product_price}
                   onChange={(value) => {
                     handleExchangeRefundItemUpdate(
@@ -191,6 +192,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               render: (_, record) => {
                 return (
                   <TurtleTableNumberInput
+                    step={1000}
                     defaultValue={record.product_count}
                     max={record.product_count_max}
                     onChange={(value) => {

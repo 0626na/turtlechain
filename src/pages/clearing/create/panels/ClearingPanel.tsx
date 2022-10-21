@@ -189,6 +189,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               render: (_, record) => (
                 <TurtleTableNumberInput
                   placeholder="금액 입력"
+                  step={1000}
                   value={
                     record.clearing_payment_amount! > 0
                       ? record.clearing_payment_amount!

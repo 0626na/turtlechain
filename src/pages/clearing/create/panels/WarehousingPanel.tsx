@@ -171,6 +171,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 <Space>
                   {record.type === 'adjustment_subtract' ? (
                     <TurtleTableNumberInput
+                      step={1000}
                       placeholder="금액 입력"
                       value={record.overpaid_payment_amount as number}
                       max={record.overpaid_amount}
@@ -180,6 +181,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                     />
                   ) : (
                     <TurtleTableNumberInput
+                      step={1000}
                       value={record.reserve_subtract_amount}
                       disabled={true}
                     />
