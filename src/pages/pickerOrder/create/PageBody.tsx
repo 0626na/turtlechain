@@ -26,7 +26,7 @@ import orderAPI from '@apis/orderAPI';
 import { css } from '@emotion/react';
 
 function PageBody() {
-  const { cart, ready, failList } = useOrderCart();
+  const { cart, ready, countSuccessList, countFailList } = useOrderCart();
 
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
@@ -41,6 +41,7 @@ function PageBody() {
       //2회 이상 발주 파일이 없는경우
       if (data.parsingData !== undefined) {
         ready(data.parsingData);
+
         return;
       }
 
@@ -138,12 +139,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${cart.successList.length})`}
+            tab={`성공(${countSuccessList()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`실패(${failList.length})`}
+            tab={`실패(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
