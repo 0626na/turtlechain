@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Button, Form } from 'antd';
@@ -21,7 +21,6 @@ function FindIdForm() {
       enabled: !!auth.phone && !!auth.token,
     },
   );
-  console.log(getIDQuery.data);
 
   return (
     <>
