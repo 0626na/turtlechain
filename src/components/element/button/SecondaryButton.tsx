@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, jsx } from '@emotion/react';
 import { Button } from 'antd';
 
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
@@ -6,7 +6,6 @@ import { ButtonProps } from 'antd/es/button';
 interface Props extends ButtonProps {
   children: React.ReactNode;
   htmlType?: 'submit' | 'button';
-  className?: string;
 }
 
 export function SecondaryButton({
@@ -35,7 +34,7 @@ const icon = css`
 `;
 
 const button = css`
-  width: 160px;
+  min-width: 160px;
   height: 40px;
 
   display: inline-flex;

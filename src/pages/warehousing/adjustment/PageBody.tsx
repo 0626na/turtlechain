@@ -199,9 +199,7 @@ function PageBody() {
               },
             ]}
             triggerButton={
-              <SecondaryIconButton css={{ fontSize: 13 }}>
-                교환/반품/미송 추가
-              </SecondaryIconButton>
+              <SecondaryIconButton>교환/반품/미송 추가</SecondaryIconButton>
             }
           />,
         ]}
