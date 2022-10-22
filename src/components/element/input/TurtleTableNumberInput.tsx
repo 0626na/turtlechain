@@ -8,18 +8,26 @@ interface Props extends InputNumberProps {
   min?: number;
 }
 
-function TurtleTableNumberInput({ value, min = 0, ...props }: Props) {
-  console.log(value);
+export function TurtleTableNumberInput({ value, min = 0, ...props }: Props) {
   return (
     <InputNumber
-      {...props}
-      status={value ? '' : 'error'}
+      css={input}
       value={value}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}
       min={min}
       step={1000}
       size="small"
-      css={input}
+      {...props}
+    />
+  );
+}
+
+export function TurtleTableWarningNumberInput({ value, ...props }: Props) {
+  return (
+    <TurtleTableNumberInput
+      value={value}
+      status={value ? '' : 'error'}
+      {...props}
     />
   );
 }
@@ -29,5 +37,3 @@ const input = css`
   border: 1px solid #d6d7da;
   border-radius: 4px;
 `;
-
-export default TurtleTableNumberInput;
