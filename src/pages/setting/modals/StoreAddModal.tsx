@@ -133,11 +133,12 @@ function AddModal({ visible, closeModal }: Props) {
           </div>
         </Form.Item>
 
-        <Row justify="end">
+        {/* 계좌 인증하기는 WP (웰컴페이먼츠) 가상계좌 적용시에 필요한 기능이니 당분간은 불필요 */}
+        {/* <Row justify="end">
           <Col>
             <AddButton>계좌 인증하기</AddButton>
           </Col>
-        </Row>
+        </Row> */}
 
         <TurtleDivider marginTop={32} marginBottom={32} />
 

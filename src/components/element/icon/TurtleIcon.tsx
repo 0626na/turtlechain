@@ -234,7 +234,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'info') {
     return (
-      <div css={infoIconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={handleClick}>
         <InfoIcon />
       </div>
     );
@@ -440,12 +440,6 @@ const iconContainer = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
-const infoIconContainer = css`
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
 `;
 
 const removeIconContainer = css`

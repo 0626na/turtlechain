@@ -1,5 +1,5 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import clearingAPI from '@apis/clearingAPI';
+import { TextWithTooltip } from '@components/combine';
 import {
   ArrowRightIcon,
   PrimaryButton,
@@ -7,7 +7,7 @@ import {
   TurtleIcon,
   TurtleTableTitle,
   TurtleText,
-  TurtleTableWarningNumberInput,
+  TurtleTableNumberInput,
 } from '@components/element';
 
 import { css } from '@emotion/react';
@@ -20,7 +20,6 @@ import {
   CollapsePanelProps,
   Row,
   Table,
-  Tooltip,
   Typography,
 } from 'antd';
 import { t } from 'i18next';
@@ -151,25 +150,19 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               ellipsis: true,
               align: 'right',
               title: () => (
-                <>
-                  <Tooltip
-                    title={
-                      <div style={{ width: 187 }}>
-                        사용할 금액은 당일 입고 금액을 초과할 수 없습니다.
-                      </div>
-                    }
-                  >
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                  <Typography.Text style={{ marginLeft: 4 }}>
-                    사용금액
-                  </Typography.Text>
-                </>
+                <TextWithTooltip
+                  iconPlacement="left"
+                  tooltipContent={[
+                    '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
+                  ]}
+                >
+                  사용금액
+                </TextWithTooltip>
               ),
               render: (_, record) => (
                 <>
                   {record.type === 'adjustment_subtract' ? (
-                    <TurtleTableWarningNumberInput
+                    <TurtleTableNumberInput
                       placeholder="금액 입력"
                       value={record.overpaid_payment_amount as number}
                       max={record.overpaid_amount}
@@ -178,7 +171,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       }}
                     />
                   ) : (
-                    <TurtleTableWarningNumberInput
+                    <TurtleTableNumberInput
                       value={record.reserve_subtract_amount}
                       disabled={true}
                     />
