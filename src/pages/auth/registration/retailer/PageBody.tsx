@@ -51,7 +51,7 @@ function Pagebody() {
           </div>
 
           <div css={header}>
-            {currentStep === 0 ? '계정 정보 입력' : '사업자 정보 빕력'}
+            {currentStep === 0 ? '계정 정보 입력' : '사업자 정보 입력'}
           </div>
 
           <div css={content}>

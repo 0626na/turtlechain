@@ -56,7 +56,7 @@ function TextWithTooltip({
 }
 
 const tooltip = css({
-  display: 'flex',
+  display: 'inline-flex',
 });
 const text = css({ lineHeight: 1 });
 

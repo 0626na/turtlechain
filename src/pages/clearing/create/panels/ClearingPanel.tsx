@@ -171,7 +171,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 <TextWithTooltip
                   tooltipContent={[
                     '당일결제 시, 부가세도 그 날에 함께',
-                    '전달되어야 하는 거래처를 체크해주세요.',
+                    '전달되어야 하는 거래처',
                   ]}
                 >
                   부가세 바로전달
