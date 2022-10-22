@@ -246,7 +246,7 @@ function PageBody() {
               detailModalOpen();
             },
           })}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 'auto', y: 'auto' }}
           title={() => (
             <TurtleTableTitle
               totalCount={
@@ -405,32 +405,27 @@ function PageBody() {
               width: 50,
               align: 'center',
               title: t('table.memo'),
-              render: (_, record) => (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <MemoIcon
-                    onClick={() => {
-                      setSelectedRow(record);
-                      memoModalOpen();
-                    }}
-                    value={record.memo}
-                  />
-                </div>
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  memoModalOpen();
+                },
+              }),
+              render: (_, record) => <MemoIcon value={record.memo} />,
             },
             {
               ellipsis: true,
               width: 100,
               align: 'center',
+              onCell: () => ({
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
+              }),
               render: (_, record) => (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
+                <>
                   {record.count_left !== 0 &&
                     // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
                     ((record.type === 'reserve' &&
@@ -447,28 +442,22 @@ function PageBody() {
                         처리하기
                       </ProcessButton>
                     )}
-                </div>
+                </>
               ),
             },
             {
               ellipsis: true,
               width: 30,
               align: 'center',
-              render: (_, record) => (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <TurtleIcon
-                    name="delete"
-                    onClick={() => {
-                      setSelectedRow(record);
-                      removeModalOpen();
-                    }}
-                  />
-                </div>
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  removeModalOpen();
+                },
+              }),
+              render: (_) => <TurtleIcon name="delete" />,
             },
           ]}
         />

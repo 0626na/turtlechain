@@ -6,8 +6,8 @@ import {
   ArrowRightIcon,
   MemoIcon,
   TurtleIcon,
-  TurtleTableNumberInput,
   TurtleTableTitle,
+  TurtleTableWarningNumberInput,
   TurtleText,
 } from '@components/element';
 import { css } from '@emotion/react';
@@ -28,7 +28,6 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
 
   useEffect(() => {
-    console.log(1);
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.selectedList.map((item, index) => ({
@@ -143,7 +142,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               align: 'right',
               title: t('table.price'),
               render: (_, record) => (
-                <TurtleTableNumberInput
+                <TurtleTableWarningNumberInput
                   value={record.product_price}
                   onChange={(value) => {
                     exchangeRefundItemUpdate(
@@ -160,7 +159,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               align: 'right',
               title: t('table.count'),
               render: (_, record) => (
-                <TurtleTableNumberInput
+                <TurtleTableWarningNumberInput
                   value={record.product_count}
                   max={record.product_count_max}
                   onChange={(value) => {

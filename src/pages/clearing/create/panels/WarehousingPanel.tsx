@@ -5,9 +5,9 @@ import {
   PrimaryButton,
   TurtleDivider,
   TurtleIcon,
-  TurtleTableNumberInput,
   TurtleTableTitle,
   TurtleText,
+  TurtleTableWarningNumberInput,
 } from '@components/element';
 
 import { css } from '@emotion/react';
@@ -19,7 +19,6 @@ import {
   Collapse,
   CollapsePanelProps,
   Row,
-  Space,
   Table,
   Tooltip,
   Typography,
@@ -168,9 +167,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 </>
               ),
               render: (_, record) => (
-                <Space>
+                <>
                   {record.type === 'adjustment_subtract' ? (
-                    <TurtleTableNumberInput
+                    <TurtleTableWarningNumberInput
                       placeholder="금액 입력"
                       value={record.overpaid_payment_amount as number}
                       max={record.overpaid_amount}
@@ -179,12 +178,12 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       }}
                     />
                   ) : (
-                    <TurtleTableNumberInput
+                    <TurtleTableWarningNumberInput
                       value={record.reserve_subtract_amount}
                       disabled={true}
                     />
                   )}
-                </Space>
+                </>
               ),
             },
           ]}
