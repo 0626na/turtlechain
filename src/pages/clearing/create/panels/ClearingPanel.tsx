@@ -1,5 +1,5 @@
 import { ClearingInfo } from '@apis/clearingAPI';
-import { SearchFilter } from '@components/combine';
+import { SearchFilter, TextWithTooltip } from '@components/combine';
 import {
   PrimaryButton,
   TurtleIcon,
@@ -166,7 +166,17 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             },
             {
               ellipsis: true,
-              title: '부가세 바로전달',
+
+              title: (
+                <TextWithTooltip
+                  tooltipContent={[
+                    '당일결제 시, 부가세도 그 날에 함께',
+                    '전달되어야 하는 거래처를 체크해주세요.',
+                  ]}
+                >
+                  부가세 바로전달
+                </TextWithTooltip>
+              ),
               render: (_, record) => (
                 <TurtleTag
                   color={record.vendor_info.is_vat_included ? 'orange' : 'gray'}

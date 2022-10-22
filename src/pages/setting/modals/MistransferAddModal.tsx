@@ -12,7 +12,7 @@ import {
 } from '@components/element';
 
 import { pricePattern } from '@utils/pattern';
-import { TooltipColumn, TurtleContentModal } from '@components/combine';
+import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 
@@ -210,14 +210,11 @@ function MistransferAddModal({ visible, closeModal }: Props) {
           <Form.Item
             name="is_vat_included"
             label={
-              <TooltipColumn
-                title={[
-                  '당일결제 시, 부가세도 그 날에 함께',
-                  '전달되어야 하는 거래처를 체크해주세요.',
-                ]}
+              <TextWithTooltip
+                tooltipContent={['당일결제 시, 부가세도 당일에 함께 전달']}
               >
                 {t('table.vatIncluded')}
-              </TooltipColumn>
+              </TextWithTooltip>
             }
             valuePropName="checked"
           >

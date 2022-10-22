@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
-import {
-  MemoIcon,
-  TurtleIcon,
-  TurtleText,
-  TurtleTooltip,
-} from '@components/element';
+import { MemoIcon, TurtleIcon, TurtleText } from '@components/element';
 import { SuccessItem } from '@store/vendorCartState';
-import { Input, Switch, Table } from 'antd';
+import { Input, Switch, Table, Tooltip } from 'antd';
 
 import { css } from '@emotion/react';
 
 import useVendorCart from '@hooks/useVendorCart';
 import InputModal from '@components/combine/modal/InputModal';
 import useModal from '@hooks/useModal';
+import { TextWithTooltip } from '@components/combine';
 
 interface Props {
   isLoading: boolean;
@@ -133,9 +129,7 @@ function SuccessTab({ isLoading }: Props) {
             width: 200,
             title: t('table.retailerStoreInput'),
             onCell: (record) => handleColumnHighlight(record),
-            render: (_, record) => {
-              return `${record.name}  ${record.address}`;
-            },
+            render: (_, record) => `${record.name}  ${record.address}`,
           },
           {
             ellipsis: true,
@@ -177,8 +171,17 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 100,
-            title: t('table.vatIncluded'),
+            width: 120,
+            title: (
+              <TextWithTooltip
+                tooltipContent={[
+                  '당일결제 시, 부가세도 그 날에 함께 ',
+                  '전달되어야 하는 거래처를 체크해주세요. ',
+                ]}
+              >
+                {t('table.vatIncluded')}
+              </TextWithTooltip>
+            ),
             align: 'center',
             onCell: (record) => handleColumnHighlight(record),
             render: (_, record) => (
@@ -196,10 +199,13 @@ function SuccessTab({ isLoading }: Props) {
             ellipsis: true,
             width: 200,
             title: (
-              <>
-                <TurtleText>{t('table.useVendorName')}</TurtleText>
-                <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
-              </>
+              <TextWithTooltip
+                tooltipContent={[
+                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
+                ]}
+              >
+                {t('table.useVendorName')}
+              </TextWithTooltip>
             ),
 
             onCell: (record) => handleColumnHighlight(record),
