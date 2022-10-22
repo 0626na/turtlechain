@@ -1,4 +1,4 @@
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import { Button } from 'antd';
 
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
