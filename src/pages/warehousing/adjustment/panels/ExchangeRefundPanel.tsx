@@ -13,9 +13,7 @@ import {
 import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import useModal from '@hooks/useModal';
-
 import { Collapse, CollapsePanelProps, Select, Table } from 'antd';
-
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 
@@ -24,35 +22,13 @@ interface Props extends CollapsePanelProps {
 }
 
 function ExchangeRefundPanel({ activeKey, ...props }: Props) {
-  const { cart, setCart } = useAdjustmentCart();
+  const { cart, setCart, exchangeRefundItemUpdate, exchangeRefundItemDelete } =
+    useAdjustmentCart();
   const [selectedRow, setSelectedRow] = useState<AdjustmentItem>();
-
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
 
-  //AdjustmentItemList의 필드값중 변경대상을 type으로 받아 업데이트 시킨다.
-  const handleExchangeRefundItemUpdate = (
-    type: string,
-    index: number, // id
-    value: number | string,
-  ) => {
-    setCart((cart) => ({
-      ...cart,
-      adjustmentItemList: cart.adjustmentItemList.map((item) =>
-        item.index === index ? { ...item, [type]: value } : item,
-      ),
-    }));
-  };
-
-  const handleExchangeRefundItemDelete = (index: number) => {
-    setCart((cart) => ({
-      ...cart,
-      adjustmentItemList: cart.adjustmentItemList.filter(
-        (item) => item.index !== index,
-      ),
-    }));
-  };
-
   useEffect(() => {
+    console.log(1);
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.selectedList.map((item, index) => ({
@@ -70,7 +46,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
         product_count_max: item.count,
         product_code: item.product_info.product_code,
         is_vat_included: item.is_vat_included,
-        type: '',
+        type: undefined,
         memo: '',
       })),
     }));
@@ -84,15 +60,10 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
        */}
       <InputModal
         visible={memoModalVisible}
-        //  loading={loading}
         onCancel={memoModalClose}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
-          handleExchangeRefundItemUpdate(
-            'memo',
-            selectedRow?.index as number,
-            value,
-          );
+          exchangeRefundItemUpdate('memo', selectedRow?.index as number, value);
           memoModalClose();
         }}
         title="메모"
@@ -173,9 +144,9 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               title: t('table.price'),
               render: (_, record) => (
                 <TurtleTableNumberInput
-                  defaultValue={record.product_price}
+                  value={record.product_price}
                   onChange={(value) => {
-                    handleExchangeRefundItemUpdate(
+                    exchangeRefundItemUpdate(
                       'product_price',
                       record.index as number,
                       value,
@@ -188,30 +159,29 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
               width: 120,
               align: 'right',
               title: t('table.count'),
-              render: (_, record) => {
-                return (
-                  <TurtleTableNumberInput
-                    defaultValue={record.product_count}
-                    max={record.product_count_max}
-                    onChange={(value) => {
-                      handleExchangeRefundItemUpdate(
-                        'product_count',
-                        record.index as number,
-                        value,
-                      );
-                    }}
-                  />
-                );
-              },
+              render: (_, record) => (
+                <TurtleTableNumberInput
+                  value={record.product_count}
+                  max={record.product_count_max}
+                  onChange={(value) => {
+                    exchangeRefundItemUpdate(
+                      'product_count',
+                      record.index as number,
+                      value,
+                    );
+                  }}
+                />
+              ),
             },
             {
               width: 128,
               title: t('table.type'),
               render: (_, record) => (
                 <Select
-                  status={record.type === '' ? 'error' : ''}
+                  value={record.type}
+                  status={record.type === undefined ? 'error' : ''}
                   onSelect={(value: string) => {
-                    handleExchangeRefundItemUpdate(
+                    exchangeRefundItemUpdate(
                       'type',
                       record.index as number,
                       value,
@@ -231,7 +201,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                       padding: '8px 10px',
                     }}
                     key={0}
-                    value="takeback"
+                    value="exchange"
                   >
                     교환
                   </Select.Option>
@@ -240,7 +210,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                       padding: '8px 10px',
                     }}
                     key={1}
-                    value="refund"
+                    value="takeback"
                   >
                     반품
                   </Select.Option>
@@ -270,7 +240,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                 <TurtleIcon
                   name="delete"
                   onClick={() => {
-                    handleExchangeRefundItemDelete(record.index as number);
+                    exchangeRefundItemDelete(record.index as number);
                   }}
                 />
               ),

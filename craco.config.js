@@ -15,7 +15,6 @@ module.exports = {
               '@primary-color': '#00AAB5',
 
               // font
-              '@font-family': "'Spoqa Han Sans Neo'",
               '@font-size-base': '14px',
               '@text-color': '#434852',
 

@@ -143,7 +143,7 @@
     "inventory": "재고관리 프로그램",
 
     "vatIncluded": "부가세 바로전달",
-    "accountInfo": "계좌 정보",
+    "accountInfo": "계좌정보",
 
     "vendorName": "거래처명",
     "useVendorName": "사용할 거래처명",
@@ -160,7 +160,7 @@
     "amount": "금액",
     "totalAmount": "금액 합계",
     "memo": "메모",
-    "mobile": "휴대전화번호",
+    "mobile": "휴대전화 번호",
     "retailerStoreInput": "쇼핑몰 입력값",
     "retailerStoreName": "쇼핑몰명",
     "retailerStoreURL": "쇼핑몰 URL",
@@ -249,11 +249,11 @@
   "user name": "이름",
 
   "placeholder": {
-    "store url": "쇼핑몰 url을 입력하세요.",
+    "storeUrl": "쇼핑몰 url을 입력해주세요.",
     "store": "쇼핑몰명을 입력하세요.",
-    "alimtalk": "알림톡명을 입력하세요.",
-    "mobile": "휴대번호를 입력하세요.",
-    "mistransfer refund_amt": "오입금 환불 요청금액을 입력해주세요",
+    "alimtalk": "알림톡명을 입력해주세요.",
+    "mobile": "휴대전화 번호를 입력해주세요.",
+    "mistransfer refundAmt": "오입금 환불 요청금액을 입력해주세요",
     "request memo": "오입금 환불 요청사유를 입력해주세요",
     "vendorName": "거래처명을 입력해주세요"
   },
@@ -267,7 +267,8 @@
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다.",
     "really delete": "정말 취소할까요?",
-    "You can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요."
+    "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
+    "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 
   "user": {

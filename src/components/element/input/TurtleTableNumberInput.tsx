@@ -4,16 +4,17 @@ import { InputNumber, InputNumberProps } from 'antd';
 import React from 'react';
 
 interface Props extends InputNumberProps {
-  defaultValue?: number;
+  value?: number;
   min?: number;
 }
 
-function TurtleTableNumberInput({ defaultValue, min = 0, ...props }: Props) {
+function TurtleTableNumberInput({ value, min = 0, ...props }: Props) {
+  console.log(value);
   return (
     <InputNumber
       {...props}
-      status={defaultValue === 0 ? 'error' : ''}
-      defaultValue={defaultValue}
+      status={value ? '' : 'error'}
+      value={value}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}
       min={min}
       step={1000}

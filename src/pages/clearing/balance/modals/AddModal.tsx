@@ -20,8 +20,8 @@ import useStore from '@hooks/useStore';
 
 import { useMutation, useQueryClient } from 'react-query';
 import transactionAPI from '@apis/transactionAPI';
-import { pricePattern } from '@utils/pattern';
 
+//과거매입 추가 모달
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -35,7 +35,7 @@ function AddModal({ visible, closeModal }: Props) {
 
   // 과거매입 등록
   const createTransactionMutation = useMutation(transactionAPI.create, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       message.success('성공적으로 등록하였습니다.');
       queryClient.refetchQueries(['getTransactionList'], { active: true });
       form.resetFields();
@@ -52,17 +52,10 @@ function AddModal({ visible, closeModal }: Props) {
       vendor_account_bank: record.vendor_account.bank,
       vendor_account_number: record.vendor_account.account_number,
       vendor_account_holder: record.vendor_account.account_holder,
-      //
+      subtract_amount: 0,
+      unpaid_amount: 0,
     });
     closeVendorModal();
-  };
-
-  const paymentValidation = (_: any, value: number) => {
-    if (!value) {
-      return Promise.reject(new Error('금액을 입력해주세요'));
-    }
-
-    return Promise.resolve();
   };
 
   useEffect(() => {
@@ -107,8 +100,8 @@ function AddModal({ visible, closeModal }: Props) {
             createTransactionMutation.mutate({
               rt_store_id,
               vendor_id,
-              subtract_amount,
-              unpaid_amount,
+              subtract_amount: subtract_amount ?? 0,
+              unpaid_amount: unpaid_amount ?? 0,
             });
           }}
         >
@@ -167,39 +160,11 @@ function AddModal({ visible, closeModal }: Props) {
 
           <TurtleDivider marginBottom={37} marginTop={32} />
 
-          <Form.Item
-            label={t('table.subtractAmount')}
-            name="subtract_amount"
-            rules={[
-              {
-                required: true,
-                validator: paymentValidation,
-              },
-            ]}
-          >
-            <TurtleNumberInput
-              step={1000}
-              min={0}
-              placeholder="ex. 7,000"
-              formatter={(value) => `${value}`.replace(pricePattern, ',')}
-            />
+          <Form.Item label={t('table.subtractAmount')} name="subtract_amount">
+            <TurtleNumberInput step={1000} min={0} placeholder="ex. 7,000" />
           </Form.Item>
-          <Form.Item
-            label={t('table.unpaidPayment')}
-            name="unpaid_amount"
-            rules={[
-              {
-                required: true,
-                validator: paymentValidation,
-              },
-            ]}
-          >
-            <TurtleNumberInput
-              step={1000}
-              min={0}
-              placeholder="ex. 7,000"
-              formatter={(value) => `${value}`.replace(pricePattern, ',')}
-            />
+          <Form.Item label={t('table.unpaidPayment')} name="unpaid_amount">
+            <TurtleNumberInput step={1000} min={0} placeholder="ex. 7,000" />
           </Form.Item>
 
           <Form.Item shouldUpdate noStyle>
@@ -209,9 +174,9 @@ function AddModal({ visible, closeModal }: Props) {
                   size="large"
                   htmlType="submit"
                   disabled={
-                    !getFieldValue('subtract_amount') ||
-                    !getFieldValue('unpaid_amount') ||
-                    !getFieldValue('vendor_name')
+                    !getFieldValue('vendor_name') ||
+                    (!getFieldValue('subtract_amount') &&
+                      !getFieldValue('unpaid_amount'))
                   }
                 >
                   {t('button.addTransaction')}

@@ -13,6 +13,7 @@ import { Col, Collapse, CollapsePanelProps, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
+
 import { useQuery } from 'react-query';
 
 interface Props extends CollapsePanelProps {
@@ -21,7 +22,8 @@ interface Props extends CollapsePanelProps {
 
 function WarehousingPanel({ activeKey, ...props }: Props) {
   const { store } = useStore();
-  const { cart, setCart } = useAdjustmentCart();
+  const { warehousingItemSelect, warehousingItemSelectAll } =
+    useAdjustmentCart();
 
   const [searchQuery, setSearchQuery] = useState({
     rt_store_id: store.selected?.id as number,
@@ -34,34 +36,6 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
     ['getWarehousingItem', searchQuery],
     () => warehousingAPI.getItem(searchQuery),
   );
-
-  const handleWarehousingItemSelect = (record: WarehousingItem) => {
-    if (cart.selectedList.find((item) => item.id === record.id)) {
-      setCart((cart) => ({
-        ...cart,
-        selectedList: cart.selectedList.filter((item) => item.id !== record.id),
-      }));
-
-      return;
-    }
-
-    setCart((cart) => ({
-      ...cart,
-      selectedList: [...cart.selectedList, record],
-    }));
-  };
-
-  const handleWarehousingItemSelectAll = (
-    records: WarehousingItem[],
-    totalCount: number,
-  ) => {
-    if (cart.selectedList.length === totalCount) {
-      setCart((cart) => ({ ...cart, selectedList: [] }));
-      return;
-    }
-
-    setCart((cart) => ({ ...cart, selectedList: [...records] }));
-  };
 
   return (
     <Collapse.Panel
@@ -105,9 +79,9 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
         pagination={false}
         scroll={{ x: 1400, y: 410 }}
         rowSelection={{
-          onSelect: handleWarehousingItemSelect,
+          onSelect: warehousingItemSelect,
           onSelectAll: (_, records: WarehousingItem[]) => {
-            handleWarehousingItemSelectAll(
+            warehousingItemSelectAll(
               records,
               getWarehousingItemQuery.data?.data.item_list?.length as number,
             );
