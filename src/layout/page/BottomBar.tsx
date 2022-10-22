@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
-import styled from '@emotion/styled';
+
+import { css } from '@emotion/react';
 
 interface Props {
   children?: React.ReactNode;
@@ -7,15 +8,15 @@ interface Props {
 
 function BottomBar({ children }: Props) {
   return (
-    <Inner>
+    <div css={inner}>
       <Row align="middle" justify="end">
         <Col>{children}</Col>
       </Row>
-    </Inner>
+    </div>
   );
 }
 
-const Inner = styled.div`
+const inner = css`
   height: 92px;
 
   padding: 23px 36px;

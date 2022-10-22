@@ -6,6 +6,7 @@ import { ButtonProps } from 'antd/es/button';
 interface Props extends ButtonProps {
   children: React.ReactNode;
   htmlType?: 'submit' | 'button';
+  className?: string;
 }
 
 export function SecondaryButton({
@@ -20,13 +21,9 @@ export function SecondaryButton({
   );
 }
 
-export function SecondaryIconButton({
-  children,
-  htmlType = 'button',
-  ...props
-}: Props) {
+export function SecondaryIconButton({ children, ...props }: Props) {
   return (
-    <SecondaryButton htmlType={htmlType} {...props}>
+    <SecondaryButton {...props}>
       <Plusicon css={icon} />
       {children}
     </SecondaryButton>
