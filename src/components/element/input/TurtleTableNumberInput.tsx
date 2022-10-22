@@ -33,6 +33,7 @@ export function TurtleTableWarningNumberInput({ value, ...props }: Props) {
 }
 
 const input = css`
+  width: 60%;
   height: 24px;
   border: 1px solid #d6d7da;
   border-radius: 4px;

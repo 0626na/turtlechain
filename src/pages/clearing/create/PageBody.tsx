@@ -33,45 +33,45 @@ function PageBody() {
     <>
       <div css={inner}>
         <span css={clearingDate}>결제요청 일자</span>
-        <Row justify="space-between">
+        <Row>
           <Col>
-            <Space>
-              <Button
-                css={[
-                  $button,
-                  moment().format('YYYY-MM-DD') ===
-                    moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                    greenButton,
-                ]}
-                onClick={() => {
-                  selectDate(moment().format('YYYY-MM-DD'));
-                }}
-              >
-                오늘
-              </Button>
+            <Button
+              css={[
+                $button,
+                moment().format('YYYY-MM-DD') ===
+                  moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                  greenButton,
+              ]}
+              onClick={() => {
+                selectDate(moment().format('YYYY-MM-DD'));
+              }}
+            >
+              오늘
+            </Button>
+          </Col>
 
-              <Tooltip
-                visible={tooltipVisible}
-                placement="bottom"
-                title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
-              >
-                <DatePicker
-                  onClick={() => setTooltipVisible(false)}
-                  css={[
-                    $datePicker,
-                    cart.clearingRequestDate &&
-                      moment().format('YYYY-MM-DD') !==
-                        moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                      greenDatePicker,
-                  ]}
-                  onChange={(_, date) => {
-                    selectDate(date);
-                  }}
-                  allowClear={false}
-                  placeholder="다른 일자선택"
-                />
-              </Tooltip>
-            </Space>
+          <Col>
+            <Tooltip
+              visible={tooltipVisible}
+              placement="bottom"
+              title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+            >
+              <DatePicker
+                onClick={() => setTooltipVisible(false)}
+                css={[
+                  $datePicker,
+                  cart.clearingRequestDate &&
+                    moment().format('YYYY-MM-DD') !==
+                      moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                    greenDatePicker,
+                ]}
+                onChange={(_, date) => {
+                  selectDate(date);
+                }}
+                allowClear={false}
+                placeholder="다른 일자선택"
+              />
+            </Tooltip>
           </Col>
         </Row>
       </div>
@@ -187,6 +187,7 @@ const headerCss = {
 const $button = css`
   width: 60px;
   height: 40px;
+  margin-right: 8px;
   color: #6b6d73;
   background-color: #f0f3f6;
 

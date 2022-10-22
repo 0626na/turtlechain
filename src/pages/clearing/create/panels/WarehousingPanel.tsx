@@ -89,7 +89,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         </div>
 
         <Table
-          // css={{ height: 313 }}
           scroll={{ y: 80 }}
           size="small"
           pagination={false}
@@ -149,6 +148,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
+              width: 200,
               title: () => (
                 <TextWithTooltip
                   iconPlacement="left"

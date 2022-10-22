@@ -9,6 +9,7 @@ import {
   TurtleText,
 } from '@components/element';
 import ArrowRightIcon from '@components/element/icon/ArrowRightIcon';
+import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useModal from '@hooks/useModal';
 
@@ -135,7 +136,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 totalCount={cart.resultList.length}
                 rightContent={
                   <Row>
-                    <Col style={{ marginRight: 10 }}>
+                    <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
                         전액사용
                       </FullUseButton>
@@ -162,11 +163,28 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             {
               ellipsis: true,
               title: '거래처 명',
-              render: (_, record) => record.vendor_info.vendor_name,
+              render: (_, record) => {
+                console.log(record);
+                const isMark =
+                  record.reserve_subtract_amount +
+                    (record.overpaid_payment_amount ?? 0) +
+                    record.reserve_payment_amount +
+                    +record.unpaid_amount >
+                  0;
+
+                return (
+                  <div css={{ display: 'flex', alignItems: 'center' }}>
+                    <span css={{ marginRight: 5 }}>
+                      {record.vendor_info.vendor_name}
+                    </span>
+
+                    {isMark && <TurtleIcon name="mark" />}
+                  </div>
+                );
+              },
             },
             {
               ellipsis: true,
-
               title: (
                 <TextWithTooltip
                   tooltipContent={[
@@ -196,6 +214,12 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               ellipsis: true,
               align: 'right',
               title: '결제할 금액',
+              width: 200,
+              onCell: () => ({
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
+              }),
               render: (_, record) => (
                 <TurtleTableNumberInput
                   placeholder="금액 입력"
@@ -280,5 +304,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     </>
   );
 }
+
+const marginRight = css({
+  marginRight: 8,
+});
 
 export default ClearingPanel;

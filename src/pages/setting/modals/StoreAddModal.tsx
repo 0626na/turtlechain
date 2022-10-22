@@ -12,7 +12,7 @@ import {
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
-import { TurtleContentModal } from '@components/combine';
+import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
 interface Props {
@@ -194,7 +194,11 @@ function AddModal({ visible, closeModal }: Props) {
 
         <Form.Item
           name="alimtalk_name"
-          label={t('store.alimtalk name')}
+          label={
+            <TextWithTooltip tooltipContent={['내용 입력예정']}>
+              {t('store.alimtalk name')}
+            </TextWithTooltip>
+          }
           required={false}
         >
           <TurtleFormInput placeholder={t('placeholder.alimtalk')} />
