@@ -4,11 +4,17 @@ import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props {
   visible: boolean;
-  title: string;
+  title?: string;
   children?: React.ReactNode;
   onClose: () => void;
   size?: 'small' | 'middle' | 'large';
 }
+
+const width = {
+  small: { width: 592 },
+  middle: { width: 884, height: 640 },
+  large: { width: '91.8vw', height: '100%' },
+};
 
 function TurtleContentModal({
   visible = false,
@@ -17,28 +23,18 @@ function TurtleContentModal({
   children,
   size = 'small',
 }: Props) {
-  const width = {
-    small: { width: 592 },
-    middle: { width: 884, height: 640 },
-    large: { width: '91.8vw', height: '100%' },
-  };
-
   return (
-    <>
-      {visible && (
-        <div css={modal.mask}>
-          <div css={[modal.container, width[size]]}>
-            <div css={modal.header}>
-              <h1 css={modal.headerTitle}>{title}</h1>
-              <div>
-                <TurtleIcon name="modalClose" onClick={onClose} />
-              </div>
-            </div>
-            <div css={modal.content}>{children}</div>
+    <div css={modal.mask} style={{ display: visible ? 'block' : 'none' }}>
+      <div css={[modal.container, width[size]]}>
+        <div css={modal.header}>
+          <h1 css={modal.headerTitle}>{title}</h1>
+          <div>
+            <TurtleIcon name="modalClose" onClick={onClose} />
           </div>
         </div>
-      )}
-    </>
+        <div css={modal.content}>{children}</div>
+      </div>
+    </div>
   );
 }
 
@@ -50,7 +46,7 @@ const modal = {
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 1,
+    zIndex: 2,
     background: 'rgba(0, 0, 0, 0.45)',
   }),
 
@@ -59,7 +55,6 @@ const modal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    zIndex: 1,
     transform: 'translate(-50%, -50%)',
     display: 'flex',
     flexDirection: 'column',

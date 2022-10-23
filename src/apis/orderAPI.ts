@@ -75,6 +75,7 @@ export interface StoreOrder {
   vendor_name: string;
   vendor_address: string;
   vendor_mobile: string;
+  mobile: string;
   product_name: string;
   product_option: string;
   product_price: string;
@@ -191,6 +192,7 @@ export interface CreatingOrdersItem {
   vendor_name: string;
   vendor_address: string;
   vendor_mobile: string;
+  mobile: string;
   product_name: string;
   product_option: string;
   product_count: number;

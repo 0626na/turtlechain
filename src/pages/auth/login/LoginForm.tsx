@@ -62,10 +62,20 @@ function LoginForm() {
         if (form.getFieldValue('autoLogin')) {
           autoLogin(token);
 
+          if (user_info.type === 'pi') {
+            navigate('/picker/vendor');
+            return;
+          }
+
           navigate('/home');
+        }
+
+        login(token);
+        if (user_info.type === 'pi') {
+          navigate('/picker/vendor');
           return;
         }
-        login(token);
+
         navigate('/home');
       },
     },
@@ -139,7 +149,7 @@ function LoginForm() {
         <Typography.Text type="secondary">
           {t('auth.notMember')}{' '}
         </Typography.Text>
-        <Link to="/signup" style={{ color: '#00B594' }}>
+        <Link to="/registration" style={{ color: '#00B594' }}>
           &nbsp;&nbsp;{t('auth.signUp')}
         </Link>
       </Row>
@@ -159,7 +169,7 @@ function LoginForm() {
             font-weight: 400;
           `}
         >
-          © Turtleship Corp.
+          © Turtleship Inc.
         </TurtleText>
       </Row>
     </Form>

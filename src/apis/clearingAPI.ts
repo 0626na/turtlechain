@@ -73,6 +73,16 @@ export interface ClearingItemShow {
     store_phone: Array<{
       phone: string;
     }>;
+    building: string;
+    floor: string;
+    col: string;
+    loc: string;
+    ext: string;
+    store_account: Array<{
+      bank: string;
+      account_number: string;
+      account_holder: string;
+    }>;
   };
 }
 
@@ -318,8 +328,12 @@ const removeSheet = async function (data: RequestRemoveSheet) {
  */
 
 export interface RequestGetItem {
-  sheet_id: number;
-  page_size: 10000;
+  sheet_id?: number;
+  rt_store_id?: number;
+  store_name?: string;
+  start_date?: string;
+  end_date?: string;
+  page_size: number;
 }
 
 export interface ResponseGetItem {
@@ -330,12 +344,9 @@ export interface ResponseGetItem {
   };
 }
 
-const getItem = async function (query: RequestGetItem) {
-  let url = 'clearing/item?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetItem>(url);
+const getItem = async (params: RequestGetItem) => {
+  const url = 'clearing/item';
+  const response = await v2Axios.get<ResponseGetItem>(url, { params });
 
   return response.data;
 };

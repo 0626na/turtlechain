@@ -1331,6 +1331,7 @@
   "resolved" "https://registry.npmjs.org/@emotion/hash/-/hash-0.9.0.tgz"
   "version" "0.9.0"
 
+<<<<<<< HEAD
 "@emotion/is-prop-valid@^1.2.0":
   "integrity" "sha512-3aDpDprjM0AwaxGE09bOPkNxHpBd+kA6jty3RnaEXdweX1DF1U3VQpPYb0g1IStAuK7SVQ1cy+bNBBKp4W3Fjg=="
   "resolved" "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-1.2.0.tgz"
@@ -1338,6 +1339,8 @@
   dependencies:
     "@emotion/memoize" "^0.8.0"
 
+=======
+>>>>>>> feature/registration
 "@emotion/memoize@^0.8.0":
   "integrity" "sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA=="
   "resolved" "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.8.0.tgz"
@@ -1372,6 +1375,7 @@
   "resolved" "https://registry.npmjs.org/@emotion/sheet/-/sheet-1.2.0.tgz"
   "version" "1.2.0"
 
+<<<<<<< HEAD
 "@emotion/styled@^11.10.0":
   "integrity" "sha512-V9oaEH6V4KePeQpgUE83i8ht+4Ri3E8Djp/ZPJ4DQlqWhSKITvgzlR3/YQE2hdfP4Jw3qVRkANJz01LLqK9/TA=="
   "resolved" "https://registry.npmjs.org/@emotion/styled/-/styled-11.10.0.tgz"
@@ -1383,6 +1387,8 @@
     "@emotion/serialize" "^1.1.0"
     "@emotion/utils" "^1.2.0"
 
+=======
+>>>>>>> feature/registration
 "@emotion/unitless@^0.8.0":
   "integrity" "sha512-VINS5vEYAscRl2ZUDiT3uMPlrFQupiKgHz5AA4bCH1miKBg4qtwkim1qPmJj/4WG6TreYMY111rEFsjupcOKHw=="
   "resolved" "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.8.0.tgz"
@@ -10604,10 +10610,17 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz"
   "version" "0.8.3"
 
+<<<<<<< HEAD
 "react-router-dom@^6.3.0":
   "integrity" "sha512-MY7NJCrGNVJtGp8ODMOBHu20UaIkmwD2V3YsAOUQoCXFk7Ppdwf55RdcGyrSj+ycSL9Uiwrb3gTLYSnzcRoXww=="
   "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.4.1.tgz"
   "version" "6.4.1"
+=======
+react-router-dom@^6.3.0:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.1.tgz#99c9b7c4967890701c888517475aa5d54d25760e"
+  integrity sha512-MY7NJCrGNVJtGp8ODMOBHu20UaIkmwD2V3YsAOUQoCXFk7Ppdwf55RdcGyrSj+ycSL9Uiwrb3gTLYSnzcRoXww==
+>>>>>>> feature/registration
   dependencies:
     "@remix-run/router" "1.0.1"
     "react-router" "6.4.1"

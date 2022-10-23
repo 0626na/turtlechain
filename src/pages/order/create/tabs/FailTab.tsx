@@ -41,7 +41,7 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             title: '휴대전화 번호',
-            render: (_, record) => record.phone,
+            render: (_, record) => record.mobile,
           },
           {
             title: '거래처 상품명',

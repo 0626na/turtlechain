@@ -1,158 +1,35 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
-import { TurtleBadge, TurtleText, TurtleTooltip } from '@components/element';
-import { PendingItem, SelectedWholesale } from '@store/vendorCartState';
-import { Input, message, Popover, Radio, Space, Switch, Table } from 'antd';
-import { ReactComponent as MemoIcon } from '@icons/memo.svg';
+import { MemoIcon, TurtleBadge } from '@components/element';
+import { PendingItem } from '@store/vendorCartState';
+import { Input, Popover, Radio, Space, Switch, Table } from 'antd';
+
 import { TurtleIcon } from '@components/element';
-import { Wholesale, VendorAccount } from '@apis/vendorAPI';
+
 import { css } from '@emotion/react';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
+import { TextWithTooltip } from '@components/combine';
 
 interface Props {
   isLoading: boolean;
 }
 
+//todo :  매칭성공시 성공탭의 갯수를 successList.length + pendingList.lenght로 변경할것.
 function PendingTab({ isLoading }: Props) {
-  const { cart, setCart } = useVendorCart();
+  const {
+    cart,
+    vatIncludedUpdate,
+    handleUseVendorNameUpdate,
+    memoUpdate,
+    handleWholesaleStoreSelecte,
+    handleAccountSelecte,
+  } = useVendorCart();
 
   //modal
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [selectedRow, setSelectedRow] = useState<PendingItem>();
-
-  const findWsStore = (wsStoreList: Wholesale[], wsStoreId: number) => {
-    let result = wsStoreList.find(
-      (wholesale: Wholesale) => wholesale.id === wsStoreId,
-    ) as SelectedWholesale;
-
-    result = {
-      ...result,
-      selectedAccount:
-        result?.store_account.length === 1
-          ? result.store_account[0]
-          : undefined,
-    };
-
-    return result;
-  };
-
-  const handleWholesaleStoreSelecte = (
-    wsStoreId: number,
-    target: PendingItem,
-  ) => {
-    const wsStoreInfo = findWsStore(target.ws_store_info, wsStoreId);
-
-    setCart((cart) => {
-      return {
-        ...cart,
-        pendingList: cart.pendingList.map((item) =>
-          item.vendor_code === target.vendor_code
-            ? {
-                ...target,
-                selectedWsStoreInfo: wsStoreInfo,
-                isMatching: wsStoreInfo.selectedAccount ? true : false,
-              }
-            : item,
-        ),
-      };
-    });
-  };
-
-  const handleVatIncludedUpdate = (target: PendingItem) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList?.map((item) =>
-        item.vendor_code === target.vendor_code
-          ? {
-              ...target,
-              isVatIncluded: !target.isVatIncluded,
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleUseVendorNameUpdate = (
-    newVendorName: string,
-    target: PendingItem,
-  ) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList?.map((item) =>
-        item.vendor_code === target.vendor_code
-          ? {
-              ...target,
-              useVendorName: newVendorName,
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleMemoUpdate = (newMemo: string, target: PendingItem) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList?.map((item) =>
-        item.vendor_code === target.vendor_code
-          ? {
-              ...target,
-              memo: newMemo,
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleAccountSelecte = (
-    account: VendorAccount,
-    target: PendingItem,
-  ) => {
-    setCart((cart) => ({
-      ...cart,
-      pendingList: cart.pendingList.map((item) =>
-        item.vendor_code === target.vendor_code
-          ? {
-              ...target,
-              isMatching: true,
-              selectedWsStoreInfo: {
-                ...target.selectedWsStoreInfo!,
-                selectedAccount: account,
-              },
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const convertToSuccessItem = (target: PendingItem) => {
-    return {
-      ...target,
-      ws_store_info: [
-        {
-          ...target.selectedWsStoreInfo!,
-          store_account: [
-            target.selectedWsStoreInfo?.selectedAccount as VendorAccount,
-          ],
-        },
-      ],
-    };
-  };
-
-  const passingToSuccessTab = (target: PendingItem) => {
-    setTimeout(() => {
-      setCart((cart) => ({
-        ...cart,
-        successList: [convertToSuccessItem(target), ...cart.successList],
-        pendingList: cart.pendingList.filter(
-          (item) => item.vendor_code !== target.vendor_code,
-        ),
-      }));
-
-      message.success('성공탭으로 이동');
-    }, 500);
-  };
 
   return (
     <>
@@ -164,7 +41,7 @@ function PendingTab({ isLoading }: Props) {
         onCancel={closeMemoModal}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
-          handleMemoUpdate(value, selectedRow!);
+          memoUpdate(value, selectedRow as PendingItem, 'pendingList');
           closeMemoModal();
         }}
         title="메모"
@@ -192,10 +69,9 @@ function PendingTab({ isLoading }: Props) {
             title: t('table.matching'),
             render: (_, record) => {
               if (record.isMatching) {
-                passingToSuccessTab(record);
+                // passingToSuccessTab(record);
                 return <TurtleIcon name="matching" />;
               }
-
               return <TurtleIcon name="misMatching" />;
             },
           },
@@ -371,8 +247,17 @@ function PendingTab({ isLoading }: Props) {
 
           {
             ellipsis: true,
-            width: 90,
-            title: t('table.vatIncluded'),
+            width: 150,
+            title: (
+              <TextWithTooltip
+                tooltipContent={[
+                  '당일결제 시, 부가세도 그 날에 함께 ',
+                  '전달되어야 하는 거래처를 체크해주세요. ',
+                ]}
+              >
+                {t('table.vatIncluded')}
+              </TextWithTooltip>
+            ),
             align: 'center',
             render: (_, record) => {
               return (
@@ -380,7 +265,7 @@ function PendingTab({ isLoading }: Props) {
                   css={$switch}
                   checked={record.isVatIncluded}
                   onClick={() => {
-                    handleVatIncludedUpdate(record);
+                    vatIncludedUpdate(record, 'pendingList');
                   }}
                 />
               );
@@ -390,40 +275,42 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             width: 200,
             title: (
-              <>
-                <TurtleText>{t('table.useVendorName')}</TurtleText>
-                <TurtleTooltip content="추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요." />
-              </>
+              <TextWithTooltip
+                tooltipContent={[
+                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
+                ]}
+              >
+                {t('table.useVendorName')}
+              </TextWithTooltip>
             ),
             render: (_, record) => (
               <Input
                 size="small"
                 defaultValue={record.name}
                 onChange={(e) => {
-                  handleUseVendorNameUpdate(e.currentTarget.value, record);
+                  handleUseVendorNameUpdate(
+                    e.currentTarget.value,
+                    record,
+                    'pendingList',
+                  );
                 }}
               />
             ),
           },
           {
             ellipsis: true,
-            width: 35,
+            width: 50,
             title: t('table.memo'),
             align: 'center',
-            render: (_, record) => {
-              return (
-                <MemoIcon
-                  onClick={() => {
-                    setSelectedRow(record);
-                    openMemoModal();
-                  }}
-                  css={{
-                    cursor: 'pointer',
-                    stroke: record.memo === '' ? '#A1A2A6' : '#2ab8c1',
-                  }}
-                />
-              );
-            },
+            onCell: (record) => ({
+              style: { cursor: 'pointer' },
+              onClick: (e) => {
+                e.stopPropagation();
+                setSelectedRow(record);
+                openMemoModal();
+              },
+            }),
+            render: (_, record) => <MemoIcon value={record.memo} />,
           },
         ]}
       />

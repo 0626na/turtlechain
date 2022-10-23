@@ -1,11 +1,15 @@
 import {
+  MemoIcon,
+  TurtleFormSelect,
+  TurtleIcon,
+  TurtleNumberInput,
   TurtleSearchInput,
   TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
+import { Col, Popconfirm, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
@@ -27,7 +31,7 @@ function SuccessTab({ loading, ...props }: Props) {
       value: 'mobile',
     },
   ];
-  const { cart } = useOrderCart();
+  const { cart, setCart } = useOrderCart();
   const [selectedRowId, setSelectedRowId] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState({
@@ -60,7 +64,7 @@ function SuccessTab({ loading, ...props }: Props) {
   return (
     <Tabs.TabPane {...props}>
       <Table
-        scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
+        scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
         dataSource={filteredList}
         loading={loading}
         size="small"
@@ -104,7 +108,6 @@ function SuccessTab({ loading, ...props }: Props) {
           />
         )}
         expandable={{
-          expandRowByClick: true,
           expandedRowKeys: [selectedRowId],
           onExpand: (onExpand, record) => {
             if (!onExpand) {
@@ -113,64 +116,174 @@ function SuccessTab({ loading, ...props }: Props) {
             }
             setSelectedRowId(record.rt_store_id);
           },
-          expandedRowRender: (record) => (
+          expandedRowRender: (expandedRecord) => (
             <Table
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
-              dataSource={
-                cart.successList.find(
-                  (item) => item.rt_store_id === record.rt_store_id,
-                )?.orders
-              }
-              rowKey={(record) => record.order_id!}
-              loading={
-                cart.successList.find(
-                  (item) => item.rt_store_id === record.rt_store_id,
-                ) === undefined
-              }
+              dataSource={expandedRecord.orders}
+              rowKey={(record) => record.order_id?.toString() as string}
+              loading={expandedRecord === undefined}
               pagination={false}
               columns={[
                 {
+                  width: '184px',
+                },
+                {
                   title: '거래처명',
+                  width: '136px',
                   render: (_, record) => record.vendor_name,
                 },
                 {
                   title: '거래처 주소',
-                  width: 200,
+                  width: '196px',
                   render: (_, record) => record.vendor_address,
                 },
                 {
                   title: '휴대전화번호',
-                  width: 200,
-                  render: (_, record) =>
-                    record.vendor_mobile === ''
-                      ? record.ws_store_info.length !== 0 &&
-                        record.ws_store_info[0].mobiles[0].phone
-                      : record.vendor_mobile,
+                  width: '156px',
+                  render: (_, record) => record.mobile,
                 },
                 {
                   title: '거래처 상품명',
+                  width: '216px',
                   render: (_, record) => record.product_name,
                 },
                 {
                   title: '옵션',
+                  width: '136px',
                   render: (_, record) => record.product_option,
                 },
                 {
                   title: '분류',
-                  width: 100,
-                  render: (_, record) => record.order_type,
+                  width: '136px',
+                  render: (_, record) => (
+                    <TurtleFormSelect
+                      items={[
+                        {
+                          value: '발주',
+                          name: '발주',
+                        },
+                        {
+                          value: '미송',
+                          name: '미송',
+                        },
+                        {
+                          value: '반품',
+                          name: '반품',
+                        },
+                        {
+                          value: '교환',
+                          name: '교환',
+                        },
+                        {
+                          value: '샘플',
+                          name: '샘플',
+                        },
+                        {
+                          value: '픽업',
+                          name: '픽업',
+                        },
+                        {
+                          value: '기타',
+                          name: '기타',
+                        },
+                      ]}
+                      value={record.order_type}
+                      onChange={(value: string) => {
+                        setCart({
+                          failList: cart.failList,
+                          successList: cart.successList.map((successItem) => ({
+                            rt_store_id: successItem.rt_store_id,
+                            rt_store_name: successItem.rt_store_name,
+                            orders:
+                              successItem.rt_store_id ===
+                              expandedRecord.rt_store_id
+                                ? successItem.orders.map((order) => ({
+                                    ...order,
+                                    order_type:
+                                      order.order_id === record.order_id
+                                        ? value
+                                        : order.order_type,
+                                  }))
+                                : successItem.orders,
+                          })),
+                        });
+                      }}
+                    />
+                  ),
                 },
                 {
                   title: '수량',
-                  width: 100,
-                  render: (_, record) => record.product_count,
+                  width: '136px',
+                  render: (_, record) => (
+                    <TurtleNumberInput
+                      value={record.product_count}
+                      onChange={(value) => {
+                        setCart({
+                          failList: cart.failList,
+                          successList: cart.successList.map((successItem) => ({
+                            rt_store_id: successItem.rt_store_id,
+                            rt_store_name: successItem.rt_store_name,
+                            orders:
+                              successItem.rt_store_id ===
+                              expandedRecord.rt_store_id
+                                ? successItem.orders.map((item) => ({
+                                    ...item,
+                                    product_count:
+                                      item.order_id === record.order_id &&
+                                      value !== null
+                                        ? value.toString()
+                                        : item.product_count,
+                                  }))
+                                : successItem.orders,
+                          })),
+                        });
+                      }}
+                    />
+                  ),
                 },
                 {
                   title: '공급가',
-                  width: 100,
+                  width: '136px',
                   render: (_, record) =>
                     Number(record.product_price).toLocaleString(),
+                },
+                {
+                  title: '메모',
+                  width: '136px',
+                  render: (_, record) => (
+                    <div
+                      css={css`
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      `}
+                    >
+                      <MemoIcon value="" />
+                      <Popconfirm
+                        title="정말 삭제하시겠습니까?"
+                        okText="네"
+                        cancelText="취소"
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          setCart({
+                            ...cart,
+                            successList: cart.successList.map((item) => ({
+                              ...item,
+                              orders: item.orders.filter(
+                                (order) => order.order_id !== record.order_id,
+                              ),
+                            })),
+                          });
+                        }}
+                      >
+                        <TurtleIcon name="delete" />
+                      </Popconfirm>
+                    </div>
+                  ),
                 },
               ]}
             />
@@ -179,11 +292,12 @@ function SuccessTab({ loading, ...props }: Props) {
         columns={[
           {
             title: '쇼핑몰',
-            width: 180,
+            width: '184px',
             render: (_, record) => record.rt_store_name,
           },
           {
             title: '거래처',
+            width: '488px',
             render: (_, record) =>
               `${record.orders[0].vendor_name} 외 ${
                 record.orders.length - 1
@@ -191,6 +305,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '상품',
+            width: '488px',
             render: (_, record) =>
               `${record.orders[0].product_name} 외 ${
                 record.orders.length - 1
@@ -198,7 +313,7 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '수량 합계',
-            width: 140,
+            width: '136px',
             render: (_, record) =>
               record.orders.reduce(
                 (acc, order) => acc + Number(order.product_count),
@@ -207,11 +322,35 @@ function SuccessTab({ loading, ...props }: Props) {
           },
           {
             title: '공급가 합계',
-            width: 140,
+            width: '128px',
             render: (_, record) =>
               record.orders
                 .reduce((acc, order) => acc + Number(order.product_price), 0)
                 .toLocaleString(),
+          },
+          {
+            width: '124px',
+            render: (_, record) => (
+              <Popconfirm
+                title="정말 삭제하시겠습니까?"
+                okText="네"
+                cancelText="취소"
+                onCancel={(e) => {
+                  e?.stopPropagation();
+                }}
+                onConfirm={(e) => {
+                  e?.stopPropagation();
+                  setCart({
+                    ...cart,
+                    successList: cart.successList.filter(
+                      (item) => item.rt_store_id !== record.rt_store_id,
+                    ),
+                  });
+                }}
+              >
+                <TurtleIcon name="delete" />
+              </Popconfirm>
+            ),
           },
         ]}
       />

@@ -15,7 +15,6 @@ module.exports = {
               '@primary-color': '#00AAB5',
 
               // font
-              '@font-family': "'Spoqa Han Sans Neo'",
               '@font-size-base': '14px',
               '@text-color': '#434852',
 
@@ -126,25 +125,15 @@ module.exports = {
               // Radio
               '@radio-dot-color': '#00BB88',
 
-              // Tabs
-              // '@tabs-horizontal-padding-lg': '0 0 8px 0',
-              // '@tabs-horizontal-margin': '0px',
-
               // Table
               '@table-header-bg': '#F7F8F9',
               '@table-footer-bg': '#FFFFFF',
-
-              // Divider
-              // '@divider-color': '#434852',
 
               // Message
               '@message-notice-content-bg': '#090A0ED9',
 
               // Badge
               '@badge-status-size': '8px',
-
-              // Tooltip
-              '@tooltip-bg': '#30333B',
             },
             javascriptEnabled: true,
           },

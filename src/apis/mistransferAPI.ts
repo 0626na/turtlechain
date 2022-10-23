@@ -12,45 +12,43 @@ export interface RequestCreate {
 
 export interface ResponseCreate {}
 
-const create = async function (data: RequestCreate) {
+const create = async (data: RequestCreate) => {
   const url = '/mistransfer/items';
   const response = await v2Axios.post<ResponseCreate>(url, data);
+
   return response.data;
 };
 
 export interface RequestGet {
   rt_store_id?: number;
-  start_date: string;
-  end_date: string;
   type: 'mistransfer';
 }
 
+export interface RefundItem {
+  id: number;
+  status: 'request' | 'complete' | 'pending';
+  created_date: string;
+  complete_date: string;
+  ws_store_name: string;
+  ws_bank: string;
+  ws_account_number: string;
+  ws_account_holder: string;
+  transfer_amount: number;
+  recipient_print: string;
+  memo: string;
+}
 export interface ResponseGet {
   msg: string;
   data: {
-    refund_list: Array<{
-      id: number;
-      status: string;
-      created_date: string;
-      complete_date: string;
-      ws_store_name: string;
-      ws_bank: string;
-      ws_account_number: string;
-      ws_account_holder: string;
-      transfer_amount: number;
-      recipient_print: string;
-      memo: string;
-    }>;
+    refund_list: Array<RefundItem>;
     total_count: number;
   };
 }
 
-const get = async function (query: RequestGet) {
-  let url = `/mistransfer/items?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGet>(url);
+const get = async (params: RequestGet) => {
+  const url = `/mistransfer/items`;
+  const response = await v2Axios.get<ResponseGet>(url, { params });
+
   return response.data;
 };
 
@@ -64,7 +62,7 @@ export interface ResponseUpdate {}
 
 const update = async function (data: RequestUpdate) {
   const url = `mistransfer/items/${data.item_id}`;
-  const response = await v2Axios.put<ResponseUpdate>(url, data);
+  const response = await v2Axios.patch<ResponseUpdate>(url, data);
   return response.data;
 };
 

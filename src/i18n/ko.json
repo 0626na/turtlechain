@@ -1,8 +1,9 @@
 {
-  "helmet": {
-    "turtleChain": "터틀체인",
-    "home": "HOME"
-  },
+  "turtleChain": "터틀체인",
+
+  "retailer": "쇼핑몰",
+  "home": "HOME",
+  "membershipInfo": "멤버십 정보",
 
   "vendor": {
     "create": "거래처등록",
@@ -67,7 +68,9 @@
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
-    }
+    },
+    "complete date": "결제완료 일자",
+    "price": "결제 금액"
   },
 
   "transaction": {
@@ -91,22 +94,10 @@
   },
 
   "inventory": {
-    "sellmate": {
-      "": "셀메이트",
-      "color": "orange"
-    },
-    "ezadmin": {
-      "": "이지어드민",
-      "color": "skyblue"
-    },
-    "turtlechain": {
-      "": "터틀체인",
-      "color": "gray"
-    },
-    "none": {
-      "": "없음",
-      "color": "gray"
-    }
+    "sellmate": "셀메이트",
+    "ezadmin": "이지어드민",
+    "turtlechain": "터틀체인",
+    "none": "없음"
   },
 
   "etc": {
@@ -151,8 +142,8 @@
     "transactionEmail": "이체내역 수신메일",
     "inventory": "재고관리 프로그램",
 
-    "vatIncluded": "부가세 입금",
-    "accountInfo": "계좌 정보",
+    "vatIncluded": "부가세 바로전달",
+    "accountInfo": "계좌정보",
 
     "vendorName": "거래처명",
     "useVendorName": "사용할 거래처명",
@@ -169,9 +160,9 @@
     "amount": "금액",
     "totalAmount": "금액 합계",
     "memo": "메모",
-    "mobile": "휴대전화번호",
+    "mobile": "휴대전화 번호",
     "retailerStoreInput": "쇼핑몰 입력값",
-
+    "retailerStoreName": "쇼핑몰명",
     "retailerStoreURL": "쇼핑몰 URL",
     "matching": "매칭",
     "wsStoreNumber": "매장번호",
@@ -202,14 +193,18 @@
     "totalVendorCount": "총 거래처 수",
     "subtract": "차감",
     "refund": "환불",
-    "unpaid": "결제"
+    "unpaid": "결제",
+    "storeName": "쇼핑몰명"
   },
 
   "button": {
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
-    "addTransaction": "과거매입 추가하기"
+    "addTransaction": "과거매입 추가하기",
+    "uploadFile": "파일 첨부하기",
+    "findAddress": "주소 찾기",
+    "duplicatedCheck": "중복확인"
   },
 
   "message": {
@@ -220,7 +215,14 @@
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
     "success update": "성공적으로 수정하였습니다.",
-    "success signup": "가입 신청이 완료 되었습니다."
+    "success signup": "가입 신청이 완료 되었습니다.",
+    "success update mall": "쇼핑몰이 추가 되었습니다.",
+    "not match password": "비밀번호가 일치하지 않습니다.",
+    "success create auth num": "인증번호를 생성하였습니다.",
+    "success verify auth num": "인증번호를 확인하였습니다.",
+    "expired auth time": "인증시간이 만료되었습니다.",
+    "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
+    "success create mistransfer": "오입금 반환요청을 성공했습니다."
   },
 
   "biz role": "직책",
@@ -236,11 +238,74 @@
 
   "go home": "홈으로 돌아가기",
   "next": "다음",
-  "signup": "가입 신청하기",
+  "signUp": "가입 신청하기",
   "phone": "휴대전화 번호",
   "id": "아이디",
   "password": "비밀번호",
   "confirm password": "비밀번호 확인",
+  "new password": "새 비밀번호",
+  "confirm new password": "새 비밀번호 확인",
   "email": "이메일",
-  "user name": "사용자명"
+  "user name": "이름",
+
+  "placeholder": {
+    "storeUrl": "쇼핑몰 url을 입력해주세요.",
+    "store": "쇼핑몰명을 입력하세요.",
+    "alimtalk": "알림톡명을 입력해주세요.",
+    "mobile": "휴대전화 번호를 입력해주세요.",
+    "mistransfer refundAmt": "오입금 환불 요청금액을 입력해주세요",
+    "request memo": "오입금 환불 요청사유를 입력해주세요",
+    "vendorName": "거래처명을 입력해주세요"
+  },
+
+  "find id": "아이디 찾기",
+  "auth phone": "인증하기",
+  "login": "로그인",
+  "reset password": "비밀번호 재설정",
+
+  "description": {
+    "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
+    "required item": "필수 입력값입니다.",
+    "really delete": "정말 취소할까요?",
+    "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
+    "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
+  },
+
+  "user": {
+    "": "직책",
+    "rt": "대표",
+    "ub": "직원",
+    "pi": "사입"
+  },
+  "agreement": {
+    "all": "전체 동의",
+    "service_use": "서비스 이용약관 동의(필수)",
+    "personal_information": "개인정보 수집 및 이용 동의(필수)",
+    "third_party": "제 3자 정보제공 동의",
+    "event_notificaton": "이벤트 소식 등 알림 정보받기"
+  },
+
+  "mistransfer": {
+    "list": "오입금 환불내역",
+    "create": "오입금 환불요청",
+    "status": {
+      "": "진행상태",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
+    },
+    "created date": "요청 일자",
+    "accountInfo": "오입금 계좌정보",
+    "recipient_accountInfo": "환불받을 계좌정보",
+    "recipient print": "받는분 통장인쇄",
+    "refund_memo": "환불 사유",
+    "request memo": "요청 사유",
+    "request price": "요청 금액",
+
+    "management": "오입금 반환 관리",
+    "complete date": "오입금 환불 처리날짜"
+  },
+
+  "yes": "네",
+  "no": "아니요"
 }

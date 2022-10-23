@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   PrimaryButton,
-  SecondaryButton,
+  SecondaryIconButton,
   TertiaryButton,
   TurtleDropdown,
   TurtleIcon,
@@ -24,7 +24,7 @@ import { useMutation } from 'react-query';
 import orderAPI from '@apis/orderAPI';
 
 function PageBody() {
-  const { cart, ready } = useOrderCart();
+  const { cart, ready, failList } = useOrderCart();
 
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
@@ -87,7 +87,9 @@ function PageBody() {
             onClick={openSettingColumnModal}
           />,
           <TurtleDropdown
-            triggerButton={<SecondaryButton>발주 추가하기</SecondaryButton>}
+            triggerButton={
+              <SecondaryIconButton>발주 추가하기</SecondaryIconButton>
+            }
             items={[
               {
                 key: '0',
@@ -131,7 +133,7 @@ function PageBody() {
           />
           <FailTab
             key="fail"
-            tab={`실패(${cart.failList.length})`}
+            tab={`실패(${failList.length})`}
             loading={false}
           />
         </TurtleTabs>

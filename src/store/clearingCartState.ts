@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { ClearingInfo } from '@apis/clearingAPI';
+import moment from 'moment';
 // import { AdjustmentItemShow } from '@apis/adjustmentAPI';
 
 export interface ClearingCartState {
@@ -14,7 +15,7 @@ export interface ClearingCartState {
 export const clearingCartState = atom<ClearingCartState>({
   key: 'clearingCart',
   default: {
-    clearingRequestDate: '',
+    clearingRequestDate: moment().format('YYYY-MM-DD'),
     resultList: [],
     adjustmentSubtractList: [], // 매입차감
     reserveSubtractList: [], // 미송 차감

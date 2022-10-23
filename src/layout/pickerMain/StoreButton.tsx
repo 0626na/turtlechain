@@ -1,12 +1,13 @@
 import { Button } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon, TurtleImg } from '@components/element';
+import { ArrowRightIcon } from '@components/element';
 import { css } from '@emotion/react';
-import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 
 import { useNavigate } from 'react-router-dom';
 import useUser from '@hooks/useUser';
+import { ReactComponent as StoreIcon } from '@icons/store.svg';
+import pickerAPI from '@apis/pickerAPI';
 
 function StoreButton() {
   const navigate = useNavigate();
@@ -14,34 +15,34 @@ function StoreButton() {
   const { user } = useUser();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getStoreListQuery = useQuery(
-    ['getStoreList'],
-    retailerStoreAPI.getList,
-    {
-      enabled: !!user.id,
-      onSuccess: (data) => {
-        fillStoreList(data.store_list);
-        selectDefaultStore(data.store_list);
-      },
+  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+    enabled: !!user.id,
+    onSuccess: (data) => {
+      fillStoreList(data.data.store_list);
+      selectDefaultStore(data.data.store_list);
     },
-  );
+  });
 
   return (
     <Button
-      css={storeButton}
+      css={buttonCss.self}
       onClick={() => {
         navigate('/picker/setting');
       }}
     >
-      <div css={storeButtonLeft}>
-        <div>
-          <TurtleImg css={buttonImg} name="Logo" />
+      <div css={buttonCss.container}>
+        <div css={buttonCss.logoContainer}>
+          <div css={buttonCss.logo}>
+            <StoreIcon css={buttonCss.icon} />
+          </div>
         </div>
-        <div css={buttonContent}>
-          <span css={contentTop}>연결된 쇼핑몰</span>
-          <span css={contentBottom}>{store.selected?.name} 외 19개</span>
+
+        <div css={buttonCss.textContainer}>
+          <span css={buttonCss.topText}>연결된 쇼핑몰</span>
+          <span css={buttonCss.bottomText}>{store.selected?.name} 외 19개</span>
         </div>
       </div>
+
       <div>
         <ArrowRightIcon value="#AAADB3" />
       </div>
@@ -49,54 +50,66 @@ function StoreButton() {
   );
 }
 
-const storeButton = css`
-  color: #fff;
-  padding: 8px 12px;
-  width: 216px;
-  height: 60px;
+const buttonCss = {
+  self: css({
+    color: '#fff',
+    padding: '8px 12px',
+    width: 216,
+    height: 60,
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.1);
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
 
-  // antd 기본 스타일 제거
-  &:focus,
-  &:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-`;
+    // antd 기본 스타일 제거
+    '&:focus,&:hover': {
+      color: '#fff',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  }),
 
-const storeButtonLeft = css`
-  display: flex;
-  align-items: center;
-`;
+  container: css({
+    display: 'flex',
+  }),
 
-const buttonContent = css`
-  margin-left: 12px;
-  text-align: left;
-`;
+  logoContainer: css({
+    position: 'relative',
+    borderRadius: '50%',
+    background: '#fff',
+    width: 44,
+    height: 44,
+    overflow: 'hidden',
+  }),
+  logo: css({
+    position: 'absolute',
+    top: 11,
+    left: 8,
+  }),
+  icon: css({
+    width: 34,
+    height: 34,
+    fill: '#13BCB2',
+  }),
 
-const contentTop = css`
-  display: block;
-  color: #a1a2a6;
-  font-size: 12px;
-`;
-
-const contentBottom = css`
-  display: block;
-`;
-
-const buttonImg = css`
-  border-radius: 50%;
-  background: yellow;
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-`;
+  textContainer: css({
+    textAlign: 'left',
+    marginLeft: 12,
+  }),
+  topText: css({
+    fontSize: 12,
+    color: '#a1a2a6',
+  }),
+  bottomText: css({
+    width: 120,
+    display: 'block',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }),
+};
 
 export default StoreButton;

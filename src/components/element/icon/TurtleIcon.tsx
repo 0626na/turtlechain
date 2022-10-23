@@ -42,12 +42,20 @@ import { ReactComponent as TutorialIcon } from '@icons/tutorial.svg';
 import { ReactComponent as ClearingIcon } from '@icons/clearing.svg';
 import { ReactComponent as PlusIcon } from '@icons/plus.svg';
 
+import { ReactComponent as ExcludeWonIcon } from '@icons/excludeWon.svg';
+import { ReactComponent as IncludeWonIcon } from '@icons/includeWon.svg';
+import { ReactComponent as CoinIcon } from '@icons/coin.svg';
+import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
+import { ReactComponent as UserCheckIcon } from '@icons/userCheck.svg';
+import { ReactComponent as UserLineIcon } from '@icons/userLine.svg';
+import { ReactComponent as MarkIcon } from '@icons/mark.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'mark'
     | 'delete'
     | 'download'
     | 'modalClose'
@@ -82,7 +90,13 @@ interface Props {
     | 'clearing'
     | 'setting'
     | 'tutorial'
-    | 'plus';
+    | 'plus'
+    | 'includeWon'
+    | 'excludeWon'
+    | 'coin'
+    | 'rightTriangle'
+    | 'userCheck'
+    | 'userLine';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -91,6 +105,58 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'mark') {
+    return <MarkIcon />;
+  }
+
+  if (name === 'rightTriangle') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <RightTriangleIcon />
+      </div>
+    );
+  }
+
+  if (name === 'userCheck') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UserCheckIcon />
+      </div>
+    );
+  }
+
+  if (name === 'userLine') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <UserLineIcon />
+      </div>
+    );
+  }
+
+  if (name === 'coin') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <CoinIcon />
+      </div>
+    );
+  }
+
+  if (name === 'includeWon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <IncludeWonIcon />
+      </div>
+    );
+  }
+
+  if (name === 'excludeWon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <ExcludeWonIcon />
+      </div>
+    );
+  }
 
   if (name === 'plus') {
     return (
@@ -215,7 +281,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   if (name === 'delete') {
     return (
       <div
-        css={[iconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
+        css={[removeIconContainer, { stroke: danger ? 'red' : '#A1A2A6' }]}
         onClick={handleClick}
       >
         <RemoveIcon />
@@ -382,4 +448,11 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
+const removeIconContainer = css`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+`;
 export default TurtleIcon;

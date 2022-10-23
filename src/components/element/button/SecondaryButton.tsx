@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Button } from 'antd';
-import TurtleText from '../TurtleText';
+
 import { ReactComponent as Plusicon } from '@icons/plus.svg';
 import { ButtonProps } from 'antd/es/button';
 interface Props extends ButtonProps {
@@ -8,12 +8,24 @@ interface Props extends ButtonProps {
   htmlType?: 'submit' | 'button';
 }
 
-function SecondaryButton({ children, htmlType = 'button', ...props }: Props) {
+export function SecondaryButton({
+  children,
+  htmlType = 'button',
+  ...props
+}: Props) {
   return (
     <Button css={button} htmlType={htmlType} {...props}>
-      <Plusicon css={icon} />
-      <TurtleText>{children}</TurtleText>
+      {children}
     </Button>
+  );
+}
+
+export function SecondaryIconButton({ children, ...props }: Props) {
+  return (
+    <SecondaryButton {...props}>
+      <Plusicon css={icon} />
+      {children}
+    </SecondaryButton>
   );
 }
 
@@ -22,7 +34,7 @@ const icon = css`
 `;
 
 const button = css`
-  width: 160px;
+  min-width: 160px;
   height: 40px;
 
   display: inline-flex;
@@ -57,5 +69,3 @@ const button = css`
     border-color: #babcc0;
   }
 `;
-
-export default SecondaryButton;

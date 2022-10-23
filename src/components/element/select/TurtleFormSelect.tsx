@@ -1,8 +1,8 @@
 import { Select } from 'antd';
 
-import styled from '@emotion/styled';
 import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
 import React from 'react';
+import { css } from '@emotion/react';
 
 interface Props {
   value?: string;
@@ -15,7 +15,8 @@ interface Props {
 
 function TurtleFormSelect({ items, ...props }: Props) {
   return (
-    <StyledSelect
+    <Select
+      css={select}
       {...props}
       bordered={false}
       suffixIcon={<ArrowDown />}
@@ -36,11 +37,11 @@ function TurtleFormSelect({ items, ...props }: Props) {
           {item.name}
         </Select.Option>
       ))}
-    </StyledSelect>
+    </Select>
   );
 }
 
-const StyledSelect = styled(Select)`
+const select = css`
   height: 36px;
   background-color: #fcfcfc;
   border-radius: 8px;

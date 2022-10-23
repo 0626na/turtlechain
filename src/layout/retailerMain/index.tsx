@@ -16,11 +16,11 @@ function MainLayout() {
   }
 
   if (user.type === 'pi') {
-    return <Navigate to="/picker/home" replace={true} />;
+    return <Navigate to="/picker/vendor" replace={true} />;
   }
 
   return (
-    <Layout>
+    <Layout css={{ minWidth: 1100 }}>
       <Sider />
       <Content>
         <Outlet />

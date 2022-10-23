@@ -1,5 +1,5 @@
 import PrimaryButton from './button/PrimaryButton';
-import SecondaryButton from './button/SecondaryButton';
+import { SecondaryButton, SecondaryIconButton } from './button/SecondaryButton';
 import TertiaryButton from './button/TertiaryButton';
 import AnswerButton from './button/AnswerButton';
 import HistoryButton from './button/HistoryButton';
@@ -38,11 +38,16 @@ import SelectButton from './button/SelectButton';
 import ArrowRightIcon from './icon/ArrowRightIcon';
 import GridIcon from './icon/GridIcon';
 import SpecialButton from './button/SpecialButton';
+import {
+  TurtleTableNumberInput,
+  TurtleTableWarningNumberInput,
+} from './input/TurtleTableNumberInput';
 
 export {
   //buttons
   PrimaryButton,
   SecondaryButton,
+  SecondaryIconButton,
   TertiaryButton,
   AnswerButton,
   HistoryButton,
@@ -56,7 +61,8 @@ export {
   TurtleFormInput,
   TurtleFormSearchInput,
   TurtleNumberInput,
-
+  TurtleTableNumberInput,
+  TurtleTableWarningNumberInput,
   //RangePicker
   TurtlePrimaryRangePicker,
   TurtleSecondaryRangePicker,

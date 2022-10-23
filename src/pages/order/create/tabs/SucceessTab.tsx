@@ -1,4 +1,3 @@
-import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import {
   TurtleSearchInput,
   TurtleSearchSelect,
@@ -7,7 +6,7 @@ import {
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -29,48 +28,44 @@ function SuccessTab({ loading, ...props }: Props) {
     },
   ];
   const { cart } = useOrderCart();
-  const [selectedRowOrder, setSelectedRowOrder] =
-    useState<StoreOrderItemExcelParsing>({
-      rt_store_id: 0,
-      rt_store_name: '',
-      orders: [],
-    });
 
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
     search_string: '',
   });
 
-  const filteredList = useMemo(
-    () =>
-      cart.successList.filter((item) => {
-        const { type, search_string } = searchQuery;
-        if (type === 'name') {
-          return item.rt_store_name.toLowerCase().includes(search_string);
-        }
-        if (type === 'vendor_name') {
-          return item.orders.filter((item) => {
-            return item.vendor_name.toLowerCase().includes(search_string);
-          });
-        }
-        if (type === 'mobile') {
-          return item.orders.filter((item) => {
-            return item.vendor_mobile.toLowerCase().includes(search_string);
-          });
-        }
-        return true;
-      }),
-    [searchQuery, cart.successList],
-  );
+  // const filteredList = useMemo(
+  //   () =>
+  //     cart.successList.filter((item) => {
+  //       const { type, search_string } = searchQuery;
+  //       if (type === 'name') {
+  //         return item.rt_store_name.toLowerCase().includes(search_string);
+  //       }
+  //       if (type === 'vendor_name') {
+  //         return item.orders.filter((item) => {
+  //           return item.vendor_name.toLowerCase().includes(search_string);
+  //         });
+  //       }
+  //       if (type === 'mobile') {
+  //         return item.orders.filter((item) => {
+  //           return item.vendor_mobile.toLowerCase().includes(search_string);
+  //         });
+  //       }
+  //       return true;
+  //     }),
+  //   [searchQuery, cart.successList],
+  //);
 
   return (
     <Tabs.TabPane {...props}>
       <Table
         scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
-        dataSource={filteredList}
+        dataSource={
+          cart.successList.length !== 0 ? cart.successList[0].orders : []
+        }
         loading={loading}
         size="small"
-        rowKey={(record) => record.rt_store_id}
+        rowKey={(record) => record.order_id!}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
@@ -109,120 +104,48 @@ function SuccessTab({ loading, ...props }: Props) {
             }
           />
         )}
-        expandable={{
-          expandRowByClick: true,
-          expandedRowKeys: [selectedRowOrder?.rt_store_id ?? -1],
-          onExpand: (onExpand, record) => {
-            if (!onExpand) {
-              setSelectedRowOrder({
-                rt_store_id: 0,
-                rt_store_name: '',
-                orders: [],
-              });
-              return;
-            }
-            setSelectedRowOrder({
-              rt_store_id: record.rt_store_id,
-              rt_store_name: record.rt_store_name,
-              orders: record.orders.map<StoreOrder>((order, index) => {
-                return {
-                  ...order,
-                  order_id: index,
-                };
-              }),
-            });
-          },
-          expandedRowRender: () => (
-            <Table
-              size="small"
-              scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
-              dataSource={selectedRowOrder?.orders}
-              rowKey={(record) => record.order_id!}
-              loading={selectedRowOrder === undefined}
-              pagination={false}
-              columns={[
-                {
-                  title: '거래처명',
-                  render: (_, record) => record.vendor_name,
-                },
-                {
-                  title: '거래처 주소',
-                  width: 200,
-                  render: (_, record) => record.vendor_address,
-                },
-                {
-                  title: '휴대전화번호',
-                  width: 200,
-                  render: (_, record) =>
-                    record.vendor_mobile === ''
-                      ? record.ws_store_info.length !== 0 &&
-                        record.ws_store_info[0].mobiles[0].phone
-                      : record.vendor_mobile,
-                },
-                {
-                  title: '거래처 상품명',
-                  render: (_, record) => record.product_name,
-                },
-                {
-                  title: '옵션',
-                  render: (_, record) => record.product_option,
-                },
-                {
-                  title: '분류',
-                  width: 100,
-                  render: (_, record) => record.order_type,
-                },
-                {
-                  title: '수량',
-                  width: 100,
-                  render: (_, record) => record.product_count,
-                },
-                {
-                  title: '공급가',
-                  width: 100,
-                  render: (_, record) =>
-                    Number(record.product_price).toLocaleString(),
-                },
-              ]}
-            />
-          ),
-        }}
         columns={[
           {
-            title: '쇼핑몰',
-            width: 180,
-            render: (_, record) => record.rt_store_name,
+            title: '거래처명',
+            render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처',
-            render: (_, record) =>
-              `${record.orders[0].vendor_name} 외 ${
-                record.orders.length - 1
-              }개`,
+            title: '거래처 주소',
+            width: 200,
+            render: (_, record) => record.vendor_address,
           },
           {
-            title: '상품',
+            title: '휴대전화번호',
+            width: 200,
             render: (_, record) =>
-              `${record.orders[0].product_name} 외 ${
-                record.orders.length - 1
-              }건`,
+              record.vendor_mobile === ''
+                ? record.ws_store_info.length !== 0 &&
+                  record.ws_store_info[0].mobiles[0].phone
+                : record.vendor_mobile,
           },
           {
-            title: '수량 합계',
-            width: 140,
-            render: (_, record) =>
-              record.orders.reduce(
-                (acc, order) => acc + Number(order.product_count),
-                0,
-              ),
+            title: '거래처 상품명',
+            render: (_, record) => record.product_name,
           },
           {
-            title: '공급가 합계',
-            width: 140,
+            title: '옵션',
+            render: (_, record) => record.product_option,
+          },
+          {
+            title: '분류',
+            width: 100,
+            render: (_, record) => record.order_type,
+          },
+          {
+            title: '수량',
+            width: 100,
+            render: (_, record) => record.product_count,
+          },
+          {
+            title: '공급가',
+            width: 100,
             render: (_, record) =>
-              record.orders
-                .reduce((acc, order) => acc + Number(order.product_price), 0)
-                .toLocaleString(),
+              Number(record.product_price).toLocaleString(),
           },
         ]}
       />

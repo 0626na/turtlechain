@@ -8,7 +8,7 @@ import {
 import { Col, Form, message, Popconfirm, Radio, Row, Upload } from 'antd';
 import { t } from 'i18next';
 
-import Card from '../card/UserCard';
+import Card from '../cards/UserCard';
 import { useMutation, useQuery } from 'react-query';
 import retailerCompanyAPI, { Company } from '@apis/retailerCompanyAPI';
 

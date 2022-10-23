@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   PrimaryButton,
-  SecondaryButton,
+  SecondaryIconButton,
   TertiaryButton,
   TurtleConfirmModal,
   TurtleDropdown,
@@ -128,7 +128,9 @@ function PageBody() {
             }}
           />,
           <TurtleDropdown
-            triggerButton={<SecondaryButton>상품 추가하기</SecondaryButton>}
+            triggerButton={
+              <SecondaryIconButton>상품 추가하기</SecondaryIconButton>
+            }
             items={[
               {
                 key: '0',

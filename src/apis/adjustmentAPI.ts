@@ -19,7 +19,7 @@ export interface AdjustmentItem {
   is_vat_included: boolean;
 
   product_count: number;
-  type: 'reserve' | 'takeback' | 'exchange' | 'refund' | '';
+  type?: 'reserve' | 'takeback' | 'exchange' | 'refund';
   memo?: string | undefined;
   // 매입조정 상품 등록 최대개수
   product_count_max?: number;
@@ -62,8 +62,8 @@ export interface RequestGetList {
   end_date: string;
   start_date: string;
 
-  type: 'name' | 'vendor_name' | 'product_name';
-  search_string: string;
+  type?: 'name' | 'vendor_name' | 'product_name';
+  search_string?: string;
 
   page?: number;
 }
@@ -155,6 +155,7 @@ export interface RequestUpdate {
   id: number;
 
   memo?: string;
+  is_inactive?: 1;
 
   // for 매입조정 처리
   process_count?: number;

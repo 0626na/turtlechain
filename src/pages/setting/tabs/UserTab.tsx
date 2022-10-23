@@ -11,7 +11,7 @@ import { t } from 'i18next';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
-import UserCard from '../card/UserCard';
+import UserCard from '../cards/UserCard';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
@@ -50,15 +50,12 @@ function UserTab() {
   );
 
   useEffect(() => {
-    resetStates(user);
-  }, [resetStates, user]);
-
-  useEffect(() => {
-    if (searchParams.get('tab') !== 'user') {
-      hideButtons();
+    if (searchParams.get('tab') === 'user') {
       resetStates(user);
       return;
     }
+
+    hideButtons();
   }, [resetStates, searchParams, user]);
 
   return (

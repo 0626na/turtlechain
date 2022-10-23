@@ -8,13 +8,10 @@ function useClearingCart() {
 
   // 결제요청일을 선택한다.
   const selectDate = (date: string) => {
-    setCart({
+    setCart((cart) => ({
+      ...cart,
       clearingRequestDate: date,
-      reservePaymentList: [],
-      reserveSubtractList: [],
-      adjustmentSubtractList: [],
-      resultList: [],
-    });
+    }));
   };
 
   // 당일 미송인 거래처를 filter

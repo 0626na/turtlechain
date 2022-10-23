@@ -6,8 +6,9 @@ import { SearchFilter } from '@components/combine';
 import InputModal from '@components/combine/modal/InputModal';
 import {
   MemoIcon,
-  SecondaryButton,
+  SecondaryIconButton,
   TurtleCard,
+  TurtleConfirmModal,
   TurtleDivider,
   TurtleDropdown,
   TurtleIcon,
@@ -22,52 +23,44 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Col, message, Pagination, Popconfirm, Row, Table } from 'antd';
+import { Col, message, Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import ExchangeRefundModal from './modal/AddExchangeRefundModal';
-import AddReserveModal from './modal/AddReserveModal';
-import AdjustmentProcessModal from './modal/AdjustmentProcessModal';
-import DetailModal from './modal/DetailModal';
+import ExchangeRefundModal from './modals/AddExchangeRefundModal';
+import AddReserveModal from './modals/AddReserveModal';
+import AdjustmentProcessModal from './modals/ProcessModal';
+import DetailModal from './modals/DetailModal';
 
 function PageBody() {
   const { store } = useStore();
-
   const [selectedRow, setSelectedRow] = useState<AdjustmentItemShow>();
   const [addReserveModalVisible, addReserveModalOpen, addReserveModalClose] =
     useModal();
-
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
-
   const [
     addExchangeRefundModalVisible,
     addExchangeRefundModalOpen,
     addExchangeRefundModalClose,
   ] = useModal();
-
   const [adjustmentModalVisible, adjustmentModalOpen, adjustmentModalClose] =
     useModal();
-
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
+  const [removeModalVisible, removeModalOpen, removeModalClose] = useModal();
 
-  // 매입조정 검색 조건
+  // 교환/반품/미송 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: null,
-
     is_cleared: '',
-
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
-
     type: 'vendor_name',
     search_string: '',
-
     page: 1,
   });
 
-  // 매입조정 검색 요청
+  // 교환/반품/미송 검색 요청
   const getAdjustmentListQuery = useQuery(
     ['getAdjustmentList', searchQuery],
     () => adjustmentAPI.getList(searchQuery),
@@ -76,7 +69,7 @@ function PageBody() {
     },
   );
 
-  // 매입조정 정보 수정 요청
+  // 교환/반품/미송 정보 수정 요청
   const updateAdjustmentMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       message.success('성공적으로 업데이트 되었습니다.');
@@ -86,19 +79,15 @@ function PageBody() {
     },
   });
 
-  // 매입조정 삭제 요청
+  // 교환/반품/미송 삭제 요청
   const removeAdjustmentMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       message.success('성공적으로 삭제되었습니다.');
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
+      removeModalClose();
     },
   });
-
-  const loading =
-    getAdjustmentListQuery.isLoading ||
-    updateAdjustmentMutation.isLoading ||
-    removeAdjustmentMutation.isLoading;
 
   useEffect(() => {
     setSearchQuery((searchQuery) => ({
@@ -135,7 +124,7 @@ function PageBody() {
       />
 
       {/*
-       *  매입조정 처리 모달
+       *  교환/반품/미송 처리 모달
        */}
       <AdjustmentProcessModal
         selectedRow={selectedRow as AdjustmentItemShow}
@@ -148,8 +137,10 @@ function PageBody() {
        */}
       <InputModal
         visible={memoModalVisible}
-        loading={loading}
-        onCancel={loading ? () => {} : memoModalClose}
+        loading={updateAdjustmentMutation.isLoading}
+        onCancel={
+          updateAdjustmentMutation.isLoading ? () => {} : memoModalClose
+        }
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
           updateAdjustmentMutation.mutate({
@@ -164,11 +155,29 @@ function PageBody() {
         ]}
         placeholder="ex. 영수증 이중으로 확인 또 확인!"
       />
+      {/*
+       * 교환/반품/미송 삭제 모달
+       */}
+      <TurtleConfirmModal
+        title={t('description.really delete')}
+        description={[
+          t('description.can not go back to the past after the cancellation.'),
+        ]}
+        okText={t('yes')}
+        visible={removeModalVisible}
+        loading={removeAdjustmentMutation.isLoading}
+        onCancel={removeModalClose}
+        onOk={() => {
+          removeAdjustmentMutation.mutate({
+            id: selectedRow?.id as number,
+            is_inactive: 1,
+          });
+        }}
+      />
 
       <PageHeader title="교환/반품/미송" />
-
       <PageTitle
-        title="매입조정 현황"
+        title="현황"
         buttons={[
           <TurtleDropdown
             items={[
@@ -189,14 +198,15 @@ function PageBody() {
                 },
               },
             ]}
-            triggerButton={<SecondaryButton>매입조정 추가</SecondaryButton>}
+            triggerButton={
+              <SecondaryIconButton>교환/반품/미송 추가</SecondaryIconButton>
+            }
           />,
         ]}
       />
-
       <PageContent>
         {/*
-         *  매입조정 현황
+         *  교환/반품/미송 현황
          */}
 
         <TurtleCard
@@ -226,7 +236,7 @@ function PageBody() {
 
         <Table
           size="small"
-          loading={loading}
+          loading={getAdjustmentListQuery.isLoading}
           dataSource={getAdjustmentListQuery.data?.data.adjustment_list}
           rowKey={(record) => record.id}
           pagination={false}
@@ -236,7 +246,7 @@ function PageBody() {
               detailModalOpen();
             },
           })}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 'auto', y: 'auto' }}
           title={() => (
             <TurtleTableTitle
               totalCount={
@@ -328,18 +338,15 @@ function PageBody() {
               ellipsis: true,
               width: 70,
               title: t('table.progressStatus'),
-              render: (_, record) => {
-                const { is_cleared } = record;
-                return (
-                  <div>
-                    {is_cleared ? (
-                      <TurtleTag color="cyan">마감</TurtleTag>
-                    ) : (
-                      <TurtleTag color="orange">대기</TurtleTag>
-                    )}
-                  </div>
-                );
-              },
+              render: (_, { is_cleared }) => (
+                <div>
+                  {is_cleared ? (
+                    <TurtleTag color="cyan">마감</TurtleTag>
+                  ) : (
+                    <TurtleTag color="orange">대기</TurtleTag>
+                  )}
+                </div>
+              ),
             },
             {
               ellipsis: true,
@@ -398,62 +405,59 @@ function PageBody() {
               width: 50,
               align: 'center',
               title: t('table.memo'),
-              render: (_, record) => (
-                <MemoIcon
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedRow(record);
-                    memoModalOpen();
-                  }}
-                  value={record.memo}
-                />
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  memoModalOpen();
+                },
+              }),
+              render: (_, record) => <MemoIcon value={record.memo} />,
             },
             {
               ellipsis: true,
               width: 100,
               align: 'center',
-              render: (_, record) =>
-                record.count_left !== 0 &&
-                // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
-                ((record.type === 'reserve' &&
-                  moment
-                    .duration(moment().diff(moment(record.created_date)))
-                    .asHours() > 19) ||
-                  record.type !== 'reserve') && (
-                  <ProcessButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedRow(record);
-                      adjustmentModalOpen();
-                    }}
-                  >
-                    처리하기
-                  </ProcessButton>
-                ),
+              onCell: () => ({
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
+              }),
+              render: (_, record) => (
+                <>
+                  {record.count_left !== 0 &&
+                    // 미송항목 일시, 등록날짜 기준 오후 7시 이후에만 활성화
+                    ((record.type === 'reserve' &&
+                      moment
+                        .duration(moment().diff(moment(record.created_date)))
+                        .asHours() > 19) ||
+                      record.type !== 'reserve') && (
+                      <ProcessButton
+                        onClick={() => {
+                          setSelectedRow(record);
+                          adjustmentModalOpen();
+                        }}
+                      >
+                        처리하기
+                      </ProcessButton>
+                    )}
+                </>
+              ),
             },
             {
               ellipsis: true,
               width: 30,
               align: 'center',
-              render: (_, record) => (
-                <Popconfirm
-                  title="정말 삭제하시겠습니까?"
-                  okText="네"
-                  cancelText="취소"
-                  onCancel={(e) => {
-                    e?.stopPropagation();
-                  }}
-                  onConfirm={(e) => {
-                    e?.stopPropagation();
-                    removeAdjustmentMutation.mutate({
-                      id: record.id,
-                    });
-                  }}
-                >
-                  <TurtleIcon name="delete" />
-                </Popconfirm>
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  removeModalOpen();
+                },
+              }),
+              render: (_) => <TurtleIcon name="delete" />,
             },
           ]}
         />

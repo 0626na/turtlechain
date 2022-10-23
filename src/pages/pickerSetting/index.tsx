@@ -8,8 +8,8 @@ import PageBody from './PageBody';
 function PickerSetting() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('helmet.home')}`} />
-      <PageHeader title="" />
+      <Helmet title={`${t('helmet.turtleChain')} - ${t('etc.setting')}`} />
+      <PageHeader title="설정" />
       <PageBody />
     </>
   );

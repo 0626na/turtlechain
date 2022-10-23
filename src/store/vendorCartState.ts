@@ -1,31 +1,27 @@
+import { atom } from 'recoil';
 import {
   ParsedVendor,
-  ParesdResult,
   Wholesale,
   VendorAccount,
+  ParesdResult,
 } from '@apis/vendorAPI';
-
-import { atom } from 'recoil';
 
 export interface SuccessItem extends ParsedVendor {
   isVatIncluded: boolean;
   useVendorName: string;
-  memo: string;
+  memo?: string;
 }
 
-export interface SelectedWholesale extends Wholesale {
-  selectedAccount?: VendorAccount;
-}
-
-export interface PendingItem extends ParsedVendor {
+export interface PendingItem extends SuccessItem {
   isMatching: boolean;
-  isVatIncluded: boolean;
-  useVendorName: string;
-  memo: string;
   selectedWsStoreInfo?: SelectedWholesale;
 }
 
 interface FailItem extends ParsedVendor {}
+
+export interface SelectedWholesale extends Wholesale {
+  selectedAccount?: VendorAccount;
+}
 
 export interface VendorCartState {
   successList: SuccessItem[];

@@ -17,13 +17,14 @@ import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import StoreCard from '../card/StoreCard';
-import AddModal from '../modal/AddModal';
-import DetailModal from '../modal/DetailModal';
+import StoreCard from '../cards/StoreCard';
+import StoreAddModal from '../modals/StoreAddModal';
+import DetailModal from '../modals/DetailModal';
 
 function StoreTab() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
   const { user } = useUser();
+
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
@@ -57,7 +58,10 @@ function StoreTab() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <AddModal visible={addModalVisible} closeModal={closeAddDetailModal} />
+      <StoreAddModal
+        visible={addModalVisible}
+        closeModal={closeAddDetailModal}
+      />
 
       <Row
         align="middle"
@@ -197,7 +201,7 @@ function StoreTab() {
               ellipsis: true,
               width: 25,
               title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}.`),
+              render: (_, record) => t(`inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,
