@@ -36,7 +36,8 @@ function PageBody() {
   const navigate = useNavigate();
 
   const { store } = useStore();
-  const { cart, setCart, ready } = useVendorCart();
+  const { cart, setCart, ready, convertToSuccessItem, convertToMutateItem } =
+    useVendorCart();
 
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
@@ -45,17 +46,15 @@ function PageBody() {
 
   // 재고프로그램 연동
   const inventoryMutation = useMutation(vendorAPI.inventory, {
-    onError: () => {
-      // resetField();
-    },
     onSuccess: (data) => {
       closeInventoryModal();
-
       message.info(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
-
       ready(data);
+    },
+    onError: () => {
+      // resetField();
     },
   });
 
@@ -71,7 +70,6 @@ function PageBody() {
 
   // 거래처 등록하기
   const vendorCreateMutation = useMutation(vendorAPI.create, {
-    onError: () => {},
     onSuccess: (data) => {
       message.success(
         `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
@@ -79,9 +77,8 @@ function PageBody() {
       closeConfirmModal();
       navigate('/vendor/history');
     },
+    onError: () => {},
   });
-
-  const loading = inventoryMutation.isLoading || excelMutation.isLoading;
 
   return (
     <>
@@ -98,7 +95,7 @@ function PageBody() {
           '선택한 기간의 재고 정보를 불러옵니다.',
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
-        loading={loading}
+        loading={inventoryMutation.isLoading}
         onCancel={closeInventoryModal}
         onOk={({ start_date, end_date }) => {
           inventoryMutation.mutate({
@@ -126,34 +123,32 @@ function PageBody() {
 
       <TurtleConfirmModal
         visible={confirmModalVisivle}
-        title={'정말 등록할까요?'}
-        description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
-        onCancel={() => {
-          closeConfirmModal();
-        }}
         okText="등록"
         onOk={() => {
-          vendorCreateMutation.mutate(
-            cart.successList.map((vendor) => ({
-              rt_store_id: store.selected?.id ?? -1,
-              vendor_code: vendor.vendor_code,
-              vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
-              vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
-              ws_store_id: vendor.ws_store_info[0].id,
-              vendor_address: vendor.ws_store_info[0].address,
-              vendor_name: vendor.useVendorName,
-              memo: vendor.memo,
-              is_vat_included: vendor.isVatIncluded,
-            })),
-          );
+          vendorCreateMutation.mutate([
+            ...cart.successList.map((vendor) =>
+              convertToMutateItem(vendor, store.selected?.id as number),
+            ),
+            ...cart.pendingList
+              .filter((vendor) => vendor.isMatching)
+              .map((vendor) => convertToSuccessItem(vendor))
+              .map((vendor) =>
+                convertToMutateItem(vendor, store.selected?.id as number),
+              ),
+          ]);
 
-          setCart(() => ({
+          setCart({
             successList: [],
             pendingList: [],
             failList: [],
-          }));
+          });
         }}
-        loading={inventoryMutation.isLoading}
+        loading={vendorCreateMutation.isLoading}
+        onCancel={() => {
+          closeConfirmModal();
+        }}
+        title={'정말 등록할까요?'}
+        description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
       />
 
       <PageHeader
@@ -211,14 +206,31 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane tab={`성공(${cart.successList.length})`} key="success">
-            <SuccessTab isLoading={loading} />
+          <Tabs.TabPane
+            tab={`성공(${
+              cart.successList.length +
+              cart.pendingList.filter((item) => item.isMatching).length
+            })`}
+            key="success"
+          >
+            <SuccessTab
+              isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
+            />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`보류(${cart.pendingList.length})`} key="pending">
-            <PendingTab isLoading={loading} />
+          <Tabs.TabPane
+            tab={`보류(${
+              cart.pendingList.filter((item) => !item.isMatching).length
+            })`}
+            key="pending"
+          >
+            <PendingTab
+              isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
+            />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`실패(${cart.failList.length})`} key="fail">
-            <FailTab isLoading={loading} />
+            <FailTab
+              isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
+            />
           </Tabs.TabPane>
         </TurtleTabs>
       </PageContent>
