@@ -201,6 +201,7 @@
     "uploadExcel": "엑셀 업로드",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
+    "updateVendor": "정보수정 요청하기",
     "addTransaction": "과거매입 추가하기",
     "uploadFile": "파일 첨부하기",
     "findAddress": "주소 찾기",

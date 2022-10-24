@@ -49,32 +49,17 @@ function SearchFilter({
       ];
 
   return (
-    <Row>
-      {select && (
-        <Col css={marginRight}>
-          <TurtleSearchSelect
-            value={searchQuery.type}
-            onChange={(value) => {
-              setSearchQuery({ ...searchQuery, type: value, page: 1 });
-            }}
-            items={options}
-          />
-        </Col>
-      )}
-      <Col>
-        <TurtleSearchInput
-          placeholder="검색어를 입력하세요"
-          value={searchQuery.search_string}
-          onChange={(e) => {
-            setSearchQuery({
-              ...searchQuery,
-              search_string: e.currentTarget.value,
-              page: 1,
-            });
-          }}
-        />
-      </Col>
-    </Row>
+    <TurtleSearchInput
+      placeholder="검색어를 입력하세요"
+      defaultValue={searchQuery.search_string}
+      onSearch={(value) => {
+        setSearchQuery({
+          ...searchQuery,
+          search_string: value,
+          page: 1,
+        });
+      }}
+    />
   );
 }
 

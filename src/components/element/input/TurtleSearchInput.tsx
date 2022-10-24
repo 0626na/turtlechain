@@ -2,8 +2,9 @@ import { InputProps } from 'antd';
 import { Input } from 'antd';
 
 import { css } from '@emotion/react';
+import { SearchProps } from 'antd/lib/input';
 
-function TurtleSearchInput({ ...props }: InputProps) {
+function TurtleSearchInput({ ...props }: SearchProps) {
   return <Input.Search {...props} css={search} />;
 }
 
