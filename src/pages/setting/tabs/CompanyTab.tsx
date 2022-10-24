@@ -16,6 +16,7 @@ import { css } from '@emotion/react';
 import { bizNumPattern } from '@utils/pattern';
 import { DaumPostcodeModal } from '@components/combine';
 import { useSearchParams } from 'react-router-dom';
+import { RcFile } from 'antd/lib/upload';
 
 function CompanyTab() {
   const [searchParams] = useSearchParams();
@@ -68,13 +69,16 @@ function CompanyTab() {
   //   },
   // );
 
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
+  const normFile = (
+    uploadFiles:
+      | { file: RcFile; fileList: RcFile[] }
+      | { file: RcFile; fileList: RcFile[] }[],
+  ) => {
+    if (Array.isArray(uploadFiles)) {
+      return uploadFiles;
     }
-    return e && e.fileList;
+    return uploadFiles && uploadFiles.fileList;
   };
-
   const resetStates = useCallback(
     (data: Company) => {
       form.setFieldsValue({

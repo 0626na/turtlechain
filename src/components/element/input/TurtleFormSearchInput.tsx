@@ -4,7 +4,7 @@ import { Input } from 'antd';
 
 interface Props extends InputProps {
   value?: string;
-  onSearch?: (value: any) => void;
+  onSearch?: (value: string) => void;
 }
 
 function TurtleFormSearchInput({

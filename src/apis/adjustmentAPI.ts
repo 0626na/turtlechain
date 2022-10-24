@@ -25,6 +25,7 @@ export interface AdjustmentItem {
   product_count_max?: number;
 }
 
+type AdjustmentProcessType = 'subtract' | 'refund';
 // 매입조정 상품 Show
 export interface AdjustmentItemShow {
   id: number;
@@ -50,7 +51,7 @@ export interface AdjustmentItemShow {
   memo_value?: string;
   // for 매입조정 처리
   process_count?: number;
-  adjustment_process_type?: 'substract' | 'refund';
+  adjustment_process_type?: AdjustmentProcessType;
 }
 
 // Request: 매입조정 리스트 조회
@@ -128,8 +129,7 @@ export interface RequestCreate {
     rt_store_id: number;
     vendor_id: number;
     product_id: number;
-    // 미송의 경우 0
-    warehousing_item_id: number;
+    warehousing_item_id: number; // 미송의 경우 0
     count: number;
     price: number;
     type: string;
@@ -159,7 +159,7 @@ export interface RequestUpdate {
 
   // for 매입조정 처리
   process_count?: number;
-  adjustment_process_type?: 'substract' | 'refund';
+  adjustment_process_type?: AdjustmentProcessType;
 }
 
 // Response: 매입조정 상품 수정

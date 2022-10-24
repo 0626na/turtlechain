@@ -4,8 +4,10 @@ import { Col, Row } from 'antd';
 import { t } from 'i18next';
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchQuery: any; // state
-  setSearchQuery: (searchQuery: any) => void; // setState
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setSearchQuery: any; // setState
   select?: boolean;
   vendor?: boolean; // true이면 거래처 해당하는 options 출력
 }

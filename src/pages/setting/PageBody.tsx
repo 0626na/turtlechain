@@ -28,7 +28,7 @@ function PageBody() {
       <div // pageContent
         css={pageContent}
         style={{
-          ['--background-color' as any]:
+          ['--background-color' as string]:
             searchParams.get('tab') === 'store' ||
             searchParams.get('tab') === 'mistransfer'
               ? '#fff'

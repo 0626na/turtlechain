@@ -47,17 +47,17 @@ function ConfirmModal({ clickCreate, ...props }: Props) {
               rt_store_name: store.selected?.name,
               // 당일 결제 합계
               clearing_amount_list: cart.resultList
-                .filter((item) => item.clearing_payment_amount! > 0)
+                .filter((item) => (item.clearing_payment_amount as number) > 0)
                 .map((item) => ({
                   vendor_id: item.vendor_info.id,
-                  clearing_amount: item.clearing_payment_amount!,
+                  clearing_amount: item.clearing_payment_amount as number,
                 })),
               // 매입 차감
               subtract_amount_list: cart.adjustmentSubtractList
-                .filter((item) => item.overpaid_payment_amount! > 0)
+                .filter((item) => (item.overpaid_payment_amount as number) > 0)
                 .map((item) => ({
                   vendor_id: item.vendor_info.id,
-                  subtract_amount: item.overpaid_payment_amount!,
+                  subtract_amount: item.overpaid_payment_amount as number,
                 })),
             },
           });

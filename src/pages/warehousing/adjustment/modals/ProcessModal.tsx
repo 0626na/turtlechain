@@ -68,10 +68,10 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
               { value: 'refund', name: '환불' },
             ]}
             value={item?.adjustment_process_type}
-            onChange={(value: any) => {
+            onChange={(value: string) => {
               setItem((item) => ({
                 ...(item as AdjustmentItemShow),
-                adjustment_process_type: value,
+                adjustment_process_type: value as 'subtract' | 'refund',
               }));
             }}
           />

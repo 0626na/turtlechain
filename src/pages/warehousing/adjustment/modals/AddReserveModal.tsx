@@ -48,7 +48,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
         vendor_id: product.vendor_info.id,
         vendor_name: product.vendor_info.vendor_name,
         vendor_address: product.vendor_info.vendor_address,
-        vendor_phone: product.vendor_info.vendor_phone.phone,
+
         product_id: product.id,
         product_name: product.name,
         product_code: product.product_code,
@@ -63,7 +63,13 @@ function AddReserveModal({ visible, closeModal }: Props) {
   );
 
   // 미송 생성
-  const handleReserveCreate = (data: any) => {
+  const handleReserveCreate = (data: {
+    vendor_id: number;
+    product_id: number;
+    count: number;
+    price: number;
+    memo: string;
+  }) => {
     createReserveMutation.mutate({
       item_list: [
         {
@@ -81,7 +87,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   };
 
   // 가격, 수량  === 0 유효성 검사.
-  const handlePriceValidationCheck = (_: any, value: any) => {
+  const handlePriceValidationCheck = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('가격을 확인해 주세요.'));
     }
@@ -89,7 +95,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
     return Promise.resolve();
   };
 
-  const handleCountValidationCheck = (_: any, value: any) => {
+  const handleCountValidationCheck = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('수량을 입력해 주세요.'));
     }
@@ -241,16 +247,6 @@ function AddReserveModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
           >
             <TurtleFormInput // 거래처 주소 Input
-              disabled
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="vendor_phone"
-            label={t('table.mobile')}
-            rules={[{ required: true }]}
-          >
-            <TurtleFormInput // 거래처 휴대번호 Input
               disabled
             />
           </Form.Item>

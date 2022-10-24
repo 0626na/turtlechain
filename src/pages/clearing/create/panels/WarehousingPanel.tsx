@@ -197,7 +197,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         pagination={false}
         loading={getStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
-        rowKey={(record) => record.id!}
+        rowKey={(record) => record.id as number}
         title={() => (
           <TurtleTableTitle totalCount={cart.reservePaymentList.length} />
         )}

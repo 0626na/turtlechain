@@ -68,7 +68,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
   };
 
   // 0원 유효성검사
-  const refundAmountValidator = (_: any, value: number) => {
+  const refundAmountValidator = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('금액을 확인해 주세요.'));
     }

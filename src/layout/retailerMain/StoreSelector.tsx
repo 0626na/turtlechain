@@ -72,7 +72,7 @@ function StoreSelector() {
               <StoreIcon
                 css={buttonCss.icon}
                 style={{
-                  ['--fill-color' as any]:
+                  ['--fill-color' as string]:
                     color[
                       store.list.findIndex(
                         (item) => item.name === store.selected?.name,

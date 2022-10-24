@@ -216,7 +216,7 @@ function useClearingCart() {
         0,
       ) +
       cart.adjustmentSubtractList.reduce(
-        (acc, cur) => acc + (cur.overpaid_payment_amount! ?? 0),
+        (acc, cur) => acc + ((cur.overpaid_payment_amount as number) ?? 0),
         0,
       ),
     [cart.reserveSubtractList, cart.adjustmentSubtractList],
@@ -226,7 +226,7 @@ function useClearingCart() {
   const clearingPaymentTotal = useMemo(
     () =>
       cart.resultList.reduce(
-        (acc, cur) => acc + (cur.clearing_payment_amount! ?? 0),
+        (acc, cur) => acc + ((cur.clearing_payment_amount as number) ?? 0),
         0,
       ),
     [cart.resultList],

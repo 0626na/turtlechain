@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 
 interface Props {
   value?: string;
-  onChange?: (value: any) => void;
+  onChange?: (value: string) => void;
   items?: { value: string; name: string; icon?: React.ReactNode }[];
   disabled?: boolean;
   showSearch?: boolean;

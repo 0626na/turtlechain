@@ -34,7 +34,7 @@ function StoreCard({ store }: Props) {
           <div
             css={markCss.status}
             style={{
-              ['--backgroundColor' as any]: store.is_closed
+              ['--backgroundColor' as string]: store.is_closed
                 ? '#a1a2a6'
                 : '#00b3be',
             }}
@@ -61,7 +61,7 @@ function StoreCard({ store }: Props) {
           <TurtleIcon name="account" />
           <span
             css={leftContentCss.title}
-            style={{ ['--marginRight' as any]: '3px' }}
+            style={{ ['--marginRight' as string]: '3px' }}
           >
             결제 계좌정보
           </span>
@@ -79,7 +79,7 @@ function StoreCard({ store }: Props) {
           <TurtleIcon name="pencil" />
           <span
             css={leftContentCss.title}
-            style={{ ['--marginRight' as any]: '3px' }}
+            style={{ ['--marginRight' as string]: '3px' }}
           >
             받는분 통장인쇄
           </span>

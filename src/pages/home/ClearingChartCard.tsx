@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem,
 } from 'chart.js';
 import clearingAPI, { ClearingSheetShow } from '@apis/clearingAPI';
 
@@ -79,8 +80,8 @@ function ClearingChartCard() {
         bodySpacing: 5,
         usePointStyle: true,
         callbacks: {
-          title: (context: any) =>
-            moment().set('date', context[0].label).format('YYYY-MM-DD'),
+          title: (context: TooltipItem<'line'>[]) =>
+            moment().set('date', Number(context[0].label)).format('YYYY-MM-DD'),
         },
       },
     },
@@ -100,7 +101,7 @@ function ClearingChartCard() {
           drawTicks: false,
           color: '#EDEFF1',
         },
-        afterDataLimits: (scale: any) => {
+        afterDataLimits: (scale: { max: number }) => {
           scale.max = scale.max * 1.1;
         },
         display: true,
@@ -142,10 +143,8 @@ function ClearingChartCard() {
     datasets: storeList.map((store, index) => ({
       label: store,
       data: labels.map((day) => {
-        if (day > parseInt(moment().format('D'))) {
-          // eslint-disable-next-line array-callback-return
-          return;
-        }
+        if (day > parseInt(moment().format('D'))) return;
+
         return getSheetQuery.data?.data.sheet_list
           .filter(
             ({ complete_date, store_name }) =>

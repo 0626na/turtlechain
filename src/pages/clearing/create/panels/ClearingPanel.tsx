@@ -223,14 +223,14 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 <TurtleTableNumberInput
                   placeholder="금액 입력"
                   value={
-                    record.clearing_payment_amount! > 0
-                      ? record.clearing_payment_amount!
+                    (record.clearing_payment_amount as number) > 0
+                      ? (record.clearing_payment_amount as number)
                       : undefined
                   }
                   max={record.clearing_amount}
                   min={Math.max(
                     record.reserve_payment_amount -
-                      (record.overpaid_payment_amount! ?? 0) -
+                      ((record.overpaid_payment_amount as number) ?? 0) -
                       record.reserve_subtract_amount,
                     0,
                   )}
