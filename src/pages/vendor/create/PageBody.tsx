@@ -80,6 +80,17 @@ function PageBody() {
     onError: () => {},
   });
 
+  const successCount = [
+    ...cart.successList,
+    ...cart.pendingList.filter((item) => item.isMatching),
+  ].length;
+
+  const pendingCount = cart.pendingList.filter(
+    (item) => !item.isMatching,
+  ).length;
+
+  const failCount = cart.failList.length;
+
   return (
     <>
       {/*
@@ -206,28 +217,17 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane
-            tab={`성공(${
-              cart.successList.length +
-              cart.pendingList.filter((item) => item.isMatching).length
-            })`}
-            key="success"
-          >
+          <Tabs.TabPane tab={`성공(${successCount})`} key="success">
             <SuccessTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`보류(${
-              cart.pendingList.filter((item) => !item.isMatching).length
-            })`}
-            key="pending"
-          >
+          <Tabs.TabPane tab={`보류(${pendingCount})`} key="pending">
             <PendingTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`실패(${cart.failList.length})`} key="fail">
+          <Tabs.TabPane tab={`실패(${failCount})`} key="fail">
             <FailTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
@@ -237,6 +237,7 @@ function PageBody() {
 
       <PageBottomBar>
         <PrimaryButton
+          disabled={successCount === 0}
           onClick={() => {
             openConfirmModal();
           }}
