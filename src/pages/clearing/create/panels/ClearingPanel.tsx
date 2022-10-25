@@ -142,7 +142,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                     </Col>
                     <Col>
                       <SearchFilter
-                        select={false}
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />

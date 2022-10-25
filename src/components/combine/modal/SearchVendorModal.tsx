@@ -34,7 +34,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   // 거래처 목록 불러오기 query
   const [searchQuery, setSearchQuery] = useState<RequestGet>({
     page: 1,
-    type: 'name',
     search_string: '',
     rt_store_id: store.selected?.id,
   });
@@ -59,7 +58,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
     if (visible) return;
     setSearchQuery({
       page: 1,
-      type: 'name',
       search_string: '',
       rt_store_id: store.selected?.id,
     });
@@ -89,7 +87,6 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
               totalCount={getListQuery.data?.data.total_count ?? 0}
               rightContent={
                 <SearchFilter
-                  vendor
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

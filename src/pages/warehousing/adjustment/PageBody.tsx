@@ -55,7 +55,6 @@ function PageBody() {
     is_cleared: '',
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
-    type: 'vendor_name',
     search_string: '',
     page: 1,
   });

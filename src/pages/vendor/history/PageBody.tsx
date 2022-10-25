@@ -29,7 +29,6 @@ function PageBody() {
     rt_store_id: -1,
     page: 1,
     search_string: '',
-    type: 'name',
   });
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
   const [vatIncludedModalVisible, openVatIncludedModal, closeVatIncludedModal] =

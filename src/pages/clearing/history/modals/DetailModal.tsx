@@ -89,7 +89,6 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             searchCount={filteredList?.length ?? 0}
             rightContent={
               <SearchFilter
-                select={false}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
               />

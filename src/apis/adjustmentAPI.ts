@@ -57,13 +57,9 @@ export interface AdjustmentItemShow {
 // Request: 매입조정 리스트 조회
 export interface RequestGetList {
   rt_store_id: number | null;
-
   is_cleared: 'True' | 'False' | '';
-
   end_date: string;
   start_date: string;
-
-  type?: 'name' | 'vendor_name' | 'product_name';
   search_string?: string;
 
   page?: number;

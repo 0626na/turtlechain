@@ -100,7 +100,6 @@ export interface RequestGetList {
   rt_store_id?: number;
   page: number;
   search_string: string;
-  type: string;
   vendor_id?: number;
 }
 
