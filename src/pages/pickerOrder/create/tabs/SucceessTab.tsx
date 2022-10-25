@@ -91,7 +91,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 successList: cart.successList.map((store) => ({
                   ...store,
                   orders: store.orders.filter(
-                    (order) => order.order_id !== selectOrderRowID,
+                    (order:any) => order.order_id !== selectOrderRowID,
                   ),
                 })),
               });
@@ -262,7 +262,7 @@ function SuccessTab({ loading, ...props }: Props) {
                       <TurtleTableNumberInput
                         step={1}
                         value={record.product_count}
-                        onChange={(value) => {
+                        onChange={(value:number) => {
                           setCart({
                             failList: cart.failList,
                             successList: cart.successList.map(

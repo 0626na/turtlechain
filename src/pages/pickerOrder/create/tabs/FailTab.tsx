@@ -233,7 +233,7 @@ function FailTab({ loading, ...props }: Props) {
                 <TurtleTableNumberInput
                   value={record.product_count}
                   step={1}
-                  onChange={(value) => {
+                  onChange={(value:number) => {
                     setCart({
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
