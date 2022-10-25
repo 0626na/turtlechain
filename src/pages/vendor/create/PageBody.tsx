@@ -107,7 +107,7 @@ function PageBody() {
           '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
         ]}
         loading={inventoryMutation.isLoading}
-        onCancel={closeInventoryModal}
+        onCancel={inventoryMutation.isLoading ? () => {} : closeInventoryModal}
         onOk={({ start_date, end_date }) => {
           inventoryMutation.mutate({
             rt_store_id: store.selected?.id as number,

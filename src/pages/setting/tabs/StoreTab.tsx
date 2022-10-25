@@ -22,7 +22,7 @@ import StoreAddModal from '../modals/StoreAddModal';
 import DetailModal from '../modals/DetailModal';
 
 function StoreTab() {
-  const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
+  const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
 
   const [selectedRow, setSelectedRow] = useState<StoreShow>();

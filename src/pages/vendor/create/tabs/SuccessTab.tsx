@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { t } from 'i18next';
-import { MemoIcon, TurtleConfirmModal, TurtleIcon } from '@components/element';
+import {
+  MemoIcon,
+  TurtleConfirmModal,
+  TurtleIcon,
+  TurtleTableInput,
+} from '@components/element';
 import { SuccessItem } from '@store/vendorCartState';
 import { Input, Switch, Table } from 'antd';
 
@@ -170,7 +175,7 @@ function SuccessTab({ isLoading }: Props) {
             ),
 
             render: (_, record) => (
-              <Input
+              <TurtleTableInput
                 size="small"
                 defaultValue={record.useVendorName}
                 onChange={(e) => {

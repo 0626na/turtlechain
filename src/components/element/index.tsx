@@ -42,6 +42,7 @@ import {
   TurtleTableNumberInput,
   TurtleTableWarningNumberInput,
 } from './input/TurtleTableNumberInput';
+import TurtleTableInput from './input/TurtleTableInput';
 
 export {
   //buttons
@@ -63,6 +64,7 @@ export {
   TurtleNumberInput,
   TurtleTableNumberInput,
   TurtleTableWarningNumberInput,
+  TurtleTableInput,
   //RangePicker
   TurtlePrimaryRangePicker,
   TurtleSecondaryRangePicker,

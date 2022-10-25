@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
-import { MemoIcon, TurtleBadge } from '@components/element';
+import { MemoIcon, TurtleBadge, TurtleTableInput } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
 import { Input, Popover, Radio, Space, Switch, Table } from 'antd';
 
@@ -284,7 +284,7 @@ function PendingTab({ isLoading }: Props) {
               </TextWithTooltip>
             ),
             render: (_, record) => (
-              <Input
+              <TurtleTableInput
                 size="small"
                 defaultValue={record.name}
                 onChange={(e) => {
