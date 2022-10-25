@@ -30,13 +30,11 @@ const useOrderCart = () => {
 
   //발주 등록 전, 발주 중복 데이터 및 실패=> 성공 이전데이터 통합
   const integrationOrderList = () => {
-    let organizedList: StoreOrderItemExcelParsing[] = [];
+    const organizedList: StoreOrderItemExcelParsing[] = [];
     let comparisonList = cart.successList;
     let orderArrayToMerge: StoreOrder[] = [];
 
-    // eslint-disable-next-line array-callback-return
     cart.successList.map((store) => {
-      // eslint-disable-next-line array-callback-return
       comparisonList.map((item) => {
         if (item.id !== store.id && item.rt_store_id === store.rt_store_id) {
           orderArrayToMerge = item.orders;
@@ -61,22 +59,27 @@ const useOrderCart = () => {
 
     comparisonList = cart.failList;
 
-    // eslint-disable-next-line array-callback-return
-    cart.failList.map((store) => {
-      // eslint-disable-next-line array-callback-return
-      store.orders.map((order) => {
-        if (order.mobile !== '') {
-          organizedList = organizedList.map((item) => {
-            if (item.rt_store_id === store.rt_store_id)
-              return {
-                ...item,
-                orders: [...item.orders, order],
-              };
-
-            return item;
-          });
+    organizedList.map((store) => {
+      comparisonList.map((item) => {
+        if (item.rt_store_id === store.rt_store_id) {
+          orderArrayToMerge = item.orders;
         }
       });
+
+      const replaceArrayIndex = organizedList.findIndex(
+        (item) => item.rt_store_id === store.rt_store_id,
+      );
+
+      if (replaceArrayIndex !== -1) {
+        organizedList[replaceArrayIndex] = {
+          ...store,
+          orders: [...store.orders, ...orderArrayToMerge],
+        };
+      }
+      comparisonList = comparisonList.filter(
+        (item) => item.rt_store_id !== store.rt_store_id,
+      );
+      orderArrayToMerge = [];
     });
 
     return organizedList;
@@ -148,7 +151,7 @@ const useOrderCart = () => {
    */
   const checkSuccessListAndIDCreate = useCallback(() => {
     if (cart.successList.length !== 0)
-      return cart.successList[cart.successList.length - 1].id! + 1;
+      return Number(cart.successList[cart.successList.length - 1].id) + 1;
 
     return 1;
   }, [cart.successList]);
@@ -177,18 +180,17 @@ const useOrderCart = () => {
    * 실패 케이스 미리보기 출력을 위한 가공
    */
   const failListOutput = useCallback(() => {
-    let failRowList: FailListForOutput[] = [];
+    const failRowList: FailListForOutput[] = [];
     let id = 0;
-    // eslint-disable-next-line array-callback-return
+
     cart.failList.map((store) => {
       let failRow: FailListForOutput;
-      // eslint-disable-next-line array-callback-return
       store.orders.map((order) => {
         failRow = {
           id: id++,
           rt_store_id: store.rt_store_id,
           rt_store_name: store.rt_store_name,
-          order_id: order.order_id!,
+          order_id: Number(order.order_id),
           vendor_name: order.vendor_name,
           vendor_address: order.vendor_address,
           mobile: order.mobile,
@@ -217,9 +219,8 @@ const useOrderCart = () => {
     });
 
     //실패에서 성공으로 이전한 경우의 데이터 카운트 (실패에서 휴대전화번호 입력시)
-    // eslint-disable-next-line array-callback-return
+
     cart.failList.map((store) => {
-      // eslint-disable-next-line array-callback-return
       store.orders.map((order) => {
         if (order.mobile !== '') count++;
       });
@@ -234,15 +235,14 @@ const useOrderCart = () => {
 
   const countFailList = useCallback(() => {
     let count = 0;
-    // eslint-disable-next-line array-callback-return
+
     cart.failList.map((store) => {
       count += store.orders.length;
     });
 
     //실패에서 성공으로 넘어간 케이스 카운트
-    // eslint-disable-next-line array-callback-return
+
     cart.failList.map((store) => {
-      // eslint-disable-next-line array-callback-return
       store.orders.map((order) => {
         if (order.mobile !== '') count--;
       });
