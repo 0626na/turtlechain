@@ -5,7 +5,7 @@ import { InputNumber, InputNumberProps } from 'antd';
 interface Props extends InputNumberProps {
   value?: number;
   min?: number;
-  step: number;
+  step?: number;
 }
 
 export function TurtleTableNumberInput({

@@ -14,6 +14,8 @@ import { message, Table, TabPaneProps, Tabs } from 'antd';
 import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../modals/OrderMemoModal';
+import { valueType } from 'antd/lib/statistic/utils';
+import { StoreOrder } from '@apis/orderAPI';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -91,7 +93,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 successList: cart.successList.map((store) => ({
                   ...store,
                   orders: store.orders.filter(
-                    (order:any) => order.order_id !== selectOrderRowID,
+                    (order: StoreOrder) => order.order_id !== selectOrderRowID,
                   ),
                 })),
               });
@@ -137,7 +139,7 @@ function SuccessTab({ loading, ...props }: Props) {
           dataSource={cart.successList}
           loading={loading}
           size="small"
-          rowKey={(record) => record.id?.toString()!}
+          rowKey={(record) => String(record.id)}
           pagination={{
             position: ['bottomCenter'],
             showSizeChanger: false,
@@ -184,14 +186,14 @@ function SuccessTab({ loading, ...props }: Props) {
                 return;
               }
 
-              setSelectedRowID(record.id!);
+              setSelectedRowID(Number(record.id));
             },
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
                 scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
                 dataSource={expandedRecord.orders}
-                rowKey={(record) => record.order_id?.toString()!}
+                rowKey={(record) => String(record.order_id)}
                 loading={expandedRecord === undefined}
                 pagination={false}
                 columns={[
@@ -261,8 +263,8 @@ function SuccessTab({ loading, ...props }: Props) {
                     render: (_, record) => (
                       <TurtleTableNumberInput
                         step={1}
-                        value={record.product_count}
-                        onChange={(value:number) => {
+                        value={Number(record.product_count)}
+                        onChange={(value: valueType) => {
                           setCart({
                             failList: cart.failList,
                             successList: cart.successList.map(
@@ -309,7 +311,7 @@ function SuccessTab({ loading, ...props }: Props) {
                         <MemoIcon
                           value={record.memo ?? ''}
                           onClick={() => {
-                            setSelectOrderRowID(record.order_id!);
+                            setSelectOrderRowID(Number(record.order_id));
                             openMemoModal();
                           }}
                         />
@@ -317,7 +319,7 @@ function SuccessTab({ loading, ...props }: Props) {
                         <TurtleIcon
                           name="delete"
                           onClick={() => {
-                            setSelectOrderRowID(record.order_id!);
+                            setSelectOrderRowID(Number(record.order_id));
                             setDeleteMode(false);
                             openDeleteModal();
                           }}
@@ -375,7 +377,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 style: { cursor: 'pointer' },
                 onClick: (e) => {
                   e.stopPropagation();
-                  setSelectedRowID(record.id!);
+                  setSelectedRowID(Number(record.id));
                   setDeleteMode(true);
                   openDeleteModal();
                 },

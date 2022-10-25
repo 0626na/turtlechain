@@ -16,6 +16,7 @@ import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import TurtleTablePhoneNumberInput from '@components/element/input/TurtleTablePhoneNumberInput';
 import { notNumPattern, phonePattern } from '@utils/pattern';
 import AddOrderFailtoSuccessModal from '../modals/AddOrderFailtoSuccessModal';
+import { valueType } from 'antd/lib/statistic/utils';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -231,9 +232,9 @@ function FailTab({ loading, ...props }: Props) {
               width: 136,
               render: (_, record) => (
                 <TurtleTableNumberInput
-                  value={record.product_count}
+                  value={Number(record.product_count)}
                   step={1}
-                  onChange={(value:number) => {
+                  onChange={(value: valueType) => {
                     setCart({
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
