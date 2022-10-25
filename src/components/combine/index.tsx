@@ -6,7 +6,7 @@ import SearchFilter from './SearchFilter';
 import DaumPostcodeModal from './modal/DaumPostcodeModal';
 import PhoneAuthForm from './PhoneAuthForm';
 import CreateModal from './modal/CreateModal';
-import TooltipColumn from './TooltipColumn';
+import TextWithTooltip from './TextWithTooltip';
 
 export {
   Notification,
@@ -17,5 +17,5 @@ export {
   SearchVendorModal,
   DaumPostcodeModal,
   PhoneAuthForm,
-  TooltipColumn,
+  TextWithTooltip,
 };

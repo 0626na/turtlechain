@@ -87,14 +87,17 @@ function PageBody() {
           loading={loading}
           dataSource={itemList}
           rowKey={(record) => String(record.vendor_id)}
+          pagination={{
+            position: ['bottomCenter'],
+            showSizeChanger: false,
+          }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedRow({ ...record });
               detailModalOpen();
             },
           })}
-          pagination={false}
-          scroll={{ y: 1000, x: 1400 }}
+          scroll={{ y: 'auto', x: 1400 }}
           title={() => (
             <TurtleTableTitle
               totalCount={itemList.length ?? 0}

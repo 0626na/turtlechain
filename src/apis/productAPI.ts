@@ -161,7 +161,6 @@ export interface RequestUpdate {
 
 export interface ResponseUpdate {
   msg: string;
-  data: {};
 }
 
 const update = async function (data: RequestUpdate) {
@@ -182,7 +181,6 @@ export interface RequestRemove {
 
 export interface ResponseRemove {
   msg: string;
-  data: {};
 }
 
 const remove = async (data: RequestRemove) => {

@@ -12,7 +12,8 @@
       "@utils/*": ["src/utils/*"],
       "@font/*": ["public/assets/font/*"],
       "@img/*": ["public/assets/img/*"],
-      "@icons/*": ["src/assets/icons/*"]
+      "@icons/*": ["src/assets/icons/*"],
+      "@styles/*": ["src/styles/*"]
     }
   }
 }

@@ -18,8 +18,8 @@ interface Props {
 function DetailModal({ visible, onClose, selectedRow }: Props) {
   // 매입조정 상세내역 요청
   const getAdjustmentDetailHistoryQuery = useQuery(
-    ['getAdjustmentDetailHistory', selectedRow?.id!],
-    () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id! }),
+    ['getAdjustmentDetailHistory', selectedRow?.id],
+    () => adjustmentAPI.get({ adjustment_item_id: selectedRow?.id as number }),
     {
       enabled: !!visible,
     },
@@ -28,7 +28,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title="매입조정 상세보기"
+      title={`${t(`adjustment.process type.${selectedRow?.type}`)}`}
       visible={visible}
       onClose={onClose}
     >
@@ -48,7 +48,8 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           {
             ellipsis: true,
             title: t('table.type'),
-            render: (_, record) => t(`adjustment.type.${record.type}`),
+            render: (_, record) =>
+              t(`adjustment.process type.${selectedRow?.type}`),
           },
           {
             ellipsis: true,
@@ -98,7 +99,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             font-size: 20px;
           `}
         >
-          처리 상세내역
+          처리 내역
         </TurtleText>
       </Row>
 

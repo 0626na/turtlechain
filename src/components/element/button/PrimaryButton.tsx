@@ -53,11 +53,11 @@ function PrimaryButton({
     <Button
       css={buttonCss.self}
       style={{
-        ['--font-size' as any]: sizeCss[size].fontSize,
-        ['--size-width' as any]: sizeCss[size].width,
-        ['--size-height' as any]: sizeCss[size].height,
-        ['--background-color' as any]: sizeCss[size].background,
-        ['--hover-color' as any]: sizeCss[size].hoverColor,
+        ['--font-size' as string]: sizeCss[size].fontSize,
+        ['--size-width' as string]: sizeCss[size].width,
+        ['--size-height' as string]: sizeCss[size].height,
+        ['--background-color' as string]: sizeCss[size].background,
+        ['--hover-color' as string]: sizeCss[size].hoverColor,
       }}
       htmlType={htmlType}
       {...props}

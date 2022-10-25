@@ -36,7 +36,7 @@ export interface ResponseCreate {
 const create = async function (data: RequestCreate) {
   const url = `provisioning/store-bucketlist`;
   const formData = new FormData();
-  formData.append('file', data.file!);
+  formData.append('file', data.file as RcFile);
   delete data.file;
   formData.append('json', JSON.stringify(data));
   const response = await v2Axios.post<ResponseCreate>(url, formData);

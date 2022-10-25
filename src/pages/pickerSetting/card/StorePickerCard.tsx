@@ -17,7 +17,7 @@ function StorePickerCard({ store }: Props) {
           <div
             css={markCss.status}
             style={{
-              ['--backgroundColor' as any]: store.is_closed
+              ['--backgroundColor' as string]: store.is_closed
                 ? '#a1a2a6'
                 : '#00b3be',
             }}

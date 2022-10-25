@@ -49,7 +49,7 @@ function Pagebody() {
   });
 
   // 아이디 유효성 검사
-  const idValidator = (_: any, value: string) => {
+  const idValidator = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('아이디를 입력해주세요.'));
     }
@@ -62,7 +62,7 @@ function Pagebody() {
   };
 
   //이메일 유효성 검사
-  const emailValidator = (_: any, value: string) => {
+  const emailValidator = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('이메일을 입력해주세요.'));
     }
@@ -75,7 +75,7 @@ function Pagebody() {
   };
 
   // 비밀번호 확인 유효성 검사
-  const passwordValidator = (_: any, value: number) => {
+  const passwordValidator = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('비밀번호 입력해주세요.'));
     }
@@ -88,7 +88,7 @@ function Pagebody() {
   };
 
   //약관동의 유효성 검사
-  const agreementValidator = (_: any, value: CheckboxValueType[] = []) => {
+  const agreementValidator = (_: unknown, value: CheckboxValueType[] = []) => {
     if (
       !value.includes('service_use') ||
       !value.includes('personal_information')

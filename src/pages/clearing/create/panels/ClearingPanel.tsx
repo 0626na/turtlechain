@@ -1,5 +1,5 @@
 import { ClearingInfo } from '@apis/clearingAPI';
-import { SearchFilter } from '@components/combine';
+import { SearchFilter, TextWithTooltip } from '@components/combine';
 import {
   PrimaryButton,
   TurtleIcon,
@@ -9,6 +9,7 @@ import {
   TurtleText,
 } from '@components/element';
 import ArrowRightIcon from '@components/element/icon/ArrowRightIcon';
+import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useModal from '@hooks/useModal';
 
@@ -61,7 +62,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   useEffect(() => {
     if (activeKey !== '2') return;
     calculateClearingAmount();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey]);
 
   return (
@@ -135,7 +135,7 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
                 totalCount={cart.resultList.length}
                 rightContent={
                   <Row>
-                    <Col style={{ marginRight: 10 }}>
+                    <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
                         전액사용
                       </FullUseButton>
@@ -162,11 +162,38 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
             {
               ellipsis: true,
               title: '거래처 명',
-              render: (_, record) => record.vendor_info.vendor_name,
+              render: (_, record) => {
+                console.log(record);
+                const isMark =
+                  record.reserve_subtract_amount +
+                    (record.overpaid_payment_amount ?? 0) +
+                    record.reserve_payment_amount +
+                    +record.unpaid_amount >
+                  0;
+
+                return (
+                  <div css={{ display: 'flex', alignItems: 'center' }}>
+                    <span css={{ marginRight: 5 }}>
+                      {record.vendor_info.vendor_name}
+                    </span>
+
+                    {isMark && <TurtleIcon name="mark" />}
+                  </div>
+                );
+              },
             },
             {
               ellipsis: true,
-              title: '부가세 바로전달',
+              title: (
+                <TextWithTooltip
+                  tooltipContent={[
+                    '당일결제 시, 부가세도 그 날에 함께',
+                    '전달되어야 하는 거래처',
+                  ]}
+                >
+                  부가세 바로전달
+                </TextWithTooltip>
+              ),
               render: (_, record) => (
                 <TurtleTag
                   color={record.vendor_info.is_vat_included ? 'orange' : 'gray'}
@@ -186,18 +213,24 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               ellipsis: true,
               align: 'right',
               title: '결제할 금액',
+              width: 200,
+              onCell: () => ({
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
+              }),
               render: (_, record) => (
                 <TurtleTableNumberInput
                   placeholder="금액 입력"
                   value={
-                    record.clearing_payment_amount! > 0
-                      ? record.clearing_payment_amount!
+                    (record.clearing_payment_amount as number) > 0
+                      ? (record.clearing_payment_amount as number)
                       : undefined
                   }
-                  max={record.clearing_amount!}
+                  max={record.clearing_amount}
                   min={Math.max(
                     record.reserve_payment_amount -
-                      (record.overpaid_payment_amount! ?? 0) -
+                      ((record.overpaid_payment_amount as number) ?? 0) -
                       record.reserve_subtract_amount,
                     0,
                   )}
@@ -270,5 +303,9 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
     </>
   );
 }
+
+const marginRight = css({
+  marginRight: 8,
+});
 
 export default ClearingPanel;

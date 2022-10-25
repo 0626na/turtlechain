@@ -20,13 +20,9 @@ export function SecondaryButton({
   );
 }
 
-export function SecondaryIconButton({
-  children,
-  htmlType = 'button',
-  ...props
-}: Props) {
+export function SecondaryIconButton({ children, ...props }: Props) {
   return (
-    <SecondaryButton htmlType={htmlType} {...props}>
+    <SecondaryButton {...props}>
       <Plusicon css={icon} />
       {children}
     </SecondaryButton>
@@ -38,7 +34,7 @@ const icon = css`
 `;
 
 const button = css`
-  width: 160px;
+  min-width: 160px;
   height: 40px;
 
   display: inline-flex;

@@ -46,7 +46,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
-  const handleAccountValidation = (_: any, value: any) => {
+  const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('계좌번호를 입력해주세요'));
     }
@@ -159,9 +159,16 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             <Form.Item name="bank" rules={[{ required: true }]} noStyle>
               <TurtleFormSelect
                 placeholder="은행"
-                items={Object.values(getBankQuery.data?.data ?? []).map(
-                  (bank: any) => ({ value: bank, name: bank }),
-                )}
+                items={
+                  Object.values(getBankQuery.data?.data ?? []).map((bank) => ({
+                    value: bank,
+                    name: bank,
+                  })) as {
+                    value: string;
+                    name: string;
+                    icon?: React.ReactNode;
+                  }[]
+                }
               />
             </Form.Item>
             <Form.Item

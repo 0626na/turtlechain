@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Col, Form, message, Popconfirm, Radio, Row } from 'antd';
 import {
-  AddButton,
   SpecialButton,
   TurtleDivider,
   TurtleFormInput,
@@ -12,7 +11,7 @@ import {
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
-import { TurtleContentModal } from '@components/combine';
+import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
 interface Props {
@@ -40,7 +39,7 @@ function AddModal({ visible, closeModal }: Props) {
     form.resetFields();
   }, [form]);
 
-  const handleAccountValidation = (_: any, value: any) => {
+  const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('계좌번호를 입력해주세요'));
     }
@@ -107,9 +106,16 @@ function AddModal({ visible, closeModal }: Props) {
             >
               <TurtleFormSelect
                 placeholder="은행"
-                items={Object.values(getBankQuery.data?.data ?? []).map(
-                  (bank: any) => ({ value: bank, name: bank }),
-                )}
+                items={
+                  Object.values(getBankQuery.data?.data ?? []).map((bank) => ({
+                    value: bank,
+                    name: bank,
+                  })) as {
+                    value: string;
+                    name: string;
+                    icon?: React.ReactNode;
+                  }[]
+                }
               />
             </Form.Item>
             <Form.Item
@@ -133,11 +139,12 @@ function AddModal({ visible, closeModal }: Props) {
           </div>
         </Form.Item>
 
-        <Row justify="end">
+        {/* 계좌 인증하기는 WP (웰컴페이먼츠) 가상계좌 적용시에 필요한 기능이니 당분간은 불필요 */}
+        {/* <Row justify="end">
           <Col>
             <AddButton>계좌 인증하기</AddButton>
           </Col>
-        </Row>
+        </Row> */}
 
         <TurtleDivider marginTop={32} marginBottom={32} />
 
@@ -193,7 +200,11 @@ function AddModal({ visible, closeModal }: Props) {
 
         <Form.Item
           name="alimtalk_name"
-          label={t('store.alimtalk name')}
+          label={
+            <TextWithTooltip tooltipContent={['내용 입력예정']}>
+              {t('store.alimtalk name')}
+            </TextWithTooltip>
+          }
           required={false}
         >
           <TurtleFormInput placeholder={t('placeholder.alimtalk')} />

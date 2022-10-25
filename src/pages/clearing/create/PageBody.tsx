@@ -2,16 +2,8 @@ import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useStore from '@hooks/useStore';
 import { PageContent } from '@layout/page';
-import {
-  Badge,
-  Button,
-  Col,
-  Collapse,
-  DatePicker,
-  Row,
-  Space,
-  Tooltip,
-} from 'antd';
+import { theme } from '@styles/theme';
+import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -31,46 +23,46 @@ function PageBody() {
   return (
     <>
       <div css={inner}>
-        <h4>결제요청 일자</h4>
-        <Row justify="space-between">
+        <span css={clearingDate}>결제요청 일자</span>
+        <Row>
           <Col>
-            <Space>
-              <Button
-                css={[
-                  $button,
-                  moment().format('YYYY-MM-DD') ===
-                    moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                    greenButton,
-                ]}
-                onClick={() => {
-                  selectDate(moment().format('YYYY-MM-DD'));
-                }}
-              >
-                오늘
-              </Button>
+            <Button
+              css={[
+                $button,
+                moment().format('YYYY-MM-DD') ===
+                  moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                  greenButton,
+              ]}
+              onClick={() => {
+                selectDate(moment().format('YYYY-MM-DD'));
+              }}
+            >
+              오늘
+            </Button>
+          </Col>
 
-              <Tooltip
-                visible={tooltipVisible}
-                placement="bottom"
-                title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
-              >
-                <DatePicker
-                  onClick={() => setTooltipVisible(false)}
-                  css={[
-                    $datePicker,
-                    cart.clearingRequestDate &&
-                      moment().format('YYYY-MM-DD') !==
-                        moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                      greenDatePicker,
-                  ]}
-                  onChange={(_, date) => {
-                    selectDate(date);
-                  }}
-                  allowClear={false}
-                  placeholder="다른 일자선택"
-                />
-              </Tooltip>
-            </Space>
+          <Col>
+            <Tooltip
+              visible={tooltipVisible}
+              placement="bottom"
+              title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+            >
+              <DatePicker
+                onClick={() => setTooltipVisible(false)}
+                css={[
+                  $datePicker,
+                  cart.clearingRequestDate &&
+                    moment().format('YYYY-MM-DD') !==
+                      moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                    greenDatePicker,
+                ]}
+                onChange={(_, date) => {
+                  selectDate(date);
+                }}
+                allowClear={false}
+                placeholder="다른 일자선택"
+              />
+            </Tooltip>
           </Col>
         </Row>
       </div>
@@ -92,47 +84,19 @@ function PageBody() {
               setActiveKey('2');
             }}
             header={
-              <div
-                css={css`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
+              <div css={headerCss.self}>
                 <Badge
                   count={1}
                   style={{
-                    width: 36,
-                    height: 36,
-                    lineHeight: '36px',
-                    borderRadius: '50%',
                     backgroundColor:
                       Number(activeKey) >= 1 ? '#DDF3F5' : '#F0F3F6',
                     color: Number(activeKey) >= 1 ? '#00AAB5' : '#A1A2A6',
-                    fontWeight: 500,
-                    fontSize: 16,
+                    ...headerCss.badgeCss,
                   }}
                 />
-                <div
-                  css={css`
-                    margin-left: 25px;
-                  `}
-                >
-                  <div
-                    css={css`
-                      color: #242934;
-                      font-weight: 700;
-                      font-size: 20px;
-                    `}
-                  >
-                    매입조정 확인하기
-                  </div>
-
-                  <div
-                    css={css`
-                      color: #6b6d73;
-                      font-weight: 500;
-                    `}
-                  >
+                <div css={headerCss.textInner}>
+                  <div css={headerCss.title}>교환/반품/미송 확인하기</div>
+                  <div css={headerCss.subTitle}>
                     결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
                   </div>
                 </div>
@@ -146,47 +110,20 @@ function PageBody() {
               setActiveKey('0');
             }}
             header={
-              <div
-                css={css`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
+              <div css={headerCss.self}>
                 <Badge
                   count={2}
                   style={{
-                    width: 36,
-                    height: 36,
-                    lineHeight: '36px',
-                    borderRadius: '50%',
                     backgroundColor:
                       Number(activeKey) >= 2 ? '#DDF3F5' : '#F0F3F6',
                     color: Number(activeKey) >= 2 ? '#00AAB5' : '#A1A2A6',
-                    fontWeight: 500,
-                    fontSize: 16,
+                    ...headerCss.badgeCss,
                   }}
                 />
-                <div
-                  css={css`
-                    margin-left: 25px;
-                  `}
-                >
-                  <div
-                    css={css`
-                      color: #242934;
-                      font-weight: 700;
-                      font-size: 20px;
-                    `}
-                  >
-                    결제금액 미리보기
-                  </div>
+                <div css={headerCss.textInner}>
+                  <div css={headerCss.title}>결제금액 미리보기</div>
 
-                  <div
-                    css={css`
-                      color: #6b6d73;
-                      font-weight: 500;
-                    `}
-                  >
+                  <div css={headerCss.subTitle}>
                     거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
                   </div>
                 </div>
@@ -200,13 +137,48 @@ function PageBody() {
 }
 
 const inner = css`
-  /* flex-grow: 1; */
   padding: 18px 36px;
 `;
+
+const clearingDate = css({
+  display: 'inline-block',
+  marginBottom: 8,
+  fontWeight: 500,
+  fontSize: 14,
+  color: theme.grey600,
+});
+
+const headerCss = {
+  self: css({
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  badgeCss: {
+    width: 36,
+    height: 36,
+    lineHeight: '36px',
+    borderRadius: '50%',
+    fontWeight: 700,
+    fontSize: 18,
+  },
+  textInner: css({
+    marginLeft: 25,
+  }),
+  title: css({
+    color: '#242934',
+    fontWeight: 700,
+    fontSize: 20,
+  }),
+  subTitle: css({
+    color: '#6b6d73',
+    fontWeight: 500,
+  }),
+};
 
 const $button = css`
   width: 60px;
   height: 40px;
+  margin-right: 8px;
   color: #6b6d73;
   background-color: #f0f3f6;
 

@@ -145,14 +145,20 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             width: 200,
             align: 'right',
             title: t('table.subtract'),
-            render: (_, record) => record.subtract_amount.toLocaleString(),
+            render: (_, record) =>
+              record.subtract_amount > 0
+                ? '+' + record.subtract_amount.toLocaleString()
+                : 0,
           },
           {
             ellipsis: true,
             width: 200,
             align: 'right',
             title: t('table.refund'),
-            render: (_, record) => record.refund_amount.toLocaleString(),
+            render: (_, record) =>
+              record.refund_amount > 0
+                ? '+' + record.refund_amount.toLocaleString()
+                : 0,
           },
           {
             ellipsis: true,

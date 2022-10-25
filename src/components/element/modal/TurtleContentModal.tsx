@@ -32,6 +32,7 @@ function TurtleContentModal({
             <TurtleIcon name="modalClose" onClick={onClose} />
           </div>
         </div>
+
         <div css={modal.content}>{children}</div>
       </div>
     </div>

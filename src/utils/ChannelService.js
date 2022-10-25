@@ -6,7 +6,7 @@ class ChannelService {
   loadScript() {
     var w = window;
     if (w.ChannelIO) {
-      return (window.console.error || window.console.log || function () {})(
+      return (window.console.error || window.console.log || (() => {}))(
         'ChannelIO script included twice.',
       );
     }

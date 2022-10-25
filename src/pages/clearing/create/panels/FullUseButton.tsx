@@ -18,7 +18,7 @@ function FullUseButton({ icon, children, disabled, ...props }: Props) {
       <span
         css={buttonCss.text}
         style={{
-          ['--opacity' as any]: disabled ? 0.5 : 1,
+          ['--opacity' as string]: disabled ? 0.5 : 1,
         }}
       >
         {children}

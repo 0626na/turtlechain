@@ -2,9 +2,10 @@ import { InputProps } from 'antd';
 import { Input } from 'antd';
 
 import { css } from '@emotion/react';
+import { ChangeEvent } from 'react';
 
 interface Props extends InputProps {
-  onChange?: (value: any) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TurtleModalInput({

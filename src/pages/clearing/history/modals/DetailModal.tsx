@@ -22,7 +22,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
     ['getClearingItemQuery'], //
     () =>
       clearingAPI.getItem({
-        sheet_id: selectedRow?.id!,
+        sheet_id: selectedRow?.id as number,
         page_size: 10000,
       }),
     {

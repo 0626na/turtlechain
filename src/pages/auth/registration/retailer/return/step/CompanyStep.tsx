@@ -6,6 +6,7 @@ import useModal from '@hooks/useModal';
 import AgreementCheckbox from '@pages/auth/registration/AgreementCheckbox';
 import { Button, Form, Input, message, Radio, Upload } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { RcFile } from 'antd/lib/upload';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
@@ -43,15 +44,19 @@ function CompanyStep({ visible, loading }: Props) {
     },
   });
 
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
+  const normFile = (
+    uploadFiles:
+      | { file: RcFile; fileList: RcFile[] }
+      | { file: RcFile; fileList: RcFile[] }[],
+  ) => {
+    if (Array.isArray(uploadFiles)) {
+      return uploadFiles;
     }
-    return e && e.fileList;
+    return uploadFiles && uploadFiles.fileList;
   };
 
   // 사업자번호 유효성 검사
-  const bizNumValidation = (_: any, value: number) => {
+  const bizNumValidation = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('사업자 번호 입력해주세요'));
     }
@@ -64,7 +69,7 @@ function CompanyStep({ visible, loading }: Props) {
   };
 
   //약관동의 유효성 검사
-  const agreementValidation = (_: any, value: CheckboxValueType[] = []) => {
+  const agreementValidation = (_: unknown, value: CheckboxValueType[] = []) => {
     if (
       !value.includes('service_use') ||
       !value.includes('personal_information')

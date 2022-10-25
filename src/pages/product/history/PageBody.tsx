@@ -74,7 +74,7 @@ function PageBody() {
        * 메모 수정 모달
        */}
       <InputModal
-        visible={memoModalVisible as boolean}
+        visible={memoModalVisible}
         loading={loading}
         onCancel={loading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}

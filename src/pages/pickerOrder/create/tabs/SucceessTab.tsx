@@ -121,7 +121,7 @@ function SuccessTab({ loading, ...props }: Props) {
               size="small"
               scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
               dataSource={expandedRecord.orders}
-              rowKey={(record) => record.order_id?.toString()!}
+              rowKey={(record) => record.order_id?.toString() as string}
               loading={expandedRecord === undefined}
               pagination={false}
               columns={[

@@ -53,7 +53,7 @@ function DetailModal({
                 <li css={[modalBottomContentCss.item]}>
                   <span>교환/반품</span>
                   <span>
-                    -{' '}
+                    -
                     {selectedRow.overpaid_payment_amount?.toLocaleString() ?? 0}
                   </span>
                 </li>
