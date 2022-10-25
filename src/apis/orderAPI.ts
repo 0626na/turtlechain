@@ -78,9 +78,10 @@ export interface StoreOrder {
   mobile: string;
   product_name: string;
   product_option: string;
-  product_price: string;
-  product_count: string;
-  order_type: string;
+  count: number;
+  price: number;
+  type: string;
+  image_url: string;
   memo: string;
 
   ws_store_info: WholesalerStore[];
@@ -183,22 +184,9 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
     preParsingResult: preParsingResponse.data,
     parsingData: parsingResponse?.data,
   };
-};
-
-/*
- * 발주 등록
- */
-
-export interface CreatingOrdersItem {
-  vendor_name: string;
-  vendor_address: string;
-  vendor_mobile: string;
-  mobile: string;
-  product_name: string;
-  product_option: string;
-  product_count: number;
-  product_price: number;
-  order_type: string;
+  count: number;
+  price: number;
+  type: string;
   memo: string;
   ws_store_id: number | null;
 }
