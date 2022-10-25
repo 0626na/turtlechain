@@ -86,6 +86,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
                       product_count: Number(order.product_count),
                       product_price: Number(order.product_price),
                       order_type: order.order_type,
+                      creation_type: order.creation_type,
                       memo: order.memo,
                       ws_store_id: order.ws_store_info[0].id,
                     })),

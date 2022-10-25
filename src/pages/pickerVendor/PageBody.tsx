@@ -1,16 +1,51 @@
-import wholesalerAPI from '@apis/wholesalerAPI';
+import wholesalerAPI, { RequestGetList } from '@apis/wholesalerAPI';
+import { SearchFilter } from '@components/combine';
+import {
+  TurtleSearchInput,
+  TurtleSearchSelect,
+  TurtleTableTitle,
+} from '@components/element';
+import { css } from '@emotion/react';
 import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
-import { Pagination, Row, Table } from 'antd';
+import { Col, Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 
+const options = [
+  {
+    name: '거래처명',
+    value: 'store_name',
+  },
+  {
+    name: '휴대전화 번호',
+    value: 'mobile',
+  },
+  {
+    name: '계좌번호',
+    value: 'account_number',
+  },
+  {
+    name: '예금주',
+    value: 'account_holder',
+  },
+];
+
 function PageBody() {
-  const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState<RequestGetList>({
+    search_type: 'store_name',
+    search_string: '',
+    page: 1,
+    page_size: 10,
+  });
   const getWholesalerStoreListQuery = useQuery(
-    ['getWholesalerStoreListQuery', page],
-    () => wholesalerAPI.getList({ page }),
+    [
+      'getWholesalerStoreListQuery',
+      searchQuery.page,
+      searchQuery.search_string,
+    ],
+    () => wholesalerAPI.getList(searchQuery),
   );
 
   return (
@@ -20,18 +55,51 @@ function PageBody() {
           size="small"
           scroll={{ y: 648, x: 1608 }}
           loading={getWholesalerStoreListQuery.isLoading}
-          dataSource={getWholesalerStoreListQuery.data?.data.store_list}
+          dataSource={getWholesalerStoreListQuery.data?.data.store_list ?? []}
           rowKey={(record) => record.id}
           pagination={false}
+          title={() => (
+            <TurtleTableTitle
+              totalCount={
+                getWholesalerStoreListQuery.data?.data.total_count ?? 0
+              }
+              rightContent={
+                <Row>
+                  <Col css={marginRight}>
+                    <TurtleSearchSelect
+                      items={options}
+                      value={searchQuery.search_type}
+                      onChange={(value) =>
+                        setSearchQuery({ ...searchQuery, search_type: value })
+                      }
+                    />
+                  </Col>
+                  <Col>
+                    <TurtleSearchInput
+                      placeholder="검색어를 입력해주세요"
+                      onSearch={(value) =>
+                        setSearchQuery({
+                          ...searchQuery,
+                          search_string: value,
+                          page: 1,
+                        })
+                      }
+                    />
+                  </Col>
+                </Row>
+              }
+            />
+          )}
           footer={() => (
             <Row justify="center">
               <Pagination
                 size="small"
                 total={getWholesalerStoreListQuery.data?.data.total_count ?? 0}
                 showSizeChanger={false}
-                current={page}
+                current={searchQuery.page}
+                pageSize={10}
                 onChange={(page) => {
-                  setPage(page);
+                  setSearchQuery({ ...searchQuery, page });
                 }}
               />
             </Row>
@@ -97,4 +165,7 @@ function PageBody() {
   );
 }
 
+const marginRight = css`
+  margin-right: 6px;
+`;
 export default PageBody;

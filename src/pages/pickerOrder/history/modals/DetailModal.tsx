@@ -23,6 +23,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
       enabled: sheetId !== 0,
     },
   );
+
   return (
     <>
       <TurtleContentModal
