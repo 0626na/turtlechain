@@ -1,6 +1,9 @@
 import wholesalerAPI, { RequestGetList } from '@apis/wholesalerAPI';
 import { SearchFilter } from '@components/combine';
 import {
+  MemoIcon,
+  TurtleDropdown,
+  TurtleIcon,
   TurtleSearchInput,
   TurtleSearchSelect,
   TurtleTableTitle,
@@ -70,7 +73,10 @@ function PageBody() {
                       items={options}
                       value={searchQuery.search_type}
                       onChange={(value) =>
-                        setSearchQuery({ ...searchQuery, search_type: value })
+                        setSearchQuery({
+                          ...searchQuery,
+                          search_type: String(value),
+                        })
                       }
                     />
                   </Col>
@@ -107,13 +113,13 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: '160px',
+              width: 176,
               title: t('table.vendorName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: '160px',
+              width: 176,
               title: t('table.vendorAddress'),
               render: (_, record) => {
                 if (record.ext !== '') {
@@ -129,7 +135,7 @@ function PageBody() {
 
             {
               ellipsis: true,
-              width: '160px',
+              width: 176,
               title: t('table.mobile'),
               render: (_, record) => {
                 if (record.store_phone.length !== 0) {
@@ -144,7 +150,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: '260px',
+              width: 176,
               title: t('table.accountInfo'),
               render: (_, record) => {
                 if (record.store_account.length !== 0)
@@ -154,9 +160,43 @@ function PageBody() {
               },
             },
             {
-              width: 70,
-              align: 'center',
-              title: t('table.memo'),
+              width: 20,
+
+              title: '',
+              align: 'right',
+              render: (_, record) => (
+                <TurtleDropdown
+                  items={[
+                    {
+                      key: '1',
+                      label: '거래처명 수정',
+                      icon: <TurtleIcon name="updateVendorName" />,
+                    },
+                    {
+                      key: '2',
+                      label: '정보수정 요청',
+                    },
+                    {
+                      key: '3',
+                      type: 'divider',
+                    },
+                    {
+                      key: '4',
+                      label: (
+                        <span
+                          css={css`
+                            color: red;
+                          `}
+                        >
+                          삭제
+                        </span>
+                      ),
+                      icon: <TurtleIcon name="delete" danger />,
+                    },
+                  ]}
+                  triggerButton={<TurtleIcon name="more" />}
+                />
+              ),
             },
           ]}
         />
