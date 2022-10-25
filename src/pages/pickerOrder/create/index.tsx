@@ -1,10 +1,11 @@
 import React from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import PageBody from './PageBody';
-import { PageHeader } from '@layout/page';
 
-function OrderCreate() {
+import { PageHeader } from '@layout/page';
+import PageBody from './PageBody';
+
+function PickerOrder() {
   return (
     <>
       <Helmet title={`${t('turtleChain')} - ${t('order.create')}`} />
@@ -14,4 +15,4 @@ function OrderCreate() {
   );
 }
 
-export default OrderCreate;
+export default PickerOrder;

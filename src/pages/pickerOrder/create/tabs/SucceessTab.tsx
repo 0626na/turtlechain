@@ -69,8 +69,7 @@ function SuccessTab({ loading, ...props }: Props) {
   const { cart, setCart } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
   const [selectOrderRowID, setSelectOrderRowID] = useState(0);
-  //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
-  const [deleteMode, setDeleteMode] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false); //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
   const [visibleDeleteModal, openDeleteModal, closeDeleteModal] = useModal();
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
 
@@ -178,7 +177,7 @@ function SuccessTab({ loading, ...props }: Props) {
             />
           )}
           expandable={{
-            expandedRowKeys: [selectedRowID.toString()],
+            expandRowByClick: true,
             onExpand: (onExpand, record) => {
               if (!onExpand) {
                 setSelectedRowID(-1);
@@ -372,17 +371,16 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               width: 124,
-              render: (_, record) => (
-                <TurtleIcon
-                  name="delete"
-                  onClick={(e) => {
-                    setSelectedRowID(record.id!);
-                    e.stopPropagation();
-                    setDeleteMode(true);
-                    openDeleteModal();
-                  }}
-                />
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRowID(record.id!);
+                  setDeleteMode(true);
+                  openDeleteModal();
+                },
+              }),
+              render: (_, record) => <TurtleIcon name="delete" />,
             },
           ]}
         />
