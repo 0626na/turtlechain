@@ -38,7 +38,7 @@ function UserStep({ visible, onClickNext }: Props) {
   });
 
   // 아이디 유효성 검사
-  const idValidation = (_: any, value: string) => {
+  const idValidation = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('아이디를 입력해주세요.'));
     }
@@ -51,7 +51,7 @@ function UserStep({ visible, onClickNext }: Props) {
   };
 
   //이메일 유효성 검사
-  const emailValidation = (_: any, value: string) => {
+  const emailValidation = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('이메일을 입력해주세요.'));
     }
@@ -64,7 +64,7 @@ function UserStep({ visible, onClickNext }: Props) {
   };
 
   // 비밀번호 확인 유효성 검사
-  const passwordValidation = (_: any, value: number) => {
+  const passwordValidation = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('비밀번호 입력해주세요.'));
     }

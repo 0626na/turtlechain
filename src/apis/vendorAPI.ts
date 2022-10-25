@@ -139,7 +139,6 @@ const excel = async (data: RequestExcel) => {
 
 export interface RequestGet {
   page: number;
-  type?: string;
   search_string: string;
   rt_store_id?: number;
 }
@@ -253,7 +252,6 @@ const remove = async (data: RequestRemove) => {
 // Request: 마스터 도매 검색
 export interface RequestGetWholesale {
   page: number;
-  type: string;
   search_string: string;
 }
 

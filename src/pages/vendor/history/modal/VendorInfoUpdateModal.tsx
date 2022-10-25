@@ -21,6 +21,7 @@ import { useMutation, useQuery } from 'react-query';
 import presetAPI from '@apis/presetAPI';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
+import { RcFile } from 'antd/lib/upload';
 
 interface Props {
   visible: boolean;
@@ -82,16 +83,19 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     });
   };
 
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
+  const normFile = (
+    uploadFiles:
+      | { file: RcFile; fileList: RcFile[] }
+      | { file: RcFile; fileList: RcFile[] }[],
+  ) => {
+    if (Array.isArray(uploadFiles)) {
+      return uploadFiles;
     }
-    return e && e.fileList;
+    return uploadFiles && uploadFiles.fileList;
   };
 
   useEffect(() => {
     if (visible) fieldsFillIn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   return (
@@ -240,9 +244,15 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               <Form.Item name={['banks', 'bank']} noStyle>
                 <TurtleFormSelect
                   placeholder="은행"
-                  items={Object.values(getBankQuery.data?.data ?? []).map(
-                    (bank: any) => ({ value: bank, name: bank }),
-                  )}
+                  items={
+                    Object.values(getBankQuery.data?.data ?? []).map(
+                      (bank) => ({ value: bank, name: bank }),
+                    ) as {
+                      value: string;
+                      name: string;
+                      icon?: React.ReactNode;
+                    }[]
+                  }
                 />
               </Form.Item>
 

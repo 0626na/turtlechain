@@ -148,6 +148,9 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
+          onFinish={(value) => {
+            createVendorMutation.mutate([{ ...value }]);
+          }}
         >
           {/*  서버 전달용 데이터 */}
           <Form.Item name="rt_store_id" hidden>
@@ -165,7 +168,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           <Form.Item name="ws_store_id" hidden>
             <Input hidden />
           </Form.Item>
-
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
@@ -178,18 +180,15 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               placeholder="거래처명을 입력해주세요"
             />
           </Form.Item>
-
           <Form.Item name="store_phone" label={t('table.wsStoreNumber')}>
             <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
           </Form.Item>
-
           <Form.Item label={t('table.mobile')} name="vendor_phone" required>
             <TurtleFormInput
               disabled
               placeholder="휴대전화번호를 입력해주세요"
             />
           </Form.Item>
-
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
               <Form.Item name="vendor_address_buliding" noStyle>
@@ -209,14 +208,12 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               </Form.Item>
             </div>
           </Form.Item>
-
           <Form.Item
             name="vendor_address_ext"
             label={t('table.vendorEtcAddress')}
           >
             <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
           </Form.Item>
-
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
@@ -232,7 +229,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               </Form.Item>
             </div>
           </Form.Item>
-
           <Form.Item
             label={t('table.vendorCode')}
             name="vendor_code"
@@ -240,7 +236,6 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput placeholder="거래처코드를 입력해주세요" disabled />
           </Form.Item>
-
           <div css={flexEnd}>
             <AddButton
               disabled={
@@ -252,9 +247,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               코드만들기
             </AddButton>
           </div>
-
           <TurtleDivider marginBottom={37} marginTop={32} />
-
           <Form.Item
             name="is_vat_included"
             label={t('table.vatIncluded')}
@@ -263,36 +256,35 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           >
             <Switch css={$switch} />
           </Form.Item>
-
           <Form.Item name="biz_name" label={t('table.wsStoreName')}>
             <TurtleFormInput placeholder="상호명을 입력해주세요" />
           </Form.Item>
-
           <Form.Item name="biz_num" label={t('table.wsCompanyNum')}>
             <TurtleFormInput placeholder="사업자 번호를입력해주세요" />
           </Form.Item>
-
           <Form.Item name="owner" label={t('table.wsOwner')}>
             <TurtleFormInput placeholder="대표자명을 입력해주세요" />
           </Form.Item>
-
           <Form.Item name="memo" label={t('table.memo')}>
             <TurtleFormInput placeholder="메모를 입력해주세요" />
           </Form.Item>
 
-          <div css={marginTop}>
-            <PrimaryButton
-              size="large"
-              htmlType="submit"
-              onClick={() => {
-                form.validateFields().then(() => {
-                  createVendorMutation.mutate([{ ...form.getFieldsValue() }]);
-                });
-              }}
-            >
-              {t('button.addVendor')}
-            </PrimaryButton>
-          </div>
+          <Form.Item noStyle shouldUpdate>
+            {({ getFieldValue }) => (
+              <div css={marginTop}>
+                <PrimaryButton
+                  size="large"
+                  htmlType="submit"
+                  disabled={
+                    !getFieldValue('vendor_name') ||
+                    !getFieldValue('vendor_code')
+                  }
+                >
+                  {t('button.updateVendor')}
+                </PrimaryButton>
+              </div>
+            )}
+          </Form.Item>
         </Form>
       </TurtleContentModal>
     </>

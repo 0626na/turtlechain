@@ -36,8 +36,8 @@ function TurtleTag({ children, color }: Props) {
     <div
       css={container}
       style={{
-        ['--color' as any]: colors[color].color,
-        ['--background-color' as any]: colors[color].backgroundColor,
+        ['--color' as string]: colors[color].color,
+        ['--background-color' as string]: colors[color].backgroundColor,
       }}
     >
       <TurtleText>{children}</TurtleText>

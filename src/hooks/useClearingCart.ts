@@ -25,7 +25,7 @@ function useClearingCart() {
       .map((item) => ({
         ...item,
         id: index++,
-        type: 'reserve_payment' as 'reserve_payment',
+        type: 'reserve_payment' as const,
       }));
   };
 
@@ -39,7 +39,7 @@ function useClearingCart() {
     return balanceList.filter(isReserveSubtract).map((item) => ({
       ...item,
       id: index++,
-      type: 'reserve_subtract' as 'reserve_subtract',
+      type: 'reserve_subtract' as const,
     }));
   };
 
@@ -65,7 +65,7 @@ function useClearingCart() {
     return balanceList.filter(isAdjustmentSubtract).map((item) => ({
       ...item,
       id: index++,
-      type: 'adjustment_subtract' as 'adjustment_subtract',
+      type: 'adjustment_subtract' as const,
       overpaid_amount:
         item.overpaid_amount > totalPaymentAmount(item)
           ? totalPaymentAmount(item)
@@ -87,7 +87,7 @@ function useClearingCart() {
     return balanceList.filter(existPayment).map((item) => ({
       ...item,
       id: index++,
-      type: 'warehousing' as 'warehousing',
+      type: 'warehousing' as const,
     }));
   };
 
@@ -216,7 +216,7 @@ function useClearingCart() {
         0,
       ) +
       cart.adjustmentSubtractList.reduce(
-        (acc, cur) => acc + (cur.overpaid_payment_amount! ?? 0),
+        (acc, cur) => acc + ((cur.overpaid_payment_amount as number) ?? 0),
         0,
       ),
     [cart.reserveSubtractList, cart.adjustmentSubtractList],
@@ -226,7 +226,7 @@ function useClearingCart() {
   const clearingPaymentTotal = useMemo(
     () =>
       cart.resultList.reduce(
-        (acc, cur) => acc + (cur.clearing_payment_amount! ?? 0),
+        (acc, cur) => acc + ((cur.clearing_payment_amount as number) ?? 0),
         0,
       ),
     [cart.resultList],

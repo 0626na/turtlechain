@@ -22,7 +22,7 @@ import StoreAddModal from '../modals/StoreAddModal';
 import DetailModal from '../modals/DetailModal';
 
 function StoreTab() {
-  const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
+  const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
 
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
@@ -201,7 +201,7 @@ function StoreTab() {
               ellipsis: true,
               width: 25,
               title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}.`),
+              render: (_, record) => t(`inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,

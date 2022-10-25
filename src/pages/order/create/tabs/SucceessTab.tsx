@@ -65,7 +65,7 @@ function SuccessTab({ loading, ...props }: Props) {
         }
         loading={loading}
         size="small"
-        rowKey={(record) => record.order_id!}
+        rowKey={(record) => record.order_id as number}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,

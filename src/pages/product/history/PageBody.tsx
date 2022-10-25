@@ -22,7 +22,6 @@ function PageBody() {
     rt_store_id: undefined,
     page: 1,
     search_string: '',
-    type: 'name',
   });
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
@@ -74,7 +73,7 @@ function PageBody() {
        * 메모 수정 모달
        */}
       <InputModal
-        visible={memoModalVisible as boolean}
+        visible={memoModalVisible}
         loading={loading}
         onCancel={loading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}

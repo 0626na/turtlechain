@@ -7,6 +7,9 @@ import { message } from 'antd';
 import { t } from 'i18next';
 import useStore from './useStore';
 
+type SUCCESS_LIST = 'successList';
+type PENDING_LIST = 'pendingList';
+
 const useProductCart = () => {
   const [cart, setCart] = useRecoilState(productCartState);
   const { store } = useStore();
@@ -75,7 +78,7 @@ const useProductCart = () => {
 
   const addProduct = (record: Product) => {
     if (
-      cart.successList.find(
+      cart.successList.some(
         (product) => product.product_code === record.product_code,
       )
     ) {
@@ -98,6 +101,20 @@ const useProductCart = () => {
     return true;
   };
 
+  const memoUpdate = (newMemo: string, target: Product) => {
+    setCart((cart) => ({
+      ...cart,
+      successList: cart.successList?.map((item) =>
+        item.product_code === target.product_code
+          ? {
+              ...target,
+              memo: newMemo,
+            }
+          : item,
+      ),
+    }));
+  };
+
   return {
     cart,
     ready,
@@ -106,6 +123,7 @@ const useProductCart = () => {
     deleteProduct,
     addProduct,
     resetCart,
+    memoUpdate,
   };
 };
 

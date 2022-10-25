@@ -6,11 +6,13 @@ import koKR from 'antd/es/locale/ko_KR';
 import 'moment/locale/ko';
 import 'antd/dist/antd.less';
 import './i18n';
-import GlobalStyle from './GlobalStyle';
-import ChannelService from './ChannelService';
+
+import ChannelService from './utils/ChannelService';
 import GA4React from 'ga-4-react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { Global } from '@emotion/react';
+import { reset } from '@styles/reset';
 
 // Antd Message
 message.config({
@@ -41,7 +43,7 @@ const ga4react = new GA4React(
       <QueryClientProvider client={queryClient}>
         <ConfigProvider locale={koKR}>
           <BrowserRouter>
-            <GlobalStyle />
+            <Global styles={reset} />
             <App />
           </BrowserRouter>
         </ConfigProvider>

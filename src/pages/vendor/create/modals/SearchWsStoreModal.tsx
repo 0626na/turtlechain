@@ -29,7 +29,6 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
     page: 1,
-    type: 'name',
     search_string: '',
   });
 
@@ -59,7 +58,6 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     closeModal();
     setSearchQuery({
       page: 1,
-      type: 'name',
       search_string: '',
     });
   };
@@ -117,7 +115,6 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
               totalCount={getWholesaleQuery.data?.data.total_count ?? 0}
               rightContent={
                 <SearchFilter
-                  vendor
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

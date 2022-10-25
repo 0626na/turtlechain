@@ -6,6 +6,7 @@ import {
 } from '@components/element';
 import { css } from '@emotion/react';
 import { Col, Form, message, Row } from 'antd';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
@@ -15,7 +16,7 @@ interface Props {
   selectedRow: AdjustmentItemShow;
 }
 
-function AdjustmentProcessModal({ visible, onClose, selectedRow }: Props) {
+function ProcessModal({ visible, onClose, selectedRow }: Props) {
   const queryClient = useQueryClient();
 
   const [item, setItem] = useState<AdjustmentItemShow>();
@@ -23,7 +24,7 @@ function AdjustmentProcessModal({ visible, onClose, selectedRow }: Props) {
   const updateMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentList'], { active: true });
-      message.success('매입조정이 처리되었습니다.');
+      message.success('교환/반품/미송이 처리되었습니다.');
       onClose();
     },
   });
@@ -45,9 +46,9 @@ function AdjustmentProcessModal({ visible, onClose, selectedRow }: Props) {
       }}
       okDisabled={!item?.process_count || !item?.adjustment_process_type}
       loading={updateMutation.isLoading}
-      title="매입 조정 처리"
+      title={`${t(`adjustment.process type.${selectedRow?.type}`)} 처리`}
       description={[
-        '선택한 내역의 매입조정을 처리합니다.',
+        '선택한 내역을 처리합니다.',
         '처리 방식과 수량을 설정해주세요.',
       ]}
     >
@@ -67,10 +68,10 @@ function AdjustmentProcessModal({ visible, onClose, selectedRow }: Props) {
               { value: 'refund', name: '환불' },
             ]}
             value={item?.adjustment_process_type}
-            onChange={(value: any) => {
+            onChange={(value: string) => {
               setItem((item) => ({
                 ...(item as AdjustmentItemShow),
-                adjustment_process_type: value,
+                adjustment_process_type: value as 'subtract' | 'refund',
               }));
             }}
           />
@@ -110,4 +111,4 @@ function AdjustmentProcessModal({ visible, onClose, selectedRow }: Props) {
   );
 }
 
-export default AdjustmentProcessModal;
+export default ProcessModal;

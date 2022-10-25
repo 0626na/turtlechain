@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import styled from '@emotion/styled';
 
 import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
@@ -16,7 +15,7 @@ interface Props {
 function TertiaryButton({ text, icon, ...props }: Props) {
   return (
     <Button css={button} {...props}>
-      {icon && <IconContainer>{icon}</IconContainer>}
+      {icon && <div css={iconContainer}>{icon}</div>}
       <TurtleText>{text}</TurtleText>
     </Button>
   );
@@ -60,10 +59,11 @@ const button = css`
   }
 `;
 
-const IconContainer = styled.div`
+const iconContainer = css`
   margin-right: 5px;
 
   display: flex;
   align-items: center;
 `;
+
 export default TertiaryButton;

@@ -26,7 +26,6 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   const queryClient = useQueryClient();
   const [itemList, setItemList] = useState<WarehousingItem[]>([]);
   const [searchQuery, setSearchQuery] = useState({
-    type: 'vendor_name',
     search_string: '',
   });
   const [isUpdated, setIsUpdated] = useState(false);
@@ -80,7 +79,6 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
     if (visible) return;
     setIsUpdated(false);
     setSearchQuery({
-      type: 'vendor_name',
       search_string: '',
     });
   }, [visible]);
@@ -89,21 +87,16 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
     () =>
       itemList
         .filter((item) => !item.is_inactive)
-        .filter((item) => {
-          const { type, search_string } = searchQuery;
-          if (type === 'name') {
-            return item.product_info.name.toLowerCase().includes(search_string);
-          }
-          if (type === 'vendor_product_name') {
-            return item.product_info.vendor_product_name
+        .filter(
+          (item) =>
+            item.product_info.name
               .toLowerCase()
-              .includes(search_string);
-          }
-          if (type === 'vendor_name') {
-            return item.vendor_info.vendor_name.includes(search_string);
-          }
-          return true;
-        }),
+              .includes(searchQuery.search_string) ||
+            item.product_info.vendor_product_name
+              .toLowerCase()
+              .includes(searchQuery.search_string) ||
+            item.vendor_info.vendor_name.includes(searchQuery.search_string),
+        ),
     [itemList, searchQuery],
   );
 

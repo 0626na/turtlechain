@@ -107,13 +107,13 @@ function Pagebody() {
             <div
               css={tab}
               style={{
-                ['--background-color' as any]: '#5b5d63',
+                ['--background-color' as string]: '#5b5d63',
               }}
             />
             <div
               css={tab}
               style={{
-                ['--background-color' as any]:
+                ['--background-color' as string]:
                   currentStep === 1 ? '#5b5d63' : '#DEE4EB',
               }}
             />

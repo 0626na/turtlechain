@@ -38,20 +38,20 @@ function Pagebody() {
             <div
               css={tab}
               style={{
-                ['--background-color' as any]: '#5b5d63',
+                ['--background-color' as string]: '#5b5d63',
               }}
             />
             <div
               css={tab}
               style={{
-                ['--background-color' as any]:
+                ['--background-color' as string]:
                   currentStep === 1 ? '#5b5d63' : '#DEE4EB',
               }}
             />
           </div>
 
           <div css={header}>
-            {currentStep === 0 ? '계정 정보 입력' : '사업자 정보 빕력'}
+            {currentStep === 0 ? '계정 정보 입력' : '사업자 정보 입력'}
           </div>
 
           <div css={content}>

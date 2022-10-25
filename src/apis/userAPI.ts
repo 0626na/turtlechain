@@ -63,8 +63,12 @@ interface ResponseCreateRegistration {
 const createRegistration = async (data: RequestCreateRegistration) => {
   const url = '/provisioning/registration';
   const formData = new FormData();
-  for (let [key, value] of Object.entries(data)) {
-    if (key === 'agreements') value = JSON.stringify(value);
+  for (const [key, value] of Object.entries(data)) {
+    if (key === 'agreements') {
+      formData.append(key, JSON.stringify(value));
+      return;
+    }
+
     formData.append(key, value);
   }
 
@@ -163,8 +167,11 @@ const updateRegistration = async (requestData: RequestUpdateRegistration) => {
   const url = `/provisioning/registration/${requestData.id}`;
 
   const formData = new FormData();
-  for (let [key, value] of Object.entries(requestData.data)) {
-    if (key === 'agreements') value = JSON.stringify(value);
+  for (const [key, value] of Object.entries(requestData.data)) {
+    if (key === 'agreements') {
+      formData.append(key, JSON.stringify(value));
+      return;
+    }
 
     formData.append(key, value as string);
   }

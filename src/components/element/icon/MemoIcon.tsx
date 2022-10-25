@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { ReactComponent as Memo } from '@icons/memo.svg';
 
 interface Props {
   // 사용처에서 이벤트전파 제어를 하기위해 인자 타입을 지정해준다.
-  onClick?: (e: any) => void;
-  value: string;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
+  value?: string;
 }
 
 function MemoIcon({ onClick, value }: Props) {

@@ -23,7 +23,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
     rt_store_id: store.selected?.id,
     page: 1,
     search_string: '',
-    type: 'name',
   });
 
   // 상품 리스트 요청
@@ -43,7 +42,6 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
     if (visible) return;
     setSearchQuery({
       page: 1,
-      type: 'name',
       search_string: '',
       rt_store_id: store.selected?.id,
     });

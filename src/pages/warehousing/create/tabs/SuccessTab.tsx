@@ -28,7 +28,6 @@ function SuccessTab({ loading, ...props }: Props) {
     vendorCount,
   } = useWarehousingCart();
   const [searchQuery, setSearchQuery] = useState({
-    type: 'name',
     search_string: '',
   });
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -41,19 +40,14 @@ function SuccessTab({ loading, ...props }: Props) {
 
   const filteredList = useMemo(
     () =>
-      cart.successList.filter((item) => {
-        const { type, search_string } = searchQuery;
-        if (type === 'name') {
-          return item.product_name.toLowerCase().includes(search_string);
-        }
-        if (type === 'vendor_product_name') {
-          return item.vendor_product_name.toLowerCase().includes(search_string);
-        }
-        if (type === 'vendor_name') {
-          return item.vendor_name.toLowerCase().includes(search_string);
-        }
-        return true;
-      }),
+      cart.successList.filter(
+        (item) =>
+          item.product_name.toLowerCase().includes(searchQuery.search_string) ||
+          item.vendor_product_name
+            .toLowerCase()
+            .includes(searchQuery.search_string) ||
+          item.vendor_name.toLowerCase().includes(searchQuery.search_string),
+      ),
     [cart.successList, searchQuery],
   );
 

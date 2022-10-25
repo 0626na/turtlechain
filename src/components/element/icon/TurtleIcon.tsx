@@ -48,12 +48,14 @@ import { ReactComponent as CoinIcon } from '@icons/coin.svg';
 import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
 import { ReactComponent as UserCheckIcon } from '@icons/userCheck.svg';
 import { ReactComponent as UserLineIcon } from '@icons/userLine.svg';
+import { ReactComponent as MarkIcon } from '@icons/mark.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'mark'
     | 'delete'
     | 'download'
     | 'modalClose'
@@ -103,6 +105,10 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'mark') {
+    return <MarkIcon />;
+  }
 
   if (name === 'rightTriangle') {
     return (
@@ -234,7 +240,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'info') {
     return (
-      <div css={infoIconContainer} onClick={handleClick}>
+      <div css={iconContainer} onClick={handleClick}>
         <InfoIcon />
       </div>
     );
@@ -440,12 +446,6 @@ const iconContainer = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
-const infoIconContainer = css`
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
 `;
 
 const removeIconContainer = css`

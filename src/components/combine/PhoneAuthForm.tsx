@@ -131,9 +131,9 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                 <Button
                   css={button}
                   style={{
-                    ['--color' as any]:
+                    ['--color' as string]:
                       type === 'registration' ? '#6B6D73' : '#fff',
-                    ['--background-color' as any]:
+                    ['--background-color' as string]:
                       type === 'registration' ? '#F0F3F6' : '#00b3be',
                   }}
                   disabled={!expire_time || !getFieldValue('otp_code')}

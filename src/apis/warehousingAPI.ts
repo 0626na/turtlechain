@@ -94,7 +94,7 @@ export interface ResponseConnectInventory {
 }
 
 const connectInventory = async function (params: RequestConnectInventory) {
-  let url = 'external-api/inventory/warehousing';
+  const url = 'external-api/inventory/warehousing';
   const response = await v2Axios.get<ResponseConnectInventory>(url, { params });
   return response.data;
 };

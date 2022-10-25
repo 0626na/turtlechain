@@ -19,6 +19,7 @@ import vendorAPI, { Vendor, VendorAccount } from '@apis/vendorAPI';
 
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
+import { TextWithTooltip } from '@components/combine';
 
 function PageBody() {
   const [vendorList, setVendorList] = useState<Vendor[]>();
@@ -28,9 +29,10 @@ function PageBody() {
     rt_store_id: -1,
     page: 1,
     search_string: '',
-    type: 'name',
   });
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
+  const [vatIncludedModalVisible, openVatIncludedModal, closeVatIncludedModal] =
+    useModal();
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [
     updateVendorInfoModalVisible,
@@ -69,6 +71,9 @@ function PageBody() {
   const vendorUpdateMutation = useMutation(vendorAPI.update, {
     onSuccess: () => {
       message.success('수정이 완료되었습니다.');
+      closeMemoModal();
+      closeVatIncludedModal();
+      closeRemoveModal();
       getVendorListQuery.refetch();
     },
   });
@@ -80,11 +85,6 @@ function PageBody() {
       getVendorListQuery.refetch();
     },
   });
-
-  const loading =
-    getVendorListQuery.isLoading ||
-    vendorRemoveMutation.isLoading ||
-    vendorUpdateMutation.isLoading;
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
@@ -102,8 +102,8 @@ function PageBody() {
        */}
       <InputModal
         visible={memoModalVisible}
-        loading={loading}
-        onCancel={loading ? () => {} : closeMemoModal}
+        loading={vendorUpdateMutation.isLoading}
+        onCancel={vendorUpdateMutation.isLoading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
@@ -123,7 +123,10 @@ function PageBody() {
        */}
       <InputModal
         visible={updateVendorNameModalVisible}
-        onCancel={closeupdateVendorNameModal}
+        loading={vendorUpdateMutation.isLoading}
+        onCancel={
+          vendorUpdateMutation.isLoading ? () => {} : closeupdateVendorNameModal
+        }
         defaultValue={selectedRow?.vendor_name}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
@@ -144,14 +147,33 @@ function PageBody() {
       <TurtleConfirmModal
         title="정말 삭제할까요?"
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="네"
+        okText="삭제"
         visible={removeModalVisible}
-        loading={loading}
-        onCancel={closeRemoveModal}
+        loading={vendorUpdateMutation.isLoading}
+        onCancel={vendorUpdateMutation.isLoading ? () => {} : closeRemoveModal}
         onOk={() => {
           vendorRemoveMutation.mutate({
             id: selectedRow?.id as number,
             is_inactive: true,
+          });
+        }}
+      />
+      {/*
+       * 부가세 바로전달 confirm 모달
+       */}
+      <TurtleConfirmModal
+        title="정말 변경할까요?"
+        description={['변경 후에는 변경된 방식으로 적용 됩니다.']}
+        okText="변경"
+        visible={vatIncludedModalVisible}
+        loading={vendorUpdateMutation.isLoading}
+        onCancel={
+          vendorUpdateMutation.isLoading ? () => {} : closeVatIncludedModal
+        }
+        onOk={() => {
+          vendorUpdateMutation.mutate({
+            id: selectedRow?.id as number,
+            is_vat_included: !selectedRow?.is_vat_included,
           });
         }}
       />
@@ -167,7 +189,7 @@ function PageBody() {
       <PageContent>
         <Table
           size="small"
-          loading={loading}
+          loading={getVendorListQuery.isLoading}
           dataSource={vendorList}
           rowKey={(record) => record.id}
           pagination={false}
@@ -236,42 +258,40 @@ function PageBody() {
               ellipsis: true,
               width: 120,
               align: 'center',
-              title: t('table.vatIncluded'),
-              render: (_, record) => (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+              title: (
+                <TextWithTooltip
+                  tooltipContent={[
+                    '당일결제 시, 부가세도 그 날에 함께 ',
+                    '전달되어야 하는 거래처를 체크해주세요. ',
+                  ]}
                 >
-                  <Popconfirm
-                    title={'부가세 입금 여부를 변경하시겠습니까?'}
-                    okText={'예'}
-                    cancelText={'아니오'}
-                    onConfirm={() => {
-                      vendorUpdateMutation.mutate({
-                        id: record.id,
-                        is_vat_included: !record.is_vat_included,
-                      });
-                    }}
-                  >
-                    <Switch css={$switch} checked={record.is_vat_included} />
-                  </Popconfirm>
-                </div>
+                  {t('table.vatIncluded')}
+                </TextWithTooltip>
+              ),
+              render: (_, record) => (
+                <Switch
+                  css={$switch}
+                  onClick={() => {
+                    setSelectedRow(record);
+                    openVatIncludedModal();
+                  }}
+                  checked={record.is_vat_included}
+                />
               ),
             },
             {
               width: 70,
               align: 'center',
               title: t('table.memo'),
-              render: (_, record) => (
-                <MemoIcon
-                  value={record.memo}
-                  onClick={() => {
-                    setSelectedRow(record);
-                    openMemoModal();
-                  }}
-                />
-              ),
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  openMemoModal();
+                },
+              }),
+              render: (_, record) => <MemoIcon value={record.memo} />,
             },
             {
               width: 45,
@@ -285,6 +305,7 @@ function PageBody() {
                       label: '거래처명 수정',
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
+                        setSelectedRow(record);
                         openUpdateVendorNameModal();
                       },
                     },
@@ -317,6 +338,7 @@ function PageBody() {
                       ),
                       icon: <TurtleIcon name="delete" danger />,
                       onClick: () => {
+                        setSelectedRow(record);
                         openRemoveModal();
                       },
                     },

@@ -1,13 +1,13 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import clearingAPI from '@apis/clearingAPI';
+import { TextWithTooltip } from '@components/combine';
 import {
   ArrowRightIcon,
   PrimaryButton,
   TurtleDivider,
   TurtleIcon,
-  TurtleTableNumberInput,
   TurtleTableTitle,
   TurtleText,
+  TurtleTableNumberInput,
 } from '@components/element';
 
 import { css } from '@emotion/react';
@@ -19,9 +19,7 @@ import {
   Collapse,
   CollapsePanelProps,
   Row,
-  Space,
   Table,
-  Tooltip,
   Typography,
 } from 'antd';
 import { t } from 'i18next';
@@ -91,7 +89,6 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         </div>
 
         <Table
-          // css={{ height: 313 }}
           scroll={{ y: 80 }}
           size="small"
           pagination={false}
@@ -151,24 +148,19 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
+              width: 200,
               title: () => (
-                <>
-                  <Tooltip
-                    title={
-                      <div style={{ width: 187 }}>
-                        사용할 금액은 당일 입고 금액을 초과할 수 없습니다.
-                      </div>
-                    }
-                  >
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                  <Typography.Text style={{ marginLeft: 4 }}>
-                    사용금액
-                  </Typography.Text>
-                </>
+                <TextWithTooltip
+                  iconPlacement="left"
+                  tooltipContent={[
+                    '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
+                  ]}
+                >
+                  사용금액
+                </TextWithTooltip>
               ),
               render: (_, record) => (
-                <Space>
+                <>
                   {record.type === 'adjustment_subtract' ? (
                     <TurtleTableNumberInput
                       step={1000}
@@ -186,7 +178,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       disabled={true}
                     />
                   )}
-                </Space>
+                </>
               ),
             },
           ]}
@@ -207,7 +199,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         pagination={false}
         loading={getStoreClearingQuery.isLoading}
         dataSource={[...cart.reservePaymentList]}
-        rowKey={(record) => record.id!}
+        rowKey={(record) => record.id as number}
         title={() => (
           <TurtleTableTitle totalCount={cart.reservePaymentList.length} />
         )}

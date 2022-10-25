@@ -39,14 +39,16 @@ import authAPI from '@apis/authAPI';
 import { useQuery } from 'react-query';
 
 import useUser from '@hooks/useUser';
+import useLogin from '@hooks/useLogin';
 
 function App() {
   const { setUser } = useUser();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isLogin } = useLogin();
   const getUserQuery = useQuery('getUser', authAPI.verify, {
     onSuccess: ({ user_info }) => {
-      setUser({ ...user_info }); // 사용자 셋팅(쇼핑몰 or 사입자)
+      setUser(user_info); // 사용자 셋팅(쇼핑몰 or 사입자)
     },
+    enabled: !!isLogin,
   });
 
   return (

@@ -3,14 +3,12 @@ import React from 'react';
 import { ReactComponent as ArrowRight } from '@icons/arrowRight.svg';
 
 interface Props {
-  // 사용처에서 이벤트전파 제어를 하기위해 인자 타입을 지정해준다.
-  onClick?: (e: any) => void;
   value?: string;
 }
 
-function ArrowRightIcon({ onClick, value = '#a1a2a6' }: Props) {
+function ArrowRightIcon({ value = '#a1a2a6' }: Props) {
   return (
-    <div css={iconContainer} onClick={onClick}>
+    <div css={iconContainer}>
       <ArrowRight css={{ fill: value }} />
     </div>
   );

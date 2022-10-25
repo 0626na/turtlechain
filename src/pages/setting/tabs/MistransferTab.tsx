@@ -1,5 +1,4 @@
 import mistransferAPI, { RefundItem } from '@apis/mistransferAPI';
-import TooltipColumn from '@components/combine/TooltipColumn';
 
 import {
   SecondaryButton,
@@ -18,6 +17,7 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import MistransferAddModal from '../modals/MistransferAddModal';
+import { TextWithTooltip } from '@components/combine';
 
 const tagColors = {
   request: 'green',
@@ -159,15 +159,15 @@ function MistransferTab() {
             ellipsis: true,
             width: 200,
             title: (
-              <TooltipColumn
-                title={[
+              <TextWithTooltip
+                tooltipContent={[
                   t(
                     'description.displayed in the vendor`s account when transferring money.',
                   ),
                 ]}
               >
                 {t('mistransfer.recipient print')}
-              </TooltipColumn>
+              </TextWithTooltip>
             ),
             render: (_, record) => record.recipient_print,
           },

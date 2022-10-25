@@ -18,7 +18,6 @@ function FailTab({ loading, ...props }: Props) {
         dataSource={cart.failList}
         rowKey={(record) => record.product_code}
         scroll={{ x: 1400, y: 'auto' }}
-        title={() => <TurtleTableTitle totalCount={cart.failList.length} />}
         columns={[
           {
             ellipsis: true,
@@ -62,13 +61,6 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 120,
-            align: 'right',
-            title: t('table.price'),
-            render: (_, record) => record.price.toLocaleString(),
-          },
-          {
-            ellipsis: true,
             width: 200,
             title: t('table.imageUrl'),
             render: (_, record) => (
@@ -79,15 +71,10 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 50,
-            title: t('table.memo'),
-            render: (_, record) => (
-              <Tooltip title={record.memo}>
-                <div>
-                  <MemoIcon value={record.memo} />
-                </div>
-              </Tooltip>
-            ),
+            width: 120,
+            align: 'right',
+            title: t('table.price'),
+            render: (_, record) => record.price.toLocaleString(),
           },
         ]}
       />
