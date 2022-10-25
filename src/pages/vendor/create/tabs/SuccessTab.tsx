@@ -89,28 +89,24 @@ function SuccessTab({ isLoading }: Props) {
             ellipsis: true,
             width: 85,
             title: t('table.vendorCode'),
-
             render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
             width: 200,
             title: t('table.retailerStoreInput'),
-
             render: (_, record) => `${record.name}  ${record.address}`,
           },
           {
             ellipsis: true,
             width: 250,
             title: t('table.vendorName'),
-
             render: (_, record) => record.ws_store_info[0]?.name,
           },
           {
             ellipsis: true,
             width: 150,
             title: t('table.vendorAddress'),
-
             render: (_, record) => record.ws_store_info[0]?.address,
           },
           {
