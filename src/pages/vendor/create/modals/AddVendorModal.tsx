@@ -200,7 +200,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               </Form.Item>
 
               <Form.Item name="vendor_address_col" noStyle>
-                <TurtleFormInput placeholder="열" disabled />
+                <TurtleFormInput placeholder="열/호" disabled />
               </Form.Item>
 
               <Form.Item name="vendor_address_loc" noStyle>

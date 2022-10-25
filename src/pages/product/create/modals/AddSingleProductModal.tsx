@@ -50,6 +50,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   const selectVendor = useCallback(
     (record: Vendor) => {
       form.setFieldsValue({
+        ...form.getFieldsValue(),
         vendor_id: record.id,
         vendor_name: record.vendor_name,
         vendor_address: record.vendor_address,
@@ -105,6 +106,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           <Form.Item name="vendor_id" hidden>
             <Input hidden />
           </Form.Item>
+
           <Form.Item
             name="vendor_name"
             label={t('table.vendorName')}
@@ -114,6 +116,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               onClick={openVendorModal}
               onSearch={openVendorModal}
               readOnly
+              placeholder="거래처명을 입력해주세요"
             />
           </Form.Item>
           <Form.Item
@@ -121,7 +124,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.vendorAddress')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput disabled />
+            <TurtleFormInput disabled placeholder="거래처주소를 입력해주세요" />
           </Form.Item>
 
           <Form.Item
@@ -131,6 +134,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput
               disabled
               value={form.getFieldValue('ws_store_info')?.ext ?? ''}
+              placeholder="기타 주소를 입력해주세요"
             />
           </Form.Item>
 
@@ -139,7 +143,10 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.mobile')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput disabled />
+            <TurtleFormInput
+              disabled
+              placeholder="휴대전화 번호를 입력해주세요"
+            />
           </Form.Item>
 
           <TurtleDivider marginTop={32} marginBottom={32} />
@@ -149,7 +156,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.productName')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput />
+            <TurtleFormInput placeholder="ex.우디 투웨이 후드 집업" />
           </Form.Item>
 
           <Form.Item
@@ -157,7 +164,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.vendorProductName')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput />
+            <TurtleFormInput placeholder="ex.우디 투웨이 후드 집업" />
           </Form.Item>
 
           <Form.Item
@@ -165,7 +172,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.productCode')}
             rules={[{ required: true, message: '상품 바코드 입력해 주세요' }]}
           >
-            <TurtleFormInput disabled />
+            <TurtleFormInput disabled placeholder="코드를 입력해주세요" />
           </Form.Item>
 
           <div css={flexLayout}>
@@ -185,7 +192,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.option')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput />
+            <TurtleFormInput placeholder="ex.블랙,one size" />
           </Form.Item>
 
           <Form.Item
@@ -193,7 +200,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.price')}
             rules={[{ required: true }]}
           >
-            <TurtleNumberInput />
+            <TurtleNumberInput placeholder="ex.7,000" />
           </Form.Item>
 
           <Form.Item
@@ -201,7 +208,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             name="image_url"
             rules={[{ required: false }]}
           >
-            <TurtleFormInput />
+            <TurtleFormInput placeholder="ex.https://kkobugi.co.kr/.." />
           </Form.Item>
 
           <Form.Item
@@ -209,14 +216,29 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.memo')}
             rules={[{ required: false }]}
           >
-            <TurtleFormInput />
+            <TurtleFormInput placeholder="메모를 입력해주세요." />
           </Form.Item>
 
-          <Row justify="end">
-            <PrimaryButton size="large" htmlType="submit">
-              {t('button.addProduct')}
-            </PrimaryButton>
-          </Row>
+          <Form.Item noStyle shouldUpdate>
+            {({ getFieldValue }) => (
+              <Row css={{ marginTop: 60 }}>
+                <PrimaryButton
+                  size="large"
+                  htmlType="submit"
+                  disabled={
+                    !getFieldValue('vendor_name') ||
+                    !getFieldValue('name') ||
+                    !getFieldValue('vendor_product_name') ||
+                    !getFieldValue('product_code') ||
+                    !getFieldValue('option') ||
+                    !getFieldValue('price')
+                  }
+                >
+                  {t('button.addProduct')}
+                </PrimaryButton>
+              </Row>
+            )}
+          </Form.Item>
         </Form>
       </TurtleContentModal>
     </>
