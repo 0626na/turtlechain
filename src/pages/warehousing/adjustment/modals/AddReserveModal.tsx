@@ -199,9 +199,6 @@ function AddReserveModal({ visible, closeModal }: Props) {
                 ]}
               >
                 <TurtleNumberInput
-                  style={{ width: '100%' }}
-                  step={1000}
-                  min={0}
                   formatter={(value) => `${value}`.replace(pricePattern, ',')}
                 />
               </Form.Item>
