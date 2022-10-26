@@ -199,6 +199,8 @@
 
   "button": {
     "uploadExcel": "엑셀 업로드",
+    "at a time": "한번에 추가",
+    "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
     "updateVendor": "정보수정 요청하기",
@@ -222,6 +224,9 @@
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
     "expired auth time": "인증시간이 만료되었습니다.",
+    "successAddOrder": "단건추가가 완료되었습니다.",
+    "successMemoInput": "메모가 추가되었습니다.",
+    "successDelete": "삭제되었습니다.",
     "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
@@ -269,8 +274,11 @@
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "required item": "필수 입력값입니다.",
-    "really delete": "정말 취소할까요?",
-    "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
+    "really delete": "정말 삭제하시겠습니까?",
+    "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
+    "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
+    "really cancel": "정말 취소할까요?",
+    "You can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 

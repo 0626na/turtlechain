@@ -7,7 +7,7 @@ import { PageHeader } from '@layout/page';
 function OrderCreate() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('order.create')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('order.create')}`} />
       <PageHeader title={t('order.create')} />
       <PageBody />
     </>

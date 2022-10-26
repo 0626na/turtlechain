@@ -12,7 +12,7 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
 import presetAPI from '@apis/presetAPI';
-import useOrderCart from '@hooks/useOrderCart';
+
 interface Props {
   visible: boolean;
   close: () => void;
@@ -29,7 +29,7 @@ function AddNewOrderModal({ visible, close }: Props) {
       },
     ],
   });
-  const { updateSuccess, findSuccess } = useOrderCart();
+
   const [floor, setFloor] = useState('');
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
@@ -55,51 +55,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
-          onFinish={(values) => {
-            if (
-              // 단건 추가하려는 쇼핑몰이 이미 등록되어 있는 경우
-              !findSuccess({
-                rt_store_id: selectStore.id,
-                rt_store_name: selectStore.name,
-                orders: [
-                  {
-                    vendor_name: values.vendor_name,
-                    vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: '',
-                    mobile: values.mobile,
-                    product_name: values.vendor_product_name,
-                    product_option: values.option ?? '',
-                    order_type: values.type,
-                    product_price: values.price,
-                    product_count: values.count,
-                    memo: values.memo,
-                    ws_store_info: [],
-                  },
-                ],
-              })
-            ) {
-              //새로운 쇼핑몰 인경우
-              updateSuccess({
-                rt_store_id: selectStore.id,
-                rt_store_name: selectStore.name,
-                orders: [
-                  {
-                    vendor_name: values.vendor_name,
-                    vendor_address: `${values.vendor_address_buliding} ${values.vendor_address_floor} ${values.vendor_address_col}`,
-                    vendor_mobile: '',
-                    mobile: values.mobile,
-                    product_name: values.vendor_product_name,
-                    product_option: values.option ?? '',
-                    order_type: values.type,
-                    product_price: values.price,
-                    product_count: values.count,
-                    memo: values.memo,
-                    ws_store_info: [],
-                  },
-                ],
-              });
-            }
-          }}
+          onFinish={(values) => {}}
         >
           {/* 쇼핑몰 */}
           <Form.Item
@@ -149,7 +105,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   flex-basis: 33%;
                 `}
               >
-                <Form.Item name="vendor_address_buliding" noStyle>
+                <Form.Item name="vendor_address_building" noStyle>
                   <TurtleFormSelect
                     placeholder="상가"
                     onChange={(value) => setFloor(value)}

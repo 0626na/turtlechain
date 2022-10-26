@@ -5,8 +5,8 @@ import {
   TurtleIcon,
   TurtleTableNumberInput,
   TurtleTableTitle,
-  TurtleTableWarningNumberInput,
 } from '@components/element';
+import { TurtleTableWarningNumberInput } from '@components/element/input/TurtleTableNumberInput';
 import TurtleNumberInput from '@components/element/input/TurtleNumberInput';
 import useProductCart from '@hooks/useProductCart';
 import { Table, TabPaneProps, Tabs, Tooltip, Typography } from 'antd';
@@ -15,6 +15,7 @@ import NeedUpdatePopover from '../popovers/NeedUpdatePopover';
 import InputModal from '@components/combine/modal/InputModal';
 import useModal from '@hooks/useModal';
 import { Product } from '@apis/productAPI';
+import { valueType } from 'antd/lib/statistic/utils';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -182,7 +183,7 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => (
                 <TurtleTableWarningNumberInput
                   value={record.price}
-                  onChange={(value) => {
+                  onChange={(value: valueType) => {
                     updatePrice(record, Number(value));
                   }}
                 />

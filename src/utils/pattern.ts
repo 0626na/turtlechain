@@ -11,6 +11,9 @@ export const emailPattern =
 // 숫자 패턴
 export const numPattern = /[0-9]/;
 
+//숫자제외 패턴
+export const notNumPattern = /[^0-9]/g;
+
 // 휴대번호 패턴
 export const phonePattern = /^(\d{2,3})(\d{3,4})(\d{4})$/;
 

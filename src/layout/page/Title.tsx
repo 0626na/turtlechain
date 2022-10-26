@@ -25,7 +25,7 @@ function PageTitle({ title, subTitle, buttons }: Props) {
         </Col>
 
         <Col>
-          <Row>
+          <Row align="middle">
             {buttons?.map((button, idx) => (
               <Col key={idx} css={buttonContainer}>
                 {button}
