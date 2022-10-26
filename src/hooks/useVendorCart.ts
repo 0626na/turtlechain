@@ -11,6 +11,8 @@ import {
   vendorCartState,
 } from '@store/vendorCartState';
 import { useRecoilState } from 'recoil';
+import { t } from 'i18next';
+import { message } from 'antd';
 
 type SUCCESS_LIST = 'successList';
 type PENDING_LIST = 'pendingList';
@@ -43,6 +45,22 @@ const useVendorCart = () => {
       pendingList: initPendingList(data.data.suggest),
       failList: data.data.fail,
     });
+  };
+
+  const addSingleVendor = (data: SuccessItem) => {
+    if (
+      cart.successList.some((item) => item.vendor_code === data.vendor_code)
+    ) {
+      message.warn(t('message.already exist vendor'));
+      return false;
+    }
+
+    setCart((cart) => ({
+      ...cart,
+      successList: [data, ...cart.successList],
+    }));
+
+    return true;
   };
 
   const vatIncludedUpdate = (
@@ -203,6 +221,7 @@ const useVendorCart = () => {
     vendorRemove,
     handleWholesaleStoreSelecte,
     handleAccountSelecte,
+    addSingleVendor,
   };
 };
 

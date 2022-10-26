@@ -30,7 +30,7 @@ import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
-import AddSingleVendorModal from './modals/AddVendorModal';
+import AddSingleVendorModal from './modals/AddSingleModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -138,13 +138,13 @@ function PageBody() {
         onOk={() => {
           vendorCreateMutation.mutate([
             ...cart.successList.map((vendor) =>
-              convertToMutateItem(vendor, store.selected?.id as number),
+              convertToMutateItem(vendor, Number(store.selected?.id)),
             ),
             ...cart.pendingList
               .filter((vendor) => vendor.isMatching)
               .map((vendor) => convertToSuccessItem(vendor))
               .map((vendor) =>
-                convertToMutateItem(vendor, store.selected?.id as number),
+                convertToMutateItem(vendor, Number(store.selected?.id)),
               ),
           ]);
 

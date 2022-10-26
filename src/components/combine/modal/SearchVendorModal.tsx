@@ -15,17 +15,7 @@ import useStore from '@hooks/useStore';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  onClickSelect: (
-    record: Vendor,
-    // vendor_id: number,
-    // vendor_name: string,
-    // vendor_address: string,
-    // vendor_phone: string,
-    // is_vat_included?: boolean,
-    // vendor_account_bank?: string,
-    // vendor_account_number?: string,
-    // vendor_account_holder?: string,
-  ) => void;
+  onClickSelect: (record: Vendor) => void;
 }
 
 function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
