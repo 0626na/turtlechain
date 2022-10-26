@@ -31,6 +31,7 @@ import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
 import AddSingleVendorModal from './modals/AddSingleModal';
+import { t } from 'i18next';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ function PageBody() {
   });
 
   // 엑셀 연동
+
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
@@ -201,7 +203,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '단건추가',
+                label: t('button.one by one'),
                 icon: <TurtleIcon name="single" />,
                 onClick() {
                   openAddModal();
