@@ -125,6 +125,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         description={['해당 입고서를 수정합니다.']}
         onCancel={closeConfirmModal}
         loading={loading}
+        okText="수정"
         onOk={() => {
           updateWarehousingItemMutation.mutate({
             sheet_id: selectedRow?.id as number,
