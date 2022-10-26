@@ -316,7 +316,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 });
               }}
             >
-              {t('button.addVendor')}
+              {t('button.updateVendor')}
             </PrimaryButton>
           </div>
         </Form>

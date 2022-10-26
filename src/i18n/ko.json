@@ -223,7 +223,9 @@
     "success verify auth num": "인증번호를 확인하였습니다.",
     "expired auth time": "인증시간이 만료되었습니다.",
     "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
-    "success create mistransfer": "오입금 반환요청을 성공했습니다."
+    "success create mistransfer": "오입금 반환요청을 성공했습니다.",
+    "already exist vendor": "이미 추가된 거래처입니다.",
+    "already exist product": "이미 추가된 상품입니다."
   },
 
   "biz role": "직책",
