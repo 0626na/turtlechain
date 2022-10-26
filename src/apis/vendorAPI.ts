@@ -191,9 +191,9 @@ export interface RequestCreate {
   ws_store_id?: number;
   vendor_address?: string;
   vendor_name?: string;
-  memo?: string;
   is_vat_included?: boolean;
   owner?: string;
+  memo?: string;
   biz_num?: string;
   biz_name?: string;
 }

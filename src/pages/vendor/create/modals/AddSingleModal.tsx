@@ -17,17 +17,17 @@ import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
 import SearchWsStoreModal from './SearchWsStoreModal';
 import useStore from '@hooks/useStore';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
+import useVendorCart from '@hooks/useVendorCart';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
 }
 
-function AddSingleVendorModal({ visible, closeModal }: Props) {
-  const navigate = useNavigate();
+function AddSingleModal({ visible, closeModal }: Props) {
   const { store } = useStore();
+  const { addSingleVendor } = useVendorCart();
   const { isStoreSelected } = useStore();
 
   const [form] = Form.useForm();
@@ -41,7 +41,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
     () =>
       vendorAPI.getCode({
         rt_store_id: store.selected?.id as number,
-        ws_store_id: form.getFieldValue('ws_store_id'),
+        ws_store_id: form.getFieldValue('ws_store_info')?.id,
       }),
     {
       enabled: false,
@@ -54,50 +54,44 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
     },
   );
 
-  // 거래처 등록
-  const createVendorMutation = useMutation(vendorAPI.create, {
-    onSuccess: (data) => {
-      if (data.data.fail_count > 0) {
-        message.error('이미 등록된 거래처입니다.');
-        return;
-      }
-      message.success('성공적으로 등록하였습니다.');
-      form.resetFields();
-      navigate('/vendor/history');
-    },
-  });
-
   // 거래처 선택후 폼에 채워넣기
-  const HandleFieldFillin = (vendor: Wholesale) => {
+  const HandleFieldFillin = (ws_store: Wholesale) => {
+    console.log(ws_store);
+
     form.setFieldsValue({
       ...form.getFieldsValue(),
-
-      ws_store_id: vendor.id,
-      vendor_name: vendor.name,
-      store_phone: vendor.phone,
-
-      vendor_phone_id: vendor.store_phone[0].id,
-      vendor_phone: vendor.store_phone[0].phone,
-
-      vendor_address: `${vendor.building} ${vendor.floor}${
-        vendor.floor ? '층' : ''
-      } ${vendor.col} ${vendor.loc} ${vendor.ext}`,
-      vendor_address_buliding: vendor.building,
-      vendor_address_floor: vendor.floor,
-      vendor_address_col: vendor.col,
-      vendor_address_loc: vendor.loc,
-      vendor_address_ext: vendor.ext,
-
-      vendor_account_id: vendor.store_account[0].id,
-      bank: vendor.store_account[0].bank,
-      account_holder: vendor.store_account[0].account_holder,
-      account_number: vendor.store_account[0].account_number,
-
-      is_vat_included: false,
-      biz_name: vendor.company[0]?.name,
-      biz_num: vendor.company[0]?.biz_num,
-      owner: vendor.company[0]?.owner,
-      memo: '',
+      vendor_code: undefined,
+      isVatIncluded: false,
+      memo: undefined,
+      ws_store_info: {
+        id: ws_store.id,
+        name: ws_store.name,
+        phone: ws_store.phone,
+        address: `${ws_store.building} ${ws_store.floor}${
+          ws_store.floor ? '층' : ''
+        } ${ws_store.col} ${ws_store.loc} ${ws_store.ext}`,
+        store_phone: {
+          id: ws_store.store_phone[0].id,
+          phone: ws_store.store_phone[0].phone,
+        },
+        store_account: {
+          id: ws_store.store_account[0].id,
+          account_number: ws_store.store_account[0].account_number,
+          account_holder: ws_store.store_account[0].account_holder,
+          bank: ws_store.store_account[0].bank,
+        },
+        building: ws_store.building,
+        floor: ws_store.floor,
+        loc: ws_store.loc,
+        col: ws_store.col,
+        loc_col: `${ws_store.loc}/${ws_store.col}`,
+        ext: ws_store.ext,
+      },
+      company: {
+        name: ws_store.company[0]?.name,
+        biz_num: ws_store.company[0]?.biz_num,
+        owner: ws_store.company[0]?.owner,
+      },
     });
   };
 
@@ -107,7 +101,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
       return;
     }
 
-    if (!form.getFieldValue('vendor_name')) {
+    if (!form.getFieldValue('ws_store_info')?.name) {
       message.warn('거래처를 선택해 주세요');
       return;
     }
@@ -117,11 +111,8 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
 
   useEffect(() => {
     if (visible) return;
-
-    form.setFieldsValue({
-      rt_store_id: store.selected?.id as number,
-    });
-  }, [visible, form, store.selected?.id]);
+    form.resetFields();
+  }, [visible, form]);
 
   return (
     <>
@@ -149,28 +140,27 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(value) => {
-            createVendorMutation.mutate([{ ...value }]);
+            addSingleVendor({
+              vendor_code: value.vendor_code,
+              name: value.ws_store_info.name,
+              address: value.ws_store_info.address,
+              match_type: 'success',
+              ws_store_info: [
+                {
+                  ...value.ws_store_info,
+                  store_account: [{ ...value.ws_store_info.store_account }],
+                  store_phone: [{ ...value.ws_store_info.store_phone }],
+                },
+              ],
+              memo: value.memo,
+              useVendorName: value.ws_store_info.name,
+              isVatIncluded: value.isVatIncluded,
+            }) && closeModal();
           }}
         >
-          {/*  서버 전달용 데이터 */}
-          <Form.Item name="rt_store_id" hidden>
-            <Input hidden />
-          </Form.Item>
-          <Form.Item name="vendor_address" hidden>
-            <Input hidden />
-          </Form.Item>
-          <Form.Item name="vendor_account_id" hidden>
-            <Input hidden />
-          </Form.Item>
-          <Form.Item name="vendor_phone_id" hidden>
-            <Input hidden />
-          </Form.Item>
-          <Form.Item name="ws_store_id" hidden>
-            <Input hidden />
-          </Form.Item>
           <Form.Item
             label={t('table.vendorName')}
-            name="vendor_name"
+            name={['ws_store_info', 'name']}
             rules={[{ required: true, message: '거래처명을 입력해주세요' }]}
           >
             <TurtleFormSearchInput
@@ -180,10 +170,17 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
               placeholder="거래처명을 입력해주세요"
             />
           </Form.Item>
-          <Form.Item name="store_phone" label={t('table.wsStoreNumber')}>
+          <Form.Item
+            name={['ws_store_info', 'phone']}
+            label={t('table.wsStoreNumber')}
+          >
             <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
           </Form.Item>
-          <Form.Item label={t('table.mobile')} name="vendor_phone" required>
+          <Form.Item
+            label={t('table.mobile')}
+            name={['ws_store_info', 'store_phone', 'phone']}
+            required
+          >
             <TurtleFormInput
               disabled
               placeholder="휴대전화번호를 입력해주세요"
@@ -191,40 +188,49 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           </Form.Item>
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
-              <Form.Item name="vendor_address_buliding" noStyle>
-                <TurtleFormSelect placeholder="상가" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_floor" noStyle>
-                <TurtleFormInput placeholder="층" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_col" noStyle>
-                <TurtleFormInput placeholder="열" disabled />
-              </Form.Item>
-
-              <Form.Item name="vendor_address_loc" noStyle>
-                <TurtleFormInput placeholder="호" disabled />
-              </Form.Item>
+              <div css={{ flexBasis: '50%' }}>
+                <Form.Item name={['ws_store_info', 'building']} noStyle>
+                  <TurtleFormSelect placeholder="상가" disabled />
+                </Form.Item>
+              </div>
+              <div css={{ flexBasis: '20%' }}>
+                <Form.Item name={['ws_store_info', 'floor']} noStyle>
+                  <TurtleFormInput placeholder="층" disabled />
+                </Form.Item>
+              </div>
+              <div css={{ flexBasis: '30%' }}>
+                <Form.Item name={['ws_store_info', 'loc_col']} noStyle>
+                  <TurtleFormInput placeholder="열/호" disabled />
+                </Form.Item>
+              </div>
             </div>
           </Form.Item>
           <Form.Item
-            name="vendor_address_ext"
+            name={['ws_store_info', 'ext']}
             label={t('table.vendorEtcAddress')}
           >
             <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
           </Form.Item>
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
-              <Form.Item name="bank" noStyle>
+              <Form.Item
+                name={['ws_store_info', 'store_account', 'bank']}
+                noStyle
+              >
                 <TurtleFormSelect placeholder="은행" disabled />
               </Form.Item>
 
-              <Form.Item name="account_number" noStyle>
+              <Form.Item
+                name={['ws_store_info', 'store_account', 'account_number']}
+                noStyle
+              >
                 <TurtleFormInput placeholder="계좌번호" disabled />
               </Form.Item>
 
-              <Form.Item name="account_holder" noStyle>
+              <Form.Item
+                name={['ws_store_info', 'store_account', 'account_holder']}
+                noStyle
+              >
                 <TurtleFormInput placeholder="예금주명" disabled />
               </Form.Item>
             </div>
@@ -240,7 +246,7 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
             <AddButton
               disabled={
                 !!form.getFieldValue('vendor_code') ||
-                !form.getFieldValue('vendor_name')
+                !form.getFieldValue('ws_store_info')?.name
               }
               onClick={clickCreateVendorCode}
             >
@@ -249,21 +255,28 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
           </div>
           <TurtleDivider marginBottom={37} marginTop={32} />
           <Form.Item
-            name="is_vat_included"
+            name="isVatIncluded"
             label={t('table.vatIncluded')}
             valuePropName="checked"
             required
           >
             <Switch css={$switch} />
           </Form.Item>
-          <Form.Item name="biz_name" label={t('table.wsStoreName')}>
-            <TurtleFormInput placeholder="상호명을 입력해주세요" />
+
+          <Form.Item name={['company', 'name']} label={t('table.wsStoreName')}>
+            <TurtleFormInput placeholder="상호명을 입력해주세요" disabled />
           </Form.Item>
-          <Form.Item name="biz_num" label={t('table.wsCompanyNum')}>
-            <TurtleFormInput placeholder="사업자 번호를입력해주세요" />
+          <Form.Item
+            name={['company', 'biz_num']}
+            label={t('table.wsCompanyNum')}
+          >
+            <TurtleFormInput
+              placeholder="사업자 번호를 입력해주세요"
+              disabled
+            />
           </Form.Item>
-          <Form.Item name="owner" label={t('table.wsOwner')}>
-            <TurtleFormInput placeholder="대표자명을 입력해주세요" />
+          <Form.Item name={['company', 'owner']} label={t('table.wsOwner')}>
+            <TurtleFormInput placeholder="대표자명을 입력해주세요" disabled />
           </Form.Item>
           <Form.Item name="memo" label={t('table.memo')}>
             <TurtleFormInput placeholder="메모를 입력해주세요" />
@@ -276,11 +289,11 @@ function AddSingleVendorModal({ visible, closeModal }: Props) {
                   size="large"
                   htmlType="submit"
                   disabled={
-                    !getFieldValue('vendor_name') ||
+                    !getFieldValue('ws_store_info')?.name ||
                     !getFieldValue('vendor_code')
                   }
                 >
-                  {t('button.updateVendor')}
+                  {t('button.addVendor')}
                 </PrimaryButton>
               </div>
             )}
@@ -320,4 +333,4 @@ const marginTop = css`
   margin-top: 44px;
 `;
 
-export default AddSingleVendorModal;
+export default AddSingleModal;

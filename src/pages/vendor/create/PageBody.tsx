@@ -30,7 +30,8 @@ import useStore from '@hooks/useStore';
 import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
-import AddSingleVendorModal from './modals/AddVendorModal';
+import AddSingleVendorModal from './modals/AddSingleModal';
+import { t } from 'i18next';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ function PageBody() {
   });
 
   // 엑셀 연동
+
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
@@ -138,13 +140,13 @@ function PageBody() {
         onOk={() => {
           vendorCreateMutation.mutate([
             ...cart.successList.map((vendor) =>
-              convertToMutateItem(vendor, store.selected?.id as number),
+              convertToMutateItem(vendor, Number(store.selected?.id)),
             ),
             ...cart.pendingList
               .filter((vendor) => vendor.isMatching)
               .map((vendor) => convertToSuccessItem(vendor))
               .map((vendor) =>
-                convertToMutateItem(vendor, store.selected?.id as number),
+                convertToMutateItem(vendor, Number(store.selected?.id)),
               ),
           ]);
 
@@ -201,7 +203,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '단건추가',
+                label: t('button.one by one'),
                 icon: <TurtleIcon name="single" />,
                 onClick() {
                   openAddModal();

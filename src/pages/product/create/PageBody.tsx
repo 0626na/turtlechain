@@ -21,6 +21,7 @@ import { RangeDateModal } from '@components/combine';
 import AddSingleProductModal from './modals/AddSingleProductModal';
 import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '단건추가',
+                label: t('button.one by one'),
                 icon: <TurtleIcon name="single" />,
                 onClick: () => {
                   openAddingModal();

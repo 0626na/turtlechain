@@ -73,7 +73,7 @@ function PageBody() {
       message.success('수정이 완료되었습니다.');
       closeMemoModal();
       closeVatIncludedModal();
-      closeRemoveModal();
+      closeUpdateVendorInfoModal();
       getVendorListQuery.refetch();
     },
   });
@@ -82,6 +82,7 @@ function PageBody() {
   const vendorRemoveMutation = useMutation(vendorAPI.remove, {
     onSuccess: () => {
       message.success('거래처가 삭제되었습니다.');
+      closeRemoveModal();
       getVendorListQuery.refetch();
     },
   });
