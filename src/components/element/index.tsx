@@ -38,8 +38,7 @@ import SelectButton from './button/SelectButton';
 import ArrowRightIcon from './icon/ArrowRightIcon';
 import GridIcon from './icon/GridIcon';
 import SpecialButton from './button/SpecialButton';
-import {
-  TurtleTableNumberInput,
+import TurtleTableNumberInput, {
   TurtleTableWarningNumberInput,
 } from './input/TurtleTableNumberInput';
 import TurtleTableInput from './input/TurtleTableInput';

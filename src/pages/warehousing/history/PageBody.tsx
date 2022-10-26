@@ -10,6 +10,7 @@ import {
   TurtlePrimaryRangePicker,
   TurtleSearchSelect,
   TurtleTableTitle,
+  TurtleTag,
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
@@ -102,8 +103,8 @@ function PageBody() {
             is_inactive: true,
           });
         }}
-        cancelText="아니요"
-        okText="네"
+        cancelText="취소"
+        okText="삭제"
         loading={loading}
       />
       {/**
@@ -120,8 +121,8 @@ function PageBody() {
             is_confirmed: true,
           });
         }}
-        cancelText="아니요"
-        okText="네"
+        cancelText="취소"
+        okText="마감"
         loading={loading}
       />
       {/**
@@ -138,8 +139,8 @@ function PageBody() {
             is_confirmed: false,
           });
         }}
-        cancelText="아니요"
-        okText="네"
+        cancelText="취소"
+        okText="마감취소"
         loading={loading}
       />
       {/**
@@ -206,13 +207,13 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 100,
+              width: 70,
               align: 'center',
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
-                <Tag color={is_confirmed ? 'cyan' : 'orange'}>
+                <TurtleTag color={is_confirmed ? 'cyan' : 'orange'}>
                   {t(`warehousing.confirm.${is_confirmed}`)}
-                </Tag>
+                </TurtleTag>
               ),
             },
             {
@@ -237,11 +238,19 @@ function PageBody() {
               render: (_, record) => record.total_amount.toLocaleString(),
             },
             {
+              width: 200,
+            },
+            {
               ellipsis: true,
               align: 'center',
-              width: 200,
+              width: 70,
+              onCell: () => ({
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
+              }),
               render: (_, record) => (
-                <Space size="large">
+                <>
                   {record.is_confirmed ? (
                     // 16일 이전은 x
                     moment(record.created_time) > moment('2022-08-17') && (
@@ -262,27 +271,39 @@ function PageBody() {
                     /*
                      * 진행상태 : 대기
                      */
-                    <>
-                      <ProcessButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          selectRow(record);
-                          openConfirmModal();
-                        }}
-                      >
-                        마감하기
-                      </ProcessButton>
-                      <TurtleIcon
-                        name="delete"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          selectRow(record);
-                          openRemoveModal();
-                        }}
-                      />
-                    </>
+                    <ProcessButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        selectRow(record);
+                        openConfirmModal();
+                      }}
+                    >
+                      마감하기
+                    </ProcessButton>
                   )}
-                </Space>
+                </>
+              ),
+            },
+            {
+              ellipsis: true,
+              width: 30,
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  selectRow(record);
+                  openRemoveModal();
+                },
+              }),
+              render: (_, record) => (
+                <>
+                  {!record.is_confirmed && (
+                    /*
+                     * 진행상태 : 대기
+                     */
+                    <TurtleIcon name="delete" />
+                  )}
+                </>
               ),
             },
           ]}

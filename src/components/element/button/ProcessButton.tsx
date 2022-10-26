@@ -21,8 +21,8 @@ function ProcessButton({ children, size = 'small', ...props }: Props) {
 }
 
 const button = css`
-  /* width: 88px; */
-  /* height: 26px; */
+  width: 88px;
+  height: 26px;
 
   font-weight: 500;
   border-radius: 8px;
