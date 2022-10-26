@@ -21,7 +21,7 @@ function TurtleUpload({ beforeUpload }: Props) {
       }}
       fileList={[]}
     >
-      {t('button.uploadExcel')}
+      {t('button.at a time')}
     </Upload>
   );
 }
