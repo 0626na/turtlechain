@@ -1,5 +1,14 @@
-import wholesalerAPI, { RequestGetList } from '@apis/wholesalerAPI';
+import vendorAPI, {
+  VendorAccount,
+  VendorPhone,
+  Wholesale,
+} from '@apis/vendorAPI';
+import wholesalerAPI, {
+  RequestGetList,
+  WholesalerStore,
+} from '@apis/wholesalerAPI';
 import { SearchFilter } from '@components/combine';
+import InputModal from '@components/combine/modal/InputModal';
 import {
   MemoIcon,
   TurtleDropdown,
@@ -9,12 +18,14 @@ import {
   TurtleTableTitle,
 } from '@components/element';
 import { css } from '@emotion/react';
+import useModal from '@hooks/useModal';
 import { PageContent } from '@layout/page';
+import VendorInfoUpdateModal from '@pages/vendor/history/modal/VendorInfoUpdateModal';
 import { phonePattern } from '@utils/pattern';
-import { Col, Pagination, Row, Table } from 'antd';
+import { Col, message, Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 const options = [
   {
@@ -34,6 +45,20 @@ const options = [
     value: 'account_holder',
   },
 ];
+
+export interface OrderVendor {
+  id: number;
+  vendor_code: string;
+  vendor_name: string;
+  vendor_address: string;
+  is_vat_included: boolean;
+  memo: string;
+  vendor_phone: VendorPhone;
+  vendor_account: VendorAccount;
+  ws_store_info: Wholesale;
+  memo_active?: boolean;
+  memo_value?: string;
+}
 
 function PageBody() {
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
@@ -127,7 +152,7 @@ function PageBody() {
                 }
                 return (
                   `${record.building} ${record.floor}층 ${record.col ?? ''} ${
-                    record.lc ?? ''
+                    record.loc ?? ''
                   }` ?? ''
                 );
               },
@@ -175,6 +200,8 @@ function PageBody() {
                     {
                       key: '2',
                       label: '정보수정 요청',
+                      icon: <TurtleIcon name="updateVendorInfo" />,
+                      onClick: (e) => {},
                     },
                     {
                       key: '3',

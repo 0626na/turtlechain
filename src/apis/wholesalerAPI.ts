@@ -1,12 +1,12 @@
 import { v2Axios } from '@apis/index';
 
-interface WholesalerStore {
+export interface WholesalerStore {
   id: number;
   name: string;
   building: string;
   floor: string;
   col: string;
-  lc: string;
+  loc: string;
   ext: string;
   store_phone: {
     phone: string;
