@@ -62,16 +62,16 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             value: selectedRow?.vendor_name,
           },
           {
+            title: t('table.refundAmount'),
+            value: selectedRow?.refund_amount.toLocaleString(),
+          },
+          {
             title: t('table.subtractAmount'),
             value: selectedRow?.subtract_amount.toLocaleString(),
           },
           {
             title: t('table.unpaidAmount'),
             value: selectedRow?.unpaid_amount.toLocaleString(),
-          },
-          {
-            title: t('table.refundAmount'),
-            value: selectedRow?.refund_amount.toLocaleString(),
           },
         ]}
       />

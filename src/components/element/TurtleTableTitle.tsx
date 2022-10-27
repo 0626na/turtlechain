@@ -58,22 +58,22 @@ function TurtleTableTitle({
             원
           </TurtleText>
         )}
-        {!!totalSubstractAmount && totalSubstractAmount >= 0 && (
+        {!!totalRefundAmount && totalRefundAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 차감금액 합계{' '}
+            누적 환불예정금액{' '}
             <TurtleText css={count}>
-              {totalSubstractAmount.toLocaleString()}
+              {totalRefundAmount.toLocaleString()}
             </TurtleText>
             원
           </TurtleText>
         )}
-        {!!totalRefundAmount && totalRefundAmount >= 0 && (
+        {!!totalSubstractAmount && totalSubstractAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 환불금액 합계{' '}
+            누적 사용가능 금액{' '}
             <TurtleText css={count}>
-              {totalRefundAmount.toLocaleString()}
+              {totalSubstractAmount.toLocaleString()}
             </TurtleText>
             원
           </TurtleText>
@@ -81,7 +81,7 @@ function TurtleTableTitle({
         {!!totalUnpaidAmount && totalUnpaidAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 결제금액 합계{' '}
+            누적 결제요청금액{' '}
             <TurtleText css={count}>
               {totalUnpaidAmount.toLocaleString()}
             </TurtleText>
