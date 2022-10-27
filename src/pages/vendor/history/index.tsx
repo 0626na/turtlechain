@@ -10,11 +10,7 @@ function Index() {
 
   return (
     <>
-      <Helmet
-        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
-          'vendor.history',
-        )}`}
-      />
+      <Helmet title={`${t('turtleChain')} - ${t('vendor.history')}`} />
       <PageHeader
         title={t('vendor.history')}
         onClickBefore={() => {

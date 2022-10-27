@@ -8,9 +8,7 @@ import PageBody from './PageBody';
 function Index() {
   return (
     <>
-      <Helmet
-        title={`${t('turtleChain')} - ${t('retailer')} - ${t('etc.setting')}`}
-      />
+      <Helmet title={`${t('turtleChain')} - ${t('etc.setting')}`} />
       <AlertBar />
       <PageBody />
     </>

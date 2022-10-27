@@ -11,11 +11,7 @@ function ProductCreate() {
 
   return (
     <>
-      <Helmet
-        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
-          'product.create',
-        )}`}
-      />
+      <Helmet title={`${t('turtleChain')} - ${t('product.create')}`} />
       <PageHeader
         title={t('product.create')}
         button={
