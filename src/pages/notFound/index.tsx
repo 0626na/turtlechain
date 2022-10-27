@@ -9,7 +9,7 @@ function Index() {
 
   return (
     <>
-      <Helmet title={t('turtlechain')} />
+      <Helmet title={t('turtleChain')} />
       <Row
         justify="center"
         align="middle"

@@ -7,7 +7,11 @@ import React from 'react';
 function ClearingCreatePage() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('clearing.create')}`} />
+      <Helmet
+        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
+          'clearing.create',
+        )}`}
+      />
       <PageHeader title={t('clearing.create')} />
       <PageBody />
     </>

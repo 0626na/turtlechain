@@ -8,7 +8,9 @@ function WarehousingCreatePage() {
   return (
     <>
       <Helmet
-        title={`${t('helmet.turtleChain')} - ${t('warehousing.history')}`}
+        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
+          'warehousing.history',
+        )}`}
       />
       <PageHeader title={t('warehousing.history')} />
       <PageBody />

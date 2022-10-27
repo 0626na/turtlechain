@@ -5,14 +5,16 @@ import { Helmet } from 'react-helmet';
 import { PageHeader } from '@layout/page';
 import PageBody from './PageBody';
 
-function PickerVendor() {
+function PickerOrder() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('vendor.history')}`} />
-      <PageHeader title="거래처 목록" />
+      <Helmet
+        title={`${t('turtleChain')}- ${t('picker')} - ${t('order.create')}`}
+      />
+      <PageHeader title={t('order.create')} />
       <PageBody />
     </>
   );
 }
 
-export default PickerVendor;
+export default PickerOrder;

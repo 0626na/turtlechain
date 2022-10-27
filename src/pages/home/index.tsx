@@ -11,7 +11,7 @@ import { css } from '@emotion/react';
 function index() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('helmet.home')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('home')}`} />
       <PageHeader title="" />
 
       <div css={container}>

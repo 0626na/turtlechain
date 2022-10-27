@@ -8,7 +8,9 @@ function WarehousingAdjustment() {
   return (
     <>
       <Helmet
-        title={`${t('helmet.turtleChain')} - ${t('warehousing.adjustment')}`}
+        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
+          'warehousing.adjustment.',
+        )}`}
       />
       <AlertBar />
       <PageBody />

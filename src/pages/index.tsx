@@ -35,9 +35,11 @@ export const SettingPage = lazy(() => import('./setting'));
 // export const TutorialPage = lazy(() => import('./tutorial'));
 
 // 사입자Page
-export const PickerOrderCreatePage = lazy(() => import('./pickerOrder/create'));
-export const PickerOrderHistoryPage = lazy(
-  () => import('./pickerOrder/history'),
+export const PickerOrderCreatePage = lazy(
+  () => import('./picker/pickerOrder/create'),
 );
-export const PickerVendorPage = lazy(() => import('./pickerVendor'));
-export const PickerSettingPage = lazy(() => import('./pickerSetting'));
+export const PickerOrderHistoryPage = lazy(
+  () => import('./picker/pickerOrder/history'),
+);
+export const PickerVendorPage = lazy(() => import('./picker/pickerVendor'));
+export const PickerSettingPage = lazy(() => import('./picker/pickerSetting'));
