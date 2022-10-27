@@ -163,13 +163,21 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
       >
         <TurtleStatistics
           value={[
-            { title: '등록 일자', value: `${selectedRow?.created_date}` },
             {
-              title: '입고 수량 합계',
+              title: t('table.createdDate'),
+              value: `${selectedRow?.created_date}`,
+            },
+            {
+              title: t('table.totalWarehousingCount'),
               value: `${selectedRow?.total_item_count}건`,
             },
             {
-              title: '금액 합계',
+              title: t('table.totalVendorCount'),
+              value: `${selectedRow?.total_store_count}개`,
+            },
+
+            {
+              title: t('table.totalAmount'),
               value: `${selectedRow?.total_amount.toLocaleString()}원`,
             },
           ]}

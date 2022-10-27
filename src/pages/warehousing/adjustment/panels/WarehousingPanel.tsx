@@ -61,10 +61,10 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
         `}
       >
         <TurtleFormSearchInput
-          onChange={(a) => {
+          onSearch={(value) => {
             setSearchQuery((searchQuery) => ({
               ...searchQuery,
-              product_name: a.target.value,
+              product_name: value,
             }));
           }}
           placeholder="상품명을 입력해주세요."
@@ -93,26 +93,22 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
               getWarehousingItemQuery.data?.data.item_list?.length ?? 0
             }
             rightContent={
-              <Row>
-                <Col>
-                  <TurtlePrimaryRangePicker
-                    value={[
-                      moment(searchQuery.start_date),
-                      moment(searchQuery.end_date),
-                    ]}
-                    onChange={(_, dateStrings) => {
-                      const start_date = dateStrings[0];
-                      const end_date = dateStrings[1];
+              <TurtlePrimaryRangePicker
+                value={[
+                  moment(searchQuery.start_date),
+                  moment(searchQuery.end_date),
+                ]}
+                onChange={(_, dateStrings) => {
+                  const start_date = dateStrings[0];
+                  const end_date = dateStrings[1];
 
-                      setSearchQuery((searchQuery) => ({
-                        ...searchQuery,
-                        start_date,
-                        end_date,
-                      }));
-                    }}
-                  />
-                </Col>
-              </Row>
+                  setSearchQuery((searchQuery) => ({
+                    ...searchQuery,
+                    start_date,
+                    end_date,
+                  }));
+                }}
+              />
             }
           />
         )}

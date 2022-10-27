@@ -126,6 +126,12 @@ function PageBody() {
             {
               ellipsis: true,
               align: 'right',
+              title: t('table.refundAmount'),
+              render: (_, record) => record.refund_amount?.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              align: 'right',
               title: t('table.subtractAmount'),
               render: (_, record) => record.subtract_amount.toLocaleString(),
             },
@@ -134,12 +140,6 @@ function PageBody() {
               align: 'right',
               title: t('table.unpaidAmount'),
               render: (_, record) => record.unpaid_amount?.toLocaleString(),
-            },
-            {
-              ellipsis: true,
-              align: 'right',
-              title: t('table.refundAmount'),
-              render: (_, record) => record.refund_amount?.toLocaleString(),
             },
           ]}
         />
