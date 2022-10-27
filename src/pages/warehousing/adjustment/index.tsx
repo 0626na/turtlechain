@@ -7,11 +7,7 @@ import PageBody from './PageBody';
 function WarehousingAdjustment() {
   return (
     <>
-      <Helmet
-        title={`${t('turtleChain')} - ${t('retailer')} - ${t(
-          'warehousing.adjustment.',
-        )}`}
-      />
+      <Helmet title={`${t('turtleChain')} - ${t('warehousing.adjustment.')}`} />
       <AlertBar />
       <PageBody />
     </>
