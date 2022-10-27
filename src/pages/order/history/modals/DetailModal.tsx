@@ -58,7 +58,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             {
               title: '발주금액 합계',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.total_price.toLocaleString() ??
+                getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
                 '0',
             },
           ]}

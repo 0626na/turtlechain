@@ -20,6 +20,7 @@ function PageBody() {
       end_date: moment().format('YYYY-MM-DD'),
     }),
   );
+
   return (
     <>
       <DetailModal
@@ -48,19 +49,30 @@ function PageBody() {
               color: 'cyan',
               title: '성공',
               count:
-                getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
+                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                  (acc, sheet) => acc + sheet.total_store_count,
+                  0,
+                ) ?? 0,
 
               price:
                 getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
-                  (acc, sheet) => acc + sheet.order_price,
+                  (acc, sheet) => acc + sheet.total_success_price,
                   0,
                 ) ?? 0,
             },
             {
               color: 'orange',
               title: '실패',
-              count: 0,
-              price: 0,
+              count:
+                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                  (acc, sheet) => acc + sheet.total_fail_count,
+                  0,
+                ) ?? 0,
+              price:
+                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                  (acc, sheet) => acc + sheet.total_fail_price,
+                  0,
+                ) ?? 0,
             },
           ]}
         />

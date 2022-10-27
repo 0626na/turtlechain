@@ -8,6 +8,7 @@ import { TurtleTabs } from '@components/element';
 import { PageContent } from '@layout/page';
 import SuccessTab from './tabs/SuccessTab';
 import FailTab from './tabs/FailTab';
+import { Table } from 'antd';
 
 interface Props {
   visible: boolean;
@@ -49,39 +50,37 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             {
               title: '발주 거래처',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString() ??
-                '0',
+                `${getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString()}개` ??
+                '0개',
             },
             {
               title: '발주수량 합계',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString() ??
-                '0',
+                `${getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString()}개` ??
+                '0개',
             },
             {
               title: '발주금액 합계',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.total_price.toLocaleString() ??
-                '0',
+                `${getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString()}원` ??
+                '0원',
             },
           ]}
         />
-        <PageContent>
-          <TurtleTabs>
-            <SuccessTab
-              key={'successHistory'}
-              tab={`성공(${getOrderHistoryQuery.data?.data.successes.length})`}
-              data={getOrderHistoryQuery.data?.data.successes ?? []}
-              loading={getOrderHistoryQuery.isLoading}
-            />
-            <FailTab
-              key={'failHistory'}
-              tab={`실패(${getOrderHistoryQuery.data?.data.fails.length})`}
-              data={getOrderHistoryQuery.data?.data.fails ?? []}
-              loading={getOrderHistoryQuery.isLoading}
-            />
-          </TurtleTabs>
-        </PageContent>
+        <TurtleTabs>
+          <SuccessTab
+            key={'successHistory'}
+            tab={`성공(${getOrderHistoryQuery.data?.data.successes.length})`}
+            data={getOrderHistoryQuery.data?.data.successes ?? []}
+            loading={getOrderHistoryQuery.isLoading}
+          />
+          <FailTab
+            key={'failHistory'}
+            tab={`실패(${getOrderHistoryQuery.data?.data.fails.length})`}
+            data={getOrderHistoryQuery.data?.data.fails ?? []}
+            loading={getOrderHistoryQuery.isLoading}
+          />
+        </TurtleTabs>
       </TurtleContentModal>
     </>
   );
