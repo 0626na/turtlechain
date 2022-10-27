@@ -5,11 +5,15 @@ import { WarehousingItem } from '@apis/warehousingAPI';
 const useAdjustmentCart = () => {
   const [cart, setCart] = useRecoilState(adjustmentCartState);
 
-  const warehousingItemSelect = (record: WarehousingItem) => {
-    if (cart.selectedList.find((item) => item.id === record.id)) {
+  const selectWarehousingItem = (record: WarehousingItem) => {
+    if (
+      cart.selectedWarehousingItemList.find((item) => item.id === record.id)
+    ) {
       setCart((cart) => ({
         ...cart,
-        selectedList: cart.selectedList.filter((item) => item.id !== record.id),
+        selectedWarehousingItemList: cart.selectedWarehousingItemList.filter(
+          (item) => item.id !== record.id,
+        ),
       }));
 
       return;
@@ -17,24 +21,27 @@ const useAdjustmentCart = () => {
 
     setCart((cart) => ({
       ...cart,
-      selectedList: [...cart.selectedList, record],
+      selectedWarehousingItemList: [
+        ...cart.selectedWarehousingItemList,
+        record,
+      ],
     }));
   };
 
-  const warehousingItemSelectAll = (
+  const selectAllWarehousingItem = (
     records: WarehousingItem[],
     totalCount: number,
   ) => {
-    if (cart.selectedList.length === totalCount) {
-      setCart((cart) => ({ ...cart, selectedList: [] }));
+    if (cart.selectedWarehousingItemList.length === totalCount) {
+      setCart((cart) => ({ ...cart, selectedWarehousingItemList: [] }));
 
       return;
     }
 
-    setCart((cart) => ({ ...cart, selectedList: [...records] }));
+    setCart((cart) => ({ ...cart, selectedWarehousingItemList: [...records] }));
   };
   //AdjustmentItemList의 필드값중 변경대상을 type으로 받아 업데이트 시킨다.
-  const exchangeRefundItemUpdate = (
+  const updateExchangeTakebackItem = (
     type: string,
     index: number, // id
     value: number | string,
@@ -47,7 +54,7 @@ const useAdjustmentCart = () => {
     }));
   };
 
-  const exchangeRefundItemDelete = (index: number) => {
+  const deleteExchangeTakebackItem = (index: number) => {
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.adjustmentItemList.filter(
@@ -59,10 +66,10 @@ const useAdjustmentCart = () => {
   return {
     cart,
     setCart,
-    warehousingItemSelect,
-    warehousingItemSelectAll,
-    exchangeRefundItemUpdate,
-    exchangeRefundItemDelete,
+    selectWarehousingItem,
+    selectAllWarehousingItem,
+    updateExchangeTakebackItem,
+    deleteExchangeTakebackItem,
   };
 };
 
