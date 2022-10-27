@@ -111,14 +111,16 @@
   },
 
   "auth": {
-    "logout": "로그아웃",
+    "findId": "아이디 찾기",
     "login": "로그인",
+    "logout": "로그아웃",
     "autoLogin": "자동 로그인",
     "id": "아이디",
     "password": "비밀번호",
-    "findId": "아이디 찾기",
     "resetPassword": "비밀번호 재설정",
-    "signUp": "서비스 가입",
+    "registration": "서비스 가입",
+    "registrationReturn": "가입반려",
+    "registrationSelect": "가입 유형 선택",
     "aboutMembership": "요금플랜 알아보기",
     "wonderMembership": "다양한 요금제가 궁금하신가요?",
     "notMember": "아직 회원이 아니신가요?"
@@ -223,7 +225,7 @@
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
     "success update": "성공적으로 수정하였습니다.",
-    "success signup": "가입 신청이 완료 되었습니다.",
+    "success registration": "가입 신청이 완료 되었습니다.",
     "success update store": "정보가 업데이트 되었습니다.",
     "success create store": "쇼핑몰이 생성되었습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
@@ -252,7 +254,7 @@
 
   "go home": "홈으로 돌아가기",
   "next": "다음",
-  "signUp": "가입 신청하기",
+  "registration": "가입 신청하기",
   "phone": "휴대전화 번호",
   "id": "아이디",
   "password": "비밀번호",
@@ -272,7 +274,6 @@
     "vendorName": "거래처명을 입력해주세요"
   },
 
-  "find id": "아이디 찾기",
   "auth phone": "인증하기",
   "login": "로그인",
   "reset password": "비밀번호 재설정",
@@ -324,5 +325,6 @@
   },
 
   "yes": "네",
-  "no": "아니요"
+  "no": "아니요",
+  "picker": "사입자"
 }

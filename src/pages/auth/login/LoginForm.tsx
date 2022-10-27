@@ -150,7 +150,7 @@ function LoginForm() {
           {t('auth.notMember')}{' '}
         </Typography.Text>
         <Link to="/registration" style={{ color: '#00B594' }}>
-          &nbsp;&nbsp;{t('auth.signUp')}
+          &nbsp;&nbsp;{t('auth.registration')}
         </Link>
       </Row>
       <Row>

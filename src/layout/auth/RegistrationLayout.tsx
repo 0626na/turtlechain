@@ -23,7 +23,7 @@ function RegistrationPageBody() {
           <img
             css={logoCss.img}
             src={`${process.env.PUBLIC_URL}/assets/img/background_signup.png`}
-            alt="signup_logo"
+            alt="registration_logo"
           />
           <div css={logoCss.container}>
             <span css={logoCss.title}>

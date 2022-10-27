@@ -263,7 +263,7 @@ function Pagebody() {
                       }
                       loading={registrationMutation.isLoading}
                     >
-                      {t('signUp')}
+                      {t('registration')}
                     </SpecialButton>
                   </Row>
                 )}

@@ -25,7 +25,7 @@ function FindIdForm() {
   return (
     <>
       <div css={cardCss.self}>
-        <TurtleText css={cardCss.title}>{t('find id')}</TurtleText>
+        <TurtleText css={cardCss.title}>{t('auth.findId')}</TurtleText>
         <TurtleText css={cardCss.subTitle}>
           {!auth.token
             ? t('description.please phone auth')

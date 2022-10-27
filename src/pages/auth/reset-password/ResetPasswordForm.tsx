@@ -141,7 +141,7 @@ function ResetPasswordForm() {
           </Link>
           <TurtleDivider type="vertical" />
           <Link to="/find-id" css={footerCss.content}>
-            {t('find id')}
+            {t('auth.findId')}
           </Link>
         </div>
       </Form>
