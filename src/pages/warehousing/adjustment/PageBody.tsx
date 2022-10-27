@@ -28,8 +28,8 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import ExchangeRefundModal from './modals/AddExchangeRefundModal';
-import AddReserveModal from './modals/AddReserveModal';
+import ExchangeRefundModal from './modals/CreateExchangeTakebackModal';
+import AddReserveModal from './modals/CreateReserveModal';
 import AdjustmentProcessModal from './modals/ProcessModal';
 import DetailModal from './modals/DetailModal';
 
