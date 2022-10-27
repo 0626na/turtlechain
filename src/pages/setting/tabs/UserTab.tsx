@@ -4,7 +4,7 @@ import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 
 import useUser from '@hooks/useUser';
-import { phonePattern, removeHyphen } from '@utils/pattern';
+import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
 import { Button, Col, Form, message, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
@@ -49,6 +49,32 @@ function UserTab() {
     [form],
   );
 
+  //이메일 유효성 검사
+  const emailValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error('이메일을 입력해주세요.'));
+    }
+
+    if (!emailPattern.test(value)) {
+      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
+    }
+
+    return Promise.resolve();
+  };
+
+  //휴대전화 번호 유효성 검사
+  const mobileValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error('휴대전화 번호를 입력해주세요.'));
+    }
+
+    if (!phonePattern.test(value)) {
+      return Promise.reject(new Error('유효하지 않은 형식 입니다.'));
+    }
+
+    return Promise.resolve();
+  };
+
   useEffect(() => {
     if (searchParams.get('tab') === 'user') {
       resetStates(user);
@@ -83,11 +109,19 @@ function UserTab() {
           <Form.Item label="아이디" name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label="이메일" name="email">
-            <TurtleFormInput />
+          <Form.Item
+            label="이메일"
+            name="email"
+            rules={[{ validator: emailValidator }]}
+          >
+            <TurtleFormInput placeholder="이메일을 입력해주세요" />
           </Form.Item>
-          <Form.Item label="휴대전화 번호" name="mobile_phone">
-            <TurtleFormInput />
+          <Form.Item
+            label="휴대전화 번호"
+            name="mobile_phone"
+            rules={[{ validator: mobileValidator }]}
+          >
+            <TurtleFormInput placeholder="휴대전화 번호를 입력해주세요" />
           </Form.Item>
 
           {buttonsVisible && (
