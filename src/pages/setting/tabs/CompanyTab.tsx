@@ -42,8 +42,8 @@ function CompanyTab() {
   const updateMutation = useMutation(retailerCompanyAPI.update, {
     onSuccess: () => {
       message.success(t('message.success update'));
-      hideButtons();
       getCompanyQuery.refetch();
+      hideButtons();
     },
   });
 
@@ -162,12 +162,17 @@ function CompanyTab() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label="사업자명(법인명)" name="name">
+          <Form.Item
+            label="사업자명(법인명)"
+            required={false}
+            rules={[{ required: true }]}
+            name="name"
+          >
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item label="사업자번호" name="biz_num">
-            <TurtleFormInput />
+            <TurtleFormInput disabled />
           </Form.Item>
 
           <Form.Item label="사업장주소" name="address_main">
@@ -183,6 +188,8 @@ function CompanyTab() {
             label="사업자등록증"
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            required={false}
+            rules={[{ required: true }]}
           >
             <Upload
               css={upload}
