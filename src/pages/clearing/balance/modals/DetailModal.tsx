@@ -148,7 +148,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             render: (_, record) =>
               record.refund_amount > 0
                 ? '+' + record.refund_amount.toLocaleString()
-                : 0,
+                : record.refund_amount.toLocaleString(),
           },
           {
             ellipsis: true,
@@ -158,7 +158,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             render: (_, record) =>
               record.subtract_amount > 0
                 ? '+' + record.subtract_amount.toLocaleString()
-                : 0,
+                : record.subtract_amount.toLocaleString(),
           },
           {
             ellipsis: true,
