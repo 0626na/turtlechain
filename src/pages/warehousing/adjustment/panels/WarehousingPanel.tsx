@@ -32,6 +32,7 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
     rt_store_id: store.selected?.id as number,
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
+    product_name: '',
   });
 
   const getWarehousingItemQuery = useQuery(
