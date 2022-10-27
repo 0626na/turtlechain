@@ -19,7 +19,7 @@ interface Props {
   closeModal: () => void;
 }
 
-function AddModal({ visible, closeModal }: Props) {
+function StoreCreateModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
@@ -29,7 +29,7 @@ function AddModal({ visible, closeModal }: Props) {
 
   const createMutation = useMutation(retailerStoreAPI.create, {
     onSuccess: () => {
-      message.success(t('message.success update mall'));
+      message.success(t('message.success create store'));
       queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },
@@ -68,6 +68,22 @@ function AddModal({ visible, closeModal }: Props) {
         colon={false}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
+        onFinish={(value) => {
+          form.validateFields().then((value) => {
+            createMutation.mutate({
+              ...value,
+              inventory_domain: value.inventory_domain ?? '',
+              inventory_key: value.inventory_key ?? '',
+              email: value.email ?? '',
+              alimtalk_name: value.alimtalk_name ?? '',
+              store_mobile: {
+                send_alimtalk: false,
+                mobile: value.store_mobile.mobile,
+                tag: '',
+              },
+            });
+          });
+        }}
       >
         <Form.Item name="store_id" hidden>
           <TurtleFormInput hidden />
@@ -209,55 +225,31 @@ function AddModal({ visible, closeModal }: Props) {
         >
           <TurtleFormInput placeholder={t('placeholder.alimtalk')} />
         </Form.Item>
-      </Form>
 
-      <Row css={{ marginTop: 40 }}>
-        <Popconfirm
-          title={'정말 추가하시겠습니까?'}
-          okText={t('yes')}
-          cancelText={t('no')}
-          onConfirm={() => {
-            form.validateFields().then((value) => {
-              createMutation.mutate({
-                ...value,
-                inventory_domain: value.inventory_domain ?? '',
-                inventory_key: value.inventory_key ?? '',
-                email: value.email ?? '',
-                alimtalk_name: value.alimtalk_name ?? '',
-                store_mobile: {
-                  send_alimtalk: false,
-                  mobile: value.store_mobile.mobile,
-                  tag: '',
-                },
-              });
-            });
-          }}
-        >
-          <SpecialButton // 수정하기 Button
-            size="large"
-            loading={createMutation.isLoading}
-          >
-            추가하기
-          </SpecialButton>
-          {/* <Form.Item shouldUpdate noStyle>
-            {({ getFieldValue }) => (
-              <div css={marginTop}>
-                <PrimaryButton
-                  size="large"
-                  htmlType="submit"
-                  disabled={
-                    !getFieldValue('subtract_amount') ||
-                    !getFieldValue('unpaid_amount') ||
-                    !getFieldValue('vendor_name')
-                  }
-                >
-                  {t('button.addTransaction')}
-                </PrimaryButton>
-              </div>
-            )}
-          </Form.Item> */}
-        </Popconfirm>
-      </Row>
+        <Form.Item noStyle shouldUpdate>
+          {({ getFieldValue }) => (
+            <Row css={{ marginTop: 40 }}>
+              <SpecialButton // 수정하기 Button
+                size="large"
+                loading={createMutation.isLoading}
+                htmlType="submit"
+                disabled={
+                  !getFieldValue('name') ||
+                  !getFieldValue('store_url') ||
+                  !getFieldValue('store_mobile')?.mobile ||
+                  !getFieldValue('store_account')?.bank ||
+                  !getFieldValue('store_account')?.account_number ||
+                  !getFieldValue('store_account')?.account_holder ||
+                  getFieldValue('inventory_is_vat_included') === undefined ||
+                  !getFieldValue('inventory_type')
+                }
+              >
+                추가하기
+              </SpecialButton>
+            </Row>
+          )}
+        </Form.Item>
+      </Form>
     </TurtleContentModal>
   );
 }
@@ -267,4 +259,4 @@ const flexGap = css`
   gap: 4px;
 `;
 
-export default AddModal;
+export default StoreCreateModal;

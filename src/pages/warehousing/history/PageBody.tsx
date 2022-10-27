@@ -79,6 +79,8 @@ function PageBody() {
     updateSheetMutation.isLoading ||
     removeSheetMutation.isLoading;
 
+  console.log(getWarehousingSheetQuery.data?.sheet_list);
+
   return (
     <>
       {/**
@@ -229,6 +231,13 @@ function PageBody() {
               align: 'right',
               title: t('table.totalWarehousingCount'),
               render: (_, record) => record.total_item_count.toLocaleString(),
+            },
+            {
+              ellipsis: true,
+              width: 200,
+              align: 'right',
+              title: t('table.totalVendorCount'),
+              render: (_, record) => record.total_store_count,
             },
             {
               ellipsis: true,

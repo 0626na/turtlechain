@@ -18,19 +18,18 @@ interface Props {
 
 function ProcessModal({ visible, onClose, selectedRow }: Props) {
   const queryClient = useQueryClient();
-
   const [item, setItem] = useState<AdjustmentItemShow>();
-
   const updateMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentList'], { active: true });
-      message.success('교환/반품/미송이 처리되었습니다.');
+      message.success('성공적으로 업데이트 되었습니다.');
+
       onClose();
     },
   });
 
   useEffect(() => {
-    setItem(selectedRow);
+    setItem({ ...selectedRow, process_count: selectedRow?.count_left });
   }, [selectedRow]);
 
   return (
@@ -44,7 +43,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
           adjustment_process_type: item?.adjustment_process_type,
         });
       }}
-      okDisabled={!item?.process_count || !item?.adjustment_process_type}
+      okDisabled={item?.process_count === 0 || !item?.adjustment_process_type}
       loading={updateMutation.isLoading}
       title={`${t(`adjustment.process type.${selectedRow?.type}`)} 처리`}
       description={[
@@ -60,14 +59,17 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
         labelCol={{ span: 12 }}
         wrapperCol={{ span: 16 }}
       >
-        <Form.Item label="처리방식" css={{ marginBottom: 12 }}>
+        <Form.Item
+          label="처리방식"
+          name="adjustment_process_type"
+          css={{ marginBottom: 12 }}
+        >
           <TurtleFormSelect
             placeholder="선택"
             items={[
               { value: 'subtract', name: '차감' },
               { value: 'refund', name: '환불' },
             ]}
-            value={item?.adjustment_process_type}
             onChange={(value: string) => {
               setItem((item) => ({
                 ...(item as AdjustmentItemShow),

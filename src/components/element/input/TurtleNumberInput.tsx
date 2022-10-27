@@ -4,12 +4,14 @@ import { css } from '@emotion/react';
 
 interface Props extends InputNumberProps {
   step?: number;
+  value?: number;
 }
 
-function TurtleNumberInput({ step = 1000, ...props }: Props) {
+function TurtleNumberInput({ step = 1000, value, ...props }: Props) {
   return (
     <InputNumber
       {...props}
+      value={value}
       css={priceInput}
       step={step}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}

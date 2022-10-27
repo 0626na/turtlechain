@@ -144,17 +144,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             ellipsis: true,
             width: 200,
             align: 'right',
-            title: t('table.subtract'),
-            render: (_, record) =>
-              record.subtract_amount > 0
-                ? '+' + record.subtract_amount.toLocaleString()
-                : 0,
-          },
-          {
-            ellipsis: true,
-            width: 200,
-            align: 'right',
-            title: t('table.refund'),
+            title: t('table.refundAmount'),
             render: (_, record) =>
               record.refund_amount > 0
                 ? '+' + record.refund_amount.toLocaleString()
@@ -164,7 +154,17 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             ellipsis: true,
             width: 200,
             align: 'right',
-            title: t('table.unpaid'),
+            title: t('table.subtractAmount'),
+            render: (_, record) =>
+              record.subtract_amount > 0
+                ? '+' + record.subtract_amount.toLocaleString()
+                : 0,
+          },
+          {
+            ellipsis: true,
+            width: 200,
+            align: 'right',
+            title: t('table.unpaidAmount'),
             render: (_, record) =>
               record.unpaid_amount > 0
                 ? '+' + record.unpaid_amount.toLocaleString()

@@ -97,7 +97,8 @@
     "sellmate": "셀메이트",
     "ezadmin": "이지어드민",
     "turtlechain": "터틀체인",
-    "none": "없음"
+    "none": "없음",
+    "etc": "기타"
   },
 
   "etc": {
@@ -219,7 +220,8 @@
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
     "success update": "성공적으로 수정하였습니다.",
     "success signup": "가입 신청이 완료 되었습니다.",
-    "success update mall": "쇼핑몰이 추가 되었습니다.",
+    "success update store": "정보가 업데이트 되었습니다.",
+    "success create store": "쇼핑몰이 생성되었습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
@@ -278,7 +280,7 @@
     "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
     "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
     "really cancel": "정말 취소할까요?",
-    "You can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
+    "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 

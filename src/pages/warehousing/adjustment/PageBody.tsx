@@ -68,8 +68,8 @@ function PageBody() {
     },
   );
 
-  // 교환/반품/미송 정보 수정 요청
-  const updateAdjustmentMutation = useMutation(adjustmentAPI.update, {
+  //메모 등록 요청
+  const updateMemoMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       message.success('성공적으로 업데이트 되었습니다.');
       setSearchQuery({ ...searchQuery, page: 1 });
@@ -136,13 +136,11 @@ function PageBody() {
        */}
       <InputModal
         visible={memoModalVisible}
-        loading={updateAdjustmentMutation.isLoading}
-        onCancel={
-          updateAdjustmentMutation.isLoading ? () => {} : memoModalClose
-        }
+        loading={updateMemoMutation.isLoading}
+        onCancel={updateMemoMutation.isLoading ? () => {} : memoModalClose}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
-          updateAdjustmentMutation.mutate({
+          updateMemoMutation.mutate({
             id: selectedRow?.id as number,
             memo: value,
           });
@@ -162,7 +160,7 @@ function PageBody() {
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
-        okText={t('yes')}
+        okText="삭제"
         visible={removeModalVisible}
         loading={removeAdjustmentMutation.isLoading}
         onCancel={removeModalClose}

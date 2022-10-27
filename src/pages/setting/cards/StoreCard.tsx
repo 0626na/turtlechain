@@ -1,5 +1,11 @@
 import { StoreShow } from '@apis/retailerStoreAPI';
-import { TurtleDivider, TurtleIcon, TurtleTag } from '@components/element';
+import { TextWithTooltip } from '@components/combine';
+import {
+  TurtleDivider,
+  TurtleIcon,
+  TurtleTag,
+  TurtleTooltip,
+} from '@components/element';
 import { css } from '@emotion/react';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row } from 'antd';
@@ -21,6 +27,9 @@ const colors = {
     color: 'gray',
   },
   none: {
+    color: 'gray',
+  },
+  etc: {
     color: 'gray',
   },
 } as const;
@@ -59,13 +68,9 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="account" />
-          <span
-            css={leftContentCss.title}
-            style={{ ['--marginRight' as string]: '3px' }}
-          >
-            결제 계좌정보
-          </span>
-          <TurtleIcon name="info" />
+          <TextWithTooltip tooltipContent={['결제 계좌정보 툴팁내용']}>
+            <span css={leftContentCss.title}>결제 계좌정보</span>
+          </TextWithTooltip>
         </Col>
         <Col css={rightContentCss.self}>
           <span>{`${store.store_account[0]?.bank ?? ''} ${
@@ -77,13 +82,9 @@ function StoreCard({ store }: Props) {
       <Row>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="pencil" />
-          <span
-            css={leftContentCss.title}
-            style={{ ['--marginRight' as string]: '3px' }}
-          >
-            받는분 통장인쇄
-          </span>
-          <TurtleIcon name="info" />
+          <TextWithTooltip tooltipContent={['받는분 통장인쇄 툴팁내용']}>
+            <span css={leftContentCss.title}>받는분 통장인쇄</span>
+          </TextWithTooltip>
         </Col>
         <Col>
           <TurtleTag color="gray">

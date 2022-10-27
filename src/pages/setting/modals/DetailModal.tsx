@@ -11,7 +11,7 @@ import {
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
 import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
-import { TurtleContentModal } from '@components/combine';
+import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
 interface Props {
@@ -38,9 +38,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
     enabled: visible,
   });
 
-  const updateQuery = useMutation(retailerStoreAPI.update, {
+  const updateMutation = useMutation(retailerStoreAPI.update, {
     onSuccess: () => {
-      message.success(t('message.success update mall'));
+      message.success(t('message.success update store'));
       queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },
@@ -112,6 +112,29 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         wrapperCol={{ span: 17 }}
         onValuesChange={() => {
           showButtons();
+        }}
+        onFinish={(value) => {
+          updateMutation.mutate({
+            store_id: value.store_id,
+            is_closed: value.is_closed,
+            name: value.name,
+            store_url: value.store_url,
+            store_mobile: {
+              mobile: value.mobile,
+            },
+            store_account: {
+              bank: value.bank,
+              account_number: value.account_number,
+              account_holder: value.account_holder,
+            },
+            inventory_type: value.inventory_type,
+            inventory_domain:
+              value.inventory_type === 2 ? '' : value.inventory_domain,
+            inventory_key: value.inventory_key,
+            inventory_is_vat_included: value.inventory_is_vat_included,
+            email: value.email,
+            alimtalk_name: value.alimtalk_name,
+          });
         }}
       >
         <Form.Item name="store_id" hidden>
@@ -253,73 +276,46 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
         <Form.Item
           name="alimtalk_name"
-          label={t('table.alimtalkName')}
+          label={
+            <TextWithTooltip tooltipContent={['']}>
+              {t('table.alimtalkName')}
+            </TextWithTooltip>
+          }
           required={false}
         >
           <TurtleFormInput placeholder={t('placeholder.alimtalk')} />
         </Form.Item>
-      </Form>
 
-      {buttonsVisible && (
-        <Row
-          css={css`
-            margin-top: 32px;
-          `}
-          justify="end"
-          align="middle"
-        >
-          <Col>
-            <AnswerButton
-              type="NO"
-              text="취소 "
-              onClick={() => {
-                // 취소를 누르면 최초 값으로 초기화.
-                resetStates();
-                hideButtons();
-              }}
-            />
-          </Col>
-          <Col css={marginleft}>
-            <Popconfirm
-              title={t('description.really update')}
-              okText={t('yes')}
-              cancelText={t('no')}
-              onConfirm={() => {
-                form.validateFields().then((value) => {
-                  updateQuery.mutate({
-                    store_id: value.store_id,
-                    is_closed: value.is_closed,
-                    name: value.name,
-                    store_url: value.store_url,
-                    store_mobile: {
-                      mobile: value.mobile,
-                    },
-                    store_account: {
-                      bank: value.bank,
-                      account_number: value.account_number,
-                      account_holder: value.account_holder,
-                    },
-                    inventory_type: value.inventory_type,
-                    inventory_domain:
-                      value.inventory_type === 2 ? '' : value.inventory_domain,
-                    inventory_key: value.inventory_key,
-                    inventory_is_vat_included: value.inventory_is_vat_included,
-                    email: value.email,
-                    alimtalk_name: value.alimtalk_name,
-                  });
-                });
-              }}
-            >
+        {buttonsVisible && (
+          <Row
+            css={css`
+              margin-top: 32px;
+            `}
+            justify="end"
+            align="middle"
+          >
+            <Col>
+              <AnswerButton
+                type="NO"
+                text="취소 "
+                onClick={() => {
+                  // 취소를 누르면 최초 값으로 초기화.
+                  resetStates();
+                  hideButtons();
+                }}
+              />
+            </Col>
+            <Col css={marginleft}>
               <AnswerButton
                 type="YES"
                 text="저장"
                 htmlType="submit"
-                loading={updateQuery.isLoading}
+                loading={updateMutation.isLoading}
               />
-            </Popconfirm>
-          </Col>
-        </Row>
-      )}
+            </Col>
+          </Row>
+        )}
+      </Form>
     </TurtleContentModal>
   );
 }

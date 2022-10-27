@@ -18,6 +18,7 @@ export default function TurtleTableNumberInput({
 }: Props) {
   return (
     <InputNumber
+      controls={false}
       css={input}
       value={value}
       formatter={(value) => `${value}`.replace(pricePattern, ',')}
@@ -40,8 +41,13 @@ export function TurtleTableWarningNumberInput({ value, ...props }: Props) {
 }
 
 const input = css`
+  .ant-input-number-input {
+    text-align: right;
+  }
   width: 100%;
   height: 24px;
   border: 1px solid #d6d7da;
   border-radius: 4px;
+  /* display: flex;
+  flex-direction: row-reverse; */
 `;

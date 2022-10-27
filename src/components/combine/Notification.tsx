@@ -148,10 +148,13 @@ function Notification() {
           // ).length
         }
         style={{
-          paddingBottom: 1,
-          paddingTop: 1,
-          paddingLeft: 4,
-          paddingRight: 5,
+          width: 18,
+          height: 18,
+          fontSize: 12,
+          fontWeight: 500,
+          borderRadius: 18,
+          boxShadow: 'none',
+          lineHeight: 1.4,
         }}
         offset={[-20, 7]}
       >

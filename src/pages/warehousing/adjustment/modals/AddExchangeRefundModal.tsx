@@ -165,7 +165,7 @@ const collapse = css`
     margin-bottom: 12px;
     background-color: #f3f5f8;
     border: none;
-    border-radius: 10px;
+    border-radius: 10px !important;
   }
 
   .ant-collapse-content-box {

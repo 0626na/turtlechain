@@ -160,7 +160,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 </TextWithTooltip>
               ),
               render: (_, record) => (
-                <>
+                <div css={{ display: 'inline-block', width: '60%' }}>
                   {record.type === 'adjustment_subtract' ? (
                     <TurtleTableNumberInput
                       step={1000}
@@ -178,7 +178,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       disabled={true}
                     />
                   )}
-                </>
+                </div>
               ),
             },
           ]}

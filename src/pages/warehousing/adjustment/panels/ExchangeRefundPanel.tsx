@@ -28,6 +28,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
 
   useEffect(() => {
+    console.log(activeKey);
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.selectedList.map((item, index) => ({
@@ -74,9 +75,8 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
       <Collapse.Panel
         {...props}
         style={{
-          border: `${
-            activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
-          }`,
+          border:
+            activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
         }}
         showArrow={false}
         extra={

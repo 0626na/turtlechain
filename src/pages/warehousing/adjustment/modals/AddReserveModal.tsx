@@ -152,6 +152,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
             <TurtleFormSearchInput // 상품 검색 Input
               onClick={openProductModal}
               onSearch={openProductModal}
+              placeholder="상품명을 입력해주세요"
               readOnly
             />
           </Form.Item>
@@ -163,6 +164,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 상품명 Input
               disabled
+              placeholder="거래처 상품명을 입력해주세요"
             />
           </Form.Item>
 
@@ -173,6 +175,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 바코드 Input
               disabled
+              placeholder="코드를 입력해주세요"
             />
           </Form.Item>
 
@@ -183,6 +186,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 옵션 Input
               disabled
+              placeholder="옵션을 입력해주세요"
             />
           </Form.Item>
 
@@ -200,6 +204,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
               >
                 <TurtleNumberInput
                   formatter={(value) => `${value}`.replace(pricePattern, ',')}
+                  placeholder="ex. 7,000"
                 />
               </Form.Item>
             )}
@@ -217,7 +222,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
                   },
                 ]}
               >
-                <TurtleNumberInput style={{ width: '100%' }} step={1} min={1} />
+                <TurtleNumberInput step={1} min={1} placeholder="ex. 10" />
               </Form.Item>
             )}
           </Form.Item>
@@ -235,6 +240,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처명 검색 Input
               disabled
+              placeholder="거래처명을 입력해주세요"
             />
           </Form.Item>
 
@@ -244,6 +250,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
           >
             <TurtleFormInput // 거래처 주소 Input
+              placeholder="거래처주소를 입력해주세요"
               disabled
             />
           </Form.Item>
