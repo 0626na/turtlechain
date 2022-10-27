@@ -9,7 +9,7 @@ function PickerOrder() {
   return (
     <>
       <Helmet
-        title={`${t('turtleChain')}- ${t('picker')} - ${t('order.create')}`}
+        title={`${t('turtleChain')} - ${t('picker')} - ${t('order.create')}`}
       />
       <PageHeader title={t('order.create')} />
       <PageBody />
