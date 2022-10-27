@@ -90,7 +90,11 @@
     "add_unpaid": "미결제 추가",
     "remove_unpaid": "미결제 삭제",
     "add_subtract": "차감 추가",
-    "remove_subtract": "차감 삭제"
+    "remove_subtract": "차감 삭제",
+    "add_past_subtract": "과거매입 등록",
+    "add_past_unpaid": "과거매입 등록",
+    "subtract_past_subtract": "과거매입 차감",
+    "subtract_past_unpaid": "과거매입 차감"
   },
 
   "inventory": {
