@@ -162,7 +162,6 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
               ellipsis: true,
               title: '거래처 명',
               render: (_, record) => {
-                console.log(record);
                 const isMark =
                   record.reserve_subtract_amount +
                     (record.overpaid_payment_amount ?? 0) +
