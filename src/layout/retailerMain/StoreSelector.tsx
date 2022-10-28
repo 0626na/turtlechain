@@ -7,6 +7,8 @@ import useStore from '@hooks/useStore';
 import { t } from 'i18next';
 import useUser from '@hooks/useUser';
 import { ReactComponent as StoreIcon } from '@icons/store.svg';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const color = [
   '#13BCB2',
@@ -20,6 +22,7 @@ const color = [
 function StoreSelector() {
   const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   const getStoreListQuery = useQuery(
     ['getStoreList', 'sider'],
@@ -35,64 +38,77 @@ function StoreSelector() {
       },
     },
   );
-
+  const isEmpty = store.list.length === 0;
   return (
-    <Dropdown // 이름은 DropDown지만, selector역할을 한다.
-      trigger={['click']}
-      overlay={
-        <Menu
-          css={menu}
-          selectable
-          onSelect={({ key }) => {
-            selectStore(Number(key), t('message.warningChangeStore'));
+    <>
+      {isEmpty ? (
+        <Button
+          css={buttonCss.self}
+          onClick={() => {
+            navigate('/setting');
           }}
-          items={store.list.map((store, idx) => ({
-            style: menuItemCss.self,
-            onMouseEnter: (e) => {
-              e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
-            },
-            onMouseLeave: (e) => {
-              e.domEvent.currentTarget.style.backgroundColor = '#fff';
-            },
-            key: store.id,
-            label: <span css={menuItemCss.text}>{store.name}</span>,
-            icon: (
-              <div css={menuItemCss.logoContainer}>
-                <div css={menuItemCss.logo}>
-                  <StoreIcon style={{ fill: color[idx % color.length] }} />
+        >
+          쇼핑몰생성하러 가기
+        </Button>
+      ) : (
+        <Dropdown // 이름은 DropDown지만, selector역할을 한다.
+          trigger={['click']}
+          overlay={
+            <Menu
+              css={menu}
+              selectable
+              onSelect={({ key }) => {
+                selectStore(Number(key), t('message.warningChangeStore'));
+              }}
+              items={store.list.map((store, idx) => ({
+                style: menuItemCss.self,
+                onMouseEnter: (e) => {
+                  e.domEvent.currentTarget.style.backgroundColor = '#EAECEF';
+                },
+                onMouseLeave: (e) => {
+                  e.domEvent.currentTarget.style.backgroundColor = '#fff';
+                },
+                key: store.id,
+                label: <span css={menuItemCss.text}>{store.name}</span>,
+                icon: (
+                  <div css={menuItemCss.logoContainer}>
+                    <div css={menuItemCss.logo}>
+                      <StoreIcon style={{ fill: color[idx % color.length] }} />
+                    </div>
+                  </div>
+                ),
+              }))}
+            />
+          }
+        >
+          <Button css={buttonCss.self}>
+            <div css={buttonCss.container}>
+              <div css={buttonCss.logoContainer}>
+                <div css={buttonCss.logo}>
+                  <StoreIcon
+                    css={buttonCss.icon}
+                    style={{
+                      ['--fill-color' as string]:
+                        color[
+                          store.list.findIndex(
+                            (item) => item.name === store.selected?.name,
+                          ) % color.length
+                        ],
+                    }}
+                  />
                 </div>
               </div>
-            ),
-          }))}
-        />
-      }
-    >
-      <Button css={buttonCss.self}>
-        <div css={buttonCss.container}>
-          <div css={buttonCss.logoContainer}>
-            <div css={buttonCss.logo}>
-              <StoreIcon
-                css={buttonCss.icon}
-                style={{
-                  ['--fill-color' as string]:
-                    color[
-                      store.list.findIndex(
-                        (item) => item.name === store.selected?.name,
-                      ) % color.length
-                    ],
-                }}
-              />
+
+              <span css={buttonCss.text}>{store.selected?.name}</span>
             </div>
-          </div>
 
-          <span css={buttonCss.text}>{store.selected?.name}</span>
-        </div>
-
-        <div>
-          <ArrowRightIcon value="#AAADB3" />
-        </div>
-      </Button>
-    </Dropdown>
+            <div>
+              <ArrowRightIcon value="#AAADB3" />
+            </div>
+          </Button>
+        </Dropdown>
+      )}
+    </>
   );
 }
 
