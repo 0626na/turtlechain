@@ -13,7 +13,6 @@ import { Col, Collapse, CollapsePanelProps, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
-
 import { useQuery } from 'react-query';
 
 interface Props extends CollapsePanelProps {
@@ -22,20 +21,36 @@ interface Props extends CollapsePanelProps {
 
 function WarehousingPanel({ activeKey, ...props }: Props) {
   const { store } = useStore();
-  const { warehousingItemSelect, warehousingItemSelectAll } =
+  const { selectWarehousingItem, selectAllWarehousingItem } =
     useAdjustmentCart();
 
+  const [warehousingItemList, setWarehousingItemList] =
+    useState<WarehousingItem[]>();
+
+  const [searchString, setSearchString] = useState('');
   const [searchQuery, setSearchQuery] = useState({
     rt_store_id: store.selected?.id as number,
-    product_name: '',
     start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
+    product_name: '',
   });
 
   const getWarehousingItemQuery = useQuery(
     ['getWarehousingItem', searchQuery],
     () => warehousingAPI.getItem(searchQuery),
+    {
+      onSuccess: (data) => {
+        setWarehousingItemList(data.data.item_list);
+      },
+    },
   );
+
+  const filteredItemList = warehousingItemList?.filter(
+    (item) =>
+      item.product_info.vendor_product_name.includes(searchString) ||
+      item.product_info.name.includes(searchString),
+  );
+  const totalCount = filteredItemList?.length ?? 0;
 
   return (
     <Collapse.Panel
@@ -61,58 +76,48 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
         `}
       >
         <TurtleFormSearchInput
-          onChange={(a) => {
-            setSearchQuery((searchQuery) => ({
-              ...searchQuery,
-              product_name: a.target.value,
-            }));
+          onSearch={(value) => {
+            setSearchString(value);
           }}
-          placeholder="상품명을 입력해주세요."
+          placeholder="상품명 or 거래처 상품명을 입력해주세요."
         />
       </div>
 
       <Table
         size="small"
         loading={getWarehousingItemQuery.isLoading}
-        dataSource={getWarehousingItemQuery.data?.data.item_list}
+        dataSource={filteredItemList}
         rowKey={(record) => record.id}
         pagination={false}
         scroll={{ x: 1400, y: 410 }}
+        // onRow={() => {}}
+
         rowSelection={{
-          onSelect: warehousingItemSelect,
+          onSelect: selectWarehousingItem,
           onSelectAll: (_, records: WarehousingItem[]) => {
-            warehousingItemSelectAll(
-              records,
-              getWarehousingItemQuery.data?.data.item_list?.length as number,
-            );
+            selectAllWarehousingItem(records, totalCount);
           },
         }}
         title={() => (
           <TurtleTableTitle
-            totalCount={
-              getWarehousingItemQuery.data?.data.item_list?.length ?? 0
-            }
+            totalCount={totalCount}
             rightContent={
-              <Row>
-                <Col>
-                  <TurtlePrimaryRangePicker
-                    value={[
-                      moment(searchQuery.start_date),
-                      moment(searchQuery.end_date),
-                    ]}
-                    onChange={(_, dateStrings) => {
-                      const start_date = dateStrings[0];
-                      const end_date = dateStrings[1];
+              <TurtlePrimaryRangePicker
+                value={[
+                  moment(searchQuery.start_date),
+                  moment(searchQuery.end_date),
+                ]}
+                onChange={(_, dateStrings) => {
+                  const start_date = dateStrings[0];
+                  const end_date = dateStrings[1];
 
-                      setSearchQuery((searchQuery) => ({
-                        ...searchQuery,
-                        start_date,
-                        end_date,
-                      }));
-                    }}
-                  />
-                </Col>
-              </Row>
+                  setSearchQuery((searchQuery) => ({
+                    ...searchQuery,
+                    start_date,
+                    end_date,
+                  }));
+                }}
+              />
             }
           />
         )}

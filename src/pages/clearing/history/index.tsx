@@ -7,7 +7,7 @@ import PageBody from './PageBody';
 function ClearingCreatePage() {
   return (
     <>
-      <Helmet title={`${t('helmet.turtleChain')} - ${t('clearing.history')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('clearing.history')}`} />
       <PageHeader title={t('clearing.history')} />
       <PageBody />
     </>

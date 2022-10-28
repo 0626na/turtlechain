@@ -60,7 +60,7 @@ const iconMargin = css`
 
 const menuItem = {
   borderRadius: 6,
-  height: 34,
+  height: 38,
 };
 
 const $divider = {

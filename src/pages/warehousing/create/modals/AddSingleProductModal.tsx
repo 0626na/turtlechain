@@ -13,6 +13,7 @@ import { pricePattern } from '@utils/pattern';
 import SearchProductModal from '@components/combine/modal/SearchProductModal';
 import { ProductShow } from '@apis/productAPI';
 import useWarehousingCart from '@hooks/useWarehousingCart';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
@@ -30,7 +31,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         vendor_id: product.vendor_info.id,
         vendor_name: product.vendor_info.vendor_name,
         vendor_address: product.vendor_info.vendor_address,
-        vendor_phone: product.vendor_info.vendor_phone.phone,
+
         product_id: product.id,
         product_name: product.name,
         product_code: product.product_code,
@@ -93,6 +94,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormSearchInput // 상품 검색 Input
               onClick={openProductModal}
               onSearch={openProductModal}
+              placeholder="상품명을 입력해주세요"
               readOnly
             />
           </Form.Item>
@@ -104,6 +106,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 상품명 Input
               disabled
+              placeholder="거래처 상품명을 입력해주세요"
             />
           </Form.Item>
 
@@ -114,6 +117,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 바코드 Input
               disabled
+              placeholder="코드를 입력해주세요"
             />
           </Form.Item>
 
@@ -124,6 +128,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 옵션 Input
               disabled
+              placeholder="옵션을 입력해주세요"
             />
           </Form.Item>
 
@@ -133,10 +138,8 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
           >
             <TurtleNumberInput
-              style={{ width: '100%' }}
-              step={1000}
-              min={0}
               formatter={(value) => `${value}`.replace(pricePattern, ',')}
+              placeholder="ex. 7,000"
             />
           </Form.Item>
 
@@ -145,10 +148,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             name="count"
             rules={[{ required: true }]}
           >
-            <InputNumber // 상품 수량 Input
-              style={{ width: '100%' }}
-              min={1}
-            />
+            <TurtleNumberInput min={1} placeholder="ex. 10" />
           </Form.Item>
 
           <Divider />
@@ -160,6 +160,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처명 검색 Input
               disabled
+              placeholder="거래처명을 입력해주세요"
             />
           </Form.Item>
 
@@ -170,28 +171,34 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 주소 Input
               disabled
+              placeholder="거래처주소를 입력해주세요"
             />
           </Form.Item>
 
-          <Form.Item
-            name="vendor_phone"
-            label={t('table.mobile')}
-            rules={[{ required: true }]}
-          >
-            <TurtleFormInput // 거래처 휴대번호 Input
-              disabled
-            />
+          <Form.Item noStyle shouldUpdate>
+            {({ getFieldValue }) => (
+              <Row css={marginTop}>
+                <PrimaryButton
+                  disabled={
+                    !getFieldValue('product_name') ||
+                    !getFieldValue('count') ||
+                    !getFieldValue('price')
+                  }
+                  size="large"
+                  htmlType="submit"
+                >
+                  {t('button.addProduct')}
+                </PrimaryButton>
+              </Row>
+            )}
           </Form.Item>
-
-          <Row justify="end">
-            <PrimaryButton size="large" htmlType="submit">
-              {t('button.addProduct')}
-            </PrimaryButton>
-          </Row>
         </Form>
       </TurtleContentModal>
     </>
   );
 }
 
+const marginTop = css({
+  marginTop: 60,
+});
 export default AddSingleProductModal;

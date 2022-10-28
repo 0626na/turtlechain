@@ -8,7 +8,9 @@ import PageBody from './PageBody';
 function PickerOrder() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('order.create')}`} />
+      <Helmet
+        title={`${t('turtleChain')} - ${t('picker')} - ${t('order.create')}`}
+      />
       <PageHeader title={t('order.create')} />
       <PageBody />
     </>

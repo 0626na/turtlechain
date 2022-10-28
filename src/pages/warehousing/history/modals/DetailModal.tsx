@@ -7,6 +7,7 @@ import {
   PrimaryButton,
   TurtleConfirmModal,
   TurtleIcon,
+  TurtleTableNumberInput,
   TurtleTableTitle,
 } from '@components/element';
 import TurtleStatistics from '@components/element/TurtleStatistics';
@@ -124,6 +125,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         description={['해당 입고서를 수정합니다.']}
         onCancel={closeConfirmModal}
         loading={loading}
+        okText="수정"
         onOk={() => {
           updateWarehousingItemMutation.mutate({
             sheet_id: selectedRow?.id as number,
@@ -161,13 +163,21 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
       >
         <TurtleStatistics
           value={[
-            { title: '입고 일자', value: `${selectedRow?.created_date}` },
             {
-              title: '입고 수량 합계',
+              title: t('table.createdDate'),
+              value: `${selectedRow?.created_date}`,
+            },
+            {
+              title: t('table.totalWarehousingCount'),
               value: `${selectedRow?.total_item_count}건`,
             },
             {
-              title: '금액 합계',
+              title: t('table.totalVendorCount'),
+              value: `${selectedRow?.total_store_count}개`,
+            },
+
+            {
+              title: t('table.totalAmount'),
               value: `${selectedRow?.total_amount.toLocaleString()}원`,
             },
           ]}
@@ -218,12 +228,6 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_info.vendor_address,
             },
-            //   {
-            //     ellipsis: true,
-            //     width: 150,
-            //     title: t('table.productCode'),
-            //     render: (_, record) => record.product_info.product_code,
-            //   },
             {
               ellipsis: true,
               width: 150,
@@ -252,14 +256,13 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              width: 100,
+              width: 60,
               title: t('table.warehousingCount'),
               render: (_, record) => (
-                <InputNumber
+                <TurtleTableNumberInput
                   disabled={selectedRow?.is_confirmed}
                   min={1}
-                  size="small"
-                  defaultValue={record.count}
+                  value={record.count}
                   onChange={(value) => {
                     updateItemList('count', record.id, value);
                   }}
@@ -269,7 +272,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             {
               ellipsis: true,
               width: 80,
-              align: 'right',
+              align: 'center',
               title: t('table.isReserveWarehousing'),
               render: (_, record) => (
                 <Checkbox
@@ -288,17 +291,17 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             {
               width: 20,
               align: 'center',
-              render: (_, record) => (
-                <Space>
-                  {!selectedRow?.is_confirmed && (
-                    <TurtleIcon
-                      name="delete"
-                      onClick={() => {
-                        deleteProduct(record);
-                      }}
-                    />
-                  )}
-                </Space>
+              onCell: (record) => ({
+                style: { cursor: 'pointer' },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  deleteProduct(record);
+                },
+              }),
+              render: (_) => (
+                <>
+                  {!selectedRow?.is_confirmed && <TurtleIcon name="delete" />}
+                </>
               ),
             },
           ]}

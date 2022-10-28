@@ -7,9 +7,7 @@ import PageBody from './PageBody';
 function WarehousingCreatePage() {
   return (
     <>
-      <Helmet
-        title={`${t('helmet.turtleChain')} - ${t('warehousing.create')}`}
-      />
+      <Helmet title={`${t('turtleChain')} - ${t('warehousing.create')}`} />
       <PageHeader title={t('warehousing.create')} />
       <PageBody />
     </>

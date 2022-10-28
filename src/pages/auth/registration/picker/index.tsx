@@ -7,7 +7,11 @@ import React from 'react';
 function index() {
   return (
     <>
-      <Helmet title={`${t('turtlechain')} - ${t('signup')}`} />
+      <Helmet
+        title={`${t('turtleChain')} - ${t('auth.registration')} - ${t(
+          'picker',
+        )}`}
+      />
 
       <PageBody />
     </>

@@ -39,11 +39,11 @@ function CompanyTab() {
     },
   });
 
-  const updateQuery = useMutation(retailerCompanyAPI.update, {
+  const updateMutation = useMutation(retailerCompanyAPI.update, {
     onSuccess: () => {
       message.success(t('message.success update'));
-
       getCompanyQuery.refetch();
+      hideButtons();
     },
   });
 
@@ -130,6 +130,20 @@ function CompanyTab() {
           onValuesChange={() => {
             showButtons();
           }}
+          onFinish={() => {
+            form.validateFields().then((value) => {
+              updateMutation.mutate({
+                company_id: value.company_id,
+                biz_type: value.biz_type,
+                name: value.name,
+                address_main: value.address_main,
+                address_sub: value.address_sub ?? '',
+                email: value.email ?? '',
+                memo: value.memo ?? '',
+                biz_license_file: value.biz_license_file[0].originFileObj,
+              });
+            });
+          }}
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
@@ -148,12 +162,17 @@ function CompanyTab() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label="사업자명(법인명)" name="name">
+          <Form.Item
+            label="사업자명(법인명)"
+            required={false}
+            rules={[{ required: true }]}
+            name="name"
+          >
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item label="사업자번호" name="biz_num">
-            <TurtleFormInput />
+            <TurtleFormInput disabled />
           </Form.Item>
 
           <Form.Item label="사업장주소" name="address_main">
@@ -169,6 +188,8 @@ function CompanyTab() {
             label="사업자등록증"
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            required={false}
+            rules={[{ required: true }]}
           >
             <Upload
               css={upload}
@@ -209,33 +230,12 @@ function CompanyTab() {
               </Col>
 
               <Col css={marginleft}>
-                <Popconfirm
-                  title={t('description.really update')}
-                  okText={t('yes')}
-                  cancelText={t('no')}
-                  onConfirm={() => {
-                    form.validateFields().then((value) => {
-                      updateQuery.mutate({
-                        company_id: value.company_id,
-                        biz_type: value.biz_type,
-                        name: value.name,
-                        address_main: value.address_main,
-                        address_sub: value.address_sub ?? '',
-                        email: value.email ?? '',
-                        memo: value.memo ?? '',
-                        biz_license_file:
-                          value.biz_license_file[0].originFileObj,
-                      });
-                    });
-                  }}
-                >
-                  <AnswerButton
-                    type="YES"
-                    text="저장"
-                    htmlType="submit"
-                    loading={updateQuery.isLoading}
-                  />
-                </Popconfirm>
+                <AnswerButton
+                  type="YES"
+                  text="저장"
+                  htmlType="submit"
+                  loading={updateMutation.isLoading}
+                />
               </Col>
             </Row>
           )}

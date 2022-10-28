@@ -19,14 +19,16 @@ import useStore from '@hooks/useStore';
 import { useMutation } from 'react-query';
 import warehousingAPI from '@apis/warehousingAPI';
 import useWarehousingCart from '@hooks/useWarehousingCart';
-import { message } from 'antd';
+import { Col, message, Row } from 'antd';
 import moment from 'moment';
 import AddSingleProductModal from './modals/AddSingleProductModal';
+import { t } from 'i18next';
 
 function PageBody() {
   const navigate = useNavigate();
   const { store, isStoreSelected } = useStore();
-  const { cart, ready, reset, saveFile } = useWarehousingCart();
+  const { cart, ready, reset, saveFile, totalCount, totalAmount } =
+    useWarehousingCart();
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
@@ -160,7 +162,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '단건추가',
+                label: t('button.one by one'),
                 icon: <TurtleIcon name="single" />,
                 onClick: openAddingModal,
               },
@@ -185,12 +187,33 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton
-          onClick={openConfirmModal}
-          disabled={cart.successList.length === 0}
-        >
-          입고서 등록하기
-        </PrimaryButton>
+        <Row justify="end" align="middle">
+          <Col>
+            <span style={{ color: ' #6B6D73', marginRight: 8 }}>
+              입고 수량 합계
+            </span>
+            <span style={{ fontWeight: 700 }}>
+              {totalCount.toLocaleString()}개
+            </span>
+          </Col>
+          <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
+          <Col style={{ marginRight: 24 }}>
+            <span style={{ color: ' #6B6D73', marginRight: 8 }}>
+              입고금액 합계
+            </span>
+            <span style={{ fontWeight: 700 }}>
+              {totalAmount.toLocaleString()}원
+            </span>
+          </Col>
+          <Col>
+            <PrimaryButton
+              onClick={openConfirmModal}
+              disabled={cart.successList.length === 0}
+            >
+              입고서 등록하기
+            </PrimaryButton>
+          </Col>
+        </Row>
       </PageBottomBar>
     </>
   );

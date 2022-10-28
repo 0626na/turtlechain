@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 import { AdjustmentItem } from '@apis/adjustmentAPI';
 
 export interface AdjustmentCartState {
-  selectedList: WarehousingItem[];
+  selectedWarehousingItemList: WarehousingItem[];
   adjustmentItemList: AdjustmentItem[];
 }
 
@@ -12,6 +12,6 @@ export const adjustmentCartState = atom<AdjustmentCartState>({
   key: 'adjustmentCart',
   default: {
     adjustmentItemList: [],
-    selectedList: [],
+    selectedWarehousingItemList: [],
   },
 });

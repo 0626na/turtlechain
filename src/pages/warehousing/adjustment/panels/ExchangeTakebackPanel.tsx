@@ -21,35 +21,43 @@ interface Props extends CollapsePanelProps {
   activeKey: string;
 }
 
-function ExchangeRefundPanel({ activeKey, ...props }: Props) {
-  const { cart, setCart, exchangeRefundItemUpdate, exchangeRefundItemDelete } =
-    useAdjustmentCart();
+function ExchangeTakebackPanel({ activeKey, ...props }: Props) {
+  const {
+    cart,
+    setCart,
+    updateExchangeTakebackItem,
+    deleteExchangeTakebackItem,
+  } = useAdjustmentCart();
   const [selectedRow, setSelectedRow] = useState<AdjustmentItem>();
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
 
   useEffect(() => {
     setCart((cart) => ({
       ...cart,
-      adjustmentItemList: cart.selectedList.map((item, index) => ({
-        index,
-        vendor_id: item.vendor_info.id,
-        vendor_name: item.vendor_info.vendor_name,
-        vendor_address: item.vendor_info.vendor_address,
-        warehousing_item_id: item.id,
-        product_id: item.product_info.id,
-        product_name: item.product_info.name,
-        vendor_product_name: item.product_info.vendor_product_name,
-        product_option: item.product_info.option,
-        product_price: item.product_info.price,
-        product_count: 0,
-        product_count_max: item.count,
-        product_code: item.product_info.product_code,
-        is_vat_included: item.is_vat_included,
-        type: undefined,
-        memo: '',
-      })),
+      adjustmentItemList: cart.selectedWarehousingItemList.map(
+        (item, index) => ({
+          index,
+          vendor_id: item.vendor_info.id,
+          vendor_name: item.vendor_info.vendor_name,
+          vendor_address: item.vendor_info.vendor_address,
+          warehousing_item_id: item.id,
+          product_id: item.product_info.id,
+          product_name: item.product_info.name,
+          vendor_product_name: item.product_info.vendor_product_name,
+          product_option: item.product_info.option,
+          product_price: item.product_info.price,
+          product_count: 0,
+          product_count_max: item.count,
+          product_code: item.product_info.product_code,
+          is_vat_included: item.is_vat_included,
+          type: undefined,
+          memo: '',
+        }),
+      ),
     }));
   }, [activeKey]);
+
+  const totalCount = cart.adjustmentItemList.length;
 
   return (
     <>
@@ -61,7 +69,11 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
         onCancel={memoModalClose}
         defaultValue={selectedRow?.memo}
         onOk={(value) => {
-          exchangeRefundItemUpdate('memo', selectedRow?.index as number, value);
+          updateExchangeTakebackItem(
+            'memo',
+            selectedRow?.index as number,
+            value,
+          );
           memoModalClose();
         }}
         title="메모"
@@ -71,12 +83,12 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
         ]}
         placeholder="ex. 영수증 이중으로 확인 또 확인!"
       />
+
       <Collapse.Panel
         {...props}
         style={{
-          border: `${
-            activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none'
-          }`,
+          border:
+            activeKey === '2' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
         }}
         showArrow={false}
         extra={
@@ -92,12 +104,10 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
         <Table
           size="small"
           dataSource={cart.adjustmentItemList}
-          rowKey={(record) => record.index as number}
+          rowKey={(record) => Number(record.index)}
           pagination={false}
           scroll={{ x: 1400, y: 410 }}
-          title={() => (
-            <TurtleTableTitle totalCount={cart.adjustmentItemList.length} />
-          )}
+          title={() => <TurtleTableTitle totalCount={totalCount} />}
           columns={[
             {
               ellipsis: true,
@@ -144,7 +154,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                 <TurtleTableWarningNumberInput
                   value={record.product_price}
                   onChange={(value) => {
-                    exchangeRefundItemUpdate(
+                    updateExchangeTakebackItem(
                       'product_price',
                       record.index as number,
                       value,
@@ -162,7 +172,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                   value={record.product_count}
                   max={record.product_count_max}
                   onChange={(value) => {
-                    exchangeRefundItemUpdate(
+                    updateExchangeTakebackItem(
                       'product_count',
                       record.index as number,
                       value,
@@ -179,7 +189,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                   value={record.type}
                   status={record.type === undefined ? 'error' : ''}
                   onSelect={(value: string) => {
-                    exchangeRefundItemUpdate(
+                    updateExchangeTakebackItem(
                       'type',
                       record.index as number,
                       value,
@@ -238,7 +248,7 @@ function ExchangeRefundPanel({ activeKey, ...props }: Props) {
                 <TurtleIcon
                   name="delete"
                   onClick={() => {
-                    exchangeRefundItemDelete(record.index as number);
+                    deleteExchangeTakebackItem(record.index as number);
                   }}
                 />
               ),
@@ -271,4 +281,4 @@ const select = css`
     border-color: #d6d7da;
   }
 `;
-export default ExchangeRefundPanel;
+export default ExchangeTakebackPanel;

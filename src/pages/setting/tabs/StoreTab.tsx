@@ -18,7 +18,7 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import StoreCard from '../cards/StoreCard';
-import StoreAddModal from '../modals/StoreAddModal';
+import StoreCreateModal from '../modals/StoreCreateModal';
 import DetailModal from '../modals/DetailModal';
 
 function StoreTab() {
@@ -58,7 +58,7 @@ function StoreTab() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <StoreAddModal
+      <StoreCreateModal
         visible={addModalVisible}
         closeModal={closeAddDetailModal}
       />
@@ -144,7 +144,10 @@ function StoreTab() {
         <Table
           size="small"
           loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.store_list}
+          dataSource={getStoreListQuery.data?.store_list.sort((a) => {
+            if (!a.is_closed) return -1;
+            return 0;
+          })}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {

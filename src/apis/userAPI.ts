@@ -66,7 +66,7 @@ const createRegistration = async (data: RequestCreateRegistration) => {
   for (const [key, value] of Object.entries(data)) {
     if (key === 'agreements') {
       formData.append(key, JSON.stringify(value));
-      return;
+      continue;
     }
 
     formData.append(key, value);
@@ -170,7 +170,7 @@ const updateRegistration = async (requestData: RequestUpdateRegistration) => {
   for (const [key, value] of Object.entries(requestData.data)) {
     if (key === 'agreements') {
       formData.append(key, JSON.stringify(value));
-      return;
+      continue;
     }
 
     formData.append(key, value as string);

@@ -5,7 +5,7 @@ import { FindIdPageBody } from '@layout/auth';
 import React from 'react';
 
 function FindIdPage() {
-  const title = `${t('turtlechain')} - ${t('find id')}`;
+  const title = `${t('turtleChain')} - ${t('auth.findId')}`;
 
   return (
     <>

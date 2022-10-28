@@ -94,14 +94,19 @@
     "add_unpaid": "미결제 추가",
     "remove_unpaid": "미결제 삭제",
     "add_subtract": "차감 추가",
-    "remove_subtract": "차감 삭제"
+    "remove_subtract": "차감 삭제",
+    "add_past_subtract": "과거매입 등록",
+    "add_past_unpaid": "과거매입 등록",
+    "subtract_past_subtract": "과거매입 차감",
+    "subtract_past_unpaid": "과거매입 차감"
   },
 
   "inventory": {
     "sellmate": "셀메이트",
     "ezadmin": "이지어드민",
     "turtlechain": "터틀체인",
-    "none": "없음"
+    "none": "없음",
+    "etc": "기타"
   },
 
   "etc": {
@@ -110,14 +115,16 @@
   },
 
   "auth": {
-    "logout": "로그아웃",
+    "findId": "아이디 찾기",
     "login": "로그인",
+    "logout": "로그아웃",
     "autoLogin": "자동 로그인",
     "id": "아이디",
     "password": "비밀번호",
-    "findId": "아이디 찾기",
     "resetPassword": "비밀번호 재설정",
-    "signUp": "서비스 가입",
+    "registration": "서비스 가입",
+    "registrationReturn": "가입반려",
+    "registrationSelect": "가입 유형 선택",
     "aboutMembership": "요금플랜 알아보기",
     "wonderMembership": "다양한 요금제가 궁금하신가요?",
     "notMember": "아직 회원이 아니신가요?"
@@ -222,8 +229,9 @@
     "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
     "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
     "success update": "성공적으로 수정하였습니다.",
-    "success signup": "가입 신청이 완료 되었습니다.",
-    "success update mall": "쇼핑몰이 추가 되었습니다.",
+    "success registration": "가입 신청이 완료 되었습니다.",
+    "success update store": "정보가 업데이트 되었습니다.",
+    "success create store": "쇼핑몰이 생성되었습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
@@ -250,7 +258,7 @@
 
   "go home": "홈으로 돌아가기",
   "next": "다음",
-  "signUp": "가입 신청하기",
+  "registration": "가입 신청하기",
   "phone": "휴대전화 번호",
   "id": "아이디",
   "password": "비밀번호",
@@ -270,7 +278,6 @@
     "vendorName": "거래처명을 입력해주세요"
   },
 
-  "find id": "아이디 찾기",
   "auth phone": "인증하기",
   "login": "로그인",
   "reset password": "비밀번호 재설정",
@@ -282,7 +289,7 @@
     "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
     "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
     "really cancel": "정말 취소할까요?",
-    "You can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
+    "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 
@@ -322,5 +329,6 @@
   },
 
   "yes": "네",
-  "no": "아니요"
+  "no": "아니요",
+  "picker": "사입자"
 }

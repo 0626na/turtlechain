@@ -241,7 +241,7 @@ function CompanyStep({ visible, loading }: Props) {
             css={button}
             loading={loading}
           >
-            {t('signUp')}
+            {t('registration')}
           </Button>
         )}
       </Form.Item>

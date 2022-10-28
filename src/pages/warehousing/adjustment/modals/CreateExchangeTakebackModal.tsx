@@ -14,7 +14,7 @@ import { Col, Collapse, message, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 
-import ExchangeRefundPanel from '../panels/ExchangeRefundPanel';
+import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
 import { useQueryClient } from 'react-query';
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
   visible: boolean;
 }
 
-function ExchangeRefundModal({ onClose, visible }: Props) {
+function ExchangeTakebackModal({ onClose, visible }: Props) {
   const queryClient = useQueryClient();
   const [activeKey, setActiveKey] = useState('1');
   const { cart, setCart } = useAdjustmentCart();
@@ -74,7 +74,7 @@ function ExchangeRefundModal({ onClose, visible }: Props) {
       setActiveKey('1');
       return;
     }
-    setCart({ adjustmentItemList: [], selectedList: [] });
+    setCart({ adjustmentItemList: [], selectedWarehousingItemList: [] });
   }, [setCart, visible]);
 
   return (
@@ -165,7 +165,7 @@ const collapse = css`
     margin-bottom: 12px;
     background-color: #f3f5f8;
     border: none;
-    border-radius: 10px;
+    border-radius: 10px !important;
   }
 
   .ant-collapse-content-box {
@@ -175,4 +175,4 @@ const collapse = css`
   }
 `;
 
-export default ExchangeRefundModal;
+export default ExchangeTakebackModal;

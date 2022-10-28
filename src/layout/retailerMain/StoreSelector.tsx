@@ -6,7 +6,6 @@ import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
 import { t } from 'i18next';
 import useUser from '@hooks/useUser';
-
 import { ReactComponent as StoreIcon } from '@icons/store.svg';
 
 const color = [
@@ -28,8 +27,11 @@ function StoreSelector() {
     {
       enabled: !!user.id,
       onSuccess: (data) => {
-        fillStoreList(data.store_list);
-        selectDefaultStore(data.store_list);
+        const sortedAscending = data.store_list.sort((a, b) =>
+          a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+        ); // 한글 오름차순,
+        fillStoreList(sortedAscending);
+        selectDefaultStore(sortedAscending);
       },
     },
   );
@@ -100,7 +102,7 @@ const menu = css({
   position: 'absolute',
   top: 0,
   left: 20,
-  overflowY: 'scroll',
+  overflow: 'overlay',
 
   padding: 8,
 

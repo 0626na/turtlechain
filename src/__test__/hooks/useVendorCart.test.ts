@@ -16,7 +16,7 @@ describe('vendorCart 테스트', () => {
     result.current.ready(parseVendorData as ResponseVendorInventory);
   });
 
-  it('성공테스트', () => {
+  it('성공테스트1', () => {
     expect(result.current.cart.successList.length).toBe(2);
   });
   it('펜딩테스트', () => {

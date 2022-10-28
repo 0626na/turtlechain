@@ -8,7 +8,9 @@ import PageBody from './PageBody';
 function PickerVendor() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('vendor.history')}`} />
+      <Helmet
+        title={`${t('turtleChain')} - ${t('picker')}- ${t('vendor.history')}`}
+      />
       <PageHeader title="거래처 목록" />
       <PageBody />
     </>

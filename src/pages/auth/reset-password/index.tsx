@@ -4,7 +4,7 @@ import { FindIdPageBody } from '@layout/auth';
 import ResetPasswordForm from './ResetPasswordForm';
 import React from 'react';
 function ResetPassword() {
-  const title = `${t('turtlechain')} - ${t('reset password')}`;
+  const title = `${t('turtleChain')} - ${t('auth.resetPassword')}`;
 
   return (
     <>
