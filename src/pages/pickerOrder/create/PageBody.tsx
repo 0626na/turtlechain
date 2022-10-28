@@ -12,7 +12,7 @@ import TurtleTabs from '@components/element/TurtleTabs';
 import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
-import AddOrderColumnModal from './modals/AddOrderColumnModal';
+import AddOrderColumnModal from './modals/AddOrderColumnModal temp';
 import { Upload } from 'antd';
 
 import { t } from 'i18next';
