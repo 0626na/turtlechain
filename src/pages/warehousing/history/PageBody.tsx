@@ -79,8 +79,6 @@ function PageBody() {
     updateSheetMutation.isLoading ||
     removeSheetMutation.isLoading;
 
-  console.log(getWarehousingSheetQuery.data?.sheet_list);
-
   return (
     <>
       {/**

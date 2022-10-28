@@ -205,7 +205,7 @@ const useVendorCart = () => {
     ws_store_id: vendor.ws_store_info[0].id,
     vendor_address: vendor.ws_store_info[0].address,
     vendor_name: vendor.useVendorName,
-    memo: vendor.memo,
+    memo: vendor.memo ?? '',
     is_vat_included: vendor.isVatIncluded,
   });
 

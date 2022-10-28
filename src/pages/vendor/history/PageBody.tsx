@@ -96,6 +96,8 @@ function PageBody() {
     }));
   }, [store.selected]);
 
+  const totalCount = getVendorListQuery.data?.data.total_count;
+
   return (
     <>
       {/**
@@ -197,7 +199,7 @@ function PageBody() {
           scroll={{ y: 'auto', x: 1400 }}
           title={() => (
             <TurtleTableTitle
-              totalCount={vendorList?.length ?? 0}
+              totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
                   searchQuery={searchQuery}
@@ -210,7 +212,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={vendorList?.length ?? 0}
+                total={totalCount ?? 0}
                 showSizeChanger={false}
                 current={searchQuery.page}
                 onChange={(page) => {
