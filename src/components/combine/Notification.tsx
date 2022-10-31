@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 
 import notificationAPI from '@apis/notificationAPI';
-
 import { ReactComponent as BellIcon } from '@icons/bell.svg';
 import { css } from '@emotion/react';
 
@@ -31,6 +30,10 @@ function Notification() {
     },
   });
 
+  const needReadCount = getNotificationQuery.data?.notification_list.filter(
+    (item) => !item.read_at,
+  ).length;
+
   return (
     <Popover
       css={popover}
@@ -42,7 +45,13 @@ function Notification() {
       ref={popoverRef}
       content={
         <>
-          <div style={{ maxHeight: 400, width: 400, overflow: 'auto' }}>
+          <div
+            style={{
+              maxHeight: 400,
+              width: 400,
+              overflow: 'auto',
+            }}
+          >
             {getNotificationQuery.data?.notification_list.length === 0 ? (
               <Row style={{ padding: '12px 20px' }}>알림이 없습니다.</Row>
             ) : (
@@ -141,12 +150,7 @@ function Notification() {
       <Badge
         size="small"
         overflowCount={9}
-        count={
-          1
-          // getNotificationQuery.data?.notification_list.filter(
-          //   (item) => !item.read_at,
-          // ).length
-        }
+        count={needReadCount}
         style={{
           width: 18,
           height: 18,
