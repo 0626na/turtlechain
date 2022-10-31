@@ -3,7 +3,7 @@ import React from 'react';
 import vendorAPI from '@apis/vendorAPI';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { message, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import {
   PageBottomBar,
   PageContent,
@@ -21,7 +21,7 @@ import {
   TurtleTabs,
   TurtleUpload,
 } from '@components/element';
-
+import { message } from '@utils/message';
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
 import { RangeDateModal } from '@components/combine';
@@ -49,7 +49,7 @@ function PageBody() {
   const inventoryMutation = useMutation(vendorAPI.inventory, {
     onSuccess: (data) => {
       closeInventoryModal();
-      message.info(
+      message.warn(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
       ready(data);
@@ -64,7 +64,7 @@ function PageBody() {
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
-      message.info(
+      message.warn(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
     },

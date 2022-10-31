@@ -1,11 +1,11 @@
 import { t } from 'i18next';
-import { message } from 'antd';
+
 import { TOKEN } from '@constant/index';
 import { useCallback, useMemo } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { v2Axios } from '@apis/index';
-
+import { message } from '@utils/message';
 const useLogin = function () {
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const useLogin = function () {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           logout();
-          message.info(`${t('message.loginExpired')}`);
+          message.warn(`${t('message.loginExpired')}`);
         } else if (error.response?.status === 400) {
           message.error(error.response.data.msg);
         } else {

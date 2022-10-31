@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Form, Input, message } from 'antd';
+import { Form, Input } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import {
   PrimaryButton,
@@ -18,7 +18,7 @@ import adjustmentAPI from '@apis/adjustmentAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { useStore } from '@hooks/index';
 import { css } from '@emotion/react';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   closeModal: () => void;

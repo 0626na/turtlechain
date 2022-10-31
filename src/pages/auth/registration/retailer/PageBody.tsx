@@ -1,9 +1,9 @@
-import { Form, message } from 'antd';
+import { Form } from 'antd';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import React from 'react';
-
+import { message } from '@utils/message';
 import userAPI from '@apis/userAPI';
 
 import CompanyStep from './step/CompanyStep';

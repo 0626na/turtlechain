@@ -11,8 +11,8 @@ import {
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
-
-import { Col, message, Row, Table } from 'antd';
+import { message } from '@utils/message';
+import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';

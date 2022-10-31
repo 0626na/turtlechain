@@ -1,7 +1,8 @@
 import { t } from 'i18next';
-import { Form, Input, message, Row } from 'antd';
+import { Form, Input, Row } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { message } from '@utils/message';
 import productAPI from '@apis/productAPI';
 import {
   AddButton,

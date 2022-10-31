@@ -1,4 +1,4 @@
-import { Form, message } from 'antd';
+import { Form } from 'antd';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
@@ -9,7 +9,7 @@ import userAPI from '@apis/userAPI';
 import CompanyStep from './step/CompanyStep';
 
 import UserStep from './step/UserStep';
-
+import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { phonePattern } from '@utils/pattern';

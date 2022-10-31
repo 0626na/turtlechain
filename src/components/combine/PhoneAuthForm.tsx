@@ -1,7 +1,8 @@
 import moment from 'moment';
 import { t } from 'i18next';
 import { useState, useEffect } from 'react';
-import { Form, Input, Button, message, Row } from 'antd';
+import { Form, Input, Button, Row } from 'antd';
+import { message } from '@utils/message';
 import { useMutation } from 'react-query';
 import authAPI from '@apis/authAPI';
 import { css } from '@emotion/react';
@@ -72,7 +73,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
 
         setExpireTime(null);
         clearTimeout(countdown);
-        message.warning(t('message.expired auth time'));
+        message.warn(t('message.expired auth time'));
       }, 1000);
 
       return () => {

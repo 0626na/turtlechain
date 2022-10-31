@@ -10,25 +10,15 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
-import { message } from '@utils/message';
 
 function PageBody() {
   const [sheetId, setSheetId] = useState(0);
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
-  const getOrderSheetsQuery = useQuery(
-    'getOrderSheetsQuery',
-    () =>
-      orderAPI.getOrderSheets({
-        start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
-        end_date: moment().format('YYYY-MM-DD'),
-      }),
-    {
-      onError: () => {
-        message.warn('fdfdf');
-        message.success('fdfdf');
-        message.error('fdfdf');
-      },
-    },
+  const getOrderSheetsQuery = useQuery('getOrderSheetsQuery', () =>
+    orderAPI.getOrderSheets({
+      start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+    }),
   );
   return (
     <>

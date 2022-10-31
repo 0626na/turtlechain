@@ -1,7 +1,8 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Col, Form, message, Popconfirm, Radio, Row } from 'antd';
+import { Col, Form, Popconfirm, Radio, Row } from 'antd';
+import { message } from '@utils/message';
 import {
   AnswerButton,
   TurtleDivider,

@@ -1,7 +1,7 @@
 import { t } from 'i18next';
-import { Form, Input, message, Switch } from 'antd';
+import { Form, Input, Switch } from 'antd';
 import React, { useEffect } from 'react';
-
+import { message } from '@utils/message';
 import {
   AddButton,
   PrimaryButton,

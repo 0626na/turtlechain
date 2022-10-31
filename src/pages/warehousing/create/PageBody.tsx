@@ -19,11 +19,11 @@ import useStore from '@hooks/useStore';
 import { useMutation } from 'react-query';
 import warehousingAPI from '@apis/warehousingAPI';
 import useWarehousingCart from '@hooks/useWarehousingCart';
-import { Col, message, Row } from 'antd';
+import { Col, Row } from 'antd';
 import moment from 'moment';
 import AddSingleProductModal from './modals/AddSingleProductModal';
 import { t } from 'i18next';
-
+import { message } from '@utils/message';
 function PageBody() {
   const navigate = useNavigate();
   const { store, isStoreSelected } = useStore();
