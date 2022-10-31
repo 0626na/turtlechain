@@ -1,6 +1,22 @@
+import { theme } from '@styles/theme';
 import { Tabs } from 'antd';
 import { TabsProps } from 'rc-tabs';
 
+const colors = {
+  dark: {
+    size: 100,
+    color: theme.grey800,
+    inactiveColor: theme.grey400,
+    statusBarColor: theme.grey600,
+  },
+
+  blue: {
+    size: 80,
+    color: theme.blue,
+    inactiveColor: theme.grey600,
+    statusBarColor: theme.blue,
+  },
+};
 interface Props extends TabsProps {
   color?: 'blue' | 'dark';
 }
@@ -10,7 +26,8 @@ function TurtleTabs({ children, color = 'blue', ...props }: Props) {
     <Tabs
       css={{
         '.ant-tabs-nav-wrap': {
-          backgroundColor: '#fff',
+          backgroundColor: theme.white,
+          borderBottom: `1px solid ${theme.DivlderGrey}`,
           padding: color === 'blue' ? '' : '0px 36px',
         },
         '.ant-tabs-nav': {
@@ -44,8 +61,8 @@ function TurtleTabs({ children, color = 'blue', ...props }: Props) {
           // status 바
           '.ant-tabs-ink-bar': {
             height: 4,
-            backgroundColor: colors[color].statusBarColor,
             borderRadius: 2,
+            backgroundColor: colors[color].statusBarColor,
           },
         },
       }}
@@ -56,22 +73,5 @@ function TurtleTabs({ children, color = 'blue', ...props }: Props) {
     </Tabs>
   );
 }
-
-const colors = {
-  dark: {
-    size: 100,
-    color: '#242934',
-    inactiveColor: '#A1A2A6',
-    statusBarColor: '#5B5D63',
-  },
-  blue: {
-    size: 80,
-    color: '#1a66f9',
-    inactiveColor: '#5b5d63',
-    statusBarColor: '#1a66f9',
-  },
-};
-
-// PageContent
 
 export default TurtleTabs;
