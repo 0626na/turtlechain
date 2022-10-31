@@ -3,6 +3,7 @@ import {
   StoreOrder,
   StoreOrderItemExcelParsing,
   ResponseCreateOrderItemExcelParsing,
+  RequestCreateOrderFormat,
 } from '@apis/orderAPI';
 import { useCallback, useState } from 'react';
 import { orderCartState } from '@store/orderCartState';
@@ -27,6 +28,18 @@ export interface FailListForOutput {
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
   const [uploadFiles, setuploadFiles] = useState<RcFile[]>([]);
+
+  const [orderFormat, setOrderFormat] = useState<RequestCreateOrderFormat>({
+    vendor_name: [],
+    vendor_address: [],
+    vendor_mobile: [],
+    product_name: [],
+    product_option: [],
+    product_count: [],
+    product_price: [],
+    order_type: [],
+    memo: [],
+  });
 
   //발주 등록 전, 발주 중복 데이터 및 실패=> 성공 이전데이터 통합
   const integrationOrderList = () => {
@@ -213,7 +226,7 @@ const useOrderCart = () => {
 
   const countSuccessList = useCallback(() => {
     let count = 0;
-    // eslint-disable-next-line array-callback-return
+
     cart.successList.map((store) => {
       count += store.orders.length;
     });
@@ -300,6 +313,8 @@ const useOrderCart = () => {
     countSuccessList,
     countFailList,
     calculateTotalPrice,
+    orderFormat,
+    setOrderFormat,
   };
 };
 

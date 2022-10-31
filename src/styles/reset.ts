@@ -119,6 +119,9 @@ export const reset = css`
     content: ‘’;
     content: none;
   }
+  input {
+    outline: none;
+  }
   table {
     border-collapse: collapse;
     border-spacing: 0;

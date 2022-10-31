@@ -245,7 +245,9 @@ function AddNewOrderModal({ visible, close }: Props) {
           </Form.Item>
           <Form.Item noStyle>
             <Row justify="end">
-              <PrimaryButton htmlType="submit">발주 추가하기</PrimaryButton>
+              <PrimaryButton size="large" htmlType="submit">
+                발주 추가하기
+              </PrimaryButton>
             </Row>
           </Form.Item>
         </Form>

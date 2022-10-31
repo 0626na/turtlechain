@@ -259,6 +259,7 @@ function SuccessTab({ loading, ...props }: Props) {
                   },
                   {
                     title: '수량',
+                    align: 'right',
                     width: 136,
                     render: (_, record) => (
                       <TurtleTableNumberInput

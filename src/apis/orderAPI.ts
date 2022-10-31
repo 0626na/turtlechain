@@ -234,7 +234,12 @@ export interface OrderSheetList {
   rt_store_name: string; //쇼핑몰명
   is_inactive: boolean; //삭제여부
   created_time: string;
+  fails: number; //실패수량
   total_store_count: number;
+  total_success_count: number; //총 성공 건수
+  total_fail_count: number; //총 실패 건수
+  total_success_price: number; //총 성공 금액
+  total_fail_price: number; //총 실패 금액
   order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify
 }
@@ -281,9 +286,9 @@ export interface OrderHistorySheet {
   rt_store_name: string;
   created_time: string;
   total_store_count: number;
+  total_success_count: number;
   total_item_subcount: number;
-  total_price: number;
-  total_item_count: number;
+  total_success_price: number;
 }
 
 export interface RequestGetOrderItem {
