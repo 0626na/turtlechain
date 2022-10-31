@@ -6,7 +6,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   text: string;
 }
 
-function AddColumnButton({ text, ...props }: Props) {
+function AddColumnButton({ text, onClick, ...props }: Props) {
   return (
     <div
       css={css`
@@ -20,6 +20,7 @@ function AddColumnButton({ text, ...props }: Props) {
         align-items: center;
         justify-content: space-between;
       `}
+      onClick={onClick}
     >
       <div
         css={css`

@@ -4,9 +4,11 @@ import TurtleIcon from '../icon/TurtleIcon';
 
 interface Props extends React.HtmlHTMLAttributes<HTMLInputElement> {
   value: string;
+
+  onDelete: () => void;
 }
 
-function ColumnTitleInput({ value, ...props }: Props) {
+function ColumnTitleInput({ value, onDelete, ...props }: Props) {
   return (
     <div
       css={css`
@@ -34,7 +36,7 @@ function ColumnTitleInput({ value, ...props }: Props) {
           margin-right: 10px;
         `}
       >
-        <TurtleIcon name="delete" />
+        <TurtleIcon name="delete" onClick={onDelete} />
       </div>
     </div>
   );
