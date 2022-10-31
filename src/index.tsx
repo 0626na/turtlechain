@@ -18,7 +18,6 @@ import { reset } from '@styles/reset';
 message.config({
   top: 65,
   maxCount: 1,
-  duration: 2,
 });
 
 // React Query
