@@ -203,7 +203,7 @@ export const reset = css`
   .ant-message-notice-content {
     border-radius: 12px;
     padding: 16px 18px 16px 20px;
-    width: 360px;
+    min-width: 360px;
     .ant-message-custom-content {
       font-weight: 500;
       line-height: 1;

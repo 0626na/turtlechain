@@ -4,7 +4,7 @@ import { message as antdMessage } from 'antd';
 
 export const message = {
   // 기본으로 띄워져있는 시간 : 1초
-  success: (content: string, duration = 1) => {
+  success: (content: string, duration = 2) => {
     antdMessage.info({
       content: (
         <div css={leftContent}>
@@ -19,7 +19,7 @@ export const message = {
     });
   },
 
-  error: (content: string, duration = 1) => {
+  error: (content: string, duration = 2) => {
     antdMessage.error({
       content: (
         <div css={leftContent}>
@@ -34,7 +34,7 @@ export const message = {
     });
   },
 
-  warn: (content: string, duration = 1) => {
+  warn: (content: string, duration = 2) => {
     antdMessage.warn({
       content: (
         <div css={leftContent}>
@@ -53,6 +53,6 @@ export const message = {
 const leftContent = css({ display: 'flex' });
 const textMargin = css({
   marginTop: 2,
-  verticalAlign: 'bottom',
   marginLeft: 8,
+  marginRight: 10,
 });

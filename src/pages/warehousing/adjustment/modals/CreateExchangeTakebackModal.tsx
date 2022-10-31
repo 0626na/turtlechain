@@ -18,6 +18,7 @@ import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
 import { useQueryClient } from 'react-query';
 import { message } from '@utils/message';
+import { AxiosError } from 'axios';
 interface Props {
   onClose: () => void;
   visible: boolean;
@@ -35,6 +36,9 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
       queryClient.refetchQueries(['getAdjustmentList'], { active: true });
       message.success('교환/반품이 성공적으로 등록되었습니다.');
       onClose();
+    },
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data.msg, 6);
     },
   });
 
