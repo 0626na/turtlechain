@@ -1,7 +1,7 @@
 import { t } from 'i18next';
-import { Form, Input, message, Switch } from 'antd';
+import { Form, Input, Switch } from 'antd';
 import React, { useEffect } from 'react';
-
+import { message } from '@utils/message';
 import {
   AddButton,
   PrimaryButton,
@@ -56,8 +56,6 @@ function AddSingleModal({ visible, closeModal }: Props) {
 
   // 거래처 선택후 폼에 채워넣기
   const HandleFieldFillin = (ws_store: Wholesale) => {
-    console.log(ws_store);
-
     form.setFieldsValue({
       ...form.getFieldsValue(),
       vendor_code: undefined,
@@ -158,6 +156,9 @@ function AddSingleModal({ visible, closeModal }: Props) {
             }) && closeModal();
           }}
         >
+          <Form.Item name={['ws_store_info', 'id']} hidden>
+            <TurtleFormSearchInput />
+          </Form.Item>
           <Form.Item
             label={t('table.vendorName')}
             name={['ws_store_info', 'name']}
@@ -176,6 +177,9 @@ function AddSingleModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
           </Form.Item>
+          <Form.Item name={['ws_store_info', 'store_phone', 'id']} hidden>
+            <TurtleFormInput />
+          </Form.Item>
           <Form.Item
             label={t('table.mobile')}
             name={['ws_store_info', 'store_phone', 'phone']}
@@ -189,6 +193,9 @@ function AddSingleModal({ visible, closeModal }: Props) {
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
               <div css={{ flexBasis: '50%' }}>
+                <Form.Item name={['ws_store_info', 'address']} hidden>
+                  <TurtleFormSelect />
+                </Form.Item>
                 <Form.Item name={['ws_store_info', 'building']} noStyle>
                   <TurtleFormSelect placeholder="상가" disabled />
                 </Form.Item>
@@ -213,6 +220,9 @@ function AddSingleModal({ visible, closeModal }: Props) {
           </Form.Item>
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
+              <Form.Item name={['ws_store_info', 'store_account', 'id']} hidden>
+                <TurtleFormSelect />
+              </Form.Item>
               <Form.Item
                 name={['ws_store_info', 'store_account', 'bank']}
                 noStyle

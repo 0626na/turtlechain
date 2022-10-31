@@ -49,12 +49,20 @@ import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
 import { ReactComponent as UserCheckIcon } from '@icons/userCheck.svg';
 import { ReactComponent as UserLineIcon } from '@icons/userLine.svg';
 import { ReactComponent as MarkIcon } from '@icons/mark.svg';
+import { ReactComponent as AlertCloseIcon } from '@icons/alertClose.svg';
+import { ReactComponent as AlertSuccessIcon } from '@icons/alertSuccess.svg';
+import { ReactComponent as AlertFailIcon } from '@icons/alertFail.svg';
+import { ReactComponent as AlertWarnIcon } from '@icons/alertWarn.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'alertWarn'
+    | 'alertFail'
+    | 'alertSuccess'
+    | 'alertClose'
     | 'mark'
     | 'delete'
     | 'download'
@@ -105,6 +113,25 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'alertSuccess') {
+    return <AlertSuccessIcon />;
+  }
+
+  if (name === 'alertFail') {
+    return <AlertFailIcon />;
+  }
+  if (name === 'alertWarn') {
+    return <AlertWarnIcon />;
+  }
+
+  if (name === 'alertClose') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <AlertCloseIcon />
+      </div>
+    );
+  }
 
   if (name === 'mark') {
     return <MarkIcon />;

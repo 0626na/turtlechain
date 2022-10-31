@@ -11,12 +11,12 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { message, Pagination, Popconfirm, Row, Switch, Table } from 'antd';
+import { Pagination, Popconfirm, Row, Switch, Table } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';
 import vendorAPI, { Vendor, VendorAccount } from '@apis/vendorAPI';
-
+import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
@@ -95,6 +95,8 @@ function PageBody() {
       page: 1,
     }));
   }, [store.selected]);
+
+  const totalCount = getVendorListQuery.data?.data.total_count;
 
   return (
     <>
@@ -197,7 +199,7 @@ function PageBody() {
           scroll={{ y: 'auto', x: 1400 }}
           title={() => (
             <TurtleTableTitle
-              totalCount={vendorList?.length ?? 0}
+              totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
                   searchQuery={searchQuery}
@@ -210,7 +212,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={vendorList?.length ?? 0}
+                total={totalCount ?? 0}
                 showSizeChanger={false}
                 current={searchQuery.page}
                 onChange={(page) => {

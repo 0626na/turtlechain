@@ -82,7 +82,11 @@ function StoreCard({ store }: Props) {
       <Row>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="pencil" />
-          <TextWithTooltip tooltipContent={['받는분 통장인쇄 툴팁내용']}>
+          <TextWithTooltip
+            tooltipContent={[
+              '터틀체인으로 입금 및 환불 반환에 사용되는 계좌입니다.',
+            ]}
+          >
             <span css={leftContentCss.title}>받는분 통장인쇄</span>
           </TextWithTooltip>
         </Col>

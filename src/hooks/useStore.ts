@@ -1,9 +1,9 @@
 import { t } from 'i18next';
-import { message } from 'antd';
+
 import { useRecoilState } from 'recoil';
 import { storeState } from '@store/storeState';
 import { StoreShow } from '@apis/retailerStoreAPI';
-
+import { message } from '@utils/message';
 function useStore() {
   const [store, setStore] = useRecoilState(storeState);
 

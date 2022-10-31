@@ -3,13 +3,13 @@ import { PhoneAuthForm } from '@components/combine';
 import { SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
-import { Button, Form, Input, message, Row } from 'antd';
+import { Button, Form, Input, Row } from 'antd';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   onClickNext: () => void;

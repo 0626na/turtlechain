@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Pagination, Popover, Radio, Row, Space, Table } from 'antd';
+import { Pagination, Popover, Radio, Row, Space, Table } from 'antd';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { t } from 'i18next';
@@ -17,7 +17,7 @@ import {
 } from '@components/element';
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -45,12 +45,12 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
 
   const onClickSelect = (record: Wholesale) => {
     if (record.store_phone.length !== 1) {
-      message.warning('휴대번호를 선택해주세요');
+      message.warn('휴대번호를 선택해주세요');
       return;
     }
 
     if (record.store_account.length !== 1) {
-      message.warning('계좌번호를 선택해주세요');
+      message.warn('계좌번호를 선택해주세요');
       return;
     }
 

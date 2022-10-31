@@ -9,7 +9,8 @@ import {
   TurtleUpload,
 } from '@components/element';
 import { PageBottomBar, PageContent, PageTitle } from '@layout/page';
-import { message } from 'antd';
+
+import { message } from '@utils/message';
 import SuccessTab from './tabs/SuccessTab';
 import TurtleTabs from '@components/element/TurtleTabs';
 import FailTab from './tabs/FailTab';

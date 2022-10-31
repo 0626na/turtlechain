@@ -3,7 +3,7 @@ import { DaumPostcodeModal } from '@components/combine';
 import { AddButton } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
-import { Button, Form, Input, message, Radio, Upload } from 'antd';
+import { Button, Form, Input, Radio, Upload } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { RcFile } from 'antd/lib/upload';
 
@@ -12,7 +12,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import AgreementCheckbox from '../../AgreementCheckbox';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   loading: boolean;

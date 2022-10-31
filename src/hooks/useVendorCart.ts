@@ -12,8 +12,8 @@ import {
 } from '@store/vendorCartState';
 import { useRecoilState } from 'recoil';
 import { t } from 'i18next';
-import { message } from 'antd';
 
+import { message } from '@utils/message';
 type SUCCESS_LIST = 'successList';
 type PENDING_LIST = 'pendingList';
 
@@ -205,7 +205,7 @@ const useVendorCart = () => {
     ws_store_id: vendor.ws_store_info[0].id,
     vendor_address: vendor.ws_store_info[0].address,
     vendor_name: vendor.useVendorName,
-    memo: vendor.memo,
+    memo: vendor.memo ?? '',
     is_vat_included: vendor.isVatIncluded,
   });
 
