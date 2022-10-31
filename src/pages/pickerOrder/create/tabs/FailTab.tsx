@@ -7,7 +7,8 @@ import {
 import TurtleTableSelect from '@components/element/select/TurtleTableSelect';
 import useModal from '@hooks/useModal';
 import useOrderCart, { FailListForOutput } from '@hooks/useOrderCart';
-import { message, Table, TabPaneProps, Tabs } from 'antd';
+import { Table, TabPaneProps, Tabs } from 'antd';
+import { message } from '@utils/message';
 import { useState } from 'react';
 import OrderMemoModal from '../modals/OrderMemoModal';
 import { category } from './SucceessTab';
