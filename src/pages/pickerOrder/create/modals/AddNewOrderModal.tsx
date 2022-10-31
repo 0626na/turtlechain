@@ -7,7 +7,8 @@ import {
   TurtleFormSelect,
 } from '@components/element';
 import { css } from '@emotion/react';
-import { Form, message, Radio, Row } from 'antd';
+import { Form, Radio, Row } from 'antd';
+import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';

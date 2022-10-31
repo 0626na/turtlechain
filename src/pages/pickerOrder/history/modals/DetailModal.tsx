@@ -5,10 +5,8 @@ import TurtleStatistics from '@components/element/TurtleStatistics';
 import moment from 'moment';
 import { useQuery } from 'react-query';
 import { TurtleTabs } from '@components/element';
-import { PageContent } from '@layout/page';
 import SuccessTab from './tabs/SuccessTab';
 import FailTab from './tabs/FailTab';
-import { Table } from 'antd';
 
 interface Props {
   visible: boolean;

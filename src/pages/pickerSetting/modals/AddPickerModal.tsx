@@ -2,7 +2,8 @@ import React from 'react';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Form, message, Popconfirm, Row } from 'antd';
+import { Form, Popconfirm, Row } from 'antd';
+import { message } from '@utils/message';
 import {
   SpecialButton,
   TurtleFormInput,
@@ -48,7 +49,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   useEffect(() => {
     if (!searched) return;
     if (searchStore === undefined) {
-      message.info('신규쇼핑몰입니다. 값을 입력해주세요');
+      message.error('신규쇼핑몰입니다. 값을 입력해주세요');
       form.setFieldsValue({
         store_id: '',
         store_url: '',
