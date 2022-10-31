@@ -9,7 +9,7 @@ import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import useStore from '@hooks/useStore';
 
-import { Col, Collapse, message, Row } from 'antd';
+import { Col, Collapse, Row } from 'antd';
 
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -17,6 +17,7 @@ import { useMutation } from 'react-query';
 import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
 import { useQueryClient } from 'react-query';
+import { message } from '@utils/message';
 interface Props {
   onClose: () => void;
   visible: boolean;

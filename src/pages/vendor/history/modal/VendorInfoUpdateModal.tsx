@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Form, Input, message, Upload } from 'antd';
+import { Form, Input, Upload } from 'antd';
 import React, { useEffect } from 'react';
 
 import {
@@ -22,7 +22,7 @@ import presetAPI from '@apis/presetAPI';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   closeModal: () => void;

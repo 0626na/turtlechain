@@ -12,8 +12,8 @@ import {
 } from '@store/vendorCartState';
 import { useRecoilState } from 'recoil';
 import { t } from 'i18next';
-import { message } from 'antd';
 
+import { message } from '@utils/message';
 type SUCCESS_LIST = 'successList';
 type PENDING_LIST = 'pendingList';
 

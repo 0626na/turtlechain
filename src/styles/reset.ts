@@ -202,8 +202,16 @@ export const reset = css`
   /* message 박스 크기 설정 */
   .ant-message-notice-content {
     border-radius: 12px;
+    padding: 16px 18px 16px 20px;
     width: 360px;
-    text-align: left;
+    .ant-message-custom-content {
+      font-weight: 500;
+      line-height: 1;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   .ant-tooltip-inner {

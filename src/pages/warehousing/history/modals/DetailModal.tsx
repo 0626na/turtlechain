@@ -12,11 +12,11 @@ import {
 } from '@components/element';
 import TurtleStatistics from '@components/element/TurtleStatistics';
 import useModal from '@hooks/useModal';
-import { Checkbox, InputNumber, message, Row, Space, Table } from 'antd';
+import { Checkbox, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   onClose(): void;

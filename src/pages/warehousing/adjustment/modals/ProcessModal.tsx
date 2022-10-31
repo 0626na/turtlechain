@@ -5,11 +5,11 @@ import {
   TurtleNumberInput,
 } from '@components/element';
 import { css } from '@emotion/react';
-import { Col, Form, message, Row } from 'antd';
+import { Col, Form, Row } from 'antd';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   onClose: () => void;

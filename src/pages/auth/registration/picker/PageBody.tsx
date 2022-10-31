@@ -1,4 +1,5 @@
-import { Button, Form, Input, message, Row } from 'antd';
+import { Button, Form, Input, Row } from 'antd';
+import { message } from '@utils/message';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useMutation } from 'react-query';

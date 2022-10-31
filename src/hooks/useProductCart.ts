@@ -3,7 +3,8 @@ import { RcFile } from 'antd/lib/upload';
 import { productCartState } from '@store/productCartState';
 import { useRecoilState } from 'recoil';
 import { Product, ResponseConnectInventory } from '@apis/productAPI';
-import { message } from 'antd';
+
+import { message } from '@utils/message';
 import { t } from 'i18next';
 import useStore from './useStore';
 
@@ -40,7 +41,7 @@ const useProductCart = () => {
       fileList: [],
     });
 
-    message.info(
+    message.warn(
       `이미 등록된 상품이 ${data.data.count.duplicated_count}건 있습니다.`,
     );
   };

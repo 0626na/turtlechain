@@ -1,5 +1,6 @@
 import { t } from 'i18next';
-import { Form, Input, message } from 'antd';
+import { Form, Input } from 'antd';
+import { message } from '@utils/message';
 import React, { useEffect } from 'react';
 
 import {

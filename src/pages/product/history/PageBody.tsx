@@ -10,7 +10,8 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { message, Pagination, Row, Table, Typography } from 'antd';
+import { Pagination, Row, Table, Typography } from 'antd';
+import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';

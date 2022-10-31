@@ -17,7 +17,8 @@ import {
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { Divider, message, Pagination, Row, Table } from 'antd';
+import { Divider, Pagination, Row, Table } from 'antd';
+import { message } from '@utils/message';
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import moment from 'moment';

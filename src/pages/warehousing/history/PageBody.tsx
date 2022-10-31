@@ -14,14 +14,14 @@ import {
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { message, Space, Table, Tag } from 'antd';
+import { Space, Table, Tag } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import { useMutation, useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import DetailModal from './modals/DetailModal';
 import ProcessButton from '@components/element/button/ProcessButton';
-
+import { message } from '@utils/message';
 function PageBody() {
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({

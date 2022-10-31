@@ -19,11 +19,11 @@ import {
 import ProcessButton from '@components/element/button/ProcessButton';
 import TurtleTag from '@components/element/TurtleTag';
 import { css } from '@emotion/react';
-
+import { message } from '@utils/message';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Col, message, Pagination, Row, Table } from 'antd';
+import { Col, Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';

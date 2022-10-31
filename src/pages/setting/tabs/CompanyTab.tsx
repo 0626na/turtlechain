@@ -5,13 +5,13 @@ import {
   TurtleFormInput,
   TurtleIcon,
 } from '@components/element';
-import { Col, Form, message, Popconfirm, Radio, Row, Upload } from 'antd';
+import { Col, Form, Popconfirm, Radio, Row, Upload } from 'antd';
 import { t } from 'i18next';
 
 import Card from '../cards/UserCard';
 import { useMutation, useQuery } from 'react-query';
 import retailerCompanyAPI, { Company } from '@apis/retailerCompanyAPI';
-
+import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import { bizNumPattern } from '@utils/pattern';
 import { DaumPostcodeModal } from '@components/combine';

@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { Form, Input, message, Row, Switch } from 'antd';
+import { Form, Input, Row, Switch } from 'antd';
 import {
   PrimaryButton,
   TurtleDivider,
@@ -11,6 +11,7 @@ import {
   TurtleNumberInput,
 } from '@components/element';
 
+import { message } from '@utils/message';
 import { pricePattern } from '@utils/pattern';
 import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';

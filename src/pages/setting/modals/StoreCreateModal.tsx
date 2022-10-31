@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Col, Form, message, Popconfirm, Radio, Row } from 'antd';
+import { Col, Form, Popconfirm, Radio, Row } from 'antd';
 import {
   SpecialButton,
   TurtleDivider,
@@ -13,7 +13,7 @@ import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
 import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
-
+import { message } from '@utils/message';
 interface Props {
   visible: boolean;
   closeModal: () => void;
