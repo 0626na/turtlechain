@@ -226,7 +226,7 @@ const useOrderCart = () => {
 
   const countSuccessList = useCallback(() => {
     let count = 0;
-    // eslint-disable-next-line array-callback-return
+
     cart.successList.map((store) => {
       count += store.orders.length;
     });
