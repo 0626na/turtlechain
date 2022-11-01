@@ -4,9 +4,10 @@ import PlusIcon from '../icon/PlusIcon';
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   text: string;
+  required: boolean;
 }
 
-function AddColumnButton({ text, onClick, ...props }: Props) {
+function AddColumnButton({ text, onClick, required, ...props }: Props) {
   return (
     <div
       css={css`
@@ -32,6 +33,16 @@ function AddColumnButton({ text, onClick, ...props }: Props) {
         `}
       >
         {text}
+
+        {(text === '거래처명' || text === '거래처 주소' || text === '수량') && (
+          <span
+            css={css`
+              color: red;
+            `}
+          >
+            *
+          </span>
+        )}
       </div>
       <div
         css={css`
