@@ -41,7 +41,7 @@ export interface Vendor {
 
 // 거래처 계좌 타입
 export interface VendorAccount {
-  id: number;
+  id?: number;
   account_number: string;
   account_holder: string;
   bank: string;

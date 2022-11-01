@@ -14,7 +14,7 @@ function SelectButton({ children, size = 'default', icon, ...props }: Props) {
   return (
     <Button css={[button, sizes[size]]} {...props}>
       {children}
-      {icon && <div>{icon}</div>}
+      {icon && <span css={$icon}>{icon}</span>}
     </Button>
   );
 }
@@ -27,9 +27,14 @@ const sizes = {
     width: 60px;
   `,
   default: css`
-    width: 88px;
+    min-width: 88px;
   `,
 };
+
+const $icon = css({
+  marginLeft: 3,
+  lineHeight: 1,
+});
 
 const button = css`
   height: 26px;
@@ -44,6 +49,7 @@ const button = css`
   color: #00aab5;
   background-color: #ddf3f5;
   border-color: #ddf3f5;
+
   &:hover {
     color: #00aab5;
     border-color: #d4e9eb;

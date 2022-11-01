@@ -15,7 +15,6 @@ export interface RequestCreate {
   loc: string;
   colLoc?: string;
   ext: string;
-  memo: string;
   biz_name: string;
   biz_num: number;
   biz_owner: string;
