@@ -14,6 +14,7 @@ import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
 import presetAPI from '@apis/presetAPI';
 import useOrderCart from '@hooks/useOrderCart';
+import { notNumPattern } from '@utils/pattern';
 interface Props {
   visible: boolean;
   close: () => void;
@@ -44,6 +45,7 @@ function AddNewOrderModal({ visible, close }: Props) {
   const getBuildingQuery = useQuery('getBuildingQuery', presetAPI.getBuilding);
 
   useEffect(() => form.resetFields(), [form, visible]);
+
   return (
     <>
       <TurtleContentModal
@@ -61,6 +63,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             updateSuccess({
               rt_store_id: selectStore.id,
               rt_store_name: selectStore.name,
+              type: 'single',
               orders: [
                 {
                   vendor_name: values.vendor_name,
@@ -195,7 +198,16 @@ function AddNewOrderModal({ visible, close }: Props) {
           </Form.Item>
           {/* 휴대번호 */}
           <Form.Item label={t('table.mobile')} name="mobile" required>
-            <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
+            <TurtleFormInput
+              placeholder="휴대전화번호를 입력해주세요"
+              maxLength={11}
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replaceAll(
+                  notNumPattern,
+                  '',
+                );
+              }}
+            />
           </Form.Item>
 
           <TurtleDivider marginBottom={37} marginTop={32} />
@@ -244,12 +256,30 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item label={t('table.memo')} name="memo">
             <TurtleFormInput placeholder="ex 7,000" />
           </Form.Item>
-          <Form.Item noStyle>
-            <Row justify="end">
-              <PrimaryButton size="large" htmlType="submit">
-                발주 추가하기
-              </PrimaryButton>
-            </Row>
+          <Form.Item noStyle shouldUpdate>
+            {(values) => {
+              return (
+                <Row justify="end">
+                  <PrimaryButton
+                    size="large"
+                    htmlType="submit"
+                    disabled={
+                      !values.getFieldValue('store_name') ||
+                      !values.getFieldValue('vendor_name') ||
+                      !values.getFieldValue('vendor_address_building') ||
+                      !values.getFieldValue('vendor_address_floor') ||
+                      !values.getFieldValue('vendor_address_col') ||
+                      !values.getFieldValue('mobile') ||
+                      !values.getFieldValue('vendor_product_name') ||
+                      !values.getFieldValue('option') ||
+                      !values.getFieldValue('type')
+                    }
+                  >
+                    발주 추가하기
+                  </PrimaryButton>
+                </Row>
+              );
+            }}
           </Form.Item>
         </Form>
       </TurtleContentModal>
