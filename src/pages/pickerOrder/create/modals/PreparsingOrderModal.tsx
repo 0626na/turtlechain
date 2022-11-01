@@ -24,8 +24,20 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
   const createOrderExcelParseMutation = useMutation(
     orderAPI.createOrderExcelParsing,
     {
-      onSuccess: (data) => {
-        ready(data);
+      onSuccess: (parsingData) => {
+        ready({
+          ...parsingData,
+          data: {
+            successes: parsingData.data.successes.map((item) => ({
+              ...item,
+              type: 'excel',
+            })),
+            fails: parsingData.data.fails.map((item) => ({
+              ...item,
+              type: 'excel',
+            })),
+          },
+        });
       },
     },
   );

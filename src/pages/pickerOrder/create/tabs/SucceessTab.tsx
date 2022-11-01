@@ -180,6 +180,7 @@ function SuccessTab({ loading, ...props }: Props) {
             />
           )}
           expandable={{
+            rowExpandable: (record) => record.type !== 'single',
             expandRowByClick: true,
             onExpand: (onExpand, record) => {
               if (!onExpand) {
@@ -189,6 +190,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
               setSelectedRowID(Number(record.id));
             },
+
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
@@ -240,6 +242,7 @@ function SuccessTab({ loading, ...props }: Props) {
                               (successItem) => ({
                                 rt_store_id: successItem.rt_store_id,
                                 rt_store_name: successItem.rt_store_name,
+                                type: successItem.type,
                                 orders:
                                   successItem.rt_store_id ===
                                   expandedRecord.rt_store_id
