@@ -118,6 +118,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
             `}
           >
             <AddColumnButton
+              required={true}
               text="거래처명"
               onClick={() => {
                 setOrderFormat({
@@ -127,6 +128,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={true}
               text="거래처 주소"
               onClick={() => {
                 setOrderFormat({
@@ -136,6 +138,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={false}
               text="휴대전화 번호"
               onClick={() => {
                 setOrderFormat({
@@ -145,6 +148,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={true}
               text="거래처 상품명"
               onClick={() => {
                 setOrderFormat({
@@ -154,6 +158,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={false}
               text="옵션"
               onClick={() => {
                 setOrderFormat({
@@ -163,6 +168,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={false}
               text="분류"
               onClick={() => {
                 setOrderFormat({
@@ -172,6 +178,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={true}
               text="수량"
               onClick={() => {
                 setOrderFormat({
@@ -181,6 +188,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={false}
               text="가격"
               onClick={() => {
                 setOrderFormat({
@@ -190,6 +198,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               }}
             />
             <AddColumnButton
+              required={false}
               text="메모"
               onClick={() => {
                 setOrderFormat({
