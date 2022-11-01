@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   MemoIcon,
   TurtleIcon,
+  TurtleSearchInput,
+  TurtleSearchSelect,
   TurtleTableNumberInput,
   TurtleTableTitle,
 } from '@components/element';
@@ -10,7 +12,7 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useOrderCart from '@hooks/useOrderCart';
 import DeleteOrderModal from '@pages/order/create/modals/DeleteOrderModal';
-import { Table, TabPaneProps, Tabs } from 'antd';
+import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
@@ -54,20 +56,20 @@ export const category = [
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
-  // const options = [
-  //   {
-  //     name: '쇼핑몰명',
-  //     value: 'name',
-  //   },
-  //   {
-  //     name: '거래처명',
-  //     value: 'vendor_name',
-  //   },
-  //   {
-  //     name: '휴대번호',
-  //     value: 'mobile',
-  //   },
-  // ];
+  const options = [
+    {
+      name: '쇼핑몰명',
+      value: 'name',
+    },
+    {
+      name: '거래처명',
+      value: 'vendor_name',
+    },
+    {
+      name: '휴대전화번호',
+      value: 'mobile',
+    },
+  ];
 
   const { cart, setCart } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
@@ -75,6 +77,33 @@ function SuccessTab({ loading, ...props }: Props) {
   const [deleteMode, setDeleteMode] = useState(false); //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
   const [visibleDeleteModal, openDeleteModal, closeDeleteModal] = useModal();
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
+  const [searchQuery, setSearchQuery] = useState({
+    type: 'name',
+    search_string: '',
+  });
+
+  const filterdList = useMemo(() => {
+    if (searchQuery.type === 'name')
+      return cart.successList.filter((item) =>
+        item.rt_store_name.includes(searchQuery.search_string),
+      );
+    if (searchQuery.type === 'vendor_name')
+      return cart.successList.map((store) => ({
+        ...store,
+        orders: store.orders.filter((order) =>
+          order.vendor_name.includes(searchQuery.search_string),
+        ),
+      }));
+
+    if (searchQuery.type === 'mobile')
+      return cart.successList.map((store) => ({
+        ...store,
+        orders: store.orders.filter((order) =>
+          order.mobile.includes(searchQuery.search_string),
+        ),
+      }));
+    return cart.successList;
+  }, [cart.successList, searchQuery]);
 
   return (
     <>
@@ -137,7 +166,7 @@ function SuccessTab({ loading, ...props }: Props) {
       <Tabs.TabPane {...props}>
         <Table
           scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
-          dataSource={cart.successList}
+          dataSource={filterdList}
           loading={loading}
           size="small"
           rowKey={(record) => String(record.id)}
@@ -148,35 +177,35 @@ function SuccessTab({ loading, ...props }: Props) {
           title={() => (
             <TurtleTableTitle
               totalCount={cart.successList.length ?? 0}
-              // rightContent={
-              //   <Row>
-              //     <Col css={marginRight}>
-              //       <TurtleSearchSelect
-              //         value={searchQuery.type}
-              //         onChange={(value) => {
-              //           setSearchQuery({
-              //             ...searchQuery,
-              //             type: value,
-              //           });
-              //         }}
-              //         items={options}
-              //       />
-              //     </Col>
+              rightContent={
+                <Row>
+                  <Col css={marginRight}>
+                    <TurtleSearchSelect
+                      value={searchQuery.type}
+                      onChange={(value) => {
+                        setSearchQuery({
+                          ...searchQuery,
+                          type: value,
+                        });
+                      }}
+                      items={options}
+                    />
+                  </Col>
 
-              //     <Col>
-              //       <TurtleSearchInput
-              //         placeholder="검색어를 입력하세요"
-              //         value={searchQuery.search_string}
-              //         onChange={(e) => {
-              //           setSearchQuery({
-              //             ...searchQuery,
-              //             search_string: e.currentTarget.value,
-              //           });
-              //         }}
-              //       />
-              //     </Col>
-              //   </Row>
-              // }
+                  <Col>
+                    <TurtleSearchInput
+                      placeholder="검색어를 입력하세요"
+                      value={searchQuery.search_string}
+                      onChange={(e) =>
+                        setSearchQuery({
+                          ...searchQuery,
+                          search_string: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Col>
+                </Row>
+              }
             />
           )}
           expandable={{
@@ -206,27 +235,27 @@ function SuccessTab({ loading, ...props }: Props) {
                   {
                     title: '거래처명',
                     width: 136,
-                    render: (_, record) => record.vendor_name,
+                    render: (_, record) => record.vendor_name ?? '',
                   },
                   {
                     title: '거래처 주소',
                     width: 196,
-                    render: (_, record) => record.vendor_address,
+                    render: (_, record) => record.vendor_address ?? '',
                   },
                   {
                     title: '휴대전화번호',
                     width: 156,
-                    render: (_, record) => record.mobile,
+                    render: (_, record) => record.mobile ?? '',
                   },
                   {
                     title: '거래처 상품명',
                     width: 216,
-                    render: (_, record) => record.product_name,
+                    render: (_, record) => record.product_name ?? '',
                   },
                   {
                     title: '옵션',
                     width: 136,
-                    render: (_, record) => record.product_option,
+                    render: (_, record) => record.product_option ?? '',
                   },
                   {
                     title: '분류',
@@ -299,7 +328,7 @@ function SuccessTab({ loading, ...props }: Props) {
                     width: 136,
                     align: 'right',
                     render: (_, record) =>
-                      Number(record.product_price).toLocaleString(),
+                      Number(record.product_price).toLocaleString() ?? 0,
                   },
                   {
                     title: '메모',
@@ -340,20 +369,25 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               title: '쇼핑몰',
               width: 184,
-              render: (_, record) => record.rt_store_name,
+              render: (_, record) => record.rt_store_name ?? '',
             },
             {
               title: '거래처',
               width: 488,
-              render: (_, record) =>
-                `${record.orders[0].vendor_name} 외 ${
-                  record.orders.length - 1
-                }개`,
+              render: (_, record) => {
+                return (
+                  record.orders.length !== 0 &&
+                  `${record.orders[0].vendor_name} 외 ${
+                    record.orders.length - 1
+                  }개`
+                );
+              },
             },
             {
               title: '상품',
               width: 488,
               render: (_, record) =>
+                record.orders.length !== 0 &&
                 `${record.orders[0].product_name} 외 ${
                   record.orders.length - 1
                 }건`,
@@ -362,6 +396,7 @@ function SuccessTab({ loading, ...props }: Props) {
               title: '수량 합계',
               width: 136,
               render: (_, record) =>
+                record.orders.length !== 0 &&
                 record.orders.reduce(
                   (acc, order) => acc + Number(order.product_count),
                   0,
@@ -372,6 +407,7 @@ function SuccessTab({ loading, ...props }: Props) {
               width: 128,
               align: 'right',
               render: (_, record) =>
+                record.orders.length !== 0 &&
                 record.orders
                   .reduce((acc, order) => acc + Number(order.product_price), 0)
                   .toLocaleString(),
