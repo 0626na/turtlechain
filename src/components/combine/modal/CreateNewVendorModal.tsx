@@ -23,10 +23,10 @@ import { phonePattern } from '@utils/pattern';
 
 interface Props {
   closeModal: () => void;
-  // visible: boolean;
+  visible: boolean;
 }
 
-function CreateNewModal({ closeModal }: Props) {
+function CreateNewModal({ visible, closeModal }: Props) {
   const { store } = useStore();
   const [form] = Form.useForm();
 
@@ -87,17 +87,14 @@ function CreateNewModal({ closeModal }: Props) {
   );
 
   useEffect(() => {
-    return () => {
-      console.log(123);
-    };
-  }, []);
+    if (!visible) form.resetFields();
+  }, [visible]);
 
   return (
     <TurtleContentModal
       title={t('vendor.newCreate')}
-      visible={true}
+      visible={visible}
       onClose={() => {
-        form.resetFields();
         closeModal();
       }}
     >
@@ -105,7 +102,7 @@ function CreateNewModal({ closeModal }: Props) {
         layout="horizontal"
         form={form}
         colon={false}
-        // preserve={false}
+        preserve={false}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
         onFinish={(value) => {

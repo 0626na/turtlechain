@@ -18,7 +18,7 @@ function AlertBar() {
       {/*
        *  거래처 신규생성 모달
        */}
-      {modalVisible && <CreateNewVendorModal closeModal={modalClose} />}
+      <CreateNewVendorModal visible={modalVisible} closeModal={modalClose} />
 
       {visible && (
         <div css={alertBarCss.self}>
