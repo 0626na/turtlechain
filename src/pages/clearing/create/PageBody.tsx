@@ -14,12 +14,12 @@ function PageBody() {
   const [activeKey, setActiveKey] = useState('0');
   const { store } = useStore();
   const { cart, selectDate } = useClearingCart();
+  const [tooltipVisible, setTooltipVisible] = useState(true);
 
   // 날짜선택, 쇼핑몰 변경시 교환/반품/미송 패널 보여준다.
   useEffect(() => {
     setActiveKey('1');
   }, [cart.clearingRequestDate, store.selected?.id]);
-  const [tooltipVisible, setTooltipVisible] = useState(true);
   return (
     <>
       <div css={inner}>

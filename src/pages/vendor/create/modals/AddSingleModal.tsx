@@ -33,8 +33,6 @@ function AddSingleModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
 
-  // 선택된 거래처
-
   //거래처코드 생성
   const getVendorCodeQuery = useQuery(
     'getVendorCode',
@@ -108,9 +106,8 @@ function AddSingleModal({ visible, closeModal }: Props) {
   };
 
   useEffect(() => {
-    if (visible) return;
-    form.resetFields();
-  }, [visible, form]);
+    if (!visible) form.resetFields();
+  }, [visible]);
 
   return (
     <>
@@ -127,7 +124,6 @@ function AddSingleModal({ visible, closeModal }: Props) {
         title={t('vendor.addSingle')}
         visible={visible}
         onClose={() => {
-          form.resetFields();
           closeModal();
         }}
       >

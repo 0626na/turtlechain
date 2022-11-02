@@ -102,7 +102,6 @@ function CreateNewModal({ visible, closeModal }: Props) {
         layout="horizontal"
         form={form}
         colon={false}
-        preserve={false}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
         onFinish={(value) => {
