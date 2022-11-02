@@ -7,7 +7,7 @@ function useExelClearingCart() {
   const [cart, setCart] = useRecoilState(exelClearingCartState);
 
   // 결제요청일을 선택한다.
-  const selectExelDate = (date: string) => {
+  const selectDate = (date: string) => {
     console.log(date);
     setCart((cart) => ({
       ...cart,
@@ -29,7 +29,7 @@ function useExelClearingCart() {
   return {
     cart,
     ready,
-    selectExelDate,
+    selectDate,
   };
 }
 

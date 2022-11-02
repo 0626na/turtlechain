@@ -16,7 +16,7 @@ import { useModal } from '@hooks/index';
 import { theme } from '@styles/theme';
 import { css } from '@emotion/react';
 import { message } from '@utils/message';
-import { AxiosError } from 'axios';
+
 interface Props {
   visible: boolean;
   onClose: () => void;
