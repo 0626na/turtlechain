@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { storeState } from '@store/storeState';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import { message } from '@utils/message';
+import { useEffect } from 'react';
 function useStore() {
   const [store, setStore] = useRecoilState(storeState);
 

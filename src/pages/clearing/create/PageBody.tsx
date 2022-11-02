@@ -1,137 +1,210 @@
+import clearingAPI from '@apis/clearingAPI';
+
+import { SecondaryIconButton, TurtleUpload } from '@components/element';
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
+import useExelClearingCart from '@hooks/useExelClearingCart';
+import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
+
 import { PageContent } from '@layout/page';
 import { theme } from '@styles/theme';
-import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
+import { message } from '@utils/message';
+import {
+  Badge,
+  Button,
+  Col,
+  Collapse,
+  DatePicker,
+  Row,
+  Tooltip,
+  Upload,
+} from 'antd';
+import { AxiosError } from 'axios';
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
+import ExelModal from './modals/ExelModal';
 import ClearingPanel from './panels/ClearingPanel';
 import WarehousingPanel from './panels/WarehousingPanel';
 
+// TODO : 결제요청날짜 변경할때 대행 vs 2.0 분기처리
 function PageBody() {
-  const [activeKey, setActiveKey] = useState('0');
+  // 공통
   const { store } = useStore();
-  const { cart, selectDate } = useClearingCart();
   const [tooltipVisible, setTooltipVisible] = useState(true);
+  const serviceVersion = store.selected?.companies[0].version;
 
-  // 날짜선택, 쇼핑몰 변경시 교환/반품/미송 패널 보여준다.
+  // agency_services(대행 서비스)
+  const [excelModalVisible, openExcelModal, closeExcelModal] = useModal();
+  const { ready, selectExelDate } = useExelClearingCart();
+  const excelMutation = useMutation(clearingAPI.parseExcel, {
+    onSuccess: (data) => {
+      ready(data.success, data.fail);
+      openExcelModal();
+      setTooltipVisible(false);
+    },
+    onError: (error: AxiosError) => {
+      message.warn(error.response?.data.msg, 10);
+    },
+  });
+
+  // 2.0
+  const { cart, selectDate } = useClearingCart();
+  const [activeKey, setActiveKey] = useState('0');
+  // 날짜선택, 쇼핑몰 변경시 교환/반품/미송 패널 보여준다. (대행서비스일시 안보여줌.)
   useEffect(() => {
+    if (serviceVersion === 'agency_services') return;
     setActiveKey('1');
   }, [cart.clearingRequestDate, store.selected?.id]);
+
   return (
     <>
       <div css={inner}>
         <span css={clearingDate}>결제요청 일자</span>
-        <Row>
-          <Col>
-            <Button
-              css={[
-                $button,
-                moment().format('YYYY-MM-DD') ===
-                  moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                  greenButton,
-              ]}
-              onClick={() => {
-                selectDate(moment().format('YYYY-MM-DD'));
-              }}
-            >
-              오늘
-            </Button>
-          </Col>
-
-          <Col>
-            <Tooltip
-              visible={tooltipVisible}
-              placement="bottom"
-              title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
-            >
-              <DatePicker
-                onClick={() => setTooltipVisible(false)}
+        <Row justify="space-between">
+          <Row>
+            <Col>
+              <Button
                 css={[
-                  $datePicker,
-                  cart.clearingRequestDate &&
-                    moment().format('YYYY-MM-DD') !==
-                      moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
-                    greenDatePicker,
+                  $button,
+                  moment().format('YYYY-MM-DD') ===
+                    moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                    greenButton,
                 ]}
-                onChange={(_, date) => {
-                  selectDate(date);
+                onClick={() => {
+                  serviceVersion === 'agency_services'
+                    ? selectExelDate(moment().format('YYYY-MM-DD'))
+                    : selectDate(moment().format('YYYY-MM-DD'));
                 }}
-                allowClear={false}
-                placeholder="다른 일자선택"
+              >
+                오늘
+              </Button>
+            </Col>
+
+            <Col>
+              <Tooltip
+                visible={tooltipVisible}
+                placement="bottom"
+                title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+              >
+                <DatePicker
+                  onClick={() => setTooltipVisible(false)}
+                  css={[
+                    $datePicker,
+                    cart.clearingRequestDate &&
+                      moment().format('YYYY-MM-DD') !==
+                        moment(cart.clearingRequestDate).format('YYYY-MM-DD') &&
+                      greenDatePicker,
+                  ]}
+                  onChange={(_, date) => {
+                    serviceVersion === 'agency_services'
+                      ? selectExelDate(date)
+                      : selectDate(date);
+                  }}
+                  allowClear={false}
+                  placeholder="다른 일자선택"
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+
+          {serviceVersion === 'agency_services' && (
+            <>
+              <ExelModal
+                visible={excelModalVisible}
+                onClose={closeExcelModal}
               />
-            </Tooltip>
-          </Col>
+              <Col>
+                <Upload
+                  maxCount={1}
+                  accept=".csv, .xls, .xlsx"
+                  beforeUpload={(file) => {
+                    excelMutation.mutate({
+                      file,
+                      rt_store_id: Number(store.selected?.id),
+                    });
+
+                    return false;
+                  }}
+                  fileList={[]}
+                >
+                  <SecondaryIconButton loading={excelMutation.isLoading}>
+                    정산서 업로드
+                  </SecondaryIconButton>
+                </Upload>
+              </Col>
+            </>
+          )}
         </Row>
       </div>
-      <PageContent gray>
-        <Collapse
-          css={collapse}
-          onChange={(key) => {
-            if (!key || key[0] === '2') return;
-            setActiveKey(key[0]);
-          }}
-          activeKey={activeKey}
-          accordion
-          bordered={false}
-        >
-          <WarehousingPanel
-            activeKey={activeKey}
-            key="1"
-            clickNext={() => {
-              setActiveKey('2');
-            }}
-            header={
-              <div css={headerCss.self}>
-                <Badge
-                  count={1}
-                  style={{
-                    backgroundColor:
-                      Number(activeKey) >= 1 ? '#DDF3F5' : '#F0F3F6',
-                    color: Number(activeKey) >= 1 ? '#00AAB5' : '#A1A2A6',
-                    ...headerCss.badgeCss,
-                  }}
-                />
-                <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>교환/반품/미송 확인하기</div>
-                  <div css={headerCss.subTitle}>
-                    결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
-                  </div>
-                </div>
-              </div>
-            }
-          />
-          <ClearingPanel
-            activeKey={activeKey}
-            key="2"
-            clickCreate={() => {
-              setActiveKey('0');
-            }}
-            header={
-              <div css={headerCss.self}>
-                <Badge
-                  count={2}
-                  style={{
-                    backgroundColor:
-                      Number(activeKey) >= 2 ? '#DDF3F5' : '#F0F3F6',
-                    color: Number(activeKey) >= 2 ? '#00AAB5' : '#A1A2A6',
-                    ...headerCss.badgeCss,
-                  }}
-                />
-                <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>결제금액 미리보기</div>
 
-                  <div css={headerCss.subTitle}>
-                    거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
+      {serviceVersion === '2.0' && (
+        <PageContent gray>
+          <Collapse
+            css={collapse}
+            onChange={(key) => {
+              if (!key || key[0] === '2') return;
+              setActiveKey(key[0]);
+            }}
+            activeKey={activeKey}
+            accordion
+            bordered={false}
+          >
+            <WarehousingPanel
+              activeKey={activeKey}
+              key="1"
+              clickNext={() => {
+                setActiveKey('2');
+              }}
+              header={
+                <div css={headerCss.self}>
+                  <Badge
+                    count={1}
+                    style={{
+                      backgroundColor:
+                        Number(activeKey) >= 1 ? '#DDF3F5' : '#F0F3F6',
+                      color: Number(activeKey) >= 1 ? '#00AAB5' : '#A1A2A6',
+                      ...headerCss.badgeCss,
+                    }}
+                  />
+                  <div css={headerCss.textInner}>
+                    <div css={headerCss.title}>교환/반품/미송 확인하기</div>
+                    <div css={headerCss.subTitle}>
+                      결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
+                    </div>
                   </div>
                 </div>
-              </div>
-            }
-          />
-        </Collapse>
-      </PageContent>
+              }
+            />
+            <ClearingPanel
+              activeKey={activeKey}
+              key="2"
+              header={
+                <div css={headerCss.self}>
+                  <Badge
+                    count={2}
+                    style={{
+                      backgroundColor:
+                        Number(activeKey) >= 2 ? '#DDF3F5' : '#F0F3F6',
+                      color: Number(activeKey) >= 2 ? '#00AAB5' : '#A1A2A6',
+                      ...headerCss.badgeCss,
+                    }}
+                  />
+                  <div css={headerCss.textInner}>
+                    <div css={headerCss.title}>결제금액 미리보기</div>
+
+                    <div css={headerCss.subTitle}>
+                      거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
+                    </div>
+                  </div>
+                </div>
+              }
+            />
+          </Collapse>
+        </PageContent>
+      )}
     </>
   );
 }

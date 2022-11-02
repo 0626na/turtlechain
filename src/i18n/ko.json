@@ -233,6 +233,7 @@
     "success registration": "가입 신청이 완료 되었습니다.",
     "success update store": "정보가 업데이트 되었습니다.",
     "success create store": "쇼핑몰이 생성되었습니다.",
+    "success create clearing": "결제요청이 완료되었습니다",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 생성하였습니다.",
     "success verify auth num": "인증번호를 확인하였습니다.",
