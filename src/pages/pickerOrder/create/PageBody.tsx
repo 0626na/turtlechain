@@ -39,7 +39,7 @@ function PageBody() {
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
       //2회 이상 발주 파일이 없는경우
-      if (data.parsingData !== undefined) {
+      if (data.parsingData) {
         ready({ ...data.parsingData });
 
         return;
@@ -96,6 +96,7 @@ function PageBody() {
           <TertiaryButton
             text="발주서 설정"
             onClick={openSettingColumnModal}
+            icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
