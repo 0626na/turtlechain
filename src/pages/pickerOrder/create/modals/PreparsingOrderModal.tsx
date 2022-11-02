@@ -28,6 +28,7 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
         ready({
           ...parsingData,
           data: {
+            ...parsingData.data,
             successes: parsingData.data.successes.map((item) => ({
               ...item,
               type: 'excel',

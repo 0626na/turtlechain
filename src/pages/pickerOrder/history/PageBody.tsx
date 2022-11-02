@@ -1,5 +1,10 @@
 import orderAPI from '@apis/orderAPI';
-import { TertiaryButton, TurtleCard, TurtleIcon } from '@components/element';
+import {
+  TertiaryButton,
+  TurtleCard,
+  TurtleIcon,
+  TurtleTag,
+} from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
@@ -106,7 +111,12 @@ function PageBody() {
               ellipsis: true,
               width: 108,
               title: '분류',
-              render: (_, record) => (record.type === 'new' ? '1차' : '2차'),
+              render: (_, record) =>
+                record.type === 'new' ? (
+                  <TurtleTag color="orderHistoryCategoryFirst">1차</TurtleTag>
+                ) : (
+                  <TurtleTag color="orderHistoryCategorySecond">2차</TurtleTag>
+                ),
             },
             {
               ellipsis: true,

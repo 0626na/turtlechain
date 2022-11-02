@@ -14,6 +14,7 @@ interface Props {
   okText?: string;
   okDisabled?: boolean;
   loading?: boolean;
+  size?: 'small' | 'middle' | 'large';
 }
 
 function TurtleConfirmModal({
@@ -25,6 +26,7 @@ function TurtleConfirmModal({
   cancelText = '취소',
   okText = '확인',
   okDisabled = false,
+  size = 'small',
   loading,
   onCancel,
   onOk,
@@ -33,7 +35,7 @@ function TurtleConfirmModal({
     <>
       {visible && (
         <div css={modalMask}>
-          <div css={modalContent}>
+          <div css={[modalContent, sizeCss[size]]}>
             <h1 css={$title}>{title}</h1>
             <p css={$description}>
               {description.map((item, index) => (
@@ -66,16 +68,20 @@ const modalMask = css`
   height: 100vh;
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   z-index: 5;
   background: rgba(0, 0, 0, 0.45);
 `;
 
-const modalContent = css`
-  width: 400px;
+const sizeCss = {
+  small: { width: 400 },
+  middle: { width: 884 },
+  large: { width: '91.8vw' },
+};
 
+const modalContent = css`
   color: #5b5d63;
 
   position: relative;
@@ -104,7 +110,7 @@ const $title = css`
 
 const $description = css`
   margin-top: 16px;
-
+  font-size: 14px;
   line-height: 1.429;
   color: #5b5d63;
 `;
