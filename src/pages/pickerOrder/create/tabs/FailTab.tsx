@@ -282,6 +282,7 @@ function FailTab({ loading, ...props }: Props) {
                   value={record.order_type}
                   onChange={(value: string) => {
                     setCart({
+                      ...cart,
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
                         ...failItem,
@@ -306,6 +307,7 @@ function FailTab({ loading, ...props }: Props) {
                   step={1}
                   onChange={(value: valueType) => {
                     setCart({
+                      ...cart,
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
                         ...failItem,
