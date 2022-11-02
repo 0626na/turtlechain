@@ -219,7 +219,18 @@ function SuccessTab({ loading, ...props }: Props) {
 
               setSelectedRowID(Number(record.id));
             },
-
+            expandIcon: ({ expanded, onExpand, record }) =>
+              expanded ? (
+                <TurtleIcon
+                  name="accordionUp"
+                  onClick={(e) => onExpand(record, e)}
+                />
+              ) : (
+                <TurtleIcon
+                  name="accordionDown"
+                  onClick={(e) => onExpand(record, e)}
+                />
+              ),
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
