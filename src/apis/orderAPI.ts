@@ -95,6 +95,12 @@ export interface StoreOrderItemExcelParsing {
   orders: StoreOrder[];
 }
 
+export interface ParsingStatus {
+  success_count: number;
+  fail_count: number;
+  error_messages: string[];
+}
+
 export interface RequestCreateOrderItemExcelParsing {
   files: RcFile[];
 }
@@ -104,6 +110,7 @@ export interface ResponseCreateOrderItemExcelParsing {
   data: {
     successes: StoreOrderItemExcelParsing[];
     fails: StoreOrderItemExcelParsing[];
+    parsing_status: ParsingStatus;
   };
 }
 

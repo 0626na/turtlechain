@@ -154,6 +154,7 @@ const useOrderCart = () => {
             return setStoreListItem(store, id);
           }),
         ],
+        parsingStatus: data.data.parsing_status,
       });
     },
     [cart.failList, cart.successList, setCart, setStoreListItem],
@@ -175,6 +176,7 @@ const useOrderCart = () => {
   const updateSuccess = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
+        ...cart,
         successList: [
           ...cart.successList,
           {
@@ -291,10 +293,40 @@ const useOrderCart = () => {
   }, [cart.successList, cart.failList]);
 
   /*
+   * 발주 수량 분류별 계산
+   */
+
+  const countOrdersForType = useCallback(() => {
+    const orderCount = {
+      order: 0,
+      notDelivery: 0,
+      return: 0,
+      exchange: 0,
+      sample: 0,
+      pickup: 0,
+      etc: 0,
+    };
+    cart.successList.map((item) => {
+      item.orders.map((order) => {
+        if (order.order_type === '발주') orderCount.order += 1;
+        if (order.order_type === '미송') orderCount.notDelivery += 1;
+        if (order.order_type === '반품') orderCount.return += 1;
+        if (order.order_type === '교환') orderCount.exchange += 1;
+        if (order.order_type === '샘플') orderCount.sample += 1;
+        if (order.order_type === '픽업') orderCount.pickup += 1;
+        if (order.order_type === '기타') orderCount.etc += 1;
+      });
+    });
+
+    return orderCount;
+  }, [cart.successList]);
+
+  /*
    * 발주 데이터 초기화
    */
   const reset = useCallback(() => {
     setCart({
+      parsingStatus: { fail_count: 0, success_count: 0, error_messages: [] },
       successList: [],
       failList: [],
     });
@@ -315,6 +347,7 @@ const useOrderCart = () => {
     calculateTotalPrice,
     orderFormat,
     setOrderFormat,
+    countOrdersForType,
   };
 };
 

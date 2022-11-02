@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -13,7 +13,7 @@ import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
-import { Upload } from 'antd';
+import { Col, Row, Upload } from 'antd';
 
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
@@ -21,33 +21,85 @@ import useOrderCart from '@hooks/useOrderCart';
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import PreparsingOrderModal from './modals/PreparsingOrderModal';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import orderAPI from '@apis/orderAPI';
 import { css } from '@emotion/react';
+import pickerAPI from '@apis/pickerAPI';
+import useUser from '@hooks/useUser';
+import moment from 'moment';
+import { theme } from '@styles/theme';
+import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
 
 function PageBody() {
-  const { cart, ready, countSuccessList, countFailList } = useOrderCart();
-
+  const {
+    cart,
+    ready,
+    countSuccessList,
+    countFailList,
+    countOrdersForType,
+    calculateTotalPrice,
+  } = useOrderCart();
+  const { user } = useUser();
+  const [todayOrdersCount, setTodayordersCount] = useState({
+    complete: 0,
+    total: 0,
+  });
+  //모달 data
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
   const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
     useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
+  const [
+    orderParsingProcessPresentModalVisible,
+    openParsingProcessModal,
+    closeParsingProcessModal,
+  ] = useModal();
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
       //2회 이상 발주 파일이 없는경우
-      if (data.parsingData !== undefined) {
+      if (data.parsingData) {
         ready({ ...data.parsingData });
-
+        if (data.parsingData.data.parsing_status.fail_count)
+          openParsingProcessModal();
         return;
       }
 
       openPreparsingModal();
     },
   });
+
+  //쇼핑몰 갯수
+  const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
+    enabled: !!user.id,
+    onSuccess: (data) =>
+      setTodayordersCount({
+        ...todayOrdersCount,
+        total: data.data.total_count,
+      }),
+  });
+
+  //발주완료 갯수
+  const getOrdersCountQuery = useQuery(
+    'getOrdersCountQuery',
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+      }),
+    {
+      onSuccess: (data) =>
+        setTodayordersCount({
+          ...todayOrdersCount,
+          complete: data.data.order_sheet_list.filter(
+            (order) => order.type === 'new',
+          ).length,
+        }),
+    },
+  );
 
   return (
     <>
@@ -79,6 +131,22 @@ function PageBody() {
         close={closeConfirmModal}
       />
 
+      {/* 발주서 파싱 결과 모달 */}
+      {/* <OrderParsingProcessPresentModal
+        visible={orderParsingProcessPresentModalVisible}
+        title="발주서 처리 현황"
+        description={[
+          '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
+          '발주서 별 자세한 오류사항은 하나씩 올리면 확인 가능.',
+        ]}
+        onCancel={closeParsingProcessModal}
+        onOk={() => {}}
+        successCount={cart.parsingStatus.success_count}
+        failCount={cart.parsingStatus.fail_count}
+        messages={cart.parsingStatus.error_messages}
+        size="middle"
+      /> */}
+
       {/*
        * Page
        */}
@@ -86,16 +154,27 @@ function PageBody() {
         title="발주서 미리보기"
         buttons={[
           <TurtleText
-            css={css`
-              font-size: 14px;
-              font-weight: 500;
-            `}
+            css={css({
+              fontSize: 14,
+              fontWeight: 500,
+            })}
           >
-            당일 발주완료 0/20개 | 당일 미발주 0/20 개
+            {`당일 발주완료 ${todayOrdersCount.complete}`}{' '}
+            <span css={css({ color: theme.grey400 })}>
+              {`/ 
+              ${todayOrdersCount.total}개 | `}
+            </span>
+            {`당일 미발주 ${
+              todayOrdersCount.total - todayOrdersCount.complete
+            }`}{' '}
+            <span
+              css={css({ color: theme.grey400 })}
+            >{`/ ${todayOrdersCount.total}개`}</span>
           </TurtleText>,
           <TertiaryButton
             text="발주서 설정"
             onClick={openSettingColumnModal}
+            icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
@@ -151,14 +230,45 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton
-          disabled={cart.successList.length === 0}
-          onClick={() => {
-            openConfirmModal();
-          }}
+        <Row
+          css={css({
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 16,
+            fontWeight: 700,
+          })}
         >
-          발주 등록하기
-        </PrimaryButton>
+          <Col css={css({ marginRight: 20 })}>
+            <TurtleText>
+              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+                발주수량 합계{' '}
+              </span>
+              {'   '}
+              {` ${countSuccessList()}개 `}
+              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+                {`(발주 ${countOrdersForType().order}, 교환 ${
+                  countOrdersForType().exchange
+                }, 미송 ${countOrdersForType().notDelivery}, 샘플 ${
+                  countOrdersForType().sample
+                }, 픽업 ${countOrdersForType().pickup}, 기타 ${
+                  countOrdersForType().etc
+                })
+              / 발주금액 합계  `}
+              </span>
+              {`${calculateTotalPrice().toLocaleString()}원`}
+            </TurtleText>
+          </Col>
+          <Col>
+            <PrimaryButton
+              disabled={cart.successList.length === 0}
+              onClick={() => {
+                openConfirmModal();
+              }}
+            >
+              발주 등록하기
+            </PrimaryButton>
+          </Col>
+        </Row>
       </PageBottomBar>
     </>
   );
