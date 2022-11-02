@@ -9,6 +9,7 @@
     "create": "거래처등록",
     "history": "거래처목록",
     "addSingle": "거래처 단건추가",
+    "newCreate": "거래처 신규추가",
     "updateInfo": "거래처 정보수정 요청",
     "search": "거래처검색"
   },

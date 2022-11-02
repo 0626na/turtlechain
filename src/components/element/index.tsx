@@ -42,6 +42,7 @@ import TurtleTableNumberInput, {
   TurtleTableWarningNumberInput,
 } from './input/TurtleTableNumberInput';
 import TurtleTableInput from './input/TurtleTableInput';
+import AlertCloseIcon from './icon/AlertCloseIcon';
 
 export {
   //buttons
@@ -80,6 +81,7 @@ export {
   MemoIcon,
   ArrowRightIcon,
   GridIcon,
+  AlertCloseIcon,
 
   //
   TurtleDropdown,

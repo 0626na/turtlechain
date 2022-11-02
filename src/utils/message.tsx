@@ -1,4 +1,5 @@
 import { TurtleIcon } from '@components/element';
+import AlertCloseIcon from '@components/element/icon/AlertCloseIcon';
 import { css } from '@emotion/react';
 import { message as antdMessage } from 'antd';
 
@@ -12,7 +13,7 @@ export const message = {
           <span css={textMargin}>{content}</span>
         </div>
       ),
-      icon: <TurtleIcon name="alertClose" />,
+      icon: <AlertCloseIcon />,
       duration,
       key: 'msgKey',
       onClick: () => antdMessage.destroy('msgKey'),
@@ -27,7 +28,7 @@ export const message = {
           <span css={textMargin}>{content}</span>
         </div>
       ),
-      icon: <TurtleIcon name="alertClose" />,
+      icon: <AlertCloseIcon />,
       duration,
       key: 'msgKey',
       onClick: () => antdMessage.destroy('msgKey'),
@@ -42,7 +43,7 @@ export const message = {
           <span css={textMargin}>{content}</span>
         </div>
       ),
-      icon: <TurtleIcon name="alertClose" />,
+      icon: <AlertCloseIcon />,
       duration,
       key: 'msgKey',
       onClick: () => antdMessage.destroy('msgKey'),

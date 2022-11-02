@@ -200,7 +200,7 @@ const useVendorCart = () => {
   const convertToMutateItem = (vendor: SuccessItem, rt_store_id: number) => ({
     rt_store_id: rt_store_id,
     vendor_code: vendor.vendor_code,
-    vendor_account_id: vendor.ws_store_info[0].store_account[0].id,
+    vendor_account_id: Number(vendor.ws_store_info[0].store_account[0].id),
     vendor_phone_id: vendor.ws_store_info[0].store_phone[0].id,
     ws_store_id: vendor.ws_store_info[0].id,
     vendor_address: vendor.ws_store_info[0].address,
