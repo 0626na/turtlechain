@@ -13,7 +13,7 @@ import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
-import { Upload } from 'antd';
+import { Col, Row, Upload } from 'antd';
 
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
@@ -27,9 +27,17 @@ import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
 import moment from 'moment';
+import { theme } from '@styles/theme';
 
 function PageBody() {
-  const { cart, ready, countSuccessList, countFailList } = useOrderCart();
+  const {
+    cart,
+    ready,
+    countSuccessList,
+    countFailList,
+    countOrdersForType,
+    calculateTotalPrice,
+  } = useOrderCart();
   const { user } = useUser();
   const [todayOrdersCount, setTodayordersCount] = useState({
     complete: 0,
@@ -123,16 +131,22 @@ function PageBody() {
         title="발주서 미리보기"
         buttons={[
           <TurtleText
-            css={css`
-              font-size: 14px;
-              font-weight: 500;
-            `}
+            css={css({
+              fontSize: 14,
+              fontWeight: 500,
+            })}
           >
-            {`당일 발주완료 ${todayOrdersCount.complete} / ${
-              todayOrdersCount.total
-            }개 | 당일 미발주 ${
+            {`당일 발주완료 ${todayOrdersCount.complete}`}{' '}
+            <span css={css({ color: theme.grey400 })}>
+              {`/ 
+              ${todayOrdersCount.total}개 | `}
+            </span>
+            {`당일 미발주 ${
               todayOrdersCount.total - todayOrdersCount.complete
-            } / ${todayOrdersCount.total} 개`}
+            }`}{' '}
+            <span
+              css={css({ color: theme.grey400 })}
+            >{`/ ${todayOrdersCount.total}개`}</span>
           </TurtleText>,
           <TertiaryButton
             text="발주서 설정"
@@ -193,14 +207,45 @@ function PageBody() {
       </PageContent>
 
       <PageBottomBar>
-        <PrimaryButton
-          disabled={cart.successList.length === 0}
-          onClick={() => {
-            openConfirmModal();
-          }}
+        <Row
+          css={css({
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 16,
+            fontWeight: 700,
+          })}
         >
-          발주 등록하기
-        </PrimaryButton>
+          <Col css={css({ marginRight: 20 })}>
+            <TurtleText>
+              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+                발주수량 합계{' '}
+              </span>
+              {'   '}
+              {` ${countSuccessList()}개 `}
+              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+                {`(발주 ${countOrdersForType().order}, 교환 ${
+                  countOrdersForType().exchange
+                }, 미송 ${countOrdersForType().notDelivery}, 샘플 ${
+                  countOrdersForType().sample
+                }, 픽업 ${countOrdersForType().pickup}, 기타 ${
+                  countOrdersForType().etc
+                })
+              / 발주금액 합계  `}
+              </span>
+              {`${calculateTotalPrice().toLocaleString()}원`}
+            </TurtleText>
+          </Col>
+          <Col>
+            <PrimaryButton
+              disabled={cart.successList.length === 0}
+              onClick={() => {
+                openConfirmModal();
+              }}
+            >
+              발주 등록하기
+            </PrimaryButton>
+          </Col>
+        </Row>
       </PageBottomBar>
     </>
   );
