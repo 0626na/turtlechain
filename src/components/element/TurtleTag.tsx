@@ -1,33 +1,49 @@
 import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
 import React from 'react';
 
 import TurtleText from './TurtleText';
 
 interface Props {
   children: React.ReactNode;
-  color: 'orange' | 'cyan' | 'green' | 'gray' | 'skyblue';
+  color:
+    | 'orange'
+    | 'cyan'
+    | 'green'
+    | 'gray'
+    | 'skyblue'
+    | 'orderHistoryCategoryFirst'
+    | 'orderHistoryCategorySecond';
 }
 
 const colors = {
   orange: {
-    color: '#DD7A32',
-    backgroundColor: '#FBEFE6',
+    color: theme.orangeTx,
+    backgroundColor: theme.orangeBg,
   },
   cyan: {
-    color: '#00AAB5',
-    backgroundColor: '#DDF3F5',
+    color: theme.skyblueTx,
+    backgroundColor: theme.skyblueBg,
   },
   green: {
     color: '#389E0D',
     backgroundColor: '#EBF6DF',
   },
   gray: {
-    color: '#5C6069',
-    backgroundColor: '#EBECED',
+    color: theme.greyTx,
+    backgroundColor: theme.greyBg,
   },
   skyblue: {
     color: '#2CA4D4',
     backgroundColor: '#E6F4FA',
+  },
+  orderHistoryCategoryFirst: {
+    color: '#29A9DD',
+    backgroundColor: '#E6F4FA',
+  },
+  orderHistoryCategorySecond: {
+    color: '#FFFFFF',
+    backgroundColor: '#29A9DD',
   },
 };
 
