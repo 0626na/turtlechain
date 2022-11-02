@@ -28,6 +28,7 @@ import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
+import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
 
 function PageBody() {
   const {
@@ -50,6 +51,11 @@ function PageBody() {
   const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
     useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
+  const [
+    orderParsingProcessPresentModalVisible,
+    openParsingProcessModal,
+    closeParsingProcessModal,
+  ] = useModal();
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
@@ -57,7 +63,8 @@ function PageBody() {
       //2회 이상 발주 파일이 없는경우
       if (data.parsingData) {
         ready({ ...data.parsingData });
-
+        if (data.parsingData.data.parsing_status.fail_count)
+          openParsingProcessModal();
         return;
       }
 
@@ -123,6 +130,22 @@ function PageBody() {
         visible={confirmModalVisible}
         close={closeConfirmModal}
       />
+
+      {/* 발주서 파싱 결과 모달 */}
+      {/* <OrderParsingProcessPresentModal
+        visible={orderParsingProcessPresentModalVisible}
+        title="발주서 처리 현황"
+        description={[
+          '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
+          '발주서 별 자세한 오류사항은 하나씩 올리면 확인 가능.',
+        ]}
+        onCancel={closeParsingProcessModal}
+        onOk={() => {}}
+        successCount={cart.parsingStatus.success_count}
+        failCount={cart.parsingStatus.fail_count}
+        messages={cart.parsingStatus.error_messages}
+        size="middle"
+      /> */}
 
       {/*
        * Page
