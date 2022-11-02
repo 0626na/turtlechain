@@ -154,6 +154,7 @@ const useOrderCart = () => {
             return setStoreListItem(store, id);
           }),
         ],
+        parsingStatus: data.data.parsing_status,
       });
     },
     [cart.failList, cart.successList, setCart, setStoreListItem],
@@ -175,6 +176,7 @@ const useOrderCart = () => {
   const updateSuccess = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
+        ...cart,
         successList: [
           ...cart.successList,
           {
@@ -324,6 +326,7 @@ const useOrderCart = () => {
    */
   const reset = useCallback(() => {
     setCart({
+      parsingStatus: { fail_count: 0, success_count: 0, error_messages: [] },
       successList: [],
       failList: [],
     });
