@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -21,13 +21,21 @@ import useOrderCart from '@hooks/useOrderCart';
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import PreparsingOrderModal from './modals/PreparsingOrderModal';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import orderAPI from '@apis/orderAPI';
 import { css } from '@emotion/react';
+import pickerAPI from '@apis/pickerAPI';
+import useUser from '@hooks/useUser';
+import moment from 'moment';
 
 function PageBody() {
   const { cart, ready, countSuccessList, countFailList } = useOrderCart();
-
+  const { user } = useUser();
+  const [todayOrdersCount, setTodayordersCount] = useState({
+    complete: 0,
+    total: 0,
+  });
+  //모달 data
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
@@ -48,6 +56,35 @@ function PageBody() {
       openPreparsingModal();
     },
   });
+
+  //쇼핑몰 갯수
+  const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
+    enabled: !!user.id,
+    onSuccess: (data) =>
+      setTodayordersCount({
+        ...todayOrdersCount,
+        total: data.data.total_count,
+      }),
+  });
+
+  //발주완료 갯수
+  const getOrdersCountQuery = useQuery(
+    'getOrdersCountQuery',
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+      }),
+    {
+      onSuccess: (data) =>
+        setTodayordersCount({
+          ...todayOrdersCount,
+          complete: data.data.order_sheet_list.filter(
+            (order) => order.type === 'new',
+          ).length,
+        }),
+    },
+  );
 
   return (
     <>
@@ -91,7 +128,11 @@ function PageBody() {
               font-weight: 500;
             `}
           >
-            당일 발주완료 0/20개 | 당일 미발주 0/20 개
+            {`당일 발주완료 ${todayOrdersCount.complete} / ${
+              todayOrdersCount.total
+            }개 | 당일 미발주 ${
+              todayOrdersCount.total - todayOrdersCount.complete
+            } / ${todayOrdersCount.total} 개`}
           </TurtleText>,
           <TertiaryButton
             text="발주서 설정"
