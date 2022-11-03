@@ -424,7 +424,7 @@ export interface ClearingItemParse {
 }
 
 export interface RequestParseExcel {
-  files: RcFile;
+  file: RcFile;
   rt_store_id: number;
 }
 
@@ -443,7 +443,7 @@ export interface ResponseParseExcel {
 const parseExcel = async (data: RequestParseExcel) => {
   const url = `excel/clearing`;
   const formData = new FormData();
-  formData.append('files', data.files);
+  formData.append('files', data.file);
   formData.append('rt_store_id', `${data.rt_store_id}`);
   const response = await v2Axios.post<ResponseParseExcel>(url, formData, {
     headers: {
