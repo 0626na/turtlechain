@@ -1,3 +1,4 @@
+import React from 'react';
 import { OrderHistoryItem } from '@apis/orderAPI';
 import { TurtleTableTitle } from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';

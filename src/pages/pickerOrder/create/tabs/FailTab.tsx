@@ -95,7 +95,7 @@ function FailTab({ loading, ...props }: Props) {
         maxLength={13}
         onInput={(e) => {
           e.currentTarget.value = e.currentTarget.value
-            .replaceAll(notNumPattern, '')
+            .replace(notNumPattern, '')
             .replace(phonePattern, '$1-$2-$3');
 
           if (e.currentTarget.value.length === 13) {
@@ -170,7 +170,7 @@ function FailTab({ loading, ...props }: Props) {
                   mobile:
                     failItem.rt_store_id === failToSuccessRecord.rt_store_id &&
                     order.vendor_name === failToSuccessRecord.vendor_name
-                      ? failToSuccessRowData.mobile
+                      ? failToSuccessRowData.mobile.replaceAll('-', '')
                       : order.mobile,
                 })),
               })),
@@ -248,7 +248,8 @@ function FailTab({ loading, ...props }: Props) {
               render: (_, record) => {
                 const tempList = failListOutput();
 
-                if (record.mobile !== '') return record.mobile;
+                if (record.mobile !== '')
+                  return record.mobile.replace(phonePattern, '$1-$2-$3');
                 if (record.id === 0) return failTablePhoneNumberInput(record);
                 if (
                   tempList[record.id - 1].rt_store_name ===

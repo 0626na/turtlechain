@@ -51,9 +51,6 @@ function PageBody() {
         start_date: searchQuery.start_date,
         end_date: searchQuery.end_date,
       }),
-    {
-      onSuccess: (data) => {},
-    },
   );
 
   const filteredList = useMemo(() => {
