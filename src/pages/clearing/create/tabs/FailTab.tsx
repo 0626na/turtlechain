@@ -1,16 +1,22 @@
+import { TextWithTooltip } from '@components/combine';
+import { TurtleTableTitle, TurtleTag } from '@components/element';
 import useExelClearingCart from '@hooks/useExelClearingCart';
 import { Table } from 'antd';
 
 function FailTab() {
   const { cart } = useExelClearingCart();
-
+  const totalCount = cart.failList.length;
   return (
     <Table
       scroll={{ y: 450, scrollToFirstRowOnChange: true }}
       size="small"
       dataSource={cart.failList}
       rowKey={(record) => record.account_number}
-      pagination={false}
+      title={() => <TurtleTableTitle totalCount={totalCount} />}
+      pagination={{
+        position: ['bottomCenter'],
+        showSizeChanger: false,
+      }}
       columns={[
         {
           ellipsis: true,
@@ -45,13 +51,28 @@ function FailTab() {
         },
         {
           ellipsis: true,
+          align: 'right',
           title: '받는분통장인쇄내용',
           render: (_, record) => record.recipient_print,
         },
         {
           ellipsis: true,
-          title: '부가세 포함여부',
-          render: (_, record) => (record.is_vat_included ? '포함' : '미포함'),
+          align: 'center',
+          title: (
+            <TextWithTooltip
+              tooltipContent={[
+                '당일결제 시, 부가세도 그 날에 함께',
+                '전달되어야 하는 거래처',
+              ]}
+            >
+              부가세 바로전달
+            </TextWithTooltip>
+          ),
+          render: (_, record) => (
+            <TurtleTag color={record.is_vat_included ? 'orange' : 'gray'}>
+              {record.is_vat_included ? '바로전달' : '일반'}
+            </TurtleTag>
+          ),
         },
       ]}
     />
