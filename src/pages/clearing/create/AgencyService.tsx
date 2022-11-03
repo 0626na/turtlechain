@@ -22,16 +22,15 @@ function AgencyService() {
   const { store } = useStore();
   const { cart, ready, selectDate } = useExelClearingCart();
   const [tooltipVisible, setTooltipVisible] = useState(true);
-
+  const [modalVisible, openModallModal, closeModal] = useModal();
   const closeToolTip = () => {
     setTooltipVisible(false);
   };
 
-  const [excelModalVisible, openExcelModal, closeExcelModal] = useModal();
   const excelMutation = useMutation(clearingAPI.parseExcel, {
     onSuccess: (data) => {
       ready(data.success, data.fail);
-      openExcelModal();
+      openModallModal();
       closeToolTip();
     },
     onError: (error: AxiosError) => {
@@ -40,19 +39,19 @@ function AgencyService() {
   });
 
   const isToday =
-    moment().format('YYYY-MM-DD') ===
-    moment(cart.clearingRequestDate).format('YYYY-MM-DD');
+    moment(cart.clearingRequestDate).format('YYYY-MM-DD') ===
+    moment().format('YYYY-MM-DD');
 
   const isOtherDay =
-    moment().format('YYYY-MM-DD') !==
-    moment(cart.clearingRequestDate).format('YYYY-MM-DD');
+    moment(cart.clearingRequestDate).format('YYYY-MM-DD') !==
+    moment().format('YYYY-MM-DD');
 
   return (
     <>
       {/*
        * 파싱 결과 모달
        */}
-      <ExelModal visible={excelModalVisible} onClose={closeExcelModal} />
+      <ExelModal visible={modalVisible} onClose={closeModal} />
 
       <div css={inner}>
         <span css={clearingDate}>결제요청 일자</span>

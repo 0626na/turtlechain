@@ -8,7 +8,6 @@ function useExelClearingCart() {
 
   // 결제요청일을 선택한다.
   const selectDate = (date: string) => {
-    console.log(date);
     setCart((cart) => ({
       ...cart,
       clearingRequestDate: date,
