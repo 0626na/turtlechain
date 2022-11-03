@@ -36,7 +36,8 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             {
               title: '쇼핑몰',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.rt_store_name ?? '',
+                getOrderHistoryQuery.data?.data.order_sheet.rt_store_name ??
+                '없음',
             },
             {
               title: '발주 일자',
@@ -47,21 +48,24 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             },
             {
               title: '발주 거래처',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString()}개` ??
-                '0개',
+              value: `${
+                getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString() ??
+                '0'
+              }개`,
             },
             {
               title: '발주수량 합계',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString()}개` ??
-                '0개',
+              value: `${
+                getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString() ??
+                '0'
+              }개`,
             },
             {
               title: '발주금액 합계',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString()}원` ??
-                '0원',
+              value: `${
+                getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
+                '0'
+              }원`,
             },
           ]}
         />
