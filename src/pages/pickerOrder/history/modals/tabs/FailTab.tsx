@@ -13,6 +13,7 @@ function FailTab({ data, loading, ...props }: Props) {
     <Tabs.TabPane {...props}>
       <Table
         size="small"
+        rowKey={(record) => String(record.id)}
         loading={loading}
         dataSource={data}
         pagination={{

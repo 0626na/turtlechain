@@ -14,6 +14,7 @@ function SuccessTab({ data, loading, ...props }: Props) {
       <Table
         size="small"
         loading={loading}
+        rowKey={(record) => String(record.id)}
         dataSource={data}
         pagination={{
           position: ['bottomCenter'],

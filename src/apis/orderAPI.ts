@@ -277,6 +277,7 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
  */
 
 export interface OrderHistoryItem {
+  id?: number;
   ws_store_id: number; //도매 ID
   vendor_name: string; //거래처명
   address: string; //거래처주소

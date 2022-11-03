@@ -72,14 +72,26 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
         <TurtleTabs>
           <SuccessTab
             key={'successHistory'}
-            tab={`성공(${getOrderHistoryQuery.data?.data.successes.length})`}
-            data={getOrderHistoryQuery.data?.data.successes ?? []}
+            tab={`성공(${
+              getOrderHistoryQuery.data?.data.successes.length ?? 0
+            })`}
+            data={
+              getOrderHistoryQuery.data?.data.successes.map((item, index) => ({
+                ...item,
+                id: index,
+              })) ?? []
+            }
             loading={getOrderHistoryQuery.isLoading}
           />
           <FailTab
             key={'failHistory'}
-            tab={`실패(${getOrderHistoryQuery.data?.data.fails.length})`}
-            data={getOrderHistoryQuery.data?.data.fails ?? []}
+            tab={`실패(${getOrderHistoryQuery.data?.data.fails.length ?? 0})`}
+            data={
+              getOrderHistoryQuery.data?.data.fails.map((item, index) => ({
+                ...item,
+                id: index,
+              })) ?? []
+            }
             loading={getOrderHistoryQuery.isLoading}
           />
         </TurtleTabs>
