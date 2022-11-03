@@ -3,28 +3,77 @@ import {
   TertiaryButton,
   TurtleCard,
   TurtleIcon,
+  TurtlePrimaryRangePicker,
+  TurtleSearchInput,
+  TurtleSearchSelect,
   TurtleTag,
 } from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
-import { Table } from 'antd';
+import { Col, DatePicker, Row, Table } from 'antd';
 import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
+import { css } from '@emotion/react';
 
 function PageBody() {
+  const options = [
+    {
+      value: 'entire',
+      name: '전체',
+    },
+    {
+      value: 'new',
+      name: '1차',
+    },
+    {
+      value: 'modify',
+      name: '2차',
+    },
+  ];
+
   const [sheetId, setSheetId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState({
+    type: 'entire',
+    start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+    end_date: moment().format('YYYY-MM-DD'),
+  });
+
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
-  const getOrderSheetsQuery = useQuery('getOrderSheetsQuery', () =>
-    orderAPI.getOrderSheets({
-      start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
-    }),
+  const getOrderSheetsQuery = useQuery(
+    ['getOrderSheetsQuery', searchQuery.end_date, searchQuery.end_date],
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: searchQuery.start_date,
+        end_date: searchQuery.end_date,
+      }),
+    {
+      onSuccess: (data) => {},
+    },
   );
+
+  const filteredList = useMemo(() => {
+    if (searchQuery.type === 'entire')
+      return getOrderSheetsQuery.data?.data.order_sheet_list ?? [];
+
+    if (searchQuery.type === 'new')
+      return (
+        getOrderSheetsQuery.data?.data.order_sheet_list.filter(
+          (sheet) => sheet.type === searchQuery.type,
+        ) ?? []
+      );
+
+    if (searchQuery.type === 'modify')
+      return (
+        getOrderSheetsQuery.data?.data.order_sheet_list.filter(
+          (sheet) => sheet.type === searchQuery.type,
+        ) ?? []
+      );
+  }, [getOrderSheetsQuery.data?.data.order_sheet_list, searchQuery]);
 
   return (
     <>
@@ -86,7 +135,7 @@ function PageBody() {
           size="small"
           scroll={{ y: 432, x: 1608 }}
           rowKey={(record) => record.id}
-          dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
+          dataSource={filteredList}
           pagination={{
             position: ['bottomCenter'],
             showSizeChanger: false,
@@ -103,6 +152,26 @@ function PageBody() {
             <TurtleTableTitle
               totalCount={
                 getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0
+              }
+              rightContent={
+                <Row>
+                  <Col css={css({ marginRight: 16 })}>
+                    <TurtleSearchSelect
+                      items={options}
+                      value={searchQuery.type}
+                      onChange={(value) =>
+                        setSearchQuery({ ...searchQuery, type: value })
+                      }
+                    />
+                  </Col>
+                  <Col>
+                    <TurtlePrimaryRangePicker
+                      onChange={(_, [start_date, end_date]) =>
+                        setSearchQuery({ ...searchQuery, start_date, end_date })
+                      }
+                    />
+                  </Col>
+                </Row>
               }
             />
           )}
