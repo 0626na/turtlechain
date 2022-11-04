@@ -9,7 +9,6 @@ function Index() {
   return (
     <>
       <Helmet title={`${t('turtleChain')} - ${t('etc.setting')}`} />
-      <AlertBar />
       <PageBody />
     </>
   );
