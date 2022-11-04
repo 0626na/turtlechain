@@ -1,64 +1,49 @@
 import { css } from '@emotion/react';
 import { PageContent, PageHeader } from '@layout/page';
 import { theme } from '@styles/theme';
-import { Col, Row } from 'antd';
+
 import React from 'react';
 
-import AdjustmentStatusCard from './AdjustmentStatusCard';
-import AnnouncementCard from './AnnouncementCard';
+// import { faker } from '@faker-js/faker';
 
-import ClearingStatusCard from './ClearingStatusCard';
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// );
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
+// const options = {
+//   responsive: true,
+//   plugins: {
+//     legend: {
+//       position: 'top' as const,
+//     },
+//     title: {
+//       display: true,
+//       text: 'Chart.js Bar Chart',
+//     },
+//   },
+// };
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Bar Chart',
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
+// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+// const data = {
+//   labels,
+//   datasets: [
+//     {
+//       label: 'Dataset 1',
+//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//       backgroundColor: 'rgba(255, 99, 132, 0.5)',
+//     },
+//     {
+//       label: 'Dataset 2',
+//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+//     },
+//   ],
+// };
 function PageBody() {
   return (
     <>
@@ -182,7 +167,7 @@ function PageBody() {
                 원
               </span>
             </h1>
-            <Bar options={options} data={data} />;
+            {/* <Bar options={options} data={data} />; */}
           </div>
           <div css={{ flex: 1, background: 'red' }}>
             {/* <ClearingStatusCard /> */}
