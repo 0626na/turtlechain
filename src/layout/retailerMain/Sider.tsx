@@ -35,7 +35,7 @@ const pathnames = {
 
   etc: {
     setting: '/setting',
-    // tutorial: '/tutorial',
+    tutorial: '/tutorial',
   },
 };
 
@@ -248,16 +248,24 @@ const menus = [
         ),
         style: etcMenuTitleStyle,
       },
-      // {
-      //   key: pathnames.etc.tutorial,
-      //   label: t('etc.tutorial'),
-      //   icon: (
-      //     <div css={iconContainer}>
-      //       <TurtleIcon name="tutorial" />
-      //     </div>
-      //   ),
-      //   style: etcMenuTitleStyle,
-      // },
+      {
+        key: pathnames.etc.tutorial,
+        label: (
+          <a
+            rel="stylesheet"
+            target="_blank"
+            href="https://turtlechain-guide.oopy.io/"
+          >
+            {t('etc.tutorial')}
+          </a>
+        ),
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="tutorial" />
+          </div>
+        ),
+        style: etcMenuTitleStyle,
+      },
     ],
   },
 ];
@@ -290,6 +298,7 @@ function Sider() {
         )}
         selectedKeys={[selectedPath]}
         onSelect={({ key }) => {
+          if (key === '/tutorial') return;
           navigate(key);
         }}
       />
