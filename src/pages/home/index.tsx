@@ -7,7 +7,8 @@ function index() {
   return (
     <>
       <Helmet title={`${t('turtleChain')} - ${t('home')}`} />
-      <PageBody />
+      <div style={{ fontSize: 30, margin: 30 }}>작업진행중</div>
+      {/* <PageBody /> */}
     </>
   );
 }

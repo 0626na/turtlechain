@@ -185,11 +185,11 @@ function PageBody() {
             <Bar options={options} data={data} />;
           </div>
           <div css={{ flex: 1, background: 'red' }}>
-            <ClearingStatusCard />
+            {/* <ClearingStatusCard /> */}
           </div>
           <div css={{ flex: 1, background: 'red' }}>
-            <AnnouncementCard />
-            <AdjustmentStatusCard />
+            {/* <AnnouncementCard />
+            <AdjustmentStatusCard /> */}
           </div>
         </div>
 
