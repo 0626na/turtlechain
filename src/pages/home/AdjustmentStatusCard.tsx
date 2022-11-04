@@ -26,7 +26,7 @@ function AdjustmentStatusCard() {
       <Row justify="space-between" style={{ paddingBottom: 24 }}>
         <Col>
           <Typography.Title style={{ fontSize: 18 }}>
-            매입조정 현황
+            교환/반품/미송
           </Typography.Title>
         </Col>
         <Col>

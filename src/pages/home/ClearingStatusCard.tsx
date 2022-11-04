@@ -4,6 +4,7 @@ import { Col, Row, Table, Tag, Typography } from 'antd';
 import { useQuery } from 'react-query';
 // import { TurtleCardHome } from '@components/common';
 import clearingAPI from '@apis/clearingAPI';
+import { theme } from '@styles/theme';
 
 function ClearingStatusCard() {
   const getSheetQuery = useQuery(['getClearingSheet'], () =>
@@ -16,71 +17,21 @@ function ClearingStatusCard() {
     }),
   );
 
+  const list = getSheetQuery.data?.data.sheet_list;
   return (
     <div>
-      <Row justify="space-between">
-        <Col>
-          <Typography.Title style={{ marginBottom: 16, fontSize: 18 }}>
-            정산처리 현황
-          </Typography.Title>
-        </Col>
-        <Col>
-          <Typography.Text type="secondary">
-            {moment().format('YYYY-MM')}
-          </Typography.Text>
-        </Col>
-      </Row>
-      <Table
-        size="small"
-        loading={getSheetQuery.isLoading}
-        dataSource={getSheetQuery.data?.data.sheet_list}
-        rowKey={(record) => record.id}
-        pagination={{
-          position: ['bottomRight'],
-          showSizeChanger: false,
-          defaultPageSize: 3,
+      <h4
+        css={{
+          display: 'inline',
+          color: theme.grey500,
+          fontSize: 18,
+          fontWeight: 500,
         }}
-        columns={[
-          {
-            ellipsis: true,
-            width: 100,
-            align: 'center',
-            title: t('table.paymentStatus'),
-            render: (_, record) => {
-              const { status } = record;
-              const color =
-                status === 'request'
-                  ? 'green'
-                  : status === 'pending'
-                  ? 'orange'
-                  : 'geekblue';
-              const text = t(`clearing.status.${status}`);
-              return <Tag color={color}>{text}</Tag>;
-            },
-          },
-          {
-            ellipsis: true,
-            title: t('table.paymentRequestDate'),
-            render: (_, record) => record.request_date,
-          },
-          {
-            ellipsis: true,
-            title: t('table.paymentCompleteDate'),
-            render: (_, record) => record.complete_date,
-          },
-          {
-            ellipsis: true,
-            title: t('table.storeName'),
-            render: (_, record) => record.store_name,
-          },
-          {
-            ellipsis: true,
-            title: t('table.paymentPrice'),
-            render: (_, record) =>
-              `${record.total_deposit_amount.toLocaleString()}원`,
-          },
-        ]}
-      />
+      >
+        누적 결제금액
+      </h4>
+
+      <span></span>
     </div>
   );
 }
