@@ -2,6 +2,7 @@ import { UserInfo } from '@apis/authAPI';
 import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
+import useModal from '@hooks/useModal';
 
 import useUser from '@hooks/useUser';
 import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
@@ -12,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
+import PaypleModal from '../modals/PayPleModal';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
@@ -20,7 +22,7 @@ function UserTab() {
   const [form] = useForm();
 
   const [buttonsVisible, setButtonsVisible] = useState(false);
-
+  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
   const showButtons = () => {
     setButtonsVisible(true);
   };
@@ -86,6 +88,13 @@ function UserTab() {
 
   return (
     <>
+      {/**페이플 결제하기 모달 */}
+      <PaypleModal
+        visible={paypleModalVisible}
+        closeModal={() => {
+          paypleModalClose();
+        }}
+      />
       <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
@@ -159,7 +168,7 @@ function UserTab() {
               <Button
                 css={button}
                 onClick={() => {
-                  message.warning('준비중입니다.');
+                  paypleModalOpen();
                 }}
               >
                 결제하기
