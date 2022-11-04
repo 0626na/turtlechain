@@ -127,7 +127,7 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
             width: 100,
             title: t('table.warehousingDate'),
             render: (_, record) =>
-              moment(record.created_date).format('YYYY-MM-DD'),
+              moment(record.created_time).format('YYYY-MM-DD'),
           },
           {
             ellipsis: true,
