@@ -14,7 +14,7 @@ function useExelClearingCart() {
     }));
   };
 
-  const ready = (
+  const separate = (
     successList: ClearingItemParse[],
     failList: ClearingItemParse[],
   ) => {
@@ -27,7 +27,7 @@ function useExelClearingCart() {
 
   return {
     cart,
-    ready,
+    separate,
     selectDate,
   };
 }

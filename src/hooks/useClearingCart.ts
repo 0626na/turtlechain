@@ -223,14 +223,16 @@ function useClearingCart() {
   );
 
   //총 당일 결제 합계
-  const clearingPaymentTotal = useMemo(
-    () =>
-      cart.resultList.reduce(
-        (acc, cur) => acc + ((cur.clearing_payment_amount as number) ?? 0),
-        0,
-      ),
-    [cart.resultList],
-  );
+  const clearingPaymentTotal = useMemo(() => {
+    return cart.resultList.reduce(
+      (acc, cur) =>
+        acc +
+        ((cur.clearing_payment_amount ?? 0) <= 0
+          ? 0
+          : cur.clearing_payment_amount ?? 0),
+      0,
+    );
+  }, [cart.resultList]);
 
   return {
     cart,

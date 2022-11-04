@@ -20,7 +20,7 @@ import ExelModal from './modals/ExelModal';
 // 대행서비스
 function AgencyService() {
   const { store } = useStore();
-  const { cart, ready, selectDate } = useExelClearingCart();
+  const { cart, separate, selectDate } = useExelClearingCart();
   const [tooltipVisible, setTooltipVisible] = useState(true);
   const [modalVisible, openModallModal, closeModal] = useModal();
   const closeToolTip = () => {
@@ -29,7 +29,7 @@ function AgencyService() {
 
   const excelMutation = useMutation(clearingAPI.parseExcel, {
     onSuccess: (data) => {
-      ready(data.success, data.fail);
+      separate(data.success, data.fail);
       openModallModal();
       closeToolTip();
     },
