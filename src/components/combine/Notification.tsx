@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
@@ -8,6 +8,23 @@ import { useMutation, useQuery } from 'react-query';
 import notificationAPI from '@apis/notificationAPI';
 import { ReactComponent as BellIcon } from '@icons/bell.svg';
 import { css } from '@emotion/react';
+
+//TODO: 추후 notificationAPI로 이동 리팩토링 해야함
+interface Noti {
+  id: number;
+  created_time: string;
+  read_at?: string;
+  type: string;
+  content: {
+    vendor_name: string;
+    store_id: number;
+    component: string;
+    before: string;
+    after: string;
+    status: string;
+    memo: string;
+  };
+}
 
 function Notification() {
   const navigate = useNavigate();
@@ -29,6 +46,29 @@ function Notification() {
       getNotificationQuery.refetch();
     },
   });
+
+  const makeContent = useCallback((noti: Noti) => {
+    let value = '';
+    if (noti.type === 'internal_change') {
+      value = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after}`;
+    }
+    if (noti.type === 'creation_request') {
+      if (noti.content.status === 'reject') {
+        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요. ${noti.content.memo}`;
+      } else {
+        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
+      }
+    }
+    if (noti.type === 'modification_request') {
+      if (noti.content.status === 'reject') {
+        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요. ${noti.content.memo}`;
+      } else {
+        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
+      }
+    }
+
+    return value;
+  }, []);
 
   const needReadCount = getNotificationQuery.data?.notification_list.filter(
     (item) => !item.read_at,
@@ -55,79 +95,57 @@ function Notification() {
             {getNotificationQuery.data?.notification_list.length === 0 ? (
               <Row style={{ padding: '12px 20px' }}>알림이 없습니다.</Row>
             ) : (
-              getNotificationQuery.data?.notification_list.map((noti) => {
-                let mainContent = '';
-                if (noti.type === 'internal_change') {
-                  mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
-                }
-                if (noti.type === 'creation_request') {
-                  if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 거래처 등록이 반려되었습니다. 반려사유: ${noti.content.memo}`;
-                  } else {
-                    mainContent = `거래처 ${noti.content.vendor_name}가 신규 등록되었습니다.`;
-                  }
-                }
-                if (noti.type === 'modification_request') {
-                  if (noti.content.status === 'reject') {
-                    mainContent = `요청하신 거래처 ${noti.content.vendor_name}의 정보 수정이 반려되었습니다. 반려사유: ${noti.content.memo}`;
-                  } else {
-                    mainContent = `거래처 ${noti.content.vendor_name}의 ${noti.content.component}가 ${noti.content.after}(으로) 수정되었습니다.`;
-                  }
-                }
-                return (
-                  <div
+              getNotificationQuery.data?.notification_list.map((noti) => (
+                <div
+                  style={{
+                    backgroundColor: noti.read_at ? '#FFFFFF' : '#F4FEFC',
+                  }}
+                  key={noti.id}
+                >
+                  <Row
                     style={{
-                      backgroundColor: noti.read_at ? '#FFFFFF' : '#F4FEFC',
+                      borderBottom: '1px solid #F0F0F1',
+                      padding: '12px 20px',
                     }}
-                    key={noti.id}
                   >
-                    <Row
-                      style={{
-                        borderBottom: '1px solid #F0F0F1',
-                        padding: '12px 20px',
-                      }}
-                    >
-                      <Space direction="vertical">
-                        <Col>{mainContent}</Col>
-                        <Col>
-                          <Typography.Text
-                            style={{
-                              color: '#00B594',
-                              fontSize: 13,
-                              cursor: 'pointer',
-                            }}
-                            onClick={() => {
-                              navigate(
-                                noti.type === 'creation_request'
-                                  ? 'vendor/create'
-                                  : 'vendor/list',
-                              );
-                              setPopoverVisible(false);
-                              !noti.read_at &&
-                                updateNotificationMutate.mutate({
-                                  id: noti.id,
-                                });
-                            }}
-                          >
-                            {noti.type === 'creation_request'
-                              ? '거래처 등록하기'
-                              : '거래처 정보 확인'}
-                          </Typography.Text>
-                          <Divider type="vertical" />
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 13 }}
-                          >
-                            {moment(noti.created_time).format(
-                              'YYYY-MM-DD HH:mm',
-                            )}
-                          </Typography.Text>
-                        </Col>
-                      </Space>
-                    </Row>
-                  </div>
-                );
-              })
+                    <Space direction="vertical">
+                      <Col>{makeContent(noti)}</Col>
+                      <Col>
+                        <Typography.Text
+                          style={{
+                            color: '#00B594',
+                            fontSize: 13,
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => {
+                            navigate(
+                              noti.type === 'creation_request'
+                                ? 'vendor/create'
+                                : 'vendor/list',
+                            );
+                            setPopoverVisible(false);
+                            !noti.read_at &&
+                              updateNotificationMutate.mutate({
+                                id: noti.id,
+                              });
+                          }}
+                        >
+                          {noti.type === 'creation_request'
+                            ? '거래처 등록하기'
+                            : '거래처 정보 확인'}
+                        </Typography.Text>
+                        <Divider type="vertical" />
+                        <Typography.Text
+                          type="secondary"
+                          style={{ fontSize: 13 }}
+                        >
+                          {moment(noti.created_time).format('YYYY-MM-DD HH:mm')}
+                        </Typography.Text>
+                      </Col>
+                    </Space>
+                  </Row>
+                </div>
+              ))
             )}
           </div>
           <Row

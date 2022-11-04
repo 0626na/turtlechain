@@ -1,28 +1,29 @@
 import { v2Axios } from '.';
 
+export interface Notification {
+  id: number;
+  created_time: string;
+  read_at?: string;
+  type: string;
+  content: {
+    vendor_name: string;
+    store_id: number;
+    component: string;
+    before: string;
+    after: string;
+    status: string;
+    memo: string;
+  };
+}
+
 export interface RequestGet {
   type: 'home' | 'setting';
   page?: number;
 }
-
 export interface ResponseGet {
   msg: string;
   data: {
-    notification_list: Array<{
-      id: number;
-      created_time: string;
-      read_at?: string;
-      type: string;
-      content: {
-        vendor_name: string;
-        store_id: number;
-        component: string;
-        before: string;
-        after: string;
-        status: string;
-        memo: string;
-      };
-    }>;
+    notification_list: Notification[];
   };
 }
 
