@@ -47,6 +47,8 @@ function PaypleModal({ visible, closeModal }: Props) {
         PCD_AUTH_KEY: data.AuthKey,
 
         PCD_RST_URL: `/setting/user`,
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
           // 성공, 실패 상관없이 결과 msg alert
           alert(res.PCD_PAY_MSG);
@@ -60,6 +62,7 @@ function PaypleModal({ visible, closeModal }: Props) {
       };
 
       // payple 내장 함수 호출 (결제 요청)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).PaypleCpayAuthCheck(requestData);
     },
   });
