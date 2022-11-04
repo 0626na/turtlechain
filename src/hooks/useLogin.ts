@@ -32,7 +32,10 @@ const useLogin = function () {
         } else if (error.response?.status === 400) {
           message.error(error.response.data.msg);
         } else {
-          message.error(`${t('message.networkError')}`);
+          //TODO: i18n 개편끝나고 리팩토링 필요
+          message.error(
+            `알 수 없는 오류가 발생했습니다. 채널톡으로 문의 해주세요.`,
+          );
         }
         return Promise.reject(error);
       },
