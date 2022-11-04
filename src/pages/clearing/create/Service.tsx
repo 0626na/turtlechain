@@ -15,9 +15,9 @@ import WarehousingPanel from './panels/WarehousingPanel';
 // 2.0
 function Service() {
   const { store } = useStore();
-  const [tooltipVisible, setTooltipVisible] = useState(true);
   const { cart, selectDate } = useClearingCart();
   const [activeKey, setActiveKey] = useState('0');
+  const [tooltipVisible, setTooltipVisible] = useState(true);
 
   // 날짜선택, 쇼핑몰 변경시 교환/반품/미송 패널 보여준다.
   useEffect(() => {
