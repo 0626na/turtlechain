@@ -112,6 +112,11 @@ const GlobalStyle = () => (
       ::-webkit-scrollbar-button {
         display: none;
       }
+
+      /** popconfirm 채널톡 안가리도록 */
+      .ant-popconfirm {
+        z-index: 99999999;
+      }
     `}
   />
 );
