@@ -1,5 +1,6 @@
 import paypleAPI from '@apis/paypleAPI';
-import retailerCompanyAPI from '@apis/retailerCompanyAPI';
+
+import useUser from '@hooks/useUser';
 import { Button, Form, Modal, Space } from 'antd';
 import React from 'react';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ interface Props {
 
 function PaypleModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -26,9 +28,6 @@ function PaypleModal({ visible, closeModal }: Props) {
 
     document.body.appendChild(script);
   }, []);
-
-  //TODO: 전역 user에서 company_id꺼내오도록 리팩토링해야함
-  const getCompanyQuery = useQuery('getCompany', retailerCompanyAPI.get);
 
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
@@ -81,7 +80,7 @@ function PaypleModal({ visible, closeModal }: Props) {
             <Button
               onClick={() => {
                 authenticateMutation.mutate({
-                  company_id: getCompanyQuery.data?.id as number,
+                  company_id: Number(user.company_id),
                   pay_type: 'regular',
                 });
               }}
@@ -91,7 +90,7 @@ function PaypleModal({ visible, closeModal }: Props) {
             <Button
               onClick={() => {
                 authenticateMutation.mutate({
-                  company_id: getCompanyQuery.data?.id as number,
+                  company_id: Number(user.company_id),
                   pay_type: 'single',
                 });
               }}
