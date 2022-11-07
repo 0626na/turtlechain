@@ -79,7 +79,7 @@ function UserTab() {
 
   useEffect(() => {
     if (searchParams.get('tab') === 'user') {
-      resetStates(user);
+      resetStates(user as UserInfo);
       return;
     }
 
@@ -106,7 +106,7 @@ function UserTab() {
           }}
           onFinish={({ email, mobile_phone }) => {
             updateMutation.mutate({
-              user_id: user.id,
+              user_id: user?.id,
               email,
               mobile_phone: mobile_phone.replace(removeHyphen, ''),
             });
@@ -148,7 +148,7 @@ function UserTab() {
                   text="취소 "
                   onClick={() => {
                     // 취소를 누르면 최초 값으로 초기화.
-                    resetStates(user);
+                    resetStates(user as UserInfo);
                     hideButtons();
                   }}
                 />

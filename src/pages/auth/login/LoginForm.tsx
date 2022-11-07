@@ -1,6 +1,5 @@
 import { t } from 'i18next';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -11,78 +10,24 @@ import {
   Space,
   Row,
 } from 'antd';
-import { useMutation } from 'react-query';
 import {
   UserOutlined,
   LockOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
 import { useLogin } from '@hooks/index';
-import authAPI, { RequestLogin } from '@apis/authAPI';
-import { AxiosError } from 'axios';
 import { css } from '@emotion/react';
 import { TurtleText } from '@components/element';
 
 function LoginForm() {
-  const navigate = useNavigate();
-  const { login, autoLogin } = useLogin();
   const [form] = Form.useForm();
-  const [errorMsg, setErrorMsg] = useState('');
-
-  // 로그인 요청
-  const loginQuery = useMutation(
-    (variables: RequestLogin) => {
-      if (!variables.login_id) {
-        setErrorMsg(t('message.enterId'));
-        return Promise.reject(t('message.enterId'));
-      }
-      if (!variables.password) {
-        setErrorMsg(t('message.enterPassword'));
-        return Promise.reject(t('message.enterPassword'));
-      }
-
-      return authAPI.login(variables);
-    },
-    {
-      onError: (data: AxiosError) => {
-        if (data.response?.status === 400) {
-          setErrorMsg(`${t('message.incorrectUser')}`);
-          return;
-        }
-
-        if (data.response) {
-          setErrorMsg(`${t('message.networkError')}`);
-          return;
-        }
-      },
-      onSuccess: ({ token, user_info }) => {
-        if (form.getFieldValue('autoLogin')) {
-          autoLogin(token);
-
-          if (user_info.type === 'pi') {
-            navigate('/picker/vendor');
-            return;
-          }
-
-          navigate('/home');
-        }
-
-        login(token);
-        if (user_info.type === 'pi') {
-          navigate('/picker/vendor');
-          return;
-        }
-
-        navigate('/home');
-      },
-    },
-  );
+  const { loginTemp, errorMsg } = useLogin();
 
   return (
     <Form
       form={form}
-      onFinish={({ login_id, password }) => {
-        loginQuery.mutate({ login_id, password });
+      onFinish={({ login_id, password, autoLogin }) => {
+        loginTemp(login_id, password, autoLogin);
       }}
     >
       <img

@@ -1,15 +1,18 @@
 import { t } from 'i18next';
 import { TOKEN } from '@constant/index';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
 import { useUser } from '.';
+import authAPI, { RequestLogin } from '@apis/authAPI';
+import { useMutation } from 'react-query';
 
 const useLogin = function () {
   const navigate = useNavigate();
   const { loadUser } = useUser();
+  const [errorMsg, setErrorMsg] = useState('');
 
   const clearToken = useCallback(() => {
     v2Axios.defaults.headers.common['Authorization'] = '';
@@ -21,6 +24,71 @@ const useLogin = function () {
     clearToken();
     navigate('/');
   }, [clearToken, navigate]);
+
+  const loginTemp = useCallback(
+    (login_id: string, password: string, autoLogin: boolean) => {
+      if (!login_id) {
+        setErrorMsg(t('message.enterId'));
+        return;
+      }
+      if (!password) {
+        setErrorMsg(t('message.enterPassword'));
+        return;
+      }
+
+      if (autoLogin) {
+        autoLoginMutation.mutate({ login_id, password });
+      }
+
+      loginMutation.mutate({ login_id, password });
+    },
+    [],
+  );
+
+  // 로그인 요청
+  const loginMutation = useMutation(authAPI.login, {
+    onError: (data: AxiosError) => {
+      if (data.response?.status === 400) {
+        setErrorMsg(`${t('message.incorrectUser')}`);
+        return;
+      }
+
+      if (data.response) {
+        setErrorMsg(`${t('message.networkError')}`);
+        return;
+      }
+    },
+    onSuccess: ({ token, user_info }) => {
+      login(token);
+      if (user_info.type === 'pi') {
+        navigate('/picker/vendor');
+        return;
+      }
+      navigate('/home');
+    },
+  });
+
+  const autoLoginMutation = useMutation(authAPI.login, {
+    onError: (data: AxiosError) => {
+      if (data.response?.status === 400) {
+        setErrorMsg(`${t('message.incorrectUser')}`);
+        return;
+      }
+
+      if (data.response) {
+        setErrorMsg(`${t('message.networkError')}`);
+        return;
+      }
+    },
+    onSuccess: ({ token, user_info }) => {
+      autoLogin(token);
+      if (user_info.type === 'pi') {
+        navigate('/picker/vendor');
+        return;
+      }
+      navigate('/home');
+    },
+  });
 
   const applyInterceptor = useCallback(() => {
     v2Axios.interceptors.response.use(
@@ -80,7 +148,12 @@ const useLogin = function () {
     return localToken || sessionToken;
   }, [login, autoLogin]);
 
-  return { login, autoLogin, logout, isLogin };
+  return {
+    logout,
+    isLogin,
+    loginTemp,
+    errorMsg,
+  };
 };
 
 export default useLogin;

@@ -16,7 +16,7 @@ function StoreButton() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
-    enabled: !!user.id,
+    enabled: !!user,
     onSuccess: (data) => {
       fillStoreList(data.data.store_list);
       selectDefaultStore(data.data.store_list);
