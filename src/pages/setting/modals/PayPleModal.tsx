@@ -1,10 +1,12 @@
 import paypleAPI from '@apis/paypleAPI';
+import { PrimaryButton } from '@components/element';
+import TurtleContentModal from '@components/element/modal/TurtleContentModal';
 
 import useUser from '@hooks/useUser';
-import { Button, Form, Modal, Space } from 'antd';
+import { Form } from 'antd';
 import React from 'react';
 import { useEffect } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -67,17 +69,18 @@ function PaypleModal({ visible, closeModal }: Props) {
   });
 
   return (
-    <Modal
+    <TurtleContentModal
       visible={visible}
-      onCancel={closeModal}
-      centered
+      onClose={() => {
+        closeModal();
+      }}
       title="멤버쉽 결제"
-      footer={false}
     >
       <Form colon={false}>
-        <Form.Item label="결제선택">
-          <Space size="small">
-            <Button
+        <Form.Item label={<span css={{ fontSize: 20 }}>결제선택</span>}>
+          <div css={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+            <PrimaryButton
+              size="small"
               onClick={() => {
                 authenticateMutation.mutate({
                   company_id: Number(user.company_id),
@@ -86,8 +89,10 @@ function PaypleModal({ visible, closeModal }: Props) {
               }}
             >
               정기결제
-            </Button>
-            <Button
+            </PrimaryButton>
+
+            <PrimaryButton
+              size="small"
               onClick={() => {
                 authenticateMutation.mutate({
                   company_id: Number(user.company_id),
@@ -96,11 +101,11 @@ function PaypleModal({ visible, closeModal }: Props) {
               }}
             >
               일반결제
-            </Button>
-          </Space>
+            </PrimaryButton>
+          </div>
         </Form.Item>
       </Form>
-    </Modal>
+    </TurtleContentModal>
   );
 }
 
