@@ -119,6 +119,9 @@ export const reset = css`
     content: ‘’;
     content: none;
   }
+  input {
+    outline: none;
+  }
   table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -158,6 +161,7 @@ export const reset = css`
     border-radius: 8px;
   }
 
+  /* 탭 */
   .ant-tabs {
     line-height: 1;
   }
@@ -214,6 +218,7 @@ export const reset = css`
     }
   }
 
+  /* 툴팁 */
   .ant-tooltip-inner {
     font-size: 13px;
     font-weight: 400;

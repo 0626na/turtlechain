@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { Tabs } from 'antd';
 import {
+  AlertBar,
   PageBottomBar,
   PageContent,
   PageHeader,
@@ -21,7 +22,7 @@ import {
   TurtleTabs,
   TurtleUpload,
 } from '@components/element';
-import { message } from '@utils/message';
+
 import SuccessTab from './tabs/SuccessTab';
 import PendingTab from './tabs/PendingTab';
 import { RangeDateModal } from '@components/combine';
@@ -32,6 +33,7 @@ import useModal from '@hooks/useModal';
 import FailTab from './tabs/FailTab';
 import AddSingleVendorModal from './modals/AddSingleModal';
 import { t } from 'i18next';
+import { message } from '@utils/message';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -53,9 +55,6 @@ function PageBody() {
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
       ready(data);
-    },
-    onError: () => {
-      // resetField();
     },
   });
 
@@ -122,7 +121,6 @@ function PageBody() {
       {/*
        *  단건 추가 모달
        */}
-
       <AddSingleVendorModal
         visible={addModalVisivle}
         closeModal={closeAddModal}
@@ -163,6 +161,11 @@ function PageBody() {
         title={'정말 등록할까요?'}
         description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
       />
+
+      {/*
+       * 신규거래처 요청 알림 바
+       */}
+      <AlertBar />
 
       <PageHeader
         title="거래처등록"

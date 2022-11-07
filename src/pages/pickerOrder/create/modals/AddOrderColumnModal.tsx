@@ -1,10 +1,28 @@
-import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  PlusCircleOutlined,
+  PlusCircleTwoTone,
+} from '@ant-design/icons';
 import orderAPI, { RequestCreateOrderFormat } from '@apis/orderAPI';
-import { TurtleText } from '@components/element';
+import { TurtleContentModal } from '@components/combine';
+import {
+  PrimaryButton,
+  TurtleDivider,
+  TurtleFormInput,
+  TurtleIcon,
+  TurtleText,
+} from '@components/element';
+import AddColumnButton from '@components/element/button/AddColumnButton';
+import ColumnTitleInput from '@components/element/button/ColumnTitleInput';
+import PlusIcon from '@components/element/icon/PlusIcon';
+import TurtleStack from '@components/element/TurtleStack';
 import { css } from '@emotion/react';
+import useOrderCart from '@hooks/useOrderCart';
 import { PageTitle } from '@layout/page';
-import { Button, Col, Divider, Input, message, Modal, Row } from 'antd';
-import { useState } from 'react';
+import { message } from '@utils/message';
+import { Button, Col, Divider, Input, Modal, Row } from 'antd';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 interface Props {
@@ -13,19 +31,8 @@ interface Props {
 }
 
 function AddOrderColumnModal({ visible, closeModal }: Props) {
-  const [orderFormat, setOrderFormat] = useState<RequestCreateOrderFormat>({
-    vendor_name: [],
-    vendor_address: [],
-    vendor_mobile: [],
-    product_name: [],
-    product_option: [],
-    product_count: [],
-    product_price: [],
-    order_type: [],
-    memo: [],
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { orderFormat, setOrderFormat } = useOrderCart();
+  const [mutateSwitch, setMutateSwitch] = useState(0);
   const getOrderFormatQuery = useQuery(
     'getOrderFormatQuery',
     () => orderAPI.getOrderFormat(),
@@ -53,557 +60,511 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     },
   });
 
+  useEffect(() => {
+    if (mutateSwitch !== 0) createOrderFormatMutation.mutate(orderFormat);
+  }, [mutateSwitch]);
+
+  useEffect(() => {
+    if (!visible) getOrderFormatQuery.refetch();
+  }, [visible]);
+
   return (
-    <Modal visible={visible} onCancel={closeModal} width="100vw" footer={false}>
-      <Row css={wrapper}>
-        <Col>
-          <TurtleText css={$title}>발주서 설정</TurtleText>
-        </Col>
-      </Row>
-
-      <PageTitle
-        title="발주서 외부헤더 추가"
-        subTitle="외부 헤더명을 추가하면 외부 발주서도 자유롭게 등록할 수 있어요"
-      />
-
-      <Row style={{ display: 'flex', justifyContent: 'center' }}>
-        {/* 헤더 추가 버튼 */}
-        <Row gutter={[14, 16]}>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+    <TurtleContentModal
+      title="발주서 설정"
+      size="large"
+      visible={visible}
+      onClose={closeModal}
+    >
+      {/* 헤더와 전체 margin 맞춤 */}
+      <div
+        css={css`
+          margin-left: -7px;
+        `}
+      >
+        {/* 타이틀 및 설명 */}
+        <div>
+          <span
+            css={css`
+              font-weight: 500;
+              font-size: 20px;
+            `}
+          >
+            {t('order.setting.title')}
+          </span>
+          <p
+            css={css`
+              margin-top: 7px;
+              font-size: 13px;
+              font-weight: 400;
+              color: #6b6d73;
+            `}
+          >
+            {t('order.setting.description')}
+          </p>
+        </div>
+        {/* 종방향 정렬 container */}
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+          `}
+        >
+          {/* 컬럼 추가 버튼목록 */}
+          <div
+            css={css`
+              margin-top: 24px;
+              gap: 10px;
+              display: flex;
+            `}
+          >
+            <AddColumnButton
+              required={true}
+              text="거래처명"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   vendor_name: [...orderFormat.vendor_name, ''],
-                })
-              }
-            >
-              거래처명
-              <PlusCircleOutlined style={{ color: '#DDF3F5' }} />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={true}
+              text="거래처 주소"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   vendor_address: [...orderFormat.vendor_address, ''],
-                })
-              }
-            >
-              거래처 주소 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={false}
+              text="휴대전화 번호"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   vendor_mobile: [...orderFormat.vendor_mobile, ''],
-                })
-              }
-            >
-              휴대번호 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={true}
+              text="거래처 상품명"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   product_name: [...orderFormat.product_name, ''],
-                })
-              }
-            >
-              거래처 상품명 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={false}
+              text="옵션"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   product_option: [...orderFormat.product_option, ''],
-                })
-              }
-            >
-              옵션 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={false}
+              text="분류"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   order_type: [...orderFormat.order_type, ''],
-                })
-              }
-            >
-              분류 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={true}
+              text="수량"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   product_count: [...orderFormat.product_count, ''],
-                })
-              }
-            >
-              수량 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={false}
+              text="가격"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   product_price: [...orderFormat.product_price, ''],
-                })
-              }
-            >
-              공급가 <PlusCircleOutlined />
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              css={columnHeader}
-              onClick={() =>
+                });
+              }}
+            />
+            <AddColumnButton
+              required={false}
+              text="메모"
+              onClick={() => {
                 setOrderFormat({
                   ...orderFormat,
                   memo: [...orderFormat.memo, ''],
-                })
-              }
-            >
-              메모 <PlusCircleOutlined />
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
+                });
+              }}
+            />
+          </div>
+          {/* 경계선 */}
+          <TurtleDivider color="#dce0e4" marginTop={12} />
 
-        {/* 헤더목록 */}
-        <Row gutter={[14, 16]}>
-          {/* 거래처명 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.vendor_name.length !== 0 ? (
-              orderFormat.vendor_name.map((name, index) => {
-                return (
-                  <Input
-                    key={index}
-                    id={index.toString()}
-                    value={name}
-                    css={columnContent}
-                    onChange={(e) =>
-                      setOrderFormat({
-                        ...orderFormat,
-                        vendor_name: orderFormat.vendor_name.map(
-                          (value, index) => {
-                            if (index.toString() === e.currentTarget.id) {
-                              return e.currentTarget.value;
-                            } else return value;
-                          },
-                        ),
-                      })
-                    }
-                    suffix={
-                      <DeleteOutlined
-                        id={index.toString()}
-                        onClick={(e) =>
+          {/* 저장된 칼럼명 */}
+          <div
+            css={css`
+              display: flex;
+              height: 600px;
+              flex-direction: column;
+              justify-content: space-between;
+            `}
+          >
+            {/* 칼럼명 목록 container */}
+            <div
+              css={css`
+                display: flex;
+                gap: 10px;
+                overflow-y: auto;
+              `}
+            >
+              {/* 거래처명 */}
+              <TurtleStack>
+                {orderFormat.vendor_name.length !== 0 &&
+                  orderFormat.vendor_name.map((name, index) => {
+                    return (
+                      <ColumnTitleInput
+                        key={index}
+                        id={String(index)}
+                        value={name}
+                        onChange={(e) =>
                           setOrderFormat({
                             ...orderFormat,
-                            vendor_name: orderFormat.vendor_name.filter(
-                              (_, index) =>
-                                e.currentTarget.id !== index.toString(),
+                            vendor_name: orderFormat.vendor_name.map(
+                              (value, index) => {
+                                if (String(index) === e.currentTarget.id)
+                                  return e.currentTarget.value;
+                                return value;
+                              },
                             ),
                           })
                         }
+                        onDelete={() => {
+                          setOrderFormat({
+                            ...orderFormat,
+                            vendor_name: orderFormat.vendor_name.filter(
+                              (vendorName) => vendorName !== name,
+                            ),
+                          });
+                        }}
                       />
-                    }
-                  />
-                );
-              })
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
+                    );
+                  })}
+              </TurtleStack>
 
-          {/* 거래처 주소 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.vendor_address.length !== 0 ? (
-              orderFormat.vendor_address.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      vendor_address: orderFormat.vendor_address.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+              {/* 거래처 주소 */}
+              <TurtleStack>
+                {orderFormat.vendor_address.length !== 0 &&
+                  orderFormat.vendor_address.map((address, index) => (
+                    <ColumnTitleInput
+                      key={index}
+                      id={String(index)}
+                      value={address}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          vendor_address: orderFormat.vendor_address.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           vendor_address: orderFormat.vendor_address.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (vendorAddress) => vendorAddress !== address,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
+                  ))}
+              </TurtleStack>
 
-          {/* 휴대번호 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.vendor_mobile.length !== 0 ? (
-              orderFormat.vendor_mobile.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      vendor_mobile: orderFormat.vendor_mobile.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+              {/* 휴대전화 번호 */}
+              <TurtleStack>
+                {orderFormat.vendor_mobile.length !== 0 &&
+                  orderFormat.vendor_mobile.map((mobile, index) => (
+                    <ColumnTitleInput
+                      value={mobile}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          vendor_mobile: orderFormat.vendor_mobile.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           vendor_mobile: orderFormat.vendor_mobile.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (vendorMobile) => vendorMobile !== mobile,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
+                  ))}
+              </TurtleStack>
 
-          {/* 거래처 상품명 */}
-
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.product_name.length !== 0 ? (
-              orderFormat.product_name.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      product_name: orderFormat.product_name.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+              {/* 거래처 상품명 */}
+              <TurtleStack>
+                {orderFormat.product_name.length !== 0 &&
+                  orderFormat.product_name.map((product, index) => (
+                    <ColumnTitleInput
+                      value={product}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          product_name: orderFormat.product_name.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           product_name: orderFormat.product_name.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (vendorProduct) => vendorProduct !== product,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
+                  ))}
+              </TurtleStack>
 
-          {/* 옵션 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.product_option.length !== 0 ? (
-              orderFormat.product_option.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      product_option: orderFormat.product_option.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+              {/* 옵션 */}
+              <TurtleStack>
+                {orderFormat.product_option.length !== 0 &&
+                  orderFormat.product_option.map((option, index) => (
+                    <ColumnTitleInput
+                      value={option}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          product_option: orderFormat.product_option.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           product_option: orderFormat.product_option.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (vendorProduct) => vendorProduct !== option,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
+                  ))}
+              </TurtleStack>
 
-          {/* 분류 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.order_type.length !== 0 ? (
-              orderFormat.order_type.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      order_type: orderFormat.order_type.map((value, index) => {
-                        if (index.toString() === e.currentTarget.id) {
-                          return e.currentTarget.value;
-                        } else return value;
-                      }),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+              {/* 분류 */}
+              <TurtleStack>
+                {orderFormat.order_type.length !== 0 &&
+                  orderFormat.order_type.map((orderType, index) => (
+                    <ColumnTitleInput
+                      value={orderType}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          order_type: orderFormat.order_type.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           order_type: orderFormat.order_type.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (type) => type !== orderType,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
-          {/* 수량 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.product_count.length !== 0 ? (
-              orderFormat.product_count.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      product_count: orderFormat.product_count.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+                  ))}
+              </TurtleStack>
+
+              {/* 수량 */}
+              <TurtleStack>
+                {orderFormat.product_count.length !== 0 &&
+                  orderFormat.product_count.map((count, index) => (
+                    <ColumnTitleInput
+                      value={count}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          product_count: orderFormat.product_count.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           product_count: orderFormat.product_count.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (productCount) => productCount !== count,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
-          {/* 공급가 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.product_price.length !== 0 ? (
-              orderFormat.product_price.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      product_price: orderFormat.product_price.map(
-                        (value, index) => {
-                          if (index.toString() === e.currentTarget.id) {
-                            return e.currentTarget.value;
-                          } else return value;
-                        },
-                      ),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+                  ))}
+              </TurtleStack>
+
+              {/* 가격 */}
+              <TurtleStack>
+                {orderFormat.product_price.length !== 0 &&
+                  orderFormat.product_price.map((price, index) => (
+                    <ColumnTitleInput
+                      value={price}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          product_price: orderFormat.product_price.map(
+                            (value, index) => {
+                              if (String(index) === e.currentTarget.id)
+                                return e.currentTarget.value;
+                              return value;
+                            },
+                          ),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           product_price: orderFormat.product_price.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (productPrice) => productPrice !== price,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
-          {/* 메모 */}
-          <Col style={{ display: 'flex', flexDirection: 'column' }}>
-            {orderFormat.memo.length !== 0 ? (
-              orderFormat.memo.map((name, index) => (
-                <Input
-                  key={index}
-                  id={index.toString()}
-                  value={name}
-                  css={columnContent}
-                  onChange={(e) =>
-                    setOrderFormat({
-                      ...orderFormat,
-                      memo: orderFormat.memo.map((value, index) => {
-                        if (index.toString() === e.currentTarget.id) {
-                          return e.currentTarget.value;
-                        } else return value;
-                      }),
-                    })
-                  }
-                  suffix={
-                    <DeleteOutlined
-                      id={index.toString()}
-                      onClick={(e) =>
+                  ))}
+              </TurtleStack>
+
+              {/* 메모 */}
+              <TurtleStack>
+                {orderFormat.memo.length !== 0 &&
+                  orderFormat.memo.map((memo, index) => (
+                    <ColumnTitleInput
+                      value={memo}
+                      id={String(index)}
+                      key={index}
+                      onChange={(e) =>
+                        setOrderFormat({
+                          ...orderFormat,
+                          memo: orderFormat.memo.map((value, index) => {
+                            if (String(index) === e.currentTarget.id)
+                              return e.currentTarget.value;
+                            return value;
+                          }),
+                        })
+                      }
+                      onDelete={() =>
                         setOrderFormat({
                           ...orderFormat,
                           memo: orderFormat.memo.filter(
-                            (_, index) =>
-                              e.currentTarget.id !== index.toString(),
+                            (vendorMemo) => vendorMemo !== memo,
                           ),
                         })
                       }
                     />
-                  }
-                />
-              ))
-            ) : (
-              <Input css={columnVisibleContent} />
-            )}
-          </Col>
-        </Row>
-      </Row>
-      <Row justify="end">
-        <Button
-          type="primary"
-          style={{ marginBottom: 20, marginRight: 20, width: 200, height: 40 }}
-          onClick={() => {
-            setOrderFormat({
-              vendor_name: orderFormat.vendor_name.filter(
-                (name) => name !== '',
-              ),
-              vendor_address: orderFormat.vendor_address.filter(
-                (address) => address !== '',
-              ),
-              vendor_mobile: orderFormat.vendor_mobile.filter(
-                (mobile) => mobile !== '',
-              ),
-              order_type: orderFormat.order_type.filter((type) => type !== ''),
-              product_count: orderFormat.product_count.filter(
-                (count) => count !== '',
-              ),
-              product_name: orderFormat.product_name.filter(
-                (name) => name !== '',
-              ),
-              product_option: orderFormat.product_option.filter(
-                (option) => option !== '',
-              ),
-              product_price: orderFormat.product_price.filter(
-                (price) => price !== '',
-              ),
-              memo: orderFormat.memo.filter((memo) => memo !== ''),
-            });
-            createOrderFormatMutation.mutate(orderFormat);
-          }}
-        >
-          저장하기
-        </Button>
-      </Row>
-    </Modal>
+                  ))}
+              </TurtleStack>
+            </div>
+
+            {/* 저장 버튼 */}
+            <div
+              css={css`
+                display: flex;
+
+                justify-self: end;
+                justify-content: flex-end;
+              `}
+            >
+              <PrimaryButton
+                onClick={() => {
+                  setOrderFormat({
+                    vendor_name: orderFormat.vendor_name.filter(
+                      (name) => name !== '',
+                    ),
+                    vendor_address: orderFormat.vendor_address.filter(
+                      (address) => address !== '',
+                    ),
+                    vendor_mobile: orderFormat.vendor_mobile.filter(
+                      (mobile) => mobile !== '',
+                    ),
+                    order_type: orderFormat.order_type.filter(
+                      (type) => type !== '',
+                    ),
+                    product_count: orderFormat.product_count.filter(
+                      (count) => count !== '',
+                    ),
+                    product_name: orderFormat.product_name.filter(
+                      (name) => name !== '',
+                    ),
+                    product_option: orderFormat.product_option.filter(
+                      (option) => option !== '',
+                    ),
+                    product_price: orderFormat.product_price.filter(
+                      (price) => price !== '',
+                    ),
+                    memo: orderFormat.memo.filter((memo) => memo !== ''),
+                  });
+                  setMutateSwitch((prev) => prev + 1);
+                }}
+              >
+                저장하기
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </TurtleContentModal>
   );
 }
 

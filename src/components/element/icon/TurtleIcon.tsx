@@ -49,20 +49,26 @@ import { ReactComponent as RightTriangleIcon } from '@icons/rightTriangle.svg';
 import { ReactComponent as UserCheckIcon } from '@icons/userCheck.svg';
 import { ReactComponent as UserLineIcon } from '@icons/userLine.svg';
 import { ReactComponent as MarkIcon } from '@icons/mark.svg';
-import { ReactComponent as AlertCloseIcon } from '@icons/alertClose.svg';
+
 import { ReactComponent as AlertSuccessIcon } from '@icons/alertSuccess.svg';
 import { ReactComponent as AlertFailIcon } from '@icons/alertFail.svg';
 import { ReactComponent as AlertWarnIcon } from '@icons/alertWarn.svg';
+import { ReactComponent as ExclamationMarkIcon } from '@icons/exclamationMark.svg';
+import { ReactComponent as AlertBarArrowRightIcon } from '@icons/alertBarArrowRight.svg';
+import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
+import { ReactComponent as AccordionDown } from '@icons/accordionDown.svg';
+import { ReactComponent as AccordionUp } from '@icons/accordionUp.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'alertBarArrowRight'
+    | 'exclamationMark'
     | 'alertWarn'
     | 'alertFail'
     | 'alertSuccess'
-    | 'alertClose'
     | 'mark'
     | 'delete'
     | 'download'
@@ -104,7 +110,10 @@ interface Props {
     | 'coin'
     | 'rightTriangle'
     | 'userCheck'
-    | 'userLine';
+    | 'userLine'
+    | 'tuning'
+    | 'accordionUp'
+    | 'accordionDown';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -113,6 +122,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+
+  if (name === 'alertBarArrowRight') {
+    return <AlertBarArrowRightIcon />;
+  }
+
+  if (name === 'exclamationMark') {
+    return <ExclamationMarkIcon />;
+  }
 
   if (name === 'alertSuccess') {
     return <AlertSuccessIcon />;
@@ -123,14 +140,6 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   }
   if (name === 'alertWarn') {
     return <AlertWarnIcon />;
-  }
-
-  if (name === 'alertClose') {
-    return (
-      <div css={iconContainer} onClick={handleClick}>
-        <AlertCloseIcon />
-      </div>
-    );
   }
 
   if (name === 'mark') {
@@ -460,6 +469,29 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <MembershipIcon />
+      </div>
+    );
+  }
+  if (name === 'tuning') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <TuningIcon />
+      </div>
+    );
+  }
+
+  if (name === 'accordionUp') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <AccordionUp />
+      </div>
+    );
+  }
+
+  if (name === 'accordionDown') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <AccordionDown />
       </div>
     );
   }

@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   MemoIcon,
+  TurtleSearchInput,
+  TurtleSearchSelect,
   TurtleTableNumberInput,
   TurtleTableTitle,
 } from '@components/element';
 import TurtleTableSelect from '@components/element/select/TurtleTableSelect';
 import useModal from '@hooks/useModal';
 import useOrderCart, { FailListForOutput } from '@hooks/useOrderCart';
-import { message, Table, TabPaneProps, Tabs } from 'antd';
+import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
+import { message } from '@utils/message';
 import { useState } from 'react';
 import OrderMemoModal from '../modals/OrderMemoModal';
 import { category } from './SucceessTab';
@@ -17,18 +20,39 @@ import TurtleTablePhoneNumberInput from '@components/element/input/TurtleTablePh
 import { notNumPattern, phonePattern } from '@utils/pattern';
 import AddOrderFailtoSuccessModal from '../modals/AddOrderFailtoSuccessModal';
 import { valueType } from 'antd/lib/statistic/utils';
+import { css } from '@emotion/react';
 
 interface Props extends TabPaneProps {
   loading: boolean;
 }
 
 function FailTab({ loading, ...props }: Props) {
+  const options = [
+    {
+      name: '쇼핑몰명',
+      value: 'name',
+    },
+    {
+      name: '거래처명',
+      value: 'vendor_name',
+    },
+    {
+      name: '거래처주소',
+      value: 'address',
+    },
+  ];
+
   const { cart, setCart, failListOutput } = useOrderCart();
   const [selectRowID, setSelectRowID] = useState(-1);
   const [failToSuccessRowData, setfailToSuccessRowData] = useState({
     id: 0,
     mobile: '',
   });
+  const [searchQuery, setSearchQuery] = useState({
+    type: 'name',
+    search_string: '',
+  });
+
   const [memoModalvisible, openMemoModal, closeMemoModal] = useModal();
   const [
     failtoSuccessModailvisible,
@@ -47,6 +71,21 @@ function FailTab({ loading, ...props }: Props) {
       order.order_id === record.order_id
     );
   };
+
+  const filteredList = useMemo(() => {
+    if (searchQuery.type === 'name')
+      return failListOutput().filter((item) =>
+        item.rt_store_name.includes(searchQuery.search_string),
+      );
+    if (searchQuery.type === 'vendor_name')
+      return failListOutput().filter((item) =>
+        item.vendor_name.includes(searchQuery.search_string),
+      );
+    if (searchQuery.type === 'address')
+      return failListOutput().filter((item) =>
+        item.vendor_address.includes(searchQuery.search_string),
+      );
+  }, [cart.failList, searchQuery]);
 
   //휴대전화번호 Input
   const failTablePhoneNumberInput = (record: FailListForOutput) => {
@@ -147,14 +186,45 @@ function FailTab({ loading, ...props }: Props) {
           scroll={{ x: 1608, y: 'auto', scrollToFirstRowOnChange: true }}
           loading={loading}
           size="small"
-          dataSource={failListOutput()}
+          dataSource={filteredList}
           rowKey={(record) => record.id}
           pagination={{
             position: ['bottomCenter'],
             showSizeChanger: false,
           }}
           title={() => (
-            <TurtleTableTitle totalCount={failListOutput().length ?? 0} />
+            <TurtleTableTitle
+              totalCount={failListOutput().length ?? 0}
+              rightContent={
+                <Row>
+                  <Col css={marginRight}>
+                    <TurtleSearchSelect
+                      value={searchQuery.type}
+                      onChange={(value) => {
+                        setSearchQuery({
+                          ...searchQuery,
+                          type: value,
+                        });
+                      }}
+                      items={options}
+                    />
+                  </Col>
+
+                  <Col>
+                    <TurtleSearchInput
+                      placeholder="검색어를 입력하세요"
+                      value={searchQuery.search_string}
+                      onChange={(e) =>
+                        setSearchQuery({
+                          ...searchQuery,
+                          search_string: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Col>
+                </Row>
+              }
+            />
           )}
           columns={[
             {
@@ -212,6 +282,7 @@ function FailTab({ loading, ...props }: Props) {
                   value={record.order_type}
                   onChange={(value: string) => {
                     setCart({
+                      ...cart,
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
                         ...failItem,
@@ -236,6 +307,7 @@ function FailTab({ loading, ...props }: Props) {
                   step={1}
                   onChange={(value: valueType) => {
                     setCart({
+                      ...cart,
                       successList: cart.successList,
                       failList: cart.failList.map((failItem) => ({
                         ...failItem,
@@ -279,5 +351,9 @@ function FailTab({ loading, ...props }: Props) {
     </>
   );
 }
+
+const marginRight = css`
+  margin-right: 6px;
+`;
 
 export default FailTab;

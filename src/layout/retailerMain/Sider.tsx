@@ -16,10 +16,10 @@ const pathnames = {
     create: '/product/create',
   },
 
-  order: {
-    create: '/order/create',
-    history: '/order/history',
-  },
+  // order: {
+  //   create: '/order/create',
+  //   history: '/order/history',
+  // },
 
   warehousing: {
     create: '/warehousing/create',
@@ -35,7 +35,7 @@ const pathnames = {
 
   etc: {
     setting: '/setting',
-    // tutorial: '/tutorial',
+    tutorial: '/tutorial',
   },
 };
 
@@ -155,28 +155,28 @@ const menus = [
           },
         ],
       },
-      {
-        key: 'order',
-        label: t('order.'),
-        icon: (
-          <div css={iconContainer}>
-            <TurtleIcon name="order" />
-          </div>
-        ),
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.order.create,
-            label: t('order.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.order.history,
-            label: t('order.history'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
+      // {
+      //   key: 'order',
+      //   label: t('order.'),
+      //   icon: (
+      //     <div css={iconContainer}>
+      //       <TurtleIcon name="order" />
+      //     </div>
+      //   ),
+      //   style: mainMenuTitleStyle,
+      //   children: [
+      //     {
+      //       key: pathnames.order.create,
+      //       label: t('order.create'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //     {
+      //       key: pathnames.order.history,
+      //       label: t('order.history'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //   ],
+      // },
       {
         key: 'warehousing',
         label: t('warehousing.'),
@@ -248,16 +248,24 @@ const menus = [
         ),
         style: etcMenuTitleStyle,
       },
-      // {
-      //   key: pathnames.etc.tutorial,
-      //   label: t('etc.tutorial'),
-      //   icon: (
-      //     <div css={iconContainer}>
-      //       <TurtleIcon name="tutorial" />
-      //     </div>
-      //   ),
-      //   style: etcMenuTitleStyle,
-      // },
+      {
+        key: pathnames.etc.tutorial,
+        label: (
+          <a
+            rel="stylesheet"
+            target="_blank"
+            href="https://turtlechain-guide.oopy.io/"
+          >
+            {t('etc.tutorial')}
+          </a>
+        ),
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="tutorial" />
+          </div>
+        ),
+        style: etcMenuTitleStyle,
+      },
     ],
   },
 ];
@@ -290,6 +298,7 @@ function Sider() {
         )}
         selectedKeys={[selectedPath]}
         onSelect={({ key }) => {
+          if (key === '/tutorial') return;
           navigate(key);
         }}
       />

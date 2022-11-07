@@ -18,7 +18,9 @@ function PageTitle({ title, subTitle, buttons }: Props) {
           <TurtleText css={$title}>{title}</TurtleText>
           {subTitle && (
             <TurtleText css={$subtitle}>
-              <InfoIcon />
+              <span css={subTitleIcon}>
+                <InfoIcon />
+              </span>
               {subTitle}
             </TurtleText>
           )}
@@ -55,10 +57,15 @@ const $title = css`
 `;
 
 const $subtitle = css`
+  margin-left: 3px;
   font-size: 13px;
   font-weight: 400;
   color: #6b6d73;
 `;
+
+const subTitleIcon = css({
+  marginRight: 5,
+});
 
 const buttonContainer = css`
   margin-left: 8px;

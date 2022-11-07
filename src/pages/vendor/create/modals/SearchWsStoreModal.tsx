@@ -101,7 +101,9 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
         size="middle"
         title={t('vendor.search')}
         visible={visible}
-        onClose={closeModal}
+        onClose={() => {
+          closeModal();
+        }}
       >
         <Table
           size="small"

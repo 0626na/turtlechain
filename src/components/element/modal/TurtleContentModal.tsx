@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
 import TurtleIcon from '../icon/TurtleIcon';
 
@@ -10,7 +10,7 @@ interface Props {
   size?: 'small' | 'middle' | 'large';
 }
 
-const width = {
+const sizeCss = {
   small: { width: 592 },
   middle: { width: 884, height: 640 },
   large: { width: '91.8vw', height: '100%' },
@@ -23,9 +23,28 @@ function TurtleContentModal({
   children,
   size = 'small',
 }: Props) {
+  useEffect(() => {
+    const escKeyModalClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', escKeyModalClose);
+    return () => window.removeEventListener('keydown', escKeyModalClose);
+  }, []);
+
   return (
-    <div css={modal.mask} style={{ display: visible ? 'block' : 'none' }}>
-      <div css={[modal.container, width[size]]}>
+    <div
+      css={modal.mask}
+      style={{ display: visible ? 'block' : 'none' }}
+      onClick={() => {
+        onClose();
+      }}
+    >
+      <div
+        css={[modal.container, sizeCss[size]]}
+        onClick={(e) => {
+          e.stopPropagation(); // TODO: 추후 마스크를 분리하여 리택토링 예정
+        }}
+      >
         <div css={modal.header}>
           <h1 css={modal.headerTitle}>{title}</h1>
           <div>

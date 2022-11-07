@@ -1,5 +1,9 @@
-import { ClearingInfo } from '@apis/clearingAPI';
-import { SearchFilter, TextWithTooltip } from '@components/combine';
+import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
+import {
+  CreateModal,
+  SearchFilter,
+  TextWithTooltip,
+} from '@components/combine';
 import {
   PrimaryButton,
   TurtleIcon,
@@ -12,6 +16,8 @@ import ArrowRightIcon from '@components/element/icon/ArrowRightIcon';
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useModal from '@hooks/useModal';
+import useStore from '@hooks/useStore';
+import { message } from '@utils/message';
 
 import {
   Col,
@@ -21,20 +27,22 @@ import {
   Table,
   Typography,
 } from 'antd';
+import { t } from 'i18next';
 
 import React, { useEffect, useMemo, useState } from 'react';
-
-import ConfirmModal from '../modals/ConfirmModal';
+import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 import DetailModal from '../modals/DetailModal';
 import FullUseButton from './FullUseButton';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
-  clickCreate(): void;
 }
 
-function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
+function ClearingPanel({ activeKey, ...props }: Props) {
+  const navigate = useNavigate();
+  const { store } = useStore();
   const {
     cart,
     calculateClearingAmount,
@@ -49,6 +57,43 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
+
+  // 정산서 생성 및 정산 상품추가
+  const createClearingMutation = useMutation(clearingAPI.create, {
+    onSuccess: () => {
+      message.success(t('message.success create clearing'));
+      navigate('/clearing/history');
+    },
+  });
+
+  const handleCreate = () => {
+    createClearingMutation.mutate({
+      sheet: {
+        store_id: store.selected?.id,
+        credit_type: 'general',
+        store_name: store.selected?.name,
+        request_date: cart.clearingRequestDate,
+      },
+      item: {
+        rt_store_id: store.selected?.id,
+        rt_store_name: store.selected?.name,
+        // 당일 결제 합계
+        clearing_amount_list: cart.resultList
+          .filter((item) => (item.clearing_payment_amount as number) > 0)
+          .map((item) => ({
+            vendor_id: item.vendor_info.id,
+            clearing_amount: item.clearing_payment_amount as number,
+          })),
+        // 매입 차감
+        subtract_amount_list: cart.adjustmentSubtractList
+          .filter((item) => (item.overpaid_payment_amount as number) > 0)
+          .map((item) => ({
+            vendor_id: item.vendor_info.id,
+            subtract_amount: item.overpaid_payment_amount as number,
+          })),
+      },
+    });
+  };
 
   // 거래처 검색(default : 전체)
   const filteredList = useMemo(
@@ -78,10 +123,13 @@ function ClearingPanel({ activeKey, clickCreate, ...props }: Props) {
       {/*
        * 결제요청 모달
        */}
-      <ConfirmModal
+      <CreateModal
+        onOk={() => {
+          handleCreate();
+        }}
+        loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        clickCreate={clickCreate}
         title="정말 요청을 보낼까요?"
         description={[
           '등록 후에는 이전으로 되돌릴 수 없어요.',

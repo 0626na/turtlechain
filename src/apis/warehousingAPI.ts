@@ -64,7 +64,7 @@ export interface WarehousingItem {
   is_vat_included: boolean;
   is_inactive: boolean;
   is_reserved: boolean;
-  created_date: string;
+  created_time: string;
   warehousing_date: string;
 }
 
