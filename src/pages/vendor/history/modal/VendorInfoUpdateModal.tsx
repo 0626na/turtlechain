@@ -153,7 +153,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                       (building) => ({ value: building, name: building }),
                     )}
                     placeholder="상가"
-                    onChange={(building) => {
+                    onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
                         floor: undefined,
@@ -174,29 +174,27 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {() => {
-                    return (
-                      <Form.Item name="floor" noStyle>
-                        <TurtleFormSelect
-                          items={Object.keys(
-                            getBuildingQuery.data?.data[
-                              form.getFieldValue('building')
-                            ] ?? [],
-                          ).map((floor: string) => ({
-                            value: floor,
-                            name: floor,
-                          }))}
-                          placeholder="층"
-                          onChange={(floor) => {
-                            form.setFieldsValue({
-                              ...form.getFieldsValue(),
-                              colLoc: undefined,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    );
-                  }}
+                  {() => (
+                    <Form.Item name="floor" noStyle>
+                      <TurtleFormSelect
+                        items={Object.keys(
+                          getBuildingQuery.data?.data[
+                            form.getFieldValue('building')
+                          ] ?? [],
+                        ).map((floor: string) => ({
+                          value: floor,
+                          name: floor,
+                        }))}
+                        placeholder="층"
+                        onChange={() => {
+                          form.setFieldsValue({
+                            ...form.getFieldsValue(),
+                            colLoc: undefined,
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  )}
                 </Form.Item>
               </div>
               <div
