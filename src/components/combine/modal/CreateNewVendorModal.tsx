@@ -109,7 +109,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
             rt_store_id: store.selected?.id,
             type: 'create',
             name: value.name,
-            tel: value.tel,
+            tel: value.tel ?? '',
             mobile: value.mobile,
             banks: [value.banks],
             building: value.address.building,

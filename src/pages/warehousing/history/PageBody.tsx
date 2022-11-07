@@ -14,7 +14,7 @@ import {
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import { useMutation, useQuery } from 'react-query';
