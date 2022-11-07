@@ -184,7 +184,6 @@ const button = css`
   align-items: center;
   justify-content: center;
   color: #fff;
-
   background-color: #00b3be;
 
   &:hover {
@@ -192,10 +191,8 @@ const button = css`
     background-color: #00b3be;
   }
 
-  // active 상태
   &.ant-btn:focus {
     color: #fff;
-
     background-color: #00b3be;
     border-color: #00b3be;
   }

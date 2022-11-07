@@ -1,13 +1,15 @@
 import { t } from 'i18next';
-
 import { TOKEN } from '@constant/index';
 import { useCallback, useMemo } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
+import { useUser } from '.';
+
 const useLogin = function () {
   const navigate = useNavigate();
+  const { loadUser } = useUser();
 
   const clearToken = useCallback(() => {
     v2Axios.defaults.headers.common['Authorization'] = '';
@@ -51,6 +53,7 @@ const useLogin = function () {
     (token: string) => {
       sessionStorage.setItem(TOKEN, token);
       applyToken(token);
+      loadUser();
     },
     [applyToken],
   );
@@ -59,6 +62,7 @@ const useLogin = function () {
     (token: string) => {
       localStorage.setItem(TOKEN, token);
       applyToken(token);
+      loadUser();
     },
     [applyToken],
   );
