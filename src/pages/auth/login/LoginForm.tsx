@@ -21,13 +21,13 @@ import { TurtleText } from '@components/element';
 
 function LoginForm() {
   const [form] = Form.useForm();
-  const { loginTemp, errorMsg } = useLogin();
+  const { loginRequest, errorMsg } = useLogin();
 
   return (
     <Form
       form={form}
       onFinish={({ login_id, password, autoLogin }) => {
-        loginTemp(login_id, password, autoLogin);
+        loginRequest(login_id, password, autoLogin);
       }}
     >
       <img

@@ -6,27 +6,32 @@ import { useNavigate } from 'react-router-dom';
 import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
 import { useUser } from '.';
-import authAPI, { RequestLogin } from '@apis/authAPI';
+import authAPI from '@apis/authAPI';
 import { useMutation } from 'react-query';
 
 const useLogin = function () {
   const navigate = useNavigate();
-  const { loadUser } = useUser();
+  const { loadUser, resetUser } = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
   const clearToken = useCallback(() => {
     v2Axios.defaults.headers.common['Authorization'] = '';
   }, []);
 
-  const logout = useCallback(() => {
+  const removeStorage = useCallback(() => {
     sessionStorage.removeItem(TOKEN);
     localStorage.removeItem(TOKEN);
+  }, []);
+
+  const logout = useCallback(() => {
+    resetUser();
+    removeStorage();
     clearToken();
     navigate('/');
-  }, [clearToken, navigate]);
+  }, [clearToken, navigate, resetUser, removeStorage]);
 
-  const loginTemp = useCallback(
-    (login_id: string, password: string, autoLogin: boolean) => {
+  const loginRequest = useCallback(
+    async (login_id: string, password: string, isAutoLogin: boolean) => {
       if (!login_id) {
         setErrorMsg(t('message.enterId'));
         return;
@@ -36,59 +41,42 @@ const useLogin = function () {
         return;
       }
 
-      if (autoLogin) {
-        autoLoginMutation.mutate({ login_id, password });
-      }
+      try {
+        const { token, user_info } = await authAPI.login({
+          login_id,
+          password,
+        });
+        const isPicker = user_info.type === 'pi';
 
-      loginMutation.mutate({ login_id, password });
+        isAutoLogin ? autoLogin(token) : login(token);
+        routeHome(isPicker);
+      } catch (e) {
+        handleErrorMsg(e as AxiosError);
+      }
     },
     [],
   );
 
-  // 로그인 요청
-  const loginMutation = useMutation(authAPI.login, {
-    onError: (data: AxiosError) => {
-      if (data.response?.status === 400) {
-        setErrorMsg(`${t('message.incorrectUser')}`);
-        return;
-      }
+  const routeHome = useCallback((isPicker: boolean) => {
+    if (isPicker) {
+      navigate('/picker/vendor');
+      return;
+    }
 
-      if (data.response) {
-        setErrorMsg(`${t('message.networkError')}`);
-        return;
-      }
-    },
-    onSuccess: ({ token, user_info }) => {
-      login(token);
-      if (user_info.type === 'pi') {
-        navigate('/picker/vendor');
-        return;
-      }
-      navigate('/home');
-    },
-  });
+    navigate('/home');
+  }, []);
 
-  const autoLoginMutation = useMutation(authAPI.login, {
-    onError: (data: AxiosError) => {
-      if (data.response?.status === 400) {
-        setErrorMsg(`${t('message.incorrectUser')}`);
-        return;
-      }
+  const handleErrorMsg = useCallback((error: AxiosError) => {
+    if (error.response?.status === 400) {
+      setErrorMsg(`${t('message.incorrectUser')}`);
+      return;
+    }
 
-      if (data.response) {
-        setErrorMsg(`${t('message.networkError')}`);
-        return;
-      }
-    },
-    onSuccess: ({ token, user_info }) => {
-      autoLogin(token);
-      if (user_info.type === 'pi') {
-        navigate('/picker/vendor');
-        return;
-      }
-      navigate('/home');
-    },
-  });
+    if (error.response) {
+      setErrorMsg(`${t('message.networkError')}`);
+      return;
+    }
+  }, []);
 
   const applyInterceptor = useCallback(() => {
     v2Axios.interceptors.response.use(
@@ -102,10 +90,7 @@ const useLogin = function () {
         } else if (error.response?.status === 400) {
           message.error(error.response.data.msg);
         } else {
-          //TODO: i18n 개편끝나고 리팩토링 필요
-          message.error(
-            `알 수 없는 오류가 발생했습니다. 채널톡으로 문의 해주세요.`,
-          );
+          message.error(`${t('message.networkError')}`);
         }
         return Promise.reject(error);
       },
@@ -126,7 +111,7 @@ const useLogin = function () {
       applyToken(token);
       loadUser();
     },
-    [applyToken],
+    [applyToken, loadUser],
   );
 
   const autoLogin = useCallback(
@@ -135,7 +120,7 @@ const useLogin = function () {
       applyToken(token);
       loadUser();
     },
-    [applyToken],
+    [applyToken, loadUser],
   );
 
   const isLogin = useMemo(() => {
@@ -151,7 +136,7 @@ const useLogin = function () {
   return {
     logout,
     isLogin,
-    loginTemp,
+    loginRequest,
     errorMsg,
   };
 };

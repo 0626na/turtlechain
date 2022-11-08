@@ -6,7 +6,7 @@ import authAPI from '@apis/authAPI';
 function useUser() {
   const [user, setUser] = useRecoilState(userState);
 
-  const getUser = useCallback(async () => {
+  const reloadUser = useCallback(async () => {
     const { user_info } = await authAPI.verify();
     setUser(user_info);
   }, []);
@@ -15,13 +15,17 @@ function useUser() {
     // 이미 user가 존재한다면 재요청 하지 않는다.
     if (user) return;
 
-    getUser();
+    reloadUser();
   }, [user]);
+
+  const resetUser = useCallback(() => {
+    setUser(null);
+  }, []);
 
   return {
     user,
     loadUser,
-    getUser,
+    resetUser,
   };
 }
 
