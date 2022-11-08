@@ -7,6 +7,7 @@ import useModal from './useModal';
 import useVendorCart from './useVendorCart';
 import useWarehousingCart from './useWarehousingCart';
 import useUser from './useUser';
+import usePreset from './usePreset';
 
 export {
   useLogin,
@@ -18,4 +19,5 @@ export {
   useVendorCart,
   useWarehousingCart,
   useUser,
+  usePreset,
 };
