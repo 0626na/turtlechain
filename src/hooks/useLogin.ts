@@ -7,12 +7,30 @@ import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
 import { useUser } from '.';
 import authAPI from '@apis/authAPI';
-import { useMutation } from 'react-query';
 
 const useLogin = function () {
   const navigate = useNavigate();
   const { loadUser, resetUser } = useUser();
   const [errorMsg, setErrorMsg] = useState('');
+
+  const logout = useCallback(() => {
+    resetUser();
+    removeStorage();
+    clearToken();
+    navigate('/');
+  }, []);
+
+  const login = useCallback((token: string) => {
+    sessionStorage.setItem(TOKEN, token);
+    applyToken(token);
+    loadUser();
+  }, []);
+
+  const autoLogin = useCallback((token: string) => {
+    localStorage.setItem(TOKEN, token);
+    applyToken(token);
+    loadUser();
+  }, []);
 
   const clearToken = useCallback(() => {
     v2Axios.defaults.headers.common['Authorization'] = '';
@@ -22,13 +40,6 @@ const useLogin = function () {
     sessionStorage.removeItem(TOKEN);
     localStorage.removeItem(TOKEN);
   }, []);
-
-  const logout = useCallback(() => {
-    resetUser();
-    removeStorage();
-    clearToken();
-    navigate('/');
-  }, [clearToken, navigate, resetUser, removeStorage]);
 
   const loginRequest = useCallback(
     async (login_id: string, password: string, isAutoLogin: boolean) => {
@@ -46,6 +57,7 @@ const useLogin = function () {
           login_id,
           password,
         });
+
         const isPicker = user_info.type === 'pi';
 
         isAutoLogin ? autoLogin(token) : login(token);
@@ -95,33 +107,12 @@ const useLogin = function () {
         return Promise.reject(error);
       },
     );
-  }, [logout]);
+  }, []);
 
-  const applyToken = useCallback(
-    (token: string) => {
-      v2Axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
-      applyInterceptor();
-    },
-    [applyInterceptor],
-  );
-
-  const login = useCallback(
-    (token: string) => {
-      sessionStorage.setItem(TOKEN, token);
-      applyToken(token);
-      loadUser();
-    },
-    [applyToken, loadUser],
-  );
-
-  const autoLogin = useCallback(
-    (token: string) => {
-      localStorage.setItem(TOKEN, token);
-      applyToken(token);
-      loadUser();
-    },
-    [applyToken, loadUser],
-  );
+  const applyToken = useCallback((token: string) => {
+    v2Axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
+    applyInterceptor();
+  }, []);
 
   const isLogin = useMemo(() => {
     // 최초 접속시 Storage에 TOKEN 있으면 자동 로그인해준다.
@@ -131,7 +122,7 @@ const useLogin = function () {
     sessionToken && login(sessionToken);
 
     return localToken || sessionToken;
-  }, [login, autoLogin]);
+  }, []);
 
   return {
     logout,
