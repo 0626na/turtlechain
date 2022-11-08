@@ -36,8 +36,9 @@ function Notification() {
     () => notificationAPI.get({ type: 'home' }),
     {
       // 1분마다 refetch
-      refetchInterval: 60000,
-      refetchIntervalInBackground: true,
+      refetchInterval: 10000,
+      refetchIntervalInBackground: false,
+      staleTime: 10000,
     },
   );
 
