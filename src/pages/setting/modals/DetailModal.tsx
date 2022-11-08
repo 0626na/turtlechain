@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Col, Form, Popconfirm, Radio, Row } from 'antd';
+import { useMutation, useQueryClient } from 'react-query';
+import { Col, Form, Radio, Row } from 'antd';
 import { message } from '@utils/message';
 import {
   AnswerButton,
@@ -10,10 +10,10 @@ import {
   TurtleFormSelect,
 } from '@components/element';
 import retailerStoreAPI, { StoreShow } from '@apis/retailerStoreAPI';
-import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
 import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
+import usePreset from '@hooks/usePreset';
 
 interface Props {
   visible: boolean;
@@ -22,8 +22,9 @@ interface Props {
 }
 
 function DetailModal({ visible, closeModal, selectedRow }: Props) {
-  const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const [form] = Form.useForm();
+  const { bankData } = usePreset();
 
   const [buttonsVisible, setButtonsVisible] = useState(false);
 
@@ -34,10 +35,6 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
   const hideButtons = () => {
     setButtonsVisible(false);
   };
-
-  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
-    enabled: visible,
-  });
 
   const updateMutation = useMutation(retailerStoreAPI.update, {
     onSuccess: () => {
@@ -184,7 +181,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
               <TurtleFormSelect
                 placeholder="은행"
                 items={
-                  Object.values(getBankQuery.data?.data ?? []).map((bank) => ({
+                  Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,
                     name: bank,
                   })) as {

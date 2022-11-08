@@ -9,11 +9,12 @@ import {
   TurtleFormSelect,
 } from '@components/element';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
-import presetAPI from '@apis/presetAPI';
 import { numPattern } from '@utils/pattern';
 import { TextWithTooltip, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 import { message } from '@utils/message';
+import usePreset from '@hooks/usePreset';
+
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -22,10 +23,7 @@ interface Props {
 function StoreCreateModal({ visible, closeModal }: Props) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-
-  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
-    enabled: visible,
-  });
+  const { bankData } = usePreset();
 
   const createMutation = useMutation(retailerStoreAPI.create, {
     onSuccess: () => {
@@ -123,7 +121,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
               <TurtleFormSelect
                 placeholder="은행"
                 items={
-                  Object.values(getBankQuery.data?.data ?? []).map((bank) => ({
+                  Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,
                     name: bank,
                   })) as {

@@ -17,9 +17,9 @@ import useStore from '@hooks/useStore';
 import { useMutation, useQuery } from 'react-query';
 
 import bucketListAPI from '@apis/bucketListAPI';
-import presetAPI from '@apis/presetAPI';
 import { RcFile } from 'antd/lib/upload';
 import { phonePattern } from '@utils/pattern';
+import usePreset from '@hooks/usePreset';
 
 interface Props {
   closeModal: () => void;
@@ -29,6 +29,7 @@ interface Props {
 function CreateNewModal({ visible, closeModal }: Props) {
   const { store } = useStore();
   const [form] = Form.useForm();
+  const { buildingData, bankData } = usePreset();
 
   const createMutation = useMutation(bucketListAPI.create, {
     onSuccess: () => {
@@ -36,9 +37,6 @@ function CreateNewModal({ visible, closeModal }: Props) {
       closeModal();
     },
   });
-
-  const getBuildingQuery = useQuery('getAdress', presetAPI.getBuilding, {});
-  const getBankQuery = useQuery('getBank', presetAPI.getBank, {});
 
   const normFile = (
     uploadFiles:
@@ -64,26 +62,27 @@ function CreateNewModal({ visible, closeModal }: Props) {
   };
 
   const handleFloorList = (building: string) =>
-    Object.keys(getBuildingQuery.data?.data[building] ?? {}).map((floor) => ({
+    Object.keys(buildingData?.data[building] ?? {}).map((floor) => ({
       value: floor,
       name: floor,
     }));
 
   const handleColLocList = (building: string, floor: string) =>
-    (getBuildingQuery.data?.data[building]?.[floor] ?? []).map(
-      (colLoc: string) => ({
-        value: colLoc,
-        name: colLoc,
-      }),
-    );
+    (buildingData?.data[building]?.[floor] ?? []).map((colLoc: string) => ({
+      value: colLoc,
+      name: colLoc,
+    }));
 
-  const bankList = Object.values(getBankQuery.data?.data ?? []).map((bank) => ({
+  const bankList = Object.values(bankData?.data ?? []).map((bank) => ({
     value: String(bank),
     name: String(bank),
   }));
 
-  const buildingList = Object.keys(getBuildingQuery.data?.data ?? {}).map(
-    (building) => ({ name: building, value: building }),
+  const buildingList = Object.keys(buildingData?.data ?? {}).map(
+    (building) => ({
+      name: building,
+      value: building,
+    }),
   );
 
   useEffect(() => {
