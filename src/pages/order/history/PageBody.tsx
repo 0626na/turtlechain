@@ -94,7 +94,7 @@ function PageBody() {
               ellipsis: true,
               title: '발주 일자',
               render: (_, record) =>
-                moment(record.created_time).format('YYYY-MM-DD'),
+                moment(record.request_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
