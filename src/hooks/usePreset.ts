@@ -4,27 +4,29 @@ import presetAPI from '@apis/presetAPI';
 import { useCallback, useEffect } from 'react';
 
 const usePreset = () => {
-  const [building, setBuilding] = useRecoilState(presetState.building);
-  const [bank, setBank] = useRecoilState(presetState.bank);
+  const [buildingData, setBuildingData] = useRecoilState(
+    presetState.buildingData,
+  );
+  const [bankData, setBankData] = useRecoilState(presetState.bankData);
 
   useEffect(() => {
     // building이나 bank 중 한개라도 있으면 재요청 하지 않는다.
-    const existPreset = building || bank;
+    const existPreset = buildingData || bankData;
 
     if (existPreset) return;
 
     initializePreset();
-  }, [building, bank]);
+  }, [buildingData, bankData]);
 
   const initializePreset = useCallback(async () => {
-    setBuilding(await presetAPI.getBuilding());
-    setBank(await presetAPI.getBank());
+    setBuildingData(await presetAPI.getBuilding());
+    setBankData(await presetAPI.getBank());
   }, []);
 
   return {
     initializePreset,
-    buildingData: building,
-    bankData: bank,
+    buildingData,
+    bankData,
   };
 };
 
