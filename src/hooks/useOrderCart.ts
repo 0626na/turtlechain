@@ -1,3 +1,4 @@
+import { orderSelectedDateState } from './../store/orderSelectedDateState';
 import { RcFile } from 'antd/lib/upload';
 import {
   StoreOrder,
@@ -8,6 +9,7 @@ import {
 import { useCallback, useState } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
+import moment from 'moment';
 
 export interface FailListForOutput {
   id: number;
@@ -28,6 +30,7 @@ export interface FailListForOutput {
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
   const [uploadFiles, setuploadFiles] = useState<RcFile[]>([]);
+  const [date, setDate] = useRecoilState(orderSelectedDateState);
 
   const [orderFormat, setOrderFormat] = useState<RequestCreateOrderFormat>({
     vendor_name: [],
@@ -358,6 +361,8 @@ const useOrderCart = () => {
   return {
     cart,
     setCart,
+    date,
+    setDate,
     failListOutput,
     uploadFiles,
     setuploadFiles,
