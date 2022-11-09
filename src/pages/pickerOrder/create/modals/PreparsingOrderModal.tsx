@@ -18,7 +18,7 @@ interface Props {
 }
 
 function PreparsingOrderModal({ visible, close, open, data }: Props) {
-  const { ready } = useOrderCart();
+  const { ready, date } = useOrderCart();
 
   //발주서 파싱
   const createOrderExcelParseMutation = useMutation(
@@ -92,6 +92,7 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
               onClick={() => {
                 createOrderExcelParseMutation.mutate({
                   files: data.files,
+                  request_date: date.date.format('YYYY-MM-DD'),
                 });
                 close();
               }}
