@@ -171,7 +171,7 @@ const useOrderCart = () => {
   }, [cart.successList]);
 
   /*
-   * 단건추가 등록
+   * 단건추가 등록(Picker)
    */
   const updateSuccess = useCallback(
     (data: StoreOrderItemExcelParsing) => {
@@ -189,6 +189,29 @@ const useOrderCart = () => {
       });
     },
     [cart.failList, cart.successList, checkSuccessListAndIDCreate, setCart],
+  );
+
+  /*
+   * 단건추가 등록 (쇼핑몰)
+   */
+
+  const updateSuccessForStore = useCallback(
+    (data: StoreOrderItemExcelParsing) => {
+      setCart({
+        ...cart,
+        successList: [
+          {
+            rt_store_id: cart.successList[0].rt_store_id,
+            rt_store_name: cart.successList[0].rt_store_name,
+            orders: [...cart.successList[0].orders, ...data.orders].map(
+              (order, index) => ({ ...order, order_id: index }),
+            ),
+            type: 'single',
+          },
+        ],
+      });
+    },
+    [cart.successList],
   );
 
   /*
@@ -342,6 +365,7 @@ const useOrderCart = () => {
     reset,
     integrationOrderList,
     updateSuccess,
+    updateSuccessForStore,
     countSuccessList,
     countFailList,
     calculateTotalPrice,
