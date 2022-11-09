@@ -15,7 +15,7 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset, calculateTotalPrice, integrationOrderList } =
+  const { cart, date, reset, calculateTotalPrice, integrationOrderList } =
     useOrderCart();
   const navigate = useNavigate();
 
@@ -30,6 +30,15 @@ function ConfirmOrderModal({ visible, close }: Props) {
       }
     },
   });
+
+  const orderCount = () => {
+    let count = 0;
+    cart.successList.map((item) => {
+      count += item.orders.length;
+    });
+
+    return count;
+  };
 
   return (
     <>
@@ -46,11 +55,11 @@ function ConfirmOrderModal({ visible, close }: Props) {
           </Typography.Paragraph>
 
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {`발주일자: ${moment().format('YYYY-MM-DD')}   `}
+            {`발주일자: ${date.date.format('YYYY-MM-DD')}   `}
           </Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주수량:  ${cart.successList.length}개  `}</Typography.Text>
+          >{`총 발주수량:  ${orderCount()}개  `}</Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
           >{`총 발주금액: ${calculateTotalPrice().toLocaleString()}원`}</Typography.Text>
@@ -68,6 +77,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
                   rt_stores: [
                     ...integrationOrderList().map<OrderItemList>((order) => ({
                       rt_store_id: order.rt_store_id,
+                      request_date: date.date.format('YYYY-MM-DD'),
                       orders: order.orders.map<CreatingOrdersItem>((item) => ({
                         vendor_name: item.vendor_name,
                         vendor_address: item.vendor_address,
