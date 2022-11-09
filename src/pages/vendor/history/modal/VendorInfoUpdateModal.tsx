@@ -195,7 +195,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {
+                  {() => (
                     <Form.Item name="colLoc" noStyle>
                       <TurtleFormSelect
                         items={(
@@ -212,7 +212,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                         placeholder="열/호"
                       />
                     </Form.Item>
-                  }
+                  )}
                 </Form.Item>
               </div>
             </div>
