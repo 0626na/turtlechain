@@ -33,14 +33,13 @@ function StoreTab() {
     ['getStoreList'],
     retailerStoreAPI.getList,
     {
-      enabled: !!user.id,
+      enabled: !!user,
     },
   );
 
   const changeMode = () => {
     setMode((mode) => {
-      if (mode === 'cardView') return 'listView';
-      return 'cardView';
+      return mode === 'cardView' ? 'listView' : 'cardView';
     });
   };
 

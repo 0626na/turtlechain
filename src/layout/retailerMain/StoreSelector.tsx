@@ -28,7 +28,7 @@ function StoreSelector() {
     ['getStoreList', 'sider'],
     retailerStoreAPI.getList,
     {
-      enabled: !!user.id,
+      enabled: !!user,
       onSuccess: (data) => {
         const sortedAscending = data.store_list.sort((a, b) =>
           a.name < b.name ? -1 : a.name > b.name ? 1 : 0,

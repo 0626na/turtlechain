@@ -37,7 +37,8 @@ function Notification() {
     {
       // 1분마다 refetch
       refetchInterval: 60000,
-      refetchIntervalInBackground: true,
+      refetchIntervalInBackground: false,
+      staleTime: 60000,
     },
   );
 
