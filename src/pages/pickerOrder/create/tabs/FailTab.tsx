@@ -12,7 +12,7 @@ import useOrderCart, { FailListForOutput } from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { useState } from 'react';
-import OrderMemoModal from '../modals/OrderMemoModal';
+import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { category } from './SucceessTab';
 import { t } from 'i18next';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
