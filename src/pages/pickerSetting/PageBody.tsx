@@ -30,7 +30,7 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
-    enabled: !!user.id,
+    enabled: !!user,
   });
 
   const changeMode = () => {

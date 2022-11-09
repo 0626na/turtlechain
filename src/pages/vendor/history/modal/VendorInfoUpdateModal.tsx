@@ -18,11 +18,11 @@ import { css } from '@emotion/react';
 import useStore from '@hooks/useStore';
 
 import { useMutation, useQuery } from 'react-query';
-import presetAPI from '@apis/presetAPI';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
+import usePreset from '@hooks/usePreset';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -31,20 +31,8 @@ interface Props {
 
 function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   const { store } = useStore();
-
   const [form] = Form.useForm();
-
-  // 선택된 거래처
-
-  // 건물정보 불러오기
-  const getBuildingQuery = useQuery('getAdress', presetAPI.getBuilding, {
-    enabled: !!visible,
-  });
-
-  // 은행정보 불러오기
-  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
-    enabled: !!visible,
-  });
+  const { buildingData, bankData } = usePreset();
 
   // 거래처 정보수정
   const createVendorMutation = useMutation(bucketListAPI.create, {
@@ -149,11 +137,11 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               >
                 <Form.Item name="building" noStyle>
                   <TurtleFormSelect
-                    items={Object.keys(getBuildingQuery.data?.data ?? []).map(
+                    items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
                     placeholder="상가"
-                    onChange={(building) => {
+                    onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
                         floor: undefined,
@@ -174,29 +162,26 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {() => {
-                    return (
-                      <Form.Item name="floor" noStyle>
-                        <TurtleFormSelect
-                          items={Object.keys(
-                            getBuildingQuery.data?.data[
-                              form.getFieldValue('building')
-                            ] ?? [],
-                          ).map((floor: string) => ({
-                            value: floor,
-                            name: floor,
-                          }))}
-                          placeholder="층"
-                          onChange={(floor) => {
-                            form.setFieldsValue({
-                              ...form.getFieldsValue(),
-                              colLoc: undefined,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    );
-                  }}
+                  {() => (
+                    <Form.Item name="floor" noStyle>
+                      <TurtleFormSelect
+                        items={Object.keys(
+                          buildingData?.data[form.getFieldValue('building')] ??
+                            [],
+                        ).map((floor: string) => ({
+                          value: floor,
+                          name: floor,
+                        }))}
+                        placeholder="층"
+                        onChange={() => {
+                          form.setFieldsValue({
+                            ...form.getFieldsValue(),
+                            colLoc: undefined,
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  )}
                 </Form.Item>
               </div>
               <div
@@ -210,26 +195,24 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {() => {
-                    return (
-                      <Form.Item name="colLoc" noStyle>
-                        <TurtleFormSelect
-                          items={(
-                            getBuildingQuery.data?.data[
-                              form.getFieldValue('building')
-                            ]?.[form.getFieldValue('floor')] ?? []
-                          ).map((colLoc: string) => {
-                            const [col, loc] = colLoc.split(' ');
-                            return {
-                              value: `${col} ${loc}`,
-                              name: `${col} ${loc}`,
-                            };
-                          })}
-                          placeholder="열/호"
-                        />
-                      </Form.Item>
-                    );
-                  }}
+                  {() => (
+                    <Form.Item name="colLoc" noStyle>
+                      <TurtleFormSelect
+                        items={(
+                          buildingData?.data[form.getFieldValue('building')]?.[
+                            form.getFieldValue('floor')
+                          ] ?? []
+                        ).map((colLoc: string) => {
+                          const [col, loc] = colLoc.split(' ');
+                          return {
+                            value: `${col} ${loc}`,
+                            name: `${col} ${loc}`,
+                          };
+                        })}
+                        placeholder="열/호"
+                      />
+                    </Form.Item>
+                  )}
                 </Form.Item>
               </div>
             </div>
@@ -245,9 +228,10 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 <TurtleFormSelect
                   placeholder="은행"
                   items={
-                    Object.values(getBankQuery.data?.data ?? []).map(
-                      (bank) => ({ value: bank, name: bank }),
-                    ) as {
+                    Object.values(bankData?.data ?? []).map((bank) => ({
+                      value: bank,
+                      name: bank,
+                    })) as {
                       value: string;
                       name: string;
                       icon?: React.ReactNode;

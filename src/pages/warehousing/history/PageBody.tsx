@@ -14,7 +14,7 @@ import {
 } from '@components/element';
 import useStore from '@hooks/useStore';
 import { PageContent, PageTitle } from '@layout/page';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import { useMutation, useQuery } from 'react-query';
@@ -74,11 +74,6 @@ function PageBody() {
     }));
   }, [store.selected]);
 
-  const loading =
-    getWarehousingSheetQuery.isLoading ||
-    updateSheetMutation.isLoading ||
-    removeSheetMutation.isLoading;
-
   return (
     <>
       {/**
@@ -105,7 +100,7 @@ function PageBody() {
         }}
         cancelText="취소"
         okText="삭제"
-        loading={loading}
+        loading={removeSheetMutation.isLoading}
       />
       {/**
        * 마감 확인 모달
@@ -123,7 +118,7 @@ function PageBody() {
         }}
         cancelText="취소"
         okText="마감"
-        loading={loading}
+        loading={updateSheetMutation.isLoading}
       />
       {/**
        * 마감 취소 확인 모달
@@ -141,7 +136,7 @@ function PageBody() {
         }}
         cancelText="취소"
         okText="마감취소"
-        loading={loading}
+        loading={updateSheetMutation.isLoading}
       />
       {/**
        * 페이지

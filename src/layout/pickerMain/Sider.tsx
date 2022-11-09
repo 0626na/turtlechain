@@ -154,7 +154,15 @@ const menus = [
       },
       // {
       //   key: pathnames.etc.tutorial,
-      //   label: t('etc.tutorial'),
+      //   label: (
+      //     <a
+      //       rel="stylesheet"
+      //       target="_blank"
+      //       href="https://turtlechain-guide.oopy.io/"
+      //     >
+      //       {t('etc.tutorial')}
+      //     </a>
+      //   ),
       //   icon: (
       //     <span css={iconContainer}>
       //       <TurtleIcon name="tutorial" />

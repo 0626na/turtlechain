@@ -15,7 +15,7 @@ function MainLayout() {
     return <Navigate to="/" replace={true} />;
   }
 
-  if (user.type === 'pi') {
+  if (user?.type === 'pi') {
     return <Navigate to="/picker/vendor" replace={true} />;
   }
 
