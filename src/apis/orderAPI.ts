@@ -103,6 +103,8 @@ export interface ParsingStatus {
 
 export interface RequestCreateOrderItemExcelParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
 export interface ResponseCreateOrderItemExcelParsing {
@@ -120,6 +122,10 @@ const createOrderExcelParsing = async (
   const url = 'order/parsing';
   const formData = new FormData();
   data.files.map((file) => formData.append('files', file));
+
+  if (data.rt_store_id)
+    formData.append('rt_store_id', String(data.rt_store_id));
+  formData.append('request_date', data.request_date);
   const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
     url,
     formData,
@@ -151,6 +157,8 @@ export interface PreParsingOrderList {
 
 export interface RequestCreatePreParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
 export interface ResponseCreatePreParsing {
@@ -164,6 +172,9 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
   const formData = new FormData();
   data.files.map((file) => formData.append('files', file));
 
+  if (data.rt_store_id)
+    formData.append('rt_store_id', String(data.rt_store_id));
+  formData.append('request_date', data.request_date);
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,
     formData,
@@ -215,6 +226,7 @@ export interface CreatingOrdersItem {
 
 export interface OrderItemList {
   rt_store_id: number;
+  request_date: string;
   orders: CreatingOrdersItem[];
 }
 
@@ -242,6 +254,7 @@ export interface OrderSheetList {
   rt_store_name: string; //쇼핑몰명
   is_inactive: boolean; //삭제여부
   created_time: string;
+  request_date: string;
   fails: number; //실패수량
   total_store_count: number;
   total_success_count: number; //총 성공 건수
@@ -253,7 +266,7 @@ export interface OrderSheetList {
 }
 
 export interface RequestGetOrderSheet {
-  //rt_store_id: number;
+  rt_store_id?: number;
   start_date: string;
   end_date: string;
 }
@@ -294,6 +307,7 @@ export interface OrderHistorySheet {
   rt_store_id: number;
   rt_store_name: string;
   created_time: string;
+  request_date: string;
   total_store_count: number;
   total_success_count: number;
   total_item_subcount: number;
