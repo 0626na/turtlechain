@@ -191,7 +191,7 @@ function PageBody() {
                     beforeUpload={(_, list) => {
                       createPreParsingMutation.mutate({
                         files: list,
-                        request_date: date.date.format('YYYY-MM-DD'),
+                        request_date: date.selectedDate.format('YYYY-MM-DD'),
                       });
 
                       return false;

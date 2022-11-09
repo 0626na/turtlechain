@@ -79,7 +79,7 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
               onClick={() => {
                 createOrderExcelParseMutation.mutate({
                   files: data.files,
-                  request_date: date.date.format('YYYY-MM-DD'),
+                  request_date: date.selectedDate.format('YYYY-MM-DD'),
                 });
                 close();
               }}

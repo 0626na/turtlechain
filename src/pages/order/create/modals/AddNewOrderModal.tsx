@@ -12,6 +12,9 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
 import usePreset from '@hooks/usePreset';
+import useOrderCart from '@hooks/useOrderCart';
+import { message } from '@utils/message';
+import useStore from '@hooks/useStore';
 
 interface Props {
   visible: boolean;
@@ -21,15 +24,7 @@ interface Props {
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
   const { buildingData } = usePreset();
-  const [selectStore, setSelectStore] = useState<PickerStore>({
-    id: 0,
-    name: '',
-    store_phone: [
-      {
-        phone: '',
-      },
-    ],
-  });
+  const { store } = useStore();
 
   const [floor, setFloor] = useState('');
   const { updateSuccessForStore } = useOrderCart();

@@ -12,8 +12,8 @@ function TurtleDatePicker() {
     <div>
       <DatePicker
         css={datePicker}
-        value={date.date}
-        onChange={(value) => setDate({ date: moment(value) })}
+        value={date.selectedDate}
+        onChange={(value) => setDate({ selectedDate: moment(value) })}
         allowClear={false}
       />
     </div>

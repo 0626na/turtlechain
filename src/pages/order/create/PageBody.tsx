@@ -77,7 +77,7 @@ function PageBody() {
 
   //쇼핑몰 갯수
   const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
-    enabled: !!user.id,
+    enabled: !!user?.id,
     onSuccess: (data) =>
       setTodayordersCount({
         ...todayOrdersCount,
@@ -196,7 +196,7 @@ function PageBody() {
                       createPreParsingMutation.mutate({
                         files: list,
                         rt_store_id: store.selected?.id,
-                        request_date: date.date.format('YYYY-MM-DD'),
+                        request_date: date.selectedDate.format('YYYY-MM-DD'),
                       });
 
                       return false;
