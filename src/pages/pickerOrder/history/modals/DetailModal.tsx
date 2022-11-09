@@ -43,7 +43,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
               title: '발주 일자',
               value:
                 moment(
-                  getOrderHistoryQuery.data?.data.order_sheet.created_time,
+                  getOrderHistoryQuery.data?.data.order_sheet.request_date,
                 ).format('YYYY-MM-DD') ?? '',
             },
             {
