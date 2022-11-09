@@ -11,12 +11,12 @@ import TurtleTableSelect from '@components/element/select/TurtleTableSelect';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useOrderCart from '@hooks/useOrderCart';
-import DeleteOrderModal from '@pages/order/create/modals/DeleteOrderModal';
+import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
-import OrderMemoModal from '../modals/OrderMemoModal';
+import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { valueType } from 'antd/lib/statistic/utils';
 import { StoreOrder } from '@apis/orderAPI';
 
