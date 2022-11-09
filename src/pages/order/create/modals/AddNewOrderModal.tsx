@@ -12,6 +12,9 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
 import presetAPI from '@apis/presetAPI';
+import useOrderCart from '@hooks/useOrderCart';
+import useStore from '@hooks/useStore';
+import { message } from '@utils/message';
 
 interface Props {
   visible: boolean;
@@ -20,17 +23,10 @@ interface Props {
 
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
-  const [selectStore, setSelectStore] = useState<PickerStore>({
-    id: 0,
-    name: '',
-    store_phone: [
-      {
-        phone: '',
-      },
-    ],
-  });
+  const { store } = useStore();
 
   const [floor, setFloor] = useState('');
+  const { updateSuccessForStore } = useOrderCart();
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
     'getPickerStores',
@@ -55,40 +51,34 @@ function AddNewOrderModal({ visible, close }: Props) {
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
-          onFinish={(values) => {}}
+          onFinish={(values) => {
+            updateSuccessForStore({
+              rt_store_id: Number(store.selected?.id),
+              rt_store_name: String(store.selected?.name),
+              type: 'single',
+              orders: [
+                {
+                  vendor_name: values.vendor_name,
+                  vendor_address: values.vendor_address_building
+                    ? `${values.vendor_address_building} ${values.vendor_address_floor}층 ${values.vendor_address_col}`
+                    : values.ext,
+                  vendor_mobile: '',
+                  mobile: values.mobile,
+                  product_name: values.vendor_product_name,
+                  product_option: values.option,
+                  product_count: values.count,
+                  product_price: values.price,
+                  order_type: values.type,
+                  creation_type: 'single',
+                  memo: values.memo,
+                  ws_store_info: [],
+                },
+              ],
+            });
+            message.success(t('message.successAddOrder'));
+            close();
+          }}
         >
-          {/* 쇼핑몰 */}
-          <Form.Item
-            label="쇼핑몰명"
-            name="store_name"
-            rules={[{ required: true, message: '쇼핑몰을 입력해주세요' }]}
-          >
-            <TurtleFormSelect
-              showSearch
-              placeholder="쇼핑몰을 입력해주세요"
-              items={getPickerStoresQuery.data?.data.store_list.map((store) => {
-                return {
-                  name: store.name,
-                  value: store.name,
-                };
-              })}
-              onChange={(store: string) => {
-                setSelectStore(
-                  getPickerStoresQuery.data?.data.store_list.find(
-                    (fstore) => fstore.name === store,
-                  ) ?? {
-                    id: 0,
-                    name: '',
-                    store_phone: [
-                      {
-                        phone: '',
-                      },
-                    ],
-                  },
-                );
-              }}
-            />
-          </Form.Item>
           {/* 거래처 */}
           <Form.Item
             label={t('table.vendorName')}
