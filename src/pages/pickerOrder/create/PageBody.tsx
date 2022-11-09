@@ -33,6 +33,7 @@ import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresent
 function PageBody() {
   const {
     cart,
+    date,
     ready,
     countSuccessList,
     countFailList,
@@ -190,6 +191,7 @@ function PageBody() {
                     beforeUpload={(_, list) => {
                       createPreParsingMutation.mutate({
                         files: list,
+                        request_date: date.date.format('YYYY-MM-DD'),
                       });
 
                       return false;
