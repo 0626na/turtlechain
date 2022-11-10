@@ -44,18 +44,18 @@ function TurtleTableTitle({
             <TurtleText css={count}>{vendorCount}</TurtleText>개
           </TurtleText>
         )}
-        {!!searchCount && searchCount >= 0 && (
-          <TurtleText css={container}>
-            <Divider type="vertical" />
-            검색결과 <TurtleText css={count}>{searchCount}</TurtleText>건
-          </TurtleText>
-        )}
         {!!searchAmount && searchAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
             검색금액 합계{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
             원
+          </TurtleText>
+        )}
+        {!!searchCount && searchCount >= 0 && (
+          <TurtleText css={container}>
+            <Divider type="vertical" />
+            검색결과 <TurtleText css={count}>{searchCount}</TurtleText>건
           </TurtleText>
         )}
         {!!totalRefundAmount && totalRefundAmount >= 0 && (

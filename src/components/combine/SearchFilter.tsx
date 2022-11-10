@@ -1,7 +1,5 @@
-import { TurtleSearchInput, TurtleSearchSelect } from '@components/element';
-import { css } from '@emotion/react';
-import { Col, Row } from 'antd';
-import { t } from 'i18next';
+import { TurtleSearchInput } from '@components/element';
+import { useEffect, useState } from 'react';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,10 +9,21 @@ interface Props {
 }
 
 function SearchFilter({ searchQuery, setSearchQuery }: Props) {
+  const [value, setValue] = useState('');
+
+  const handleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
+    setValue(searchQuery.search_string);
+  }, [searchQuery]);
+
   return (
     <TurtleSearchInput
       placeholder="검색어를 입력하세요"
-      defaultValue={searchQuery.search_string}
+      value={value}
+      onChange={handleValue}
       onSearch={(value) => {
         setSearchQuery({
           ...searchQuery,
