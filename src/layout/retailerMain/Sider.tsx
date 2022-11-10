@@ -16,10 +16,10 @@ const pathnames = {
     create: '/product/create',
   },
 
-  // order: {
-  //   create: '/order/create',
-  //   history: '/order/history',
-  // },
+  order: {
+    create: '/order/create',
+    history: '/order/history',
+  },
 
   warehousing: {
     create: '/warehousing/create',
@@ -155,28 +155,28 @@ const menus = [
           },
         ],
       },
-      // {
-      //   key: 'order',
-      //   label: t('order.'),
-      //   icon: (
-      //     <div css={iconContainer}>
-      //       <TurtleIcon name="order" />
-      //     </div>
-      //   ),
-      //   style: mainMenuTitleStyle,
-      //   children: [
-      //     {
-      //       key: pathnames.order.create,
-      //       label: t('order.create'),
-      //       style: mainMenuContentStyle,
-      //     },
-      //     {
-      //       key: pathnames.order.history,
-      //       label: t('order.history'),
-      //       style: mainMenuContentStyle,
-      //     },
-      //   ],
-      // },
+      {
+        key: 'order',
+        label: t('order.'),
+        icon: (
+          <div css={iconContainer}>
+            <TurtleIcon name="order" />
+          </div>
+        ),
+        style: mainMenuTitleStyle,
+        children: [
+          {
+            key: pathnames.order.create,
+            label: t('order.create'),
+            style: mainMenuContentStyle,
+          },
+          {
+            key: pathnames.order.history,
+            label: t('order.history'),
+            style: mainMenuContentStyle,
+          },
+        ],
+      },
       {
         key: 'warehousing',
         label: t('warehousing.'),
