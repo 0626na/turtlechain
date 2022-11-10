@@ -29,6 +29,7 @@ type AdjustmentProcessType = 'subtract' | 'refund';
 // 매입조정 상품 Show
 export interface AdjustmentItemShow {
   id: number;
+  rt_store_id?: number;
   ws_store_id: number;
   count: number;
   count_left: number;

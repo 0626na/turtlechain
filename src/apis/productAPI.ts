@@ -28,6 +28,7 @@ export interface ProductShow {
       phone: string;
     };
   };
+  created_time?: string;
   product_code: string;
   name: string;
   vendor_product_name: string;
