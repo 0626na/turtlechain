@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   ParsedVendor,
   ResponseVendorInventory,
@@ -12,56 +13,67 @@ import {
 } from '@store/vendorCartState';
 import { useRecoilState } from 'recoil';
 import { t } from 'i18next';
-
 import { message } from '@utils/message';
+
 type SUCCESS_LIST = 'successList';
 type PENDING_LIST = 'pendingList';
 
 const useVendorCart = () => {
   const [cart, setCart] = useRecoilState(vendorCartState);
 
-  const ready = (data: ResponseVendorInventory) => {
-    const initSuccessList = (data: ParsedVendor[]) => {
-      return data.map((vendor) => ({
+  /**
+   * cart 초기화
+   */
+  const reset = useCallback(() => {
+    setCart({
+      successList: [],
+      pendingList: [],
+      failList: [],
+    });
+  }, []);
+
+  const ready = useCallback((data: ResponseVendorInventory) => {
+    const initSuccessList = (vendorList: ParsedVendor[]) =>
+      vendorList.map((vendor) => ({
         ...vendor,
         isVatIncluded: false,
         useVendorName: vendor.name,
         memo: undefined,
       }));
-    };
 
-    const initPendingList = (data: ParsedVendor[]) => {
-      return data.map((vendor) => ({
+    const initPendingList = (vendorList: ParsedVendor[]) =>
+      vendorList.map((vendor) => ({
         ...vendor,
         isMatching: false,
         isVatIncluded: false,
         useVendorName: vendor.name,
         memo: undefined,
       }));
-    };
 
     setCart({
       successList: initSuccessList(data.data.success),
       pendingList: initPendingList(data.data.suggest),
       failList: data.data.fail,
     });
-  };
+  }, []);
 
-  const addSingleVendor = (data: SuccessItem) => {
-    if (
-      cart.successList.some((item) => item.vendor_code === data.vendor_code)
-    ) {
+  const addSingleVendor = useCallback((vendor: SuccessItem) => {
+    const isAlreadyExist = cart.successList.some(
+      (item) => item.vendor_code === vendor.vendor_code,
+    );
+
+    if (isAlreadyExist) {
       message.warn(t('message.already exist vendor'));
       return false;
     }
 
     setCart((cart) => ({
       ...cart,
-      successList: [data, ...cart.successList],
+      successList: [vendor, ...cart.successList],
     }));
 
     return true;
-  };
+  }, []);
 
   const vatIncludedUpdate = (
     target: SuccessItem | PendingItem,
@@ -125,27 +137,21 @@ const useVendorCart = () => {
     }));
   };
 
-  const findWsStore = (wsStoreList: Wholesale[], SelectedWsId: number) => {
+  const findWsStore = (wsStoreList: Wholesale[], selectedWsId: number) => {
     const result = wsStoreList.find(
-      (wholesale: Wholesale) => wholesale.id === SelectedWsId,
+      (wholesale: Wholesale) => wholesale.id === selectedWsId,
     ) as SelectedWholesale;
 
-    return {
-      ...result,
-      selectedAccount:
-        result?.store_account.length === 1
-          ? result.store_account[0]
-          : undefined,
-    };
+    return result;
   };
 
   const handleWholesaleStoreSelecte = (
-    SelectedWsStoreId: number,
+    selectedWsStoreId: number,
     selectedRow: PendingItem,
   ) => {
     const wsStoreInfo = findWsStore(
       selectedRow.ws_store_info,
-      SelectedWsStoreId,
+      selectedWsStoreId,
     );
 
     setCart((cart) => ({
@@ -211,8 +217,8 @@ const useVendorCart = () => {
 
   return {
     cart,
-    setCart,
     ready,
+    reset,
     convertToSuccessItem,
     vatIncludedUpdate,
     memoUpdate,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import vendorAPI from '@apis/vendorAPI';
 import { useMutation } from 'react-query';
@@ -37,29 +37,34 @@ import { message } from '@utils/message';
 
 function PageBody() {
   const navigate = useNavigate();
-
   const { store } = useStore();
-  const { cart, setCart, ready, convertToSuccessItem, convertToMutateItem } =
+  const { cart, ready, reset, convertToSuccessItem, convertToMutateItem } =
     useVendorCart();
-
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
   const [addModalVisivle, openAddModal, closeAddModal] = useModal();
+  const [alertBarVisible, openAlertModal, closeAlertModal] = useModal(true);
+
+  /**
+   * 쇼핑몰 변경시 cart 초기화한다.
+   */
+  useEffect(() => {
+    reset();
+  }, [store.selected]);
 
   // 재고프로그램 연동
   const inventoryMutation = useMutation(vendorAPI.inventory, {
     onSuccess: (data) => {
+      ready(data);
       closeInventoryModal();
       message.warn(
         `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
       );
-      ready(data);
     },
   });
 
   // 엑셀 연동
-
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
@@ -78,7 +83,6 @@ function PageBody() {
       closeConfirmModal();
       navigate('/vendor/history');
     },
-    onError: () => {},
   });
 
   const successCount = [
@@ -148,11 +152,7 @@ function PageBody() {
               ),
           ]);
 
-          setCart({
-            successList: [],
-            pendingList: [],
-            failList: [],
-          });
+          reset();
         }}
         loading={vendorCreateMutation.isLoading}
         onCancel={() => {

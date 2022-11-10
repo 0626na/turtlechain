@@ -61,11 +61,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
       colLoc: `${selectedRow?.ws_store_info.col} ${selectedRow?.ws_store_info.loc}`,
       ext: selectedRow?.ws_store_info.ext,
 
-      banks: {
-        bank: selectedRow?.vendor_account.bank,
-        account_number: selectedRow?.vendor_account.account_number,
-        account_holder: selectedRow?.vendor_account.account_holder,
-      },
+      bank: selectedRow?.vendor_account.bank,
+      account_number: selectedRow?.vendor_account.account_number,
+      account_holder: selectedRow?.vendor_account.account_holder,
 
       file: undefined,
     });
@@ -184,6 +182,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   )}
                 </Form.Item>
               </div>
+
               <div
                 css={css`
                   flex-basis: 30%;
@@ -224,7 +223,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
-              <Form.Item name={['banks', 'bank']} noStyle>
+              <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
                   placeholder="은행"
                   items={
@@ -241,7 +240,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               </Form.Item>
 
               <Form.Item
-                name={['banks', 'account_number']}
+                name="account_number"
                 rules={[{ required: true, message: '계좌번호를 입력해주세요' }]}
                 noStyle
               >
@@ -249,7 +248,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               </Form.Item>
 
               <Form.Item
-                name={['banks', 'account_holder']}
+                name="account_holder"
                 rules={[{ required: true, message: '예금주를 입력해주세요' }]}
                 noStyle
               >
@@ -290,7 +289,13 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   createVendorMutation.mutate({
                     ...form.getFieldsValue(),
                     type: 'update',
-                    banks: [form.getFieldValue('banks')],
+                    banks: [
+                      {
+                        bank: form.getFieldValue('bank'),
+                        account_number: form.getFieldValue('account_number'),
+                        account_holder: form.getFieldValue('account_holder'),
+                      },
+                    ],
                     floor: form.getFieldValue('floor') ?? '',
                     col: col ?? '',
                     loc: loc ?? '',
