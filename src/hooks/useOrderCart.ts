@@ -176,7 +176,7 @@ const useOrderCart = () => {
   /*
    * 단건추가 등록(Picker)
    */
-  const updateSuccess = useCallback(
+  const addSingleSuccess = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
         ...cart,
@@ -198,7 +198,7 @@ const useOrderCart = () => {
    * 단건추가 등록 (쇼핑몰)
    */
 
-  const updateSuccessForStore = useCallback(
+  const addSingleSuccessForStore = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
         ...cart,
@@ -369,8 +369,8 @@ const useOrderCart = () => {
     ready,
     reset,
     integrationOrderList,
-    updateSuccess,
-    updateSuccessForStore,
+    addSingleSuccess,
+    addSingleSuccessForStore,
     countSuccessList,
     countFailList,
     calculateTotalPrice,
