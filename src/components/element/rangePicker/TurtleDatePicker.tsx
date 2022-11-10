@@ -5,15 +5,18 @@ import { DatePicker, DatePickerProps } from 'antd';
 import moment from 'moment';
 import useOrderCart from '@hooks/useOrderCart';
 
-function TurtleDatePicker() {
-  const { date, setDate } = useOrderCart();
+interface Props {
+  date: moment.Moment;
+  onchange: (value: moment.Moment) => void;
+}
 
+function TurtleDatePicker({ date, onchange }: Props) {
   return (
     <div>
       <DatePicker
         css={datePicker}
-        value={date.selectedDate}
-        onChange={(value) => setDate({ selectedDate: moment(value) })}
+        value={date}
+        onChange={(value) => onchange(moment(value))}
         allowClear={false}
       />
     </div>
