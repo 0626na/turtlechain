@@ -45,7 +45,8 @@
       "true": "마감",
       "false": "대기",
       "all": "전체"
-    }
+    },
+    "addSingle": "입고 하나씩 추가하기"
   },
 
   "adjustment": {
@@ -215,7 +216,7 @@
     "at a time": "한번에 추가",
     "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
-    "addVendor": "거래처 추가하기",
+    "addVendorRequest": "거래처 추가요청하기",
     "addWarehousing": "입고 추가하기",
     "updateVendor": "정보수정 요청하기",
     "addTransaction": "과거매입 추가하기",
@@ -247,7 +248,8 @@
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
     "already exist product": "이미 추가된 상품입니다.",
-    "success update vendor request": "거래처 정보 수정이 요청되었습니다."
+    "success update vendor request": "거래처정보 수정을 요청했어요. 완료시 알림으로 알려드릴게요!",
+    "success create vendor request": "거래처정보 등록을 요청했어요. 완료시 알림으로 알려드릴게요!"
   },
 
   "biz role": "직책",
