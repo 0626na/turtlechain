@@ -67,7 +67,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
 
 const container = css`
   height: 84px;
-  padding: 24px 36px;
+  padding: 24px;
 `;
 
 const leftContnetStyled = css`
