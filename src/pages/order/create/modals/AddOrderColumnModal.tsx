@@ -18,7 +18,6 @@ interface Props {
 
 function AddOrderColumnModal({ visible, closeModal }: Props) {
   const { orderFormat, setOrderFormat } = useOrderCart();
-  const [mutateSwitch, setMutateSwitch] = useState(0);
   const getOrderFormatQuery = useQuery(
     'getOrderFormatQuery',
     () => orderAPI.getOrderFormat(),
@@ -47,11 +46,8 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
   });
 
   useEffect(() => {
-    if (mutateSwitch !== 0) createOrderFormatMutation.mutate(orderFormat);
-  }, [mutateSwitch]);
-
-  useEffect(() => {
-    if (!visible) getOrderFormatQuery.refetch();
+    if (!visible) return;
+    getOrderFormatQuery.refetch();
   }, [visible]);
 
   return (
