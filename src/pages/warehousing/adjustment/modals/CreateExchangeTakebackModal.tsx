@@ -33,7 +33,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
   // 교환/반품 생성 요성
   const createMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
-      queryClient.refetchQueries(['getAdjustmentList'], { active: true });
+      queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
       message.success('교환/반품이 성공적으로 등록되었습니다.');
       onClose();
     },

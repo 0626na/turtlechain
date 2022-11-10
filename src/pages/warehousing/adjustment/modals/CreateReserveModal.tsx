@@ -35,7 +35,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   // 미송 상품 추가 요청
   const createReserveMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
-      queryClient.refetchQueries(['getAdjustmentList'], { active: true });
+      queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
       message.success('미송상품이 성공적으로 등록되었습니다.');
 
       closeModal();

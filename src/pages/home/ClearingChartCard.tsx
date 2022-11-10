@@ -1,206 +1,206 @@
 import moment from 'moment';
-import { useCallback, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import { useQuery } from 'react-query';
-import { Badge, Col, Divider, Row, Space, Typography } from 'antd';
+
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  TooltipItem,
 } from 'chart.js';
-import clearingAPI, { ClearingSheetShow } from '@apis/clearingAPI';
+import { ClearingSheetShow } from '@apis/clearingAPI';
+import { theme } from '@styles/theme';
+import { css } from '@emotion/react';
+import { t } from 'i18next';
+import React from 'react';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 );
 
-function ClearingChartCard() {
-  const [storeList, setStoreList] = useState<string[]>([]);
-
-  const getSheetQuery = useQuery(
-    ['getClearingSheet'],
-    () =>
-      clearingAPI.getSheet({
-        start_date: moment().startOf('month').format('YYYY-MM-DD'),
-        end_date: moment().endOf('month').format('YYYY-MM-DD'),
-        credit_type: 'general',
-        status: 'complete',
-        page_size: 1000,
-      }),
-    {
-      onSuccess: (data) => {
-        findStore(data.data.sheet_list);
-      },
+const chartOption = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
     },
-  );
-
-  const findStore = useCallback((sheet_list: ClearingSheetShow[]) => {
-    const set = new Set<string>();
-    sheet_list.forEach((sheet) => {
-      set.add(sheet.store_name);
-    });
-    setStoreList(Array.from(set));
-  }, []);
-
-  const options = {
-    grouped: true,
-    interaction: {
-      mode: 'index',
-    } as const,
-    responsive: true,
-    plugins: {
-      legend: {
+    title: {
+      display: false,
+    },
+  },
+  scales: {
+    x: {
+      grid: {
         display: false,
-        labels: {
-          usePointStyle: true,
-          padding: 10,
-          font: {
-            // 범례의 폰트 스타일도 지정할 수 있습니다.
-            family: "'Noto Sans KR', 'serif'",
-            lineHeight: 1,
-          },
-          display: true,
-        },
       },
-      tooltip: {
-        backgroundColor: 'black',
-        padding: 10,
-        bodySpacing: 5,
-        usePointStyle: true,
-        callbacks: {
-          title: (context: TooltipItem<'line'>[]) =>
-            moment().set('date', Number(context[0].label)).format('YYYY-MM-DD'),
-        },
+      ticks: {
+        color: theme.grey400,
       },
+    } as const,
+    y: {
+      grid: {
+        drawTicks: false,
+      },
+      ticks: {
+        color: theme.grey400,
+      },
+    } as const,
+  },
+  layout: {
+    padding: {
+      top: 40,
     },
-    scales: {
-      x: {
-        grid: {
-          display: true,
-          drawTicks: false,
-          tickLength: 1,
-          color: '#EDEFF1',
-        },
-        axis: 'x',
-      } as const,
-      y: {
-        grid: {
-          display: true,
-          drawTicks: false,
-          color: '#EDEFF1',
-        },
-        afterDataLimits: (scale: { max: number }) => {
-          scale.max = scale.max * 1.1;
-        },
-        display: true,
-      },
-    },
-  };
+  },
+};
 
-  const lineColor = [
-    '#6BD4C1',
-    '#93A9E3',
-    '#84CDEB',
-    '#6BD4C1',
-    '#93A9E3',
-    '#84CDEB',
-    '#6BD4C1',
-    '#93A9E3',
-    '#84CDEB',
-  ];
+const labels = [1, 2, 3, 4, 5].map((day) => t(`day.${day}`));
+const thisWeek = [
+  moment().startOf('week').add(1, 'day'),
+  moment().startOf('week').add(2, 'day'),
+  moment().startOf('week').add(3, 'day'),
+  moment().startOf('week').add(4, 'day'),
+  moment().startOf('week').add(5, 'day'),
+];
 
-  const pointColor = [
-    '#08B798',
-    '#5B80DF',
-    '#32ACDD',
-    '#08B798',
-    '#5B80DF',
-    '#32ACDD',
-    '#08B798',
-    '#5B80DF',
-    '#32ACDD',
-  ];
+const lastWeek = [
+  moment().startOf('week').subtract(1, 'weeks').add(1, 'day'),
+  moment().startOf('week').subtract(1, 'weeks').add(2, 'day'),
+  moment().startOf('week').subtract(1, 'weeks').add(3, 'day'),
+  moment().startOf('week').subtract(1, 'weeks').add(4, 'day'),
+  moment().startOf('week').subtract(1, 'weeks').add(5, 'day'),
+];
 
-  const labels = Array.from(
-    { length: moment().endOf('month').get('date') },
-    (v, i) => i + 1,
+interface Props {
+  completedClearingSheetList: ClearingSheetShow[];
+}
+
+function ClearingChartCard({ completedClearingSheetList }: Props) {
+  const thisWeekData = thisWeek.map((day) =>
+    completedClearingSheetList
+      ?.filter((sheet) => sheet.complete_date === day.format('YYYY-MM-DD'))
+      .map((sheet) => sheet.total_clearing_amount)
+      .reduce((acc, cur) => acc + cur, 0),
   );
 
-  const data = {
-    labels,
-    datasets: storeList.map((store, index) => ({
-      label: store,
-      data: labels.map((day) => {
-        if (day > parseInt(moment().format('D'))) return;
+  const lastWeekData = lastWeek.map((day) =>
+    completedClearingSheetList
+      ?.filter((sheet) => sheet.complete_date === day.format('YYYY-MM-DD'))
+      .map((sheet) => sheet.total_deposit_amount)
+      .reduce((acc, cur) => acc + cur, 0),
+  );
 
-        return getSheetQuery.data?.data.sheet_list
-          .filter(
-            ({ complete_date, store_name }) =>
-              complete_date ===
-                moment()
-                  .startOf('month')
-                  .add(day - 1, 'day')
-                  .format('YYYY-MM-DD') && store_name === store,
-          )
-          .map(({ total_deposit_amount }) => total_deposit_amount)
-          .reduce((cur, acc) => cur + acc, 0);
-      }),
-      borderColor: lineColor[index],
-      borderWidth: 2,
-      backgroundColor: lineColor[index],
-      pointRadius: 2,
-      pointBorderColor: pointColor[index],
-      pointBackgroundColor: pointColor[index],
-    })),
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        data: lastWeekData,
+        backgroundColor: '#EAECEF',
+        barThickness: 12,
+        borderRadius: 4,
+      },
+
+      {
+        data: thisWeekData,
+        backgroundColor: '#13BCB2',
+        barThickness: 12,
+        borderRadius: 4,
+      },
+    ],
   };
+
+  const totalThisWeekData = thisWeekData.reduce((acc, cur) => acc + cur, 0);
 
   return (
-    <div>
-      <Row justify="space-between">
-        <Col>
-          <Space direction="vertical" size={0}>
-            <Typography.Title
-              style={{ marginBottom: 4, fontWeight: 500, fontSize: 16 }}
-            >
-              누적 정산 완료 금액
-            </Typography.Title>
-            <Typography.Title style={{ marginBottom: 20, fontSize: 28 }}>
-              {getSheetQuery.data?.data.clearing_summary.complete.amount.toLocaleString()}
-              <span style={{ fontSize: 20, fontWeight: 500, marginLeft: 4 }}>
-                원
-              </span>
-            </Typography.Title>
-          </Space>
-        </Col>
-        <Col>
-          <Space size="middle" align="center" style={{ marginRight: 8 }}>
-            {storeList.map((store, index) => (
-              <Badge key={store} color={pointColor[index]} text={store} />
-            ))}
-          </Space>
-          <Divider type="vertical" />
-          <Typography.Text type="secondary">
-            &nbsp;&nbsp;{moment().format('YYYY-MM')}
-          </Typography.Text>
-        </Col>
-      </Row>
-      <Row>
-        <Line options={options} data={data} height={60} />
-      </Row>
-    </div>
+    <>
+      <div
+        css={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <h4
+          css={{
+            display: 'inline',
+            color: theme.grey500,
+            fontSize: 18,
+            fontWeight: 500,
+          }}
+        >
+          누적 결제금액
+        </h4>
+
+        <div
+          css={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexBasis: 122,
+          }}
+        >
+          <div css={markCss.self}>
+            <div
+              css={markCss.status}
+              style={{
+                ['--backgroundColor' as string]: '#EAECEF',
+              }}
+            />
+            <span>지난주</span>
+          </div>
+
+          <div css={markCss.self}>
+            <div
+              css={markCss.status}
+              style={{
+                ['--backgroundColor' as string]: '#13BCB2',
+              }}
+            />
+            <span>이번주</span>
+          </div>
+        </div>
+      </div>
+      <h1 css={{ marginTop: 12 }}>
+        <span css={{ fontSize: 28, fontWeight: 700, color: theme.grey800 }}>
+          {totalThisWeekData.toLocaleString()}
+        </span>
+        <span
+          css={{
+            fontSize: 18,
+            fontWeight: 500,
+            color: theme.grey800,
+          }}
+        >
+          원
+        </span>
+      </h1>
+
+      <Bar options={chartOption} data={chartData} height={200} />
+    </>
   );
 }
+
+const markCss = {
+  self: css({
+    fontWeight: 400,
+    fontSize: 14,
+    color: theme.grey600,
+    display: 'flex',
+    alignItems: 'center',
+  }),
+
+  status: css({
+    display: 'inline-block',
+    marginRight: 7,
+    width: 8,
+    height: 8,
+    backgroundColor: 'var(--backgroundColor)',
+    borderRadius: '50%',
+  }),
+};
 
 export default ClearingChartCard;

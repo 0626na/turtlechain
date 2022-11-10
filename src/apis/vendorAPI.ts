@@ -27,6 +27,7 @@ export interface VendorCompany {
 // 거래처
 export interface Vendor {
   id: number;
+  created_time?: string;
   vendor_code: string;
   vendor_name: string;
   vendor_address: string;
