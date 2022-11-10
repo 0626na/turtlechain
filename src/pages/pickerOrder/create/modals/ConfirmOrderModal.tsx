@@ -15,7 +15,7 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, date, reset, calculateTotalPrice, integrationOrderList } =
+  const { cart, reset, calculateTotalPrice, integrationOrderList } =
     useOrderCart();
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
           </Typography.Paragraph>
 
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {`발주일자: ${date.selectedDate.format('YYYY-MM-DD')}   `}
+            {`발주일자: ${moment(cart.selectedDate).format('YYYY-MM-DD')}   `}
           </Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
@@ -77,7 +77,9 @@ function ConfirmOrderModal({ visible, close }: Props) {
                   rt_stores: [
                     ...integrationOrderList().map<OrderItemList>((order) => ({
                       rt_store_id: order.rt_store_id,
-                      request_date: date.selectedDate.format('YYYY-MM-DD'),
+                      request_date: moment(cart.selectedDate).format(
+                        'YYYY-MM-DD',
+                      ),
                       orders: order.orders.map<CreatingOrdersItem>((item) => ({
                         vendor_name: item.vendor_name,
                         vendor_address: item.vendor_address,

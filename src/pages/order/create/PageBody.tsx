@@ -34,7 +34,6 @@ import useStore from '@hooks/useStore';
 function PageBody() {
   const {
     cart,
-    date,
     ready,
     countSuccessList,
     countFailList,
@@ -196,7 +195,9 @@ function PageBody() {
                       createPreParsingMutation.mutate({
                         files: list,
                         rt_store_id: store.selected?.id,
-                        request_date: date.selectedDate.format('YYYY-MM-DD'),
+                        request_date: moment(cart.selectedDate).format(
+                          'YYYY-MM-DD',
+                        ),
                       });
 
                       return false;

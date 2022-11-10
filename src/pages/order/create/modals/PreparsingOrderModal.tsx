@@ -6,6 +6,7 @@ import useOrderCart from '@hooks/useOrderCart';
 import { Col, Row } from 'antd';
 import { useMutation } from 'react-query';
 import { RcFile } from 'antd/lib/upload';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 function PreparsingOrderModal({ visible, close, open, data }: Props) {
-  const { ready, date } = useOrderCart();
+  const { ready, cart } = useOrderCart();
 
   //발주서 파싱
   const createOrderExcelParseMutation = useMutation(
@@ -79,7 +80,7 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
               onClick={() => {
                 createOrderExcelParseMutation.mutate({
                   files: data.files,
-                  request_date: date.selectedDate.format('YYYY-MM-DD'),
+                  request_date: moment(cart.selectedDate).format('YYYY-MM-DD'),
                 });
                 close();
               }}

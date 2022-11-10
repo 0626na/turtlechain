@@ -14,7 +14,7 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, date, reset } = useOrderCart();
+  const { cart, reset } = useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록
@@ -76,7 +76,9 @@ function ConfirmOrderModal({ visible, close }: Props) {
                 createOrderItemMutation.mutate({
                   rt_stores: cart.successList.map<OrderItemList>((store) => ({
                     rt_store_id: store.rt_store_id,
-                    request_date: date.selectedDate.format('YYYY-MM-DD'),
+                    request_date: moment(cart.selectedDate).format(
+                      'YYYY-MM-DD',
+                    ),
                     orders: store.orders.map<CreatingOrdersItem>((order) => ({
                       vendor_name: order.vendor_name,
                       vendor_address: order.vendor_address,

@@ -10,9 +10,10 @@ import {
 } from '@components/element';
 import TurtleDatePicker from '@components/element/rangePicker/TurtleDatePicker';
 import useOrderCart from '@hooks/useOrderCart';
+import moment from 'moment';
 
 function PickerOrder() {
-  const { date, setDate } = useOrderCart();
+  const { cart, setCart } = useOrderCart();
   return (
     <>
       <Helmet
@@ -22,8 +23,8 @@ function PickerOrder() {
         title={t('order.create')}
         button={
           <TurtleDatePicker
-            date={date.selectedDate}
-            onchange={(value) => setDate({ selectedDate: value })}
+            date={moment(cart.selectedDate)}
+            onchange={(value) => setCart({ ...cart, selectedDate: value })}
           />
         }
       />

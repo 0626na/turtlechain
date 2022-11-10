@@ -1,4 +1,3 @@
-import { orderSelectedDateState } from './../store/orderSelectedDateState';
 import { RcFile } from 'antd/lib/upload';
 import {
   StoreOrder,
@@ -43,8 +42,6 @@ export interface Icolumn {
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
   const [uploadFiles, setuploadFiles] = useState<RcFile[]>([]);
-  const [date, setDate] = useRecoilState(orderSelectedDateState);
-
   const [orderFormat, setOrderFormat] = useState<RequestCreateOrderFormat>({
     vendor_name: [],
     vendor_address: [],
@@ -418,8 +415,6 @@ const useOrderCart = () => {
   return {
     cart,
     setCart,
-    date,
-    setDate,
     failListOutput,
     uploadFiles,
     setuploadFiles,
