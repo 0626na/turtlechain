@@ -541,7 +541,8 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
                     ),
                     memo: orderFormat.memo.filter((memo) => memo !== ''),
                   });
-                  setMutateSwitch((prev) => prev + 1);
+
+                  createOrderFormatMutation.mutate(orderFormat);
                 }}
               >
                 저장하기
