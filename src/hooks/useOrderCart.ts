@@ -104,10 +104,10 @@ const useOrderCart = () => {
   /*
    * 발주데이터의 거래처 목록에 id 생성
    */
-  const createOrdersID = (orders: StoreOrder[]) => {
+  const createOrdersID = (orders: StoreOrder[], type: 'excel' | 'single') => {
     return orders.map<StoreOrder>((order, index) => ({
       ...order,
-      creation_type: 'excel',
+      creation_type: type,
       order_id: index,
     }));
   };
@@ -119,7 +119,7 @@ const useOrderCart = () => {
     (store: StoreOrderItemExcelParsing, id: number) => {
       return {
         ...store,
-        orders: createOrdersID(store.orders),
+        orders: createOrdersID(store.orders, 'excel'),
         id,
       };
     },
@@ -184,7 +184,7 @@ const useOrderCart = () => {
           ...cart.successList,
           {
             ...data,
-            orders: createOrdersID(data.orders),
+            orders: createOrdersID(data.orders, 'single'),
             id: checkSuccessListAndIDCreate(),
           },
         ],
@@ -206,9 +206,11 @@ const useOrderCart = () => {
           {
             rt_store_id: cart.successList[0].rt_store_id,
             rt_store_name: cart.successList[0].rt_store_name,
-            orders: [...cart.successList[0].orders, ...data.orders].map(
-              (order, index) => ({ ...order, order_id: index }),
+            orders: createOrdersID(
+              [...cart.successList[0].orders, ...data.orders],
+              'single',
             ),
+
             type: 'single',
           },
         ],
