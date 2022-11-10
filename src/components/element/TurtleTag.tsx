@@ -5,6 +5,7 @@ import React from 'react';
 import TurtleText from './TurtleText';
 
 interface Props {
+  size?: 'small' | 'large';
   children: React.ReactNode;
   color:
     | 'orange'
@@ -12,6 +13,7 @@ interface Props {
     | 'green'
     | 'gray'
     | 'skyblue'
+    | 'red'
     | 'orderHistoryCategoryFirst'
     | 'orderHistoryCategorySecond';
 }
@@ -37,6 +39,10 @@ const colors = {
     color: '#2CA4D4',
     backgroundColor: '#E6F4FA',
   },
+  red: {
+    color: '#DD3247',
+    backgroundColor: '#FBE6E9',
+  },
   orderHistoryCategoryFirst: {
     color: '#29A9DD',
     backgroundColor: '#E6F4FA',
@@ -47,10 +53,24 @@ const colors = {
   },
 };
 
-function TurtleTag({ children, color }: Props) {
+function TurtleTag({ children, color, size = 'small' }: Props) {
+  if (size === 'large') {
+    return (
+      <div
+        css={largeContainer}
+        style={{
+          ['--color' as string]: colors[color].color,
+          ['--background-color' as string]: colors[color].backgroundColor,
+        }}
+      >
+        <TurtleText>{children}</TurtleText>
+      </div>
+    );
+  }
+
   return (
     <div
-      css={container}
+      css={smallContainer}
       style={{
         ['--color' as string]: colors[color].color,
         ['--background-color' as string]: colors[color].backgroundColor,
@@ -61,7 +81,22 @@ function TurtleTag({ children, color }: Props) {
   );
 }
 
-const container = css`
+const largeContainer = css`
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 12px;
+
+  background-color: var(--background-color);
+  color: var(--color);
+`;
+
+const smallContainer = css`
   height: 20px;
 
   padding: 0px 7px;
