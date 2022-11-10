@@ -53,7 +53,7 @@ function PageBody() {
     useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
   const [
-    orderParsingProcessPresentModalVisible,
+    orderParsingProcessModalVisible,
     openParsingProcessModal,
     closeParsingProcessModal,
   ] = useModal();
@@ -64,8 +64,8 @@ function PageBody() {
       //2회 이상 발주 파일이 없는경우
       if (data.parsingData) {
         ready({ ...data.parsingData });
-        if (data.parsingData.data.parsing_status.fail_count)
-          openParsingProcessModal();
+        if (!data.parsingData.data.parsing_status.fail_count) return;
+        openParsingProcessModal();
         return;
       }
 
@@ -133,8 +133,8 @@ function PageBody() {
       />
 
       {/* 발주서 파싱 결과 모달 */}
-      {/* <OrderParsingProcessPresentModal
-        visible={orderParsingProcessPresentModalVisible}
+      <OrderParsingProcessPresentModal
+        visible={orderParsingProcessModalVisible}
         title="발주서 처리 현황"
         description={[
           '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
@@ -146,7 +146,7 @@ function PageBody() {
         failCount={cart.parsingStatus.fail_count}
         messages={cart.parsingStatus.error_messages}
         size="middle"
-      /> */}
+      />
 
       {/*
        * Page
