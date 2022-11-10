@@ -116,16 +116,22 @@ export interface ResponseCreateOrderItemExcelParsing {
   };
 }
 
+const formDataSave = (
+  formdata: FormData,
+  data: RequestCreateOrderItemExcelParsing | RequestCreatePreParsing,
+) => {
+  data.files.map((file) => formdata.append('files', file));
+  if (data.rt_store_id)
+    formdata.append('rt_store_id', String(data.rt_store_id));
+  formdata.append('request_date', data.request_date);
+};
+
 const createOrderExcelParsing = async (
   data: RequestCreateOrderItemExcelParsing,
 ) => {
   const url = 'order/parsing';
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
-
-  if (data.rt_store_id)
-    formData.append('rt_store_id', String(data.rt_store_id));
-  formData.append('request_date', data.request_date);
+  formDataSave(formData, data);
   const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
     url,
     formData,
@@ -170,11 +176,8 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
   let url = 'order/parsing/pre-parsing';
   let parsingResponse;
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
+  formDataSave(formData, data);
 
-  if (data.rt_store_id)
-    formData.append('rt_store_id', String(data.rt_store_id));
-  formData.append('request_date', data.request_date);
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,
     formData,
