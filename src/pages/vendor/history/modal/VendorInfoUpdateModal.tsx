@@ -37,7 +37,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   // 거래처 정보수정
   const createVendorMutation = useMutation(bucketListAPI.create, {
     onSuccess: () => {
-      message.success('성공적으로 등록하였습니다.');
+      message.success(t('message.success update vendor request'));
       closeModal();
     },
     onError: (error: AxiosError) => {

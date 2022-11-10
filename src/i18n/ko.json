@@ -244,7 +244,8 @@
     "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
-    "already exist product": "이미 추가된 상품입니다."
+    "already exist product": "이미 추가된 상품입니다.",
+    "success update vendor request": "거래처 정보 수정이 요청되었습니다."
   },
 
   "biz role": "직책",
