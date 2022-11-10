@@ -34,9 +34,9 @@ function Completed({ visible }: Props) {
           />
           <span css={title}>{t('message.success registration')}</span>
           <span css={description}>
-            감사합니다. 가입승인 후 서비스를 이용하실 수 있습니다.
-            <br /> 신청시 입력한 메일주소로 가입승인 여부에 대한 안내메일이
-            발송됩니다.
+            감사합니다. 입력해주신 메일 주소로 영업일 기준 1-2일 내에
+            <br /> 신청 결과에 대한 안내메일이 발송됩니다. 가입승인 후 서비스를
+            이용해주세요.
           </span>
 
           <TertiaryButton text={t('go home')} onClick={onClickGoHome} />
@@ -47,7 +47,7 @@ function Completed({ visible }: Props) {
 }
 
 const Container = css({
-  width: 420,
+  width: 460,
   position: 'absolute',
   top: '30%',
   left: '50%',
