@@ -66,7 +66,7 @@ function PageBody() {
         onClose={detailModalClose}
       />
 
-      <PageHeader title="장부" />
+      <PageHeader title={t('clearing.balance.')} />
 
       <PageTitle
         title="장부 리스트"
@@ -77,7 +77,7 @@ function PageBody() {
               addModalOpen();
             }}
           >
-            과거매입 추가
+            과거금액 추가
           </SecondaryIconButton>,
         ]}
       />

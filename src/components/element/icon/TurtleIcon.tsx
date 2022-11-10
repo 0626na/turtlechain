@@ -58,6 +58,7 @@ import { ReactComponent as AlertBarArrowRightIcon } from '@icons/alertBarArrowRi
 import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
 import { ReactComponent as AccordionDown } from '@icons/accordionDown.svg';
 import { ReactComponent as AccordionUp } from '@icons/accordionUp.svg';
+import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -113,7 +114,8 @@ interface Props {
     | 'userLine'
     | 'tuning'
     | 'accordionUp'
-    | 'accordionDown';
+    | 'accordionDown'
+    | 'mistransfer';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -144,6 +146,22 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'mark') {
     return <MarkIcon />;
+  }
+
+  if (name === 'mistransfer') {
+    return <Mistransfer />;
+  }
+
+  if (name === 'storeList') {
+    return <MembershipIcon />;
+  }
+
+  if (name === 'user') {
+    return <UserIcon />;
+  }
+
+  if (name === 'company') {
+    return <StoreListIcon />;
   }
 
   if (name === 'rightTriangle') {
@@ -444,13 +462,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
       </div>
     );
   }
-  if (name === 'user') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <UserIcon />
-      </div>
-    );
-  }
+
   if (name === 'membership') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
@@ -458,20 +470,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
       </div>
     );
   }
-  if (name === 'company') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <StoreListIcon />
-      </div>
-    );
-  }
-  if (name === 'storeList') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <MembershipIcon />
-      </div>
-    );
-  }
+
   if (name === 'tuning') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>

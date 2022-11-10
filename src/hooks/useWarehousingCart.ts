@@ -49,11 +49,6 @@ const useWarehousingCart = () => {
     });
   }, [setCart]);
 
-  // 쇼핑몰 변경시 상태 초기화
-  useEffect(() => {
-    reset();
-  }, [store.selected, reset]);
-
   const updatePrice = (record: WarehousingItemConnect, value: number) => {
     setCart((cart) => ({
       ...cart,

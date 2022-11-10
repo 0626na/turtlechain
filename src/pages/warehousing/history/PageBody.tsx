@@ -47,11 +47,19 @@ function PageBody() {
     },
   );
 
-  // 입고장 수정 요청
-  const updateSheetMutation = useMutation(warehousingAPI.updateSheet, {
+  // 입고장 마감 요청
+  const confirmSheetMutation = useMutation(warehousingAPI.updateSheet, {
     onSuccess: () => {
-      message.success('입고서를 수정되었습니다.');
+      message.success('입고서를 마감했어요');
       closeConfirmModal();
+      getWarehousingSheetQuery.refetch();
+    },
+  });
+
+  // 입고장 마감 취소 요청
+  const cancelSheetMutation = useMutation(warehousingAPI.updateSheet, {
+    onSuccess: () => {
+      message.success('입고서 마감을 취소했어요');
       closeCancelModal();
       getWarehousingSheetQuery.refetch();
     },
@@ -111,14 +119,14 @@ function PageBody() {
         description={['해당 입고서를 마감합니다.']}
         onCancel={closeConfirmModal}
         onOk={() => {
-          updateSheetMutation.mutate({
+          confirmSheetMutation.mutate({
             id: selectedRow?.id as number,
             is_confirmed: true,
           });
         }}
         cancelText="취소"
         okText="마감"
-        loading={updateSheetMutation.isLoading}
+        loading={confirmSheetMutation.isLoading}
       />
       {/**
        * 마감 취소 확인 모달
@@ -129,14 +137,14 @@ function PageBody() {
         description={['해당 입고서의 마감을 취소합니다.']}
         onCancel={closeCancelModal}
         onOk={() => {
-          updateSheetMutation.mutate({
+          cancelSheetMutation.mutate({
             id: selectedRow?.id as number,
             is_confirmed: false,
           });
         }}
         cancelText="취소"
         okText="마감취소"
-        loading={updateSheetMutation.isLoading}
+        loading={cancelSheetMutation.isLoading}
       />
       {/**
        * 페이지

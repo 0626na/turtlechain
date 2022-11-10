@@ -49,6 +49,14 @@ function StoreCreateModal({ visible, closeModal }: Props) {
     return Promise.resolve();
   };
 
+  const handleNumberValidation = (_: unknown, value: string) => {
+    if (!numPattern.test(value)) {
+      return Promise.reject(new Error('숫자만 입력해주세요'));
+    }
+
+    return Promise.resolve();
+  };
+
   useEffect(() => {
     if (!visible) return;
     resetFields();
@@ -96,19 +104,24 @@ function StoreCreateModal({ visible, closeModal }: Props) {
         </Form.Item>
 
         <Form.Item
+          name={['store_mobile', 'mobile']}
+          label={t('store.phone')}
+          rules={[
+            () => ({
+              validator: handleNumberValidation,
+            }),
+            { required: true },
+          ]}
+        >
+          <TurtleFormInput placeholder={t('placeholder.mobile')} />
+        </Form.Item>
+
+        <Form.Item
           name="store_url"
           rules={[{ required: true }]}
           label={t('store.url')}
         >
           <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
-        </Form.Item>
-
-        <Form.Item
-          name={['store_mobile', 'mobile']}
-          rules={[{ required: true }]}
-          label={t('store.phone')}
-        >
-          <TurtleFormInput placeholder={t('placeholder.mobile')} />
         </Form.Item>
 
         <Form.Item label={t('table.accountInfo')} required>
@@ -215,7 +228,9 @@ function StoreCreateModal({ visible, closeModal }: Props) {
         <Form.Item
           name="alimtalk_name"
           label={
-            <TextWithTooltip tooltipContent={['내용 입력예정']}>
+            <TextWithTooltip
+              tooltipContent={['거래처에게 보여지는 쇼핑몰명을 입력해주세요']}
+            >
               {t('store.alimtalk name')}
             </TextWithTooltip>
           }

@@ -23,14 +23,14 @@ const input = css`
 
   background-color: #fcfcfc;
 
-  // hover, focus시에도 default와 동일하게 맞춰준다.
+  /* hover, focus시에도 default와 동일하게 맞춰준다. */
   &.ant-input:focus,
   &.ant-input:hover {
     border-color: #cbccd1;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   }
 
-  // disabled 처리
+  /* // disabled 처리 */
   &.ant-input[disabled] {
     color: #a1a2a6;
 
