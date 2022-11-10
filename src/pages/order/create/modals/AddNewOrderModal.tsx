@@ -11,7 +11,7 @@ import { Form, Radio, Row } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
-import presetAPI from '@apis/presetAPI';
+import usePreset from '@hooks/usePreset';
 
 interface Props {
   visible: boolean;
@@ -20,6 +20,7 @@ interface Props {
 
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
+  const { buildingData } = usePreset();
   const [selectStore, setSelectStore] = useState<PickerStore>({
     id: 0,
     name: '',
@@ -39,8 +40,6 @@ function AddNewOrderModal({ visible, close }: Props) {
       enabled: visible,
     },
   );
-
-  const getBuildingQuery = useQuery('getBuildingQuery', presetAPI.getBuilding);
 
   return (
     <>
@@ -110,8 +109,8 @@ function AddNewOrderModal({ visible, close }: Props) {
                     placeholder="상가"
                     onChange={(value) => setFloor(value)}
                     items={
-                      getBuildingQuery.data &&
-                      Object.keys(getBuildingQuery.data.data).map((name) => {
+                      buildingData &&
+                      Object.keys(buildingData.data).map((name) => {
                         return {
                           name,
                           value: name,
@@ -131,7 +130,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                     placeholder="층"
                     items={
                       floor !== ''
-                        ? Object.keys(getBuildingQuery.data.data[floor]).map(
+                        ? Object.keys(buildingData.data[floor]).map(
                             (building) => {
                               return {
                                 value: building,

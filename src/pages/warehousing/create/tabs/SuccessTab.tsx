@@ -5,7 +5,6 @@ import {
   TurtleTableNumberInput,
   TurtleTableTitle,
 } from '@components/element';
-import { valueType } from 'antd/lib/statistic/utils';
 import useWarehousingCart from '@hooks/useWarehousingCart';
 import { pricePattern } from '@utils/pattern';
 import {

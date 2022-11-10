@@ -56,7 +56,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
               style={{ backgroundColor: 'orange', cursor: 'pointer' }}
               size={36}
             >
-              <span css={name}>{user.name.split('')[0]}</span>
+              <span css={name}>{user?.name.split('')[0]}</span>
             </Avatar>
           </Dropdown>
         </Col>
@@ -67,7 +67,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
 
 const container = css`
   height: 84px;
-  padding: 24px 36px;
+  padding: 24px;
 `;
 
 const leftContnetStyled = css`

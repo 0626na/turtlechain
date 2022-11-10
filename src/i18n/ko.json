@@ -65,8 +65,8 @@
     "create": "결제하기",
     "history": "결제내역",
     "balance": {
-      "": "장부",
-      "add": "과거매입 추가"
+      "": "터틀장부",
+      "add": "과거금액 추가"
     },
     "status": {
       "all": "전체",
@@ -89,6 +89,7 @@
     "clear_refund": "환불처리",
     "reserve_payment": "미송결제",
     "reserve_payment_subtract": "미송결제차감",
+    "reserve_subtract": "미송차감",
     "reserve_warehousing": "미송입고",
     "clearing_subtract": "매입차감",
     "clearing": "정산",
@@ -138,7 +139,7 @@
     "info": "쇼핑몰 정보",
     "alimtalk name": "알림톡명",
     "url": "쇼핑몰 URL",
-    "phone": "쇼핑몰 휴대번호",
+    "phone": "쇼핑몰 휴대전화 번호",
     "create": "쇼핑몰 추가하기",
     "update": "쇼핑몰 수정하기",
     "address": "쇼핑몰 주소",
@@ -215,6 +216,7 @@
     "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
     "addVendor": "거래처 추가하기",
+    "addWarehousing": "입고 추가하기",
     "updateVendor": "정보수정 요청하기",
     "addTransaction": "과거매입 추가하기",
     "uploadFile": "파일 첨부하기",
@@ -223,7 +225,7 @@
   },
 
   "message": {
-    "networkError": "네트워크가 불안정합니다. 새로고침 후 다시 시도해주세요.",
+    "networkError": "알 수 없는 오류가 발생했습니다. 채널톡으로 문의 해주세요.",
     "enterId": "아이디를 입력해주세요.",
     "enterPassword": "비밀번호를 입력해주세요.",
     "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
@@ -244,7 +246,8 @@
     "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
-    "already exist product": "이미 추가된 상품입니다."
+    "already exist product": "이미 추가된 상품입니다.",
+    "success update vendor request": "거래처 정보 수정이 요청되었습니다."
   },
 
   "biz role": "직책",
@@ -332,5 +335,12 @@
 
   "yes": "네",
   "no": "아니요",
-  "picker": "사입자"
+  "picker": "사입자",
+  "day": {
+    "1": "월",
+    "2": "화",
+    "3": "수",
+    "4": "목",
+    "5": "금"
+  }
 }

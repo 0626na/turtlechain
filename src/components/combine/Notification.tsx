@@ -1,7 +1,16 @@
 import React, { useCallback } from 'react';
 import moment from 'moment';
 import { useRef, useState } from 'react';
-import { Badge, Col, Divider, Popover, Row, Space, Typography } from 'antd';
+import {
+  Badge,
+  Col,
+  Divider,
+  message,
+  Popover,
+  Row,
+  Space,
+  Typography,
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 
@@ -37,7 +46,8 @@ function Notification() {
     {
       // 1분마다 refetch
       refetchInterval: 60000,
-      refetchIntervalInBackground: true,
+      refetchIntervalInBackground: false,
+      staleTime: 60000,
     },
   );
 
@@ -54,14 +64,14 @@ function Notification() {
     }
     if (noti.type === 'creation_request') {
       if (noti.content.status === 'reject') {
-        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요. ${noti.content.memo}`;
+        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요.`;
       } else {
         value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
       }
     }
     if (noti.type === 'modification_request') {
       if (noti.content.status === 'reject') {
-        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요. ${noti.content.memo}`;
+        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
       } else {
         value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
       }
@@ -120,8 +130,8 @@ function Notification() {
                           onClick={() => {
                             navigate(
                               noti.type === 'creation_request'
-                                ? 'vendor/create'
-                                : 'vendor/list',
+                                ? '/vendor/create'
+                                : '/vendor/history',
                             );
                             setPopoverVisible(false);
                             !noti.read_at &&
@@ -148,7 +158,7 @@ function Notification() {
               ))
             )}
           </div>
-          <Row
+          {/* <Row
             style={{
               backgroundColor: '#F8F9FB',
               height: 40,
@@ -161,7 +171,7 @@ function Notification() {
             }}
           >
             알림 전체보기
-          </Row>
+          </Row> */}
         </>
       }
     >
@@ -196,6 +206,9 @@ function Notification() {
 const popover = css`
   .ant-badge-count {
     padding: 1px !important;
+  }
+  .ant-popover-inner-content {
+    padding: 0px;
   }
 `;
 

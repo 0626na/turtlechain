@@ -82,7 +82,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
                 store_name: e.target.value,
               }));
             }}
-            placeholder="거래처을 입력해주세요."
+            placeholder="거래처명을 입력해주세요."
           />
         </div>
 
@@ -161,6 +161,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
             },
             {
               ellipsis: true,
+              align: 'right',
               title: t('clearing.price'),
               render: (_, record) => (
                 <span>

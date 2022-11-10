@@ -74,7 +74,7 @@ function PageBody() {
 
   //쇼핑몰 갯수
   const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
-    enabled: !!user.id,
+    enabled: !!user,
     onSuccess: (data) =>
       setTodayordersCount({
         ...todayOrdersCount,

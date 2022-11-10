@@ -18,11 +18,11 @@ import { css } from '@emotion/react';
 import useStore from '@hooks/useStore';
 
 import { useMutation, useQuery } from 'react-query';
-import presetAPI from '@apis/presetAPI';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
+import usePreset from '@hooks/usePreset';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -31,25 +31,13 @@ interface Props {
 
 function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   const { store } = useStore();
-
   const [form] = Form.useForm();
-
-  // 선택된 거래처
-
-  // 건물정보 불러오기
-  const getBuildingQuery = useQuery('getAdress', presetAPI.getBuilding, {
-    enabled: !!visible,
-  });
-
-  // 은행정보 불러오기
-  const getBankQuery = useQuery('getBank', presetAPI.getBank, {
-    enabled: !!visible,
-  });
+  const { buildingData, bankData } = usePreset();
 
   // 거래처 정보수정
   const createVendorMutation = useMutation(bucketListAPI.create, {
     onSuccess: () => {
-      message.success('성공적으로 등록하였습니다.');
+      message.success(t('message.success update vendor request'));
       closeModal();
     },
     onError: (error: AxiosError) => {
@@ -73,11 +61,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
       colLoc: `${selectedRow?.ws_store_info.col} ${selectedRow?.ws_store_info.loc}`,
       ext: selectedRow?.ws_store_info.ext,
 
-      banks: {
-        bank: selectedRow?.vendor_account.bank,
-        account_number: selectedRow?.vendor_account.account_number,
-        account_holder: selectedRow?.vendor_account.account_holder,
-      },
+      bank: selectedRow?.vendor_account.bank,
+      account_number: selectedRow?.vendor_account.account_number,
+      account_holder: selectedRow?.vendor_account.account_holder,
 
       file: undefined,
     });
@@ -149,11 +135,11 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               >
                 <Form.Item name="building" noStyle>
                   <TurtleFormSelect
-                    items={Object.keys(getBuildingQuery.data?.data ?? []).map(
+                    items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
                     placeholder="상가"
-                    onChange={(building) => {
+                    onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
                         floor: undefined,
@@ -174,31 +160,29 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {() => {
-                    return (
-                      <Form.Item name="floor" noStyle>
-                        <TurtleFormSelect
-                          items={Object.keys(
-                            getBuildingQuery.data?.data[
-                              form.getFieldValue('building')
-                            ] ?? [],
-                          ).map((floor: string) => ({
-                            value: floor,
-                            name: floor,
-                          }))}
-                          placeholder="층"
-                          onChange={(floor) => {
-                            form.setFieldsValue({
-                              ...form.getFieldsValue(),
-                              colLoc: undefined,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    );
-                  }}
+                  {() => (
+                    <Form.Item name="floor" noStyle>
+                      <TurtleFormSelect
+                        items={Object.keys(
+                          buildingData?.data[form.getFieldValue('building')] ??
+                            [],
+                        ).map((floor: string) => ({
+                          value: floor,
+                          name: floor,
+                        }))}
+                        placeholder="층"
+                        onChange={() => {
+                          form.setFieldsValue({
+                            ...form.getFieldsValue(),
+                            colLoc: undefined,
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  )}
                 </Form.Item>
               </div>
+
               <div
                 css={css`
                   flex-basis: 30%;
@@ -210,26 +194,24 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     prevValues.additional !== curValues.additional
                   }
                 >
-                  {() => {
-                    return (
-                      <Form.Item name="colLoc" noStyle>
-                        <TurtleFormSelect
-                          items={(
-                            getBuildingQuery.data?.data[
-                              form.getFieldValue('building')
-                            ]?.[form.getFieldValue('floor')] ?? []
-                          ).map((colLoc: string) => {
-                            const [col, loc] = colLoc.split(' ');
-                            return {
-                              value: `${col} ${loc}`,
-                              name: `${col} ${loc}`,
-                            };
-                          })}
-                          placeholder="열/호"
-                        />
-                      </Form.Item>
-                    );
-                  }}
+                  {() => (
+                    <Form.Item name="colLoc" noStyle>
+                      <TurtleFormSelect
+                        items={(
+                          buildingData?.data[form.getFieldValue('building')]?.[
+                            form.getFieldValue('floor')
+                          ] ?? []
+                        ).map((colLoc: string) => {
+                          const [col, loc] = colLoc.split(' ');
+                          return {
+                            value: `${col} ${loc}`,
+                            name: `${col} ${loc}`,
+                          };
+                        })}
+                        placeholder="열/호"
+                      />
+                    </Form.Item>
+                  )}
                 </Form.Item>
               </div>
             </div>
@@ -241,13 +223,14 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
-              <Form.Item name={['banks', 'bank']} noStyle>
+              <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
                   placeholder="은행"
                   items={
-                    Object.values(getBankQuery.data?.data ?? []).map(
-                      (bank) => ({ value: bank, name: bank }),
-                    ) as {
+                    Object.values(bankData?.data ?? []).map((bank) => ({
+                      value: bank,
+                      name: bank,
+                    })) as {
                       value: string;
                       name: string;
                       icon?: React.ReactNode;
@@ -257,7 +240,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               </Form.Item>
 
               <Form.Item
-                name={['banks', 'account_number']}
+                name="account_number"
                 rules={[{ required: true, message: '계좌번호를 입력해주세요' }]}
                 noStyle
               >
@@ -265,7 +248,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               </Form.Item>
 
               <Form.Item
-                name={['banks', 'account_holder']}
+                name="account_holder"
                 rules={[{ required: true, message: '예금주를 입력해주세요' }]}
                 noStyle
               >
@@ -306,7 +289,13 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   createVendorMutation.mutate({
                     ...form.getFieldsValue(),
                     type: 'update',
-                    banks: [form.getFieldValue('banks')],
+                    banks: [
+                      {
+                        bank: form.getFieldValue('bank'),
+                        account_number: form.getFieldValue('account_number'),
+                        account_holder: form.getFieldValue('account_holder'),
+                      },
+                    ],
                     floor: form.getFieldValue('floor') ?? '',
                     col: col ?? '',
                     loc: loc ?? '',

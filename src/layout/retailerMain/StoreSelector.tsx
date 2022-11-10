@@ -20,7 +20,7 @@ const color = [
 ];
 
 function StoreSelector() {
-  const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
+  const { store, fillStoreList, selectStore } = useStore();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -28,13 +28,9 @@ function StoreSelector() {
     ['getStoreList', 'sider'],
     retailerStoreAPI.getList,
     {
-      enabled: !!user.id,
+      enabled: !!user,
       onSuccess: (data) => {
-        const sortedAscending = data.store_list.sort((a, b) =>
-          a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
-        ); // 한글 오름차순,
-        fillStoreList(sortedAscending);
-        selectDefaultStore(sortedAscending);
+        fillStoreList(data.store_list);
       },
     },
   );

@@ -50,7 +50,6 @@ const select = css`
   color: #5b5d63;
   line-height: 1;
 
-  // 셀렉터 인풋 style
   &.ant-select-single .ant-select-selector {
     .ant-select-selection-item,
     .ant-select-selection-placeholder {

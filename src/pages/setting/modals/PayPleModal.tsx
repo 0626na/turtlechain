@@ -1,10 +1,14 @@
 import paypleAPI from '@apis/paypleAPI';
+import { TertiaryButton, TurtleIcon } from '@components/element';
+
+import { css } from '@emotion/react';
 
 import useUser from '@hooks/useUser';
-import { Button, Form, Modal, Space } from 'antd';
+import { theme } from '@styles/theme';
+import { Form } from 'antd';
 import React from 'react';
 import { useEffect } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -66,42 +70,120 @@ function PaypleModal({ visible, closeModal }: Props) {
     },
   });
 
+  useEffect(() => {
+    const escKeyModalClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    window.addEventListener('keydown', escKeyModalClose);
+    return () => window.removeEventListener('keydown', escKeyModalClose);
+  }, []);
+
   return (
-    <Modal
-      visible={visible}
-      onCancel={closeModal}
-      centered
-      title="멤버쉽 결제"
-      footer={false}
+    <div
+      css={modal.mask}
+      style={{ display: visible ? 'block' : 'none' }}
+      onClick={() => {
+        closeModal();
+      }}
     >
-      <Form colon={false}>
-        <Form.Item label="결제선택">
-          <Space size="small">
-            <Button
+      <div
+        css={[modal.container]}
+        onClick={(e) => {
+          e.stopPropagation(); // TODO: 추후 마스크를 분리하여 리택토링 예정
+        }}
+      >
+        <div css={modal.header}>
+          <h1 css={modal.headerTitle}>요금플랜 결제</h1>
+          <div>
+            <TurtleIcon
+              name="modalClose"
               onClick={() => {
-                authenticateMutation.mutate({
-                  company_id: Number(user.company_id),
-                  pay_type: 'regular',
-                });
+                closeModal();
               }}
-            >
-              정기결제
-            </Button>
-            <Button
-              onClick={() => {
-                authenticateMutation.mutate({
-                  company_id: Number(user.company_id),
-                  pay_type: 'single',
-                });
-              }}
-            >
-              일반결제
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
-    </Modal>
+            />
+          </div>
+        </div>
+
+        <div css={modal.description}>
+          <p>*정기결제는 매월 1일에 등록한 결제수단을 통해 자동 결제됩니다.</p>
+          <p>*정기결제 해지는 채팅상담을 통해 요청주세요.</p>
+        </div>
+
+        <div css={modal.buttonContainer}>
+          <TertiaryButton
+            text="정기결제"
+            size="large"
+            onClick={() => {
+              authenticateMutation.mutate({
+                company_id: Number(user?.company_id),
+                pay_type: 'regular',
+              });
+            }}
+          />
+
+          <TertiaryButton
+            text="일반결제"
+            size="large"
+            onClick={() => {
+              authenticateMutation.mutate({
+                company_id: Number(user?.company_id),
+                pay_type: 'single',
+              });
+            }}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 
+const modal = {
+  mask: css({
+    height: '100vh',
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 2,
+    background: 'rgba(0, 0, 0, 0.45)',
+  }),
+
+  container: css({
+    width: 480,
+    height: 308,
+    maxHeight: '92vh',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#fff',
+    boxShadow: '0px 8px 28px rgba(0, 0, 0, 0.2)',
+    borderRadius: 12,
+    padding: '32px 32px 48px 32px',
+  }),
+
+  header: css({
+    height: 24,
+    marginBottom: 16,
+    display: 'flex',
+    justifyContent: 'space-between',
+  }),
+
+  headerTitle: css({
+    fontWeight: 700,
+    fontSize: 24,
+    lineHeight: 1,
+    color: '#242934',
+  }),
+
+  description: css({
+    marginBottom: 40,
+    color: theme.grey600,
+    lineHeight: 1.4,
+  }),
+  buttonContainer: css({ display: 'flex', flexDirection: 'column', gap: 12 }),
+};
 export default PaypleModal;

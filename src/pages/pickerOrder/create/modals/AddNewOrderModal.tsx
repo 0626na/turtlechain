@@ -12,9 +12,9 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import orderAPI, { PickerStore } from '@apis/orderAPI';
-import presetAPI from '@apis/presetAPI';
 import useOrderCart from '@hooks/useOrderCart';
 import { notNumPattern } from '@utils/pattern';
+import usePreset from '@hooks/usePreset';
 interface Props {
   visible: boolean;
   close: () => void;
@@ -33,6 +33,8 @@ function AddNewOrderModal({ visible, close }: Props) {
   });
   const { updateSuccess } = useOrderCart();
   const [building, setBuilding] = useState('');
+  const { buildingData } = usePreset();
+
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
     'getPickerStores',
@@ -41,8 +43,6 @@ function AddNewOrderModal({ visible, close }: Props) {
       enabled: visible,
     },
   );
-
-  const getBuildingQuery = useQuery('getBuildingQuery', presetAPI.getBuilding);
 
   useEffect(() => form.resetFields(), [form, visible]);
 
@@ -141,8 +141,8 @@ function AddNewOrderModal({ visible, close }: Props) {
                     placeholder="상가"
                     onChange={(value) => setBuilding(value)}
                     items={
-                      getBuildingQuery.data &&
-                      Object.keys(getBuildingQuery.data.data).map((name) => {
+                      buildingData &&
+                      Object.keys(buildingData.data).map((name) => {
                         return {
                           name,
                           value: name,
@@ -162,13 +162,11 @@ function AddNewOrderModal({ visible, close }: Props) {
                     placeholder="층"
                     items={
                       building !== ''
-                        ? Object.keys(getBuildingQuery.data.data[building]).map(
-                            (building) => {
-                              return {
-                                value: building,
-                                name: building,
-                              };
-                            },
+                        ? Object.keys(buildingData.data[building]).map(
+                            (building) => ({
+                              value: building,
+                              name: building,
+                            }),
                           )
                         : []
                     }

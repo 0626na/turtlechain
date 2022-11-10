@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AnswerButton from '../button/AnswerButton';
 
 interface Props {
@@ -31,11 +31,30 @@ function TurtleConfirmModal({
   onCancel,
   onOk,
 }: Props) {
+  
+  useEffect(() => {
+    const escKeyModalClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', escKeyModalClose);
+    return () => window.removeEventListener('keydown', escKeyModalClose);
+  }, []);
+
   return (
     <>
       {visible && (
-        <div css={modalMask}>
-          <div css={[modalContent, sizeCss[size]]}>
+        <div
+          css={modalMask}
+          onClick={() => {
+            onCancel();
+          }}
+        >
+          <div
+            css={[modalContent, sizeCss[size]]}
+            onClick={(e) => {
+              e.stopPropagation(); // TODO: 추후 마스크를 분리하여 리택토링 예정
+            }}
+          >
             <h1 css={$title}>{title}</h1>
             <p css={$description}>
               {description.map((item, index) => (

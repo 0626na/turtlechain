@@ -21,7 +21,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
   const [item, setItem] = useState<AdjustmentItemShow>();
   const updateMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
-      queryClient.refetchQueries(['getAdjustmentList'], { active: true });
+      queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
       message.success('성공적으로 업데이트 되었습니다.');
 
       onClose();
