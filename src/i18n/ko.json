@@ -89,6 +89,7 @@
     "clear_refund": "환불처리",
     "reserve_payment": "미송결제",
     "reserve_payment_subtract": "미송결제차감",
+    "reserve_subtract": "미송차감",
     "reserve_warehousing": "미송입고",
     "clearing_subtract": "매입차감",
     "clearing": "정산",
@@ -332,5 +333,12 @@
 
   "yes": "네",
   "no": "아니요",
-  "picker": "사입자"
+  "picker": "사입자",
+  "day": {
+    "1": "월",
+    "2": "화",
+    "3": "수",
+    "4": "목",
+    "5": "금"
+  }
 }
