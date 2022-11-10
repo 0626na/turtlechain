@@ -27,6 +27,19 @@ export interface FailListForOutput {
   memo: string;
 }
 
+export interface Icolumn {
+  column:
+    | 'vendor_name'
+    | 'vendor_address'
+    | 'vendor_mobile'
+    | 'order_type'
+    | 'product_count'
+    | 'product_name'
+    | 'product_option'
+    | 'product_price'
+    | 'memo';
+}
+
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
   const [uploadFiles, setuploadFiles] = useState<RcFile[]>([]);
@@ -360,6 +373,56 @@ const useOrderCart = () => {
     });
   }, [setCart]);
 
+  /*
+   * 발주서설정, 발주서 칼럼 추가
+   */
+
+  const addNewOrderColumn = ({ column }: Icolumn) => {
+    setOrderFormat({
+      ...orderFormat,
+      [column]: [...orderFormat[column], ''],
+    });
+  };
+
+  /*
+   * 발주서설정, 등록되어 있는 발주서 칼럼 변경
+   */
+
+  const changeOrderColumn = (
+    { column }: Icolumn,
+    id: string,
+    newValue: string,
+  ) => {
+    setOrderFormat({
+      ...orderFormat,
+      [column]: orderFormat[column].map((value, index) => {
+        if (String(index) === id) return newValue;
+        return value;
+      }),
+    });
+  };
+
+  /*
+   * 발주서설정, 등록되어있는 발주서 칼럼 제거
+   */
+
+  const deleteOrderColumn = ({ column }: Icolumn, columnName: string) => {
+    setOrderFormat({
+      ...orderFormat,
+      [column]: orderFormat[column].filter(
+        (vendorName) => vendorName !== columnName,
+      ),
+    });
+  };
+
+  /*
+   * 발주서설정, 빈값인 컬럼을 찾아내서 제거
+   */
+
+  const deleteBlankColumn = ({ column }: Icolumn) => {
+    return orderFormat[column].filter((col) => col !== '');
+  };
+
   return {
     cart,
     setCart,
@@ -379,6 +442,10 @@ const useOrderCart = () => {
     orderFormat,
     setOrderFormat,
     countOrdersForType,
+    addNewOrderColumn,
+    changeOrderColumn,
+    deleteOrderColumn,
+    deleteBlankColumn,
   };
 };
 

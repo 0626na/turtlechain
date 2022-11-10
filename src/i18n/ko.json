@@ -27,8 +27,19 @@
     "history": "발주내역",
     "present": "발주현황",
     "setting": {
-      "title": "발주서 외부헤더 추가",
-      "description": "외부 헤더명을 추가하면 외부 발주서도 자유롭게 등록할 수 있어요. (*필수항목: 거래처명, 거래처주소, 거래처 상품명, 수량)"
+      "title": "발주서 설정",
+      "subTitle": "발주서 외부헤더 추가",
+      "description": "외부 헤더명을 추가하면 외부 발주서도 자유롭게 등록할 수 있어요. (*필수항목: 거래처명, 거래처주소, 거래처 상품명, 수량)",
+      "vendorName": "거래처명",
+      "vendorAddress": "거래처 주소",
+      "vendorMobile": "휴대전화 번호",
+      "productName": "거래처 상품명",
+      "productOption": "옵션",
+      "orderType": "분류",
+      "productCount": "수량",
+      "productPrice": "가격",
+      "memo": "메모",
+      "save": "저장하기"
     }
   },
 
@@ -244,7 +255,8 @@
     "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
-    "already exist product": "이미 추가된 상품입니다."
+    "already exist product": "이미 추가된 상품입니다.",
+    "create format success": "양식 등록이 완료되었습니다."
   },
 
   "biz role": "직책",
