@@ -415,14 +415,6 @@ const useOrderCart = () => {
     });
   };
 
-  /*
-   * 발주서설정, 빈값인 컬럼을 찾아내서 제거
-   */
-
-  const deleteBlankColumn = ({ column }: Icolumn) => {
-    return orderFormat[column].filter((col) => col !== '');
-  };
-
   return {
     cart,
     setCart,
@@ -445,7 +437,6 @@ const useOrderCart = () => {
     addNewOrderColumn,
     changeOrderColumn,
     deleteOrderColumn,
-    deleteBlankColumn,
   };
 };
 

@@ -37,9 +37,8 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     addNewOrderColumn,
     changeOrderColumn,
     deleteOrderColumn,
-    deleteBlankColumn,
   } = useOrderCart();
-  const [mutateSwitch, setMutateSwitch] = useState(0);
+
   const getOrderFormatQuery = useQuery(
     'getOrderFormatQuery',
     () => orderAPI.getOrderFormat(),
@@ -175,7 +174,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.prodctPrice')}
+              text={t('order.setting.productPrice')}
               onClick={() => addNewOrderColumn({ column: 'product_price' })}
             />
             <AddColumnButton
@@ -269,33 +268,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               `}
             >
               <PrimaryButton
-                onClick={() => {
-                  setOrderFormat({
-                    vendor_name: deleteBlankColumn({ column: 'vendor_name' }),
-
-                    vendor_address: deleteBlankColumn({
-                      column: 'vendor_address',
-                    }),
-                    vendor_mobile: deleteBlankColumn({
-                      column: 'vendor_mobile',
-                    }),
-                    order_type: deleteBlankColumn({ column: 'order_type' }),
-                    product_count: deleteBlankColumn({
-                      column: 'product_count',
-                    }),
-                    product_name: deleteBlankColumn({
-                      column: 'product_name',
-                    }),
-                    product_option: deleteBlankColumn({
-                      column: 'product_price',
-                    }),
-                    product_price: deleteBlankColumn({
-                      column: 'product_price',
-                    }),
-                    memo: deleteBlankColumn({ column: 'memo' }),
-                  });
-                  createOrderFormatMutation.mutate(orderFormat);
-                }}
+                onClick={() => createOrderFormatMutation.mutate(orderFormat)}
               >
                 {t('order.setting.save')}
               </PrimaryButton>
