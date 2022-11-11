@@ -190,6 +190,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                     </Col>
                     <Col>
                       <SearchFilter
+                        placeholder="거래처 검색"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />
