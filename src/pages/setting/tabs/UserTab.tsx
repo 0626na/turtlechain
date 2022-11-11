@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 
 import useUser from '@hooks/useUser';
+import { theme } from '@styles/theme';
 import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
 import { Button, Col, Form, message, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
@@ -162,9 +163,17 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        <UserCard title="맴버십 정보" icon={<TurtleIcon name="user" />}>
+        <UserCard title="요금플랜 결제" icon={<TurtleIcon name="membership" />}>
           <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
-            <Form.Item label="결제">
+            <Form.Item
+              label={
+                <span
+                  css={{ color: theme.grey800, fontWeight: 500, fontSize: 15 }}
+                >
+                  요금플랜 결제
+                </span>
+              }
+            >
               <Button
                 css={button}
                 onClick={() => {
