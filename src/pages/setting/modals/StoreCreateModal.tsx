@@ -159,7 +159,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
             <Form.Item
               name={['store_account', 'account_holder']}
               noStyle
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: '예금주명을 입력해주세요' }]}
             >
               <TurtleFormInput placeholder="예금주명" />
             </Form.Item>

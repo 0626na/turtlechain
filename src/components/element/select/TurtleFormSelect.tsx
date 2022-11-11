@@ -61,6 +61,7 @@ const select = css`
     height: 36px;
     font-size: 14px;
     padding: 0px 10px;
+    border-radius: 8px;
   }
   &.ant-select-disabled {
     background-color: #f6f7f8;
