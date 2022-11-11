@@ -14,7 +14,7 @@ import { TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 
 import useStore from '@hooks/useStore';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 import bucketListAPI from '@apis/bucketListAPI';
 import { RcFile } from 'antd/lib/upload';
@@ -33,7 +33,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
 
   const createMutation = useMutation(bucketListAPI.create, {
     onSuccess: () => {
-      message.success('성공적으로 등록하였습니다.');
+      message.success(t('message.success create vendor request'));
       closeModal();
     },
   });
@@ -91,7 +91,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('vendor.newCreate')}
+      title={'신규거래처 요청'}
       visible={visible}
       onClose={() => {
         closeModal();
@@ -137,7 +137,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
           validateTrigger="onBlur"
           rules={[{ required: true, validator: mobileValidator }]}
         >
-          <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
+          <TurtleFormInput placeholder="휴대전화 번호를 입력해주세요" />
         </Form.Item>
 
         <Form.Item label={t('table.vendorAddress')} required>
@@ -239,7 +239,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
 
         <Form.Item
           name="file"
-          label={t('biz license')}
+          label={'전자영수증'}
           valuePropName="fileList"
           getValueFromEvent={normFile}
           required
@@ -282,7 +282,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
                   !getFieldValue('file')
                 }
               >
-                {t('button.addVendor')}
+                {t('button.addVendorRequest')}
               </PrimaryButton>
             </div>
           )}
