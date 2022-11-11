@@ -68,7 +68,11 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="account" />
-          <TextWithTooltip tooltipContent={['결제 계좌정보 툴팁내용']}>
+          <TextWithTooltip
+            tooltipContent={[
+              '터틀체인으로 입금 및 환불 반환에 사용되는 계좌입니다.',
+            ]}
+          >
             <span css={leftContentCss.title}>결제 계좌정보</span>
           </TextWithTooltip>
         </Col>
@@ -83,9 +87,7 @@ function StoreCard({ store }: Props) {
         <Col css={leftContentCss.self}>
           <TurtleIcon name="pencil" />
           <TextWithTooltip
-            tooltipContent={[
-              '터틀체인으로 입금 및 환불 반환에 사용되는 계좌입니다.',
-            ]}
+            tooltipContent={['이체시, 거래처 통장에 표시되는 내용입니다.']}
           >
             <span css={leftContentCss.title}>받는분 통장인쇄</span>
           </TextWithTooltip>

@@ -1,5 +1,4 @@
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
-import { TransactionItem } from '@apis/transactionAPI';
 import { TextWithTooltip } from '@components/combine';
 import {
   ArrowRightIcon,
@@ -170,6 +169,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                         }}
                         css={{
                           color: theme.grey400,
+                          '&:hover': { color: theme.bluegreen },
                           cursor: 'pointer',
                         }}
                       >

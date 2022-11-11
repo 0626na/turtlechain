@@ -63,7 +63,6 @@ function PageBody() {
       <DetailModal
         vendor_id={selectedRow?.vendor_id}
         vendor_name={selectedRow?.vendor_name}
-        // selectedRow={selectedRow as TransactionItem}
         visible={detailModalVisible}
         onClose={detailModalClose}
       />
