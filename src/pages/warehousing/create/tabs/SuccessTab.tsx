@@ -99,6 +99,7 @@ function SuccessTab({ loading, ...props }: Props) {
               )}
               rightContent={
                 <SearchFilter
+                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -146,6 +147,7 @@ function SuccessTab({ loading, ...props }: Props) {
                         누락되지 않도록 다시 한번 확인해주세요.
                       </span>
                     }
+                    zIndex={1}
                   >
                     {t('table.productName')}
                   </Tooltip>

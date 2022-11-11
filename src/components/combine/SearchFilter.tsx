@@ -6,9 +6,14 @@ interface Props {
   searchQuery: any; // state
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSearchQuery: any; // setState
+  placeholder?: string;
 }
 
-function SearchFilter({ searchQuery, setSearchQuery }: Props) {
+function SearchFilter({
+  searchQuery,
+  setSearchQuery,
+  placeholder = '검색어를 입력하세요',
+}: Props) {
   const [value, setValue] = useState('');
 
   const handleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +26,7 @@ function SearchFilter({ searchQuery, setSearchQuery }: Props) {
 
   return (
     <TurtleSearchInput
-      placeholder="검색어를 입력하세요"
+      placeholder={placeholder}
       value={value}
       onChange={handleValue}
       onSearch={(value) => {
