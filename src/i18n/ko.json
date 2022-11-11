@@ -229,19 +229,6 @@
   },
 
   "message": {
-<<<<<<< HEAD
-    "networkError": "알 수 없는 오류가 발생했습니다. 채널톡으로 문의 해주세요.",
-    "enterId": "아이디를 입력해주세요.",
-    "enterPassword": "비밀번호를 입력해주세요.",
-    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
-    "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
-    "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
-    "success update": "성공적으로 수정하였습니다.",
-    "success registration": "가입 신청이 완료 되었습니다.",
-    "success update store": "정보가 업데이트 되었습니다.",
-    "success create store": "쇼핑몰이 추가되었습니다.",
-    "success create clearing": "결제요청이 완료되었습니다",
-=======
     "networkError": "알 수 없는 오류가 발생했습니다 채널톡으로 문의 해주세요",
     "enterId": "아이디를 입력해주세요",
     "enterPassword": "비밀번호를 입력해주세요",
@@ -253,7 +240,6 @@
     "success update store": "정보를 수정했어요",
     "success create store": "쇼핑몰이 생성되었어요",
     "success create clearing": "결제요청이 완료됐어요",
->>>>>>> devel
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 문자메세지로 보냈어요",
     "success verify auth num": "인증번호를 확인했어요",
