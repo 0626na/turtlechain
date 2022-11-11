@@ -1,6 +1,6 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon } from '@components/element';
+import { ArrowRightIcon, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
@@ -45,7 +45,7 @@ function StoreSelector() {
           }}
         >
           쇼핑몰 추가하기
-          <ArrowRightIcon value="#AAADB3" />
+          <TurtleIcon name="storePlus" />
         </Button>
       ) : (
         <Dropdown // 이름은 DropDown지만, selector역할을 한다.
@@ -99,9 +99,7 @@ function StoreSelector() {
               <span css={buttonCss.text}>{store.selected?.name}</span>
             </div>
 
-            <div>
-              <ArrowRightIcon value="#AAADB3" />
-            </div>
+            <TurtleIcon name="selectIcon" />
           </Button>
         </Dropdown>
       )}

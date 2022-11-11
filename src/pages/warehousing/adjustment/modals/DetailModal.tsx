@@ -28,7 +28,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)}`}
+      title={`${t(`adjustment.process type.${selectedRow?.type}`)} 상세보기`}
       visible={visible}
       onClose={onClose}
     >
