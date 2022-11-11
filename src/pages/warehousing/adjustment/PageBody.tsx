@@ -48,7 +48,7 @@ function PageBody() {
     useModal();
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
   const [removeModalVisible, removeModalOpen, removeModalClose] = useModal();
-
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   // 교환/반품/미송 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: null,

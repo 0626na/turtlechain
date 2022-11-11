@@ -1,10 +1,11 @@
-import { AdjustmentItem } from '@apis/adjustmentAPI';
+import adjustmentAPI, { AdjustmentItem } from '@apis/adjustmentAPI';
 
 import InputModal from '@components/combine/modal/InputModal';
 
 import {
   ArrowRightIcon,
   MemoIcon,
+  PrimaryButton,
   TurtleIcon,
   TurtleTableTitle,
   TurtleTableWarningNumberInput,
@@ -13,49 +14,70 @@ import {
 import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import useModal from '@hooks/useModal';
-import { Collapse, CollapsePanelProps, Select, Table } from 'antd';
+import useStore from '@hooks/useStore';
+import { message } from '@utils/message';
+import { Col, Collapse, CollapsePanelProps, Row, Select, Table } from 'antd';
+import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
+  onClose: () => void;
 }
 
-function ExchangeTakebackPanel({ activeKey, ...props }: Props) {
-  const {
-    cart,
-    setCart,
-    updateExchangeTakebackItem,
-    deleteExchangeTakebackItem,
-  } = useAdjustmentCart();
+function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
+  const { cart, updateExchangeTakebackItem, deleteExchangeTakebackItem } =
+    useAdjustmentCart();
   const [selectedRow, setSelectedRow] = useState<AdjustmentItem>();
   const [memoModalVisible, memoModalOpen, memoModalClose] = useModal();
+  const queryClient = useQueryClient();
+  const { store } = useStore();
 
-  useEffect(() => {
-    setCart((cart) => ({
-      ...cart,
-      adjustmentItemList: cart.selectedWarehousingItemList.map(
-        (item, index) => ({
-          index,
-          vendor_id: item.vendor_info.id,
-          vendor_name: item.vendor_info.vendor_name,
-          vendor_address: item.vendor_info.vendor_address,
-          warehousing_item_id: item.id,
-          product_id: item.product_info.id,
-          product_name: item.product_info.name,
-          vendor_product_name: item.product_info.vendor_product_name,
-          product_option: item.product_info.option,
-          product_price: item.product_info.price,
-          product_count: 0,
-          product_count_max: item.count,
-          product_code: item.product_info.product_code,
-          is_vat_included: item.is_vat_included,
-          type: undefined,
-          memo: '',
-        }),
-      ),
-    }));
-  }, [activeKey]);
+  // 교환/반품 생성 요성
+  const createMutation = useMutation(adjustmentAPI.create, {
+    onSuccess: () => {
+      queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
+      message.success('교환/반품이 성공적으로 등록되었습니다.');
+      onClose();
+    },
+    onError: (error: AxiosError) => {
+      message.error(error.response?.data.msg, 6);
+    },
+  });
+
+  // 수량, 종류, 가격 입력되었는지 확인
+  const handleValidation = () => {
+    let isVaild = true;
+
+    cart.adjustmentItemList.forEach((item) => {
+      if (!item.type || item.product_count === 0 || item.product_price === 0) {
+        isVaild = false;
+      }
+    });
+    return isVaild;
+  };
+
+  const handleExchangeRefundCreate = () => {
+    if (!handleValidation()) {
+      message.warn('교환/반품 가격,수량,종류를 확인해주세요.');
+      return;
+    }
+
+    createMutation.mutate({
+      item_list: cart.adjustmentItemList.map((item) => ({
+        rt_store_id: store.selected?.id as number,
+        vendor_id: item.vendor_id,
+        product_id: item.product_id,
+        warehousing_item_id: item.warehousing_item_id,
+        count: item.product_count,
+        price: item.product_price,
+        type: item.type ?? '',
+        memo: item.memo,
+      })),
+    });
+  };
 
   const totalCount = cart.adjustmentItemList.length;
 
@@ -255,6 +277,36 @@ function ExchangeTakebackPanel({ activeKey, ...props }: Props) {
             },
           ]}
         />
+
+        <Row style={{ marginTop: 32 }} justify="end" align="middle">
+          <Col style={{ marginRight: 24 }}>
+            <TurtleText
+              css={{ color: ' #6B6D73', marginRight: 8, fontSize: 15 }}
+            >
+              금액 합계
+            </TurtleText>
+            <TurtleText css={{ fontWeight: 700 }}>
+              {cart.adjustmentItemList
+                .map((item) => item.product_count * item.product_price)
+                .reduce((totalPrice, price) => totalPrice + price, 0)
+                .toLocaleString()}
+              원
+            </TurtleText>
+          </Col>
+
+          <Col>
+            <PrimaryButton
+              disabled={
+                !handleValidation() || cart.adjustmentItemList.length === 0
+              }
+              onClick={() => {
+                handleExchangeRefundCreate();
+              }}
+            >
+              교환/반품 등록하기
+            </PrimaryButton>
+          </Col>
+        </Row>
       </Collapse.Panel>
     </>
   );
