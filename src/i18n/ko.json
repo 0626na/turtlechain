@@ -216,6 +216,8 @@
     "at a time": "한번에 추가",
     "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
+    "addReserve": "미송상품 추가하기",
+    "addVendor": "거래처 추가하기",
     "addVendorRequest": "거래처 추가요청하기",
     "addWarehousing": "입고 추가하기",
     "updateVendor": "정보수정 요청하기",

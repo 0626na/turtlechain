@@ -8,7 +8,7 @@ function AnnouncementCard() {
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <TurtleTag color="red">공지</TurtleTag>
         <div css={{ marginLeft: 16, color: theme.grey800 }}>
-          터틀체인 2.0 업데이트 공지⚡️
+          터틀체인 업데이트 소식⚡️
         </div>
       </div>
       <ArrowRightIcon value={theme.grey300} />
