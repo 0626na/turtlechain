@@ -170,7 +170,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return <Mistransfer />;
   }
 
-  if (name === 'storeList') {
+  if (name === 'membership') {
     return <MembershipIcon />;
   }
 
@@ -178,7 +178,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return <UserIcon />;
   }
 
-  if (name === 'company') {
+  if (name === 'storeList') {
     return <StoreListIcon />;
   }
 
@@ -481,7 +481,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     );
   }
 
-  if (name === 'membership') {
+  if (name === 'company') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <CompanyIcon />
