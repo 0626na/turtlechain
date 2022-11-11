@@ -20,6 +20,7 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
+import { phonePattern } from '@utils/pattern';
 
 function PageBody() {
   const [vendorList, setVendorList] = useState<Vendor[]>();
@@ -202,6 +203,7 @@ function PageBody() {
               totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
+                  placeholder="거래처명, 휴대전화 번호, 계좌번호 검색"
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -244,7 +246,8 @@ function PageBody() {
               ellipsis: true,
               width: 200,
               title: t('table.mobile'),
-              render: (_, record) => record.vendor_phone.phone,
+              render: (_, record) =>
+                record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
             },
             {
               ellipsis: true,
@@ -260,7 +263,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 120,
-              align: 'center',
+              // align: 'center',
               title: (
                 <TextWithTooltip
                   tooltipContent={[
@@ -283,7 +286,7 @@ function PageBody() {
               ),
             },
             {
-              width: 70,
+              width: 50,
               align: 'center',
               title: t('table.memo'),
               onCell: (record) => ({
@@ -297,8 +300,7 @@ function PageBody() {
               render: (_, record) => <MemoIcon value={record.memo} />,
             },
             {
-              width: 45,
-              title: '편집',
+              width: 30,
               align: 'center',
               render: (record) => (
                 <TurtleDropdown

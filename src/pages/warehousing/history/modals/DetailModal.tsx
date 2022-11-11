@@ -203,6 +203,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               )}
               rightContent={
                 <SearchFilter
+                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
