@@ -61,7 +61,9 @@ function PageBody() {
        * 상세보기 모달
        */}
       <DetailModal
-        selectedRow={selectedRow as TransactionItem}
+        vendor_id={selectedRow?.vendor_id}
+        vendor_name={selectedRow?.vendor_name}
+        // selectedRow={selectedRow as TransactionItem}
         visible={detailModalVisible}
         onClose={detailModalClose}
       />
