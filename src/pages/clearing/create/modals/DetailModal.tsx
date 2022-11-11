@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
-import { TurtleDivider, TurtleIcon } from '@components/element';
+import { TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
+import { theme } from '@styles/theme';
 
 interface Props {
   visible: boolean;
@@ -57,7 +58,7 @@ function DetailModal({
               </div>
             </div>
 
-            <TurtleDivider marginTop={30} marginBottom={40} />
+            <div css={divider} />
 
             <div>
               <div css={modalBottomContentCss.title}>상세내역</div>
@@ -184,6 +185,14 @@ const modalTopContentCss = {
     },
   }),
 };
+
+const divider = css({
+  marginTop: 30,
+  marginBottom: 40,
+  height: 2,
+  background: theme.grey800,
+  width: '100%',
+});
 
 const modalBottomContentCss = {
   title: css({

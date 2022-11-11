@@ -1,78 +1,23 @@
-import adjustmentAPI from '@apis/adjustmentAPI';
 import { TurtleContentModal } from '@components/combine';
-import {
-  PrimaryButton,
-  TurtlePanelTitle,
-  TurtleText,
-} from '@components/element';
+import { TurtlePanelTitle } from '@components/element';
 import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
-import useStore from '@hooks/useStore';
 
-import { Col, Collapse, Row } from 'antd';
+import { Collapse } from 'antd';
 
 import React, { useEffect, useState } from 'react';
-import { useMutation } from 'react-query';
 
 import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
-import { useQueryClient } from 'react-query';
-import { message } from '@utils/message';
-import { AxiosError } from 'axios';
+
 interface Props {
   onClose: () => void;
   visible: boolean;
 }
 
 function ExchangeTakebackModal({ onClose, visible }: Props) {
-  const queryClient = useQueryClient();
   const [activeKey, setActiveKey] = useState('1');
-  const { cart, setCart } = useAdjustmentCart();
-  const { store } = useStore();
-
-  // 교환/반품 생성 요성
-  const createMutation = useMutation(adjustmentAPI.create, {
-    onSuccess: () => {
-      queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success('교환/반품이 성공적으로 등록되었습니다.');
-      onClose();
-    },
-    onError: (error: AxiosError) => {
-      message.error(error.response?.data.msg, 6);
-    },
-  });
-
-  // 수량, 종류, 가격 입력되었는지 확인
-  const handleValidation = () => {
-    let isVaild = true;
-
-    cart.adjustmentItemList.forEach((item) => {
-      if (!item.type || item.product_count === 0 || item.product_price === 0) {
-        isVaild = false;
-      }
-    });
-    return isVaild;
-  };
-
-  const handleExchangeRefundCreate = () => {
-    if (!handleValidation()) {
-      message.warn('교환/반품 가격,수량,종류를 확인해주세요.');
-      return;
-    }
-
-    createMutation.mutate({
-      item_list: cart.adjustmentItemList.map((item) => ({
-        rt_store_id: store.selected?.id as number,
-        vendor_id: item.vendor_id,
-        product_id: item.product_id,
-        warehousing_item_id: item.warehousing_item_id,
-        count: item.product_count,
-        price: item.product_price,
-        type: item.type ?? '',
-        memo: item.memo,
-      })),
-    });
-  };
+  const { setCart } = useAdjustmentCart();
 
   useEffect(() => {
     if (visible) {
@@ -93,8 +38,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
         >
           <Collapse
             onChange={(key) => {
-              if (!key) return;
-
+              if (!key || key[0] !== '1') return;
               setActiveKey(key[0]);
             }}
             activeKey={activeKey}
@@ -104,6 +48,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
           >
             <WarehousingPanel
               activeKey={activeKey}
+              setActiveKey={setActiveKey}
               key="1"
               style={{ border: '1px solid red' }}
               header={
@@ -125,38 +70,9 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                 />
               }
               activeKey={activeKey}
+              onClose={onClose}
             />
           </Collapse>
-
-          <Row style={{ marginTop: 32 }} justify="end" align="middle">
-            <Col style={{ marginRight: 24 }}>
-              <TurtleText
-                css={{ color: ' #6B6D73', marginRight: 8, fontSize: 15 }}
-              >
-                금액 합계
-              </TurtleText>
-              <TurtleText css={{ fontWeight: 700 }}>
-                {cart.adjustmentItemList
-                  .map((item) => item.product_count * item.product_price)
-                  .reduce((totalPrice, price) => totalPrice + price, 0)
-                  .toLocaleString()}
-                원
-              </TurtleText>
-            </Col>
-
-            <Col>
-              <PrimaryButton
-                disabled={
-                  !handleValidation() || cart.adjustmentItemList.length === 0
-                }
-                onClick={() => {
-                  handleExchangeRefundCreate();
-                }}
-              >
-                교환/반품 등록하기
-              </PrimaryButton>
-            </Col>
-          </Row>
         </TurtleContentModal>
       )}
     </>

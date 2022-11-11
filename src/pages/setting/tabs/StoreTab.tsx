@@ -29,11 +29,23 @@ function StoreTab() {
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
+  const [storeList, setStoreList] = useState<StoreShow[]>();
+
   const getStoreListQuery = useQuery(
     ['getStoreList'],
     retailerStoreAPI.getList,
     {
       enabled: !!user,
+      onSuccess: (data) => {
+        // 1.폐점,운영 정렬 2. 생성날짜 정렬
+        setStoreList([
+          ...data.store_list.sort((a, b) => {
+            if (!a?.is_closed > !b?.is_closed) return -1;
+            if (a?.id > b?.id) return -1;
+            return 0;
+          }),
+        ]);
+      },
     },
   );
 
@@ -102,7 +114,7 @@ function StoreTab() {
       </Row>
 
       <TurtleTableTitle
-        totalCount={getStoreListQuery.data?.store_list.length ?? 0}
+        totalCount={storeList?.length ?? 0}
         rightContent={
           <AddButton
             icon={
@@ -123,7 +135,7 @@ function StoreTab() {
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {getStoreListQuery.data?.store_list.map((item, idx) => (
+          {storeList?.map((item, idx) => (
             <Col
               key={idx}
               span={8}
@@ -143,10 +155,7 @@ function StoreTab() {
         <Table
           size="small"
           loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.store_list.sort((a) => {
-            if (!a.is_closed) return -1;
-            return 0;
-          })}
+          dataSource={storeList}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
