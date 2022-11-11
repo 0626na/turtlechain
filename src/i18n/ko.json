@@ -8,7 +8,7 @@
   "vendor": {
     "create": "거래처등록",
     "history": "거래처목록",
-    "addSingle": "거래처 단건추가",
+    "addSingle": "거래처 추가",
     "newCreate": "거래처 신규추가",
     "updateInfo": "거래처 정보수정 요청",
     "search": "거래처검색"
@@ -17,7 +17,7 @@
   "product": {
     "create": "상품등록",
     "history": "상품목록",
-    "addSingle": "상품 단건추가",
+    "addSingle": "상품 추가",
     "search": "상품 검색"
   },
 
@@ -46,7 +46,7 @@
       "false": "대기",
       "all": "전체"
     },
-    "addSingle": "입고 하나씩 추가하기"
+    "addSingle": "입고 추가"
   },
 
   "adjustment": {
