@@ -39,12 +39,13 @@ function StoreSelector() {
     <>
       {isEmpty ? (
         <Button
-          css={buttonCss.self}
+          css={[buttonCss.self, { padding: 16 }]}
           onClick={() => {
             navigate('/setting');
           }}
         >
-          쇼핑몰생성하러 가기
+          쇼핑몰 추가하기
+          <ArrowRightIcon value="#AAADB3" />
         </Button>
       ) : (
         <Dropdown // 이름은 DropDown지만, selector역할을 한다.

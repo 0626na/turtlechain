@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
 import { TurtleDivider, TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
@@ -15,10 +15,23 @@ function DetailModal({
 
   selectedRow,
 }: Props) {
+  useEffect(() => {
+    const escKeyModalClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', escKeyModalClose);
+    return () => window.removeEventListener('keydown', escKeyModalClose);
+  }, []);
+
   return (
     <>
       {visible && (
-        <div css={modalCss.mask}>
+        <div
+          css={modalCss.mask}
+          onClick={() => {
+            onClose();
+          }}
+        >
           <div css={modalCss.container}>
             <div css={modalCss.header}>
               <TurtleIcon name="modalClose" onClick={onClose} />
@@ -53,14 +66,15 @@ function DetailModal({
                 <li css={[modalBottomContentCss.item]}>
                   <span>교환/반품</span>
                   <span>
-                    -
+                    {(selectedRow.overpaid_payment_amount ?? 0) > 0 && '- '}
                     {selectedRow.overpaid_payment_amount?.toLocaleString() ?? 0}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
                   <span>미송입고</span>
                   <span>
-                    - {selectedRow.reserve_subtract_amount.toLocaleString()}
+                    {selectedRow.reserve_subtract_amount > 0 && '- '}
+                    {selectedRow.reserve_subtract_amount.toLocaleString()}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>

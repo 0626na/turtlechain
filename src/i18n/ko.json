@@ -45,7 +45,8 @@
       "true": "마감",
       "false": "대기",
       "all": "전체"
-    }
+    },
+    "addSingle": "입고 하나씩 추가하기"
   },
 
   "adjustment": {
@@ -215,7 +216,9 @@
     "at a time": "한번에 추가",
     "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
+    "addReserve": "미송상품 추가하기",
     "addVendor": "거래처 추가하기",
+    "addVendorRequest": "거래처 추가요청하기",
     "addWarehousing": "입고 추가하기",
     "updateVendor": "정보수정 요청하기",
     "addTransaction": "과거매입 추가하기",
@@ -237,7 +240,7 @@
     "success create store": "쇼핑몰이 생성되었습니다.",
     "success create clearing": "결제요청이 완료되었습니다",
     "not match password": "비밀번호가 일치하지 않습니다.",
-    "success create auth num": "인증번호를 생성하였습니다.",
+    "success create auth num": "인증번호를 sms로 보냈어요",
     "success verify auth num": "인증번호를 확인하였습니다.",
     "expired auth time": "인증시간이 만료되었습니다.",
     "successAddOrder": "단건추가가 완료되었습니다.",
@@ -247,7 +250,8 @@
     "success create mistransfer": "오입금 반환요청을 성공했습니다.",
     "already exist vendor": "이미 추가된 거래처입니다.",
     "already exist product": "이미 추가된 상품입니다.",
-    "success update vendor request": "거래처 정보 수정이 요청되었습니다."
+    "success update vendor request": "거래처정보 수정을 요청했어요. 완료시 알림으로 알려드릴게요!",
+    "success create vendor request": "거래처정보 등록을 요청했어요. 완료시 알림으로 알려드릴게요!"
   },
 
   "biz role": "직책",
@@ -255,10 +259,10 @@
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
-  "biz name": "사업자명",
+  "biz name": "사업자명(법인명)",
   "biz num": "사업자번호",
-  "biz address": "사업자주소",
-  "biz detail address": "사업자 상세주소",
+  "biz address": "사업장 주소",
+  "biz detail address": "사업장 상세주소",
   "biz license": "사업자등록증",
 
   "go home": "홈으로 돌아가기",

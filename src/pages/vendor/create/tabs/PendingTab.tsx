@@ -77,13 +77,13 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             width: 50,
             title: t('table.matching'),
-            render: (_, record) => {
-              if (record.isMatching) {
-                // passingToSuccessTab(record);
-                return <TurtleIcon name="matching" />;
-              }
-              return <TurtleIcon name="misMatching" />;
-            },
+            render: (_, record) => (
+              <div css={{ margin: 'auto' }}>
+                <TurtleIcon
+                  name={record.isMatching ? 'matching' : 'misMatching'}
+                />
+              </div>
+            ),
           },
           {
             ellipsis: true,

@@ -79,7 +79,7 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
           onSearch={(value) => {
             setSearchString(value);
           }}
-          placeholder="상품명 or 거래처 상품명을 입력해주세요."
+          placeholder="상품명 또는 거래처 상품명을 입력해주세요."
         />
       </div>
 
@@ -90,8 +90,6 @@ function WarehousingPanel({ activeKey, ...props }: Props) {
         rowKey={(record) => record.id}
         pagination={false}
         scroll={{ x: 1400, y: 410 }}
-        // onRow={() => {}}
-
         rowSelection={{
           onSelect: selectWarehousingItem,
           onSelectAll: (_, records: WarehousingItem[]) => {
