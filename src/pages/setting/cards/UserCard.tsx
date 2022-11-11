@@ -13,14 +13,15 @@ function UserCard({ title, icon, children }: Props) {
       <div css={titleContainer}>
         {icon && (
           <div
-            css={css`
-              margin-right: 12px;
-            `}
+            css={{
+              marginRight: 12,
+              display: 'flex',
+            }}
           >
             {icon}
           </div>
         )}
-        <div>{title}</div>
+        <div css={{ display: 'flex', alignItems: 'center' }}>{title}</div>
       </div>
       {children}
     </div>

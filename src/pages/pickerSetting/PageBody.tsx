@@ -73,7 +73,7 @@ function PageBody() {
                 margin-right: 12px;
               `}
             >
-              <TurtleIcon name="company" />
+              <TurtleIcon name="storeList" />
             </Col>
             <Col
               css={css`
