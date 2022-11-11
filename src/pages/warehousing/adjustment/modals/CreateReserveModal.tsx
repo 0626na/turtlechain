@@ -263,7 +263,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
                   htmlType="submit"
                   disabled={!getFieldValue('price') || !getFieldValue('count')}
                 >
-                  {t('button.addProduct')}
+                  {t('button.addReserve')}
                 </PrimaryButton>
               </div>
             )}
