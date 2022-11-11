@@ -53,6 +53,7 @@ function Service() {
               <Tooltip
                 visible={tooltipVisible}
                 placement="bottom"
+                zIndex={1}
                 title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
               >
                 <DatePicker

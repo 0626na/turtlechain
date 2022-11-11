@@ -1,4 +1,5 @@
-import clearingAPI from '@apis/clearingAPI';
+import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
+import { TransactionItem } from '@apis/transactionAPI';
 import { TextWithTooltip } from '@components/combine';
 import {
   ArrowRightIcon,
@@ -12,7 +13,10 @@ import {
 
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
+import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
+import DetailModal from '@pages/clearing/transaction/modals/DetailModal';
+import { theme } from '@styles/theme';
 
 import {
   Col,
@@ -24,7 +28,7 @@ import {
 } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import FullUseButton from './FullUseButton';
 
@@ -35,6 +39,8 @@ interface Props extends CollapsePanelProps {
 
 function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   const { store } = useStore();
+  const [selectedRow, setSelectedRow] = useState<ClearingInfo>();
+  const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
   const {
     cart,
     separate,
@@ -61,33 +67,176 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
   );
 
   return (
-    <Collapse.Panel
-      {...props}
-      style={{
-        border: activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
-      }}
-      showArrow={false}
-      extra={
-        <TurtleText css={{ color: '#242934' }}>
-          {activeKey === '1' ? (
-            <TurtleIcon name="arrowDown" />
-          ) : (
-            <ArrowRightIcon />
-          )}
-        </TurtleText>
-      }
-    >
+    <>
       {/*
-       *  차감
+       * 거래장부 상세보기 모달
        */}
-      <TurtleDivider marginBottom={36} />
+      <DetailModal
+        vendor_id={selectedRow?.vendor_info.id}
+        vendor_name={selectedRow?.vendor_info.vendor_name}
+        visible={detailModalVisible}
+        onClose={detailModalClose}
+      />
 
-      <div css={panelContentCSS.self}>
-        <div css={panelContentCSS.titleContainer}>
-          <TurtleIcon name="excludeWon" />
-          <span css={panelContentCSS.titleText}>이번 결제에서 제외해요</span>
+      <Collapse.Panel
+        {...props}
+        style={{
+          border:
+            activeKey === '1' ? '1px solid rgba(227, 230, 234, 1)' : 'none',
+        }}
+        showArrow={false}
+        extra={
+          <TurtleText css={{ color: '#242934' }}>
+            {activeKey === '1' ? (
+              <TurtleIcon name="arrowDown" />
+            ) : (
+              <ArrowRightIcon />
+            )}
+          </TurtleText>
+        }
+      >
+        {/*
+         *  차감
+         */}
+        <TurtleDivider marginBottom={36} />
+
+        <div css={panelContentCSS.self}>
+          <div css={panelContentCSS.titleContainer}>
+            <TurtleIcon name="excludeWon" />
+            <span css={panelContentCSS.titleText}>이번 결제에서 제외해요</span>
+          </div>
+
+          <Table
+            css={{
+              '&& tbody > tr:hover > td': {
+                background: '#E2F6F7',
+              },
+            }}
+            scroll={{ y: 80 }}
+            size="small"
+            pagination={false}
+            loading={getStoreClearingQuery.isLoading}
+            dataSource={[
+              ...cart.adjustmentSubtractList,
+              ...cart.reserveSubtractList,
+            ]}
+            rowKey={(record) => record.id as number}
+            title={() => (
+              <TurtleTableTitle
+                totalCount={
+                  cart.adjustmentSubtractList.length +
+                  cart.reserveSubtractList.length
+                }
+                rightContent={
+                  <FullUseButton
+                    onClick={() => {
+                      fillAllAdjustmentSubtract();
+                    }}
+                  >
+                    전액사용
+                  </FullUseButton>
+                }
+              />
+            )}
+            columns={[
+              {
+                ellipsis: true,
+                title: '등록 일자',
+                render: (_, record) =>
+                  moment(record.created_date).format('YYYY-MM-DD'),
+              },
+              {
+                ellipsis: true,
+                title: '분류',
+                render: (_, record) =>
+                  // i18
+                  record.type === 'adjustment_subtract'
+                    ? '매입 차감'
+                    : '미송 차감',
+              },
+              {
+                ellipsis: true,
+                title: t('table.vendorName'),
+                render: (_, record) => {
+                  return (
+                    <div
+                      css={{ display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <span>{record.vendor_info.vendor_name}</span>
+                      <span
+                        onClick={() => {
+                          detailModalOpen();
+                          setSelectedRow(record);
+                        }}
+                        css={{
+                          color: theme.grey400,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        장부보기
+                      </span>
+                    </div>
+                  );
+                },
+              },
+
+              {
+                ellipsis: true,
+                align: 'right',
+                title: '사용가능 금액',
+                render: (_, record) =>
+                  record.type === 'adjustment_subtract'
+                    ? record.overpaid_amount.toLocaleString()
+                    : record.reserve_subtract_amount.toLocaleString(),
+              },
+
+              {
+                ellipsis: true,
+                align: 'right',
+                width: 200,
+                title: () => (
+                  <TextWithTooltip
+                    iconPlacement="left"
+                    tooltipContent={[
+                      '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
+                    ]}
+                  >
+                    사용금액
+                  </TextWithTooltip>
+                ),
+                render: (_, record) => (
+                  <div css={{ display: 'inline-block', width: '60%' }}>
+                    {record.type === 'adjustment_subtract' ? (
+                      <TurtleTableNumberInput
+                        step={1000}
+                        placeholder="금액 입력"
+                        value={record.overpaid_payment_amount as number}
+                        max={record.overpaid_amount}
+                        onChange={(value) => {
+                          handleAdjustmentSubtract(record, value as number);
+                        }}
+                      />
+                    ) : (
+                      <TurtleTableNumberInput
+                        step={1000}
+                        value={record.reserve_subtract_amount}
+                        disabled={true}
+                      />
+                    )}
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
+        {/*
+         *  미송
+         */}
 
+        <div css={panelContentCSS.titleContainer}>
+          <TurtleIcon name="includeWon" />
+          <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
+        </div>
         <Table
           css={{
             '&& tbody > tr:hover > td': {
@@ -98,175 +247,65 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           size="small"
           pagination={false}
           loading={getStoreClearingQuery.isLoading}
-          dataSource={[
-            ...cart.adjustmentSubtractList,
-            ...cart.reserveSubtractList,
-          ]}
+          dataSource={[...cart.reservePaymentList]}
           rowKey={(record) => record.id as number}
           title={() => (
-            <TurtleTableTitle
-              totalCount={
-                cart.adjustmentSubtractList.length +
-                cart.reserveSubtractList.length
-              }
-              rightContent={
-                <FullUseButton
-                  onClick={() => {
-                    fillAllAdjustmentSubtract();
-                  }}
-                >
-                  전액사용
-                </FullUseButton>
-              }
-            />
+            <TurtleTableTitle totalCount={cart.reservePaymentList.length} />
           )}
           columns={[
             {
               ellipsis: true,
-              title: '등록 일자',
+              title: '등록 날짜',
               render: (_, record) =>
                 moment(record.created_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
-              title: '분류',
-              render: (_, record) =>
-                // i18
-                record.type === 'adjustment_subtract'
-                  ? '매입 차감'
-                  : '미송 차감',
-            },
-            {
-              ellipsis: true,
-              title: t('table.vendorName'),
+              title: '거래처명',
               render: (_, record) => record.vendor_info.vendor_name,
             },
-
             {
               ellipsis: true,
+              title: '당일 미송 금액',
               align: 'right',
-              title: '사용가능 금액',
               render: (_, record) =>
-                record.type === 'adjustment_subtract'
-                  ? record.overpaid_amount.toLocaleString()
-                  : record.reserve_subtract_amount.toLocaleString(),
+                record.reserve_payment_amount.toLocaleString(),
             },
-
             {
-              ellipsis: true,
-              align: 'right',
-              width: 200,
-              title: () => (
-                <TextWithTooltip
-                  iconPlacement="left"
-                  tooltipContent={[
-                    '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
-                  ]}
-                >
-                  사용금액
-                </TextWithTooltip>
-              ),
-              render: (_, record) => (
-                <div css={{ display: 'inline-block', width: '60%' }}>
-                  {record.type === 'adjustment_subtract' ? (
-                    <TurtleTableNumberInput
-                      step={1000}
-                      placeholder="금액 입력"
-                      value={record.overpaid_payment_amount as number}
-                      max={record.overpaid_amount}
-                      onChange={(value) => {
-                        handleAdjustmentSubtract(record, value as number);
-                      }}
-                    />
-                  ) : (
-                    <TurtleTableNumberInput
-                      step={1000}
-                      value={record.reserve_subtract_amount}
-                      disabled={true}
-                    />
-                  )}
-                </div>
-              ),
+              title: '',
             },
           ]}
         />
-      </div>
-      {/*
-       *  미송
-       */}
 
-      <div css={panelContentCSS.titleContainer}>
-        <TurtleIcon name="includeWon" />
-        <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
-      </div>
-      <Table
-        css={{
-          '&& tbody > tr:hover > td': {
-            background: '#E2F6F7',
-          },
-        }}
-        scroll={{ y: 80 }}
-        size="small"
-        pagination={false}
-        loading={getStoreClearingQuery.isLoading}
-        dataSource={[...cart.reservePaymentList]}
-        rowKey={(record) => record.id as number}
-        title={() => (
-          <TurtleTableTitle totalCount={cart.reservePaymentList.length} />
-        )}
-        columns={[
-          {
-            ellipsis: true,
-            title: '등록 날짜',
-            render: (_, record) =>
-              moment(record.created_date).format('YYYY-MM-DD'),
-          },
-          {
-            ellipsis: true,
-            title: '거래처명',
-            render: (_, record) => record.vendor_info.vendor_name,
-          },
-          {
-            ellipsis: true,
-            title: '당일 미송 금액',
-            align: 'right',
-            render: (_, record) =>
-              record.reserve_payment_amount.toLocaleString(),
-          },
-          {
-            title: '',
-          },
-        ]}
-      />
-
-      <Row justify="end" align="middle" style={{ marginTop: 40 }}>
-        <Col>
-          <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-            총 차감 합계
-          </Typography.Text>
-          <Typography.Text style={{ fontWeight: 700 }}>
-            {subtractAmountTotal.toLocaleString()}원
-          </Typography.Text>
-        </Col>
-        <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
-        <Col style={{ marginRight: 24 }}>
-          <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-            총 미송 합계
-          </Typography.Text>
-          <Typography.Text style={{ fontWeight: 700 }}>
-            {reservePaymentAmountTotal.toLocaleString()}원
-          </Typography.Text>
-        </Col>
-        <Col>
-          <PrimaryButton
-            children={'모두 확인했어요'}
-            onClick={() => {
-              clickNext();
-            }}
-          />
-        </Col>
-      </Row>
-    </Collapse.Panel>
+        <Row justify="end" align="middle" style={{ marginTop: 40 }}>
+          <Col>
+            <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
+              총 차감 합계
+            </Typography.Text>
+            <Typography.Text style={{ fontWeight: 700 }}>
+              {subtractAmountTotal.toLocaleString()}원
+            </Typography.Text>
+          </Col>
+          <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
+          <Col style={{ marginRight: 24 }}>
+            <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
+              총 미송 합계
+            </Typography.Text>
+            <Typography.Text style={{ fontWeight: 700 }}>
+              {reservePaymentAmountTotal.toLocaleString()}원
+            </Typography.Text>
+          </Col>
+          <Col>
+            <PrimaryButton
+              children={'모두 확인했어요'}
+              onClick={() => {
+                clickNext();
+              }}
+            />
+          </Col>
+        </Row>
+      </Collapse.Panel>
+    </>
   );
 }
 

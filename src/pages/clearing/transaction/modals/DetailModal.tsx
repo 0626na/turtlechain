@@ -9,10 +9,7 @@ import {
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import transactionAPI, {
-  RequestGetItem,
-  TransactionItem,
-} from '@apis/transactionAPI';
+import transactionAPI, { RequestGetItem } from '@apis/transactionAPI';
 import { useEffect, useState } from 'react';
 import { t } from 'i18next';
 import TurtleStatistics from '@components/element/TurtleStatistics';
@@ -20,10 +17,11 @@ import TurtleStatistics from '@components/element/TurtleStatistics';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  selectedRow: TransactionItem;
+  vendor_id?: number;
+  vendor_name?: string;
 }
 
-function DetailModal({ visible, onClose, selectedRow }: Props) {
+function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
   const [searchQuery, setSearchQuery] = useState<RequestGetItem>({
     vendor_id: undefined,
     start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
@@ -44,9 +42,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
 
     setSearchQuery((searchQuery) => ({
       ...searchQuery,
-      vendor_id: selectedRow.vendor_id,
+      vendor_id: vendor_id,
     }));
-  }, [selectedRow, visible]);
+  }, [vendor_id, visible]);
 
   return (
     <TurtleContentModal
@@ -59,19 +57,34 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         value={[
           {
             title: t('table.vendorName'),
-            value: selectedRow?.vendor_name,
+            value: vendor_name ?? '',
           },
           {
             title: t('table.refundAmount'),
-            value: selectedRow?.refund_amount.toLocaleString(),
+            value: (
+              getTransactionDetailQuery?.data?.data.reduce(
+                (acc, item) => acc + item.refund_amount,
+                0,
+              ) ?? ''
+            ).toLocaleString(),
           },
           {
             title: t('table.subtractAmount'),
-            value: selectedRow?.subtract_amount.toLocaleString(),
+            value: (
+              getTransactionDetailQuery?.data?.data.reduce(
+                (acc, item) => acc + item.subtract_amount,
+                0,
+              ) ?? ''
+            ).toLocaleString(),
           },
           {
             title: t('table.unpaidAmount'),
-            value: selectedRow?.unpaid_amount.toLocaleString(),
+            value: (
+              getTransactionDetailQuery?.data?.data.reduce(
+                (acc, item) => acc + item.unpaid_amount,
+                0,
+              ) ?? ''
+            ).toLocaleString(),
           },
         ]}
       />
