@@ -238,7 +238,7 @@
     "success update": "성공적으로 수정했어요",
     "success registration": "가입 신청이 완료 되었습니다",
     "success update store": "정보를 수정했어요",
-    "success create store": "쇼핑몰이 추가성되었어요",
+    "success create store": "쇼핑몰이 추가되었어요",
     "success create clearing": "결제요청이 완료됐어요",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 문자메세지로 보냈어요",
