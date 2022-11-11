@@ -46,10 +46,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
       okDisabled={item?.process_count === 0 || !item?.adjustment_process_type}
       loading={updateMutation.isLoading}
       title={`${t(`adjustment.process type.${selectedRow?.type}`)} 처리`}
-      description={[
-        '선택한 내역을 처리합니다.',
-        '처리 방식과 수량을 설정해주세요.',
-      ]}
+      description={['처리 방식과 수량을 설정해주세요.']}
     >
       <Form
         css={css`
