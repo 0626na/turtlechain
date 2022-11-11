@@ -59,12 +59,16 @@ import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
 import { ReactComponent as AccordionDown } from '@icons/accordionDown.svg';
 import { ReactComponent as AccordionUp } from '@icons/accordionUp.svg';
 import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
+import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
+import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'storePlus'
+    | 'selectIcon'
     | 'alertBarArrowRight'
     | 'exclamationMark'
     | 'alertWarn'
@@ -124,7 +128,21 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+  if (name === 'storePlus') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <StorePlus />
+      </div>
+    );
+  }
 
+  if (name === 'selectIcon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <SelectIcon />
+      </div>
+    );
+  }
   if (name === 'alertBarArrowRight') {
     return <AlertBarArrowRightIcon />;
   }

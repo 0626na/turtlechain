@@ -172,6 +172,11 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       >
         <Table
           size="small"
+          css={{
+            '&& tbody > tr:hover > td': {
+              background: '#E2F6F7',
+            },
+          }}
           scroll={{ y: 300 }}
           pagination={false}
           loading={activeKey !== '2'}

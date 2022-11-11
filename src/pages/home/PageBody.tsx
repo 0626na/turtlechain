@@ -90,7 +90,7 @@ function PageBody() {
           <div css={container}>
             <a
               target="_blank"
-              href="https://turtlechain-guide.oopy.io/97bb491f-e0ba-45a4-b7c1-fa21b3a89a3c"
+              href="https://turtlechain-guide.oopy.io/18a4f13e-e989-475b-97aa-84600c75b822"
               css={announcementCardLayout}
             >
               <AnnouncementCard />
