@@ -4,6 +4,7 @@ import SearchFilter from '@components/combine/SearchFilter';
 import {
   MemoIcon,
   TurtleConfirmModal,
+  TurtleDropdown,
   TurtleIcon,
   TurtleTableTitle,
 } from '@components/element';
@@ -15,16 +16,19 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';
+import { css } from '@emotion/react';
+import UpdateProductModal from './modal/UpdateProductModal';
 
 function PageBody() {
   const [selectedRow, selectRow] = useState<ProductShow>();
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: undefined,
+    rt_store_id: store.selected?.id,
     page: 1,
     search_string: '',
   });
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
+  const [updateModalVisible, openUpdateModal, closeUpdateModal] = useModal();
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
 
   // 상품 리스트 불러오기 요청
@@ -40,7 +44,7 @@ function PageBody() {
   const removeProductMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
       closeRemoveModal();
-      message.success(`상품이 삭제되었습니다`);
+      message.success(`상품을 삭제했어요`);
       getProductListQuery.refetch();
     },
   });
@@ -48,7 +52,7 @@ function PageBody() {
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: () => {
-      message.success('상품 정보가 수정되었습니다');
+      message.success('상품 메모를 수정했어요');
       closeMemoModal();
       getProductListQuery.refetch();
     },
@@ -70,6 +74,14 @@ function PageBody() {
 
   return (
     <>
+      {/**
+       * 상품정보 수정 모달
+       */}
+      <UpdateProductModal
+        visible={updateModalVisible}
+        closeModal={closeUpdateModal}
+        selectedRow={selectedRow as ProductShow}
+      />
       {/**
        * 메모 수정 모달
        */}
@@ -209,7 +221,7 @@ function PageBody() {
               ),
             },
             {
-              width: 70,
+              width: 50,
               align: 'center',
               title: t('table.memo'),
               render: (_, record) => (
@@ -223,14 +235,43 @@ function PageBody() {
               ),
             },
             {
-              width: 50,
-              render: (_, record) => (
-                <TurtleIcon
-                  name="delete"
-                  onClick={() => {
-                    selectRow(record);
-                    openRemoveModal();
-                  }}
+              width: 30,
+              align: 'center',
+              render: (record) => (
+                <TurtleDropdown
+                  items={[
+                    {
+                      key: '1',
+                      label: '상품정보 수정',
+                      icon: <TurtleIcon name="updateVendorName" />,
+                      onClick: () => {
+                        selectRow(record);
+                        openUpdateModal();
+                      },
+                    },
+                    {
+                      key: '3',
+                      type: 'divider',
+                    },
+                    {
+                      key: '4',
+                      label: (
+                        <span
+                          css={css`
+                            color: red;
+                          `}
+                        >
+                          삭제
+                        </span>
+                      ),
+                      icon: <TurtleIcon name="delete" danger />,
+                      onClick: () => {
+                        selectRow(record);
+                        openRemoveModal();
+                      },
+                    },
+                  ]}
+                  triggerButton={<TurtleIcon name="more" />}
                 />
               ),
             },
