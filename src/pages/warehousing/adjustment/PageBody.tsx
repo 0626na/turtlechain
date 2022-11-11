@@ -32,6 +32,7 @@ import ExchangeRefundModal from './modals/CreateExchangeTakebackModal';
 import AddReserveModal from './modals/CreateReserveModal';
 import AdjustmentProcessModal from './modals/ProcessModal';
 import DetailModal from './modals/DetailModal';
+import { RecoilValueReadOnly } from 'recoil';
 
 function PageBody() {
   const { store } = useStore();
@@ -116,6 +117,13 @@ function PageBody() {
     resetSearchQuery();
   }, [store.selected?.id]);
 
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      setTooltipVisible(false);
+    };
+    window.addEventListener('click', onClick);
+    return () => window.removeEventListener('click', onClick);
+  }, []);
   return (
     <>
       {/*
@@ -375,7 +383,8 @@ function PageBody() {
               width: 100,
               title: (
                 <Tooltip
-                  visible={true}
+                  overlayStyle={{ minWidth: 353 }}
+                  visible={tooltipVisible}
                   zIndex={1}
                   title={
                     <span>
@@ -468,19 +477,22 @@ function PageBody() {
                 </>
               ),
             },
+
             {
               ellipsis: true,
               width: 30,
               align: 'center',
               onCell: (record) => ({
-                style: { cursor: 'pointer' },
+                style: { cursor: !record.is_cleared ? 'pointer' : '' },
                 onClick: (e) => {
                   e.stopPropagation();
+                  if (record.is_cleared) return;
                   setSelectedRow(record);
                   removeModalOpen();
                 },
               }),
-              render: (_) => <TurtleIcon name="delete" />,
+              render: ({ is_cleared }) =>
+                !is_cleared ? <TurtleIcon name="delete" /> : null,
             },
           ]}
         />

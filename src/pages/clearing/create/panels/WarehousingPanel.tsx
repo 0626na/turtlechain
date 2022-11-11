@@ -89,6 +89,11 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         </div>
 
         <Table
+          css={{
+            '&& tbody > tr:hover > td': {
+              background: '#E2F6F7',
+            },
+          }}
           scroll={{ y: 80 }}
           size="small"
           pagination={false}
@@ -136,6 +141,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
+
             {
               ellipsis: true,
               align: 'right',
@@ -145,6 +151,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                   ? record.overpaid_amount.toLocaleString()
                   : record.reserve_subtract_amount.toLocaleString(),
             },
+
             {
               ellipsis: true,
               align: 'right',
@@ -193,7 +200,11 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
       </div>
       <Table
-        // css={{ height: 313 }}
+        css={{
+          '&& tbody > tr:hover > td': {
+            background: '#E2F6F7',
+          },
+        }}
         scroll={{ y: 80 }}
         size="small"
         pagination={false}
