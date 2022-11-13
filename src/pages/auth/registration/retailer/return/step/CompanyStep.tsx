@@ -1,6 +1,6 @@
 import userAPI from '@apis/userAPI';
 import { DaumPostcodeModal } from '@components/combine';
-import { AddButton } from '@components/element';
+import { AddButton, CheckDuplicatedButton } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import AgreementCheckbox from '@pages/auth/registration/AgreementCheckbox';
@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 import { message } from '@utils/message';
+
 interface Props {
   visible: boolean;
   loading: boolean;
@@ -25,6 +26,7 @@ function CompanyStep({ visible, loading }: Props) {
     useModal();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
   const [searchParams] = useSearchParams();
+
   // 사업자번호 중복체크 요청
   const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
@@ -56,7 +58,7 @@ function CompanyStep({ visible, loading }: Props) {
   };
 
   // 사업자번호 유효성 검사
-  const bizNumValidation = (_: unknown, value: number) => {
+  const bizNumValidator = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('사업자 번호 입력해주세요'));
     }
@@ -69,7 +71,7 @@ function CompanyStep({ visible, loading }: Props) {
   };
 
   //약관동의 유효성 검사
-  const agreementValidation = (_: unknown, value: CheckboxValueType[] = []) => {
+  const agreementValidator = (_: unknown, value: CheckboxValueType[] = []) => {
     if (
       !value.includes('service_use') ||
       !value.includes('personal_information')
@@ -79,6 +81,7 @@ function CompanyStep({ visible, loading }: Props) {
 
     return Promise.resolve();
   };
+
   return (
     <div style={{ display: visible ? 'block' : 'none' }}>
       {/*
@@ -125,7 +128,7 @@ function CompanyStep({ visible, loading }: Props) {
             label={t('biz num')}
             required
             name="company_biz_num"
-            rules={[{ validator: bizNumValidation }]}
+            rules={[{ validator: bizNumValidator }]}
           >
             <Input
               onChange={() => {
@@ -134,12 +137,7 @@ function CompanyStep({ visible, loading }: Props) {
               css={input}
               placeholder="ex. 123-45-67890"
               suffix={
-                <Button
-                  css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
-                  type="link"
-                  disabled={
-                    !getFieldValue('company_biz_num') || checkDuplicated
-                  }
+                <CheckDuplicatedButton
                   onClick={() => {
                     dupCheckMutation.mutate({
                       encrypted_text: searchParams.get(
@@ -148,9 +146,11 @@ function CompanyStep({ visible, loading }: Props) {
                       biz_num: form.getFieldValue('company_biz_num'),
                     });
                   }}
+                  isDuplicated={checkDuplicated}
+                  isEmpty={!getFieldValue('company_biz_num')}
                 >
-                  중복확인
-                </Button>
+                  {t('button.duplicatedCheck')}
+                </CheckDuplicatedButton>
               }
             />
           </Form.Item>
@@ -210,7 +210,7 @@ function CompanyStep({ visible, loading }: Props) {
         <Input css={input} placeholder="ex. www.turtleshop.com" />
       </Form.Item>
 
-      <Form.Item name="agreements" rules={[{ validator: agreementValidation }]}>
+      <Form.Item name="agreements" rules={[{ validator: agreementValidator }]}>
         <AgreementCheckbox
           onChange={(data: CheckboxValueType[]) => {
             form.setFieldsValue({
