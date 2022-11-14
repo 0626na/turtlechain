@@ -76,10 +76,10 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
         <div css={inputContainer}>
           <TurtleFormSearchInput
             value={searchQuery.store_name}
-            onChange={(e) => {
+            onSearch={(value) => {
               setSearchQuery((searchQuery) => ({
                 ...searchQuery,
-                store_name: e.target.value,
+                store_name: value,
               }));
             }}
             placeholder="거래처명을 입력해주세요."
