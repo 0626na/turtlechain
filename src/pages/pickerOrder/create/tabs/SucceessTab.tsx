@@ -165,6 +165,11 @@ function SuccessTab({ loading, ...props }: Props) {
       />
       <Tabs.TabPane {...props}>
         <Table
+          css={{
+            '&& tbody > tr:hover > td': {
+              backgroundColor: '#E2F6F7',
+            },
+          }}
           scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
           dataSource={filterdList}
           loading={loading}
