@@ -74,21 +74,23 @@ function PageBody() {
 
   return (
     <>
-      <DetailModal
-        visible={detailModalVisible}
-        onclose={closeDetailModal}
-        sheetId={sheetId}
-      />
+      {sheetId && (
+        <DetailModal
+          visible={detailModalVisible}
+          onclose={closeDetailModal}
+          sheetId={sheetId}
+        />
+      )}
       <PageHeader title={`${t('order.history')}`} />
       <PageTitle
         title={`${t('order.present')}`}
-        buttons={[
-          <TertiaryButton
-            text="발주서 다운"
-            disabled
-            icon={<TurtleIcon name="download" />}
-          />,
-        ]}
+        // buttons={[
+        //   <TertiaryButton
+        //     text="발주서 다운"
+        //     disabled
+        //     icon={<TurtleIcon name="download" />}
+        //   />,
+        // ]}
       />
       <PageContent>
         {/*
