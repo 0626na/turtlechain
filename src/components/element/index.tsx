@@ -43,6 +43,7 @@ import TurtleTableNumberInput, {
 } from './input/TurtleTableNumberInput';
 import TurtleTableInput from './input/TurtleTableInput';
 import AlertCloseIcon from './icon/AlertCloseIcon';
+import CheckDuplicatedButton from './button/CheckDuplicatedButton';
 
 export {
   //buttons
@@ -56,6 +57,7 @@ export {
   ProcessButton,
   SelectButton,
   SpecialButton,
+  CheckDuplicatedButton,
 
   //inputs
   TurtleSearchInput,

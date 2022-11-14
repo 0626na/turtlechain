@@ -13,6 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { Global } from '@emotion/react';
 import { reset } from '@styles/reset';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 // Antd Message
 message.config({
@@ -46,6 +47,7 @@ const ga4react = new GA4React(
             <App />
           </BrowserRouter>
         </ConfigProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </RecoilRoot>,
     document.getElementById('root'),

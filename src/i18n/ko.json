@@ -130,7 +130,10 @@
     "registrationSelect": "가입 유형 선택",
     "aboutMembership": "요금플랜 알아보기",
     "wonderMembership": "다양한 요금제가 궁금하신가요?",
-    "notMember": "아직 회원이 아니신가요?"
+    "notMember": "아직 회원이 아니신가요?",
+    "do": "인증하기",
+    "retry": "재발송",
+    "success": "인증 완료"
   },
 
   "store": {
@@ -288,7 +291,6 @@
     "vendorName": "거래처명을 입력해주세요"
   },
 
-  "auth phone": "인증하기",
   "login": "로그인",
   "reset password": "비밀번호 재설정",
 

@@ -3,26 +3,30 @@ import { t } from 'i18next';
 import { useState, useEffect } from 'react';
 import { Form, Input, Button, Row } from 'antd';
 import { message } from '@utils/message';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import authAPI from '@apis/authAPI';
 import { css } from '@emotion/react';
 import React from 'react';
+import { TurtleIcon } from '@components/element';
 
 interface Props {
   type?: 'registration'; // 회원가입에서의 버튼 색상이 다르기때문.
   onSuccess?: (data: { phone: string; token: string }) => void; // 인증 성공 콜백
 }
 
+type Auth = '인증하기' | '재발송' | '인증완료';
+
 function PhoneAuthModal({ onSuccess, type }: Props) {
   const form = Form.useFormInstance();
   const [session_key, setSessionKey] = useState('');
   const [expire_time, setExpireTime] = useState<null | number>(null);
+  const [authStatus, setAuthStatus] = useState<Auth>(t('auth.do'));
 
   // 인증번호 생성 요청
   const createOTPQuery = useMutation(authAPI.createPhoneOTP, {
     onSuccess: ({ session_key, expire_time }) => {
       message.success(t('message.success create auth num'));
-
+      setAuthStatus(t('auth.retry'));
       setSessionKey(session_key);
       setExpireTime(calculateExpireTime(expire_time));
     },
@@ -34,7 +38,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
       message.success(t('message.success verify auth num'));
       const token = data;
       const phone = form.getFieldValue('phone');
-
+      setAuthStatus(t('auth.success'));
       onSuccess && onSuccess({ token, phone });
       setSessionKey('');
       setExpireTime(null);
@@ -52,6 +56,8 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
 
   // 인증코드 생성
   const handleCreate = () => {
+    if (authStatus === t('auth.success')) return;
+
     const { phone } = form.getFieldsValue();
     createOTPQuery.mutate({ phone });
   };
@@ -102,9 +108,14 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                   onClick={handleCreate}
                   loading={createOTPQuery.isLoading}
                 >
-                  {createOTPQuery.status === 'success'
-                    ? '재발송'
-                    : t('auth phone')}
+                  {authStatus === t('auth.success') ? (
+                    <div css={authCheckCss.container}>
+                      <span css={authCheckCss.text}>인증완료</span>
+                      <TurtleIcon name="checkMark" />
+                    </div>
+                  ) : (
+                    authStatus
+                  )}
                 </Button>
               }
             />
@@ -189,5 +200,15 @@ const validateText = css({
 });
 
 const otpText = css({ color: '#fa5252' });
+
+const authCheckCss = {
+  container: css({
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  text: css({
+    marginRight: 4,
+  }),
+};
 
 export default PhoneAuthModal;
