@@ -3,7 +3,8 @@ import { useRecoilState } from 'recoil';
 import { storeState } from '@store/storeState';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import { message } from '@utils/message';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const isOpen = (store: StoreShow) => !store.is_closed;
 const STORE_TOKEN = 'TC_SELECTED_STORE_ID';
@@ -71,11 +72,14 @@ function useStore() {
     return false;
   }, [store]);
 
+  const isStoreEmpty = useMemo(() => store && store.list.length === 0, [store]);
+
   return {
     store,
     isStoreSelected,
     fillStoreList,
     selectStore,
+    isStoreEmpty,
   };
 }
 
