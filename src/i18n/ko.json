@@ -40,6 +40,15 @@
       "productPrice": "가격",
       "memo": "메모",
       "save": "저장하기"
+    },
+    "parsingModal": {
+      "title": "발주서에 문제가 있어요",
+      "description1": "수정이 필요한 발주서가 있습니다.",
+      "description2": "오류 내용을 확인하고 다시 업로드해주세요. ",
+      "errorOrdersCount": "오류 발주서",
+      "solution1": "* 파일명의 쇼핑몰이 등록되었는지 확인해주세요",
+      "solution2": "* 필수헤더명을 다시 확인해주세요",
+      "solution3": "* 수량 및 금액은 0보다 큰 숫자만 가능합니다"
     }
   },
 
