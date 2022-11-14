@@ -1,9 +1,9 @@
 import userAPI from '@apis/userAPI';
 import { PhoneAuthForm } from '@components/combine';
-import { SpecialButton } from '@components/element';
+import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
-import { Button, Form, Input, Row } from 'antd';
+import { Form, Input, Row } from 'antd';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
@@ -38,7 +38,7 @@ function UserStep({ visible, onClickNext }: Props) {
   });
 
   // 아이디 유효성 검사
-  const idValidation = (_: unknown, value: string) => {
+  const idValidator = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('아이디를 입력해주세요.'));
     }
@@ -51,7 +51,7 @@ function UserStep({ visible, onClickNext }: Props) {
   };
 
   //이메일 유효성 검사
-  const emailValidation = (_: unknown, value: string) => {
+  const emailValidator = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('이메일을 입력해주세요.'));
     }
@@ -64,7 +64,7 @@ function UserStep({ visible, onClickNext }: Props) {
   };
 
   // 비밀번호 확인 유효성 검사
-  const passwordValidation = (_: unknown, value: number) => {
+  const passwordValidator = (_: unknown, value: number) => {
     if (!value) {
       return Promise.reject(new Error('비밀번호 입력해주세요.'));
     }
@@ -88,7 +88,7 @@ function UserStep({ visible, onClickNext }: Props) {
 
       <Form.Item
         required
-        rules={[{ validator: emailValidation }]}
+        rules={[{ validator: emailValidator }]}
         name="user_email"
         label={t('email')}
       >
@@ -113,7 +113,7 @@ function UserStep({ visible, onClickNext }: Props) {
       <Form.Item shouldUpdate noStyle>
         {({ getFieldValue }) => (
           <Form.Item
-            rules={[{ validator: idValidation }]}
+            rules={[{ validator: idValidator }]}
             required
             label={t('id')}
             name="user_login_id"
@@ -125,18 +125,17 @@ function UserStep({ visible, onClickNext }: Props) {
               }}
               placeholder="아이디를 입력해주세요"
               suffix={
-                <Button
-                  css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
-                  type="link"
-                  disabled={!getFieldValue('user_login_id') || checkDuplicated}
+                <CheckDuplicatedButton
                   onClick={() => {
                     dupCheckMutation.mutate({
                       login_id: form.getFieldValue('user_login_id'),
                     });
                   }}
+                  isDuplicated={checkDuplicated}
+                  isEmpty={!getFieldValue('user_login_id')}
                 >
                   {t('button.duplicatedCheck')}
-                </Button>
+                </CheckDuplicatedButton>
               }
             />
           </Form.Item>
@@ -155,7 +154,7 @@ function UserStep({ visible, onClickNext }: Props) {
       </Form.Item>
 
       <Form.Item
-        rules={[{ validator: passwordValidation }]}
+        rules={[{ validator: passwordValidator }]}
         required
         name="confirm_password"
         label={t('confirm password')}

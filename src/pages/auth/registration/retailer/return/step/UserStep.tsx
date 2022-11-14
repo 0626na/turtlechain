@@ -1,6 +1,6 @@
 import userAPI from '@apis/userAPI';
 import { PhoneAuthForm } from '@components/combine';
-import { SpecialButton } from '@components/element';
+import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
 import { Button, Form, Input, Row } from 'antd';
@@ -126,10 +126,7 @@ function UserStep({ visible, onClickNext }: Props) {
               }}
               placeholder="아이디를 입력해주세요"
               suffix={
-                <Button
-                  css={{ color: '#1A66F9', '&:hover': { color: '#1A66F9' } }}
-                  type="link"
-                  disabled={!getFieldValue('user_login_id') || checkDuplicated}
+                <CheckDuplicatedButton
                   onClick={() => {
                     dupCheckMutation.mutate({
                       encrypted_text: searchParams.get(
@@ -138,9 +135,11 @@ function UserStep({ visible, onClickNext }: Props) {
                       login_id: form.getFieldValue('user_login_id'),
                     });
                   }}
+                  isDuplicated={checkDuplicated}
+                  isEmpty={!getFieldValue('user_login_id')}
                 >
                   {t('button.duplicatedCheck')}
-                </Button>
+                </CheckDuplicatedButton>
               }
             />
           </Form.Item>

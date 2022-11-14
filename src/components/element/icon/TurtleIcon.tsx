@@ -61,12 +61,15 @@ import { ReactComponent as AccordionUp } from '@icons/accordionUp.svg';
 import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
+import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
+
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'checkMark'
     | 'storePlus'
     | 'selectIcon'
     | 'alertBarArrowRight'
@@ -128,6 +131,13 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+  if (name === 'checkMark') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <CheckMark />
+      </div>
+    );
+  }
   if (name === 'storePlus') {
     return (
       <div css={iconContainer} onClick={handleClick}>
