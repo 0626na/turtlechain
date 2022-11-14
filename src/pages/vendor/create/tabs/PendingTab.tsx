@@ -1,19 +1,8 @@
-import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { MemoIcon, TurtleBadge, TurtleTableInput } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
-import {
-  Button,
-  Dropdown,
-  Input,
-  Menu,
-  Popover,
-  Radio,
-  Space,
-  Switch,
-  Table,
-} from 'antd';
+import { Popover, Radio, Space, Switch, Table } from 'antd';
 
 import { TurtleIcon } from '@components/element';
 
@@ -77,12 +66,15 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             width: 50,
             title: t('table.matching'),
+            align: 'center',
             render: (_, record) => (
-              <div css={{ margin: 'auto' }}>
-                <TurtleIcon
-                  name={record.isMatching ? 'matching' : 'misMatching'}
-                />
-              </div>
+              // <div css={{ display: 'flex', alignItems: 'center' }}>
+              //   <div css={{ margin: 'auto' }}>
+              <TurtleIcon
+                name={record.isMatching ? 'matching' : 'misMatching'}
+              />
+              //   </div>
+              // </div>
             ),
           },
           {
