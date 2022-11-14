@@ -14,6 +14,7 @@ import App from './App';
 import { Global } from '@emotion/react';
 import { reset } from '@styles/reset';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import TagManager from 'react-gtm-module';
 
 // Antd Message
 message.config({
@@ -36,8 +37,14 @@ const ga4react = new GA4React(
   process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID ?? '',
 );
 
+// Google Tag Manager
+const tagManagerArgs = {
+  gtmId: process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID ?? '',
+};
+
 (async () => {
   await ga4react.initialize();
+  TagManager.initialize(tagManagerArgs);
   ReactDOM.render(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
