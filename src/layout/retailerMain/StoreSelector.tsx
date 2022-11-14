@@ -1,6 +1,6 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon } from '@components/element';
+import { ArrowRightIcon, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
@@ -20,7 +20,7 @@ const color = [
 ];
 
 function StoreSelector() {
-  const { store, fillStoreList, selectDefaultStore, selectStore } = useStore();
+  const { store, fillStoreList, selectStore } = useStore();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -30,11 +30,7 @@ function StoreSelector() {
     {
       enabled: !!user,
       onSuccess: (data) => {
-        const sortedAscending = data.store_list.sort((a, b) =>
-          a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
-        ); // 한글 오름차순,
-        fillStoreList(sortedAscending);
-        selectDefaultStore(sortedAscending);
+        fillStoreList(data.store_list);
       },
     },
   );
@@ -43,12 +39,13 @@ function StoreSelector() {
     <>
       {isEmpty ? (
         <Button
-          css={buttonCss.self}
+          css={[buttonCss.self, { padding: 16 }]}
           onClick={() => {
             navigate('/setting');
           }}
         >
-          쇼핑몰생성하러 가기
+          쇼핑몰 추가하기
+          <TurtleIcon name="storePlus" />
         </Button>
       ) : (
         <Dropdown // 이름은 DropDown지만, selector역할을 한다.
@@ -102,9 +99,7 @@ function StoreSelector() {
               <span css={buttonCss.text}>{store.selected?.name}</span>
             </div>
 
-            <div>
-              <ArrowRightIcon value="#AAADB3" />
-            </div>
+            <TurtleIcon name="selectIcon" />
           </Button>
         </Dropdown>
       )}

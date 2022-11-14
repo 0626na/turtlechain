@@ -4,6 +4,7 @@ import {
   SecondaryButton,
   SelectButton,
   TurtleConfirmModal,
+  TurtleIcon,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -85,15 +86,24 @@ function MistransferTab() {
           margin-bottom: 16px;
         `}
       >
-        <Col
-          css={css`
-            font-size: 20px;
-            font-weight: 500;
-            color: #242934;
-          `}
-        >
-          오입금 환불내역
-        </Col>
+        <Row align="middle">
+          <Col
+            css={css`
+              margin-right: 12px;
+            `}
+          >
+            <TurtleIcon name="mistransfer" />
+          </Col>
+          <Col
+            css={css`
+              font-size: 20px;
+              font-weight: 500;
+              color: #242934;
+            `}
+          >
+            오입금 환불 내역
+          </Col>
+        </Row>
 
         <Col>
           <SecondaryButton

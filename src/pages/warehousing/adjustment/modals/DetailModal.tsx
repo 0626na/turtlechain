@@ -28,7 +28,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)}`}
+      title={`${t(`adjustment.process type.${selectedRow?.type}`)} 상세보기`}
       visible={visible}
       onClose={onClose}
     >
@@ -74,7 +74,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           {
             ellipsis: true,
             align: 'right',
-            title: t('table.price'),
+            title: t('table.amount'),
             render: (_, record) =>
               (record.product_info.price * record.count).toLocaleString(),
           },

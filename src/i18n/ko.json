@@ -8,7 +8,7 @@
   "vendor": {
     "create": "거래처등록",
     "history": "거래처목록",
-    "addSingle": "거래처 단건추가",
+    "addSingle": "거래처 추가",
     "newCreate": "거래처 신규추가",
     "updateInfo": "거래처 정보수정 요청",
     "search": "거래처검색"
@@ -17,7 +17,7 @@
   "product": {
     "create": "상품등록",
     "history": "상품목록",
-    "addSingle": "상품 단건추가",
+    "addSingle": "상품 추가",
     "search": "상품 검색"
   },
 
@@ -65,7 +65,8 @@
       "true": "마감",
       "false": "대기",
       "all": "전체"
-    }
+    },
+    "addSingle": "입고 추가"
   },
 
   "adjustment": {
@@ -85,8 +86,8 @@
     "create": "결제하기",
     "history": "결제내역",
     "balance": {
-      "": "장부",
-      "add": "과거매입 추가"
+      "": "터틀장부",
+      "add": "과거금액 추가"
     },
     "status": {
       "all": "전체",
@@ -109,6 +110,7 @@
     "clear_refund": "환불처리",
     "reserve_payment": "미송결제",
     "reserve_payment_subtract": "미송결제차감",
+    "reserve_subtract": "미송차감",
     "reserve_warehousing": "미송입고",
     "clearing_subtract": "매입차감",
     "clearing": "정산",
@@ -148,7 +150,10 @@
     "registrationSelect": "가입 유형 선택",
     "aboutMembership": "요금플랜 알아보기",
     "wonderMembership": "다양한 요금제가 궁금하신가요?",
-    "notMember": "아직 회원이 아니신가요?"
+    "notMember": "아직 회원이 아니신가요?",
+    "do": "인증하기",
+    "retry": "재발송",
+    "success": "인증 완료"
   },
 
   "store": {
@@ -158,7 +163,7 @@
     "info": "쇼핑몰 정보",
     "alimtalk name": "알림톡명",
     "url": "쇼핑몰 URL",
-    "phone": "쇼핑몰 휴대번호",
+    "phone": "쇼핑몰 휴대전화 번호",
     "create": "쇼핑몰 추가하기",
     "update": "쇼핑몰 수정하기",
     "address": "쇼핑몰 주소",
@@ -234,38 +239,43 @@
     "at a time": "한번에 추가",
     "one by one": "하나씩 추가",
     "addProduct": "상품 추가하기",
+    "addReserve": "미송상품 추가하기",
     "addVendor": "거래처 추가하기",
+    "addVendorRequest": "거래처 추가요청하기",
+    "addWarehousing": "입고 추가하기",
     "updateVendor": "정보수정 요청하기",
     "addTransaction": "과거매입 추가하기",
     "uploadFile": "파일 첨부하기",
     "findAddress": "주소 찾기",
-    "duplicatedCheck": "중복확인"
+    "duplicatedCheck": "중복확인",
+    "updateProduct": "상품정보 수정하기"
   },
 
   "message": {
-    "networkError": "알 수 없는 오류가 발생했습니다. 채널톡으로 문의 해주세요.",
-    "enterId": "아이디를 입력해주세요.",
-    "enterPassword": "비밀번호를 입력해주세요.",
-    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요.",
-    "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다. 변경하시겠습니까?",
-    "loginExpired": "로그인이 만료되었습니다. 다시 로그인 해주세요.",
-    "success update": "성공적으로 수정하였습니다.",
-    "success registration": "가입 신청이 완료 되었습니다.",
-    "success update store": "정보가 업데이트 되었습니다.",
-    "success create store": "쇼핑몰이 생성되었습니다.",
-    "success create clearing": "결제요청이 완료되었습니다",
+    "networkError": "알 수 없는 오류가 발생했습니다 채널톡으로 문의 해주세요",
+    "enterId": "아이디를 입력해주세요",
+    "enterPassword": "비밀번호를 입력해주세요",
+    "incorrectUser": "아이디 또는 비밀번호를 다시 확인해주세요",
+    "warningChangeStore": "쇼핑몰 변경시 작업했던 정보가 모두 사라집니다 변경하시겠어요?",
+    "loginExpired": "로그인이 만료되었습니다 다시 로그인 해주세요",
+    "success update": "성공적으로 수정했어요",
+    "success registration": "가입 신청이 완료 되었습니다",
+    "success update store": "정보를 수정했어요",
+    "success create store": "쇼핑몰이 추가되었어요",
+    "success create clearing": "결제요청이 완료됐어요",
     "not match password": "비밀번호가 일치하지 않습니다.",
-    "success create auth num": "인증번호를 생성하였습니다.",
-    "success verify auth num": "인증번호를 확인하였습니다.",
-    "expired auth time": "인증시간이 만료되었습니다.",
+    "success create auth num": "인증번호를 문자메세지로 보냈어요",
+    "success verify auth num": "인증번호를 확인했어요",
+    "expired auth time": "인증시간이 만료됐어요 다시 로그인해주세요",
     "successAddOrder": "단건추가가 완료되었습니다.",
-    "successMemoInput": "메모가 추가되었습니다.",
-    "successDelete": "삭제되었습니다.",
-    "success delete mistransfer": "오입금 반환요청을 취소하였습니다.",
-    "success create mistransfer": "오입금 반환요청을 성공했습니다.",
-    "already exist vendor": "이미 추가된 거래처입니다.",
-    "already exist product": "이미 추가된 상품입니다.",
-    "create format success": "양식 등록이 완료되었습니다."
+    "successMemoInput": "메모를 추가했어요",
+    "successDelete": "삭제됐어요",
+    "success delete mistransfer": "오입금 반환요청을 취소했어요.",
+    "success create mistransfer": "오입금 반환을 요청했어요",
+    "already exist vendor": "이미 추가된 거래처에요",
+    "already exist product": "이미 추가된 상품이에요",
+    "success update vendor request": "거래처정보 수정을 요청했어요. 완료시 알림으로 알려드릴게요!",
+    "success create vendor request": "거래처정보 등록을 요청했어요. 완료시 알림으로 알려드릴게요!"
   },
 
   "biz role": "직책",
@@ -273,10 +283,10 @@
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
-  "biz name": "사업자명",
+  "biz name": "사업자명(법인명)",
   "biz num": "사업자번호",
-  "biz address": "사업자주소",
-  "biz detail address": "사업자 상세주소",
+  "biz address": "사업장 주소",
+  "biz detail address": "사업장 상세주소",
   "biz license": "사업자등록증",
 
   "go home": "홈으로 돌아가기",
@@ -301,7 +311,6 @@
     "vendorName": "거래처명을 입력해주세요"
   },
 
-  "auth phone": "인증하기",
   "login": "로그인",
   "reset password": "비밀번호 재설정",
 
@@ -353,5 +362,12 @@
 
   "yes": "네",
   "no": "아니요",
-  "picker": "사입자"
+  "picker": "사입자",
+  "day": {
+    "1": "월",
+    "2": "화",
+    "3": "수",
+    "4": "목",
+    "5": "금"
+  }
 }

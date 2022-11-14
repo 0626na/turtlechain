@@ -1,14 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import { useQuery } from 'react-query';
-import { Card, Col, Divider, Row, Tag, Typography } from 'antd';
-import Meta from 'antd/lib/card/Meta';
 import adjustmentAPI from '@apis/adjustmentAPI';
-import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
+import { ArrowRightIcon, TurtleTag } from '@components/element';
+import { useNavigate } from 'react-router-dom';
 
 function AdjustmentStatusCard() {
+  const navigate = useNavigate();
   // 매입조정 리스트 요청
-  const getAdjustmentListQuery = useQuery(['getAdjustmentList'], () =>
+  const getAdjustmentListQuery = useQuery(['getAdjustmentListQuery'], () =>
     adjustmentAPI.getList({
       is_cleared: '',
       start_date: moment().startOf('month').format('YYYY-MM-DD'),
@@ -17,77 +18,95 @@ function AdjustmentStatusCard() {
     }),
   );
 
+  const goAdjustment = () => {
+    navigate('/warehousing/adjustment');
+  };
+
+  const pending = {
+    count:
+      getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.count,
+    price:
+      getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.price ??
+      0,
+  };
+
+  const completed = {
+    count:
+      getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.count ?? 0,
+    price:
+      getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0,
+  };
+
   return (
     <div
-      css={css`
-        padding-right: 24px;
-      `}
+      css={{ cursor: 'pointer', height: 335 }}
+      onClick={() => {
+        goAdjustment();
+      }}
     >
-      <Row justify="space-between" style={{ paddingBottom: 24 }}>
-        <Col>
-          <Typography.Title style={{ fontSize: 18 }}>
-            교환/반품/미송
-          </Typography.Title>
-        </Col>
-        <Col>
-          <Typography.Text type="secondary">
-            {moment().format('YYYY-MM')}
-          </Typography.Text>
-        </Col>
-      </Row>
+      <div
+        css={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingBottom: 66,
+        }}
+      >
+        <h4 css={{ fontWeight: 500, color: theme.grey500 }}>교환/반품/미송</h4>
+        <div>
+          <ArrowRightIcon value={theme.grey300} />
+        </div>
+      </div>
 
-      <Row style={{ marginTop: 12, marginBottom: 30 }} align="middle">
-        {[
-          {
-            color: 'orange',
-            title: '대기',
-            count:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
-                .count ?? 0,
-            price:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared
-                .price ?? 0,
-          },
-          {
-            color: 'geekblue',
-            title: '마감',
-            count:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                .count ?? 0,
-            price:
-              getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                .price ?? 0,
-          },
-        ].map(({ color, title, count, price }, index) => (
-          <React.Fragment key={index}>
-            <Col span={11}>
-              <Card size="small" bordered={false}>
-                <Row justify="center">
-                  <Tag color={color} style={{ margin: 4 }}>
-                    {title}
-                  </Tag>
-                </Row>
-                <Meta
-                  title={
-                    <>
-                      <span style={{ fontSize: 40 }}>{count ?? 0}</span>
-                      <span style={{ fontSize: 20, marginLeft: 4 }}>건</span>
-                    </>
-                  }
-                  description={`${(price ?? 0).toLocaleString()}원`}
-                  style={{ textAlign: 'center', margin: '12px 0' }}
-                />
-              </Card>
-            </Col>
-            {index === 0 && (
-              <Divider
-                type="vertical"
-                style={{ height: 50, color: '#DCE0E4' }}
-              />
-            )}
-          </React.Fragment>
+      <div css={{ display: 'flex', gap: 64, justifyContent: 'center' }}>
+        {(
+          [
+            {
+              color: 'orange',
+              title: '대기',
+              count: pending.count,
+              price: pending.price,
+            },
+            {
+              color: 'skyblue',
+              title: '마감',
+              count: completed.count,
+              price: completed.price,
+            },
+          ] as const
+        ).map(({ color, title, count, price }, index) => (
+          <div
+            key={index}
+            css={{
+              width: 150,
+              height: 160,
+              textAlign: 'center',
+            }}
+          >
+            <TurtleTag color={color}>{title}</TurtleTag>
+            <div
+              css={{
+                fontWeight: 700,
+                color: theme.grey800,
+                fontSize: 36,
+                marginTop: 24,
+              }}
+            >
+              {count}
+              <span css={{ fontWeight: 500, fontSize: 20 }}>건</span>
+            </div>
+            <div
+              css={{
+                color: theme.grey400,
+                fontWeight: 400,
+                fontSize: 16,
+                marginTop: 16,
+              }}
+            >
+              {price}원
+            </div>
+          </div>
         ))}
-      </Row>
+      </div>
     </div>
   );
 }

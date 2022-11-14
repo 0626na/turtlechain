@@ -1,7 +1,7 @@
-import { KeyboardEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
 
-const useModal = () => {
-  const [visible, setVisible] = useState(false);
+const useModal = (initialValue = false) => {
+  const [visible, setVisible] = useState(initialValue);
 
   const open = () => {
     setVisible(true);

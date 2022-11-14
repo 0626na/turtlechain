@@ -166,7 +166,7 @@ export const reset = css`
     line-height: 1;
   }
 
-  // 인풋 suffix 버튼일시 오른쪽 패딩 제거
+  /* 인풋 suffix 버튼일시 오른쪽 패딩 제거 */
   .ant-input-suffix {
     .ant-btn {
       padding-right: 0px;

@@ -1,55 +1,43 @@
-import { css } from '@emotion/react';
-import { PageContent, PageHeader } from '@layout/page';
-import { theme } from '@styles/theme';
+import { PageHeader } from '@layout/page';
 
 import React from 'react';
+import ClearingChartCard from './ClearingChartCard';
+import { theme } from '@styles/theme';
+import clearingAPI from '@apis/clearingAPI';
+import { useQuery } from 'react-query';
+import moment from 'moment';
+import { css } from '@emotion/react';
+import ProgressBar from './ProgressBar';
+import AdjustmentStatusCard from './AdjustmentStatusCard';
 
-// import { faker } from '@faker-js/faker';
+import ClearingStatusCard from './ClearingStatusCard';
+import AnnouncementCard from './AnnouncementCard';
 
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// );
-
-// const options = {
-//   responsive: true,
-//   plugins: {
-//     legend: {
-//       position: 'top' as const,
-//     },
-//     title: {
-//       display: true,
-//       text: 'Chart.js Bar Chart',
-//     },
-//   },
-// };
-
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-// const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Dataset 1',
-//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-//     },
-//     {
-//       label: 'Dataset 2',
-//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-//     },
-//   ],
-// };
 function PageBody() {
+  // 정산서 리스트 요청
+  const getClearingSheetQuery = useQuery(['getClearingSheetQuery'], () =>
+    clearingAPI.getSheet({
+      credit_type: 'general',
+      start_date: moment().startOf('month').format('YYYY-MM-DD'),
+      end_date: moment().endOf('month').format('YYYY-MM-DD'),
+      status: 'all',
+      page_size: 1000,
+    }),
+  );
+
+  const clearingSheetList = getClearingSheetQuery.data?.data.sheet_list ?? [];
+  const completedClearingSheetList =
+    clearingSheetList?.filter((sheet) => sheet.status === 'complete') ?? [];
+  const totalDepositAmount = completedClearingSheetList // 세금계산서 발행금액
+    .map((sheet) => sheet.total_deposit_amount)
+    .reduce((acc, cur) => acc + cur, 0);
+
+  const thisMonth = moment().format('M');
   return (
     <>
       <PageHeader title="" />
 
-      <PageContent>
+      <div css={pageContent}>
         {/* upper */}
         <div
           css={{
@@ -59,11 +47,12 @@ function PageBody() {
           }}
         >
           <h3 css={{ fontSize: 20, color: theme.grey600 }}>
-            8월 세금계산서 발행예정
+            {thisMonth}월 세금계산서 발행예정
           </h3>
+
           <h1 css={{ marginTop: 14 }}>
             <span css={{ fontSize: 40, fontWeight: 700, color: theme.grey800 }}>
-              100,000,000
+              {totalDepositAmount?.toLocaleString()}
             </span>
             <span
               css={{
@@ -76,142 +65,79 @@ function PageBody() {
             </span>
           </h1>
 
-          <div
-            css={{
-              marginTop: 60,
-              padding: '11px 16px',
-              backgroundColor: '#F0F3F6',
-              borderRadius: 8,
-            }}
-          >
-            교환/반품/미송 상품이 있지는 않나요?
-          </div>
-          <div css={{ marginTop: 48 }}>프로그레스바</div>
+          <ProgressBar />
         </div>
 
         {/* under */}
         <div
           css={{
             marginTop: 100,
-            height: 454,
+            height: 440,
             display: 'flex',
             gap: 24,
           }}
         >
-          <div
-            css={{
-              flex: 1,
-              padding: '36px 36px 52px 36px',
-              boxShadow: '0px 8px 20px rgba(41, 77, 119, 0.14)',
-              borderRadius: 16,
-            }}
-          >
-            <div
-              css={{
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
+          <div css={cardLayout}>
+            <ClearingChartCard
+              completedClearingSheetList={completedClearingSheetList}
+            />
+          </div>
+
+          <div css={cardLayout}>
+            <ClearingStatusCard clearingSheetList={clearingSheetList} />
+          </div>
+
+          <div css={container}>
+            <a
+              target="_blank"
+              href="https://turtlechain-guide.oopy.io/18a4f13e-e989-475b-97aa-84600c75b822"
+              css={announcementCardLayout}
             >
-              <h4
-                css={{
-                  display: 'inline',
-                  color: theme.grey500,
-                  fontSize: 18,
-                  fontWeight: 500,
-                }}
-              >
-                누적 결제금액
-              </h4>
-
-              <div
-                css={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  flexBasis: 122,
-                }}
-              >
-                <div css={markCss.self}>
-                  <div
-                    css={markCss.status}
-                    style={{
-                      ['--backgroundColor' as string]: '#a1a2a6',
-                    }}
-                  />
-                  <span>저번주</span>
-                </div>
-
-                <div css={markCss.self}>
-                  <div
-                    css={markCss.status}
-                    style={{
-                      ['--backgroundColor' as string]: '#00b3be',
-                    }}
-                  />
-                  <span>이번주</span>
-                </div>
-              </div>
+              <AnnouncementCard />
+            </a>
+            <div css={adjustmentStatusCardLayout}>
+              <AdjustmentStatusCard />
             </div>
-            <h1 css={{ marginTop: 12 }}>
-              <span
-                css={{ fontSize: 28, fontWeight: 700, color: theme.grey800 }}
-              >
-                100,000,000
-              </span>
-              <span
-                css={{
-                  fontSize: 18,
-                  fontWeight: 500,
-                  color: theme.grey800,
-                }}
-              >
-                원
-              </span>
-            </h1>
-            {/* <Bar options={options} data={data} />; */}
-          </div>
-          <div css={{ flex: 1, background: 'red' }}>
-            {/* <ClearingStatusCard /> */}
-          </div>
-          <div css={{ flex: 1, background: 'red' }}>
-            {/* <AnnouncementCard />
-            <AdjustmentStatusCard /> */}
           </div>
         </div>
-
-        {/* <Row
-          css={css`
-            height: 253px;
-          `}
-        >
-          <ClearingStatusCard />
-        </Row>
-        <Row gutter={12}>
-          <Col span={7}>
-            <AdjustmentStatusCard />
-          </Col>
-          <Col span={17}>
-            <ClearingChartCard />
-          </Col>
-        </Row> */}
-      </PageContent>
+      </div>
     </>
   );
 }
 
-const markCss = {
-  self: css({
-    fontWeight: 400,
-    fontSize: 14,
-    color: theme.grey600,
-  }),
+const pageContent = css({
+  padding: '0px 60px 20px 60px',
+  flexGrow: 1,
+});
 
-  status: css({
-    display: 'inline-block',
-    marginRight: 7,
-    width: 8,
-    height: 8,
-    backgroundColor: 'var(--backgroundColor)',
-    borderRadius: '50%',
-  }),
-};
+const cardLayout = css({
+  flex: 1,
+  boxShadow: '0px 8px 20px rgba(41, 77, 119, 0.14)',
+  padding: '36px 36px 52px 36px',
+  borderRadius: 16,
+});
+
+const container = css({
+  flex: 1,
+  gap: 20,
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const announcementCardLayout = css({
+  padding: '30px 36px 30px 36px',
+  height: 80,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  borderRadius: 16,
+  boxShadow: '0px 8px 20px rgba(41, 77, 119, 0.14)',
+});
+
+const adjustmentStatusCardLayout = css({
+  padding: '36px 36px 52px 36px',
+  height: 335,
+  borderRadius: 16,
+  boxShadow: '0px 8px 20px rgba(41, 77, 119, 0.14)',
+});
 export default PageBody;

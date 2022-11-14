@@ -13,7 +13,7 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { t } from 'i18next';
 import { PhoneAuthForm } from '@components/combine';
 import AgreementCheckbox from '../AgreementCheckbox';
-import { SpecialButton } from '@components/element';
+import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 import Completed from '../Completed';
 
 function Pagebody() {
@@ -178,23 +178,17 @@ function Pagebody() {
                       }}
                       placeholder="아이디를 입력해주세요"
                       suffix={
-                        <Button
-                          css={{
-                            color: '#1A66F9',
-                            '&:hover': { color: '#1A66F9' },
-                          }}
-                          type="link"
-                          disabled={
-                            !getFieldValue('user_login_id') || checkDuplicated
-                          }
+                        <CheckDuplicatedButton
                           onClick={() => {
                             dupCheckMutation.mutate({
                               login_id: form.getFieldValue('user_login_id'),
                             });
                           }}
+                          isDuplicated={checkDuplicated}
+                          isEmpty={!getFieldValue('user_login_id')}
                         >
-                          중복확인
-                        </Button>
+                          {t('button.duplicatedCheck')}
+                        </CheckDuplicatedButton>
                       }
                     />
                   </Form.Item>

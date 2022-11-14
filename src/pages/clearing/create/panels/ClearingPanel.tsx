@@ -172,6 +172,11 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       >
         <Table
           size="small"
+          css={{
+            '&& tbody > tr:hover > td': {
+              background: '#E2F6F7',
+            },
+          }}
           scroll={{ y: 300 }}
           pagination={false}
           loading={activeKey !== '2'}
@@ -185,11 +190,12 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                   <Row>
                     <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
-                        전액사용
+                        전액결제
                       </FullUseButton>
                     </Col>
                     <Col>
                       <SearchFilter
+                        placeholder="거래처 검색"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />
@@ -208,7 +214,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: '거래처 명',
+              title: '거래처명',
               render: (_, record) => {
                 const isMark =
                   record.reserve_subtract_amount +

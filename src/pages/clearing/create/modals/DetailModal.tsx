@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
-import { TurtleDivider, TurtleIcon } from '@components/element';
+import { TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
+import { theme } from '@styles/theme';
 
 interface Props {
   visible: boolean;
@@ -15,10 +16,23 @@ function DetailModal({
 
   selectedRow,
 }: Props) {
+  useEffect(() => {
+    const escKeyModalClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', escKeyModalClose);
+    return () => window.removeEventListener('keydown', escKeyModalClose);
+  }, []);
+
   return (
     <>
       {visible && (
-        <div css={modalCss.mask}>
+        <div
+          css={modalCss.mask}
+          onClick={() => {
+            onClose();
+          }}
+        >
           <div css={modalCss.container}>
             <div css={modalCss.header}>
               <TurtleIcon name="modalClose" onClick={onClose} />
@@ -44,7 +58,7 @@ function DetailModal({
               </div>
             </div>
 
-            <TurtleDivider marginTop={30} marginBottom={40} />
+            <div css={divider} />
 
             <div>
               <div css={modalBottomContentCss.title}>상세내역</div>
@@ -53,14 +67,15 @@ function DetailModal({
                 <li css={[modalBottomContentCss.item]}>
                   <span>교환/반품</span>
                   <span>
-                    -
+                    {(selectedRow.overpaid_payment_amount ?? 0) > 0 && '- '}
                     {selectedRow.overpaid_payment_amount?.toLocaleString() ?? 0}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
                   <span>미송입고</span>
                   <span>
-                    - {selectedRow.reserve_subtract_amount.toLocaleString()}
+                    {selectedRow.reserve_subtract_amount > 0 && '- '}
+                    {selectedRow.reserve_subtract_amount.toLocaleString()}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
@@ -170,6 +185,14 @@ const modalTopContentCss = {
     },
   }),
 };
+
+const divider = css({
+  marginTop: 30,
+  marginBottom: 40,
+  height: 2,
+  background: theme.grey800,
+  width: '100%',
+});
 
 const modalBottomContentCss = {
   title: css({

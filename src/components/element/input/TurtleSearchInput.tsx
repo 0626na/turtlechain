@@ -1,6 +1,4 @@
-import { InputProps } from 'antd';
 import { Input } from 'antd';
-
 import { css } from '@emotion/react';
 import { SearchProps } from 'antd/lib/input';
 
@@ -9,7 +7,9 @@ function TurtleSearchInput({ ...props }: SearchProps) {
 }
 
 const search = css`
-  // 검색 인풋 style
+  width: 250px;
+
+  /* 검색 인풋 style */
   input {
     height: 28px;
     background: #f5f6f7;
@@ -22,7 +22,7 @@ const search = css`
     border-radius: 6px 0px 0px 6px;
   }
 
-  // 검색 아이콘 버튼 style
+  /* 검색 아이콘 버튼 style */
   &.ant-input-search
     > .ant-input-group
     > .ant-input-group-addon:last-child

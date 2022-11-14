@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -34,12 +34,20 @@ function PageBody() {
   const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
 
+  // 쇼핑몰 변경시, unmount 시 상태 초기화
+  useEffect(() => {
+    reset();
+
+    return () => {
+      reset();
+    };
+  }, [store.selected]);
+
   const connectInventoryMutation = useMutation(
     warehousingAPI.connectInventory,
     {
       onSuccess: (data) => {
         ready(data);
-        // data.msg && setReservedMessage(data.msg);
         closeInventoryModal();
       },
     },
@@ -48,7 +56,6 @@ function PageBody() {
   const parseExcelMutation = useMutation(warehousingAPI.parseExcel, {
     onSuccess: (data) => {
       ready(data);
-      // data.msg && message.info(data.msg);
     },
   });
 

@@ -23,7 +23,7 @@ import { message } from '@utils/message';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import { PageContent, PageHeader, PageTitle } from '@layout/page';
-import { Col, Pagination, Row, Table } from 'antd';
+import { Col, Pagination, Row, Table, Tooltip } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +32,7 @@ import ExchangeRefundModal from './modals/CreateExchangeTakebackModal';
 import AddReserveModal from './modals/CreateReserveModal';
 import AdjustmentProcessModal from './modals/ProcessModal';
 import DetailModal from './modals/DetailModal';
+import { RecoilValueReadOnly } from 'recoil';
 
 function PageBody() {
   const { store } = useStore();
@@ -48,7 +49,7 @@ function PageBody() {
     useModal();
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
   const [removeModalVisible, removeModalOpen, removeModalClose] = useModal();
-
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   // 교환/반품/미송 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     rt_store_id: null,
@@ -61,7 +62,7 @@ function PageBody() {
 
   // 교환/반품/미송 검색 요청
   const getAdjustmentListQuery = useQuery(
-    ['getAdjustmentList', searchQuery],
+    ['getAdjustmentListQuery', searchQuery],
     () => adjustmentAPI.getList(searchQuery),
     {
       enabled: !!searchQuery.rt_store_id,
@@ -87,14 +88,42 @@ function PageBody() {
       removeModalClose();
     },
   });
+  const totalPendingCount =
+    getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.count ??
+    0;
+
+  const totalPendingPrice =
+    getAdjustmentListQuery.data?.data.adjustment_summary?.not_cleared.price ??
+    0;
+
+  const totalClearingCount =
+    getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.count ?? 0;
+
+  const totalClearingPrice =
+    getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0;
+
+  const resetSearchQuery = () => {
+    setSearchQuery({
+      is_cleared: '',
+      start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+      search_string: '',
+      page: 1,
+      rt_store_id: store.selected?.id as number,
+    });
+  };
 
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
-      rt_store_id: store.selected?.id as number,
-    }));
+    resetSearchQuery();
   }, [store.selected?.id]);
 
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      setTooltipVisible(false);
+    };
+    window.addEventListener('click', onClick);
+    return () => window.removeEventListener('click', onClick);
+  }, []);
   return (
     <>
       {/*
@@ -174,7 +203,7 @@ function PageBody() {
 
       <PageHeader title="교환/반품/미송" />
       <PageTitle
-        title="현황"
+        title="교환/반품/미송 현황"
         buttons={[
           <TurtleDropdown
             items={[
@@ -211,22 +240,14 @@ function PageBody() {
             {
               color: 'orange',
               title: t('warehousing.adjustment.pending'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary
-                  ?.not_cleared.price ?? 0,
+              count: totalPendingCount,
+              price: totalPendingPrice,
             },
             {
               color: 'cyan',
               title: t('warehousing.adjustment.confirmed'),
-              count:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .count ?? 0,
-              price:
-                getAdjustmentListQuery.data?.data.adjustment_summary?.cleared
-                  .price ?? 0,
+              count: totalClearingCount,
+              price: totalClearingPrice,
             },
           ]}
         />
@@ -246,17 +267,16 @@ function PageBody() {
           scroll={{ x: 'auto', y: 'auto' }}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getAdjustmentListQuery.data?.data.adjustment_list?.length ?? 0
-              }
+              totalCount={totalPendingCount + totalClearingCount}
               rightContent={
                 <Row>
                   <Col>
                     <TurtleSearchSelect
-                      value={''}
+                      value={searchQuery.is_cleared}
                       onChange={(search_type) => {
                         setSearchQuery((searchQuery) => ({
                           ...searchQuery,
+                          page: 1,
                           is_cleared: search_type as '' | 'True' | 'False',
                         }));
                       }}
@@ -289,6 +309,7 @@ function PageBody() {
 
                         setSearchQuery((searchQuery) => ({
                           ...searchQuery,
+                          page: 1,
                           start_date,
                           end_date,
                         }));
@@ -307,6 +328,7 @@ function PageBody() {
 
                   <Col>
                     <SearchFilter
+                      placeholder="거래처명, 상품명, 거래처 상품명 검색"
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
                     />
@@ -319,9 +341,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={
-                  getAdjustmentListQuery.data?.data.adjustment_list.length ?? 0
-                }
+                total={totalPendingCount + totalClearingCount}
                 showSizeChanger={false}
                 current={searchQuery.page}
                 onChange={(page) => {
@@ -361,7 +381,21 @@ function PageBody() {
             {
               ellipsis: true,
               width: 100,
-              title: t('table.vendorName'),
+              title: (
+                <Tooltip
+                  overlayStyle={{ minWidth: 353 }}
+                  visible={tooltipVisible}
+                  zIndex={1}
+                  title={
+                    <span>
+                      거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수
+                      있어요!
+                    </span>
+                  }
+                >
+                  {t('table.vendorName')}
+                </Tooltip>
+              ),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
@@ -412,6 +446,7 @@ function PageBody() {
               }),
               render: (_, record) => <MemoIcon value={record.memo} />,
             },
+
             {
               ellipsis: true,
               width: 100,
@@ -442,19 +477,22 @@ function PageBody() {
                 </>
               ),
             },
+
             {
               ellipsis: true,
               width: 30,
               align: 'center',
               onCell: (record) => ({
-                style: { cursor: 'pointer' },
+                style: { cursor: !record.is_cleared ? 'pointer' : '' },
                 onClick: (e) => {
                   e.stopPropagation();
+                  if (record.is_cleared) return;
                   setSelectedRow(record);
                   removeModalOpen();
                 },
               }),
-              render: (_) => <TurtleIcon name="delete" />,
+              render: ({ is_cleared }) =>
+                !is_cleared ? <TurtleIcon name="delete" /> : null,
             },
           ]}
         />

@@ -61,12 +61,13 @@ function PageBody() {
        * 상세보기 모달
        */}
       <DetailModal
-        selectedRow={selectedRow as TransactionItem}
+        vendor_id={selectedRow?.vendor_id}
+        vendor_name={selectedRow?.vendor_name}
         visible={detailModalVisible}
         onClose={detailModalClose}
       />
 
-      <PageHeader title="장부" />
+      <PageHeader title={t('clearing.balance.')} />
 
       <PageTitle
         title="장부 리스트"
@@ -77,7 +78,7 @@ function PageBody() {
               addModalOpen();
             }}
           >
-            과거매입 추가
+            과거금액 추가
           </SecondaryIconButton>,
         ]}
       />

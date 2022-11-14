@@ -58,13 +58,20 @@ import { ReactComponent as AlertBarArrowRightIcon } from '@icons/alertBarArrowRi
 import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
 import { ReactComponent as AccordionDown } from '@icons/accordionDown.svg';
 import { ReactComponent as AccordionUp } from '@icons/accordionUp.svg';
-import { ReactComponent as AlertWarnRedIcon } from '@icons/alertWarningRed.svg';
+import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
+import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
+import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
+import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
+
 import { css } from '@emotion/react';
 import React from 'react';
 
 interface Props {
   danger?: boolean;
   name:
+    | 'checkMark'
+    | 'storePlus'
+    | 'selectIcon'
     | 'alertBarArrowRight'
     | 'exclamationMark'
     | 'alertWarn'
@@ -115,7 +122,7 @@ interface Props {
     | 'tuning'
     | 'accordionUp'
     | 'accordionDown'
-    | 'alertWarningRed';
+    | 'mistransfer';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -124,7 +131,28 @@ function TurtleIcon({ name, onClick, danger }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick && onClick(e);
   };
+  if (name === 'checkMark') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <CheckMark />
+      </div>
+    );
+  }
+  if (name === 'storePlus') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <StorePlus />
+      </div>
+    );
+  }
 
+  if (name === 'selectIcon') {
+    return (
+      <div css={iconContainer} onClick={handleClick}>
+        <SelectIcon />
+      </div>
+    );
+  }
   if (name === 'alertBarArrowRight') {
     return <AlertBarArrowRightIcon />;
   }
@@ -146,6 +174,22 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'mark') {
     return <MarkIcon />;
+  }
+
+  if (name === 'mistransfer') {
+    return <Mistransfer />;
+  }
+
+  if (name === 'membership') {
+    return <MembershipIcon />;
+  }
+
+  if (name === 'user') {
+    return <UserIcon />;
+  }
+
+  if (name === 'storeList') {
+    return <StoreListIcon />;
   }
 
   if (name === 'rightTriangle') {
@@ -446,34 +490,15 @@ function TurtleIcon({ name, onClick, danger }: Props) {
       </div>
     );
   }
-  if (name === 'user') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <UserIcon />
-      </div>
-    );
-  }
-  if (name === 'membership') {
+
+  if (name === 'company') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <CompanyIcon />
       </div>
     );
   }
-  if (name === 'company') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <StoreListIcon />
-      </div>
-    );
-  }
-  if (name === 'storeList') {
-    return (
-      <div css={[iconContainer]} onClick={handleClick}>
-        <MembershipIcon />
-      </div>
-    );
-  }
+
   if (name === 'tuning') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
