@@ -22,7 +22,7 @@ import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI from '@apis/orderAPI';
+import orderAPI, { ResponseCreateOrderItemExcelParsing } from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
@@ -61,14 +61,15 @@ function PageBody() {
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
       //2회 이상 발주 파일이 없는경우
-      if (data.parsingData) {
-        ready({ ...data.parsingData });
-        if (!data.parsingData.data.parsing_status.fail_count) return;
-        openParsingProcessModal();
+      if (!data.parsingData) {
+        openPreparsingModal();
         return;
       }
-
-      openPreparsingModal();
+      if (!data.parsingData.data.parsing_status.fail_count) {
+        ready({ ...data.parsingData });
+        return;
+      }
+      openParsingProcessModal();
     },
   });
 
@@ -134,16 +135,31 @@ function PageBody() {
       {/* 발주서 파싱 결과 모달 */}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
-        title="발주서 처리 현황"
+        title={t('order.parsingModal.title')}
         description={[
-          '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
-          '발주서 별 자세한 오류사항은 하나씩 올리면 확인 가능.',
+          t('order.parsingModal.description1'),
+          t('order.parsingModal.description2'),
         ]}
         onCancel={closeParsingProcessModal}
-        onOk={() => {}}
-        successCount={cart.parsingStatus.success_count}
-        failCount={cart.parsingStatus.fail_count}
-        messages={cart.parsingStatus.error_messages}
+        onOk={() => {
+          ready({
+            ...(createPreParsingMutation.data
+              ?.parsingData as ResponseCreateOrderItemExcelParsing),
+          });
+          closeParsingProcessModal();
+        }}
+        successCount={Number(
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .success_count,
+        )}
+        failCount={Number(
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .fail_count,
+        )}
+        messages={
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .error_messages ?? []
+        }
         size="middle"
       />
 
@@ -251,11 +267,11 @@ function PageBody() {
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(발주 ${countOrdersForType().order}, 교환 ${
                   countOrdersForType().exchange
-                }, 미송 ${countOrdersForType().notDelivery}, 샘플 ${
-                  countOrdersForType().sample
-                }, 픽업 ${countOrdersForType().pickup}, 기타 ${
-                  countOrdersForType().etc
-                })
+                }, 반품 ${countOrdersForType().return}, 미송 ${
+                  countOrdersForType().notDelivery
+                }, 샘플 ${countOrdersForType().sample}, 픽업 ${
+                  countOrdersForType().pickup
+                }, 기타 ${countOrdersForType().etc})
               / 발주금액 합계  `}
               </span>
               {`${calculateTotalPrice().toLocaleString()}원`}
