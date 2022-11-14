@@ -310,7 +310,8 @@ const useOrderCart = () => {
       (acc, store) =>
         acc +
         store.orders.reduce(
-          (acc, order) => acc + Number(order.product_price),
+          (acc, order) =>
+            acc + Number(order.product_price) * Number(order.product_count),
           0,
         ),
       0,
@@ -321,7 +322,9 @@ const useOrderCart = () => {
         acc +
         store.orders.reduce(
           (acc, order) =>
-            order.mobile !== '' ? acc + Number(order.product_price) : acc,
+            order.mobile !== ''
+              ? acc + Number(order.product_price) * Number(order.product_count)
+              : acc,
           0,
         ),
       0,
