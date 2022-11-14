@@ -301,6 +301,7 @@ export interface OrderHistoryItem {
   name: string; //상품명
   option: string;
   type: string; //분류
+  creation_type: 'excel' | 'single';
   count: number; //요청수량
   price: number; //공급가
   memo: string;

@@ -15,12 +15,9 @@ interface Props {
 }
 
 function DetailModal({ visible, onclose, sheetId }: Props) {
-  const getOrderHistoryQuery = useQuery(
-    ['getOrderHistory', sheetId],
+  const getOrderHistoryCountQuery = useQuery(
+    ['getOrderHistoryCount', sheetId],
     () => orderAPI.getOrderHistory({ sheet_id: sheetId }),
-    {
-      enabled: sheetId !== 0,
-    },
   );
 
   return (
@@ -36,34 +33,34 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             {
               title: '쇼핑몰',
               value:
-                getOrderHistoryQuery.data?.data.order_sheet.rt_store_name ??
-                '없음',
+                getOrderHistoryCountQuery.data?.data.order_sheet
+                  .rt_store_name ?? '없음',
             },
             {
               title: '발주 일자',
               value:
                 moment(
-                  getOrderHistoryQuery.data?.data.order_sheet.request_date,
+                  getOrderHistoryCountQuery.data?.data.order_sheet.request_date,
                 ).format('YYYY-MM-DD') ?? '',
             },
             {
               title: '발주 거래처',
               value: `${
-                getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString() ??
+                getOrderHistoryCountQuery.data?.data.order_sheet.total_store_count.toString() ??
                 '0'
               }개`,
             },
             {
               title: '발주수량 합계',
               value: `${
-                getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString() ??
+                getOrderHistoryCountQuery.data?.data.order_sheet.total_item_subcount.toString() ??
                 '0'
               }개`,
             },
             {
               title: '발주금액 합계',
               value: `${
-                getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
+                getOrderHistoryCountQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
                 '0'
               }원`,
             },
@@ -71,28 +68,31 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
         />
         <TurtleTabs>
           <SuccessTab
+            sheetID={sheetId}
+            storeID={Number(
+              getOrderHistoryCountQuery.data?.data.order_sheet.rt_store_id,
+            )}
+            requestDate={String(
+              getOrderHistoryCountQuery.data?.data.order_sheet.request_date,
+            )}
             key={'successHistory'}
             tab={`성공(${
-              getOrderHistoryQuery.data?.data.successes.length ?? 0
+              getOrderHistoryCountQuery.data?.data.successes.length ?? 0
             })`}
-            data={
-              getOrderHistoryQuery.data?.data.successes.map((item, index) => ({
-                ...item,
-                id: index,
-              })) ?? []
-            }
-            loading={getOrderHistoryQuery.isLoading}
+            loading={getOrderHistoryCountQuery.isLoading}
           />
           <FailTab
             key={'failHistory'}
-            tab={`실패(${getOrderHistoryQuery.data?.data.fails.length ?? 0})`}
+            tab={`실패(${
+              getOrderHistoryCountQuery.data?.data.fails.length ?? 0
+            })`}
             data={
-              getOrderHistoryQuery.data?.data.fails.map((item, index) => ({
+              getOrderHistoryCountQuery.data?.data.fails.map((item, index) => ({
                 ...item,
                 id: index,
               })) ?? []
             }
-            loading={getOrderHistoryQuery.isLoading}
+            loading={getOrderHistoryCountQuery.isLoading}
           />
         </TurtleTabs>
       </TurtleContentModal>
