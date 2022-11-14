@@ -252,9 +252,14 @@ const menus = [
         key: pathnames.etc.tutorial,
         label: (
           <a
-            rel="stylesheet"
-            target="_blank"
-            href="https://turtlechain-guide.oopy.io/"
+            onClick={() => {
+              window.alert(
+                '최근 개편된 내용으로 현재 업데이트 중입니다. 빠른 시일내에 제공할 예정이니 잠시만 기다려주세요!',
+              );
+            }}
+            // rel="stylesheet"
+            // target="_blank"
+            // href="https://turtlechain-guide.oopy.io/"
           >
             {t('etc.tutorial')}
           </a>
