@@ -107,7 +107,9 @@ function MistransferAddModal({ visible, closeModal }: Props) {
               account_number: store.selected?.store_account[0].account_number,
               account_holder: store.selected?.store_account[0].account_holder,
             },
-            recipient_print: store.selected?.recipient_print,
+            recipient_print:
+              store.selected?.recipient_print ||
+              `${moment().format('MMDD')}터틀환불`,
           }}
           layout="horizontal"
           form={form}
@@ -233,10 +235,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             </div>
           </Form.Item>
           <Form.Item name="recipient_print" label="받는분 통장인쇄">
-            <TurtleFormInput
-              disabled
-              placeholder={`${moment().format('MMDD')}터틀환불`}
-            />
+            <TurtleFormInput disabled />
           </Form.Item>
 
           <Form.Item
