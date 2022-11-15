@@ -6,7 +6,7 @@ export interface TransactionDetailItem {
   transaction_type: string;
   memo: string;
   unpaid_amount: number;
-  subtract_amount: number;
+  overpaid_amount: number;
   refund_amount: number;
 }
 
@@ -15,7 +15,7 @@ export interface TransactionItem {
   vendor_name: string;
   vendor_address: string;
   unpaid_amount: number; // 결제요청금액
-  subtract_amount: number; // 사용가능금액
+  overpaid_amount: number; // 사용가능금액
   refund_amount: number; // 환불 예정금액
 }
 
@@ -64,7 +64,7 @@ const getItem = async (params: RequestGetItem) => {
 interface RequestCreateItem {
   rt_store_id: number;
   vendor_id: number;
-  subtract_amount: number; // 사용할 금액
+  overpaid_amount: number; // 사용할 금액
   unpaid_amount: number; // 미결제 금액
 }
 

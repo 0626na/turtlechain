@@ -53,7 +53,7 @@ function AddModal({ visible, closeModal }: Props) {
       vendor_account_bank: record.vendor_account.bank,
       vendor_account_number: record.vendor_account.account_number,
       vendor_account_holder: record.vendor_account.account_holder,
-      subtract_amount: 0,
+      overpaid_amount: 0,
       unpaid_amount: 0,
     });
     closeVendorModal();
@@ -79,7 +79,7 @@ function AddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('clearing.balance.add')}
+        title={t('clearing.transaction.add')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -95,13 +95,13 @@ function AddModal({ visible, closeModal }: Props) {
           onFinish={({
             rt_store_id,
             vendor_id,
-            subtract_amount,
+            overpaid_amount,
             unpaid_amount,
           }) => {
             createTransactionMutation.mutate({
               rt_store_id,
               vendor_id,
-              subtract_amount: subtract_amount ?? 0,
+              overpaid_amount: overpaid_amount ?? 0,
               unpaid_amount: unpaid_amount ?? 0,
             });
           }}
@@ -161,7 +161,7 @@ function AddModal({ visible, closeModal }: Props) {
 
           <TurtleDivider marginBottom={37} marginTop={32} />
 
-          <Form.Item label={t('table.subtractAmount')} name="subtract_amount">
+          <Form.Item label={t('table.overpaidAmount')} name="overpaid_amount">
             <TurtleNumberInput step={1000} min={0} placeholder="ex. 7,000" />
           </Form.Item>
           <Form.Item label={t('table.unpaidPayment')} name="unpaid_amount">
@@ -176,7 +176,7 @@ function AddModal({ visible, closeModal }: Props) {
                   htmlType="submit"
                   disabled={
                     !getFieldValue('vendor_name') ||
-                    (!getFieldValue('subtract_amount') &&
+                    (!getFieldValue('overpaid_amount') &&
                       !getFieldValue('unpaid_amount'))
                   }
                 >
