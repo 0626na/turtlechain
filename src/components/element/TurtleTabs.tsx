@@ -27,7 +27,7 @@ function TurtleTabs({ children, color = 'blue', ...props }: Props) {
       css={{
         '.ant-tabs-nav-wrap': {
           backgroundColor: theme.white,
-          borderBottom: `1px solid ${theme.DivlderGrey}`,
+          borderBottom: `1px solid ${theme.dividerGrey}`,
           padding: color === 'blue' ? '' : '0px 36px',
         },
         '.ant-tabs-nav': {
