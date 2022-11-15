@@ -6,7 +6,7 @@ interface Props {
   color?: string;
 }
 
-function TurtleBadge({ count, children, color = 'green' }: Props) {
+function TurtleBadge({ count, children, color = '#F47E12' }: Props) {
   return (
     <Badge count={count} offset={[10, 10]} color={color} size="small">
       {children}
