@@ -39,22 +39,9 @@ function OrderInfoModal({ visible, onClose }: Props) {
     <TurtleContentModal
       visible={visible}
       onClose={onClose}
-      title={
-        <div
-          css={css({
-            background: theme.blueGradient,
-            borderRadius: 14,
-            padding: '7px 12px',
-            color: theme.white,
-            fontWeight: 400,
-            fontSize: 14,
-          })}
-        >
-          공지사항
-        </div>
-      }
+      title={<div css={icon}>공지사항</div>}
     >
-      <div css={css({ fontSize: 24, fontWeight: 700, marginBottom: 16 })}>
+      <div css={title}>
         <span>발주 서비스 이용안내</span>
       </div>
       <div css={container}>
@@ -74,13 +61,7 @@ function OrderInfoModal({ visible, onClose }: Props) {
       <button css={button} onClick={openOrderLink}>
         발주 서비스 이동
       </button>
-      <div
-        css={css({
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: 15,
-        })}
-      >
+      <div css={notShowContainer}>
         <span css={notShowButton} onClick={onClickDisable}>
           다시 보지 않기
         </span>
@@ -93,6 +74,13 @@ function OrderInfoModal({ visible, onClose }: Props) {
 export default OrderInfoModal;
 
 const container = css({ marginBottom: 40, lineHeight: 1.3 });
+
+const notShowContainer = css({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  marginTop: 15,
+});
+
 const notShowButton = css({
   cursor: 'pointer',
   color: '#88898E',
@@ -110,3 +98,14 @@ const button = css({
   fontSize: 16,
   fontWeight: 700,
 });
+
+const icon = css({
+  background: theme.blueGradient,
+  borderRadius: 14,
+  padding: '7px 12px',
+  color: theme.white,
+  fontWeight: 400,
+  fontSize: 14,
+});
+
+const title = css({ fontSize: 24, fontWeight: 700, marginBottom: 16 });
