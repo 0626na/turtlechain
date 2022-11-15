@@ -45,9 +45,9 @@ function OrderInfoModal({ visible, onClose }: Props) {
         <span>발주 서비스 이용안내</span>
       </div>
       <div css={container}>
-        기존 발주 서비스 URL이 다음과 같이 변경되었습니다.
+        서비스 개편을 위해 기존 발주 서비스 URL이 변경되었습니다.
         <br />
-        변경된 주소로 발주 서비스를 이용해주세요.
+        발주 서비스를 이용중인 고객께서는 변경된 주소로 접속해 이용해주세요.
         <br />
         <br />
         <Typography.Link
