@@ -67,7 +67,7 @@ function PageBody() {
         onClose={detailModalClose}
       />
 
-      <PageHeader title={t('clearing.balance.')} />
+      <PageHeader title={t('clearing.transaction.')} />
 
       <PageTitle
         title="장부 리스트"
@@ -133,8 +133,8 @@ function PageBody() {
             {
               ellipsis: true,
               align: 'right',
-              title: t('table.subtractAmount'),
-              render: (_, record) => record.subtract_amount.toLocaleString(),
+              title: t('table.overpaidAmount'),
+              render: (_, record) => record.overpaid_amount?.toLocaleString(),
             },
             {
               ellipsis: true,

@@ -30,7 +30,7 @@ const pathnames = {
   clearing: {
     create: '/clearing/create',
     history: '/clearing/history',
-    balance: '/clearing/balance',
+    transaction: '/clearing/transaction',
   },
 
   etc: {
@@ -225,8 +225,8 @@ const menus = [
             style: mainMenuContentStyle,
           },
           {
-            key: pathnames.clearing.balance,
-            label: t('clearing.balance.'),
+            key: pathnames.clearing.transaction,
+            label: t('clearing.transaction.'),
             style: lastMainMenuContentStyle,
           },
         ],
