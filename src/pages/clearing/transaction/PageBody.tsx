@@ -115,7 +115,6 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_name,
             },
