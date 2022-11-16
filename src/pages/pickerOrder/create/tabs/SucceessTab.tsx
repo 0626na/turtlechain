@@ -18,7 +18,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { valueType } from 'antd/lib/statistic/utils';
-import { StoreOrder } from '@apis/orderAPI';
+import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -71,7 +71,13 @@ function SuccessTab({ loading, ...props }: Props) {
     },
   ];
 
-  const { cart, setCart } = useOrderCart();
+  const {
+    cart,
+    setCart,
+    setSuccessListToMemo,
+    setSuccessListToOrderCount,
+    setSuccessListToOrderType,
+  } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
   const [selectOrderRowID, setSelectOrderRowID] = useState(0);
   const [deleteMode, setDeleteMode] = useState(false); //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
@@ -144,20 +150,12 @@ function SuccessTab({ loading, ...props }: Props) {
         onOk={(value) => {
           setCart({
             ...cart,
-            successList: cart.successList.map((store) => {
-              if (store.id === selectedRowID) {
-                return {
-                  ...store,
-                  orders: store.orders.map((order) => {
-                    if (order.order_id === selectOrderRowID)
-                      return { ...order, memo: value };
-
-                    return order;
-                  }),
-                };
-              }
-              return store;
-            }),
+            successList: setSuccessListToMemo(
+              cart.successList,
+              selectedRowID,
+              selectOrderRowID,
+              value,
+            ),
           });
           message.success(t('message.successMemoInput'));
           closeMemoModal();
@@ -284,23 +282,11 @@ function SuccessTab({ loading, ...props }: Props) {
                           setCart({
                             ...cart,
                             failList: cart.failList,
-                            successList: cart.successList.map(
-                              (successItem) => ({
-                                rt_store_id: successItem.rt_store_id,
-                                rt_store_name: successItem.rt_store_name,
-                                type: successItem.type,
-                                orders:
-                                  successItem.rt_store_id ===
-                                  expandedRecord.rt_store_id
-                                    ? successItem.orders.map((order) => ({
-                                        ...order,
-                                        order_type:
-                                          order.order_id === record.order_id
-                                            ? value
-                                            : order.order_type,
-                                      }))
-                                    : successItem.orders,
-                              }),
+                            successList: setSuccessListToOrderType(
+                              cart.successList,
+                              value,
+                              expandedRecord.rt_store_id,
+                              Number(record.order_id),
                             ),
                           });
                         }}
@@ -315,26 +301,15 @@ function SuccessTab({ loading, ...props }: Props) {
                       <TurtleTableNumberInput
                         step={1}
                         value={Number(record.product_count)}
-                        onChange={(value: valueType) => {
+                        onChange={(value) => {
                           setCart({
                             ...cart,
                             failList: cart.failList,
-                            successList: cart.successList.map(
-                              (successItem) => ({
-                                ...successItem,
-                                orders:
-                                  successItem.rt_store_id ===
-                                  expandedRecord.rt_store_id
-                                    ? successItem.orders.map((item) => ({
-                                        ...item,
-                                        product_count:
-                                          item.order_id === record.order_id &&
-                                          value !== null
-                                            ? value.toString()
-                                            : item.product_count,
-                                      }))
-                                    : successItem.orders,
-                              }),
+                            successList: setSuccessListToOrderCount(
+                              cart.successList,
+                              Number(record.order_id),
+                              expandedRecord.rt_store_id,
+                              String(value),
                             ),
                           });
                         }}
@@ -395,9 +370,10 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => {
                 return (
                   record.orders.length !== 0 &&
-                  `${record.orders[0].vendor_name} 외 ${
-                    record.orders.length - 1
-                  }개`
+                  t('order.recordRender', {
+                    name: record.orders[0].vendor_name,
+                    count: record.orders.length - 1,
+                  })
                 );
               },
             },

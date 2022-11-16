@@ -429,6 +429,100 @@ const useOrderCart = () => {
     });
   };
 
+  /*
+   * 발주 메모 입력함수
+   */
+  const inputMemo = (
+    store: StoreOrderItemExcelParsing,
+    value: string,
+    orderRowID: number,
+  ) => {
+    return store.orders.map((order) => ({
+      ...order,
+      memo: order.order_id === orderRowID ? value : order.memo,
+    }));
+  };
+
+  /*
+   * 메모 입력된 발주데이터 리스트에 추가
+   */
+  const setSuccessListToMemo = (
+    list: StoreOrderItemExcelParsing[],
+    rowID: number,
+    orderRowID: number,
+    memoValue: string,
+  ) =>
+    list.map((store) => ({
+      ...store,
+      orders:
+        store.id === rowID
+          ? inputMemo(store, memoValue, orderRowID)
+          : store.orders,
+    }));
+
+  /*
+   * 발주 미리보기에서 수량 변경
+   */
+  const setOrderCount = (
+    orders: StoreOrder[],
+    value: string,
+    selectedOrderID: number,
+  ) =>
+    orders.map((order) => ({
+      ...order,
+      product_count:
+        order.order_id === selectedOrderID && value !== 'null'
+          ? value
+          : order.product_count,
+    }));
+
+  /*
+   * 발주 미리보기에서 수량 변경된 데이터를 리스트에 추가
+   */
+  const setSuccessListToOrderCount = (
+    list: StoreOrderItemExcelParsing[],
+    selectedOrderID: number,
+    storeID: number,
+    value: string,
+  ) =>
+    list.map((item) => ({
+      ...item,
+      orders:
+        item.rt_store_id === storeID
+          ? setOrderCount(item.orders, String(value), Number(selectedOrderID))
+          : item.orders,
+    }));
+
+  /*
+   * 발주 미리보기에서 타입 변경
+   */
+  const setOrderType = (
+    orders: StoreOrder[],
+    value: string,
+    selectedOrderID: number,
+  ) =>
+    orders.map((order) => ({
+      ...order,
+      order_type: order.order_id === selectedOrderID ? value : order.order_type,
+    }));
+
+  /*
+   * 미리보기 변경한 데이터를 리스트에 추가
+   */
+  const setSuccessListToOrderType = (
+    list: StoreOrderItemExcelParsing[],
+    value: string,
+    selectedStoreID: number,
+    selectedOrderID: number,
+  ) =>
+    list.map((item) => ({
+      ...item,
+      orders:
+        item.rt_store_id === selectedStoreID
+          ? setOrderType(item.orders, value, selectedOrderID)
+          : item.orders,
+    }));
+
   return {
     cart,
     setCart,
@@ -449,6 +543,11 @@ const useOrderCart = () => {
     addNewOrderColumn,
     changeOrderColumn,
     deleteOrderColumn,
+    inputMemo,
+    setSuccessListToMemo,
+    setOrderCount,
+    setSuccessListToOrderCount,
+    setSuccessListToOrderType,
   };
 };
 
