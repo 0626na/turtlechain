@@ -56,10 +56,6 @@ function ExelModal({ visible, onClose }: Props) {
     (acc, cur) => acc + cur.credit_amount,
     0,
   );
-  const vat = (Math.round((amount * 1.1) / 10) * 10 - amount).toLocaleString();
-  const vatIncludedAmount = (
-    Math.round((amount * 1.1) / 10) * 10
-  ).toLocaleString();
 
   return (
     <>
@@ -82,7 +78,7 @@ function ExelModal({ visible, onClose }: Props) {
           { title: '결제요청 일자', content: cart.clearingRequestDate },
           {
             title: '결제요청 금액',
-            content: `${vatIncludedAmount}원(부가세${vat}원 포함)`,
+            content: `${amount.toLocaleString()}원`,
           },
           { title: '총 거래처수', content: `${successCount}개` },
         ]}
@@ -111,10 +107,10 @@ function ExelModal({ visible, onClose }: Props) {
             </span>
 
             <span css={footerCss.leftContentCss.middleText}>
-              <span css={footerCss.leftContentCss.larginText}>
+              {/* <span css={footerCss.leftContentCss.larginText}>
                 (부가세 {vat}원 포함){' '}
-              </span>
-              {vatIncludedAmount}원
+              </span> */}
+              {amount.toLocaleString()}원
             </span>
           </div>
 
