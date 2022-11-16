@@ -31,7 +31,7 @@ function AddNewOrderModal({ visible, close }: Props) {
       },
     ],
   });
-  const { addSingleSuccess } = useOrderCart();
+  const { addSingleOrder } = useOrderCart();
   const [building, setBuilding] = useState('');
   const { buildingData } = usePreset();
 
@@ -60,7 +60,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            addSingleSuccess({
+            addSingleOrder({
               rt_store_id: selectStore.id,
               rt_store_name: selectStore.name,
               type: 'single',
