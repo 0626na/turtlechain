@@ -53,6 +53,7 @@ import { ReactComponent as MarkIcon } from '@icons/mark.svg';
 import { ReactComponent as AlertSuccessIcon } from '@icons/alertSuccess.svg';
 import { ReactComponent as AlertFailIcon } from '@icons/alertFail.svg';
 import { ReactComponent as AlertWarnIcon } from '@icons/alertWarn.svg';
+import { ReactComponent as AlertWarnRedIcon } from '@icons/alertWarningRed.svg';
 import { ReactComponent as ExclamationMarkIcon } from '@icons/exclamationMark.svg';
 import { ReactComponent as AlertBarArrowRightIcon } from '@icons/alertBarArrowRight.svg';
 import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
