@@ -1,5 +1,6 @@
 import { TurtleConfirmModal, TurtleText } from '@components/element';
 import { FailListForOutput } from '@hooks/useOrderCart';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
