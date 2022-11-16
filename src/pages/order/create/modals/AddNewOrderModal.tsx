@@ -27,7 +27,7 @@ function AddNewOrderModal({ visible, close }: Props) {
   const { store } = useStore();
 
   const [floor, setFloor] = useState('');
-  const { addSingleSuccessForStore } = useOrderCart();
+  const { addSingleOrderForStore } = useOrderCart();
   //사입삼촌에 등록된 쇼핑몰 목록
   const getPickerStoresQuery = useQuery(
     'getPickerStores',
@@ -51,7 +51,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            addSingleSuccessForStore({
+            addSingleOrderForStore({
               rt_store_id: Number(store.selected?.id),
               rt_store_name: String(store.selected?.name),
               type: 'single',
