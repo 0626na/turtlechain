@@ -122,7 +122,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
         dataSource={filteredItemList}
         rowKey={(record) => record.id}
         pagination={false}
-        scroll={{ x: 1400, y: 320 }}
+        scroll={{ x: 950, y: 320 }}
         rowSelection={{
           selectedRowKeys: cart.selectedWarehousingItemList.map(
             (item) => item.id,

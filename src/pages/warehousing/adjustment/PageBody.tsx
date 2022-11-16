@@ -264,7 +264,7 @@ function PageBody() {
               detailModalOpen();
             },
           })}
-          scroll={{ x: 'auto', y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           title={() => (
             <TurtleTableTitle
               totalCount={totalPendingCount + totalClearingCount}
@@ -353,7 +353,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 70,
+              width: 80,
               title: t('table.progressStatus'),
               render: (_, { is_cleared }) => (
                 <div>
@@ -373,14 +373,13 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 100,
+              width: 50,
               title: t('table.type'),
               render: (_, record) =>
                 t(`adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,
-              width: 100,
               title: (
                 <Tooltip
                   overlayStyle={{ minWidth: 353 }}
@@ -400,31 +399,30 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.productName'),
               render: (_, record) => record.product_info.name,
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.vendorProductName'),
               render: (_, record) => record.product_info.vendor_product_name,
             },
             {
               ellipsis: true,
-              width: 100,
+              width: 80,
               title: t('table.option'),
               render: (_, record) => record.product_info.option,
             },
             {
-              width: 70,
+              ellipsis: true,
+              width: 80,
               align: 'right',
               title: t('table.price'),
               render: (record) =>
                 (record.product_info.price * record.count).toLocaleString(),
             },
             {
-              width: 70,
+              width: 90,
               align: 'right',
               ellipsis: true,
               title: t('table.proccessed totalCount'),
@@ -449,7 +447,7 @@ function PageBody() {
 
             {
               ellipsis: true,
-              width: 100,
+              width: 110,
               align: 'center',
               onCell: () => ({
                 onClick: (e) => {
@@ -480,7 +478,7 @@ function PageBody() {
 
             {
               ellipsis: true,
-              width: 30,
+              width: 50,
               align: 'center',
               onCell: (record) => ({
                 style: { cursor: !record.is_cleared ? 'pointer' : '' },

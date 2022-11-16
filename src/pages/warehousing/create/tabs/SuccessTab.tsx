@@ -87,7 +87,7 @@ function SuccessTab({ loading, ...props }: Props) {
           dataSource={filteredList}
           rowKey={(record) => record.index as number}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           title={() => (
             <TurtleTableTitle
               totalCount={cart.successList.length}
@@ -109,7 +109,6 @@ function SuccessTab({ loading, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               onCell: (record) => ({
                 style: {
@@ -122,7 +121,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               onCell: (record) => ({
                 style: {
@@ -135,7 +133,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 250,
               title: (
                 <div onClick={() => setTooltipVisible(false)}>
                   <Tooltip
@@ -164,7 +161,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.vendorProductName'),
               onCell: (record) => ({
                 style: {
@@ -177,7 +173,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productCode'),
               onCell: (record) => ({
                 style: {
@@ -190,7 +185,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.option'),
               onCell: (record) => ({
                 style: {
@@ -203,7 +197,7 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 100,
+              width: 80,
               title: t('table.warehouseName'),
               onCell: (record) => ({
                 style: {
@@ -216,7 +210,7 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 120,
+              width: 100,
               align: 'right',
               title: t('table.price'),
               onCell: (record) => ({
@@ -240,7 +234,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              width: 120,
+              width: 100,
               title: t('table.warehousingCount'),
               onCell: (record) => ({
                 style: {

@@ -23,7 +23,7 @@ function FailTab({ isLoading }: Props) {
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        scroll={{ y: 'auto', x: 1400 }}
+        scroll={{ y: 'auto', x: 1000 }}
         columns={[
           {
             ellipsis: true,
