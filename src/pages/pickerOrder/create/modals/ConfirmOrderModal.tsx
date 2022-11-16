@@ -8,6 +8,7 @@ import { message } from '@utils/message';
 import moment from 'moment';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -15,8 +16,13 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset, calculateTotalPrice, integrationOrderList } =
-    useOrderCart();
+  const {
+    cart,
+    reset,
+    calculateTotalPrice,
+    integrationOrderList,
+    countSuccessList,
+  } = useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록
@@ -30,15 +36,6 @@ function ConfirmOrderModal({ visible, close }: Props) {
       }
     },
   });
-
-  const orderCount = () => {
-    let count = 0;
-    cart.successList.map((item) => {
-      count += item.orders.length;
-    });
-
-    return count;
-  };
 
   return (
     <>
