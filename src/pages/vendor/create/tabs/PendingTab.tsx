@@ -70,7 +70,7 @@ function PendingTab({ isLoading }: Props) {
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        scroll={{ y: 'auto', x: 1400 }}
+        scroll={{ y: 'auto', x: 950 }}
         columns={[
           {
             ellipsis: true,
@@ -85,13 +85,12 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 85,
+            width: 90,
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.retailerStoreInput'),
             render: (_, record) => {
               return `${record.name}  ${record.address}`;
@@ -99,7 +98,6 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('table.vendorName'),
             render: (_, record) => (
               <>
@@ -258,7 +256,6 @@ function PendingTab({ isLoading }: Props) {
           {
             ellipsis: true,
             title: t('table.vendorAddress'),
-            width: 150,
             render: (_, record) => {
               if (record?.selectedWsStoreInfo) {
                 return record.selectedWsStoreInfo?.address;
@@ -277,7 +274,6 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 130,
             title: t('table.mobile'),
             render: (_, record) =>
               record.selectedWsStoreInfo?.store_phone[0]?.phone
@@ -286,7 +282,6 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 300,
             title: t('table.accountInfo'),
             render: (_, record) => {
               if (!record?.selectedWsStoreInfo)
@@ -357,7 +352,7 @@ function PendingTab({ isLoading }: Props) {
 
           {
             ellipsis: true,
-            width: 150,
+            width: 130,
             title: (
               <TextWithTooltip
                 tooltipContent={[
@@ -383,7 +378,7 @@ function PendingTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 200,
+            width: 150,
             title: (
               <TextWithTooltip
                 tooltipContent={[
