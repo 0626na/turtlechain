@@ -1,18 +1,16 @@
-import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { MemoIcon, TurtleBadge, TurtleTableInput } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
 import {
-  Button,
   Dropdown,
-  Input,
   Menu,
   Popover,
   Radio,
   Space,
   Switch,
   Table,
+  Tooltip,
 } from 'antd';
 
 import { TurtleIcon } from '@components/element';
@@ -22,6 +20,7 @@ import useVendorCart from '@hooks/useVendorCart';
 import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
 import { TextWithTooltip } from '@components/combine';
+import { theme } from '@styles/theme';
 
 interface Props {
   isLoading: boolean;
@@ -77,12 +76,11 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             width: 50,
             title: t('table.matching'),
+            align: 'center',
             render: (_, record) => (
-              <div css={{ margin: 'auto' }}>
-                <TurtleIcon
-                  name={record.isMatching ? 'matching' : 'misMatching'}
-                />
-              </div>
+              <TurtleIcon
+                name={record.isMatching ? 'matching' : 'misMatching'}
+              />
             ),
           },
           {
@@ -155,11 +153,11 @@ function PendingTab({ isLoading }: Props) {
               </>
             ),
           },
-          // // 테스트중인 칼럼
+          // TODO : 거래처 툴팁 테스트 진행중
           // {
           //   ellipsis: true,
           //   width: 250,
-          //   title: '거래처명 툴팁 적용 진행중',
+          //   title: '거래처명',
           //   render: (_, record) => (
           //     <div
           //       css={css`
@@ -186,10 +184,36 @@ function PendingTab({ isLoading }: Props) {
           //               box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.2);
           //               border-radius: 8px;
           //             `}
-          //             items={[
-          //               {
-          //                 key: 0,
-          //                 label: '132',
+          //             items={record.ws_store_info.map(
+          //               ({ name: wsName, address: wsAddress, id }) => ({
+          //                 style: {
+          //                   width: 250,
+          //                   maxWidth: 400,
+          //                 },
+          //                 key: id,
+          //                 label: (
+          //                   <>
+          //                     <span
+          //                       css={{
+          //                         fontSize: 14,
+          //                         color: theme.grey700,
+          //                         marginRight: 8,
+          //                       }}
+          //                     >
+          //                       {wsName}
+          //                     </span>
+          //                     <span
+          //                       css={{
+          //                         color: theme.grey400,
+          //                       }}
+          //                     >
+          //                       {wsAddress}
+          //                     </span>
+          //                   </>
+          //                 ),
+          //                 onClick: () => {
+          //                   handleWholesaleStoreSelecte(id, record);
+          //                 },
           //                 onMouseEnter: (e) => {
           //                   e.domEvent.currentTarget.style.backgroundColor =
           //                     theme.bgGrey;
@@ -198,31 +222,33 @@ function PendingTab({ isLoading }: Props) {
           //                   e.domEvent.currentTarget.style.backgroundColor =
           //                     theme.white;
           //                 },
-          //               },
-          //               {
-          //                 key: 1,
-          //                 label: '12',
-          //                 onMouseEnter: (e) => {
-          //                   e.domEvent.currentTarget.style.backgroundColor =
-          //                     theme.bgGrey;
-          //                 },
-          //                 onMouseLeave: (e) => {
-          //                   e.domEvent.currentTarget.style.backgroundColor =
-          //                     theme.white;
-          //                 },
-          //               },
-          //             ]}
+          //               }),
+          //             )}
           //           />
           //         }
           //         trigger={['click']}
           //         arrow={false}
           //       >
-          //         <span
-          //           css={{ lineHeight: 1, marginTop: 1, cursor: 'pointer' }}
-          //         >
-          //           <TextWithTooltip
-          //             tooltipContent={['정확한 세부정보를 선택해주세요']}
-          //           />
+          //         <span css={{ lineHeight: 1, cursor: 'pointer' }}>
+          //           <Tooltip title="정확한 세부정보를 선택해주세요">
+          //             <div
+          //               css={{
+          //                 marginLeft: 4,
+          //                 width: 18,
+          //                 height: 18,
+          //                 borderRadius: '50%',
+          //                 background: '#F47E12',
+          //                 display: 'flex',
+          //                 justifyContent: 'center',
+          //                 alignItems: 'center',
+          //                 fontSize: 12,
+          //                 color: '#fff',
+          //                 fontWeight: 500,
+          //               }}
+          //             >
+          //               {record.ws_store_info.length}
+          //             </div>
+          //           </Tooltip>
           //         </span>
           //       </Dropdown>
           //     </div>

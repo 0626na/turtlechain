@@ -191,7 +191,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                         </>
                       }
                     >
-                      <span style={{ color: 'red', cursor: 'pointer' }}>
+                      <span style={{ color: '#a1a2a6', cursor: 'pointer' }}>
                         {record.store_phone[0]?.phone.replace(
                           phonePattern,
                           `$1-$2-$3`,
@@ -245,7 +245,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                         </>
                       }
                     >
-                      <span style={{ color: 'red', cursor: 'pointer' }}>
+                      <span style={{ color: '#a1a2a6', cursor: 'pointer' }}>
                         {makeAddress(record.store_account[0])}
                       </span>
                     </Popover>

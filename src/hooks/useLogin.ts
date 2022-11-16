@@ -7,6 +7,7 @@ import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
 import { useUser } from '.';
 import authAPI from '@apis/authAPI';
+import TagManager from 'react-gtm-module';
 
 const useLogin = function () {
   const navigate = useNavigate();
@@ -100,7 +101,8 @@ const useLogin = function () {
           logout();
           message.warn(`${t('message.loginExpired')}`);
         } else if (error.response?.status === 400) {
-          message.error(error.response.data.msg);
+          const msg = error.response.data.msg;
+          msg && message.error(msg);
         } else {
           message.error(`${t('message.networkError')}`);
         }

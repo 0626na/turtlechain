@@ -1,6 +1,6 @@
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon, TurtleIcon } from '@components/element';
+import { TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import retailerStoreAPI from '@apis/retailerStoreAPI';
 import useStore from '@hooks/useStore';
@@ -20,7 +20,7 @@ const color = [
 ];
 
 function StoreSelector() {
-  const { store, fillStoreList, selectStore } = useStore();
+  const { store, fillStoreList, selectStore, isStoreEmpty } = useStore();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -34,19 +34,25 @@ function StoreSelector() {
       },
     },
   );
-  const isEmpty = store.list.length === 0;
+
   return (
     <>
-      {isEmpty ? (
-        <Button
-          css={[buttonCss.self, { padding: 16 }]}
-          onClick={() => {
-            navigate('/setting');
-          }}
+      {isStoreEmpty ? (
+        <Tooltip
+          placement="right"
+          title="운영중인 쇼핑몰을 먼저 추가해주세요!"
+          defaultVisible
         >
-          쇼핑몰 추가하기
-          <TurtleIcon name="storePlus" />
-        </Button>
+          <Button
+            css={[buttonCss.self, buttonCss.borderActive]}
+            onClick={() => {
+              navigate('/setting');
+            }}
+          >
+            쇼핑몰 추가하기
+            <TurtleIcon name="storePlus" />
+          </Button>
+        </Tooltip>
       ) : (
         <Dropdown // 이름은 DropDown지만, selector역할을 한다.
           trigger={['click']}
@@ -165,7 +171,6 @@ const buttonCss = {
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderColor: 'rgba(255, 255, 255, 0.1)',
 
     // antd 기본 스타일 제거
     '&:focus,&:hover': {
@@ -207,6 +212,15 @@ const buttonCss = {
     width: 34,
     height: 34,
     fill: 'var(--fill-color)',
+  }),
+
+  borderActive: css({
+    border: '4px solid #00B3BE',
+    padding: 16,
+
+    '&:focus,&:hover': {
+      borderColor: '#00B3BE',
+    },
   }),
 };
 

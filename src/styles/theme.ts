@@ -4,8 +4,8 @@ export const theme = {
   bluegreen: '#00b3be',
   white: '#ffffff',
   bgGrey: '#f3f6f0',
+  dividerGrey: '#EDEFF1',
   charcoal: '#141720',
-  DivlderGrey: '#EDEFF1',
 
   // support
   grey200: '#DCE0E4',
@@ -37,6 +37,7 @@ export const theme = {
   greyTx: '#5C6069',
 
   // gradient
-  blueGradient: '#fa5252',
+  blueGradient:
+    'linear-gradient(90deg, #1A66F9 0%, #1A66F9 32.29%, #605CFF 100%)',
   greenGradient: '#1A66f9',
 };
