@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { TurtleTabs } from '@components/element';
 import SuccessTab from './tabs/SuccessTab';
 import FailTab from './tabs/FailTab';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -23,7 +24,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
   return (
     <>
       <TurtleContentModal
-        title="발주내역 상세보기"
+        title={t('order.history.detailModalTitle')}
         size="large"
         onClose={onclose}
         visible={visible}
@@ -31,38 +32,40 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
         <TurtleStatistics
           value={[
             {
-              title: '쇼핑몰',
+              title: t('order.history.store'),
               value:
                 getOrderHistoryCountQuery.data?.data.order_sheet
-                  .rt_store_name ?? '없음',
+                  .rt_store_name ?? '',
             },
             {
-              title: '발주 일자',
+              title: t('order.history.date'),
               value:
                 moment(
                   getOrderHistoryCountQuery.data?.data.order_sheet.request_date,
                 ).format('YYYY-MM-DD') ?? '',
             },
             {
-              title: '발주 거래처',
+              title: t('order.history.orderClient'),
               value: `${
                 getOrderHistoryCountQuery.data?.data.order_sheet.total_store_count.toString() ??
                 '0'
               }개`,
             },
             {
-              title: '발주수량 합계',
-              value: `${
-                getOrderHistoryCountQuery.data?.data.order_sheet.total_item_subcount.toString() ??
-                '0'
-              }개`,
+              title: t('order.totalCount'),
+              value: t('order.count', {
+                count:
+                  getOrderHistoryCountQuery.data?.data.order_sheet
+                    .total_item_subcount ?? 0,
+              }),
             },
             {
-              title: '발주금액 합계',
-              value: `${
-                getOrderHistoryCountQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
-                '0'
-              }원`,
+              title: t('order.totalPrice'),
+              value: t('order.price', {
+                price:
+                  getOrderHistoryCountQuery.data?.data.order_sheet.total_success_price.toLocaleString() ??
+                  '0',
+              }),
             },
           ]}
         />
@@ -76,14 +79,14 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
               getOrderHistoryCountQuery.data?.data.order_sheet.request_date,
             )}
             key={'successHistory'}
-            tab={`성공(${
+            tab={`${t('order.history.success')}(${
               getOrderHistoryCountQuery.data?.data.successes.length ?? 0
             })`}
             loading={getOrderHistoryCountQuery.isLoading}
           />
           <FailTab
             key={'failHistory'}
-            tab={`실패(${
+            tab={`${t('order.history.fail')}(${
               getOrderHistoryCountQuery.data?.data.fails.length ?? 0
             })`}
             data={

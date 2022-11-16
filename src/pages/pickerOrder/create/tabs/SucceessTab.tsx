@@ -26,47 +26,47 @@ interface Props extends TabPaneProps {
 
 export const category = [
   {
-    value: '발주',
-    name: '발주',
+    value: t('order.types.order'),
+    name: t('order.types.order'),
   },
   {
-    value: '미송',
-    name: '미송',
+    value: t('order.types.notDelivery'),
+    name: t('order.types.notDelivery'),
   },
   {
-    value: '반품',
-    name: '반품',
+    value: t('order.types.return'),
+    name: t('order.types.return'),
   },
   {
-    value: '교환',
-    name: '교환',
+    value: t('order.types.exchange'),
+    name: t('order.types.exchange'),
   },
   {
-    value: '샘플',
-    name: '샘플',
+    value: t('order.types.sample'),
+    name: t('order.types.sample'),
   },
   {
-    value: '픽업',
-    name: '픽업',
+    value: t('order.types.pickUp'),
+    name: t('order.types.pickUp'),
   },
   {
-    value: '기타',
-    name: '기타',
+    value: t('order.types.etc'),
+    name: t('order.types.etc'),
   },
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
   const options = [
     {
-      name: '쇼핑몰명',
+      name: t('order.search.storeName'),
       value: 'name',
     },
     {
-      name: '거래처명',
+      name: t('order.search.clientName'),
       value: 'vendor_name',
     },
     {
-      name: '휴대전화번호',
+      name: t('order.search.mobile'),
       value: 'mobile',
     },
   ];
@@ -199,7 +199,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력하세요"
+                      placeholder={t('placeholder.inputQuery')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -249,32 +249,32 @@ function SuccessTab({ loading, ...props }: Props) {
                     width: 184,
                   },
                   {
-                    title: '거래처명',
+                    title: t('table.vendorName'),
                     width: 136,
                     render: (_, record) => record.vendor_name ?? '',
                   },
                   {
-                    title: '거래처 주소',
+                    title: t('table.vendorAddress'),
                     width: 196,
                     render: (_, record) => record.vendor_address ?? '',
                   },
                   {
-                    title: '휴대전화번호',
+                    title: t('table.mobile'),
                     width: 156,
                     render: (_, record) => record.mobile ?? '',
                   },
                   {
-                    title: '거래처 상품명',
+                    title: t('table.vendorProductName'),
                     width: 216,
                     render: (_, record) => record.product_name ?? '',
                   },
                   {
-                    title: '옵션',
+                    title: t('table.option'),
                     width: 136,
                     render: (_, record) => record.product_option ?? '',
                   },
                   {
-                    title: '분류',
+                    title: t('table.type'),
                     width: 136,
                     render: (_, record) => (
                       <TurtleTableSelect
@@ -308,7 +308,7 @@ function SuccessTab({ loading, ...props }: Props) {
                     ),
                   },
                   {
-                    title: '수량',
+                    title: t('table.count'),
                     align: 'right',
                     width: 136,
                     render: (_, record) => (
@@ -342,14 +342,14 @@ function SuccessTab({ loading, ...props }: Props) {
                     ),
                   },
                   {
-                    title: '공급가',
+                    title: t('table.supplyPrice'),
                     width: 136,
                     align: 'right',
                     render: (_, record) =>
                       Number(record.product_price).toLocaleString() ?? 0,
                   },
                   {
-                    title: '메모',
+                    title: t('table.memo'),
                     align: 'center',
                     width: 107,
                     render: (_, record) => (
@@ -385,12 +385,12 @@ function SuccessTab({ loading, ...props }: Props) {
           }}
           columns={[
             {
-              title: '쇼핑몰',
+              title: t('table.store'),
               width: 184,
               render: (_, record) => record.rt_store_name ?? '',
             },
             {
-              title: '거래처',
+              title: t('table.vendor'),
               width: 488,
               render: (_, record) => {
                 return (
@@ -402,16 +402,17 @@ function SuccessTab({ loading, ...props }: Props) {
               },
             },
             {
-              title: '상품',
+              title: t('table.product'),
               width: 488,
               render: (_, record) =>
                 record.orders.length !== 0 &&
-                `${record.orders[0].product_name} 외 ${
-                  record.orders.length - 1
-                }건`,
+                t('order.recordRender', {
+                  name: record.orders[0].product_name,
+                  count: record.orders.length - 1,
+                }),
             },
             {
-              title: '수량 합계',
+              title: t('table.countTotal'),
               width: 136,
               render: (_, record) =>
                 record.orders.length !== 0 &&
@@ -421,7 +422,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 ),
             },
             {
-              title: '공급가 합계',
+              title: t('table.supplyPriceTotal'),
               width: 128,
               align: 'right',
               render: (_, record) =>

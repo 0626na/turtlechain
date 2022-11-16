@@ -27,13 +27,20 @@ function AddOrderFailtoSuccessModal({
     >
       <div>
         <br />
-        <TurtleText>{`쇼핑몰: ${failData.record.rt_store_name}`}</TurtleText>{' '}
+        <TurtleText>{`${t('table.store')}: ${
+          failData.record.rt_store_name
+        }`}</TurtleText>{' '}
         <br />
-        <TurtleText>{`거래처: ${failData.record.vendor_name}`}</TurtleText>{' '}
+        <TurtleText>{`${t('table.vendor')}: ${
+          failData.record.vendor_name
+        }`}</TurtleText>{' '}
         <br />
-        <TurtleText>{`주소: ${failData.record.vendor_address}`}</TurtleText>{' '}
+        <TurtleText>{`${t('table.address')}: ${
+          failData.record.vendor_address
+        }`}</TurtleText>{' '}
         <br />
-        <TurtleText>{`휴대전화번호: ${failData.mobile}`}</TurtleText> <br />
+        <TurtleText>{`${t('table.mobile')}: ${failData.mobile}`}</TurtleText>{' '}
+        <br />
       </div>
     </TurtleConfirmModal>
   );

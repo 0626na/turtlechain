@@ -60,8 +60,8 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
         >
           <Radio.Group disabled>
-            <Radio value={false}>운영</Radio>
-            <Radio value={true}>폐점</Radio>
+            <Radio value={false}>{t('button.operation')}</Radio>
+            <Radio value={true}>{t('button.closed')}</Radio>
           </Radio.Group>
         </Form.Item>
 

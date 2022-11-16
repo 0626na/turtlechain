@@ -23,7 +23,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
-        message.success('발주서 등록이 완료되었습니다.', 4);
+        message.success(t('message.complete create order'), 4);
         close();
         reset();
         navigate('/picker/order/history');
@@ -44,35 +44,42 @@ function ConfirmOrderModal({ visible, close }: Props) {
     <>
       <TurtleContentModal
         size="small"
-        title="정말 발주할까요?"
+        title={t('order.confirmModal.title')}
         visible={visible}
         onClose={close}
       >
         <Space direction="vertical">
           <Typography.Paragraph>
-            실패에 남아있는 건은 발주에서 제외됩니다. <br />
-            발주 정보를 다시 한번 확인해주세요.
+            {t('order.confirmModal.description1')} <br />
+            {t('order.confirmModal.description2')}
           </Typography.Paragraph>
 
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {`발주일자: ${moment(cart.selectedDate).format('YYYY-MM-DD')}   `}
+            {`${t('order.confirmModal.orderDate')}: ${moment(
+              cart.selectedDate,
+            ).format('YYYY-MM-DD')}   `}
           </Typography.Text>
-          <Typography.Text
-            style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주수량:  ${orderCount()}개  `}</Typography.Text>
-          <Typography.Text
-            style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주금액: ${calculateTotalPrice().toLocaleString()}원`}</Typography.Text>
+          <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
+            {t('order.confirmModal.totalOrderCount', {
+              count: countSuccessList(),
+            })}
+          </Typography.Text>
+          <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
+            {t('order.confirmModal.totalOrderPrice', {
+              price: calculateTotalPrice().toLocaleString(),
+            })}
+          </Typography.Text>
         </Space>
         <Row justify="end">
           <Col style={{ marginRight: 10 }}>
-            <AnswerButton type="NO" text="취소" onClick={close} />
+            <AnswerButton type="NO" text={t('cancel')} onClick={close} />
           </Col>
           <Col>
             <AnswerButton
               type="YES"
-              text="요청"
+              text={t('request')}
               onClick={() => {
+                t;
                 createOrderItemMutation.mutate({
                   rt_stores: [
                     ...integrationOrderList().map<OrderItemList>((order) => ({

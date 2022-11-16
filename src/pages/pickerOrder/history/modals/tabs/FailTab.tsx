@@ -1,6 +1,7 @@
 import { OrderHistoryItem } from '@apis/orderAPI';
 import { TurtleTableTitle } from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';
+import { t } from 'i18next';
 import React from 'react';
 
 interface Props extends TabPaneProps {
@@ -23,49 +24,49 @@ function FailTab({ data, loading, ...props }: Props) {
         title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
         columns={[
           {
-            title: '거래처명',
+            title: t('order.history.clientName'),
             width: 188,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처 주소',
+            title: t('order.history.clientAddress'),
             width: 196,
             render: (_, record) => record.address,
           },
           {
-            title: '휴대전화 번호',
+            title: t('order.history.mobile'),
             width: 176,
             render: (_, record) => record.mobile,
           },
           {
-            title: '거래처 상품명',
+            title: t('order.history.productName'),
             width: 196,
             render: (_, record) => record.name,
           },
           {
-            title: '옵션',
+            title: t('order.history.option'),
             width: 136,
             render: (_, record) => record.option,
           },
           {
-            title: '분류',
+            title: t('order.history.class'),
             width: 116,
             render: (_, record) => record.type,
           },
           {
-            title: '요청 수량',
+            title: t('order.history.count'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: '공급가',
+            title: t('order.history.price'),
             align: 'right',
             width: 116,
             render: (_, record) => record.price.toLocaleString(),
           },
           {
-            title: '메모',
+            title: t('order.history.memo'),
           },
         ]}
       />

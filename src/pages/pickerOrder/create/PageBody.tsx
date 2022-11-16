@@ -167,7 +167,7 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="발주서 미리보기"
+        title={t('order.title')}
         buttons={[
           <TurtleText
             css={css({
@@ -175,26 +175,26 @@ function PageBody() {
               fontWeight: 500,
             })}
           >
-            {`당일 발주완료 ${todayOrdersCount.complete}`}{' '}
+            {`${t('order.todayOrderComplete')} ${todayOrdersCount.complete}`}{' '}
             <span css={css({ color: theme.grey400 })}>
               {`/ 
-              ${todayOrdersCount.total}개 | `}
+              ${t('order.count', { count: todayOrdersCount.total })} | `}
             </span>
-            {`당일 미발주 ${
+            {`${t('order.todayOrderIncomplete')} ${
               todayOrdersCount.total - todayOrdersCount.complete
             }`}{' '}
-            <span
-              css={css({ color: theme.grey400 })}
-            >{`/ ${todayOrdersCount.total}개`}</span>
+            <span css={css({ color: theme.grey400 })}>{`/ ${t('order.count', {
+              count: todayOrdersCount.total,
+            })}`}</span>
           </TurtleText>,
           <TertiaryButton
-            text="발주서 설정"
+            text={t('order.setting.title')}
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>발주 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('order.addOrder')}</SecondaryIconButton>
             }
             items={[
               {
@@ -237,12 +237,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${countSuccessList()})`}
+            tab={`${t('order.orderSuccess')}(${countSuccessList()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`실패(${countFailList()})`}
+            tab={`${t('order.orderFail')}(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -260,21 +260,27 @@ function PageBody() {
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                발주수량 합계{' '}
+                {t('order.totalCount')}
               </span>
               {'   '}
-              {` ${countSuccessList()}개 `}
+              {` ${t('order.count', { count: countSuccessList() })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {`(발주 ${countOrdersForType().order}, 교환 ${
-                  countOrdersForType().exchange
-                }, 반품 ${countOrdersForType().return}, 미송 ${
-                  countOrdersForType().notDelivery
-                }, 샘플 ${countOrdersForType().sample}, 픽업 ${
+                {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
+                  'order.types.exchange',
+                )} ${countOrdersForType().exchange}, ${t(
+                  'order.types.return',
+                )} ${countOrdersForType().return}, ${t(
+                  'order.types.notDelivery',
+                )} ${countOrdersForType().notDelivery}, ${t(
+                  'order.types.sample',
+                )} ${countOrdersForType().sample}, ${t('order.types.pickUp')} ${
                   countOrdersForType().pickup
-                }, 기타 ${countOrdersForType().etc})
-              / 발주금액 합계  `}
+                }, ${t('order.types.etc')} ${countOrdersForType().etc})
+              / ${t('order.totalPrice')}  `}
               </span>
-              {`${calculateTotalPrice().toLocaleString()}원`}
+              {`${t('order.price', {
+                price: calculateTotalPrice().toLocaleString(),
+              })}`}
             </TurtleText>
           </Col>
           <Col>
@@ -284,7 +290,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              발주 등록하기
+              {t('order.place order')}
             </PrimaryButton>
           </Col>
         </Row>

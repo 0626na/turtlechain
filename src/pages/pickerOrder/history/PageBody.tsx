@@ -24,15 +24,15 @@ function PageBody() {
   const options = [
     {
       value: 'entire',
-      name: '전체',
+      name: t('order.history.entire'),
     },
     {
       value: 'new',
-      name: '1차',
+      name: t('order.history.new'),
     },
     {
       value: 'modify',
-      name: '2차',
+      name: t('order.history.modify'),
     },
   ];
 
@@ -81,7 +81,7 @@ function PageBody() {
           sheetId={sheetId}
         />
       )}
-      <PageHeader title={`${t('order.history')}`} />
+      <PageHeader title={`${t('order.history.title')}`} />
       <PageTitle
         title={`${t('order.present')}`}
         // buttons={[
@@ -100,7 +100,7 @@ function PageBody() {
           value={[
             {
               color: 'cyan',
-              title: '성공',
+              title: t('order.history.success'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_store_count,
@@ -115,7 +115,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: '실패',
+              title: t('order.history.fail'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_fail_count,
@@ -178,32 +178,36 @@ function PageBody() {
             {
               ellipsis: true,
               width: 108,
-              title: '분류',
+              title: t('order.history.class'),
               render: (_, record) =>
                 record.type === 'new' ? (
-                  <TurtleTag color="orderHistoryCategoryFirst">1차</TurtleTag>
+                  <TurtleTag color="orderHistoryCategoryFirst">
+                    {t('order.history.new')}
+                  </TurtleTag>
                 ) : (
-                  <TurtleTag color="orderHistoryCategorySecond">2차</TurtleTag>
+                  <TurtleTag color="orderHistoryCategorySecond">
+                    {t('order.history.modify')}
+                  </TurtleTag>
                 ),
             },
             {
               ellipsis: true,
               width: 176,
-              title: '발주 일자',
+              title: t('order.history.date'),
               render: (_, record) =>
                 moment(record.request_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
               width: 176,
-              title: '쇼핑몰',
+              title: t('order.history.store'),
               render: (_, record) => record.rt_store_name,
             },
             {
               ellipsis: true,
               align: 'right',
               width: 136,
-              title: '거래처 수',
+              title: t('order.history.clientCount'),
               render: (_, record) => record.total_store_count,
             },
             {},
