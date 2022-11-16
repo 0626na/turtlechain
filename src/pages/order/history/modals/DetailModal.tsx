@@ -5,7 +5,9 @@ import TurtleStatistics from '@components/element/TurtleStatistics';
 import { Table } from 'antd';
 import moment from 'moment';
 import { useQuery } from 'react-query';
-import { TurtleTableTitle } from '@components/element';
+import { TurtleTableTitle, TurtleTabs } from '@components/element';
+import SuccessTab from '../tabs/SucceessTab';
+import FailTab from '../tabs/FailTab';
 
 interface Props {
   visible: boolean;
@@ -63,55 +65,12 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             },
           ]}
         />
-        <Table
-          dataSource={getOrderHistoryQuery.data?.data.successes}
-          pagination={{
-            position: ['bottomCenter'],
-            showSizeChanger: false,
-          }}
-          title={() => (
-            <TurtleTableTitle
-              totalCount={getOrderHistoryQuery.data?.data.successes.length ?? 0}
-            />
-          )}
-          columns={[
-            {
-              title: '거래처명',
-              render: (_, record) => record.vendor_name,
-            },
-            {
-              title: '거래처 주소',
-              render: (_, record) => record.address,
-            },
-            {
-              title: '휴대전화 번호',
-              render: (_, record) => record.mobile,
-            },
-            {
-              title: '거래처 상품명',
-              render: (_, record) => record.name,
-            },
-            {
-              title: '옵션',
-              render: (_, record) => record.option,
-            },
-            {
-              title: '분류',
-              render: (_, record) => record.type,
-            },
-            {
-              title: '요청 수량',
-              render: (_, record) => record.count.toLocaleString(),
-            },
-            {
-              title: '공급가',
-              render: (_, record) => record.price.toLocaleString(),
-            },
-            {
-              title: '메모',
-            },
-          ]}
-        />
+        {/* <TurtleTabs>
+          <SuccessTab
+           shee
+           />
+          <FailTab />
+        </TurtleTabs> */}
       </TurtleContentModal>
     </>
   );
