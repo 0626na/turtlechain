@@ -79,7 +79,6 @@ const useLogin = function () {
   }, []);
 
   const handleErrorMsg = useCallback((error: AxiosError) => {
-    console.log(error.response?.status);
     if (error.response?.status === 400) {
       setErrorMsg(`${t('message.incorrectUser')}`);
       return;
