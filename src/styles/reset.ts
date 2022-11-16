@@ -4,6 +4,7 @@ export const reset = css`
   /* reset Css */
   html,
   body,
+  button,
   div,
   span,
   applet,

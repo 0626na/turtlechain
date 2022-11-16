@@ -9,6 +9,7 @@ import { useCallback, useState } from 'react';
 import { orderCartState } from '@store/orderCartState';
 import { useRecoilState } from 'recoil';
 import moment from 'moment';
+import { t } from 'i18next';
 
 export interface FailListForOutput {
   id: number;
@@ -26,18 +27,16 @@ export interface FailListForOutput {
   memo: string;
 }
 
-export interface Icolumn {
-  column:
-    | 'vendor_name'
-    | 'vendor_address'
-    | 'vendor_mobile'
-    | 'order_type'
-    | 'product_count'
-    | 'product_name'
-    | 'product_option'
-    | 'product_price'
-    | 'memo';
-}
+export type Icolumn =
+  | 'vendor_name'
+  | 'vendor_address'
+  | 'vendor_mobile'
+  | 'order_type'
+  | 'product_count'
+  | 'product_name'
+  | 'product_option'
+  | 'product_price'
+  | 'memo';
 
 const useOrderCart = () => {
   const [cart, setCart] = useRecoilState(orderCartState);
@@ -186,7 +185,7 @@ const useOrderCart = () => {
   /*
    * 단건추가 등록(Picker)
    */
-  const addSingleSuccess = useCallback(
+  const addSingleOrder = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
         ...cart,
@@ -205,10 +204,21 @@ const useOrderCart = () => {
   );
 
   /*
+   * 기존의 발주배열에 단건으로 새 발주데이터를 추가
+   */
+
+  const addOrdersToSingleOrder = (
+    orders: StoreOrder[],
+    newOrder: StoreOrder,
+  ) => {
+    return [...orders, newOrder];
+  };
+
+  /*
    * 단건추가 등록 (쇼핑몰)
    */
 
-  const addSingleSuccessForStore = useCallback(
+  const addSingleOrderForStore = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
         ...cart,
@@ -217,7 +227,10 @@ const useOrderCart = () => {
             rt_store_id: cart.successList[0].rt_store_id,
             rt_store_name: cart.successList[0].rt_store_name,
             orders: createOrdersID(
-              [...cart.successList[0].orders, ...data.orders],
+              addOrdersToSingleOrder(
+                cart.successList[0].orders,
+                data.orders[0],
+              ),
               'single',
             ),
 
@@ -349,13 +362,18 @@ const useOrderCart = () => {
     };
     cart.successList.map((item) => {
       item.orders.map((order) => {
-        if (order.order_type === '발주') orderCount.order += 1;
-        if (order.order_type === '미송') orderCount.notDelivery += 1;
-        if (order.order_type === '반품') orderCount.return += 1;
-        if (order.order_type === '교환') orderCount.exchange += 1;
-        if (order.order_type === '샘플') orderCount.sample += 1;
-        if (order.order_type === '픽업') orderCount.pickup += 1;
-        if (order.order_type === '기타') orderCount.etc += 1;
+        if (order.order_type === t('order.types.order')) orderCount.order += 1;
+        if (order.order_type === t('order.types.notDelivery'))
+          orderCount.notDelivery += 1;
+        if (order.order_type === t('order.types.return'))
+          orderCount.return += 1;
+        if (order.order_type === t('order.types.exchange'))
+          orderCount.exchange += 1;
+        if (order.order_type === t('order.types.sample'))
+          orderCount.sample += 1;
+        if (order.order_type === t('order.types.pickUp'))
+          orderCount.pickup += 1;
+        if (order.order_type === t('order.types.etc')) orderCount.etc += 1;
       });
     });
 
@@ -377,7 +395,7 @@ const useOrderCart = () => {
    * 발주서설정, 발주서 칼럼 추가
    */
 
-  const addNewOrderColumn = ({ column }: Icolumn) => {
+  const addNewOrderColumn = (column: Icolumn) => {
     setOrderFormat({
       ...orderFormat,
       [column]: [...orderFormat[column], ''],
@@ -388,11 +406,7 @@ const useOrderCart = () => {
    * 발주서설정, 등록되어 있는 발주서 칼럼 변경
    */
 
-  const changeOrderColumn = (
-    { column }: Icolumn,
-    id: string,
-    newValue: string,
-  ) => {
+  const changeOrderColumn = (column: Icolumn, id: string, newValue: string) => {
     setOrderFormat({
       ...orderFormat,
       [column]: orderFormat[column].map((value, index) => {
@@ -406,7 +420,7 @@ const useOrderCart = () => {
    * 발주서설정, 등록되어있는 발주서 칼럼 제거
    */
 
-  const deleteOrderColumn = ({ column }: Icolumn, columnName: string) => {
+  const deleteOrderColumn = (column: Icolumn, columnName: string) => {
     setOrderFormat({
       ...orderFormat,
       [column]: orderFormat[column].filter(
@@ -424,8 +438,8 @@ const useOrderCart = () => {
     ready,
     reset,
     integrationOrderList,
-    addSingleSuccess,
-    addSingleSuccessForStore,
+    addSingleOrder,
+    addSingleOrderForStore,
     countSuccessList,
     countFailList,
     calculateTotalPrice,

@@ -116,7 +116,7 @@ export interface ResponseCreateOrderItemExcelParsing {
   };
 }
 
-const formDataSave = (
+const setFormData = (
   formdata: FormData,
   data: RequestCreateOrderItemExcelParsing | RequestCreatePreParsing,
 ) => {
@@ -131,7 +131,7 @@ const createOrderExcelParsing = async (
 ) => {
   const url = 'order/parsing';
   const formData = new FormData();
-  formDataSave(formData, data);
+  setFormData(formData, data);
   const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
     url,
     formData,
@@ -176,7 +176,7 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
   let url = 'order/parsing/pre-parsing';
   let parsingResponse;
   const formData = new FormData();
-  formDataSave(formData, data);
+  setFormData(formData, data);
 
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,
