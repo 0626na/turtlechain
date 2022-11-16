@@ -128,48 +128,43 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
           dataSource={cart.adjustmentItemList}
           rowKey={(record) => Number(record.index)}
           pagination={false}
-          scroll={{ x: 1400, y: 410 }}
+          scroll={{ x: 950, y: 410 }}
           title={() => <TurtleTableTitle totalCount={totalCount} />}
           columns={[
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productName'),
               render: (_, record) => record.product_name,
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.vendorProductName'),
               render: (_, record) => record.vendor_product_name,
             },
             {
               ellipsis: true,
-              width: 120,
               title: t('table.productCode'),
               render: (_, record) => record.product_code,
             },
             {
               ellipsis: true,
-              width: 120,
+              width: 80,
               title: t('table.option'),
               render: (_, record) => record.product_option,
             },
             {
               ellipsis: true,
-              width: 120,
+              width: 100,
               align: 'right',
               title: t('table.price'),
               render: (_, record) => (
@@ -186,7 +181,8 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
               ),
             },
             {
-              width: 120,
+              ellipsis: true,
+              width: 100,
               align: 'right',
               title: t('table.count'),
               render: (_, record) => (
@@ -204,7 +200,8 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
               ),
             },
             {
-              width: 128,
+              ellipsis: true,
+              width: 120,
               title: t('table.type'),
               render: (_, record) => (
                 <Select
@@ -264,7 +261,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 30,
+              width: 50,
               align: 'center',
               render: (_, record) => (
                 <TurtleIcon

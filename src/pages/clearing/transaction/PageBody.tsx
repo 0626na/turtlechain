@@ -98,7 +98,7 @@ function PageBody() {
               detailModalOpen();
             },
           })}
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 'auto', x: 950 }}
           title={() => (
             <TurtleTableTitle
               totalCount={itemList.length ?? 0}

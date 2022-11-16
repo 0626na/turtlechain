@@ -134,7 +134,7 @@ function MistransferTab() {
           };
         }}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        scroll={{ x: 1400, y: 'auto' }}
+        scroll={{ x: 950, y: 'auto' }}
         columns={[
           {
             ellipsis: true,
@@ -154,20 +154,18 @@ function MistransferTab() {
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.vendorName'),
             render: (_, record) => record.ws_store_name,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('mistransfer.accountInfo'),
             render: (_, { ws_bank, ws_account_number, ws_account_holder }) =>
               `${ws_bank} ${ws_account_number} ${ws_account_holder}`,
           },
           {
             ellipsis: true,
-            width: 200,
+            width: 150,
             title: (
               <TextWithTooltip
                 tooltipContent={[
@@ -183,13 +181,11 @@ function MistransferTab() {
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('mistransfer.refund_memo'),
             render: (_, record) => record.memo,
           },
           {
             ellipsis: true,
-            width: 150,
             align: 'right',
             title: t('mistransfer.request price'),
             render: (_, record) => record.transfer_amount.toLocaleString(),
