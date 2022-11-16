@@ -65,20 +65,16 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     },
   });
 
-  const columnDataOutput = ({ column }: Icolumn) => {
+  const columnDataOutput = (column: Icolumn) => {
     return orderFormat[column].map((name, index) => (
       <ColumnTitleInput
         key={index}
         id={String(index)}
         value={name}
         onChange={(e) =>
-          changeOrderColumn(
-            { column },
-            e.currentTarget.id,
-            e.currentTarget.value,
-          )
+          changeOrderColumn(column, e.currentTarget.id, e.currentTarget.value)
         }
-        onDelete={() => deleteOrderColumn({ column }, name)}
+        onDelete={() => deleteOrderColumn(column, name)}
       />
     ));
   };
@@ -140,47 +136,47 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
             <AddColumnButton
               required={true}
               text={t('order.setting.vendorName')}
-              onClick={() => addNewOrderColumn({ column: 'vendor_name' })}
+              onClick={() => addNewOrderColumn('vendor_name')}
             />
             <AddColumnButton
               required={true}
               text={t('order.setting.vendorAddress')}
-              onClick={() => addNewOrderColumn({ column: 'vendor_address' })}
+              onClick={() => addNewOrderColumn('vendor_address')}
             />
             <AddColumnButton
               required={false}
               text={t('order.setting.vendorMobile')}
-              onClick={() => addNewOrderColumn({ column: 'vendor_mobile' })}
+              onClick={() => addNewOrderColumn('vendor_mobile')}
             />
             <AddColumnButton
               required={true}
               text={t('order.setting.productName')}
-              onClick={() => addNewOrderColumn({ column: 'product_name' })}
+              onClick={() => addNewOrderColumn('product_name')}
             />
             <AddColumnButton
               required={false}
               text={t('order.setting.productOption')}
-              onClick={() => addNewOrderColumn({ column: 'product_option' })}
+              onClick={() => addNewOrderColumn('product_option')}
             />
             <AddColumnButton
               required={false}
               text={t('order.setting.orderType')}
-              onClick={() => addNewOrderColumn({ column: 'order_type' })}
+              onClick={() => addNewOrderColumn('order_type')}
             />
             <AddColumnButton
               required={true}
               text={t('order.setting.productCount')}
-              onClick={() => addNewOrderColumn({ column: 'product_count' })}
+              onClick={() => addNewOrderColumn('product_count')}
             />
             <AddColumnButton
               required={false}
               text={t('order.setting.productPrice')}
-              onClick={() => addNewOrderColumn({ column: 'product_price' })}
+              onClick={() => addNewOrderColumn('product_price')}
             />
             <AddColumnButton
               required={false}
               text={t('order.setting.memo')}
-              onClick={() => addNewOrderColumn({ column: 'memo' })}
+              onClick={() => addNewOrderColumn('memo')}
             />
           </div>
           {/* 경계선 */}
@@ -206,55 +202,54 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               {/* 거래처명 */}
               <TurtleStack>
                 {orderFormat.vendor_name.length !== 0 &&
-                  columnDataOutput({ column: 'vendor_name' })}
+                  columnDataOutput('vendor_name')}
               </TurtleStack>
 
               {/* 거래처 주소 */}
               <TurtleStack>
                 {orderFormat.vendor_address.length !== 0 &&
-                  columnDataOutput({ column: 'vendor_address' })}
+                  columnDataOutput('vendor_address')}
               </TurtleStack>
 
               {/* 휴대전화 번호 */}
               <TurtleStack>
                 {orderFormat.vendor_mobile.length !== 0 &&
-                  columnDataOutput({ column: 'vendor_mobile' })}
+                  columnDataOutput('vendor_mobile')}
               </TurtleStack>
 
               {/* 거래처 상품명 */}
               <TurtleStack>
                 {orderFormat.product_name.length !== 0 &&
-                  columnDataOutput({ column: 'product_name' })}
+                  columnDataOutput('product_name')}
               </TurtleStack>
 
               {/* 옵션 */}
               <TurtleStack>
                 {orderFormat.product_option.length !== 0 &&
-                  columnDataOutput({ column: 'product_option' })}
+                  columnDataOutput('product_option')}
               </TurtleStack>
 
               {/* 분류 */}
               <TurtleStack>
                 {orderFormat.order_type.length !== 0 &&
-                  columnDataOutput({ column: 'order_type' })}
+                  columnDataOutput('order_type')}
               </TurtleStack>
 
               {/* 수량 */}
               <TurtleStack>
                 {orderFormat.product_count.length !== 0 &&
-                  columnDataOutput({ column: 'product_count' })}
+                  columnDataOutput('product_count')}
               </TurtleStack>
 
               {/* 가격 */}
               <TurtleStack>
                 {orderFormat.product_price.length !== 0 &&
-                  columnDataOutput({ column: 'product_price' })}
+                  columnDataOutput('product_price')}
               </TurtleStack>
 
               {/* 메모 */}
               <TurtleStack>
-                {orderFormat.memo.length !== 0 &&
-                  columnDataOutput({ column: 'memo' })}
+                {orderFormat.memo.length !== 0 && columnDataOutput('memo')}
               </TurtleStack>
             </div>
 
