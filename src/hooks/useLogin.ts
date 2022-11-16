@@ -79,6 +79,7 @@ const useLogin = function () {
   }, []);
 
   const handleErrorMsg = useCallback((error: AxiosError) => {
+    console.log(error.response?.status);
     if (error.response?.status === 400) {
       setErrorMsg(`${t('message.incorrectUser')}`);
       return;
@@ -100,7 +101,8 @@ const useLogin = function () {
           logout();
           message.warn(`${t('message.loginExpired')}`);
         } else if (error.response?.status === 400) {
-          message.error(error.response.data.msg);
+          const msg = error.response.data.msg;
+          msg && message.error(msg);
         } else {
           message.error(`${t('message.networkError')}`);
         }
