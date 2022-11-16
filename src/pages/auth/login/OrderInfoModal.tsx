@@ -58,9 +58,26 @@ function OrderInfoModal({ visible, onClose }: Props) {
         </Typography.Link>
       </div>
 
-      <button css={button} onClick={openOrderLink}>
+      <div css={title}>
+        <span>정산 서비스 이용안내</span>
+      </div>
+      <div css={container}>
+        서비스 개편을 위해 기존 정산 서비스 URL이 변경되었습니다.
+        <br />
+        정산 서비스를 이용중인 고객께서는 변경된 주소로 접속해 이용해주세요.
+        <br />
+        <br />
+        <Typography.Link
+          href="https://app.turtlechain.io"
+          css={css({ color: `${theme.blue} !important` })}
+        >
+          변경된 주소 : https://app.turtlechain.io
+        </Typography.Link>
+      </div>
+
+      {/* <button css={button} onClick={openOrderLink}>
         발주 서비스 이동
-      </button>
+      </button> */}
       <div css={notShowContainer}>
         <span css={notShowButton} onClick={onClickDisable}>
           다시 보지 않기
