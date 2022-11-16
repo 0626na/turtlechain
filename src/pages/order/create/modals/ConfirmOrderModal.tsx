@@ -14,7 +14,7 @@ interface Props {
 }
 
 function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset } = useOrderCart();
+  const { cart, reset, countSuccessList } = useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록
@@ -48,7 +48,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
           </Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주수량:  ${cart.successList.length}개  `}</Typography.Text>
+          >{`총 발주수량:  ${countSuccessList()}개  `}</Typography.Text>
           <Typography.Text
             style={{ fontSize: 16, fontWeight: 500 }}
           >{`총 발주금액: ${cart.successList
@@ -91,7 +91,10 @@ function ConfirmOrderModal({ visible, close }: Props) {
                       order_type: order.order_type,
                       creation_type: order.creation_type,
                       memo: order.memo,
-                      ws_store_id: order.ws_store_info[0].id,
+                      ws_store_id:
+                        order.ws_store_info.length !== 0
+                          ? order.ws_store_info[0].id
+                          : null,
                     })),
                   })),
                 })
