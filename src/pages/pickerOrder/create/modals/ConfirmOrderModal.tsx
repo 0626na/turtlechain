@@ -37,6 +37,8 @@ function ConfirmOrderModal({ visible, close }: Props) {
     },
   });
 
+  const loading = createOrderItemMutation.isLoading;
+
   return (
     <>
       <TurtleContentModal
@@ -75,6 +77,7 @@ function ConfirmOrderModal({ visible, close }: Props) {
             <AnswerButton
               type="YES"
               text={t('request')}
+              loading={loading}
               onClick={() => {
                 t;
                 createOrderItemMutation.mutate({
