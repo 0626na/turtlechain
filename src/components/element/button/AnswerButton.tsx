@@ -1,7 +1,7 @@
 import { Button } from 'antd';
-
 import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
+import PreventMultipleClickButton from './PreventMultipleClickButton';
 
 interface Props {
   text: string;
@@ -14,20 +14,40 @@ interface Props {
   onClick?: () => void;
 }
 
-function AnswerButton({ text, type = 'YES', margin, ...props }: Props) {
+function AnswerButton({
+  text,
+  type = 'YES',
+  margin,
+  loading,
+  ...props
+}: Props) {
   if (type === 'NO') {
     return (
-      <Button css={[falsy, { margin: margin }]} {...props}>
+      <PreventMultipleClickButton
+        loading={Boolean(loading)}
+        css={[falsy, { margin: margin }]}
+        {...props}
+      >
         <TurtleText>{text}</TurtleText>
-      </Button>
+      </PreventMultipleClickButton>
+      // <Button css={[falsy, { margin: margin }]} {...props}>
+      //   <TurtleText>{text}</TurtleText>
+      // </Button>
     );
   }
 
   // type === YES
   return (
-    <Button css={[truthy, { margin: margin }]} {...props}>
+    <PreventMultipleClickButton
+      loading={Boolean(loading)}
+      css={[falsy, { margin: margin }]}
+      {...props}
+    >
       <TurtleText>{text}</TurtleText>
-    </Button>
+    </PreventMultipleClickButton>
+    // <Button css={[truthy, { margin: margin }]} {...props}>
+    //   <TurtleText>{text}</TurtleText>
+    // </Button>
   );
 }
 
