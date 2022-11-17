@@ -219,13 +219,21 @@ export interface RequestGetProductCodeDuplicationCheck {
   product_code: string;
 }
 
-// const getProductCodeDuplicationCheck = async ({
-//   rt_store_id,
-//   product_code,
-// }: RequestGetProductCodeDuplicationCheck) => {
-//   const url = 'provisioning/product/dup_check';
-//   //const response = await v2Axios.get();
-// };
+export interface ResonseGetProductCodeDuplicationCheck {
+  msg: string;
+}
+
+const getProductCodeDuplicationCheck = async (
+  params: RequestGetProductCodeDuplicationCheck,
+) => {
+  const url = 'provisioning/product/dup_check';
+  const response = await v2Axios.get<ResonseGetProductCodeDuplicationCheck>(
+    url,
+    { params },
+  );
+
+  return response;
+};
 
 const productAPI = {
   connectInventory,
@@ -235,6 +243,7 @@ const productAPI = {
   update,
   remove,
   getCode,
+  getProductCodeDuplicationCheck,
 };
 
 export default productAPI;
