@@ -1,10 +1,7 @@
 import orderAPI from '@apis/orderAPI';
 import {
-  TertiaryButton,
   TurtleCard,
-  TurtleIcon,
   TurtlePrimaryRangePicker,
-  TurtleSearchInput,
   TurtleSearchSelect,
   TurtleTag,
 } from '@components/element';
@@ -74,7 +71,7 @@ function PageBody() {
 
   return (
     <>
-      {sheetId && (
+      {!!sheetId && (
         <DetailModal
           visible={detailModalVisible}
           onclose={closeDetailModal}
