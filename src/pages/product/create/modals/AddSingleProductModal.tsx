@@ -19,6 +19,7 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { Vendor } from '@apis/vendorAPI';
 import { englishAndNumberPatten, notNumPattern } from '@utils/pattern';
+import { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
@@ -61,8 +62,10 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
       onSuccess: (data) => {
         if (data.data.msg === t('product.notDuplication'))
           message.success(t('product.message.notDuplication'));
-        if (data.data.msg === t('product.duplication'))
-          message.success(t('product.message.duplication'));
+      },
+      onError: (error: AxiosError) => {
+        if (error.response?.data.msg === t('product.duplication'))
+          message.warn(t('product.message.duplication'));
       },
     },
   );
