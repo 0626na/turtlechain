@@ -173,7 +173,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.productCode')}
             rules={[{ required: true, message: '상품 바코드 입력해 주세요' }]}
           >
-            <TurtleFormInput disabled placeholder="코드를 입력해주세요" />
+            <TurtleFormInput placeholder="코드를 입력해주세요" />
           </Form.Item>
 
           <div css={flexLayout}>

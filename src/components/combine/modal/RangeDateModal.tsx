@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
-interface Date {
+export interface Date {
   start_date: string;
   end_date: string;
 }
