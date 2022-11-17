@@ -23,6 +23,7 @@ import AddSingleProductModal from './modals/AddSingleProductModal';
 import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import { Date } from '@components/combine/modal/RangeDateModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ function PageBody() {
         ]}
         loading={loading}
         onCancel={closeInventoryModal}
-        onOk={({ start_date, end_date }) => {
+        onOk={({ start_date, end_date }: Date) => {
           if (!isStoreSelected()) return;
           connectInventoryMutation.mutate({
             rt_store_id: store.selected?.id as number,
