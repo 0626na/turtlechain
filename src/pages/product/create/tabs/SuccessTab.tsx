@@ -69,11 +69,11 @@ function SuccessTab({ loading, ...props }: Props) {
           dataSource={cart.successList}
           rowKey={(record) => record.product_code}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 150,
+
               title: t('table.vendorName'),
               onCell: (record) => ({
                 style: {
@@ -86,7 +86,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               onCell: (record) => ({
                 style: {
@@ -99,7 +98,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 250,
               title: (
                 <NeedUpdatePopover>{t('table.productName')}</NeedUpdatePopover>
               ),
@@ -114,7 +112,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 250,
               title: t('table.vendorProductName'),
               onCell: (record) => ({
                 style: {
@@ -127,7 +124,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productCode'),
               onCell: (record) => ({
                 style: {
@@ -140,7 +136,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 100,
               title: t('table.option'),
               onCell: (record) => ({
                 style: {
@@ -154,7 +149,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               title: t('table.imageUrl'),
-              width: 150,
+              width: 100,
               onCell: (record) => ({
                 style: {
                   backgroundColor: record.need_update
@@ -171,7 +166,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              width: 150,
+              width: 120,
               title: t('table.price'),
               onCell: (record) => ({
                 style: {

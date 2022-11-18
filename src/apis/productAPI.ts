@@ -210,6 +210,31 @@ const getCode = async function (params: RequestGetCode) {
   return response.data;
 };
 
+/*
+ * 상품 바코드 중복체크
+ */
+
+export interface RequestGetProductCodeDuplicationCheck {
+  rt_store_id: number;
+  product_code: string;
+}
+
+export interface ResonseGetProductCodeDuplicationCheck {
+  msg: string;
+}
+
+const getProductCodeDuplicationCheck = async (
+  params: RequestGetProductCodeDuplicationCheck,
+) => {
+  const url = 'provisioning/product/dup_check';
+  const response = await v2Axios.get<ResonseGetProductCodeDuplicationCheck>(
+    url,
+    { params },
+  );
+
+  return response;
+};
+
 const productAPI = {
   connectInventory,
   parseExcel,
@@ -218,6 +243,7 @@ const productAPI = {
   update,
   remove,
   getCode,
+  getProductCodeDuplicationCheck,
 };
 
 export default productAPI;

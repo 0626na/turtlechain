@@ -157,7 +157,7 @@ function PageBody() {
           dataSource={getWarehousingSheetQuery.data?.sheet_list}
           rowKey={(record) => record.id}
           pagination={false}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
               selectRow(record);
@@ -210,7 +210,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 70,
+              width: 100,
               align: 'center',
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
@@ -221,39 +221,36 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'center',
               title: t('table.createdDate'),
               render: (_, record) => record.created_date,
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalWarehousingCount'),
               render: (_, record) => record.total_item_count.toLocaleString(),
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalVendorCount'),
               render: (_, record) => record.total_store_count,
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalAmount'),
               render: (_, record) => record.total_amount.toLocaleString(),
             },
             {
-              width: 200,
-            },
-            {
               ellipsis: true,
               align: 'center',
-              width: 70,
+              width: 130,
               onCell: () => ({
                 onClick: (e) => {
                   e.stopPropagation();
@@ -296,7 +293,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 30,
+              width: 50,
               onCell: (record) => ({
                 style: { cursor: 'pointer' },
                 onClick: (e) => {

@@ -25,3 +25,6 @@ export const bizNumPattern = /(\d{3})(\d{2})(\d{5})/;
 
 // 하이푼제거
 export const removeHyphen = /-/g;
+
+//영어와 숫자만 패턴
+export const englishAndNumberPatten = /[^A-Z|a-z|0-9]/g;
