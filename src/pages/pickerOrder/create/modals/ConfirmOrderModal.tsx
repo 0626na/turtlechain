@@ -12,6 +12,7 @@ import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
+
   close: () => void;
 }
 
@@ -36,8 +37,6 @@ function ConfirmOrderModal({ visible, close }: Props) {
       }
     },
   });
-
-  const loading = createOrderItemMutation.isLoading;
 
   return (
     <>
@@ -71,13 +70,17 @@ function ConfirmOrderModal({ visible, close }: Props) {
         </Space>
         <Row justify="end">
           <Col style={{ marginRight: 10 }}>
-            <AnswerButton type="NO" text={t('cancel')} onClick={close} />
+            <AnswerButton
+              type="NO"
+              text={t('cancel')}
+              onClick={createOrderItemMutation.isLoading ? () => {} : close}
+            />
           </Col>
           <Col>
             <AnswerButton
               type="YES"
               text={t('request')}
-              loading={loading}
+              loading={createOrderItemMutation.isLoading}
               onClick={() => {
                 t;
                 createOrderItemMutation.mutate({

@@ -25,7 +25,7 @@ function AnswerButton({
     return (
       <PreventMultipleClickButton
         loading={Boolean(loading)}
-        css={[falsy, { margin: margin }]}
+        css={[falsy, { margin }]}
         {...props}
       >
         <TurtleText>{text}</TurtleText>
@@ -37,7 +37,7 @@ function AnswerButton({
   return (
     <PreventMultipleClickButton
       loading={Boolean(loading)}
-      css={[truthy, { margin: margin }]}
+      css={[truthy, { margin }]}
       {...props}
     >
       <TurtleText>{text}</TurtleText>
