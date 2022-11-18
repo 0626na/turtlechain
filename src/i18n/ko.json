@@ -18,7 +18,16 @@
     "create": "상품등록",
     "history": "상품목록",
     "addSingle": "상품 추가",
-    "search": "상품 검색"
+    "search": "상품 검색",
+    "duplicateCheckProductCode": "중복체크",
+    "notDuplication": "중복 없음",
+    "duplication": "중복 있음",
+    "message": {
+      "notDuplication": "등록 가능한 상품 바코드입니다.",
+      "duplication": "이미 등록 되어있는 상품 바코드 입니다. 다른 바코드를 입력하세요 ",
+      "inputProductCode": "바코드를 입력해주세요",
+      "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요."
+    }
   },
 
   "order": {

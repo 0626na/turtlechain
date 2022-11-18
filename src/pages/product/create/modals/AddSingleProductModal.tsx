@@ -1,11 +1,12 @@
 import { t } from 'i18next';
 import { Form, Input, Row } from 'antd';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { message } from '@utils/message';
 import productAPI from '@apis/productAPI';
 import {
   AddButton,
+  CheckDuplicatedButton,
   PrimaryButton,
   TurtleDivider,
   TurtleFormInput,
@@ -18,6 +19,8 @@ import useProductCart from '@hooks/useProductCart';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { Vendor } from '@apis/vendorAPI';
+import { englishAndNumberPatten, notNumPattern } from '@utils/pattern';
+import { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
@@ -26,27 +29,60 @@ interface Props {
 
 function AddSingleProductModal({ visible, closeModal }: Props) {
   const { store } = useStore();
-  const { addProduct } = useProductCart();
+  const { cart, addProduct } = useProductCart();
   const [form] = Form.useForm();
   const [vendorModalVisible, openVendorModal, closeVendorModal] = useModal();
+  const [clickDuplication, setClickDuplication] = useState(false); //누름: true, 안누름: false
+  const [duplicationInCart, setDuplicationInCart] = useState(false); //중복있음: true, 없음: false
 
-  const getProductCodeQuery = useQuery(
-    'getProductCode', //
+  //이미 등록되어있는 상품이 아닌 현재 미리보기에 등록되어있는 상품중에 추가하려는 상품의 바코드와 동일한 상품이 있는지를 확인.
+  const checkDuplicationProductCodeInCart = () => {
+    //중복있는경우
+    if (
+      cart.successList.filter(
+        (product) =>
+          product.product_code === form.getFieldValue('product_code'),
+      ).length !== 0
+    ) {
+      setDuplicationInCart(true);
+      return;
+    }
+
+    //없는경우
+    setDuplicationInCart(false);
+  };
+
+  const getProductCodeDuplicationCheckQuery = useQuery(
+    'getProductCodeDuplicationCheck',
     () =>
-      productAPI.getCode({
+      productAPI.getProductCodeDuplicationCheck({
         rt_store_id: store.selected?.id ?? -1,
-        vendor_code: form.getFieldValue('vendor_id'),
+        product_code: form.getFieldValue('product_code'),
       }),
     {
       enabled: false,
       onSuccess: (data) => {
-        form.setFieldsValue({
-          ...form.getFieldsValue,
-          product_code: data.data,
-        });
+        //미리보기에 등록된 상품중에 중복이 있는 경우
+
+        if (duplicationInCart) {
+          message.warn(t('product.message.duplication'));
+
+          return;
+        }
+
+        //중복없음, 등록가능
+        if (data.data.msg === t('product.notDuplication')) {
+          message.success(t('product.message.notDuplication'));
+        }
+      },
+      //기존에 등록되어 있는 상품중에 중복이 있는 경우
+      onError: (error: AxiosError) => {
+        message.warn(t('product.message.duplication'));
       },
     },
   );
+
+  const duplicationInServer = getProductCodeDuplicationCheckQuery.isError;
 
   const selectVendor = useCallback(
     (record: Vendor) => {
@@ -63,18 +99,21 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
     [closeVendorModal, form],
   );
 
-  const createProductCode = useCallback(() => {
-    if (!form.getFieldValue('vendor_id')) {
-      message.warn('거래처를 선택해 주세요.');
+  //중복체크 버튼 클릭시 동작
+  const checkProductCodeDuplication = () => {
+    if (!form.getFieldValue('product_code')) {
+      message.warn(t('product.message.inputProductCode'));
       return;
     }
-    getProductCodeQuery.refetch();
-  }, [form]);
+    getProductCodeDuplicationCheckQuery.refetch();
+  };
 
   useEffect(() => {
     if (visible) return;
     form.resetFields();
-  }, [visible, form]);
+    setClickDuplication(false);
+    setDuplicationInCart(false);
+  }, [visible]);
 
   return (
     <>
@@ -171,20 +210,34 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           <Form.Item
             name="product_code"
             label={t('table.productCode')}
-            rules={[{ required: true, message: '상품 바코드 입력해 주세요' }]}
+            rules={[
+              {
+                required: true,
+                message: t('product.message.inputEnglishAndNumber'),
+              },
+            ]}
           >
-            <TurtleFormInput disabled placeholder="코드를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('product.message.inputEnglishAndNumber')}
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  englishAndNumberPatten,
+                  '',
+                );
+              }}
+            />
           </Form.Item>
 
           <div css={flexLayout}>
+            {/* 컴포넌트는 AddButton이지만 기능은 추가가 아닌 새로 입력한 상품바코드와 기존에 등록되어 있는 상품바코드중에 중복이 있는지를 확인하는 기능 */}
             <AddButton
-              disabled={
-                !!form.getFieldValue('product_code') ||
-                !form.getFieldValue('vendor_name')
-              }
-              onClick={createProductCode}
+              onClick={() => {
+                setClickDuplication(true);
+                checkDuplicationProductCodeInCart();
+                checkProductCodeDuplication();
+              }}
             >
-              코드만들기
+              {t('product.duplicateCheckProductCode')}
             </AddButton>
           </div>
 
@@ -232,7 +285,10 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                     !getFieldValue('vendor_product_name') ||
                     !getFieldValue('product_code') ||
                     !getFieldValue('option') ||
-                    !getFieldValue('price')
+                    !getFieldValue('price') ||
+                    duplicationInCart ||
+                    !clickDuplication ||
+                    duplicationInServer
                   }
                 >
                   {t('button.addProduct')}
