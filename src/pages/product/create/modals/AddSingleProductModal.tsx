@@ -211,11 +211,14 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             name="product_code"
             label={t('table.productCode')}
             rules={[
-              { required: true, message: '숫자 또는 영문으로 입력해주세요' },
+              {
+                required: true,
+                message: t('product.message.inputEnglishAndNumber'),
+              },
             ]}
           >
             <TurtleFormInput
-              placeholder="코드를 입력해주세요"
+              placeholder={t('product.message.inputEnglishAndNumber')}
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replace(
                   englishAndNumberPatten,
