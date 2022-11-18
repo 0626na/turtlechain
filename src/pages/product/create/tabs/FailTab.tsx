@@ -17,23 +17,20 @@ function FailTab({ loading, ...props }: Props) {
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
         dataSource={cart.failList}
         rowKey={(record) => record.product_code}
-        scroll={{ x: 1400, y: 'auto' }}
+        scroll={{ x: 950, y: 'auto' }}
         columns={[
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorName'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorAddress'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('table.productName'),
             render: (_, record) => (
               <span style={{ color: 'red' }}>{record.name}</span>
@@ -41,7 +38,6 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('table.vendorProductName'),
             render: (_, record) => (
               <span style={{ color: 'red' }}>{record.vendor_product_name}</span>
@@ -49,19 +45,16 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.productCode'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.option'),
             render: (_, record) => record.option,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.imageUrl'),
             render: (_, record) => (
               <Typography.Link href={record.image_url} target="_blank">
@@ -71,7 +64,6 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 120,
             align: 'right',
             title: t('table.price'),
             render: (_, record) => record.price.toLocaleString(),

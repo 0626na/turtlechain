@@ -197,7 +197,7 @@ function PageBody() {
           dataSource={vendorList}
           rowKey={(record) => record.id}
           pagination={false}
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 'auto', x: 950 }}
           title={() => (
             <TurtleTableTitle
               totalCount={totalCount ?? 0}
@@ -226,32 +226,29 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 100,
+              width: 90,
               title: t('table.vendorCode'),
               render: (_, record) => record.vendor_code,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_address,
             },
             {
               ellipsis: true,
-              width: 200,
+              width: 150,
               title: t('table.mobile'),
               render: (_, record) =>
                 record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.accountInfo'),
               render: (_, record) => {
                 const makeAccount = (account: VendorAccount) =>
@@ -262,8 +259,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 120,
-              // align: 'center',
+              width: 130,
               title: (
                 <TextWithTooltip
                   tooltipContent={[

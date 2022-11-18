@@ -20,24 +20,21 @@ function FailTab({ loading, ...props }: Props) {
         dataSource={cart.failList}
         rowKey={(record) => record.index as number}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        scroll={{ x: 1400, y: 'auto' }}
+        scroll={{ x: 950, y: 'auto' }}
         title={() => <TurtleTableTitle totalCount={cart.failList.length} />}
         columns={[
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorName'),
             render: (_, record) => record.vendor_name,
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorAddress'),
             render: (_, record) => record.vendor_address,
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('table.productName'),
             render: (_, record) => (
               <Typography.Text type="danger">
@@ -47,7 +44,6 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.vendorProductName'),
             render: (_, record) => (
               <Typography.Text type="danger">
@@ -57,19 +53,16 @@ function FailTab({ loading, ...props }: Props) {
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.productCode'),
             render: (_, record) => record.product_code,
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.option'),
             render: (_, record) => record.product_option,
           },
           {
             ellipsis: true,
-            width: 100,
             title: t('table.warehouseName'),
             render: (_, record) => record.store_house,
           },

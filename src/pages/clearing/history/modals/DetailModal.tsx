@@ -78,7 +78,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         loading={getClearingItemQuery.isLoading}
         dataSource={filteredList}
         rowKey={(record) => record.id}
-        scroll={{ x: 1300, y: 'auto' }}
+        scroll={{ x: 950, y: 'auto' }}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,

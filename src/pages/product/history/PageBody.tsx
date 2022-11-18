@@ -128,7 +128,7 @@ function PageBody() {
           dataSource={getProductListQuery.data?.data.product_list}
           rowKey={(record) => record.id}
           pagination={false}
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 'auto', x: 950 }}
           title={() => (
             <TurtleTableTitle
               totalCount={getProductListQuery.data?.data.total_count ?? 0}
@@ -157,56 +157,51 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 100,
+              width: 85,
               title: t('table.vendorCode'),
               render: (_, record) => record.vendor_info.vendor_code,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_info.vendor_address,
             },
             {
               ellipsis: true,
-              width: 250,
               title: t('table.productName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 200,
               title: t('table.vendorProductName'),
               render: (_, record) => record.vendor_product_name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productCode'),
               render: (_, record) => record.product_code,
             },
             {
               ellipsis: true,
-              width: 150,
+              width: 100,
               title: t('table.option'),
               render: (_, record) => record.option,
             },
             {
               ellipsis: true,
-              width: 150,
+              width: 100,
               align: 'right',
               title: t('table.price'),
               render: (_, record) => record.price.toLocaleString(),
             },
             {
               ellipsis: true,
-              width: 150,
+              width: 100,
               title: t('table.imageUrl'),
               render: (_, record) => (
                 <Typography.Link

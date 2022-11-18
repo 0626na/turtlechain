@@ -98,7 +98,7 @@ function PageBody() {
               detailModalOpen();
             },
           })}
-          scroll={{ y: 'auto', x: 1400 }}
+          scroll={{ y: 'auto', x: 950 }}
           title={() => (
             <TurtleTableTitle
               totalCount={itemList.length ?? 0}
@@ -115,7 +115,6 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_name,
             },

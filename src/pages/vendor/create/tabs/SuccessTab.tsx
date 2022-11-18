@@ -7,7 +7,7 @@ import {
   TurtleTableInput,
 } from '@components/element';
 import { SuccessItem } from '@store/vendorCartState';
-import { Input, Switch, Table } from 'antd';
+import { Switch, Table } from 'antd';
 
 import { css } from '@emotion/react';
 
@@ -83,29 +83,26 @@ function SuccessTab({ isLoading }: Props) {
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        scroll={{ y: 'auto', x: 1400 }}
+        scroll={{ y: 'auto', x: 950 }}
         columns={[
           {
             ellipsis: true,
-            width: 85,
+            width: 90,
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.retailerStoreInput'),
             render: (_, record) => `${record.name}  ${record.address}`,
           },
           {
             ellipsis: true,
-            width: 250,
             title: t('table.vendorName'),
             render: (_, record) => record.ws_store_info[0]?.name,
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorAddress'),
             render: (_, record) => record.ws_store_info[0]?.address,
           },
@@ -120,7 +117,6 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 300,
             title: t('table.accountInfo'),
             render: (_, record) => {
               const {
@@ -134,7 +130,7 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 150,
+            width: 130,
             title: (
               <TextWithTooltip
                 tooltipContent={[
@@ -159,7 +155,7 @@ function SuccessTab({ isLoading }: Props) {
 
           {
             ellipsis: true,
-            width: 200,
+            width: 130,
             title: (
               <TextWithTooltip
                 tooltipContent={[
