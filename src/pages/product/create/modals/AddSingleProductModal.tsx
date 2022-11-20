@@ -126,7 +126,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         onClickSelect={selectVendor}
       />
       <TurtleContentModal
-        title={t('product.addSingletest aaa')}
+        title={t('product.addSingle')}
         visible={visible}
         onClose={closeModal}
       >
