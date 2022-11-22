@@ -50,11 +50,11 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
       <TurtleContentModal
         size="small"
         visible={visible}
-        title={t('order.orderPreParsing')}
+        title={t('orderRecreate')}
         onClose={close}
       >
         <p>
-          {t('order.description1')}
+          {t('order dont create today')}
           <br />
           {data.preParsingResult.data.third_order.map((store, index) =>
             data.preParsingResult.data.third_order.length !== index + 1
@@ -63,15 +63,15 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
           )}
           <br />
           <br />
-          {t('order.description2')} <br />
-          {t('order.1stOrder')}:
+          {t('order can create this list')} <br />
+          {t('the first order')}:
           {data.preParsingResult.data.first_order.map((store, index) =>
             data.preParsingResult.data.first_order.length !== index + 1
               ? `${store.rt_store_name}, `
               : `${store.rt_store_name}`,
           )}
           <br />
-          {t('order.2ndOrder')}:
+          {t('the second order')}:
           {data.preParsingResult.data.second_order.map((store, index) =>
             data.preParsingResult.data.second_order.length !== index + 1
               ? `${store.rt_store_name}, `
@@ -86,7 +86,7 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
           <Col>
             <AnswerButton
               type="YES"
-              text={t('order.orderPreparsing.recreate')}
+              text={t('button.recreate')}
               disabled={
                 data.preParsingResult.data.third_order.length !== 0 &&
                 data.preParsingResult.data.first_order.length === 0 &&

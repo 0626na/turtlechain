@@ -21,15 +21,15 @@ function PageBody() {
   const options = [
     {
       value: 'entire',
-      name: t('order.history.entire'),
+      name: t('button.orderEntire'),
     },
     {
       value: 'new',
-      name: t('order.history.new'),
+      name: t('button.orderNew'),
     },
     {
       value: 'modify',
-      name: t('order.history.modify'),
+      name: t('button.orderModify'),
     },
   ];
 
@@ -78,9 +78,9 @@ function PageBody() {
           sheetId={sheetId}
         />
       )}
-      <PageHeader title={`${t('order.history.title')}`} />
+      <PageHeader title={`${t('orderDetail')}`} />
       <PageTitle
-        title={`${t('order.present')}`}
+        title={`${t('orderStatus')}`}
         // buttons={[
         //   <TertiaryButton
         //     text="발주서 다운"
@@ -97,7 +97,7 @@ function PageBody() {
           value={[
             {
               color: 'cyan',
-              title: t('order.history.success'),
+              title: t('success'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_store_count,
@@ -112,7 +112,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: t('order.history.fail'),
+              title: t('fail'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_fail_count,
@@ -175,36 +175,36 @@ function PageBody() {
             {
               ellipsis: true,
               width: 108,
-              title: t('order.history.class'),
+              title: t('table.type'),
               render: (_, record) =>
                 record.type === 'new' ? (
                   <TurtleTag color="orderHistoryCategoryFirst">
-                    {t('order.history.new')}
+                    {t('button.orderNew')}
                   </TurtleTag>
                 ) : (
                   <TurtleTag color="orderHistoryCategorySecond">
-                    {t('order.history.modify')}
+                    {t('button.orderModify')}
                   </TurtleTag>
                 ),
             },
             {
               ellipsis: true,
               width: 176,
-              title: t('order.history.date'),
+              title: t('table.orderDate'),
               render: (_, record) =>
                 moment(record.request_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
               width: 176,
-              title: t('order.history.store'),
+              title: t('table.store'),
               render: (_, record) => record.rt_store_name,
             },
             {
               ellipsis: true,
               align: 'right',
               width: 136,
-              title: t('order.history.clientCount'),
+              title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
             },
             {},

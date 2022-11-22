@@ -29,15 +29,15 @@ interface Props extends TabPaneProps {
 function FailTab({ loading, ...props }: Props) {
   const options = [
     {
-      name: t('order.search.storeName'),
+      name: t('button.storeName'),
       value: 'name',
     },
     {
-      name: t('order.setting.vendorName'),
+      name: t('button.vendorName'),
       value: 'vendor_name',
     },
     {
-      name: t('order.setting.vendorAddress'),
+      name: t('button.vendorAddress'),
       value: 'address',
     },
   ];
@@ -91,7 +91,7 @@ function FailTab({ loading, ...props }: Props) {
   const failTablePhoneNumberInput = (record: FailListForOutput) => {
     return (
       <TurtleTablePhoneNumberInput
-        placeholder={t('placeholder.mobile')}
+        placeholder={t('mobile')}
         maxLength={13}
         onInput={(e) => {
           e.currentTarget.value = e.currentTarget.value
@@ -147,10 +147,12 @@ function FailTab({ loading, ...props }: Props) {
       />
       {failListOutput().length !== 0 && (
         <AddOrderFailtoSuccessModal
-          title={t('order.changeToSuccess')}
+          title={t('change to success')}
           description={[
-            t('order.failToSuccessModal.description1'),
-            t('order.failToSuccessModal.description2'),
+            t('if you enter your phone, change it to success'),
+            t(
+              'the data converted to Success displays the mobile phone number on the Failed tab',
+            ),
           ]}
           visible={failtoSuccessModailvisible}
           onCancel={closeFailToSuccessModal}
@@ -212,7 +214,7 @@ function FailTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder={t('placeholder.inputQuery')}
+                      placeholder={t('please input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -238,7 +240,7 @@ function FailTab({ loading, ...props }: Props) {
               render: (_, record) => record.vendor_name,
             },
             {
-              title: t('table.vendorAddres'),
+              title: t('table.vendorAddress'),
               width: 196,
               render: (_, record) => record.vendor_address,
             },

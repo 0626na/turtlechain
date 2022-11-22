@@ -86,7 +86,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('order.setting.title')}
+      title={t('button.orderColumnSetting')}
       size="large"
       visible={visible}
       onClose={closeModal}
@@ -105,7 +105,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               font-size: 20px;
             `}
           >
-            {t('order.setting.subTitle')}
+            {t('orderHeaderSettingSubtitle')}
           </span>
           <p
             css={css`
@@ -115,7 +115,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               color: #6b6d73;
             `}
           >
-            {t('order.setting.description')}
+            {t('external header can create free')}
           </p>
         </div>
         {/* 종방향 정렬 container */}
@@ -135,47 +135,47 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
           >
             <AddColumnButton
               required={true}
-              text={t('order.setting.vendorName')}
+              text={t('button.vendorName')}
               onClick={() => addNewOrderColumn('vendor_name')}
             />
             <AddColumnButton
               required={true}
-              text={t('order.setting.vendorAddress')}
+              text={t('button.vendorAddress')}
               onClick={() => addNewOrderColumn('vendor_address')}
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.vendorMobile')}
+              text={t('button.vendorMobile')}
               onClick={() => addNewOrderColumn('vendor_mobile')}
             />
             <AddColumnButton
               required={true}
-              text={t('order.setting.productName')}
+              text={t('button.productName')}
               onClick={() => addNewOrderColumn('product_name')}
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.productOption')}
+              text={t('button.productOption')}
               onClick={() => addNewOrderColumn('product_option')}
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.orderType')}
+              text={t('button.orderType')}
               onClick={() => addNewOrderColumn('order_type')}
             />
             <AddColumnButton
               required={true}
-              text={t('order.setting.productCount')}
+              text={t('button.productCount')}
               onClick={() => addNewOrderColumn('product_count')}
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.productPrice')}
+              text={t('button.productPrice')}
               onClick={() => addNewOrderColumn('product_price')}
             />
             <AddColumnButton
               required={false}
-              text={t('order.setting.memo')}
+              text={t('button.memo')}
               onClick={() => addNewOrderColumn('memo')}
             />
           </div>
@@ -265,7 +265,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               <PrimaryButton
                 onClick={() => createOrderFormatMutation.mutate(orderFormat)}
               >
-                {t('order.setting.save')}
+                {t('button.save')}
               </PrimaryButton>
             </div>
           </div>

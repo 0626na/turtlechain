@@ -42,28 +42,28 @@ function ConfirmOrderModal({ visible, close }: Props) {
     <>
       <TurtleContentModal
         size="small"
-        title={t('order.confirmModal.title')}
+        title={t('orderConfirm')}
         visible={visible}
         onClose={close}
       >
         <Space direction="vertical">
           <Typography.Paragraph>
-            {t('order.confirmModal.description1')} <br />
-            {t('order.confirmModal.description2')}
+            {t('failed orders are except')} <br />
+            {t('please check order info again')}
           </Typography.Paragraph>
 
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {`${t('order.confirmModal.orderDate')}: ${moment(
-              cart.selectedDate,
-            ).format('YYYY-MM-DD')}   `}
+            {`${t('orderDate')}: ${moment(cart.selectedDate).format(
+              'YYYY-MM-DD',
+            )}   `}
           </Typography.Text>
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {t('order.confirmModal.totalOrderCount', {
+            {t('totalOrderCountInConfirm', {
               count: countSuccessList(),
             })}
           </Typography.Text>
           <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {t('order.confirmModal.totalOrderPrice', {
+            {t('totalOrderPriceInComfirm', {
               price: calculateTotalPrice().toLocaleString(),
             })}
           </Typography.Text>
@@ -72,14 +72,14 @@ function ConfirmOrderModal({ visible, close }: Props) {
           <Col style={{ marginRight: 10 }}>
             <AnswerButton
               type="NO"
-              text={t('cancel')}
+              text={t('button.cancel')}
               onClick={createOrderItemMutation.isLoading ? () => {} : close}
             />
           </Col>
           <Col>
             <AnswerButton
               type="YES"
-              text={t('request')}
+              text={t('button.request')}
               loading={createOrderItemMutation.isLoading}
               onClick={() => {
                 t;

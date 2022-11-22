@@ -17,7 +17,6 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
-import { valueType } from 'antd/lib/statistic/utils';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 
 interface Props extends TabPaneProps {
@@ -26,47 +25,47 @@ interface Props extends TabPaneProps {
 
 export const category = [
   {
-    value: t('order.types.order'),
+    value: 'order',
     name: t('order.types.order'),
   },
   {
-    value: t('order.types.notDelivery'),
-    name: t('order.types.notDelivery'),
+    value: 'reserve',
+    name: t('order.types.reserve'),
   },
   {
-    value: t('order.types.return'),
-    name: t('order.types.return'),
+    value: 'takeback',
+    name: t('order.types.takeback'),
   },
   {
-    value: t('order.types.exchange'),
+    value: 'exchange',
     name: t('order.types.exchange'),
   },
   {
-    value: t('order.types.sample'),
+    value: 'sample',
     name: t('order.types.sample'),
   },
   {
-    value: t('order.types.pickUp'),
-    name: t('order.types.pickUp'),
+    value: 'pickup',
+    name: t('order.types.pickup'),
   },
   {
-    value: t('order.types.etc'),
-    name: t('order.types.etc'),
+    value: 'extra',
+    name: t('order.types.extra'),
   },
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
   const options = [
     {
-      name: t('order.search.storeName'),
+      name: t('button.storeName'),
       value: 'name',
     },
     {
-      name: t('order.search.clientName'),
+      name: t('button.vendorName'),
       value: 'vendor_name',
     },
     {
-      name: t('order.search.mobile'),
+      name: t('button.mobile'),
       value: 'mobile',
     },
   ];
@@ -197,7 +196,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder={t('placeholder.inputQuery')}
+                      placeholder={t('please input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -370,7 +369,7 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => {
                 return (
                   record.orders.length !== 0 &&
-                  t('order.recordRender', {
+                  t('count except one', {
                     name: record.orders[0].vendor_name,
                     count: record.orders.length - 1,
                   })
@@ -382,7 +381,7 @@ function SuccessTab({ loading, ...props }: Props) {
               width: 488,
               render: (_, record) =>
                 record.orders.length !== 0 &&
-                t('order.recordRender', {
+                t('count except one', {
                   name: record.orders[0].product_name,
                   count: record.orders.length - 1,
                 }),

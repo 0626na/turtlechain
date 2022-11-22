@@ -23,7 +23,7 @@ function StoreSearchResultModal({ visible, close, resultData }: Props) {
         visible={visible}
         onClose={close}
         size="small"
-        title={t('etc.pickerOrder.searchModalTitle')}
+        title={t('store search results')}
       >
         {resultData !== undefined ? (
           <TurtleText>

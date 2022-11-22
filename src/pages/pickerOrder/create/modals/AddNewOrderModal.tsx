@@ -49,7 +49,7 @@ function AddNewOrderModal({ visible, close }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('order.addSingleOrderTitle')}
+        title={t('addSingleOrder')}
         visible={visible}
         onClose={() => close()}
       >
@@ -96,7 +96,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           >
             <TurtleFormSelect
               showSearch
-              placeholder={t('placeholder.store')}
+              placeholder={t('please input store name')}
               items={getPickerStoresQuery.data?.data.store_list.map((store) => {
                 return {
                   name: store.name,
@@ -124,9 +124,9 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
-            rules={[{ required: true, message: t('placeholder.vendorName') }]}
+            rules={[{ required: true, message: t('please input vendor name') }]}
           >
-            <TurtleFormInput placeholder={t('placeholder.vendorName')} />
+            <TurtleFormInput placeholder={t('please input vendor name')} />
           </Form.Item>
           {/* 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
@@ -138,7 +138,7 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_building" noStyle>
                   <TurtleFormSelect
-                    placeholder={t('placeholder.building')}
+                    placeholder={t('building')}
                     onChange={(value) => setBuilding(value)}
                     items={
                       buildingData &&
@@ -159,7 +159,7 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_floor" noStyle>
                   <TurtleFormSelect
-                    placeholder={t('placeholder.floor')}
+                    placeholder={t('floor')}
                     items={
                       building !== ''
                         ? Object.keys(buildingData.data[building]).map(
@@ -179,7 +179,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                 `}
               >
                 <Form.Item name="vendor_address_col" noStyle>
-                  <TurtleFormInput placeholder={t('placeholder.col loc')} />
+                  <TurtleFormInput placeholder={t('col and loc')} />
                 </Form.Item>
               </div>
             </div>
@@ -190,14 +190,14 @@ function AddNewOrderModal({ visible, close }: Props) {
             label={t('table.vendorEtcAddress')}
           >
             <TurtleFormInput
-              placeholder={t('placeholder.etcAddress')}
+              placeholder={t('please input etc address')}
               disabled={building === t('order.types.etc') ? false : true}
             />
           </Form.Item>
           {/* 휴대번호 */}
           <Form.Item label={t('table.mobile')} name="mobile" required>
             <TurtleFormInput
-              placeholder={t('placeholder.mobile')}
+              placeholder={t('please input phone number')}
               maxLength={11}
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replaceAll(
@@ -213,44 +213,38 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.vendorProductName')}
             name="vendor_product_name"
-            rules={[{ required: true, message: t('placeholder.product') }]}
+            rules={[
+              { required: true, message: t('please input product name') },
+            ]}
           >
-            <TurtleFormInput placeholder={t('placeholder.vendorProduct')} />
+            <TurtleFormInput
+              placeholder={t('please input vendorProduct name')}
+            />
           </Form.Item>
           {/* 옵션  */}
           <Form.Item
             label={t('table.option')}
             name="option"
-            rules={[{ required: true, message: t('placeholder.option') }]}
+            rules={[{ required: true, message: t('please input option') }]}
           >
-            <TurtleFormInput placeholder={t('placeholder.option')} />
+            <TurtleFormInput placeholder={t('please input option')} />
           </Form.Item>
           {/* 분류 */}
           <Form.Item
             label={t('table.type')}
             name="type"
-            rules={[{ required: true, message: t('placeholder.type') }]}
+            rules={[{ required: true, message: t('please input type') }]}
           >
             <Radio.Group>
-              <Radio value={t('order.types.order')}>
-                {t('order.types.order')}
-              </Radio>
-              <Radio value={t('order.types.notDelivery')}>
-                {t('order.types.notDelivery')}
-              </Radio>
-              <Radio value={t('order.types.return')}>
-                {t('order.types.return')}
-              </Radio>
+              <Radio value="order">{t('order.types.order')}</Radio>
+              <Radio value="reserve">{t('order.types.reserve')}</Radio>
+              <Radio value="takeback">{t('order.types.takeback')}</Radio>
               <Radio value={t('order.types.exchange')}>
                 {t('order.types.exchange')}
               </Radio>
-              <Radio value={t('order.types.sample')}>
-                {t('order.types.sample')}
-              </Radio>
-              <Radio value={t('order.types.pickUp')}>
-                {t('order.types.pickUp')}
-              </Radio>
-              <Radio value={t('order.types.etc')}>{t('order.types.etc')}</Radio>
+              <Radio value="sample">{t('order.types.sample')}</Radio>
+              <Radio value="pickup">{t('order.types.pickup')}</Radio>
+              <Radio value="extra">{t('order.types.extra')}</Radio>
             </Radio.Group>
           </Form.Item>
 
@@ -285,7 +279,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                       !values.getFieldValue('type')
                     }
                   >
-                    {t('button.addSingleOrder')}
+                    {t('addSingleOrder')}
                   </PrimaryButton>
                 </Row>
               );

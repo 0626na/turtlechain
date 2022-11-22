@@ -82,7 +82,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>{t('etc.pickerOrder.storeInfo')}</TurtleText>
+              <TurtleText>{t('store.info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -93,7 +93,7 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('etc.pickerOrder.addStore')}</TurtleText>
+            <TurtleText>{t('store.create')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -113,9 +113,7 @@ function PageBody() {
               changeMode();
             }}
           >
-            {mode === 'cardView'
-              ? t('etc.pickerOrder.listView')
-              : t('etc.pickerOrder.cardView')}
+            {mode === 'cardView' ? t('listView') : t('cardView')}
           </AddButton>
         }
       />

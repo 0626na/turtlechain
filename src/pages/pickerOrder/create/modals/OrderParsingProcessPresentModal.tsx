@@ -51,7 +51,7 @@ function OrderParsingProcessPresentModal({
             letterSpacing: '0.005em',
           })}
         >
-          <span>{t('order.parsingModal.errorOrdersCount')} </span>
+          <span>{t('errorOrder')} </span>
           <span css={css({ color: '#FA5252', marginLeft: 4, marginRight: 3 })}>
             {failCount}
           </span>
@@ -102,9 +102,11 @@ function OrderParsingProcessPresentModal({
             borderRadius: 10,
           })}
         >
-          <span>{t('order.parsingModal.solution1')}</span>
-          <span>{t('order.parsingModal.solution2')}</span>
-          <span>{t('order.parsingModal.solution3')}</span>
+          <span>{t('please check to create file name is store name')}</span>
+          <span>{t('please check essential header name')}</span>
+          <span>
+            {t('quantity and amount can only be numbers greater than zero')}
+          </span>
         </div>
       </div>
     </TurtleConfirmModal>

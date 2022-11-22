@@ -25,7 +25,7 @@ function SuccessTab({
 }: Props) {
   const [selectedRowID, setSelectedRowID] = useState(-1);
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
-  const queryClient = useQueryClient();
+  const { translateOrderType } = useOrderCart();
 
   const getOrderHistoryQuery = useQuery(['getOrderHistory', sheetID], () =>
     orderAPI.getOrderHistory({ sheet_id: sheetID }),
@@ -57,8 +57,6 @@ function SuccessTab({
         visible={visibleMemoModal}
         close={closeMemoModal}
         onOk={(value) => {
-          console.log(getOrderHistoryQuery.data?.data.successes);
-          console.log('아이디', selectedRowID);
           updateMemoQuery.mutate({
             rt_stores: [
               {
@@ -102,49 +100,49 @@ function SuccessTab({
         )}
         columns={[
           {
-            title: '거래처명',
+            title: t('table.vendorName'),
             width: 188,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처 주소',
+            title: t('table.vendorAddress'),
             width: 196,
             render: (_, record) => record.address,
           },
           {
-            title: '휴대전화 번호',
+            title: t('table.mobile'),
             width: 176,
             render: (_, record) => record.mobile,
           },
           {
-            title: '거래처 상품명',
+            title: t('table.vendorProductName'),
             width: 196,
             render: (_, record) => record.name,
           },
           {
-            title: '옵션',
+            title: t('table.option'),
             width: 136,
             render: (_, record) => record.option,
           },
           {
-            title: '분류',
+            title: t('table.type'),
             width: 116,
-            render: (_, record) => record.type,
+            render: (_, record) => translateOrderType(record.type),
           },
           {
-            title: '요청 수량',
+            title: t('table.requestCount'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: '공급가',
+            title: t('table.supplyPrice'),
             align: 'right',
             width: 116,
             render: (_, record) => record.price.toLocaleString(),
           },
           {
-            title: '메모',
+            title: t('table.memo'),
             align: 'center',
             onCell: (record) => ({
               style: { cursor: 'pointer' },

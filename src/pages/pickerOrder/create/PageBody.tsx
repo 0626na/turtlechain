@@ -73,35 +73,6 @@ function PageBody() {
     },
   });
 
-  //쇼핑몰 갯수
-  const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
-    enabled: !!user,
-    onSuccess: (data) =>
-      setTodayordersCount({
-        ...todayOrdersCount,
-        total: data.data.total_count,
-      }),
-  });
-
-  //발주완료 갯수
-  const getOrdersCountQuery = useQuery(
-    'getOrdersCountQuery',
-    () =>
-      orderAPI.getOrderSheets({
-        start_date: moment().format('YYYY-MM-DD'),
-        end_date: moment().format('YYYY-MM-DD'),
-      }),
-    {
-      onSuccess: (data) =>
-        setTodayordersCount({
-          ...todayOrdersCount,
-          complete: data.data.order_sheet_list.filter(
-            (order) => order.type === 'new',
-          ).length,
-        }),
-    },
-  );
-
   return (
     <>
       {/* 발주서 헤더 설정 모달 */}
@@ -135,10 +106,10 @@ function PageBody() {
       {/* 발주서 파싱 결과 모달 */}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
-        title={t('order.parsingModal.title')}
+        title={t('order is problem')}
         description={[
-          t('order.parsingModal.description1'),
-          t('order.parsingModal.description2'),
+          t('there are orders to modify'),
+          t('please check error and reload'),
         ]}
         onCancel={closeParsingProcessModal}
         onOk={() => {
@@ -167,7 +138,7 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title={t('order.title')}
+        title={t('order.preview')}
         buttons={[
           <TurtleText
             css={css({
@@ -175,26 +146,26 @@ function PageBody() {
               fontWeight: 500,
             })}
           >
-            {`${t('order.todayOrderComplete')} ${todayOrdersCount.complete}`}{' '}
+            {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
             <span css={css({ color: theme.grey400 })}>
               {`/ 
-              ${t('order.count', { count: todayOrdersCount.total })} | `}
+              ${t('count', { count: todayOrdersCount.total })} | `}
             </span>
-            {`${t('order.todayOrderIncomplete')} ${
+            {`${t('incomplete orders today')} ${
               todayOrdersCount.total - todayOrdersCount.complete
             }`}{' '}
-            <span css={css({ color: theme.grey400 })}>{`/ ${t('order.count', {
+            <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
               count: todayOrdersCount.total,
             })}`}</span>
           </TurtleText>,
           <TertiaryButton
-            text={t('order.setting.title')}
+            text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('order.addOrder')}</SecondaryIconButton>
+              <SecondaryIconButton>{t('button.addOrder')}</SecondaryIconButton>
             }
             items={[
               {
@@ -237,12 +208,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('order.orderSuccess')}(${countSuccessList()})`}
+            tab={`${t('success')}(${countSuccessList()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`${t('order.orderFail')}(${countFailList()})`}
+            tab={`${t('fail')}(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -260,25 +231,25 @@ function PageBody() {
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {t('order.totalCount')}
+                {t('orderTotalCount')}
               </span>
               {'   '}
-              {` ${t('order.count', { count: countSuccessList() })}`}
+              {` ${t('count', { count: countSuccessList() })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
                   'order.types.exchange',
                 )} ${countOrdersForType().exchange}, ${t(
-                  'order.types.return',
-                )} ${countOrdersForType().return}, ${t(
-                  'order.types.notDelivery',
-                )} ${countOrdersForType().notDelivery}, ${t(
+                  'order.types.takeback',
+                )} ${countOrdersForType().takeback}, ${t(
+                  'order.types.reserve',
+                )} ${countOrdersForType().reserve}, ${t(
                   'order.types.sample',
-                )} ${countOrdersForType().sample}, ${t('order.types.pickUp')} ${
+                )} ${countOrdersForType().sample}, ${t('order.types.pickup')} ${
                   countOrdersForType().pickup
-                }, ${t('order.types.etc')} ${countOrdersForType().etc})
-              / ${t('order.totalPrice')}  `}
+                }, ${t('order.types.extra')} ${countOrdersForType().extra})
+              / ${t('orderTotalPrice')}  `}
               </span>
-              {`${t('order.price', {
+              {`${t('price', {
                 price: calculateTotalPrice().toLocaleString(),
               })}`}
             </TurtleText>
@@ -290,7 +261,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              {t('order.place order')}
+              {t('button.order')}
             </PrimaryButton>
           </Col>
         </Row>

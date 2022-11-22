@@ -24,49 +24,49 @@ function FailTab({ data, loading, ...props }: Props) {
         title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
         columns={[
           {
-            title: t('order.history.clientName'),
+            title: t('table.vendorName'),
             width: 188,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: t('order.history.clientAddress'),
+            title: t('table.vendorAddress'),
             width: 196,
             render: (_, record) => record.address,
           },
           {
-            title: t('order.history.mobile'),
+            title: t('table.mobile'),
             width: 176,
             render: (_, record) => record.mobile,
           },
           {
-            title: t('order.history.productName'),
+            title: t('table.productName'),
             width: 196,
             render: (_, record) => record.name,
           },
           {
-            title: t('order.history.option'),
+            title: t('table.option'),
             width: 136,
             render: (_, record) => record.option,
           },
           {
-            title: t('order.history.class'),
+            title: t('table.type'),
             width: 116,
             render: (_, record) => record.type,
           },
           {
-            title: t('order.history.count'),
+            title: t('table.count'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: t('order.history.price'),
+            title: t('table.price'),
             align: 'right',
             width: 116,
             render: (_, record) => record.price.toLocaleString(),
           },
           {
-            title: t('order.history.memo'),
+            title: t('table.memo'),
           },
         ]}
       />

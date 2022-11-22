@@ -70,7 +70,10 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
           label={t('store.name')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store')} disabled />
+          <TurtleFormInput
+            placeholder={t('please input store name')}
+            disabled
+          />
         </Form.Item>
 
         <Form.Item
@@ -78,7 +81,7 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
           label={t('table.retailerStoreURL')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store url')} disabled />
+          <TurtleFormInput placeholder={t('please input store url')} disabled />
         </Form.Item>
 
         <Form.Item
@@ -86,7 +89,10 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
           label={t('table.mobile')}
         >
-          <TurtleFormInput placeholder={t('placeholder.mobile')} disabled />
+          <TurtleFormInput
+            placeholder={t('please input phone number')}
+            disabled
+          />
         </Form.Item>
       </Form>
     </TurtleContentModal>

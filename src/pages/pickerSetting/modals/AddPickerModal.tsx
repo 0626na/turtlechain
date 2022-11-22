@@ -94,7 +94,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             label={t('store.name')}
           >
             <TurtleFormSearchInput
-              placeholder={t('placeholder.store')}
+              placeholder={t('please input store name')}
               onSearch={(value: string) => {
                 setSearchStore(
                   getStoreListQuery.data?.store_list.find(
@@ -112,7 +112,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('store.url')}
           >
-            <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
+            <TurtleFormInput placeholder={t('please input store url')} />
           </Form.Item>
 
           <Form.Item
@@ -120,7 +120,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('store.phone')}
           >
-            <TurtleFormInput placeholder={t('placeholder.mobile')} />
+            <TurtleFormInput placeholder={t('please input phone number')} />
           </Form.Item>
         </Form>
 
