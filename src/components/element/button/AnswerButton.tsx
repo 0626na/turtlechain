@@ -1,7 +1,6 @@
 import { Button } from 'antd';
 import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
-import PreventMultipleClickButton from './PreventMultipleClickButton';
 
 interface Props {
   text: string;
@@ -23,25 +22,17 @@ function AnswerButton({
 }: Props) {
   if (type === 'NO') {
     return (
-      <PreventMultipleClickButton
-        loading={Boolean(loading)}
-        css={[falsy, { margin }]}
-        {...props}
-      >
+      <Button loading={Boolean(loading)} css={[falsy, { margin }]} {...props}>
         <TurtleText>{text}</TurtleText>
-      </PreventMultipleClickButton>
+      </Button>
     );
   }
 
   // type === YES
   return (
-    <PreventMultipleClickButton
-      loading={Boolean(loading)}
-      css={[truthy, { margin }]}
-      {...props}
-    >
+    <Button loading={Boolean(loading)} css={[truthy, { margin }]} {...props}>
       <TurtleText>{text}</TurtleText>
-    </PreventMultipleClickButton>
+    </Button>
   );
 }
 
