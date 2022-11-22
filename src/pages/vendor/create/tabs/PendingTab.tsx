@@ -1,17 +1,8 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
-import { MemoIcon, TurtleBadge, TurtleTableInput } from '@components/element';
+import { MemoIcon, TurtleTableInput } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
-import {
-  Dropdown,
-  Menu,
-  Popover,
-  Radio,
-  Space,
-  Switch,
-  Table,
-  Tooltip,
-} from 'antd';
+import { Dropdown, Menu, Switch, Table, Tooltip } from 'antd';
 
 import { TurtleIcon } from '@components/element';
 
@@ -86,6 +77,7 @@ function PendingTab({ isLoading }: Props) {
           {
             ellipsis: true,
             width: 90,
+
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
@@ -100,42 +92,95 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             title: t('table.vendorName'),
             render: (_, record) => (
-              <>
-                <TurtleBadge
-                  count={record.ws_store_info.length}
-                  color="#F47E12"
-                >
-                  <Popover
-                    content={
-                      <Radio.Group
-                        defaultValue={record.ws_store_info[0].id}
-                        value={record.selectedWsStoreInfo?.id}
-                      >
-                        <Space direction="vertical">
-                          {record.ws_store_info.map(
-                            ({ name: wsName, address: wsAddress, id }) => (
-                              <Radio
-                                key={id}
-                                value={id}
-                                onClick={() => {
-                                  handleWholesaleStoreSelecte(id, record);
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                <Dropdown
+                  overlay={
+                    <Menu
+                      css={css`
+                        position: absolute;
+                        top: -20px;
+                        left: 25px;
+                        background: #ffffff;
+                        box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.2);
+                        border-radius: 8px;
+                      `}
+                      items={record.ws_store_info.map(
+                        ({ name: wsName, address: wsAddress, id }) => ({
+                          style: {
+                            width: 250,
+                            maxWidth: 400,
+                          },
+                          key: id,
+                          label: (
+                            <>
+                              <span
+                                css={{
+                                  fontSize: 14,
+                                  color: theme.grey700,
+                                  marginRight: 8,
                                 }}
                               >
-                                <span>{wsName}</span> |
-                                <span
-                                  css={css`
-                                    color: #a1a2a6;
-                                  `}
-                                >
-                                  {wsAddress}
-                                </span>
-                              </Radio>
-                            ),
-                          )}
-                        </Space>
-                      </Radio.Group>
-                    }
+                                {wsName}
+                              </span>
+                              <span
+                                css={{
+                                  color: theme.grey400,
+                                }}
+                              >
+                                {wsAddress}
+                              </span>
+                            </>
+                          ),
+                          onClick: () => {
+                            handleWholesaleStoreSelecte(id, record);
+                          },
+                          onMouseEnter: (e) => {
+                            e.domEvent.currentTarget.style.backgroundColor =
+                              theme.bgGrey;
+                          },
+                          onMouseLeave: (e) => {
+                            e.domEvent.currentTarget.style.backgroundColor =
+                              theme.white;
+                          },
+                        }),
+                      )}
+                    />
+                  }
+                  trigger={['click']}
+                  arrow={false}
+                >
+                  <span
+                    css={{
+                      lineHeight: 1,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
                   >
+                    <Tooltip title="정확한 세부정보를 선택해주세요">
+                      <div
+                        css={{
+                          marginRight: 4,
+                          width: 18,
+                          height: 18,
+                          borderRadius: '50%',
+                          background: '#F47E12',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: 12,
+                          color: '#fff',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {record.ws_store_info.length}
+                      </div>
+                    </Tooltip>
                     <span
                       css={css`
                         color: ${record.selectedWsStoreInfo?.name
@@ -146,112 +191,11 @@ function PendingTab({ isLoading }: Props) {
                       {record.selectedWsStoreInfo?.name ??
                         record.ws_store_info[0]?.name}
                     </span>
-                  </Popover>
-                </TurtleBadge>
-              </>
+                  </span>
+                </Dropdown>
+              </div>
             ),
           },
-          // TODO : 거래처 툴팁 테스트 진행중
-          // {
-          //   ellipsis: true,
-          //   width: 250,
-          //   title: '거래처명',
-          //   render: (_, record) => (
-          //     <div
-          //       css={css`
-          //         display: flex;
-          //         align-items: center;
-          //       `}
-          //     >
-          //       <span
-          //         css={css`
-          //           color: ${record.selectedWsStoreInfo?.name ? '' : '#a1a2a6'};
-          //         `}
-          //       >
-          //         {record.selectedWsStoreInfo?.name ??
-          //           record.ws_store_info[0]?.name}
-          //       </span>
-          //       <Dropdown
-          //         overlay={
-          //           <Menu
-          //             css={css`
-          //               position: absolute;
-          //               top: -20px;
-          //               left: 25px;
-          //               background: #ffffff;
-          //               box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.2);
-          //               border-radius: 8px;
-          //             `}
-          //             items={record.ws_store_info.map(
-          //               ({ name: wsName, address: wsAddress, id }) => ({
-          //                 style: {
-          //                   width: 250,
-          //                   maxWidth: 400,
-          //                 },
-          //                 key: id,
-          //                 label: (
-          //                   <>
-          //                     <span
-          //                       css={{
-          //                         fontSize: 14,
-          //                         color: theme.grey700,
-          //                         marginRight: 8,
-          //                       }}
-          //                     >
-          //                       {wsName}
-          //                     </span>
-          //                     <span
-          //                       css={{
-          //                         color: theme.grey400,
-          //                       }}
-          //                     >
-          //                       {wsAddress}
-          //                     </span>
-          //                   </>
-          //                 ),
-          //                 onClick: () => {
-          //                   handleWholesaleStoreSelecte(id, record);
-          //                 },
-          //                 onMouseEnter: (e) => {
-          //                   e.domEvent.currentTarget.style.backgroundColor =
-          //                     theme.bgGrey;
-          //                 },
-          //                 onMouseLeave: (e) => {
-          //                   e.domEvent.currentTarget.style.backgroundColor =
-          //                     theme.white;
-          //                 },
-          //               }),
-          //             )}
-          //           />
-          //         }
-          //         trigger={['click']}
-          //         arrow={false}
-          //       >
-          //         <span css={{ lineHeight: 1, cursor: 'pointer' }}>
-          //           <Tooltip title="정확한 세부정보를 선택해주세요">
-          //             <div
-          //               css={{
-          //                 marginLeft: 4,
-          //                 width: 18,
-          //                 height: 18,
-          //                 borderRadius: '50%',
-          //                 background: '#F47E12',
-          //                 display: 'flex',
-          //                 justifyContent: 'center',
-          //                 alignItems: 'center',
-          //                 fontSize: 12,
-          //                 color: '#fff',
-          //                 fontWeight: 500,
-          //               }}
-          //             >
-          //               {record.ws_store_info.length}
-          //             </div>
-          //           </Tooltip>
-          //         </span>
-          //       </Dropdown>
-          //     </div>
-          //   ),
-          // },
           ///
           {
             ellipsis: true,
@@ -280,8 +224,10 @@ function PendingTab({ isLoading }: Props) {
                 .replace(/[^0-9]/, '')
                 .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
           },
+
           {
             ellipsis: true,
+
             title: t('table.accountInfo'),
             render: (_, record) => {
               if (!record?.selectedWsStoreInfo)
@@ -302,50 +248,104 @@ function PendingTab({ isLoading }: Props) {
               } = record.selectedWsStoreInfo?.store_account[0];
 
               return (
-                <TurtleBadge
-                  count={record.selectedWsStoreInfo?.store_account.length}
-                  color="#F47E12"
+                <div
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                  `}
                 >
-                  <Popover
-                    content={
-                      <Radio.Group
-                        value={record.selectedWsStoreInfo.selectedAccount?.id}
-                      >
-                        <Space direction="vertical">
-                          {record.selectedWsStoreInfo?.store_account.map(
-                            (account) => (
-                              <Radio
-                                value={account.id}
-                                key={account.id}
-                                onClick={() => {
-                                  handleAccountSelecte(account, record);
-                                }}
-                              >
-                                {account.bank} {account.account_number}{' '}
-                                {account.account_holder}
-                              </Radio>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        css={css`
+                          position: absolute;
+                          top: -20px;
+                          left: 25px;
+                          background: #ffffff;
+                          box-shadow: 0px 4px 18px rgba(34, 44, 56, 0.2);
+                          border-radius: 8px;
+                        `}
+                        items={record.selectedWsStoreInfo?.store_account.map(
+                          (account) => ({
+                            style: {
+                              width: 250,
+                              maxWidth: 400,
+                            },
+                            key: Number(account.id),
+                            label: (
+                              <>
+                                <span
+                                  css={{
+                                    color: theme.grey400,
+                                  }}
+                                >
+                                  {account.bank} {account.account_number}{' '}
+                                  {account.account_holder}
+                                </span>
+                              </>
                             ),
-                          )}
-                        </Space>
-                      </Radio.Group>
+                            onClick: () => {
+                              handleAccountSelecte(account, record);
+                            },
+                            onMouseEnter: (e) => {
+                              e.domEvent.currentTarget.style.backgroundColor =
+                                theme.bgGrey;
+                            },
+                            onMouseLeave: (e) => {
+                              e.domEvent.currentTarget.style.backgroundColor =
+                                theme.white;
+                            },
+                          }),
+                        )}
+                      />
                     }
+                    trigger={['click']}
+                    arrow={false}
                   >
                     <span
-                      css={css`
-                        color: ${record.selectedWsStoreInfo.selectedAccount
-                          ? ''
-                          : '#a1a2a6'};
-                      `}
+                      css={{
+                        lineHeight: 1,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
                     >
-                      {record.selectedWsStoreInfo.selectedAccount?.bank ??
-                        defaultBank}{' '}
-                      {record.selectedWsStoreInfo.selectedAccount
-                        ?.account_number ?? defaultAccountNumber}{' '}
-                      {record.selectedWsStoreInfo.selectedAccount
-                        ?.account_holder ?? defaultAccountHolder}
+                      <Tooltip title="정확한 세부정보를 선택해주세요">
+                        <div
+                          css={{
+                            marginRight: 4,
+                            width: 18,
+                            height: 18,
+                            borderRadius: '50%',
+                            background: '#F47E12',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: 12,
+                            color: '#fff',
+                            fontWeight: 500,
+                          }}
+                        >
+                          {record.selectedWsStoreInfo?.store_account.length}
+                        </div>
+                      </Tooltip>
+                      <span
+                        css={css`
+                          color: ${record.selectedWsStoreInfo.selectedAccount
+                            ? ''
+                            : '#a1a2a6'};
+                        `}
+                      >
+                        {record.selectedWsStoreInfo.selectedAccount?.bank ??
+                          defaultBank}{' '}
+                        {record.selectedWsStoreInfo.selectedAccount
+                          ?.account_number ?? defaultAccountNumber}{' '}
+                        {record.selectedWsStoreInfo.selectedAccount
+                          ?.account_holder ?? defaultAccountHolder}
+                      </span>
                     </span>
-                  </Popover>
-                </TurtleBadge>
+                  </Dropdown>
+                </div>
               );
             },
           },

@@ -77,7 +77,7 @@ function AdjustmentStatusCard() {
           <div
             key={index}
             css={{
-              width: 150,
+              flexBasis: '150px',
               height: 160,
               textAlign: 'center',
             }}
@@ -102,7 +102,7 @@ function AdjustmentStatusCard() {
                 marginTop: 16,
               }}
             >
-              {price}원
+              {price.toLocaleString()}원
             </div>
           </div>
         ))}
