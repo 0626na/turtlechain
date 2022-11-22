@@ -1,17 +1,8 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
-import { MemoIcon, TurtleBadge, TurtleTableInput } from '@components/element';
+import { MemoIcon, TurtleTableInput } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
-import {
-  Dropdown,
-  Menu,
-  Popover,
-  Radio,
-  Space,
-  Switch,
-  Table,
-  Tooltip,
-} from 'antd';
+import { Dropdown, Menu, Switch, Table, Tooltip } from 'antd';
 
 import { TurtleIcon } from '@components/element';
 
@@ -86,6 +77,7 @@ function PendingTab({ isLoading }: Props) {
           {
             ellipsis: true,
             width: 90,
+
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
@@ -162,7 +154,14 @@ function PendingTab({ isLoading }: Props) {
                   trigger={['click']}
                   arrow={false}
                 >
-                  <span css={{ lineHeight: 1, cursor: 'pointer' }}>
+                  <span
+                    css={{
+                      lineHeight: 1,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Tooltip title="정확한 세부정보를 선택해주세요">
                       <div
                         css={{
@@ -182,16 +181,18 @@ function PendingTab({ isLoading }: Props) {
                         {record.ws_store_info.length}
                       </div>
                     </Tooltip>
+                    <span
+                      css={css`
+                        color: ${record.selectedWsStoreInfo?.name
+                          ? ''
+                          : '#a1a2a6'};
+                      `}
+                    >
+                      {record.selectedWsStoreInfo?.name ??
+                        record.ws_store_info[0]?.name}
+                    </span>
                   </span>
                 </Dropdown>
-                <span
-                  css={css`
-                    color: ${record.selectedWsStoreInfo?.name ? '' : '#a1a2a6'};
-                  `}
-                >
-                  {record.selectedWsStoreInfo?.name ??
-                    record.ws_store_info[0]?.name}
-                </span>
               </div>
             ),
           },
@@ -301,7 +302,14 @@ function PendingTab({ isLoading }: Props) {
                     trigger={['click']}
                     arrow={false}
                   >
-                    <span css={{ lineHeight: 1, cursor: 'pointer' }}>
+                    <span
+                      css={{
+                        lineHeight: 1,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Tooltip title="정확한 세부정보를 선택해주세요">
                         <div
                           css={{
@@ -321,23 +329,22 @@ function PendingTab({ isLoading }: Props) {
                           {record.selectedWsStoreInfo?.store_account.length}
                         </div>
                       </Tooltip>
+                      <span
+                        css={css`
+                          color: ${record.selectedWsStoreInfo.selectedAccount
+                            ? ''
+                            : '#a1a2a6'};
+                        `}
+                      >
+                        {record.selectedWsStoreInfo.selectedAccount?.bank ??
+                          defaultBank}{' '}
+                        {record.selectedWsStoreInfo.selectedAccount
+                          ?.account_number ?? defaultAccountNumber}{' '}
+                        {record.selectedWsStoreInfo.selectedAccount
+                          ?.account_holder ?? defaultAccountHolder}
+                      </span>
                     </span>
                   </Dropdown>
-
-                  <span
-                    css={css`
-                      color: ${record.selectedWsStoreInfo.selectedAccount
-                        ? ''
-                        : '#a1a2a6'};
-                    `}
-                  >
-                    {record.selectedWsStoreInfo.selectedAccount?.bank ??
-                      defaultBank}{' '}
-                    {record.selectedWsStoreInfo.selectedAccount
-                      ?.account_number ?? defaultAccountNumber}{' '}
-                    {record.selectedWsStoreInfo.selectedAccount
-                      ?.account_holder ?? defaultAccountHolder}
-                  </span>
                 </div>
               );
             },
