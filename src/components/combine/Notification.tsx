@@ -58,26 +58,28 @@ function Notification() {
   });
 
   const makeContent = useCallback((noti: Noti) => {
-    let value = '';
+    const result = { title: '', reason: '' };
+
     if (noti.type === 'internal_change') {
-      value = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after}`;
+      result.title = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after}`;
     }
     if (noti.type === 'creation_request') {
       if (noti.content.status === 'reject') {
-        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요.`;
+        result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요.`;
+        result.reason = `(반려사유 : ${noti.content.memo})`;
       } else {
-        value = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
+        result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
       }
     }
     if (noti.type === 'modification_request') {
       if (noti.content.status === 'reject') {
-        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
+        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
       } else {
-        value = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
+        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
       }
     }
 
-    return value;
+    return result;
   }, []);
 
   const needReadCount = getNotificationQuery.data?.notification_list.filter(
@@ -119,7 +121,12 @@ function Notification() {
                     }}
                   >
                     <Space direction="vertical">
-                      <Col>{makeContent(noti)}</Col>
+                      <Col>{makeContent(noti).title}</Col>
+                      {makeContent(noti).reason !== '' ? (
+                        <Col>{makeContent(noti).reason}</Col>
+                      ) : (
+                        ''
+                      )}
                       <Col>
                         <Typography.Text
                           style={{
