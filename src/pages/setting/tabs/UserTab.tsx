@@ -179,7 +179,7 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        {isSubscription ? (
+        {!isSubscription ? (
           <UserCard
             title="요금플랜 결제"
             icon={<TurtleIcon name="membership" />}
@@ -263,7 +263,7 @@ function UserTab() {
                   <TurtleIcon name="creditCard" />{' '}
                   <span
                     css={css({ marginLeft: 5 })}
-                  >{`신용카드(ViSA) ${subscriptionData?.pay_number}`}</span>
+                  >{`신용카드(${subscriptionData?.pay_name}) ${subscriptionData?.pay_number}`}</span>
                 </div>
                 <div css={css({ marginTop: 10 })}>
                   <span>{`다음 결제일은 ${nextPaymentDate} 입니다.`}</span>
