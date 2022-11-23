@@ -21,7 +21,7 @@ interface Props {
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
-function PaypleModal({ visible, closeModal }: Props) {
+function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -99,7 +99,7 @@ function PaypleModal({ visible, closeModal }: Props) {
         }}
       >
         <div css={modal.header}>
-          <h1 css={modal.headerTitle}>요금플랜 결제</h1>
+          <h1 css={modal.headerTitle}>유료플랜 구독</h1>
           <div>
             <TurtleIcon
               name="modalClose"
@@ -111,24 +111,19 @@ function PaypleModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>*정기결제는 매월 1일에 등록한 결제수단을 통해 자동 결제됩니다.</p>
-          <p>*정기결제 해지는 채팅상담을 통해 요청주세요.</p>
+          <p>해당 기능은 유료플랜으로만 제공됩니다.</p>
+          <p>유료플랜을 구독하고 서비스를 이용해주세요</p>
         </div>
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
-            text="정기결제"
+            text="테스트 알림톡 받아보기"
             size="large"
-            onClick={() => {
-              authenticateMutation.mutate({
-                company_id: Number(user?.company_id),
-                pay_type: 'regular',
-              });
-            }}
+            onClick={() => {}}
           />
 
           <TertiaryButton
-            text="일반결제"
+            text="구독하기"
             size="large"
             onClick={() => {
               authenticateMutation.mutate({
@@ -192,4 +187,4 @@ const modal = {
   }),
   buttonContainer: css({ display: 'flex', flexDirection: 'column', gap: 12 }),
 };
-export default PaypleModal;
+export default PayMentModal;
