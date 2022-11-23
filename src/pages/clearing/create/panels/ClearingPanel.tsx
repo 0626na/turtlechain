@@ -1,4 +1,5 @@
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
+import userAPI from '@apis/userAPI';
 import {
   CreateModal,
   SearchFilter,
@@ -17,6 +18,7 @@ import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
+import useUser from '@hooks/useUser';
 import { message } from '@utils/message';
 
 import {
@@ -30,10 +32,11 @@ import {
 import { t } from 'i18next';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import DetailModal from '../modals/DetailModal';
+import PayMentModal from '../modals/PayMentModal';
 import FullUseButton from './FullUseButton';
 
 interface Props extends CollapsePanelProps {
@@ -43,6 +46,7 @@ interface Props extends CollapsePanelProps {
 function ClearingPanel({ activeKey, ...props }: Props) {
   const navigate = useNavigate();
   const { store } = useStore();
+  const { user } = useUser();
   const {
     cart,
     calculateClearingAmount,
@@ -53,10 +57,18 @@ function ClearingPanel({ activeKey, ...props }: Props) {
 
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
   const [createModalVisible, createModalOpen, createModalClose] = useModal();
+  const [paymentModalVisible, paymentModalOpen, paymentModalClose] = useModal();
   const [selectedRow, setSelectedRow] = useState<ClearingInfo>();
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
+
+  /**
+   * 유저의 구독여부 찾기
+   */
+  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
+    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  );
 
   // 정산서 생성 및 정산 상품추가
   const createClearingMutation = useMutation(clearingAPI.create, {
@@ -65,6 +77,11 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       navigate('/clearing/history');
     },
   });
+
+  const subscriptionData =
+    getSubscriptionCheckQuery.data?.data.subscription_info;
+
+  const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
 
   const handleCreate = () => {
     createClearingMutation.mutate({
@@ -118,6 +135,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         visible={detailModalVisible}
         onClose={detailModalClose}
         selectedRow={selectedRow as ClearingInfo}
+      />
+
+      {/*
+       * 유료플랜 구독 모달
+       */}
+      <PayMentModal
+        visible={paymentModalVisible}
+        closeModal={paymentModalClose}
       />
 
       {/*
@@ -345,7 +370,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             <PrimaryButton
               disabled={clearingPaymentTotal === 0}
               onClick={() => {
-                createModalOpen();
+                isSubscription ? createModalOpen() : paymentModalOpen();
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >

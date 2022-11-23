@@ -10,8 +10,9 @@ import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
 import { Button, Col, Form, message, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
+import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
 import PaypleModal from '../modals/PayPleModal';
@@ -39,6 +40,21 @@ function UserTab() {
       hideButtons();
     },
   });
+
+  /**
+   * 유저의 구독여부 찾기
+   */
+  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
+    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  );
+
+  const subscriptionData =
+    getSubscriptionCheckQuery.data?.data.subscription_info;
+
+  const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
+  const nextPaymentDate = moment(subscriptionData?.end_date)
+    .add(1, 'days')
+    .format('YYYY년 MM월 DD일');
 
   const resetStates = useCallback(
     (user: UserInfo) => {
@@ -163,28 +179,99 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        <UserCard title="요금플랜 결제" icon={<TurtleIcon name="membership" />}>
-          <Form colon={false} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
-            <Form.Item
-              label={
-                <span
-                  css={{ color: theme.grey800, fontWeight: 500, fontSize: 15 }}
-                >
-                  요금플랜 결제
-                </span>
-              }
+        {isSubscription ? (
+          <UserCard
+            title="요금플랜 결제"
+            icon={<TurtleIcon name="membership" />}
+          >
+            <Form
+              colon={false}
+              labelCol={{ span: 7 }}
+              wrapperCol={{ span: 17 }}
             >
-              <Button
-                css={button}
-                onClick={() => {
-                  paypleModalOpen();
-                }}
+              <Form.Item
+                label={
+                  <span
+                    css={{
+                      color: theme.grey800,
+                      fontWeight: 500,
+                      fontSize: 15,
+                    }}
+                  >
+                    요금플랜 결제
+                  </span>
+                }
               >
-                결제하기
-              </Button>
-            </Form.Item>
-          </Form>
-        </UserCard>
+                <Button
+                  css={button}
+                  onClick={() => {
+                    paypleModalOpen();
+                  }}
+                >
+                  결제하기
+                </Button>
+              </Form.Item>
+            </Form>
+          </UserCard>
+        ) : (
+          <UserCard
+            title="구독 및 결제"
+            icon={<TurtleIcon name="membership" />}
+          >
+            <Form
+              colon={false}
+              labelCol={{ span: 7 }}
+              wrapperCol={{ span: 17 }}
+            >
+              <Form.Item
+                label={
+                  <span
+                    css={{
+                      color: theme.grey800,
+                      fontWeight: 500,
+                      fontSize: 15,
+                    }}
+                  >
+                    유료플랜 구독
+                  </span>
+                }
+              >
+                <div
+                  css={css({
+                    borderBottom: `1px solid ${theme.grey200}`,
+                    paddingBottom: 20,
+                  })}
+                >
+                  <Button
+                    css={button}
+                    onClick={() => {
+                      paypleModalOpen();
+                    }}
+                  >
+                    결제수단 변경
+                  </Button>
+                  <Button css={css({ color: theme.grey500 })}>해지하기</Button>
+                </div>
+                <div
+                  css={css({
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontWeight: 500,
+                    paddingTop: 10,
+                  })}
+                >
+                  <TurtleIcon name="creditCard" />{' '}
+                  <span
+                    css={css({ marginLeft: 5 })}
+                  >{`신용카드(ViSA) ${subscriptionData?.pay_number}`}</span>
+                </div>
+                <div css={css({ marginTop: 10 })}>
+                  <span>{`다음 결제일은 ${nextPaymentDate} 입니다.`}</span>
+                </div>
+              </Form.Item>
+            </Form>
+          </UserCard>
+        )}
       </div>
     </>
   );
@@ -215,6 +302,8 @@ const button = css`
     border-color: #00b3be;
   }
 `;
+
+const cancelButton = css``;
 
 const marginTop = css`
   margin-top: 24px;
