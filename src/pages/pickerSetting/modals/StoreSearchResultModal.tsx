@@ -3,6 +3,7 @@ import { StoreShow } from '@apis/retailerStoreAPI';
 import { TurtleContentModal } from '@components/combine';
 import { TurtleText } from '@components/element';
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -22,12 +23,14 @@ function StoreSearchResultModal({ visible, close, resultData }: Props) {
         visible={visible}
         onClose={close}
         size="small"
-        title="쇼핑몰 검색결과"
+        title={t('store search results')}
       >
         {resultData !== undefined ? (
-          <TurtleText>{`등록되어 있는 쇼핑몰 입니다. ${resultData.name}`}</TurtleText>
+          <TurtleText>
+            {t('already exist store', { name: resultData.name })}
+          </TurtleText>
         ) : (
-          <TurtleText>신규 쇼핑몰 입니다.</TurtleText>
+          <TurtleText>{t('message.new store text')}</TurtleText>
         )}
       </TurtleContentModal>
     </div>
