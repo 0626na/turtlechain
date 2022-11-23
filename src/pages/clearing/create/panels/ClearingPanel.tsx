@@ -17,6 +17,7 @@ import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
+import PaypleModal from '@pages/setting/modals/PayPleModal';
 import { message } from '@utils/message';
 
 import {
@@ -53,6 +54,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
 
   const [detailModalVisible, detailModalOpen, detailModalClose] = useModal();
   const [createModalVisible, createModalOpen, createModalClose] = useModal();
+  const [paymentModalVisible, paymentModalOpen, paymentModalClose] = useModal();
   const [selectedRow, setSelectedRow] = useState<ClearingInfo>();
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
@@ -118,6 +120,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         visible={detailModalVisible}
         onClose={detailModalClose}
         selectedRow={selectedRow as ClearingInfo}
+      />
+
+      {/*
+       * 유료플랜 구독 모달
+       */}
+      <PaypleModal
+        visible={paymentModalVisible}
+        closeModal={paymentModalClose}
       />
 
       {/*
