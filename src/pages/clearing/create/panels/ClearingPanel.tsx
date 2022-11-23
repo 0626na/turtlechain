@@ -370,8 +370,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             <PrimaryButton
               disabled={clearingPaymentTotal === 0}
               onClick={() => {
-                console.log(getSubscriptionCheckQuery.data?.data);
-                !isSubscription ? createModalOpen() : paymentModalOpen();
+                isSubscription ? createModalOpen() : paymentModalOpen();
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >
