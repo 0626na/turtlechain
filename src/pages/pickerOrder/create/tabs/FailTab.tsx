@@ -12,7 +12,7 @@ import useOrderCart, { FailListForOutput } from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { useState } from 'react';
-import OrderMemoModal from '../modals/OrderMemoModal';
+import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { category } from './SucceessTab';
 import { t } from 'i18next';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
@@ -29,15 +29,15 @@ interface Props extends TabPaneProps {
 function FailTab({ loading, ...props }: Props) {
   const options = [
     {
-      name: '쇼핑몰명',
+      name: t('button.storeName'),
       value: 'name',
     },
     {
-      name: '거래처명',
+      name: t('button.vendorName'),
       value: 'vendor_name',
     },
     {
-      name: '거래처주소',
+      name: t('button.vendorAddress'),
       value: 'address',
     },
   ];
@@ -91,11 +91,11 @@ function FailTab({ loading, ...props }: Props) {
   const failTablePhoneNumberInput = (record: FailListForOutput) => {
     return (
       <TurtleTablePhoneNumberInput
-        placeholder="휴대전화번호 입력"
+        placeholder={t('mobile')}
         maxLength={13}
         onInput={(e) => {
           e.currentTarget.value = e.currentTarget.value
-            .replaceAll(notNumPattern, '')
+            .replace(notNumPattern, '')
             .replace(phonePattern, '$1-$2-$3');
 
           if (e.currentTarget.value.length === 13) {
@@ -141,16 +141,18 @@ function FailTab({ loading, ...props }: Props) {
             return;
           }
 
-          message.error('데이터를 선택해주세요');
+          message.error(t('message.select data'));
           closeMemoModal();
         }}
       />
       {failListOutput().length !== 0 && (
         <AddOrderFailtoSuccessModal
-          title="성공으로 변환"
+          title={t('change to success')}
           description={[
-            '휴대전화번로를 입력하면 성공으로 변경합니다.',
-            '성공으로 변환한 데이터는 실패탭에서 휴대전화번호가 표시됩니다.',
+            t('if you enter your phone, change it to success'),
+            t(
+              'the data converted to Success displays the mobile phone number on the Failed tab',
+            ),
           ]}
           visible={failtoSuccessModailvisible}
           onCancel={closeFailToSuccessModal}
@@ -170,7 +172,7 @@ function FailTab({ loading, ...props }: Props) {
                   mobile:
                     failItem.rt_store_id === failToSuccessRecord.rt_store_id &&
                     order.vendor_name === failToSuccessRecord.vendor_name
-                      ? failToSuccessRowData.mobile
+                      ? failToSuccessRowData.mobile.replaceAll('-', '')
                       : order.mobile,
                 })),
               })),
@@ -212,7 +214,7 @@ function FailTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력하세요"
+                      placeholder={t('please input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -228,27 +230,28 @@ function FailTab({ loading, ...props }: Props) {
           )}
           columns={[
             {
-              title: '쇼핑몰',
+              title: t('table.store'),
               width: 148,
               render: (_, record) => record.rt_store_name,
             },
             {
-              title: '거래처명',
+              title: t('table.vendorName'),
               width: 136,
               render: (_, record) => record.vendor_name,
             },
             {
-              title: '거래처 주소',
+              title: t('table.vendorAddress'),
               width: 196,
               render: (_, record) => record.vendor_address,
             },
             {
-              title: '휴대전화 번호',
+              title: t('table.mobile'),
               width: 156,
               render: (_, record) => {
                 const tempList = failListOutput();
 
-                if (record.mobile !== '') return record.mobile;
+                if (record.mobile !== '')
+                  return record.mobile.replace(phonePattern, '$1-$2-$3');
                 if (record.id === 0) return failTablePhoneNumberInput(record);
                 if (
                   tempList[record.id - 1].rt_store_name ===
@@ -264,17 +267,17 @@ function FailTab({ loading, ...props }: Props) {
               },
             },
             {
-              title: '거래처 상품명',
+              title: t('table.vendorProductName'),
               width: 216,
               render: (_, record) => record.product_name,
             },
             {
-              title: '옵션',
+              title: t('table.option'),
               width: 136,
               render: (_, record) => record.product_option,
             },
             {
-              title: '분류',
+              title: t('table.type'),
               width: 136,
               render: (_, record) => (
                 <TurtleTableSelect
@@ -299,7 +302,7 @@ function FailTab({ loading, ...props }: Props) {
               ),
             },
             {
-              title: '수량',
+              title: t('table.count'),
               width: 136,
               render: (_, record) => (
                 <TurtleTableNumberInput
@@ -326,13 +329,13 @@ function FailTab({ loading, ...props }: Props) {
               ),
             },
             {
-              title: '가격',
+              title: t('table.price'),
               width: 136,
               align: 'right',
               render: (_, record) => record.product_price,
             },
             {
-              title: '메모',
+              title: t('table.memo'),
               align: 'center',
               width: 100,
               render: (_, record) => (

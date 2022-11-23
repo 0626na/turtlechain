@@ -103,6 +103,8 @@ export interface ParsingStatus {
 
 export interface RequestCreateOrderItemExcelParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
 export interface ResponseCreateOrderItemExcelParsing {
@@ -114,12 +116,22 @@ export interface ResponseCreateOrderItemExcelParsing {
   };
 }
 
+const setFormData = (
+  formdata: FormData,
+  data: RequestCreateOrderItemExcelParsing | RequestCreatePreParsing,
+) => {
+  data.files.map((file) => formdata.append('files', file));
+  if (data.rt_store_id)
+    formdata.append('rt_store_id', String(data.rt_store_id));
+  formdata.append('request_date', data.request_date);
+};
+
 const createOrderExcelParsing = async (
   data: RequestCreateOrderItemExcelParsing,
 ) => {
   const url = 'order/parsing';
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
+  setFormData(formData, data);
   const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
     url,
     formData,
@@ -151,6 +163,8 @@ export interface PreParsingOrderList {
 
 export interface RequestCreatePreParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
 export interface ResponseCreatePreParsing {
@@ -162,7 +176,7 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
   let url = 'order/parsing/pre-parsing';
   let parsingResponse;
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
+  setFormData(formData, data);
 
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,
@@ -215,6 +229,7 @@ export interface CreatingOrdersItem {
 
 export interface OrderItemList {
   rt_store_id: number;
+  request_date: string;
   orders: CreatingOrdersItem[];
 }
 
@@ -242,6 +257,7 @@ export interface OrderSheetList {
   rt_store_name: string; //쇼핑몰명
   is_inactive: boolean; //삭제여부
   created_time: string;
+  request_date: string;
   fails: number; //실패수량
   total_store_count: number;
   total_success_count: number; //총 성공 건수
@@ -253,7 +269,7 @@ export interface OrderSheetList {
 }
 
 export interface RequestGetOrderSheet {
-  //rt_store_id: number;
+  rt_store_id?: number;
   start_date: string;
   end_date: string;
 }
@@ -277,6 +293,7 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
  */
 
 export interface OrderHistoryItem {
+  id?: number;
   ws_store_id: number; //도매 ID
   vendor_name: string; //거래처명
   address: string; //거래처주소
@@ -284,6 +301,7 @@ export interface OrderHistoryItem {
   name: string; //상품명
   option: string;
   type: string; //분류
+  creation_type: 'excel' | 'single';
   count: number; //요청수량
   price: number; //공급가
   memo: string;
@@ -293,6 +311,7 @@ export interface OrderHistorySheet {
   rt_store_id: number;
   rt_store_name: string;
   created_time: string;
+  request_date: string;
   total_store_count: number;
   total_success_count: number;
   total_item_subcount: number;

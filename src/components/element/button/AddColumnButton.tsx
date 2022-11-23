@@ -2,14 +2,14 @@ import { css } from '@emotion/react';
 import React from 'react';
 import PlusIcon from '../icon/PlusIcon';
 
-interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
+interface Props extends React.HtmlHTMLAttributes<HTMLButtonElement> {
   text: string;
   required: boolean;
 }
 
 function AddColumnButton({ text, onClick, required, ...props }: Props) {
   return (
-    <div
+    <button
       css={css`
         cursor: pointer;
         flex-basis: 160px;
@@ -54,7 +54,7 @@ function AddColumnButton({ text, onClick, required, ...props }: Props) {
       >
         <PlusIcon value="#00AAB5" />
       </div>
-    </div>
+    </button>
   );
 }
 

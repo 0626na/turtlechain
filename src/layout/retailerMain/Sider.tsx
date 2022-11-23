@@ -16,10 +16,10 @@ const pathnames = {
     create: '/product/create',
   },
 
-  // order: {
-  //   create: '/order/create',
-  //   history: '/order/history',
-  // },
+  order: {
+    create: '/order/create',
+    history: '/order/history',
+  },
 
   warehousing: {
     create: '/warehousing/create',
@@ -172,7 +172,7 @@ const menus = [
       //     },
       //     {
       //       key: pathnames.order.history,
-      //       label: t('order.history'),
+      //       label: t('order.history.title'),
       //       style: mainMenuContentStyle,
       //     },
       //   ],

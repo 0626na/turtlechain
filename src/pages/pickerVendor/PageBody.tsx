@@ -30,19 +30,19 @@ import { useMutation, useQuery } from 'react-query';
 
 const options = [
   {
-    name: '거래처명',
+    name: t('table.retailerStoreName'),
     value: 'store_name',
   },
   {
-    name: '휴대전화 번호',
+    name: t('table.mobile'),
     value: 'mobile',
   },
   {
-    name: '계좌번호',
+    name: t('accountNumber'),
     value: 'account_number',
   },
   {
-    name: '예금주',
+    name: t('accountHolder'),
     value: 'account_holder',
   },
 ];
@@ -108,7 +108,7 @@ function PageBody() {
                   </Col>
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력해주세요"
+                      placeholder={t('please input search query')}
                       onSearch={(value) =>
                         setSearchQuery({
                           ...searchQuery,
@@ -195,12 +195,12 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: '거래처명 수정',
+                      label: t('vendorname modify'),
                       icon: <TurtleIcon name="updateVendorName" />,
                     },
                     {
                       key: '2',
-                      label: '정보수정 요청',
+                      label: t('vendorname modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {},
                     },

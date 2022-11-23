@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-
 import TurtleText from '../TurtleText';
 import { css } from '@emotion/react';
 
@@ -14,10 +13,16 @@ interface Props {
   onClick?: () => void;
 }
 
-function AnswerButton({ text, type = 'YES', margin, ...props }: Props) {
+function AnswerButton({
+  text,
+  type = 'YES',
+  margin,
+  loading,
+  ...props
+}: Props) {
   if (type === 'NO') {
     return (
-      <Button css={[falsy, { margin: margin }]} {...props}>
+      <Button loading={Boolean(loading)} css={[falsy, { margin }]} {...props}>
         <TurtleText>{text}</TurtleText>
       </Button>
     );
@@ -25,7 +30,7 @@ function AnswerButton({ text, type = 'YES', margin, ...props }: Props) {
 
   // type === YES
   return (
-    <Button css={[truthy, { margin: margin }]} {...props}>
+    <Button loading={Boolean(loading)} css={[truthy, { margin }]} {...props}>
       <TurtleText>{text}</TurtleText>
     </Button>
   );
