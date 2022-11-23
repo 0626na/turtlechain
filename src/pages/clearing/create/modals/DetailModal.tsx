@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
 import { theme } from '@styles/theme';
+import useClearingCart from '@hooks/useClearingCart';
 
 interface Props {
   visible: boolean;
@@ -16,6 +17,8 @@ function DetailModal({
 
   selectedRow,
 }: Props) {
+  const { cart } = useClearingCart();
+
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -39,7 +42,9 @@ function DetailModal({
             </div>
 
             <div css={modalTopContentCss.self}>
-              <div css={modalTopContentCss.title}>2020-07-19</div>
+              <div css={modalTopContentCss.title}>
+                {cart.clearingRequestDate}
+              </div>
               <div css={modalTopContentCss.content}>
                 <div
                   css={[modalTopContentCss.item, modalTopContentCss.firstItem]}

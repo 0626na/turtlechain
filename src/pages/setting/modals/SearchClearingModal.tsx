@@ -75,7 +75,6 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
       >
         <div css={inputContainer}>
           <TurtleFormSearchInput
-            value={searchQuery.store_name}
             onSearch={(value) => {
               setSearchQuery((searchQuery) => ({
                 ...searchQuery,
