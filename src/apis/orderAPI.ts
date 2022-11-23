@@ -241,6 +241,11 @@ export interface ResponseCreateOrderItem {
   msg: string;
 }
 
+/**
+ * 발주서 등록
+ * @param data 미리보기 테이블의 발주데이터
+ * @returns 등록 결과 메세지
+ */
 const createOrderItem = async (data: RequestCreateOrderItem) => {
   const url = 'order/item';
   const response = await v2Axios.post<ResponseCreateOrderItem>(url, data);
@@ -248,10 +253,9 @@ const createOrderItem = async (data: RequestCreateOrderItem) => {
   return response.data;
 };
 
-/*
- * 발주내역 조회
+/**
+ * 발주서 내역 인터페이스
  */
-
 export interface OrderSheetList {
   id: number;
   rt_store_name: string; //쇼핑몰명
@@ -281,6 +285,11 @@ export interface ResponseGetOrderSheet {
   };
 }
 
+/**
+ * 발주서 내역 조회
+ * @param params 조회하려는 날짜 (쇼핑몰의 경우는 해당 쇼핑몰의 아이디)
+ * @returns 발주서 내역 데이터
+ */
 const getOrderSheets = async (params: RequestGetOrderSheet) => {
   const url = 'order/sheet';
   const response = await v2Axios.get<ResponseGetOrderSheet>(url, { params });
@@ -293,7 +302,7 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
  */
 
 export interface OrderHistoryItem {
-  id?: number;
+  id: number;
   ws_store_id: number; //도매 ID
   vendor_name: string; //거래처명
   address: string; //거래처주소
@@ -390,6 +399,22 @@ const createSingleStore = async (data: RequestCreateStore) => {
   return response.data;
 };
 
+export interface RequestUpdateOrderHistoryMemo {
+  memo: string;
+  id: number;
+}
+
+export interface ResponseUpdateOrderHistoryMemo {
+  msg: string;
+}
+
+const updateOrderHistoryMemo = async (data: RequestUpdateOrderHistoryMemo) => {
+  const url = `order/item/${data.id}`;
+  const response = await v2Axios.patch(url, data);
+
+  return response.data;
+};
+
 const orderAPI = {
   getOrderFormat,
   createOrderFormat,
@@ -400,6 +425,7 @@ const orderAPI = {
   getOrderHistory,
   createSingleStore,
   getPickerStores,
+  updateOrderHistoryMemo,
 };
 
 export default orderAPI;

@@ -23,7 +23,7 @@ function SuccessTab({
 
   ...props
 }: Props) {
-  const [selectedRowID, setSelectedRowID] = useState(-1);
+  const [orderID, setOrderID] = useState(-1);
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
   const { translateOrderType } = useOrderCart();
 
@@ -31,7 +31,7 @@ function SuccessTab({
     orderAPI.getOrderHistory({ sheet_id: sheetID }),
   );
 
-  const updateMemoQuery = useMutation(orderAPI.createOrderItem, {
+  const updateMemoQuery = useMutation(orderAPI.updateOrderHistoryMemo, {
     onSuccess: () => {
       message.success(t('message.successMemoInput'));
       getOrderHistoryQuery.refetch();
@@ -39,49 +39,20 @@ function SuccessTab({
     },
   });
 
-  const orderHistoryList = useMemo(() => {
-    return getOrderHistoryQuery.data?.data.successes.map((item, index) => ({
-      ...item,
-      id: index,
-    }));
-  }, [getOrderHistoryQuery.data?.data]);
+  const orderHistoryList = getOrderHistoryQuery.data?.data.successes;
 
   return (
     <Tabs.TabPane {...props}>
       <OrderMemoModal
         defaultValue={
           getOrderHistoryQuery.data?.data.successes.find(
-            (order) => order.id === selectedRowID,
+            (order) => order.id === orderID,
           )?.memo ?? ''
         }
         visible={visibleMemoModal}
         close={closeMemoModal}
         onOk={(value) => {
-          updateMemoQuery.mutate({
-            rt_stores: [
-              {
-                rt_store_id: storeID,
-                request_date: requestDate,
-                orders:
-                  getOrderHistoryQuery.data?.data.successes.map<CreatingOrdersItem>(
-                    (order) => ({
-                      vendor_name: order.vendor_name,
-                      vendor_address: order.address,
-                      vendor_mobile: '',
-                      mobile: order.mobile,
-                      product_name: order.name,
-                      product_option: order.option,
-                      product_count: order.count,
-                      creation_type: order.creation_type,
-                      product_price: order.price,
-                      order_type: order.type,
-                      memo: order.id === selectedRowID ? value : order.memo,
-                      ws_store_id: order.ws_store_id,
-                    }),
-                  ) ?? [],
-              },
-            ],
-          });
+          updateMemoQuery.mutate({ memo: value, id: orderID });
         }}
       />
       <Table
@@ -147,8 +118,7 @@ function SuccessTab({
             onCell: (record) => ({
               style: { cursor: 'pointer' },
               onClick: (e) => {
-                setSelectedRowID(Number(record.id));
-                console.log(orderHistoryList);
+                setOrderID(Number(record.id));
                 openMemoModal();
               },
             }),
