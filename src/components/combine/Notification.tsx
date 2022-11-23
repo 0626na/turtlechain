@@ -61,12 +61,13 @@ function Notification() {
     const result = { title: '', reason: '' };
 
     if (noti.type === 'internal_change') {
-      result.title = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after}`;
+      result.title = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요.`;
+      result.reason = `(${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
     }
     if (noti.type === 'creation_request') {
       if (noti.content.status === 'reject') {
         result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 반려되었어요.`;
-        result.reason = `(반려사유 : ${noti.content.memo})`;
+        result.reason = `(반려사유 | ${noti.content.memo})`;
       } else {
         result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
       }
@@ -74,8 +75,10 @@ function Notification() {
     if (noti.type === 'modification_request') {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
+        result.reason = `(반려사유 | ${noti.content.memo})`;
       } else {
-        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. (${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
+        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. `;
+        result.reason = `(${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
       }
     }
 
