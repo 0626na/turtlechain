@@ -36,8 +36,10 @@ yarn test
 - package 라이브러리 : yarn, craco(v6), env-cmd(v10)
 - test 라이브러리 : storybook(v6), @testing-library/jest-dom(v5), @testing-library/react-hooks(v8)
 - UI 라이브러리 : antd(v4), emotion(v11)
+- 라우팅 라이브러리 : react-router-dom(v6)
 - 전역 상태 관리 라이브러리 : recoil(v0)
-- 비동기 상태 관리 라이브러리 : react-query(v3)
+- 비동기 상태 관리 라이브러리 : axios(v0), react-query(v3)
+- 날짜 및 시간 관리 라이브러리 : moment(v2), react-moment(v1)
 - 다국어 처리 : i18next(v21), react-i18next(v11)
 
 <br>
