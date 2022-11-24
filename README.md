@@ -30,10 +30,27 @@ yarn test
 
 <br>
 
+### 🔔 프로젝트 배포
+
+```shell
+# bitbucket pipeline 배포 자동화 되어있습니다.
+
+# devel 수동 배포
+yarn deploy:devel
+
+# alpha 수동 배포
+yarn deploy:alpha
+
+# prod 수동 배포
+yarn deploy:prod
+```
+
+<br>
+
 ### ⭐️ 주요 라이브러리
 
 - SPA 라이브러리 : react(v17)
-- package 라이브러리 : yarn, craco(v6), env-cmd(v10)
+- package 라이브러리 : yarn, craco-alias(v3), craco-less(v2), env-cmd(v10)
 - test 라이브러리 : storybook(v6), @testing-library/jest-dom(v5), @testing-library/react-hooks(v8)
 - UI 라이브러리 : antd(v4), emotion(v11)
 - 라우팅 라이브러리 : react-router-dom(v6)
