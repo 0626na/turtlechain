@@ -309,6 +309,7 @@
     "success update vendor request": "거래처정보 수정을 요청했어요. 완료시 알림으로 알려드릴게요!",
     "success create vendor request": "거래처정보 등록을 요청했어요. 완료시 알림으로 알려드릴게요!",
     "complete create order": "발주서 등록이 완료되었습니다.",
+    "create new format": "발주서 설정이 저장되었습니다.",
     "new store": "신규쇼핑몰입니다. 값을 입력해주세요.",
     "add it": "정말 추가하시겠습니까?",
     "add": "추가하기"

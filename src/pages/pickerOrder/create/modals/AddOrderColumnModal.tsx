@@ -60,7 +60,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
   const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
     onSuccess: (data) => {
       if (data.msg === 'success')
-        message.success(t('message.create format success'));
+        message.success(t('message.create new format'));
       closeModal();
     },
   });
