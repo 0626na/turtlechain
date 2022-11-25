@@ -13,7 +13,7 @@ import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
-import { Col, Row, Upload } from 'antd';
+import { Col, Row, Tooltip, Upload } from 'antd';
 
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
@@ -72,12 +72,17 @@ function PageBody() {
       enabled: !!user,
       onSuccess: (data) => {
         setTodayordersCount({
+          ...todayOrdersCount,
           total: data.data.total_count,
-          complete: 0,
         });
       },
     },
   );
+
+  /**
+   * 등록되어 있는 쇼핑몰
+   */
+  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
 
   /**
    * 금일 발주완료한 쇼핑몰 갯수
@@ -98,6 +103,11 @@ function PageBody() {
       },
     },
   );
+
+  const completeStoreList =
+    getCompletOrderCountQuery.data?.data.order_sheet_list.map(
+      (store) => store.rt_store_name,
+    ) ?? [];
 
   /**
    * 엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
@@ -191,24 +201,72 @@ function PageBody() {
       <PageTitle
         title={t('order.preview')}
         buttons={[
-          <TurtleText
-            css={css({
-              fontSize: 14,
-              fontWeight: 500,
-            })}
+          <Tooltip
+            placement="bottom"
+            title={
+              <div
+                css={css({
+                  width: 160,
+                  height: 174,
+                  fontSize: 12,
+                  overflowY: 'auto',
+                  color: theme.grey200,
+                })}
+              >
+                {completeStoreList.map((store) => (
+                  <div>{store}</div>
+                ))}
+              </div>
+            }
           >
-            {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
-            <span css={css({ color: theme.grey400 })}>
-              {`/ 
+            <TurtleText
+              css={css({
+                fontSize: 14,
+                fontWeight: 500,
+              })}
+            >
+              {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
+              <span css={css({ color: theme.grey400 })}>
+                {`/ 
               ${t('count', { count: todayOrdersCount.total })} | `}
-            </span>
-            {`${t('incomplete orders today')} ${
-              todayOrdersCount.total - todayOrdersCount.complete
-            }`}{' '}
-            <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
-              count: todayOrdersCount.total,
-            })}`}</span>
-          </TurtleText>,
+              </span>
+            </TurtleText>
+          </Tooltip>,
+          <Tooltip
+            css={css({ marginRight: 20 })}
+            placement="bottom"
+            title={
+              <div
+                css={css({
+                  width: 160,
+                  height: 174,
+                  fontSize: 12,
+                  overflowY: 'auto',
+                  color: theme.grey200,
+                })}
+              >
+                {entireStoreList.map((store) => {
+                  if (completeStoreList.includes(store.name)) return;
+
+                  return <div>{store.name}</div>;
+                })}
+              </div>
+            }
+          >
+            <TurtleText
+              css={css({
+                fontSize: 14,
+                fontWeight: 500,
+              })}
+            >
+              {`${t('incomplete orders today')} ${
+                todayOrdersCount.total - todayOrdersCount.complete
+              }`}{' '}
+              <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
+                count: todayOrdersCount.total,
+              })}`}</span>
+            </TurtleText>
+          </Tooltip>,
           <TertiaryButton
             text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}

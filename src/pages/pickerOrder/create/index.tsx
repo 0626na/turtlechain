@@ -26,7 +26,7 @@ function PickerOrder() {
         button={
           <Tooltip
             visible={dateTooltipvisible}
-            title="발주요청 일자를 변경할 수 있어요"
+            title={t('you can change order request date')}
             placement="bottom"
             zIndex={1}
           >
