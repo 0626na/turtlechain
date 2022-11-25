@@ -276,7 +276,9 @@
     "orderNew": "1차",
     "orderModify": "2차",
     "orderDate": "발주일자",
-    "totalPrice": "금액 합계"
+    "totalPrice": "금액 합계",
+    "subscription": "구독하기",
+    "testNotificationKakaoTalk": "테스트 알림톡 받아보기"
   },
 
   "message": {
@@ -292,6 +294,7 @@
     "success create store": "쇼핑몰이 추가되었어요",
     "input store": "쇼핑몰을 입력해주세요",
     "success create clearing": "결제요청이 완료됐어요",
+    "success reset password": "비밀번호가 성공적으로 변경되었습니다.",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 문자메세지로 보냈어요",
     "success verify auth num": "인증번호를 확인했어요",
@@ -433,7 +436,6 @@
   "vendorname modify": "거래처명 수정",
   "request info modify": "정보수정 요청",
   "store search results": "쇼핑몰 검색결과",
-
   "look orderDetail": "발주내역 상세보기",
   "order is problem": "발주서에 문제가 있어요",
   "there are orders to modify": "수정이 필요한 발주서가 있습니다.",
@@ -462,5 +464,10 @@
   "please input option": "옵션을 입력해주세요",
   "please input type": "분류를 선택헤주세요",
   "please input store url": "쇼핑몰 url을 입력해주세요.",
+  "quit a payment": "결제를 종료하였습니다.",
+  "subscription paid plan": "유료플랜 구독",
+  "this feature is only available as a paid plan": "해당 기능은 유료플랜으로만 제공됩니다.",
+  "please subscribe to the paid plan and use the service": "유료플랜을 구독하고 서비스를 이용해주세요",
+  "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다."
   "you can change order request date": "발주요청 일자를 변경할 수 있어요."
 }

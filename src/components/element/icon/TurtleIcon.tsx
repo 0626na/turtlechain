@@ -63,6 +63,7 @@ import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
+import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -123,7 +124,8 @@ interface Props {
     | 'tuning'
     | 'accordionUp'
     | 'accordionDown'
-    | 'mistransfer';
+    | 'mistransfer'
+    | 'creditCard';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -520,6 +522,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <AccordionDown />
+      </div>
+    );
+  }
+
+  if (name === 'creditCard') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <CreditCard />
       </div>
     );
   }

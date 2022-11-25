@@ -13,7 +13,7 @@ interface Props {
   placeholder?: string;
 }
 
-function TurtleFormSelect({ items, ...props }: Props) {
+export function TurtleFormSelect({ items, ...props }: Props) {
   return (
     <Select
       css={select}
@@ -41,6 +41,64 @@ function TurtleFormSelect({ items, ...props }: Props) {
   );
 }
 
+export function TurtleFormLargeSelect({ items, ...props }: Props) {
+  return (
+    <Select
+      css={largeSelect}
+      {...props}
+      bordered={false}
+      suffixIcon={<ArrowDown />}
+      dropdownStyle={{
+        background: '#fff',
+        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
+        borderRadius: 8,
+      }}
+    >
+      {items?.map((item, idx) => (
+        <Select.Option
+          style={{
+            padding: '8px 10px',
+          }}
+          key={idx}
+          value={item.value}
+        >
+          {item.name}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+}
+
+const largeSelect = css`
+  height: 44px;
+  background-color: #fff;
+  border-radius: 8px;
+
+  border: 1px solid #cbccd1;
+  box-shadow: 0px 1px 2px rgba(27, 62, 114, 0.1);
+  color: #5b5d63;
+
+  line-height: 40px;
+
+  &.ant-select-single .ant-select-selector {
+    .ant-select-selection-item,
+    .ant-select-selection-placeholder {
+      height: 44px;
+      line-height: 40px;
+    }
+  }
+
+  &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 36px;
+    font-size: 14px;
+    padding: 0px 10px;
+    border-radius: 8px;
+  }
+  &.ant-select-disabled {
+    background-color: #f6f7f8;
+  }
+`;
+
 const select = css`
   height: 36px;
   background-color: #fcfcfc;
@@ -67,5 +125,3 @@ const select = css`
     background-color: #f6f7f8;
   }
 `;
-
-export default TurtleFormSelect;

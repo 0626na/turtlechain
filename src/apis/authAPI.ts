@@ -1,7 +1,7 @@
 import { v2Axios } from '.';
 
 export interface UserInfo {
-  id: number | undefined;
+  id: number;
   login_id: string;
   name: string;
   email: string;

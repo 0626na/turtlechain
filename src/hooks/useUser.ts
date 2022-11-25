@@ -1,25 +1,24 @@
-import { UserInfo } from './../apis/authAPI';
 import { useCallback } from 'react';
 import { userState } from './../store/userState';
 import { useRecoilState } from 'recoil';
 import authAPI from '@apis/authAPI';
 import TagManager from 'react-gtm-module';
 
-const setGtmUser = (userInfo: UserInfo) => {
-  TagManager.dataLayer({
-    dataLayer: {
-      userId: userInfo.id,
-    },
-  });
-};
-
 function useUser() {
   const [user, setUser] = useRecoilState(userState);
+
+  const setGtmUser = (userId: number) => {
+    TagManager.dataLayer({
+      dataLayer: {
+        userId,
+      },
+    });
+  };
 
   const reloadUser = useCallback(async () => {
     const { user_info } = await authAPI.verify();
     setUser(user_info);
-    setGtmUser(user_info);
+    setGtmUser(user_info.id);
   }, []);
 
   const loadUser = useCallback(() => {
