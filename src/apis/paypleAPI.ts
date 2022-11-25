@@ -23,7 +23,7 @@ interface ResponseAuthenticate {
 }
 
 const authenticate = async (data: RequestAuthenticate) => {
-  const url = `external-api/payple/authentication`;
+  const url = `subscriptions/payple/authentication`;
   const response = await v2Axios.post<ResponseAuthenticate>(url, data);
 
   return response.data.data;

@@ -82,7 +82,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>쇼핑몰 정보</TurtleText>
+              <TurtleText>{t('store.info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -93,7 +93,7 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
+            <TurtleText>{t('store.create')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -113,7 +113,7 @@ function PageBody() {
               changeMode();
             }}
           >
-            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
+            {mode === 'cardView' ? t('listView') : t('cardView')}
           </AddButton>
         }
       />

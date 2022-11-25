@@ -1,69 +1,128 @@
-import { OrderHistoryItem } from '@apis/orderAPI';
-import { TurtleTableTitle } from '@components/element';
+import React, { useMemo, useState } from 'react';
+import orderAPI, { CreatingOrdersItem, OrderHistoryItem } from '@apis/orderAPI';
+import { MemoIcon, TurtleTableTitle } from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';
+import OrderMemoModal from '@components/combine/modal/OrderMemoModal';
+import useOrderCart from '@hooks/useOrderCart';
+import useModal from '@hooks/useModal';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { message } from '@utils/message';
+import { t } from 'i18next';
 
 interface Props extends TabPaneProps {
-  data: OrderHistoryItem[];
+  requestDate: string;
+  storeID: number;
+  sheetID: number;
   loading: boolean;
 }
 
-function SuccessTab({ data, loading, ...props }: Props) {
+function SuccessTab({
+  storeID,
+  sheetID,
+  requestDate,
+
+  ...props
+}: Props) {
+  const [orderID, setOrderID] = useState(-1);
+  const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
+  const { translateOrderType } = useOrderCart();
+
+  const getOrderHistoryQuery = useQuery(['getOrderHistory', sheetID], () =>
+    orderAPI.getOrderHistory({ sheet_id: sheetID }),
+  );
+
+  const updateMemoQuery = useMutation(orderAPI.updateOrderHistoryMemo, {
+    onSuccess: () => {
+      message.success(t('message.successMemoInput'));
+      getOrderHistoryQuery.refetch();
+      closeMemoModal();
+    },
+  });
+
+  const orderHistoryList = getOrderHistoryQuery.data?.data.successes;
+
   return (
     <Tabs.TabPane {...props}>
+      <OrderMemoModal
+        defaultValue={
+          getOrderHistoryQuery.data?.data.successes.find(
+            (order) => order.id === orderID,
+          )?.memo ?? ''
+        }
+        visible={visibleMemoModal}
+        close={closeMemoModal}
+        onOk={(value) => {
+          updateMemoQuery.mutate({ memo: value, id: orderID });
+        }}
+      />
       <Table
         size="small"
-        loading={loading}
-        dataSource={data}
+        loading={getOrderHistoryQuery.isLoading}
+        rowKey={(record) => String(record.id)}
+        dataSource={orderHistoryList ?? []}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
+        title={() => (
+          <TurtleTableTitle
+            totalCount={getOrderHistoryQuery.data?.data.successes.length ?? 0}
+          />
+        )}
         columns={[
           {
-            title: '거래처명',
+            title: t('table.vendorName'),
             width: 188,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처 주소',
+            title: t('table.vendorAddress'),
             width: 196,
             render: (_, record) => record.address,
           },
           {
-            title: '휴대전화 번호',
+            title: t('table.mobile'),
             width: 176,
             render: (_, record) => record.mobile,
           },
           {
-            title: '거래처 상품명',
+            title: t('table.vendorProductName'),
             width: 196,
             render: (_, record) => record.name,
           },
           {
-            title: '옵션',
+            title: t('table.option'),
             width: 136,
             render: (_, record) => record.option,
           },
           {
-            title: '분류',
+            title: t('table.type'),
             width: 116,
-            render: (_, record) => record.type,
+            render: (_, record) => translateOrderType(record.type),
           },
           {
-            title: '요청 수량',
+            title: t('table.requestCount'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: '공급가',
+            title: t('table.supplyPrice'),
             align: 'right',
             width: 116,
             render: (_, record) => record.price.toLocaleString(),
           },
           {
-            title: '메모',
+            title: t('table.memo'),
+            align: 'center',
+            onCell: (record) => ({
+              style: { cursor: 'pointer' },
+              onClick: (e) => {
+                setOrderID(Number(record.id));
+                openMemoModal();
+              },
+            }),
+            render: (_, record) => <MemoIcon value={record.memo ?? ''} />,
           },
         ]}
       />
