@@ -195,21 +195,16 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('vendorname modify'),
-                      icon: <TurtleIcon name="updateVendorName" />,
-                    },
-                    {
-                      key: '2',
-                      label: t('vendorname modify'),
+                      label: t('request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {},
                     },
                     {
-                      key: '3',
+                      key: '2',
                       type: 'divider',
                     },
                     {
-                      key: '4',
+                      key: '3',
                       label: (
                         <span
                           css={css`
