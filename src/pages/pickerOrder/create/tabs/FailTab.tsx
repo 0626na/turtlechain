@@ -60,7 +60,13 @@ function FailTab({ loading, ...props }: Props) {
     closeFailToSuccessModal,
   ] = useModal();
 
-  //클릭한 테이블 Row를 찾는 함수
+  /**
+   * 클릭한 테이블 Row를 찾는 함수
+   * @param store 발주데이터를 가지고 있는 쇼핑몰 데이터
+   * @param order 발주데이터
+   * @param record 클릭한 row의 데이터
+   * @returns 클릭한 발주의 row와 일치하는지를 확인. 일치하면 true 아니면 false
+   */
   const searchSameRow = (
     store: StoreOrderItemExcelParsing,
     order: StoreOrder,
@@ -87,7 +93,9 @@ function FailTab({ loading, ...props }: Props) {
       );
   }, [cart.failList, searchQuery]);
 
-  //휴대전화번호 Input
+  /**
+   * 휴대전화번호 Input element
+   * */
   const failTablePhoneNumberInput = (record: FailListForOutput) => {
     return (
       <TurtleTablePhoneNumberInput
@@ -111,6 +119,51 @@ function FailTab({ loading, ...props }: Props) {
     );
   };
 
+  const inputMemo = (newMemo: string) => {
+    const clickRow = failListOutput().find((item) => item.id === selectRowID);
+    if (clickRow) {
+      setCart({
+        ...cart,
+        failList: cart.failList.map((failItem) => ({
+          ...failItem,
+          orders: failItem.orders.map((order) => ({
+            ...order,
+            memo: searchSameRow(failItem, order, clickRow)
+              ? newMemo
+              : order.memo,
+          })),
+        })),
+      });
+      message.success(t('message.successMemoInput'));
+      closeMemoModal();
+      return;
+    }
+
+    message.error(t('message.select data'));
+    closeMemoModal();
+  };
+
+  const moveOrderFromFailtoSuccess = () => {
+    const failToSuccessRecord = failListOutput()[failToSuccessRowData.id];
+    setCart({
+      ...cart,
+      failList: cart.failList.map((failItem) => ({
+        ...failItem,
+        orders: failItem.orders.map((order) => ({
+          ...order,
+          mobile:
+            failItem.rt_store_id === failToSuccessRecord.rt_store_id &&
+            order.vendor_name === failToSuccessRecord.vendor_name
+              ? failToSuccessRowData.mobile.replaceAll('-', '')
+              : order.mobile,
+        })),
+      })),
+    });
+
+    message.success(t('message.success update'));
+    closeFailToSuccessModal();
+  };
+
   return (
     <>
       <OrderMemoModal
@@ -119,31 +172,7 @@ function FailTab({ loading, ...props }: Props) {
         defaultValue={
           failListOutput().find((item) => item.id === selectRowID)?.memo ?? ''
         }
-        onOk={(value) => {
-          const clickRow = failListOutput().find(
-            (item) => item.id === selectRowID,
-          );
-          if (clickRow) {
-            setCart({
-              ...cart,
-              failList: cart.failList.map((failItem) => ({
-                ...failItem,
-                orders: failItem.orders.map((order) => ({
-                  ...order,
-                  memo: searchSameRow(failItem, order, clickRow)
-                    ? value
-                    : order.memo,
-                })),
-              })),
-            });
-            message.success(t('message.successMemoInput'));
-            closeMemoModal();
-            return;
-          }
-
-          message.error(t('message.select data'));
-          closeMemoModal();
-        }}
+        onOk={(value) => inputMemo(value)}
       />
       {failListOutput().length !== 0 && (
         <AddOrderFailtoSuccessModal
@@ -160,27 +189,7 @@ function FailTab({ loading, ...props }: Props) {
             record: failListOutput()[failToSuccessRowData.id],
             mobile: failToSuccessRowData.mobile,
           }}
-          onOk={() => {
-            const failToSuccessRecord =
-              failListOutput()[failToSuccessRowData.id];
-            setCart({
-              ...cart,
-              failList: cart.failList.map((failItem) => ({
-                ...failItem,
-                orders: failItem.orders.map((order) => ({
-                  ...order,
-                  mobile:
-                    failItem.rt_store_id === failToSuccessRecord.rt_store_id &&
-                    order.vendor_name === failToSuccessRecord.vendor_name
-                      ? failToSuccessRowData.mobile.replaceAll('-', '')
-                      : order.mobile,
-                })),
-              })),
-            });
-
-            message.success(t('message.success update'));
-            closeFailToSuccessModal();
-          }}
+          onOk={() => moveOrderFromFailtoSuccess()}
         />
       )}
       <Tabs.TabPane {...props}>
