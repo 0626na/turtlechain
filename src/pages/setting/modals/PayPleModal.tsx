@@ -112,18 +112,7 @@ function PaypleModal({ visible, closeModal }: Props) {
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
-            text="정기결제"
-            size="large"
-            onClick={() => {
-              authenticateMutation.mutate({
-                company_id: Number(user?.company_id),
-                request_type: 'PAY',
-              });
-            }}
-          />
-
-          <TertiaryButton
-            text="일반결제"
+            text="구독하기"
             size="large"
             onClick={() => {
               authenticateMutation.mutate({
