@@ -17,7 +17,7 @@ import ColumnTitleInput from '@components/element/button/ColumnTitleInput';
 import PlusIcon from '@components/element/icon/PlusIcon';
 import TurtleStack from '@components/element/TurtleStack';
 import { css } from '@emotion/react';
-import useOrderCart, { Icolumn } from '@hooks/useOrderCart';
+import useOrderCart, { IorderColumn } from '@hooks/useOrderCart';
 import { PageTitle } from '@layout/page';
 import { message } from '@utils/message';
 import { Button, Col, Divider, Input, Modal, Row } from 'antd';
@@ -65,7 +65,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     },
   });
 
-  const columnDataOutput = (column: Icolumn) => {
+  const columnDataOutput = (column: IorderColumn) => {
     return orderFormat[column].map((name, index) => (
       <ColumnTitleInput
         key={index}
