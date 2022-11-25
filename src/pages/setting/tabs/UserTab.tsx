@@ -203,7 +203,15 @@ function UserTab() {
                   </span>
                 }
               >
-                <Button css={button} onClick={() => {}}>
+                <Button
+                  css={button}
+                  onClick={() =>
+                    changeCreditCardInfoMutation.mutate({
+                      company_id: Number(user?.company_id),
+                      request_type: 'PAY',
+                    })
+                  }
+                >
                   결제하기
                 </Button>
               </Form.Item>
