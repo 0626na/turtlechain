@@ -63,7 +63,7 @@ import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
-import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
+import { ReactComponent as CreditCard } from '@icons/creditCard.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -125,6 +125,7 @@ interface Props {
     | 'accordionUp'
     | 'accordionDown'
     | 'mistransfer'
+    | 'alertWarningRed'
     | 'creditCard';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
