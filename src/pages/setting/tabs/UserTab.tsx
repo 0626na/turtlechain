@@ -1,4 +1,5 @@
 import { UserInfo } from '@apis/authAPI';
+import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
@@ -6,8 +7,9 @@ import useModal from '@hooks/useModal';
 
 import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
+import { message } from '@utils/message';
 import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
-import { Button, Col, Form, message, Row } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
 import moment from 'moment';
@@ -24,7 +26,7 @@ function UserTab() {
   const [form] = useForm();
 
   const [buttonsVisible, setButtonsVisible] = useState(false);
-  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
+
   const showButtons = () => {
     setButtonsVisible(true);
   };
@@ -41,6 +43,9 @@ function UserTab() {
     },
   });
 
+  const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
+    onSuccess: () => message.success('카드 정보가 변경되었습니다.', 3),
+  });
   /**
    * 유저의 구독여부 찾기
    */
@@ -105,13 +110,6 @@ function UserTab() {
 
   return (
     <>
-      {/**페이플 결제하기 모달 */}
-      <PaypleModal
-        visible={paypleModalVisible}
-        closeModal={() => {
-          paypleModalClose();
-        }}
-      />
       <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
@@ -202,12 +200,7 @@ function UserTab() {
                   </span>
                 }
               >
-                <Button
-                  css={button}
-                  onClick={() => {
-                    paypleModalOpen();
-                  }}
-                >
+                <Button css={button} onClick={() => {}}>
                   결제하기
                 </Button>
               </Form.Item>
@@ -244,9 +237,12 @@ function UserTab() {
                 >
                   <Button
                     css={button}
-                    onClick={() => {
-                      paypleModalOpen();
-                    }}
+                    onClick={() =>
+                      changeCreditCardInfoMutation.mutate({
+                        company_id: Number(user?.company_id),
+                        request_type: 'AUTH',
+                      })
+                    }
                   >
                     결제수단 변경
                   </Button>
