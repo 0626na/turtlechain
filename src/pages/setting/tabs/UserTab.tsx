@@ -15,7 +15,7 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
 import PaypleModal from '../modals/PayPleModal';
 
@@ -23,6 +23,7 @@ function UserTab() {
   const [searchParams] = useSearchParams();
   const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { user } = useUser();
   const [form] = useForm();
 
@@ -45,7 +46,44 @@ function UserTab() {
   });
 
   const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
-    onSuccess: () => message.success('카드 정보가 변경되었습니다.', 3),
+    onSuccess: (data) => {
+      const requestData = {
+        PCD_PAY_TYPE: data.PCD_PAY_TYPE,
+        PCD_PAY_WORK: data.PCD_PAY_WORK,
+        PCD_CARD_VER: '01',
+        PCD_PAYER_NO: data.PCD_PAYER_NO,
+        PCD_PAYER_NAME: data.PCD_PAYER_NAME,
+
+        PCD_PAY_GOODS: data.PCD_PAY_GOODS,
+        PCD_PAY_TOTAL: data.PCD_PAY_TOTAL,
+        PCD_PAY_ISTAX: data.PCD_PAY_ISTAX,
+
+        PCD_PAY_URL: data.return_url,
+        PCD_AUTH_KEY: data.AuthKey,
+
+        PCD_RST_URL: `/setting/user`,
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        callbackFunction: (res: any) => {
+          // 성공, 실패 상관없이 결과 msg alert
+          if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
+          alert(res.PCD_PAY_MSG);
+
+          // 성공일때 redirect
+          if (res.PCD_PAY_RST === 'success') {
+            navigate('/clearing/create');
+            message.success(
+              t('your subscription is complete. you can use the payment'),
+              3,
+            );
+          }
+        },
+      };
+
+      // payple 내장 함수 호출 (결제 요청)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).PaypleCpayAuthCheck(requestData);
+    },
   });
   /**
    * 유저의 구독여부 찾기
