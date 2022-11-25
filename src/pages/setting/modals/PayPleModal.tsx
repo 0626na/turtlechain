@@ -117,7 +117,7 @@ function PaypleModal({ visible, closeModal }: Props) {
             onClick={() => {
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
-                pay_type: 'regular',
+                request_type: 'PAY',
               });
             }}
           />
@@ -128,7 +128,7 @@ function PaypleModal({ visible, closeModal }: Props) {
             onClick={() => {
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
-                pay_type: 'single',
+                request_type: 'PAY',
               });
             }}
           />
