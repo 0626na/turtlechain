@@ -460,5 +460,6 @@
   "please input vendorProduct name": "거래처 상품명을 입력하세요",
   "please input option": "옵션을 입력해주세요",
   "please input type": "분류를 선택헤주세요",
-  "please input store url": "쇼핑몰 url을 입력해주세요."
+  "please input store url": "쇼핑몰 url을 입력해주세요.",
+  "you can change order request date": "발주요청 일자를 변경할 수 있어요."
 }
