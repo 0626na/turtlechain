@@ -17,11 +17,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
+import CancelpaymentModal from '../modals/CancelpaymentModal';
 import PaypleModal from '../modals/PayPleModal';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
-  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
+  const [
+    paypleCancelModalVisible,
+    paypleCancelModalOpen,
+    paypleCancelModalClose,
+  ] = useModal();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -149,8 +154,13 @@ function UserTab() {
 
   return (
     <>
-      {/* 결제모달 */}
-      <PaypleModal visible={paypleModalVisible} closeModal={paypleModalClose} />
+      {/* 구독해지모달 */}
+      <CancelpaymentModal
+        visible={paypleCancelModalVisible}
+        onCancel={paypleCancelModalClose}
+        onOk={() => {}}
+      />
+
       <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
@@ -295,7 +305,12 @@ function UserTab() {
                   >
                     결제수단 변경
                   </Button>
-                  <Button css={css({ color: theme.grey500 })}>해지하기</Button>
+                  <Button
+                    css={css({ color: theme.grey500 })}
+                    onClick={paypleCancelModalOpen}
+                  >
+                    해지하기
+                  </Button>
                 </div>
                 <div
                   css={css({
