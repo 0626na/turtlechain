@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -32,6 +32,7 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
+import useStore from '@hooks/useStore';
 
 function PageBody() {
   const {
@@ -43,6 +44,7 @@ function PageBody() {
     calculateTotalPrice,
   } = useOrderCart();
   const { user } = useUser();
+  const { store } = useStore();
   const [todayOrdersCount, setTodayordersCount] = useState({
     complete: 0,
     total: 0,
@@ -59,6 +61,43 @@ function PageBody() {
     openParsingProcessModal,
     closeParsingProcessModal,
   ] = useModal();
+
+  /**
+   * 등록되어 있는 쇼핑몰 갯수
+   */
+  const getStoreCountListQuery = useQuery(
+    ['getStoreCountListQuery'],
+    pickerAPI.getList,
+    {
+      enabled: !!user,
+      onSuccess: (data) => {
+        setTodayordersCount({
+          total: data.data.total_count,
+          complete: 0,
+        });
+      },
+    },
+  );
+
+  /**
+   * 금일 발주완료한 쇼핑몰 갯수
+   */
+  const getCompletOrderCountQuery = useQuery(
+    ['getCompleteOrderCountQuery'],
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+      }),
+    {
+      onSuccess: (data) => {
+        setTodayordersCount({
+          ...todayOrdersCount,
+          complete: data.data.order_sheet_list.length,
+        });
+      },
+    },
+  );
 
   /**
    * 엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
