@@ -21,6 +21,7 @@ import PaypleModal from '../modals/PayPleModal';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
+  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
   const queryClient = useQueryClient();
   const { user } = useUser();
   const [form] = useForm();
@@ -110,6 +111,8 @@ function UserTab() {
 
   return (
     <>
+      {/* 결제모달 */}
+      <PaypleModal visible={paypleModalVisible} closeModal={paypleModalClose} />
       <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
