@@ -275,7 +275,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         <Form.Item
           name="alimtalk_name"
           label={
-            <TextWithTooltip tooltipContent={['']}>
+            <TextWithTooltip
+              tooltipContent={['거래처에게 보여지는 쇼핑몰명을 입력해주세요']}
+            >
               {t('table.alimtalkName')}
             </TextWithTooltip>
           }
