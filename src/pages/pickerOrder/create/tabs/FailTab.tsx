@@ -91,6 +91,8 @@ function FailTab({ loading, ...props }: Props) {
       return failListOutput().filter((item) =>
         item.vendor_address.includes(searchQuery.search_string),
       );
+
+    return failListOutput();
   }, [cart.failList, searchQuery]);
 
   /**
@@ -164,6 +166,29 @@ function FailTab({ loading, ...props }: Props) {
     closeFailToSuccessModal();
   };
 
+  const modalItems = [
+    {
+      title: t('table.vendor'),
+      content:
+        failListOutput().length !== 0
+          ? failListOutput()[failToSuccessRowData.id].rt_store_name
+          : '',
+    },
+    {
+      title: t('table.address'),
+      content:
+        failListOutput().length !== 0
+          ? failListOutput()[failToSuccessRowData.id].vendor_address
+          : '',
+    },
+    {
+      title: t('table.mobile'),
+      content: failToSuccessRowData.mobile ?? '',
+    },
+  ];
+
+  console.log(failListOutput());
+
   return (
     <>
       <OrderMemoModal
@@ -176,19 +201,16 @@ function FailTab({ loading, ...props }: Props) {
       />
       {failListOutput().length !== 0 && (
         <AddOrderFailtoSuccessModal
-          title={t('change to success')}
+          title={t('Should I add it as account information?')}
           description={[
-            t('if you enter your phone, change it to success'),
             t(
-              'the data converted to Success displays the mobile phone number on the Failed tab',
+              'Add the mobile phone number you entered as your account information',
             ),
+            t(`After addition, the client's order is classified as successful`),
           ]}
           visible={failtoSuccessModailvisible}
           onCancel={closeFailToSuccessModal}
-          failData={{
-            record: failListOutput()[failToSuccessRowData.id],
-            mobile: failToSuccessRowData.mobile,
-          }}
+          items={modalItems}
           onOk={() => moveOrderFromFailtoSuccess()}
         />
       )}
@@ -263,11 +285,12 @@ function FailTab({ loading, ...props }: Props) {
                   return record.mobile.replace(phonePattern, '$1-$2-$3');
                 if (record.id === 0) return failTablePhoneNumberInput(record);
                 if (
-                  tempList[record.id - 1].rt_store_name ===
-                    record.rt_store_name &&
-                  tempList[record.id - 1].vendor_name === record.vendor_name &&
-                  tempList[record.id - 1].vendor_address ===
-                    record.vendor_address
+                  tempList[record.id - 1].id === record.id
+                  // tempList[record.id - 1]. rt_store_name ===
+                  //   record.rt_store_name &&
+                  // tempList[record.id - 1].vendor_name === record.vendor_name &&
+                  // tempList[record.id - 1].vendor_address ===
+                  //   record.vendor_address
                 ) {
                   return null;
                 }

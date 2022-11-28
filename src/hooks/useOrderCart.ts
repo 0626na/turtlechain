@@ -263,13 +263,13 @@ const useOrderCart = () => {
    */
   const failListOutput = useCallback(() => {
     const failRowList: FailListForOutput[] = [];
-    let id = 0;
+    //let id = 0;
 
     cart.failList.map((store) => {
       let failRow: FailListForOutput;
-      store.orders.map((order) => {
+      store.orders.map((order, id) => {
         failRow = {
-          id: id++,
+          id,
           rt_store_id: store.rt_store_id,
           rt_store_name: store.rt_store_name,
           order_id: Number(order.order_id),

@@ -10,16 +10,23 @@ interface Props {
   onClose: () => void;
   onOk: () => void;
   loading: boolean;
+  okText?: string;
   items: { title: string; content: string }[];
 }
 
-function CreateModal({ onClose, onOk, items, ...props }: Props) {
+function CreateModal({
+  onClose,
+  onOk,
+  items,
+  okText = '요청',
+  ...props
+}: Props) {
   return (
     <div>
       <TurtleConfirmModal
         onOk={onOk}
         onCancel={onClose}
-        okText="요청"
+        okText={okText}
         {...props}
       >
         <div css={contentCss.self}>
