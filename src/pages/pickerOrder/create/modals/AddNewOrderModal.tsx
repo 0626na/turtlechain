@@ -20,6 +20,9 @@ interface Props {
   close: () => void;
 }
 
+/**
+ * 단건 추가 모달
+ */
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
   const [selectStore, setSelectStore] = useState<PickerStore>({

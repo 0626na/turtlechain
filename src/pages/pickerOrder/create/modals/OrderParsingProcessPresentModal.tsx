@@ -17,6 +17,9 @@ interface Props {
   size?: 'small' | 'middle' | 'large';
 }
 
+/**
+ * 발주서 파싱 결과 모달
+ */
 function OrderParsingProcessPresentModal({
   visible,
   title,

@@ -18,6 +18,9 @@ interface Props {
   items: { title: string; content: string }[];
 }
 
+/**
+ * 발주등록 최종 확인 모달
+ */
 function ConfirmOrderModal({
   visible,
   close,
@@ -25,13 +28,7 @@ function ConfirmOrderModal({
   description,
   ...props
 }: Props) {
-  const {
-    cart,
-    reset,
-    calculateTotalPrice,
-    integrationOrderList,
-    countSuccessList,
-  } = useOrderCart();
+  const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
 
   //발주서 등록

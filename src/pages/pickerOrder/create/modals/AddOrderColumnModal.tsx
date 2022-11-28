@@ -29,7 +29,9 @@ interface Props {
   visible: boolean;
   closeModal: () => void;
 }
-
+/**
+ *  발주서 헤더 설정 모달
+ */
 function AddOrderColumnModal({ visible, closeModal }: Props) {
   const {
     orderFormat,
