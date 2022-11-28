@@ -64,68 +64,72 @@ import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
 import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
+import { ReactComponent as QuestionCircle } from '@icons/questioncircle.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
 
+export type iconname =
+  | 'checkMark'
+  | 'storePlus'
+  | 'selectIcon'
+  | 'alertBarArrowRight'
+  | 'exclamationMark'
+  | 'alertWarn'
+  | 'alertFail'
+  | 'alertSuccess'
+  | 'mark'
+  | 'delete'
+  | 'download'
+  | 'modalClose'
+  | 'matching'
+  | 'misMatching'
+  | 'exel'
+  | 'single'
+  | 'updateVendorName'
+  | 'updateVendorInfo'
+  | 'more'
+  | 'warning'
+  | 'siderSelect'
+  | 'exchangeRefund'
+  | 'reserve'
+  | 'arrowDown'
+  | 'user'
+  | 'membership'
+  | 'company'
+  | 'storeList'
+  | 'process'
+  | 'at'
+  | 'clip'
+  | 'pencil'
+  | 'phone'
+  | 'account'
+  | 'info'
+  | 'list'
+  | 'listView'
+  | 'vendorProduct'
+  | 'order'
+  | 'warehousing'
+  | 'clearing'
+  | 'setting'
+  | 'tutorial'
+  | 'plus'
+  | 'includeWon'
+  | 'excludeWon'
+  | 'coin'
+  | 'rightTriangle'
+  | 'userCheck'
+  | 'userLine'
+  | 'tuning'
+  | 'accordionUp'
+  | 'accordionDown'
+  | 'mistransfer'
+  | 'creditCard'
+  | 'questioncircle'
+  | 'alertWarningRed';
 interface Props {
   danger?: boolean;
-  name:
-    | 'checkMark'
-    | 'storePlus'
-    | 'selectIcon'
-    | 'alertBarArrowRight'
-    | 'exclamationMark'
-    | 'alertWarn'
-    | 'alertFail'
-    | 'alertSuccess'
-    | 'mark'
-    | 'delete'
-    | 'download'
-    | 'modalClose'
-    | 'matching'
-    | 'misMatching'
-    | 'exel'
-    | 'single'
-    | 'updateVendorName'
-    | 'updateVendorInfo'
-    | 'more'
-    | 'warning'
-    | 'siderSelect'
-    | 'exchangeRefund'
-    | 'reserve'
-    | 'arrowDown'
-    | 'user'
-    | 'membership'
-    | 'company'
-    | 'storeList'
-    | 'process'
-    | 'at'
-    | 'clip'
-    | 'pencil'
-    | 'phone'
-    | 'account'
-    | 'info'
-    | 'list'
-    | 'listView'
-    | 'vendorProduct'
-    | 'order'
-    | 'warehousing'
-    | 'clearing'
-    | 'setting'
-    | 'tutorial'
-    | 'plus'
-    | 'includeWon'
-    | 'excludeWon'
-    | 'coin'
-    | 'rightTriangle'
-    | 'userCheck'
-    | 'userLine'
-    | 'tuning'
-    | 'accordionUp'
-    | 'accordionDown'
-    | 'mistransfer'
-    | 'creditCard';
+  name: iconname;
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -534,12 +538,16 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     );
   }
 
-  if (name === 'alertWarningRed') {
+  if (name === 'questioncircle') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
-        <AlertWarnRedIcon />
+        <QuestionCircle />
       </div>
     );
+  }
+
+  if (name === 'alertWarningRed') {
+    return <AlertWarnRedIcon />;
   }
 
   return <></>;

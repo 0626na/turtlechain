@@ -311,7 +311,7 @@
     "select data": "데이터를 선택해주세요.",
     "success update vendor request": "거래처정보 수정을 요청했어요. 완료시 알림으로 알려드릴게요!",
     "success create vendor request": "거래처정보 등록을 요청했어요. 완료시 알림으로 알려드릴게요!",
-    "complete create order": "발주서 등록이 완료되었습니다.",
+    "complete order": "발주서가 발숭됐습니다.",
     "create new format": "발주서 설정이 저장되었습니다.",
     "new store": "신규쇼핑몰입니다. 값을 입력해주세요.",
     "add it": "정말 추가하시겠습니까?",
@@ -471,5 +471,6 @@
   "this feature is only available as a paid plan": "해당 기능은 유료플랜으로만 제공됩니다.",
   "please subscribe to the paid plan and use the service": "유료플랜을 구독하고 서비스를 이용해주세요",
   "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다.",
-  "you can change order request date": "발주요청 일자를 변경할 수 있어요."
+  "you can change order request date": "발주요청 일자를 변경할 수 있어요.",
+  "missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order": "필수 헤더명이 누락되었거나 부정확한 정보 입력 또는 미등록 쇼핑몰인 경우, 오류 발주서로 분류되요!"
 }

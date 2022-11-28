@@ -35,7 +35,7 @@ function ConfirmOrderModal({
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
-        message.success(t('message.complete create order'), 4);
+        message.success(t('message.complete order'), 4);
         close();
         reset();
         navigate('/picker/order/history');

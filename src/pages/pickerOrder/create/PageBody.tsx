@@ -209,7 +209,7 @@ function PageBody() {
         successCount={Number(orderExcefilesParsingData?.success_count) ?? 0}
         failCount={Number(orderExcefilesParsingData?.fail_count) ?? 0}
         messages={orderExcefilesParsingData?.error_messages ?? []}
-        size="middle"
+        size="small"
       />
 
       {/*
