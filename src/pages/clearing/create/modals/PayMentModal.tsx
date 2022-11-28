@@ -1,22 +1,26 @@
+import React from 'react';
 import paypleAPI from '@apis/paypleAPI';
 import { TertiaryButton, TurtleIcon } from '@components/element';
-
 import { css } from '@emotion/react';
-
 import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
-import { Form } from 'antd';
-import React from 'react';
+import { t } from 'i18next';
 import { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { message } from '@utils/message';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
 }
 
-function PaypleModal({ visible, closeModal }: Props) {
+/**
+ * 결제 모달창(payple)
+ *
+ * https://developer.payple.kr/integration/recurring-payment
+ */
+function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -54,12 +58,16 @@ function PaypleModal({ visible, closeModal }: Props) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
           // 성공, 실패 상관없이 결과 msg alert
-          if (res.PCD_PAY_MSG === '결제를 종료하였습니다.') return; // 취소 alert 안띄우기
+          if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
           alert(res.PCD_PAY_MSG);
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            navigate('/setting/user');
+            navigate('/clearing/create');
+            message.success(
+              t('your subscription is complete. you can use the payment'),
+              3,
+            );
             closeModal();
           }
         },
@@ -94,7 +102,7 @@ function PaypleModal({ visible, closeModal }: Props) {
         }}
       >
         <div css={modal.header}>
-          <h1 css={modal.headerTitle}>요금플랜 결제</h1>
+          <h1 css={modal.headerTitle}>{t('subscription paid plan')}</h1>
           <div>
             <TurtleIcon
               name="modalClose"
@@ -106,13 +114,19 @@ function PaypleModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>*정기결제는 매월 1일에 등록한 결제수단을 통해 자동 결제됩니다.</p>
-          <p>*정기결제 해지는 채팅상담을 통해 요청주세요.</p>
+          <p>{t('this feature is only available as a paid plan')}</p>
+          <p>{t('please subscribe to the paid plan and use the service')}</p>
         </div>
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
-            text="구독하기"
+            text={t('button.testNotificationKakaoTalk')}
+            size="large"
+            onClick={() => {}}
+          />
+
+          <TertiaryButton
+            text={t('button.subscription')}
             size="large"
             onClick={() => {
               authenticateMutation.mutate({
@@ -176,4 +190,4 @@ const modal = {
   }),
   buttonContainer: css({ display: 'flex', flexDirection: 'column', gap: 12 }),
 };
-export default PaypleModal;
+export default PayMentModal;
