@@ -164,7 +164,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               onClick={() => addNewOrderColumn('order_type')}
             />
             <AddColumnButton
-              required={true}
+              required={false}
               text={t('button.productCount')}
               onClick={() => addNewOrderColumn('product_count')}
             />
