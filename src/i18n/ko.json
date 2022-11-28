@@ -426,8 +426,9 @@
   "fail": "실패",
   "count": "{{count}}개",
   "price": "{{price}}원",
-  "totalOrderCountInConfirm": "총 발주수량: {{count}}개",
-  "totalOrderPriceInComfirm": "총 발주금액: {{price}}원",
+  "totalOrderCountInConfirm": "총 발주수량",
+  "totalOrderPriceInComfirm": "총 발주금액",
+
   "addSingleOrder": "발주 단건추가",
   "mobile": "휴대전화 번호입력",
   "building": "상가",
@@ -468,6 +469,6 @@
   "subscription paid plan": "유료플랜 구독",
   "this feature is only available as a paid plan": "해당 기능은 유료플랜으로만 제공됩니다.",
   "please subscribe to the paid plan and use the service": "유료플랜을 구독하고 서비스를 이용해주세요",
-  "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다."
+  "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다.",
   "you can change order request date": "발주요청 일자를 변경할 수 있어요."
 }

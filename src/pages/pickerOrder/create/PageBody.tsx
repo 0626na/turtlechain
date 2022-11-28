@@ -44,7 +44,6 @@ function PageBody() {
     calculateTotalPrice,
   } = useOrderCart();
   const { user } = useUser();
-  const { store } = useStore();
   const [todayOrdersCount, setTodayordersCount] = useState({
     complete: 0,
     total: 0,
@@ -143,6 +142,21 @@ function PageBody() {
   const orderExcefilesParsingData =
     createPreParsingMutation.data?.parsingData?.data.parsing_status;
 
+  const confirmModalItems = [
+    {
+      title: t('orderDate'),
+      content: moment(cart.selectedDate).format('YYYY-MM-DD'),
+    },
+    {
+      title: t('totalOrderCountInConfirm'),
+      content: t('count', { count: countSuccessList() }),
+    },
+    {
+      title: t('totalOrderPriceInComfirm'),
+      content: t('price', { price: calculateTotalPrice() }),
+    },
+  ];
+
   return (
     <>
       {/* 발주서 헤더 설정 모달 */}
@@ -169,8 +183,14 @@ function PageBody() {
 
       {/* 발주등록 확인 모달 */}
       <ConfirmOrderModal
+        title={t('orderConfirm')}
+        description={[
+          t('failed orders are except'),
+          t('please check order info again'),
+        ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
+        items={confirmModalItems}
       />
 
       {/* 발주서 파싱 결과 모달 */}
