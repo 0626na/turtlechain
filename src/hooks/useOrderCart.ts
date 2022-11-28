@@ -290,9 +290,9 @@ const useOrderCart = () => {
   }, [cart.failList]);
 
   /**
-   * 성공데이터 카운팅
+   * 발주 쇼핑몰 갯수
    */
-  const countSuccessList = useCallback(() => {
+  const countOrderStores = useCallback(() => {
     let count = 0;
 
     cart.successList.map((store) => {
@@ -387,16 +387,26 @@ const useOrderCart = () => {
       sample: 0,
       pickup: 0,
       extra: 0,
+      total: 0,
     };
     cart.successList.map((item) => {
       item.orders.map((order) => {
-        if (order.order_type === 'order') orderCount.order += 1;
-        if (order.order_type === 'reserve') orderCount.reserve += 1;
-        if (order.order_type === 'takeback') orderCount.takeback += 1;
-        if (order.order_type === 'exchange') orderCount.exchange += 1;
-        if (order.order_type === 'sample') orderCount.sample += 1;
-        if (order.order_type === 'pickup') orderCount.pickup += 1;
-        if (order.order_type === 'extra') orderCount.extra += 1;
+        if (order.order_type === 'order')
+          orderCount.order += Number(order.product_count);
+        if (order.order_type === 'reserve')
+          orderCount.reserve += Number(order.product_count);
+        if (order.order_type === 'takeback')
+          orderCount.takeback += Number(order.product_count);
+        if (order.order_type === 'exchange')
+          orderCount.exchange += Number(order.product_count);
+        if (order.order_type === 'sample')
+          orderCount.sample += Number(order.product_count);
+        if (order.order_type === 'pickup')
+          orderCount.pickup += Number(order.product_count);
+        if (order.order_type === 'extra')
+          orderCount.extra += Number(order.product_count);
+
+        orderCount.total += Number(order.product_count);
       });
     });
 
@@ -592,7 +602,7 @@ const useOrderCart = () => {
     integrationOrderList,
     addSingleOrder,
     addSingleOrderForStore,
-    countSuccessList,
+    countOrderStores,
     countFailList,
     calculateTotalPrice,
     orderFormat,

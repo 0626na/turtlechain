@@ -32,13 +32,12 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
-import useStore from '@hooks/useStore';
 
 function PageBody() {
   const {
     cart,
     ready,
-    countSuccessList,
+    countOrderStores,
     countFailList,
     countOrdersForType,
     calculateTotalPrice,
@@ -61,9 +60,6 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
-  /**
-   * 등록되어 있는 쇼핑몰 갯수
-   */
   const getStoreCountListQuery = useQuery(
     ['getStoreCountListQuery'],
     pickerAPI.getList,
@@ -78,14 +74,6 @@ function PageBody() {
     },
   );
 
-  /**
-   * 등록되어 있는 쇼핑몰
-   */
-  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
-
-  /**
-   * 금일 발주완료한 쇼핑몰 갯수
-   */
   const getCompletOrderCountQuery = useQuery(
     ['getCompleteOrderCountQuery'],
     () =>
@@ -103,6 +91,14 @@ function PageBody() {
     },
   );
 
+  /**
+   * 등록되어 있는 쇼핑몰
+   */
+  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
+
+  /**
+   * 금일 발주완료한 쇼핑몰 갯수
+   */
   const completeStoreList =
     getCompletOrderCountQuery.data?.data.order_sheet_list.map(
       (store) => store.rt_store_name,
@@ -142,14 +138,21 @@ function PageBody() {
   const orderExcefilesParsingData =
     createPreParsingMutation.data?.parsingData?.data.parsing_status;
 
+  /**
+   * 발주등록 최종 확인 모달 내용
+   */
   const confirmModalItems = [
     {
       title: t('orderDate'),
       content: moment(cart.selectedDate).format('YYYY-MM-DD'),
     },
     {
+      title: t('orderStores'),
+      content: t('count', { count: countOrderStores() }),
+    },
+    {
       title: t('totalOrderCountInConfirm'),
-      content: t('count', { count: countSuccessList() }),
+      content: t('count', { count: countOrdersForType().total }),
     },
     {
       title: t('totalOrderPriceInComfirm'),
@@ -159,16 +162,12 @@ function PageBody() {
 
   return (
     <>
-      {/* 발주서 헤더 설정 모달 */}
       <AddOrderColumnModal
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
       />
-
-      {/* 단건 추가 모달 */}
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
-      {/* 재등록 모달 */}
       {createPreParsingMutation.isSuccess && (
         <PreparsingOrderModal
           visible={preparsingModalVisible}
@@ -181,7 +180,6 @@ function PageBody() {
         />
       )}
 
-      {/* 발주등록 확인 모달 */}
       <ConfirmOrderModal
         title={t('orderConfirm')}
         description={[
@@ -193,7 +191,6 @@ function PageBody() {
         items={confirmModalItems}
       />
 
-      {/* 발주서 파싱 결과 모달 */}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
         title={t('order is problem')}
@@ -337,7 +334,7 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${countSuccessList()})`}
+            tab={`${t('success')}(${countOrderStores()})`}
             loading={false}
           />
           <FailTab
@@ -363,7 +360,7 @@ function PageBody() {
                 {t('orderTotalCount')}
               </span>
               {'   '}
-              {` ${t('count', { count: countSuccessList() })}`}
+              {` ${t('count', { count: countOrdersForType().total })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
                   'order.types.exchange',
