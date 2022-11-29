@@ -17,6 +17,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
 import RemoveSubscriptionModal from '../modals/RemoveSubscriptionModal';
+import { RequestConnectInventory } from '@apis/productAPI';
+import { SubscriptionInfo } from '@apis/userAPI';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
@@ -35,6 +37,18 @@ function UserTab() {
    */
   const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
+  const [isSubscription, setIsSubscription] = useState(false);
+  const [subscriptionData, setSubscriptionData] = useState<SubscriptionInfo>({
+    id: -1,
+    pay_name: '',
+    pay_number: '',
+    pay_type: '',
+    payer_id: '',
+    company_id: -1,
+    start_date: '',
+    end_date: '',
+    is_new: false,
+  });
 
   const showButtons = () => {
     setButtonsVisible(true);
@@ -79,7 +93,6 @@ function UserTab() {
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
             navigate('/setting?tab=user');
-            location.reload();
             message.success(
               t('your subscription is complete. you can use the payment'),
               3,
@@ -94,20 +107,17 @@ function UserTab() {
     },
   });
 
-  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: companyID }),
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () => userAPI.getSubscriptionCheck({ company_id: companyID }),
+    {
+      onSuccess: (data) => {
+        setIsSubscription(data.data.is_subscribed);
+        setSubscriptionData(data.data.subscription_info);
+      },
+    },
   );
 
-  /**
-   * 구독정보
-   */
-  const subscriptionData =
-    getSubscriptionCheckQuery.data?.data.subscription_info;
-
-  /**
-   * 구독여부 확인
-   */
-  const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
   /**
    * 다음 결제일
    */
