@@ -167,6 +167,19 @@ function UserTab() {
     hideButtons();
   }, [resetStates, searchParams, user]);
 
+  // payple, jquery script 태그 동적 불러온다.
+  useEffect(() => {
+    const script = document.createElement('script');
+
+    script.src =
+      process.env.REACT_APP_SERVICE_TYPE === 'production'
+        ? 'https://cpay.payple.kr/js/cpay.payple.1.0.1.js' // 상용 payple script (prod)
+        : 'https://democpay.payple.kr/js/cpay.payple.1.0.1.js'; // 테스트 payple script (alpha)
+    script.async = true;
+
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <>
       <RemoveSubscriptionModal
@@ -243,10 +256,7 @@ function UserTab() {
       </UserCard>
       <div css={marginTop}>
         {!isSubscription || !subscriptionData?.pay_number ? (
-          <UserCard
-            title="요금플랜 결제"
-            icon={<TurtleIcon name="membership" />}
-          >
+          <UserCard title="멤버십 정보" icon={<TurtleIcon name="membership" />}>
             <Form
               colon={false}
               labelCol={{ span: 7 }}
@@ -261,7 +271,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    요금플랜 결제
+                    결제
                   </span>
                 }
               >
@@ -274,7 +284,7 @@ function UserTab() {
                     })
                   }
                 >
-                  결제하기
+                  구독하기
                 </Button>
               </Form.Item>
             </Form>
