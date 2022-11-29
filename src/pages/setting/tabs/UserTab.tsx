@@ -79,6 +79,7 @@ function UserTab() {
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
             navigate('/setting?tab=user');
+            location.reload();
             message.success(
               t('your subscription is complete. you can use the payment'),
               3,
