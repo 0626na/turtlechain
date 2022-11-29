@@ -68,7 +68,7 @@ function UserTab() {
         PCD_PAY_URL: data.return_url,
         PCD_AUTH_KEY: data.AuthKey,
 
-        PCD_RST_URL: `/setting/user`,
+        PCD_RST_URL: `/setting?tab=user`,
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
@@ -78,7 +78,7 @@ function UserTab() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            navigate('/clearing/create');
+            navigate('/setting?tab=user');
             message.success(
               t('your subscription is complete. you can use the payment'),
               3,

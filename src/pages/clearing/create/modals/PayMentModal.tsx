@@ -53,7 +53,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         PCD_PAY_URL: data.return_url,
         PCD_AUTH_KEY: data.AuthKey,
 
-        PCD_RST_URL: `/setting/user`,
+        PCD_RST_URL: `/clearing/create`,
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
