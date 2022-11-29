@@ -22,7 +22,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
       message.success('구독해지가 완료되었습니다.');
-      navigate('/setting/user');
+      navigate('/setting?tab=user');
       onClose();
     },
   });
