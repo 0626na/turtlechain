@@ -466,5 +466,9 @@
   "subscription paid plan": "유료플랜 구독",
   "this feature is only available as a paid plan": "해당 기능은 유료플랜으로만 제공됩니다.",
   "please subscribe to the paid plan and use the service": "유료플랜을 구독하고 서비스를 이용해주세요",
-  "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다."
+  "your subscription is complete. you can use the payment": "구독이 완료되었습니다. 결제하기 기능 이용이 가능합니다.",
+  "subscription cancel": "해지하기",
+  "regular payment termination will be applied from the 1st of next month": "정기결제 해지는 다음 달 1일부터 적용됩니다.",
+  "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
+  "do you really want me to unsubscribe": "정말 구독을 해지할까요?"
 }

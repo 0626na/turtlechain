@@ -29,8 +29,25 @@ const authenticate = async (data: RequestAuthenticate) => {
   return response.data.data;
 };
 
+export interface RequestRemoveSubscription {
+  compay_id: number;
+  request_type: string;
+}
+
+/**
+ * 구독해지 API
+ *
+ */
+const removeSubscription = async (data: RequestRemoveSubscription) => {
+  const url = `subscriptions/${data.compay_id}`;
+  const response = await v2Axios.patch(url, data);
+
+  return response.data;
+};
+
 const paypleAPI = {
   authenticate,
+  removeSubscription,
 };
 
 export default paypleAPI;

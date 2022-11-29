@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
 import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
@@ -13,20 +14,32 @@ import { Button, Col, Form, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
-import PaypleModal from '../modals/PayPleModal';
+import RemoveSubscriptionModal from '../modals/RemoveSubscriptionModal';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
-  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
+  const [
+    paypleCancelModalVisible,
+    paypleCancelModalOpen,
+    paypleCancelModalClose,
+  ] = useModal();
+  const [
+    removeSubscriptionModalvisible,
+    removeSubscriptionModalOpen,
+    removeSubscriptionModalClose,
+  ] = useModal();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user } = useUser();
   const [form] = useForm();
 
+  /**
+   * 구독하는 쇼핑몰 사업자 ID
+   */
+  const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
 
   const showButtons = () => {
@@ -85,17 +98,24 @@ function UserTab() {
       (window as any).PaypleCpayAuthCheck(requestData);
     },
   });
-  /**
-   * 유저의 구독여부 찾기
-   */
+
   const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    userAPI.getSubscriptionCheck({ company_id: companyID }),
   );
 
+  /**
+   * 구독정보
+   */
   const subscriptionData =
     getSubscriptionCheckQuery.data?.data.subscription_info;
 
+  /**
+   * 구독여부 확인
+   */
   const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
+  /**
+   * 다음 결제일
+   */
   const nextPaymentDate = moment(subscriptionData?.end_date)
     .add(1, 'days')
     .format('YYYY년 MM월 DD일');
@@ -149,8 +169,12 @@ function UserTab() {
 
   return (
     <>
-      {/* 결제모달 */}
-      <PaypleModal visible={paypleModalVisible} closeModal={paypleModalClose} />
+      <RemoveSubscriptionModal
+        visible={removeSubscriptionModalvisible}
+        onClose={removeSubscriptionModalClose}
+        id={companyID}
+      />
+
       <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
         <Form
           form={form}
@@ -245,7 +269,7 @@ function UserTab() {
                   css={button}
                   onClick={() =>
                     changeCreditCardInfoMutation.mutate({
-                      company_id: Number(user?.company_id),
+                      company_id: companyID,
                       request_type: 'PAY',
                     })
                   }
@@ -288,14 +312,19 @@ function UserTab() {
                     css={button}
                     onClick={() =>
                       changeCreditCardInfoMutation.mutate({
-                        company_id: Number(user?.company_id),
+                        company_id: companyID,
                         request_type: 'AUTH',
                       })
                     }
                   >
                     결제수단 변경
                   </Button>
-                  <Button css={css({ color: theme.grey500 })}>해지하기</Button>
+                  <Button
+                    css={css({ color: theme.grey500 })}
+                    onClick={removeSubscriptionModalOpen}
+                  >
+                    해지하기
+                  </Button>
                 </div>
                 <div
                   css={css({
