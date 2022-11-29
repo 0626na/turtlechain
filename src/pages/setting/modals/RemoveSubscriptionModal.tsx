@@ -4,6 +4,7 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import React from 'react';
 import { useMutation, useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -17,9 +18,11 @@ interface Props {
  *
  */
 function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
+  const navigate = useNavigate();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
       message.success('구독해지가 완료되었습니다.');
+      navigate('/setting/user');
       onClose();
     },
   });

@@ -256,7 +256,10 @@ function UserTab() {
       </UserCard>
       <div css={marginTop}>
         {!isSubscription || !subscriptionData?.pay_number ? (
-          <UserCard title="멤버십 정보" icon={<TurtleIcon name="membership" />}>
+          <UserCard
+            title="구독 및 결제"
+            icon={<TurtleIcon name="membership" />}
+          >
             <Form
               colon={false}
               labelCol={{ span: 7 }}
@@ -271,21 +274,40 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    결제
+                    유료플랜 구독
                   </span>
                 }
               >
-                <Button
-                  css={button}
-                  onClick={() =>
-                    changeCreditCardInfoMutation.mutate({
-                      company_id: companyID,
-                      request_type: 'PAY',
-                    })
-                  }
-                >
-                  구독하기
-                </Button>
+                <div css={css({ display: 'flex', alignItems: 'center' })}>
+                  <div css={css({ marginRight: 16 })}>
+                    <Button
+                      css={button}
+                      onClick={() =>
+                        changeCreditCardInfoMutation.mutate({
+                          company_id: companyID,
+                          request_type: 'PAY',
+                        })
+                      }
+                    >
+                      구독하기
+                    </Button>
+                  </div>
+                  <div
+                    css={css({
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: '#FBF0E6',
+                      color: theme.orangeTx,
+                      borderRadius: 8,
+                      width: 143,
+                      height: 26,
+                      padding: '6px 7px',
+                    })}
+                  >
+                    <TurtleIcon name="thunder" />
+                    <span>첫달 이용료 100원</span>
+                  </div>
+                </div>
               </Form.Item>
             </Form>
           </UserCard>
