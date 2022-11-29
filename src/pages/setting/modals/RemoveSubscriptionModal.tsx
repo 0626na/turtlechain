@@ -21,9 +21,8 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const navigate = useNavigate();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
-      message.success('구독해지가 완료되었습니다.');
       navigate('/setting?tab=user');
-      location.reload();
+      message.success('구독해지가 완료되었습니다.');
       onClose();
     },
   });
