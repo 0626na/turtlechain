@@ -23,6 +23,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
     onSuccess: () => {
       message.success('구독해지가 완료되었습니다.');
       navigate('/setting?tab=user');
+      location.reload();
       onClose();
     },
   });
