@@ -114,17 +114,15 @@ function PayMentModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>{t('this feature is only available as a paid plan')}</p>
-          <p>{t('please subscribe to the paid plan and use the service')}</p>
+          <p>{t('payment feature is only available as a paid plan')}</p>
+          <p>
+            {t(
+              'If you subscribe to the service, you can pay for all the client products at once',
+            )}
+          </p>
         </div>
 
         <div css={modal.buttonContainer}>
-          <TertiaryButton
-            text={t('button.testNotificationKakaoTalk')}
-            size="large"
-            onClick={() => {}}
-          />
-
           <TertiaryButton
             text={t('button.subscription')}
             size="large"
@@ -134,6 +132,11 @@ function PayMentModal({ visible, closeModal }: Props) {
                 request_type: 'PAY',
               });
             }}
+          />
+          <TertiaryButton
+            text={t('button.testNotificationKakaoTalk')}
+            size="large"
+            onClick={() => {}}
           />
         </div>
       </div>

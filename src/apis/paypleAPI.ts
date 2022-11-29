@@ -32,6 +32,7 @@ const authenticate = async (data: RequestAuthenticate) => {
 export interface RequestRemoveSubscription {
   compay_id: number;
   request_type: string;
+  is_new?: boolean;
 }
 
 /**
