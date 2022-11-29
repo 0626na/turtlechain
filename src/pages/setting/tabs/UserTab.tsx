@@ -5,7 +5,6 @@ import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
-
 import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
 import { message } from '@utils/message';
@@ -21,11 +20,6 @@ import RemoveSubscriptionModal from '../modals/RemoveSubscriptionModal';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
-  const [
-    paypleCancelModalVisible,
-    paypleCancelModalOpen,
-    paypleCancelModalClose,
-  ] = useModal();
   const [
     removeSubscriptionModalvisible,
     removeSubscriptionModalOpen,
@@ -292,21 +286,23 @@ function UserTab() {
                       구독하기
                     </Button>
                   </div>
-                  <div
-                    css={css({
-                      display: 'flex',
-                      alignItems: 'center',
-                      backgroundColor: '#FBF0E6',
-                      color: theme.orangeTx,
-                      borderRadius: 8,
-                      width: 143,
-                      height: 26,
-                      padding: '6px 7px',
-                    })}
-                  >
-                    <TurtleIcon name="thunder" />
-                    <span>첫달 이용료 100원</span>
-                  </div>
+                  {subscriptionData?.is_new && (
+                    <div
+                      css={css({
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: '#FBF0E6',
+                        color: theme.orangeTx,
+                        borderRadius: 8,
+                        width: 143,
+                        height: 26,
+                        padding: '6px 7px',
+                      })}
+                    >
+                      <TurtleIcon name="thunder" />
+                      <span>첫달 이용료 100원</span>
+                    </div>
+                  )}
                 </div>
               </Form.Item>
             </Form>

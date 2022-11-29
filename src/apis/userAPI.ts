@@ -277,8 +277,12 @@ export interface SubscriptionInfo {
   pay_number: string;
   start_date: string;
   end_date: string;
+  is_new: boolean;
 }
 
+/**
+ * 유저의 구독여부 확인
+ */
 const getSubscriptionCheck = async (params: RequestGetSubscriptionCheck) => {
   const url = `/subscriptions/${params.company_id}`;
   const response = await v2Axios.get<ResponseGetSubscriptionCheck>(url, {
