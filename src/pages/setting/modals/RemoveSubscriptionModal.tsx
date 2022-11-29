@@ -3,7 +3,7 @@ import { TurtleConfirmModal } from '@components/element';
 import { message } from '@utils/message';
 import { t } from 'i18next';
 import React from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -19,8 +19,10 @@ interface Props {
  */
 function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
+      queryClient.refetchQueries('getSubscriptionCheckQuery');
       navigate('/setting?tab=user');
       message.success('구독해지가 완료되었습니다.');
       onClose();

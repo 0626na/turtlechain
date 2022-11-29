@@ -66,6 +66,17 @@ function UserTab() {
     },
   });
 
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () => userAPI.getSubscriptionCheck({ company_id: companyID }),
+    {
+      onSuccess: (data) => {
+        setIsSubscription(data.data.is_subscribed);
+        setSubscriptionData(data.data.subscription_info);
+      },
+    },
+  );
+
   const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
@@ -92,6 +103,7 @@ function UserTab() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
+            getSubscriptionCheckQuery.refetch();
             navigate('/setting?tab=user');
             message.success(
               t('your subscription is complete. you can use the payment'),
@@ -106,17 +118,6 @@ function UserTab() {
       (window as any).PaypleCpayAuthCheck(requestData);
     },
   });
-
-  const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckQuery',
-    () => userAPI.getSubscriptionCheck({ company_id: companyID }),
-    {
-      onSuccess: (data) => {
-        setIsSubscription(data.data.is_subscribed);
-        setSubscriptionData(data.data.subscription_info);
-      },
-    },
-  );
 
   /**
    * 다음 결제일
