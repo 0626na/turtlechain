@@ -242,7 +242,7 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        {!isSubscription || subscriptionData?.pay_number ? (
+        {!isSubscription || !subscriptionData?.pay_number ? (
           <UserCard
             title="요금플랜 결제"
             icon={<TurtleIcon name="membership" />}
