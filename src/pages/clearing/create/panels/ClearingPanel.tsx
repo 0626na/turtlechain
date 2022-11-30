@@ -134,9 +134,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         selectedRow={selectedRow as ClearingInfo}
       />
 
-      {/*
-       * 유료플랜 구독 모달
-       */}
       <PayMentModal
         visible={paymentModalVisible}
         closeModal={paymentModalClose}
