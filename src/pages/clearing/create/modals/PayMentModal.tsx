@@ -67,7 +67,9 @@ function PayMentModal({ visible, closeModal }: Props) {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            queryClient.refetchQueries('getSubscriptionCheckQuery');
+            queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+              active: true,
+            });
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
