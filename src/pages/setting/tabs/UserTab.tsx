@@ -46,7 +46,7 @@ function UserTab() {
     pay_number: '',
     pay_type: '',
     payer_id: '',
-    company_id: -1,
+    company_id: 0,
     start_date: '',
     end_date: '',
   });
@@ -108,7 +108,9 @@ function UserTab() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            getSubscriptionCheckQuery.refetch();
+            setTimeout(() => {
+              getSubscriptionCheckQuery.refetch();
+            }, 2000);
             navigate('/setting?tab=user');
             message.success(
               t('your subscription is complete. you can use the payment'),

@@ -22,9 +22,11 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const queryClient = useQueryClient();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
-      queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
-        active: true,
-      });
+      setTimeout(() => {
+        queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+          active: true,
+        });
+      }, 2000);
       navigate('/setting?tab=user');
       message.success('구독해지가 완료되었습니다.');
       onClose();
@@ -35,7 +37,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
       size="small"
       description={[
         t(
-          'regular payment termination will be applied from the 1st of next month',
+          'regular payment termination will be applied from the pay date of next month',
         ),
         t('termination may restrict some use of the service'),
       ]}
