@@ -6,7 +6,7 @@ import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import { useEffect } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
 import useClearingCart from '@hooks/useClearingCart';
@@ -17,12 +17,13 @@ interface Props {
 }
 
 /**
- * 결제 모달창(payple)
+ * 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useUser();
   const { cart, clearingPaymentTotal } = useClearingCart();
 
@@ -65,6 +66,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
+            queryClient.refetchQueries('getSubscriptionCheckQuery');
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
