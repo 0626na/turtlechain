@@ -41,12 +41,6 @@ function PayMentModal({ visible, closeModal }: Props) {
     document.body.appendChild(script);
   }, []);
 
-  const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckInModalQuery',
-    () =>
-      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
-  );
-
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
@@ -73,7 +67,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            getSubscriptionCheckQuery.refetch();
+            queryClient.refetchQueries('getSubscriptionCheckQuery');
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
