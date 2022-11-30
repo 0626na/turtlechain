@@ -38,7 +38,7 @@ function UserTab() {
   const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
   const [isSubscription, setIsSubscription] = useState(false);
-  const [isNewSubscription, setIsNewSubscription] = useState(false);
+  const [isNewSubscription, setIsNewSubscription] = useState<boolean>();
   const [serviceCost, setServiceCost] = useState(0);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionInfo>({
     id: -1,
@@ -346,7 +346,7 @@ function UserTab() {
                       </div>
                     )}
                   </div>
-                  {!isNewSubscription && (
+                  {isNewSubscription && (
                     <div
                       css={css({
                         display: 'flex',
