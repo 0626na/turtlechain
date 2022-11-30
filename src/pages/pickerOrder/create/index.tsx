@@ -33,7 +33,10 @@ function PickerOrder() {
             <div onClick={() => setdateToolipVisible(false)}>
               <TurtleDatePicker
                 date={moment(cart.selectedDate)}
-                onchange={(value) => setCart({ ...cart, selectedDate: value })}
+                onchange={(value) => {
+                  setCart({ ...cart, selectedDate: value });
+                  console.log('변경하고 날짜', value.format('YYYY/MM/DD'));
+                }}
               />
             </div>
           </Tooltip>

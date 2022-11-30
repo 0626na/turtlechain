@@ -212,9 +212,6 @@ function PageBody() {
         size="small"
       />
 
-      {/*
-       * Page
-       */}
       <PageTitle
         title={t('order.preview')}
         buttons={[
@@ -307,7 +304,10 @@ function PageBody() {
                           'YYYY-MM-DD',
                         ),
                       });
-
+                      console.log(
+                        '업로드하고 나서 날짜',
+                        cart.selectedDate?.format('YYYY/MM/DD'),
+                      );
                       return false;
                     }}
                     fileList={[]}

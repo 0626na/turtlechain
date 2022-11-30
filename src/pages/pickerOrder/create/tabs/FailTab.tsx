@@ -187,8 +187,6 @@ function FailTab({ loading, ...props }: Props) {
     },
   ];
 
-  console.log(failListOutput());
-
   return (
     <>
       <OrderMemoModal
@@ -340,7 +338,7 @@ function FailTab({ loading, ...props }: Props) {
                 <TurtleTableNumberInput
                   value={Number(record.product_count)}
                   step={1}
-                  onChange={(value: valueType) => {
+                  onChange={(value: valueType | null) => {
                     setCart({
                       ...cart,
                       successList: cart.successList,
