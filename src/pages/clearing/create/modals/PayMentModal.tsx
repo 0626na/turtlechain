@@ -6,10 +6,11 @@ import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import { useEffect } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
 import useClearingCart from '@hooks/useClearingCart';
+import userAPI from '@apis/userAPI';
 
 interface Props {
   visible: boolean;
@@ -40,6 +41,12 @@ function PayMentModal({ visible, closeModal }: Props) {
     document.body.appendChild(script);
   }, []);
 
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckInModalQuery',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  );
+
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
@@ -66,7 +73,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            queryClient.refetchQueries('getSubscriptionCheckQuery');
+            getSubscriptionCheckQuery.refetch();
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),

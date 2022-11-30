@@ -8,9 +8,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUser from '@hooks/useUser';
 import paypleAPI from '@apis/paypleAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { message } from '@utils/message';
 import { t } from 'i18next';
+import userAPI from '@apis/userAPI';
 
 function SubscriptionBar() {
   const [modalVisible, modalOepn, modalClose] = useModal();
@@ -21,6 +22,12 @@ function SubscriptionBar() {
   const closeAlertBar = () => {
     setVisible(false);
   };
+
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckInBarQuery',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  );
 
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
@@ -48,7 +55,7 @@ function SubscriptionBar() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            queryClient.refetchQueries('getSubscriptionCheckQuery');
+            getSubscriptionCheckQuery.refetch();
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
