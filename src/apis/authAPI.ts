@@ -6,7 +6,7 @@ export interface UserInfo {
   name: string;
   email: string;
   mobile_phone: string;
-  company_id: number | undefined;
+  company_id?: number;
   type: 'rt' | 'pi' | 'staff' | '';
 }
 
