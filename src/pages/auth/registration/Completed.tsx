@@ -3,76 +3,73 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
 import { TertiaryButton } from '@components/element';
-import { useEffect } from 'react';
+
 import React from 'react';
+
+import { theme } from '@styles/theme';
 
 interface Props {
   visible: boolean;
-  // title?: string;
-  // description?: string;
-  // children?: React.ReactNode;
 }
+
 function Completed({ visible }: Props) {
   const navigate = useNavigate();
-  const [, setSearchParams] = useSearchParams();
+  const [params] = useSearchParams();
 
   const onClickGoHome = () => {
     navigate('/');
   };
 
-  useEffect(() => {
-    if (visible) setSearchParams({ step: 'completed' });
-  }, [setSearchParams, visible]);
-
   return (
     <>
       {visible && (
-        <div css={Container}>
+        <section css={completedCss.container}>
           <img
             src={`${process.env.PUBLIC_URL}/assets/img/approve.png`}
             alt="approve"
           />
-          <span css={title}>{t('message.success registration')}</span>
-          <span css={description}>
-            감사합니다. 입력해주신 메일 주소로 영업일 기준 1-2일 내에
-            <br /> 신청 결과에 대한 안내메일이 발송됩니다. 가입승인 후 서비스를
-            이용해주세요.
-          </span>
+          <h1 css={completedCss.title}>{t('message.success registration')}</h1>
+          <p css={completedCss.description}>
+            {`${params.get('user_name')}`}님, 터틀체인 신규가입을 환영합니다!
+            <br /> 지금 바로 터틀체인의 다양한 서비스를 이용해보세요.
+          </p>
 
-          <TertiaryButton text={t('go home')} onClick={onClickGoHome} />
-        </div>
+          <TertiaryButton text={t('go login')} onClick={onClickGoHome} />
+        </section>
       )}
     </>
   );
 }
 
-const Container = css({
-  width: 460,
-  position: 'absolute',
-  top: '30%',
-  left: '50%',
-  transform: 'translate(-50%,-50%)',
+const completedCss = {
+  container: css({
+    width: 460,
+    position: 'absolute',
+    top: '30%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
 
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-});
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }),
 
-const title = css({
-  marginTop: 32,
-  color: '#242934',
-  fontWeight: 700,
-  fontSize: 26,
-});
+  title: css({
+    marginTop: 32,
+    color: theme.grey800,
+    fontWeight: 700,
+    fontSize: 26,
+  }),
 
-const description = css({
-  marginTop: 16,
-  marginBottom: 60,
-  lineHeight: 1.8,
-  fontWeight: 400,
-  fontSize: 14,
-  textAlign: 'center',
-  color: '#5b5d63',
-});
+  description: css({
+    marginTop: 16,
+    marginBottom: 60,
+    lineHeight: 1.8,
+    fontWeight: 400,
+    fontSize: 14,
+    textAlign: 'center',
+    color: theme.grey600,
+  }),
+};
 
 export default Completed;
