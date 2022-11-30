@@ -23,12 +23,6 @@ function SubscriptionBar() {
     setVisible(false);
   };
 
-  const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckInBarQuery',
-    () =>
-      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
-  );
-
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
@@ -55,7 +49,7 @@ function SubscriptionBar() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            getSubscriptionCheckQuery.refetch();
+            queryClient.refetchQueries('getSubscriptionCheckQuery');
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
