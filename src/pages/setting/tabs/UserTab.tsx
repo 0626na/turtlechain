@@ -38,6 +38,8 @@ function UserTab() {
   const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
   const [isSubscription, setIsSubscription] = useState(false);
+  const [isNewSubscription, setIsNewSubscription] = useState(false);
+  const [serviceCost, setServiceCost] = useState(0);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionInfo>({
     id: -1,
     pay_name: '',
@@ -47,7 +49,6 @@ function UserTab() {
     company_id: -1,
     start_date: '',
     end_date: '',
-    is_new: false,
   });
 
   const showButtons = () => {
@@ -72,6 +73,8 @@ function UserTab() {
     {
       onSuccess: (data) => {
         setIsSubscription(data.data.is_subscribed);
+        setIsNewSubscription(data.data.is_new);
+        setServiceCost(data.data.service_cost);
         setSubscriptionData({
           ...data.data.subscription_info,
         });
@@ -343,7 +346,7 @@ function UserTab() {
                       </div>
                     )}
                   </div>
-                  {subscriptionData?.is_new && (
+                  {!isNewSubscription && (
                     <div
                       css={css({
                         display: 'flex',
@@ -429,8 +432,15 @@ function UserTab() {
                     css={css({ marginLeft: 5 })}
                   >{`신용카드(${subscriptionData?.pay_name}) ${subscriptionData?.pay_number}`}</span>
                 </div>
-                <div css={css({ marginTop: 10 })}>
+                <div
+                  css={css({
+                    marginTop: 10,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  })}
+                >
                   <span>{`다음 결제일은 ${nextPaymentDate} 입니다.`}</span>
+                  <span>{`₩${serviceCost}`}</span>
                 </div>
               </Form.Item>
             </Form>

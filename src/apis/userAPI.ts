@@ -264,6 +264,8 @@ export interface ResponseGetSubscriptionCheck {
   msg: string;
   data: {
     is_subscribed: boolean;
+    is_new: boolean;
+    service_cost: number;
     subscription_info: SubscriptionInfo;
   };
 }
@@ -277,7 +279,6 @@ export interface SubscriptionInfo {
   pay_number: string;
   start_date: string;
   end_date: string;
-  is_new: boolean;
 }
 
 /**
