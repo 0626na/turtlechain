@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
+import useClearingCart from '@hooks/useClearingCart';
 
 interface Props {
   visible: boolean;
@@ -23,6 +24,7 @@ interface Props {
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
+  const { cart, clearingPaymentTotal } = useClearingCart();
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -40,18 +42,18 @@ function PayMentModal({ visible, closeModal }: Props) {
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
-        PCD_PAY_TYPE: data.PCD_PAY_TYPE,
-        PCD_PAY_WORK: data.PCD_PAY_WORK,
+        PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
+        PCD_PAY_WORK: data.data.PCD_PAY_WORK,
         PCD_CARD_VER: '01',
-        PCD_PAYER_NO: data.PCD_PAYER_NO,
-        PCD_PAYER_NAME: data.PCD_PAYER_NAME,
+        PCD_PAYER_NO: data.data.PCD_PAYER_NO,
+        PCD_PAYER_NAME: data.data.PCD_PAYER_NAME,
 
-        PCD_PAY_GOODS: data.PCD_PAY_GOODS,
-        PCD_PAY_TOTAL: data.PCD_PAY_TOTAL,
-        PCD_PAY_ISTAX: data.PCD_PAY_ISTAX,
+        PCD_PAY_GOODS: data.data.PCD_PAY_GOODS,
+        PCD_PAY_TOTAL: data.data.PCD_PAY_TOTAL,
+        PCD_PAY_ISTAX: data.data.PCD_PAY_ISTAX,
 
-        PCD_PAY_URL: data.return_url,
-        PCD_AUTH_KEY: data.AuthKey,
+        PCD_PAY_URL: data.data.return_url,
+        PCD_AUTH_KEY: data.data.AuthKey,
 
         PCD_RST_URL: `/clearing/create`,
 
@@ -76,6 +78,13 @@ function PayMentModal({ visible, closeModal }: Props) {
       // payple 내장 함수 호출 (결제 요청)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).PaypleCpayAuthCheck(requestData);
+    },
+  });
+
+  const testAlimtalkMutation = useMutation(paypleAPI.updateTestalimTalk, {
+    onSuccess: () => {
+      message.success('테스트 알림톡이 발송되었습니다.');
+      closeModal();
     },
   });
 
@@ -136,7 +145,13 @@ function PayMentModal({ visible, closeModal }: Props) {
           <TertiaryButton
             text={t('button.testNotificationKakaoTalk')}
             size="large"
-            onClick={() => {}}
+            onClick={() => {
+              testAlimtalkMutation.mutate({
+                request_date: cart.clearingRequestDate,
+                clearing_amount:
+                  Math.round((clearingPaymentTotal * 1.1) / 10) * 10,
+              });
+            }}
           />
         </div>
       </div>

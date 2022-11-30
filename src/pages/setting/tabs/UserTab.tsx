@@ -82,18 +82,18 @@ function UserTab() {
   const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
-        PCD_PAY_TYPE: data.PCD_PAY_TYPE,
-        PCD_PAY_WORK: data.PCD_PAY_WORK,
+        PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
+        PCD_PAY_WORK: data.data.PCD_PAY_WORK,
         PCD_CARD_VER: '01',
-        PCD_PAYER_NO: data.PCD_PAYER_NO,
-        PCD_PAYER_NAME: data.PCD_PAYER_NAME,
+        PCD_PAYER_NO: data.data.PCD_PAYER_NO,
+        PCD_PAYER_NAME: data.data.PCD_PAYER_NAME,
 
-        PCD_PAY_GOODS: data.PCD_PAY_GOODS,
-        PCD_PAY_TOTAL: data.PCD_PAY_TOTAL,
-        PCD_PAY_ISTAX: data.PCD_PAY_ISTAX,
+        PCD_PAY_GOODS: data.data.PCD_PAY_GOODS,
+        PCD_PAY_TOTAL: data.data.PCD_PAY_TOTAL,
+        PCD_PAY_ISTAX: data.data.PCD_PAY_ISTAX,
 
-        PCD_PAY_URL: data.return_url,
-        PCD_AUTH_KEY: data.AuthKey,
+        PCD_PAY_URL: data.data.return_url,
+        PCD_AUTH_KEY: data.data.AuthKey,
 
         PCD_RST_URL: `/setting?tab=user`,
 
