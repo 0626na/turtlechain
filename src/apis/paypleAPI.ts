@@ -22,11 +22,14 @@ interface ResponseAuthenticate {
   };
 }
 
+/**
+ * payple 결제/등록 모달 출력
+ */
 const authenticate = async (data: RequestAuthenticate) => {
   const url = `subscriptions/payple/authentication`;
   const response = await v2Axios.post<ResponseAuthenticate>(url, data);
 
-  return response.data.data;
+  return response.data;
 };
 
 export interface RequestRemoveSubscription {
@@ -46,9 +49,29 @@ const removeSubscription = async (data: RequestRemoveSubscription) => {
   return response.data;
 };
 
+export interface RequestUpdateTestAlimTalk {
+  request_date: string;
+  clearing_amount: number;
+}
+
+export interface ResponseUpdateTestAlimTalk {
+  msg: string;
+}
+
+/**
+ * 테스트 알림톡 API
+ */
+const updateTestalimTalk = async (data: RequestUpdateTestAlimTalk) => {
+  const url = 'subscriptions/test/alimtalk';
+  const response = await v2Axios.post(url, data);
+
+  return response.data;
+};
+
 const paypleAPI = {
   authenticate,
   removeSubscription,
+  updateTestalimTalk,
 };
 
 export default paypleAPI;

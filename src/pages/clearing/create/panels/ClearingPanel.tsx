@@ -78,9 +78,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
     },
   });
 
-  const subscriptionData =
-    getSubscriptionCheckQuery.data?.data.subscription_info;
-
   const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
 
   const handleCreate = () => {
