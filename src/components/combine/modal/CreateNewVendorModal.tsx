@@ -54,7 +54,7 @@ function CreateNewModal({ visible, closeModal }: Props) {
       return Promise.reject(new Error('휴대전화 번호를 입력해주세요.'));
     }
 
-    if (!phonePattern.test(value)) {
+    if (!phonePattern.test(value.trim())) {
       return Promise.reject(new Error('유효하지 않은 형식 입니다.'));
     }
 
