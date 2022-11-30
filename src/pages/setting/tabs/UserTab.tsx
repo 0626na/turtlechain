@@ -72,7 +72,9 @@ function UserTab() {
     {
       onSuccess: (data) => {
         setIsSubscription(data.data.is_subscribed);
-        setSubscriptionData(data.data.subscription_info);
+        setSubscriptionData({
+          ...data.data.subscription_info,
+        });
       },
     },
   );
@@ -125,6 +127,13 @@ function UserTab() {
   const nextPaymentDate = moment(subscriptionData?.end_date)
     .add(1, 'days')
     .format('YYYY년 MM월 DD일');
+
+  /**
+   * 구독 유효기간
+   */
+  const expirationDate = moment(subscriptionData.end_date).format(
+    'YYYY년 MM월 DD일',
+  );
 
   const resetStates = useCallback(
     (user: UserInfo) => {
@@ -184,6 +193,7 @@ function UserTab() {
     script.async = true;
 
     document.body.appendChild(script);
+    console.log(subscriptionData);
   }, []);
 
   return (
@@ -284,19 +294,54 @@ function UserTab() {
                   </span>
                 }
               >
-                <div css={css({ display: 'flex', alignItems: 'center' })}>
+                <div
+                  css={css({
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: isSubscription
+                      ? `1px solid ${theme.grey200}`
+                      : '',
+                    paddingBottom: 20,
+                  })}
+                >
                   <div css={css({ marginRight: 16 })}>
-                    <Button
-                      css={button}
-                      onClick={() =>
-                        changeCreditCardInfoMutation.mutate({
-                          company_id: companyID,
-                          request_type: 'PAY',
-                        })
-                      }
-                    >
-                      구독하기
-                    </Button>
+                    {!isSubscription ? (
+                      <Button
+                        css={button}
+                        onClick={() =>
+                          changeCreditCardInfoMutation.mutate({
+                            company_id: companyID,
+                            request_type: 'PAY',
+                          })
+                        }
+                      >
+                        구독하기
+                      </Button>
+                    ) : (
+                      <div
+                        css={css({
+                          display: 'flex',
+                          alignItems: 'center',
+                        })}
+                      >
+                        <Button
+                          css={button}
+                          onClick={() =>
+                            changeCreditCardInfoMutation.mutate({
+                              company_id: companyID,
+                              request_type: 'PAY',
+                            })
+                          }
+                        >
+                          재구독하기
+                        </Button>
+                        <span
+                          css={css({ marginLeft: 16, color: theme.grey500 })}
+                        >
+                          해지완료
+                        </span>
+                      </div>
+                    )}
                   </div>
                   {subscriptionData?.is_new && (
                     <div
@@ -315,6 +360,9 @@ function UserTab() {
                       <span>첫달 이용료 100원</span>
                     </div>
                   )}
+                </div>
+                <div css={css({ paddingTop: 10, color: theme.grey500 })}>
+                  <span>{`${expirationDate}까지 서비스 이용이 가능합니다.`}</span>
                 </div>
               </Form.Item>
             </Form>
