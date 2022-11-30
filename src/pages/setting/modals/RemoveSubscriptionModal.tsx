@@ -45,6 +45,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
           request_type: 'cancel_subscription',
         });
       }}
+      loading={removeSubscriptionMutation.isLoading}
       okText={t('subscription cancel')}
       title={t('do you really want me to unsubscribe')}
     />
