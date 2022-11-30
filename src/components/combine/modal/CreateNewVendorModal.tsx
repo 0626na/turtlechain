@@ -18,7 +18,7 @@ import { useMutation } from 'react-query';
 
 import bucketListAPI from '@apis/bucketListAPI';
 import { RcFile } from 'antd/lib/upload';
-import { phonePattern } from '@utils/pattern';
+import { notNumPattern, phonePattern } from '@utils/pattern';
 import usePreset from '@hooks/usePreset';
 
 interface Props {
@@ -141,7 +141,15 @@ function CreateNewModal({ visible, closeModal }: Props) {
           validateTrigger="onBlur"
           rules={[{ required: true, validator: mobileValidator }]}
         >
-          <TurtleFormInput placeholder="휴대전화 번호를 입력해주세요" />
+          <TurtleFormInput
+            placeholder="휴대전화 번호를 입력해주세요"
+            maxLength={13}
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(notNumPattern, '')
+                .replace(phonePattern, `$1-$2-$3`);
+            }}
+          />
         </Form.Item>
 
         <Form.Item label={t('table.vendorAddress')} required>
