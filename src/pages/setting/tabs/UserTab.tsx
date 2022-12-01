@@ -108,15 +108,15 @@ function UserTab() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            res.PCD_PAY_MSG === t('quit a payment')
-              ? setIsSubscription(false)
-              : setIsSubscription(true);
+            setTimeout(() => {
+              getSubscriptionCheckQuery.refetch();
+              message.success(
+                t('your subscription is complete. you can use the payment'),
+                3,
+              );
+            }, 1000);
 
             navigate('/setting?tab=user');
-            message.success(
-              t('your subscription is complete. you can use the payment'),
-              3,
-            );
           }
         },
       };
