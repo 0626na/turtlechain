@@ -161,6 +161,7 @@ const useOrderCart = () => {
       let id = 0;
 
       setCart({
+        ...cart,
         successList: [
           //기존 쇼핑몰
           ...cart.successList.map((store) => {
@@ -421,6 +422,7 @@ const useOrderCart = () => {
       parsingStatus: { fail_count: 0, success_count: 0, error_messages: [] },
       successList: [],
       failList: [],
+      selectedDate: moment(),
     });
   }, [setCart]);
 

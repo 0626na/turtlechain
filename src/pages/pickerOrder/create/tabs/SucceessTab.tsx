@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   MemoIcon,
   TurtleIcon,
@@ -18,6 +18,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import moment from 'moment';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -110,6 +111,20 @@ function SuccessTab({ loading, ...props }: Props) {
       }));
     return cart.successList;
   }, [cart.successList, searchQuery]);
+
+  /**
+   * 페이지 이동시 초기화
+   */
+  useEffect(
+    () =>
+      setCart({
+        successList: [],
+        failList: [],
+        parsingStatus: { success_count: 0, fail_count: 0, error_messages: [] },
+        selectedDate: moment(),
+      }),
+    [],
+  );
 
   return (
     <>
@@ -213,7 +228,6 @@ function SuccessTab({ loading, ...props }: Props) {
           )}
           expandable={{
             rowExpandable: (record) => {
-              console.log(record);
               return record.type !== 'single';
             },
             expandRowByClick: true,

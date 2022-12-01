@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 
@@ -16,6 +16,8 @@ import { Tooltip } from 'antd';
 function PickerOrder() {
   const { cart, setCart } = useOrderCart();
   const [dateTooltipvisible, setdateToolipVisible] = useState(true);
+  const [date, setDate] = useState<moment.Moment>(cart.selectedDate);
+
   return (
     <>
       <Helmet
@@ -32,10 +34,10 @@ function PickerOrder() {
           >
             <div onClick={() => setdateToolipVisible(false)}>
               <TurtleDatePicker
-                date={moment(cart.selectedDate)}
+                date={date}
                 onchange={(value) => {
                   setCart({ ...cart, selectedDate: value });
-                  console.log('변경하고 날짜', value.format('YYYY/MM/DD'));
+                  setDate(value);
                 }}
               />
             </div>
