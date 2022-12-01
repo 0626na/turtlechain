@@ -117,7 +117,9 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               color: #6b6d73;
             `}
           >
-            {t('external header can create free')}
+            {t(
+              `is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form`,
+            )}
           </p>
         </div>
         {/* 종방향 정렬 container */}
