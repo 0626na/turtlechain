@@ -58,6 +58,7 @@ const contentCss = {
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
+    zIndex: 1,
   }),
 };
 
