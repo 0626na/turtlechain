@@ -71,7 +71,7 @@ function PayMentModal({ visible, closeModal }: Props) {
               queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
                 active: true,
               });
-            }, 2000);
+            }, 1000);
 
             navigate('/clearing/create');
             message.success(

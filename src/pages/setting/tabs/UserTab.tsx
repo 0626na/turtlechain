@@ -108,9 +108,10 @@ function UserTab() {
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            setTimeout(() => {
-              getSubscriptionCheckQuery.refetch();
-            }, 2000);
+            res.PCD_PAY_MSG === t('quit a payment')
+              ? setIsSubscription(false)
+              : setIsSubscription(true);
+
             navigate('/setting?tab=user');
             message.success(
               t('your subscription is complete. you can use the payment'),
