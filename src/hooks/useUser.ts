@@ -1,4 +1,3 @@
-import { UserInfo } from './../apis/authAPI';
 import { useCallback } from 'react';
 import { userState } from './../store/userState';
 import { useRecoilState } from 'recoil';
