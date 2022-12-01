@@ -212,7 +212,10 @@ function SuccessTab({ loading, ...props }: Props) {
             />
           )}
           expandable={{
-            rowExpandable: (record) => record.type !== 'single',
+            rowExpandable: (record) => {
+              console.log(record);
+              return record.type !== 'single';
+            },
             expandRowByClick: true,
             onExpand: (onExpand, record) => {
               if (!onExpand) {
@@ -223,17 +226,19 @@ function SuccessTab({ loading, ...props }: Props) {
               setSelectedRowID(Number(record.id));
             },
             expandIcon: ({ expanded, onExpand, record }) =>
-              expanded ? (
-                <TurtleIcon
-                  name="accordionUp"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ) : (
-                <TurtleIcon
-                  name="accordionDown"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ),
+              expanded
+                ? record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionUp"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  )
+                : record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionDown"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  ),
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
@@ -368,6 +373,10 @@ function SuccessTab({ loading, ...props }: Props) {
               title: t('table.vendor'),
               width: 488,
               render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].vendor_name
+                    : '';
                 return (
                   record.orders.length !== 0 &&
                   t('count except one', {
@@ -380,12 +389,20 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               title: t('table.product'),
               width: 488,
-              render: (_, record) =>
-                record.orders.length !== 0 &&
-                t('count except one', {
-                  name: record.orders[0].product_name,
-                  count: record.orders.length - 1,
-                }),
+              render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].product_name
+                    : '';
+
+                return (
+                  record.orders.length !== 0 &&
+                  t('count except one', {
+                    name: record.orders[0].product_name,
+                    count: record.orders.length - 1,
+                  })
+                );
+              },
             },
             {
               title: t('table.countTotal'),
