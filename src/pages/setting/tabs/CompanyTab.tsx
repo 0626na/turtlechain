@@ -17,9 +17,11 @@ import { bizNumPattern } from '@utils/pattern';
 import { DaumPostcodeModal } from '@components/combine';
 import { useSearchParams } from 'react-router-dom';
 import { RcFile } from 'antd/lib/upload';
+import useUser from '@hooks/useUser';
 
 function CompanyTab() {
   const [searchParams] = useSearchParams();
+  const { user } = useUser();
   const [form] = Form.useForm();
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
@@ -33,11 +35,16 @@ function CompanyTab() {
     setButtonsVisible(false);
   };
 
-  const getCompanyQuery = useQuery('getCompany', retailerCompanyAPI.get, {
-    onSuccess: (data) => {
-      resetStates(data);
+  const getCompanyQuery = useQuery(
+    'getCompany',
+    () => retailerCompanyAPI.get({ company_id: Number(user?.company_id) }),
+    {
+      enabled: !!user,
+      onSuccess: (data: Company) => {
+        resetStates(data);
+      },
     },
-  });
+  );
 
   const updateMutation = useMutation(retailerCompanyAPI.update, {
     onSuccess: () => {
@@ -46,28 +53,6 @@ function CompanyTab() {
       hideButtons();
     },
   });
-
-  //세금계산서 유효성검사
-  // const checkEmailValidityQuery = useMutation(
-  //   retailerCompanyAPI.checkEmailValidity,
-  //   {
-  //     onSuccess: (data) => {
-  //       message.success(data.msg);
-
-  //       form.setFieldsValue({
-  //         ...form.getFieldsValue(),
-  //         email: [
-  //           ...form.getFieldValue('email'),
-  //           form.getFieldValue('newEmail'),
-  //         ],
-  //       });
-  //       form.resetFields(['newEmail']);
-  //     },
-  //     onError: (data: AxiosError) => {
-  //       message.error(data.response?.data.msg);
-  //     },
-  //   },
-  // );
 
   const normFile = (
     uploadFiles:
@@ -79,6 +64,7 @@ function CompanyTab() {
     }
     return uploadFiles && uploadFiles.fileList;
   };
+
   const resetStates = useCallback(
     (data: Company) => {
       form.setFieldsValue({
@@ -104,13 +90,9 @@ function CompanyTab() {
   );
 
   useEffect(() => {
-    resetStates(getCompanyQuery.data as Company);
-  }, [getCompanyQuery.data, resetStates]);
-
-  useEffect(() => {
-    if (searchParams.get('tab') !== 'company') {
+    if (searchParams.get('tab') !== 'company' && !!getCompanyQuery.data) {
       hideButtons();
-      resetStates(getCompanyQuery.data as Company);
+      resetStates(getCompanyQuery.data);
       return;
     }
   }, [getCompanyQuery.data, resetStates, searchParams]);
@@ -124,6 +106,7 @@ function CompanyTab() {
           form.setFieldsValue({ ...form.getFieldsValue, address_main });
         }}
       />
+
       <Card title="사업자 정보" icon={<TurtleIcon name="company" />}>
         <Form
           form={form}
@@ -222,8 +205,9 @@ function CompanyTab() {
                   type="NO"
                   text="취소 "
                   onClick={() => {
+                    if (!getCompanyQuery.data) return;
                     // 취소를 누르면 최초 값으로 초기화.
-                    resetStates(getCompanyQuery.data as Company);
+                    resetStates(getCompanyQuery.data);
                     hideButtons();
                   }}
                 />
