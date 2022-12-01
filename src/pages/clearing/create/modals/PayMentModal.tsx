@@ -171,7 +171,7 @@ const modal = {
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 2,
+    zIndex: 10,
     background: 'rgba(0, 0, 0, 0.45)',
   }),
 
@@ -189,7 +189,6 @@ const modal = {
     boxShadow: '0px 8px 28px rgba(0, 0, 0, 0.2)',
     borderRadius: 12,
     padding: '32px 32px 48px 32px',
-    zIndex: 99,
   }),
 
   header: css({
