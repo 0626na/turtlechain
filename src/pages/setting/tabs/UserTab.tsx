@@ -102,22 +102,30 @@ function UserTab() {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
-          // 성공, 실패 상관없이 결과 msg alert
-          // if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
-          // alert(res.PCD_PAY_MSG);
-
           // 성공일때 redirect
-          if (res.PCD_PAY_RST === 'success') {
-            setTimeout(() => {
-              getSubscriptionCheckQuery.refetch();
-              message.success(
-                t('your subscription is complete. you can use the payment'),
-                3,
-              );
-            }, 2000);
+          if (res.PCD_PAY_RST !== 'success') return;
 
-            navigate('/setting?tab=user');
-          }
+          setSubscriptionData({
+            ...subscriptionData,
+            pay_name: res.PCD_PAY_CARDNAME,
+            pay_number: res.PCD_PAY_CARDNUM,
+          });
+
+          setTimeout(() => {
+            getSubscriptionCheckQuery.refetch();
+          }, 2000);
+
+          //구독신청 및 재구독시
+          if (res.PCD_PAY_WORK === 'PAY')
+            message.success(
+              t('your subscription is complete. you can use the payment'),
+              3,
+            );
+          //결제수단 변경시
+          if (res.PCD_PAY_WORK === 'AUTH')
+            message.success(t('card change is complete'), 3);
+
+          navigate('/setting?tab=user');
         },
       };
 
@@ -199,7 +207,6 @@ function UserTab() {
     script.async = true;
 
     document.body.appendChild(script);
-    console.log(subscriptionData);
   }, []);
 
   return (
