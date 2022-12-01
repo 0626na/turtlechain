@@ -44,8 +44,8 @@ function SubscriptionBar() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
           // 성공, 실패 상관없이 결과 msg alert
-          if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
-          alert(res.PCD_PAY_MSG);
+          // if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
+          // alert(res.PCD_PAY_MSG);
 
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
