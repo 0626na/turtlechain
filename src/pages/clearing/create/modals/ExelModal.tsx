@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Tabs } from 'antd';
 import { useMutation, useQuery } from 'react-query';
@@ -29,18 +29,23 @@ function ExelModal({ visible, onClose }: Props) {
   const { cart } = useExelClearingCart();
   const { store } = useStore();
   const { user } = useUser();
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const [createModalVisible, createModalOpen, createModalClose] = useModal();
   const [paymentModalVisible, paymentModalOpen, paymentModalClose] = useModal();
 
   /**
    * 유저의 구독여부 찾기
    */
-  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    {
+      onSuccess: (data) => {
+        setIsSubscribed(data.data.is_subscribed);
+      },
+    },
   );
-
-  const isSubscribed =
-    getSubscriptionCheckQuery.data?.data.subscription_info.is_subscribed;
 
   const createMutation = useMutation(clearingAPI.createParse, {
     onSuccess: () => {
