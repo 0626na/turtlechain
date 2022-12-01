@@ -37,9 +37,10 @@ function UserTab() {
    */
   const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
-  const [isSubscription, setIsSubscription] = useState(false);
   const [isNewSubscription, setIsNewSubscription] = useState<boolean>();
   const [serviceCost, setServiceCost] = useState(0);
+  const [currentSubscriptionStatus, setCurrentSubscriptionStatus] =
+    useState(false);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionInfo>({
     id: -1,
     pay_name: '',
@@ -49,6 +50,7 @@ function UserTab() {
     company_id: 0,
     start_date: '',
     end_date: '',
+    is_subscribed: false,
   });
 
   const showButtons = () => {
@@ -72,8 +74,8 @@ function UserTab() {
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
       onSuccess: (data) => {
-        setIsSubscription(data.data.is_subscribed);
         setIsNewSubscription(data.data.is_new);
+        setCurrentSubscriptionStatus(data.data.is_subscribed);
         setServiceCost(data.data.service_cost);
         setSubscriptionData({
           ...data.data.subscription_info,
@@ -284,7 +286,8 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        {!isSubscription || !subscriptionData?.pay_number ? (
+        {!subscriptionData.is_subscribed ? (
+          //구독 안한 상태
           <UserCard
             title="구독 및 결제"
             icon={<TurtleIcon name="membership" />}
@@ -311,14 +314,14 @@ function UserTab() {
                   css={css({
                     display: 'flex',
                     alignItems: 'center',
-                    borderBottom: isSubscription
+                    borderBottom: subscriptionData.is_subscribed
                       ? `1px solid ${theme.grey200}`
                       : '',
                     paddingBottom: 20,
                   })}
                 >
                   <div css={css({ marginRight: 16 })}>
-                    {!isSubscription ? (
+                    {!currentSubscriptionStatus ? (
                       <Button
                         css={button}
                         onClick={() =>
@@ -356,6 +359,7 @@ function UserTab() {
                       </div>
                     )}
                   </div>
+                  {/* 최초구독의 경우 */}
                   {isNewSubscription && (
                     <div
                       css={css({
@@ -374,7 +378,7 @@ function UserTab() {
                     </div>
                   )}
                 </div>
-                {isSubscription && (
+                {subscriptionData.is_subscribed && (
                   <div css={css({ paddingTop: 10, color: theme.grey500 })}>
                     <span>{`${expirationDate}까지 서비스 이용이 가능합니다.`}</span>
                   </div>
@@ -383,6 +387,7 @@ function UserTab() {
             </Form>
           </UserCard>
         ) : (
+          //구독한 상태
           <UserCard
             title="구독 및 결제"
             icon={<TurtleIcon name="membership" />}
