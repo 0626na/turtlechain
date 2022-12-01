@@ -72,7 +72,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
     () =>
       userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
     {
-      onSuccess: (data) => setIsSubscription(data.data.is_subscribed),
+      onSuccess: (data) => setIsSubscription(data.data.is_expired),
     },
   );
 

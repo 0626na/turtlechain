@@ -263,7 +263,7 @@ export interface RequestGetSubscriptionCheck {
 export interface ResponseGetSubscriptionCheck {
   msg: string;
   data: {
-    is_subscribed: boolean;
+    is_expired: boolean;
     is_new: boolean;
     service_cost: number;
     subscription_info: SubscriptionInfo;

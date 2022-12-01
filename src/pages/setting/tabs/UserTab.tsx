@@ -75,7 +75,7 @@ function UserTab() {
     {
       onSuccess: (data) => {
         setIsNewSubscription(data.data.is_new);
-        setCurrentSubscriptionStatus(data.data.is_subscribed);
+        setCurrentSubscriptionStatus(data.data.is_expired);
         setServiceCost(data.data.service_cost);
         setSubscriptionData({
           ...data.data.subscription_info,
