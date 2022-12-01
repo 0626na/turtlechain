@@ -114,7 +114,7 @@ function UserTab() {
                 t('your subscription is complete. you can use the payment'),
                 3,
               );
-            }, 1000);
+            }, 2000);
 
             navigate('/setting?tab=user');
           }
