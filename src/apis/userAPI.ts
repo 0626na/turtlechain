@@ -272,6 +272,7 @@ export interface ResponseGetSubscriptionCheck {
 
 export interface SubscriptionInfo {
   id: number;
+  is_subscribed: boolean;
   company_id: number;
   pay_type: string;
   payer_id: string;

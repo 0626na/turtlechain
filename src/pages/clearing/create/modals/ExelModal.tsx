@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Tabs } from 'antd';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import clearingAPI from '@apis/clearingAPI';
 import { t } from 'i18next';
 import { PrimaryButton, TurtleIcon, TurtleTabs } from '@components/element';
@@ -12,10 +12,12 @@ import SuccessTab from '../tabs/SuccessTab';
 import FailTab from '../tabs/FailTab';
 import useStore from '@hooks/useStore';
 
-import { useModal } from '@hooks/index';
+import { useModal, useUser } from '@hooks/index';
 import { theme } from '@styles/theme';
 import { css } from '@emotion/react';
 import { message } from '@utils/message';
+import userAPI from '@apis/userAPI';
+import PayMentModal from './PayMentModal';
 
 interface Props {
   visible: boolean;
@@ -26,7 +28,19 @@ function ExelModal({ visible, onClose }: Props) {
   const navigate = useNavigate();
   const { cart } = useExelClearingCart();
   const { store } = useStore();
+  const { user } = useUser();
   const [createModalVisible, createModalOpen, createModalClose] = useModal();
+  const [paymentModalVisible, paymentModalOpen, paymentModalClose] = useModal();
+
+  /**
+   * 유저의 구독여부 찾기
+   */
+  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
+    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  );
+
+  const isSubscribed =
+    getSubscriptionCheckQuery.data?.data.subscription_info.is_subscribed;
 
   const createMutation = useMutation(clearingAPI.createParse, {
     onSuccess: () => {
@@ -59,6 +73,10 @@ function ExelModal({ visible, onClose }: Props) {
 
   return (
     <>
+      <PayMentModal
+        visible={paymentModalVisible}
+        closeModal={paymentModalClose}
+      />
       {/*
        * 결제요청 모달
        */}
@@ -117,7 +135,7 @@ function ExelModal({ visible, onClose }: Props) {
           <PrimaryButton
             disabled={amount === 0}
             onClick={() => {
-              createModalOpen();
+              isSubscribed ? createModalOpen() : paymentModalOpen();
             }}
             icon={<TurtleIcon name="rightTriangle" />}
           >
