@@ -378,7 +378,7 @@ function UserTab() {
                     </div>
                   )}
                 </div>
-                {subscriptionData.is_subscribed && (
+                {currentSubscriptionStatus && (
                   <div css={css({ paddingTop: 10, color: theme.grey500 })}>
                     <span>{`${expirationDate}까지 서비스 이용이 가능합니다.`}</span>
                   </div>
