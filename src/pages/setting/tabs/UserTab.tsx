@@ -166,7 +166,7 @@ function UserTab() {
   //이메일 유효성 검사
   const emailValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('이메일을 입력해주세요.'));
+      return Promise.reject(new Error(t('please input email')));
     }
 
     if (!emailPattern.test(value)) {
