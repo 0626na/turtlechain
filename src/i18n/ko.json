@@ -377,6 +377,9 @@
     "5": "금"
   },
 
+  "address": "주소",
+  "account": "계좌",
+
   "biz role": "직책",
   "biz type": "사업자 종류",
   "biz entity": "법인 사업자",
@@ -427,7 +430,9 @@
   "totalOrderCountInConfirm": "총 발주수량: {{count}}개",
   "totalOrderPriceInComfirm": "총 발주금액: {{price}}원",
   "addSingleOrder": "발주 단건추가",
-  "mobile": "휴대전화 번호입력",
+
+  "mobile": "휴대전화 번호",
+
   "building": "상가",
   "floor": "층",
   "col and loc": "열-호",

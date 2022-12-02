@@ -17,6 +17,7 @@ import { useMutation, useQuery } from 'react-query';
 import notificationAPI from '@apis/notificationAPI';
 import { ReactComponent as BellIcon } from '@icons/bell.svg';
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 
 //TODO: 추후 notificationAPI로 이동 리팩토링 해야함
 interface Noti {
@@ -34,6 +35,12 @@ interface Noti {
     memo: string;
   };
 }
+
+const type = {
+  name: '거래처명',
+  address: '주소',
+  account: '계좌',
+};
 
 function Notification() {
   const navigate = useNavigate();
@@ -62,7 +69,9 @@ function Notification() {
 
     if (noti.type === 'internal_change') {
       result.title = `거래처 ${noti.content.vendor_name} 정보가 업데이트되었어요.`;
-      result.reason = `(${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
+      result.reason = `(${t(noti.content.component)} | ${
+        noti.content.before
+      } > ${noti.content.after})`;
     }
     if (noti.type === 'creation_request') {
       if (noti.content.status === 'reject') {
@@ -78,7 +87,9 @@ function Notification() {
         result.reason = `(반려사유 | ${noti.content.memo})`;
       } else {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. `;
-        result.reason = `(${noti.content.component} | ${noti.content.before} > ${noti.content.after})`;
+        result.reason = `(${t(noti.content.component)} | ${
+          noti.content.before
+        } > ${noti.content.after})`;
       }
     }
 
