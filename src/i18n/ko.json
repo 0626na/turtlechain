@@ -472,5 +472,13 @@
   "subscription cancel": "해지하기",
   "regular payment termination will be applied from the pay date of next month": "정기결제 해지는 다음 결제일 다음날부터 적용됩니다.",
   "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
-  "do you really want me to unsubscribe": "정말 구독을 해지할까요?"
+  "do you really want me to unsubscribe": "정말 구독을 해지할까요?",
+  "do you really want me to send a request": "정말 요청을 보낼까요?",
+  "after registration, you cant go back to where you were": "등록 후에는 이전으로 되돌릴 수 없어요",
+  "please check the payment information again": "결제 정보를 다시한번 확인해주세요",
+  "payment request date": "결제요청 일자",
+  "payment request amount": "결제요청 금액",
+  "vat include": "부가세 {{price}}원 포함",
+  "full payment": "전액결제",
+  "search for accounts": "거래처 검색"
 }
