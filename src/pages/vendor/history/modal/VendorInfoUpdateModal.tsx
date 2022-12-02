@@ -96,15 +96,10 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
       >
         <Form
           layout="horizontal"
-          onFinish={() => {}}
           form={form}
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
-          onValuesChange={(prev, cur) => {
-            console.log('prev', prev);
-            console.log('cur', cur);
-          }}
         >
           {/*  서버 전달용 데이터 */}
           <Form.Item name="rt_store_id" hidden>
