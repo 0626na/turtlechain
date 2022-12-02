@@ -100,7 +100,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
           label={t('store.name')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store')} />
+          <TurtleFormInput placeholder={t('please input store name')} />
         </Form.Item>
 
         <Form.Item
@@ -113,7 +113,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
             { required: true },
           ]}
         >
-          <TurtleFormInput placeholder={t('placeholder.mobile')} />
+          <TurtleFormInput placeholder={t('please input phone number')} />
         </Form.Item>
 
         <Form.Item
@@ -121,7 +121,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
           label={t('store.url')}
         >
-          <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
+          <TurtleFormInput placeholder={t('please input store url')} />
         </Form.Item>
 
         <Form.Item label={t('table.accountInfo')} required>

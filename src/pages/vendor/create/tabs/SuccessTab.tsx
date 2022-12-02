@@ -15,6 +15,8 @@ import useVendorCart from '@hooks/useVendorCart';
 import InputModal from '@components/combine/modal/InputModal';
 import useModal from '@hooks/useModal';
 import { TextWithTooltip } from '@components/combine';
+import { phoneMaskingPattern } from '@utils/pattern';
+import { phoneMasking } from '@utils/phone';
 
 interface Props {
   isLoading: boolean;
@@ -111,9 +113,7 @@ function SuccessTab({ isLoading }: Props) {
             width: 130,
             title: t('table.mobile'),
             render: (_, record) =>
-              record.ws_store_info[0]?.store_phone[0]?.phone
-                .replace(/[^0-9]/, '')
-                .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
+              phoneMasking(record.ws_store_info[0]?.store_phone[0]?.phone),
           },
           {
             ellipsis: true,
