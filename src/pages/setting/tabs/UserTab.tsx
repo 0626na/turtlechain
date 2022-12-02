@@ -170,7 +170,7 @@ function UserTab() {
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
+      return Promise.reject(new Error(t('this email is not valid')));
     }
 
     return Promise.resolve();
@@ -179,11 +179,11 @@ function UserTab() {
   //휴대전화 번호 유효성 검사
   const mobileValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('휴대전화 번호를 입력해주세요.'));
+      return Promise.reject(new Error(t('please input phone number')));
     }
 
     if (!phonePattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 형식 입니다.'));
+      return Promise.reject(new Error(t('invalid format')));
     }
 
     return Promise.resolve();
@@ -219,7 +219,10 @@ function UserTab() {
         id={companyID}
       />
 
-      <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
+      <UserCard
+        title={t('basic information')}
+        icon={<TurtleIcon name="user" />}
+      >
         <Form
           form={form}
           colon={false}
@@ -236,18 +239,18 @@ function UserTab() {
             });
           }}
         >
-          <Form.Item label="이름" name="name">
+          <Form.Item label={t('user name')} name="name">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label="아이디" name="login_id">
+          <Form.Item label={t('auth.id')} name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
-            label="이메일"
+            label={t('email')}
             name="email"
             rules={[{ validator: emailValidator }]}
           >
-            <TurtleFormInput placeholder="이메일을 입력해주세요" />
+            <TurtleFormInput placeholder={t('please')} />
           </Form.Item>
           <Form.Item
             label="휴대전화 번호"
