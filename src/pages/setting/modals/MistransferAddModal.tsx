@@ -147,7 +147,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
               readOnly
               onClick={openVendorModal}
               onSearch={openVendorModal}
-              placeholder={t('placeholder.vendorName')}
+              placeholder={t('please input vendor name')}
             />
           </Form.Item>
 
