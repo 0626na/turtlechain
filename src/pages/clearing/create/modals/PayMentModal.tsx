@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import paypleAPI from '@apis/paypleAPI';
 import { TertiaryButton, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
@@ -26,6 +26,7 @@ function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
 
   // payple, jquery script 태그 동적 불러온다.
@@ -67,6 +68,7 @@ function PayMentModal({ visible, closeModal }: Props) {
               queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
                 active: true,
               });
+              setButtonLoading(false);
               closeModal();
               message.success(
                 t('your subscription is complete. you can use the payment'),
@@ -104,7 +106,7 @@ function PayMentModal({ visible, closeModal }: Props) {
       css={modal.mask}
       style={{ display: visible ? 'block' : 'none' }}
       onClick={() => {
-        closeModal();
+        !buttonLoading ? closeModal() : null;
       }}
     >
       <div
@@ -136,6 +138,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.subscription')}
             size="large"
             onClick={() => {
@@ -143,9 +146,11 @@ function PayMentModal({ visible, closeModal }: Props) {
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
               });
+              setButtonLoading(true);
             }}
           />
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.testNotificationKakaoTalk')}
             size="large"
             onClick={() => {
