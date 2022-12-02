@@ -106,7 +106,7 @@ function PayMentModal({ visible, closeModal }: Props) {
       css={modal.mask}
       style={{ display: visible ? 'block' : 'none' }}
       onClick={() => {
-        !buttonLoading && closeModal();
+        closeModal();
       }}
     >
       <div
@@ -121,7 +121,7 @@ function PayMentModal({ visible, closeModal }: Props) {
             <TurtleIcon
               name="modalClose"
               onClick={() => {
-                closeModal();
+                !buttonLoading && closeModal();
               }}
             />
           </div>
