@@ -39,11 +39,11 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('계좌번호를 입력해주세요'));
+      return Promise.reject(new Error(t('please input account number')));
     }
 
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('please input number only')));
     }
 
     return Promise.resolve();
@@ -51,7 +51,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleNumberValidation = (_: unknown, value: string) => {
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('please input number only')));
     }
 
     return Promise.resolve();
@@ -100,7 +100,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
           label={t('store.name')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store')} />
+          <TurtleFormInput placeholder={t('please input store name')} />
         </Form.Item>
 
         <Form.Item
@@ -113,7 +113,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
             { required: true },
           ]}
         >
-          <TurtleFormInput placeholder={t('placeholder.mobile')} />
+          <TurtleFormInput placeholder={t('please input phone number')} />
         </Form.Item>
 
         <Form.Item
@@ -121,7 +121,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
           label={t('store.url')}
         >
-          <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
+          <TurtleFormInput placeholder={t('please input store url')} />
         </Form.Item>
 
         <Form.Item label={t('table.accountInfo')} required>
@@ -132,7 +132,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
               noStyle
             >
               <TurtleFormSelect
-                placeholder="은행"
+                placeholder={t('bank')}
                 items={
                   Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,
@@ -154,14 +154,16 @@ function StoreCreateModal({ visible, closeModal }: Props) {
               ]}
               noStyle
             >
-              <TurtleFormInput placeholder="계좌번호" />
+              <TurtleFormInput placeholder={t('accountNumber')} />
             </Form.Item>
             <Form.Item
               name={['store_account', 'account_holder']}
               noStyle
-              rules={[{ required: true, message: '예금주명을 입력해주세요' }]}
+              rules={[
+                { required: true, message: t('please input account holder') },
+              ]}
             >
-              <TurtleFormInput placeholder="예금주명" />
+              <TurtleFormInput placeholder={t('accountHolderName')} />
             </Form.Item>
           </div>
         </Form.Item>

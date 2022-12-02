@@ -124,7 +124,10 @@ function CompanyTab() {
           form.setFieldsValue({ ...form.getFieldsValue, address_main });
         }}
       />
-      <Card title="사업자 정보" icon={<TurtleIcon name="company" />}>
+      <Card
+        title={t('business information')}
+        icon={<TurtleIcon name="company" />}
+      >
         <Form
           form={form}
           onValuesChange={() => {
@@ -152,7 +155,7 @@ function CompanyTab() {
             <TurtleFormInput hidden />
           </Form.Item>
 
-          <Form.Item label="사업자 종류" name="biz_type">
+          <Form.Item label={t('biz type')} name="biz_type">
             <Radio.Group>
               {['entity', 'personal', 'simple'].map((option) => (
                 <Radio key={option} value={option}>
@@ -163,7 +166,7 @@ function CompanyTab() {
           </Form.Item>
 
           <Form.Item
-            label="사업자명(법인명)"
+            label={t('biz name')}
             required={false}
             rules={[{ required: true }]}
             name="name"
@@ -171,21 +174,21 @@ function CompanyTab() {
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label="사업자번호" name="biz_num">
+          <Form.Item label={t('biz_num')} name="biz_num">
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Form.Item label="사업장주소" name="address_main">
+          <Form.Item label={t('biz address')} name="address_main">
             <TurtleFormInput onClick={() => setPostcodeModalVisible(true)} />
           </Form.Item>
 
-          <Form.Item label="사업장 상세주소" name="address_sub">
+          <Form.Item label={t('biz detail address')} name="address_sub">
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
             name="biz_license_file"
-            label="사업자등록증"
+            label={t('biz license')}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             required={false}
@@ -197,15 +200,15 @@ function CompanyTab() {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>사진 첨부하기</AddButton>
+              <AddButton>{t('attaching pictures')}</AddButton>
             </Upload>
           </Form.Item>
 
-          <Form.Item label="세금계산서 발행메일" name="email">
+          <Form.Item label={t('tax invoice issue mail')} name="email">
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label="메모" name="memo">
+          <Form.Item label={t('memo')} name="memo">
             <TurtleFormInput />
           </Form.Item>
 
@@ -220,7 +223,7 @@ function CompanyTab() {
               <Col>
                 <AnswerButton
                   type="NO"
-                  text="취소 "
+                  text={t('cancel')}
                   onClick={() => {
                     // 취소를 누르면 최초 값으로 초기화.
                     resetStates(getCompanyQuery.data as Company);
@@ -232,7 +235,7 @@ function CompanyTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text="저장"
+                  text={t('save')}
                   htmlType="submit"
                   loading={updateMutation.isLoading}
                 />
