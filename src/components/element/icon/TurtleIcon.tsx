@@ -53,6 +53,7 @@ import { ReactComponent as MarkIcon } from '@icons/mark.svg';
 import { ReactComponent as AlertSuccessIcon } from '@icons/alertSuccess.svg';
 import { ReactComponent as AlertFailIcon } from '@icons/alertFail.svg';
 import { ReactComponent as AlertWarnIcon } from '@icons/alertWarn.svg';
+import { ReactComponent as AlertWarnRedIcon } from '@icons/alertWarningRed.svg';
 import { ReactComponent as ExclamationMarkIcon } from '@icons/exclamationMark.svg';
 import { ReactComponent as AlertBarArrowRightIcon } from '@icons/alertBarArrowRight.svg';
 import { ReactComponent as TuningIcon } from '@icons/tuning.svg';
@@ -62,6 +63,8 @@ import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
+import { ReactComponent as CreditCard } from '@icons/creditCard.svg';
+import { ReactComponent as Thunder } from '@icons/thunder.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -122,7 +125,10 @@ interface Props {
     | 'tuning'
     | 'accordionUp'
     | 'accordionDown'
-    | 'mistransfer';
+    | 'mistransfer'
+    | 'alertWarningRed'
+    | 'creditCard'
+    | 'thunder';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -521,6 +527,26 @@ function TurtleIcon({ name, onClick, danger }: Props) {
         <AccordionDown />
       </div>
     );
+  }
+
+  if (name === 'creditCard') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <CreditCard />
+      </div>
+    );
+  }
+
+  if (name === 'alertWarningRed') {
+    return (
+      <div css={[iconContainer]} onClick={handleClick}>
+        <AlertWarnRedIcon />
+      </div>
+    );
+  }
+
+  if (name === 'thunder') {
+    return <Thunder />;
   }
 
   return <></>;

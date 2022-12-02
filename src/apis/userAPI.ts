@@ -252,6 +252,48 @@ const resetPassword = async function (data: RequestResetPassword) {
   return response.data.data;
 };
 
+/**
+ * 유저의 구독 유무 확인
+ */
+
+export interface RequestGetSubscriptionCheck {
+  company_id: number;
+}
+
+export interface ResponseGetSubscriptionCheck {
+  msg: string;
+  data: {
+    is_expired: boolean;
+    is_new: boolean;
+    service_cost: number;
+    subscription_info: SubscriptionInfo;
+  };
+}
+
+export interface SubscriptionInfo {
+  id: number;
+  is_subscribed: boolean;
+  company_id: number;
+  pay_type: string;
+  payer_id: string;
+  pay_name: string;
+  pay_number: string;
+  start_date: string;
+  end_date: string;
+}
+
+/**
+ * 유저의 구독여부 확인
+ */
+const getSubscriptionCheck = async (params: RequestGetSubscriptionCheck) => {
+  const url = `/subscriptions/${params.company_id}`;
+  const response = await v2Axios.get<ResponseGetSubscriptionCheck>(url, {
+    params,
+  });
+
+  return response.data;
+};
+
 const userAPI = {
   dupCheck,
   createRegistration,
@@ -260,6 +302,7 @@ const userAPI = {
   resetPassword,
   getRegistration,
   updateRegistration,
+  getSubscriptionCheck,
 };
 
 export default userAPI;

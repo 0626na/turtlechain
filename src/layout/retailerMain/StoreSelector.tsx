@@ -61,7 +61,7 @@ function StoreSelector() {
               css={menu}
               selectable
               onSelect={({ key }) => {
-                selectStore(Number(key), t('message.warningChangeStore'));
+                selectStore(Number(key));
               }}
               items={store.list.map((store, idx) => ({
                 style: menuItemCss.self,

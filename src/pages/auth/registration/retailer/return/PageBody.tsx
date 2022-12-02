@@ -21,6 +21,7 @@ function Pagebody() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
 
+  const [, setSearchParams] = useSearchParams();
   const agreementOptions = [
     'service_use',
     'personal_information',
@@ -90,6 +91,10 @@ function Pagebody() {
   const updateRegistrationMutation = useMutation(userAPI.updateRegistration, {
     onSuccess: () => {
       setCurrentStep((currentStep) => currentStep + 1);
+      setSearchParams({
+        step: 'completed',
+        user_name: form.getFieldValue('user_name'),
+      });
     },
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
