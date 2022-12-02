@@ -6,9 +6,11 @@ import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import { useEffect } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
+import useClearingCart from '@hooks/useClearingCart';
+import userAPI from '@apis/userAPI';
 
 interface Props {
   visible: boolean;
@@ -16,13 +18,23 @@ interface Props {
 }
 
 /**
+<<<<<<<< HEAD:src/pages/setting/modals/PayPleModal.tsx
  * 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
+function PaypleModal({ visible, closeModal }: Props) {
+========
+ * 구독 결제 모달창(payple)
+ *
+ * https://developer.payple.kr/integration/recurring-payment
+ */
 function PayMentModal({ visible, closeModal }: Props) {
+>>>>>>>> 5d7bf6f56a14af231035db60d559cee3dd962aed:src/pages/clearing/create/modals/PayMentModal.tsx
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useUser();
+  const { cart, clearingPaymentTotal } = useClearingCart();
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -40,29 +52,31 @@ function PayMentModal({ visible, closeModal }: Props) {
   const authenticateMutation = useMutation(paypleAPI.authenticate, {
     onSuccess: (data) => {
       const requestData = {
-        PCD_PAY_TYPE: data.PCD_PAY_TYPE,
-        PCD_PAY_WORK: data.PCD_PAY_WORK,
+        PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
+        PCD_PAY_WORK: data.data.PCD_PAY_WORK,
         PCD_CARD_VER: '01',
-        PCD_PAYER_NO: data.PCD_PAYER_NO,
-        PCD_PAYER_NAME: data.PCD_PAYER_NAME,
+        PCD_PAYER_NO: data.data.PCD_PAYER_NO,
+        PCD_PAYER_NAME: data.data.PCD_PAYER_NAME,
 
-        PCD_PAY_GOODS: data.PCD_PAY_GOODS,
-        PCD_PAY_TOTAL: data.PCD_PAY_TOTAL,
-        PCD_PAY_ISTAX: data.PCD_PAY_ISTAX,
+        PCD_PAY_GOODS: data.data.PCD_PAY_GOODS,
+        PCD_PAY_TOTAL: data.data.PCD_PAY_TOTAL,
+        PCD_PAY_ISTAX: data.data.PCD_PAY_ISTAX,
 
-        PCD_PAY_URL: data.return_url,
-        PCD_AUTH_KEY: data.AuthKey,
+        PCD_PAY_URL: data.data.return_url,
+        PCD_AUTH_KEY: data.data.AuthKey,
 
-        PCD_RST_URL: `/setting/user`,
+        PCD_RST_URL: `/clearing/create`,
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
-          // 성공, 실패 상관없이 결과 msg alert
-          if (res.PCD_PAY_MSG === t('quit a payment')) return; // 취소 alert 안띄우기
-          alert(res.PCD_PAY_MSG);
-
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
+            setTimeout(() => {
+              queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+                active: true,
+              });
+            }, 2000);
+
             navigate('/clearing/create');
             message.success(
               t('your subscription is complete. you can use the payment'),
@@ -76,6 +90,13 @@ function PayMentModal({ visible, closeModal }: Props) {
       // payple 내장 함수 호출 (결제 요청)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).PaypleCpayAuthCheck(requestData);
+    },
+  });
+
+  const testAlimtalkMutation = useMutation(paypleAPI.updateTestalimTalk, {
+    onSuccess: () => {
+      message.success('테스트 알림톡이 발송되었습니다.');
+      closeModal();
     },
   });
 
@@ -114,24 +135,33 @@ function PayMentModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>{t('this feature is only available as a paid plan')}</p>
-          <p>{t('please subscribe to the paid plan and use the service')}</p>
+          <p>{t('payment feature is only available as a paid plan')}</p>
+          <p>
+            {t(
+              'If you subscribe to the service, you can pay for all the client products at once',
+            )}
+          </p>
         </div>
 
         <div css={modal.buttonContainer}>
-          <TertiaryButton
-            text={t('button.testNotificationKakaoTalk')}
-            size="large"
-            onClick={() => {}}
-          />
-
           <TertiaryButton
             text={t('button.subscription')}
             size="large"
             onClick={() => {
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
-                pay_type: 'single',
+                request_type: 'PAY',
+              });
+            }}
+          />
+          <TertiaryButton
+            text={t('button.testNotificationKakaoTalk')}
+            size="large"
+            onClick={() => {
+              testAlimtalkMutation.mutate({
+                request_date: cart.clearingRequestDate,
+                clearing_amount:
+                  Math.round((clearingPaymentTotal * 1.1) / 10) * 10,
               });
             }}
           />
@@ -149,7 +179,7 @@ const modal = {
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 2,
+    zIndex: 10,
     background: 'rgba(0, 0, 0, 0.45)',
   }),
 

@@ -12,14 +12,19 @@ import UserStep from './step/UserStep';
 import { css } from '@emotion/react';
 
 import Completed from '../Completed';
+import { useSearchParams } from 'react-router-dom';
 
 function Pagebody() {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
-
+  const [, setSearchParams] = useSearchParams();
   // 가입 신청
   const registrationMutation = useMutation(userAPI.createRegistration, {
     onSuccess: () => {
+      setSearchParams({
+        step: 'completed',
+        user_name: form.getFieldValue('user_name'),
+      });
       setCurrentStep((currentStep) => currentStep + 1);
     },
     onError: (error: AxiosError) => {

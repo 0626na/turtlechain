@@ -15,16 +15,21 @@ import { PhoneAuthForm } from '@components/combine';
 import AgreementCheckbox from '../AgreementCheckbox';
 import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 import Completed from '../Completed';
+import { useSearchParams } from 'react-router-dom';
 
 function Pagebody() {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [checkDuplicated, setCheckDuplicated] = useState(false);
-
+  const [, setSearchParams] = useSearchParams();
   // 가입 신청
   const registrationMutation = useMutation(userAPI.createRegistration, {
     onSuccess: () => {
       setCurrentStep((currentStep) => currentStep + 1);
+      setSearchParams({
+        step: 'completed',
+        user_name: form.getFieldValue('user_name'),
+      });
     },
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);

@@ -45,6 +45,7 @@ interface Props extends CollapsePanelProps {
 
 function ClearingPanel({ activeKey, ...props }: Props) {
   const navigate = useNavigate();
+  const [isSubscription, setIsSubscription] = useState(false);
   const { store } = useStore();
   const { user } = useUser();
   const {
@@ -66,8 +67,13 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   /**
    * 유저의 구독여부 찾기
    */
-  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    {
+      onSuccess: (data) => setIsSubscription(data.data.is_expired),
+    },
   );
 
   // 정산서 생성 및 정산 상품추가
@@ -135,6 +141,11 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         visible={detailModalVisible}
         onClose={detailModalClose}
         selectedRow={selectedRow as ClearingInfo}
+      />
+
+      <PayMentModal
+        visible={paymentModalVisible}
+        closeModal={paymentModalClose}
       />
 
       {/*

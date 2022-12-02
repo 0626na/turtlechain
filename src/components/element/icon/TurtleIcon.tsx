@@ -63,7 +63,8 @@ import { ReactComponent as Mistransfer } from '@icons/mistransfer.svg';
 import { ReactComponent as SelectIcon } from '@icons/selectIcon.svg';
 import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
-import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
+import { ReactComponent as CreditCard } from '@icons/creditCard.svg';
+import { ReactComponent as Thunder } from '@icons/thunder.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -125,7 +126,9 @@ interface Props {
     | 'accordionUp'
     | 'accordionDown'
     | 'mistransfer'
-    | 'creditCard';
+    | 'alertWarningRed'
+    | 'creditCard'
+    | 'thunder';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -540,6 +543,10 @@ function TurtleIcon({ name, onClick, danger }: Props) {
         <AlertWarnRedIcon />
       </div>
     );
+  }
+
+  if (name === 'thunder') {
+    return <Thunder />;
   }
 
   return <></>;

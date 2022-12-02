@@ -4,16 +4,16 @@ import { useRecoilState } from 'recoil';
 import authAPI from '@apis/authAPI';
 import TagManager from 'react-gtm-module';
 
+const setGtmUser = (userId: number) => {
+  TagManager.dataLayer({
+    dataLayer: {
+      userId,
+    },
+  });
+};
+
 function useUser() {
   const [user, setUser] = useRecoilState(userState);
-
-  const setGtmUser = (userId: number) => {
-    TagManager.dataLayer({
-      dataLayer: {
-        userId,
-      },
-    });
-  };
 
   const reloadUser = useCallback(async () => {
     const { user_info } = await authAPI.verify();

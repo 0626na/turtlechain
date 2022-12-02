@@ -4,13 +4,22 @@ import { storeState } from '@store/storeState';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import { message } from '@utils/message';
 import { useCallback, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import TagManager from 'react-gtm-module';
 
 const isOpen = (store: StoreShow) => !store.is_closed;
 const STORE_TOKEN = 'TC_SELECTED_STORE_ID';
 
 function useStore() {
   const [store, setStore] = useRecoilState(storeState);
+
+  const setGtmStore = (id: number, name: string) => {
+    TagManager.dataLayer({
+      dataLayer: {
+        storeId: id,
+        storeName: name,
+      },
+    });
+  };
 
   const fillStoreList = useCallback((storeList: StoreShow[]) => {
     const openedStoreList = storeList
@@ -26,17 +35,15 @@ function useStore() {
 
       const selectedStoreId = localStorage.getItem(STORE_TOKEN);
 
-      // localStorage에 존재하지 않으면 첫번째 return
-      if (!selectedStoreId) {
-        return openedStoreList[0];
-      }
-
       // localStorage에 존재하면 찾아본다.
       // 있으면 해당 store return, 없으면 첫번째 store return
-      return (
+      const selectedStore =
         openedStoreList.find((store) => store.id === Number(selectedStoreId)) ??
-        openedStoreList[0]
-      );
+        openedStoreList[0];
+
+      setGtmStore(selectedStore.id, selectedStore.name);
+
+      return selectedStore;
     };
 
     setStore({
@@ -46,16 +53,21 @@ function useStore() {
   }, []);
 
   const selectStore = useCallback(
-    (id: number, warningMessage?: string) => {
+    (id: number) => {
       // 이미 선택된 쇼핑몰이 있으면 confirm 받고 false 시 return;
-      if (store.selected && warningMessage && !window.confirm(warningMessage)) {
+      if (store.selected && !confirm(t('message.warningChangeStore'))) {
         return;
       }
 
       localStorage.setItem(STORE_TOKEN, String(id));
+
+      const selected = store.list.find((item) => item.id === id) as StoreShow;
+
+      setGtmStore(selected.id, selected.name);
+
       setStore((store) => ({
         ...store,
-        selected: store.list.find((item) => item.id === id),
+        selected,
       }));
     },
     [store],
