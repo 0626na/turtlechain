@@ -95,7 +95,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape' && !buttonLoading) closeModal();
     };
     window.addEventListener('keydown', escKeyModalClose);
     return () => window.removeEventListener('keydown', escKeyModalClose);
@@ -106,7 +106,7 @@ function PayMentModal({ visible, closeModal }: Props) {
       css={modal.mask}
       style={{ display: visible ? 'block' : 'none' }}
       onClick={() => {
-        !buttonLoading ? closeModal() : null;
+        !buttonLoading && closeModal();
       }}
     >
       <div
