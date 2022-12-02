@@ -15,7 +15,7 @@ import MistransferTab from './tabs/MistransferTab';
 import useUser from '@hooks/useUser';
 
 function PageBody() {
-  const { user } = useUser();
+  const { user, isStaff } = useUser();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function PageBody() {
             </div>
           </Tabs.TabPane>
 
-          {user?.type === 'st' ? null : (
+          {isStaff ? null : (
             <>
               <Tabs.TabPane key="user" tab="계정관리">
                 <div css={greyContainer}>
