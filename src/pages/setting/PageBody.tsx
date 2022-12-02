@@ -15,7 +15,7 @@ import MistransferTab from './tabs/MistransferTab';
 import useUser from '@hooks/useUser';
 
 function PageBody() {
-  const { user, isStaff } = useUser();
+  const { isStaff } = useUser();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
