@@ -17,20 +17,11 @@ interface Props {
   closeModal: () => void;
 }
 
-/**
-<<<<<<<< HEAD:src/pages/setting/modals/PayPleModal.tsx
- * 결제 모달창(payple)
- *
- * https://developer.payple.kr/integration/recurring-payment
- */
-function PaypleModal({ visible, closeModal }: Props) {
-========
- * 구독 결제 모달창(payple)
+/* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
 function PayMentModal({ visible, closeModal }: Props) {
->>>>>>>> 5d7bf6f56a14af231035db60d559cee3dd962aed:src/pages/clearing/create/modals/PayMentModal.tsx
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = useUser();
