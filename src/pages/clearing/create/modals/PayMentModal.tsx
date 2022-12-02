@@ -67,14 +67,13 @@ function PayMentModal({ visible, closeModal }: Props) {
               queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
                 active: true,
               });
+              closeModal();
+              message.success(
+                t('your subscription is complete. you can use the payment'),
+                3,
+              );
             }, 2000);
-
             navigate('/clearing/create');
-            message.success(
-              t('your subscription is complete. you can use the payment'),
-              3,
-            );
-            closeModal();
           }
         },
       };
