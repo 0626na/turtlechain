@@ -23,6 +23,7 @@ import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
+import { phoneMasking } from '@utils/phone';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -50,10 +51,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     form.setFieldsValue({
       ws_store_id: selectedRow?.ws_store_info.id,
       rt_store_id: store.selected?.id as number,
-
       name: selectedRow?.vendor_name,
       tel: selectedRow?.ws_store_info.phone,
-      mobile: selectedRow?.vendor_phone.phone,
+      mobile: phoneMasking(selectedRow?.vendor_phone.phone),
       building: selectedRow?.ws_store_info.building,
       floor: selectedRow?.ws_store_info.floor,
       col: selectedRow?.ws_store_info.col,
@@ -96,10 +96,15 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
       >
         <Form
           layout="horizontal"
+          onFinish={() => {}}
           form={form}
           colon={false}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
+          onValuesChange={(prev, cur) => {
+            console.log('prev', prev);
+            console.log('cur', cur);
+          }}
         >
           {/*  서버 전달용 데이터 */}
           <Form.Item name="rt_store_id" hidden>
@@ -286,6 +291,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
                     ' ',
                   );
+
                   createVendorMutation.mutate({
                     ...form.getFieldsValue(),
                     type: 'update',
