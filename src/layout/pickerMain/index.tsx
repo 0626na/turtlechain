@@ -15,7 +15,7 @@ function MainLayout() {
     return <Navigate to="/" replace={true} />;
   }
 
-  if (user?.type === 'rt' || user?.type === 'staff') {
+  if (user?.type === 'rt' || user?.type === 'st') {
     return <Navigate to="/home" replace={true} />;
   }
 

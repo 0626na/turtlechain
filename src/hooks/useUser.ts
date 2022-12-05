@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { userState } from './../store/userState';
 import { useRecoilState } from 'recoil';
-import authAPI from '@apis/authAPI';
+import authAPI, { UserInfo } from '@apis/authAPI';
 import TagManager from 'react-gtm-module';
 
 const setGtmUser = (userId: number) => {
@@ -32,10 +32,13 @@ function useUser() {
     setUser(null);
   }, []);
 
+  const isStaff = user?.type === 'st';
+
   return {
     user,
     loadUser,
     resetUser,
+    isStaff,
   };
 }
 
