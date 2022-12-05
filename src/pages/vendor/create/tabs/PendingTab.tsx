@@ -12,6 +12,8 @@ import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
 import { TextWithTooltip } from '@components/combine';
 import { theme } from '@styles/theme';
+import { phoneMaskingPattern } from '@utils/pattern';
+import { phoneMasking } from '@utils/phone';
 
 interface Props {
   isLoading: boolean;
@@ -220,9 +222,9 @@ function PendingTab({ isLoading }: Props) {
             ellipsis: true,
             title: t('table.mobile'),
             render: (_, record) =>
-              record.selectedWsStoreInfo?.store_phone[0]?.phone
-                .replace(/[^0-9]/, '')
-                .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
+              phoneMasking(
+                record.selectedWsStoreInfo?.store_phone[0]?.phone ?? '',
+              ),
           },
 
           {

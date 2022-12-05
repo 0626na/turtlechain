@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import paypleAPI from '@apis/paypleAPI';
 import { TertiaryButton, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
@@ -25,6 +25,7 @@ function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
 
   // payple, jquery script 태그 동적 불러온다.
@@ -66,14 +67,14 @@ function PayMentModal({ visible, closeModal }: Props) {
               queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
                 active: true,
               });
+              setButtonLoading(false);
+              closeModal();
+              message.success(
+                t('your subscription is complete. you can use the payment'),
+                3,
+              );
             }, 2000);
-
             navigate('/clearing/create');
-            message.success(
-              t('your subscription is complete. you can use the payment'),
-              3,
-            );
-            closeModal();
           }
         },
       };
@@ -93,7 +94,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape' && !buttonLoading) closeModal();
     };
     window.addEventListener('keydown', escKeyModalClose);
     return () => window.removeEventListener('keydown', escKeyModalClose);
@@ -119,7 +120,7 @@ function PayMentModal({ visible, closeModal }: Props) {
             <TurtleIcon
               name="modalClose"
               onClick={() => {
-                closeModal();
+                !buttonLoading && closeModal();
               }}
             />
           </div>
@@ -136,6 +137,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.subscription')}
             size="large"
             onClick={() => {
@@ -143,9 +145,11 @@ function PayMentModal({ visible, closeModal }: Props) {
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
               });
+              setButtonLoading(true);
             }}
           />
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.testNotificationKakaoTalk')}
             size="large"
             onClick={() => {

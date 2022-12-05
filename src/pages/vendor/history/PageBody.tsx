@@ -20,7 +20,8 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
-import { phonePattern } from '@utils/pattern';
+import { phoneMaskingPattern, phonePattern } from '@utils/pattern';
+import { phoneMasking } from '@utils/phone';
 
 function PageBody() {
   const [vendorList, setVendorList] = useState<Vendor[]>();
@@ -244,8 +245,7 @@ function PageBody() {
               ellipsis: true,
               width: 150,
               title: t('table.mobile'),
-              render: (_, record) =>
-                record.vendor_phone.phone.replace(phonePattern, `$1-$2-$3`),
+              render: (_, record) => phoneMasking(record.vendor_phone.phone),
             },
             {
               ellipsis: true,
