@@ -122,6 +122,7 @@
     "ezadmin": "이지어드민",
     "turtlechain": "터틀체인",
     "none": "없음",
+    "not used": "사용안함",
     "etc": "기타"
   },
 
@@ -278,7 +279,9 @@
     "orderDate": "발주일자",
     "totalPrice": "금액 합계",
     "subscription": "구독하기",
-    "testNotificationKakaoTalk": "테스트 알림톡 받아보기"
+    "re-subscription": "재구독하기",
+    "testNotificationKakaoTalk": "테스트 알림톡 받아보기",
+    "payment method change": "결제수단 변경"
   },
 
   "message": {
@@ -313,7 +316,11 @@
     "complete create order": "발주서 등록이 완료되었습니다.",
     "new store": "신규쇼핑몰입니다. 값을 입력해주세요.",
     "add it": "정말 추가하시겠습니까?",
-    "add": "추가하기"
+    "add": "추가하기",
+    "the service is available until expirationDate": "{{expirationDate}}까지 서비스 이용이 가능합니다",
+    "nextPaymentDate": "다음 결제일은 {{nextPaymentDate}} 입니다.",
+    "please input account number": "계좌번호를 입력해주세요",
+    "please input number only": "숫자만 입력해주세요"
   },
 
   "placeholder": {
@@ -349,6 +356,7 @@
   },
 
   "mistransfer": {
+    "": "오입금 환불",
     "list": "오입금 환불내역",
     "create": "오입금 환불요청",
     "status": {
@@ -379,6 +387,8 @@
 
   "biz role": "직책",
   "biz type": "사업자 종류",
+  "biz info": "사업자 정보",
+  "biz management": "사업자 관리",
   "biz entity": "법인 사업자",
   "biz personal": "개인 사업자",
   "biz simple": "간이 사업자",
@@ -387,6 +397,8 @@
   "biz address": "사업장 주소",
   "biz detail address": "사업장 상세주소",
   "biz license": "사업자등록증",
+  "attachPicture": "사진 첨부하기",
+  "vat issued mail": "세금계산서 발행메일",
   "go login": "로그인 하기",
   "next": "다음",
   "registration": "가입하기",
@@ -398,16 +410,23 @@
   "confirm new password": "새 비밀번호 확인",
   "email": "이메일",
   "user name": "이름",
+  "default information": "기본정보",
   "accountNumber": "계좌번호",
   "accountHolder": "예금주",
+  "accountHolderName": "예금주명",
+  "supplyPriceOnly": "공급가만",
   "listView": "리스트로 보기",
   "cardView": "카드뷰로 보기",
   "login": "로그인",
   "reset password": "비밀번호 재설정",
+  "subscription and payment": "구독 및 결제",
+  "paid plan subscription": "유료플랜 구독",
+  "supplyPrice + vat price": "공급가 + 부가세 합산금액",
   "yes": "네",
   "no": "아니요",
   "cancel": "취소",
   "request": "요청",
+  "requestCancel": "요청취소",
   "picker": "사입자",
   "the first order": "1차발주",
   "the second order": "2차발주",
@@ -430,7 +449,9 @@
   "mobile": "휴대전화 번호입력",
   "building": "상가",
   "floor": "층",
+  "bank": "은행",
   "col and loc": "열-호",
+  "accountManagement": "계정관리",
   "vendorname modify": "거래처명 수정",
   "request info modify": "정보수정 요청",
   "store search results": "쇼핑몰 검색결과",
@@ -446,6 +467,8 @@
   "count except one": "{{name}} 외 {{count}}개",
   "change to success": "성공으로 변환",
   "order dont create today": "2차 발주까지 완료된 쇼핑몰은 발주서 등록이 금일은 불가능합니다.",
+  "this email is not valid": "유효하지 않은 이메일 입니다.",
+  "this format is not valid": "유효하지 않은 형식 입니다.",
   "order can create this list": "위 쇼핑몰을 제외한 나머지 발주서만 등록합니다.",
   "please check to create file name is store name": "* 파일명의 쇼핑몰이 등록되었는지 확인해주세요",
   "please check essential header name": "* 필수헤더명을 다시 확인해주세요",
@@ -462,6 +485,9 @@
   "please input option": "옵션을 입력해주세요",
   "please input type": "분류를 선택헤주세요",
   "please input store url": "쇼핑몰 url을 입력해주세요.",
+  "please input your email": "이메일을 입력해주세요",
+  "please select inventory": "재고관리 프로그램을 선택하세요",
+  "inventory link key": "재고프로그램 연동키",
   "quit a payment": "결제를 종료하였습니다.",
   "subscription paid plan": "유료플랜 구독",
   "payment feature is only available as a paid plan": "결제요청 기능은 유료플랜으로만 제공됩니다.",
@@ -471,5 +497,8 @@
   "subscription cancel": "해지하기",
   "regular payment termination will be applied from the pay date of next month": "정기결제 해지는 다음 결제일 다음날부터 적용됩니다.",
   "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
-  "do you really want me to unsubscribe": "정말 구독을 해지할까요?"
+  "do you really want me to unsubscribe": "정말 구독을 해지할까요?",
+  "unsubscription complete": "해지완료",
+  "the first months fee is 100won": "첫달 이용료 100원",
+  "creditInfo": "신용카드 {{cardName}} {{cardNumber}}"
 }

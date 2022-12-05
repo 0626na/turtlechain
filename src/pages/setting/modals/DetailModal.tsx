@@ -46,11 +46,11 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
   const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('계좌번호를 입력해주세요'));
+      return Promise.reject(new Error(t('please input account number')));
     }
 
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('please input number only')));
     }
 
     return Promise.resolve();
@@ -146,8 +146,8 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
         >
           <Radio.Group>
-            <Radio value={false}>운영</Radio>
-            <Radio value={true}>폐점</Radio>
+            <Radio value={false}>{t('table.open')}</Radio>
+            <Radio value={true}>{t('table.closed')}</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -179,7 +179,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           <div css={flexGap}>
             <Form.Item name="bank" rules={[{ required: true }]} noStyle>
               <TurtleFormSelect
-                placeholder="은행"
+                placeholder={t('bank')}
                 items={
                   Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,
@@ -201,14 +201,14 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
               ]}
               noStyle
             >
-              <TurtleFormInput placeholder="계좌번호" />
+              <TurtleFormInput placeholder={t('accountNumber')} />
             </Form.Item>
             <Form.Item
               name="account_holder"
               noStyle
               rules={[{ required: true }]}
             >
-              <TurtleFormInput placeholder="예금주명" />
+              <TurtleFormInput placeholder={t('accountNumberName')} />
             </Form.Item>
           </div>
         </Form.Item>
@@ -221,33 +221,33 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         >
           <Radio.Group>
             <Radio disabled value={false}>
-              공급가만
+              {t('supplyPriceOnly')}
             </Radio>
             <Radio disabled value={true}>
-              공급가 + 부가세 합산금액
+              {t('supplyPrice + vat price')}
             </Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item //
           name="inventory_type"
-          label="재고관리 프로그램"
+          label={t('table.inventory')}
           rules={[{ required: true }]}
         >
           <TurtleFormSelect
             disabled
-            placeholder="재고관리 프로그램을 선택하세요."
+            placeholder={t('please select inventory')}
             items={[
-              { value: 'sellmate', name: '셀메이트' },
-              { value: 'ezadmin', name: '이지어드민' },
-              { value: 'turtlechain', name: '터틀체인' },
-              { value: 'etc', name: '기타' },
-              { value: 'none', name: '사용안함' },
+              { value: 'sellmate', name: t('inventory.sellmate') },
+              { value: 'ezadmin', name: t('inventory.ezadmin') },
+              { value: 'turtlechain', name: t('inventory.turtlechain') },
+              { value: 'etc', name: t('inventory.etc') },
+              { value: 'none', name: t('inventory.not used') },
             ]}
           />
         </Form.Item>
 
-        <Form.Item label="재고프로그램 연동키">
+        <Form.Item label={t('inventory link key')}>
           <Row gutter={[4, 0]}>
             <Col span={11}>
               <Form.Item name="inventory_domain" noStyle label="도메인">
