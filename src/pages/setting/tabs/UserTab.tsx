@@ -1,30 +1,58 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
+import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
 import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
-
 import useUser from '@hooks/useUser';
 import { theme } from '@styles/theme';
+import { message } from '@utils/message';
 import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
-import { Button, Col, Form, message, Row } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserCard from '../cards/UserCard';
-import PaypleModal from '../modals/PayPleModal';
+import RemoveSubscriptionModal from '../modals/RemoveSubscriptionModal';
+import { RequestConnectInventory } from '@apis/productAPI';
+import { SubscriptionInfo } from '@apis/userAPI';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
+  const [
+    removeSubscriptionModalvisible,
+    removeSubscriptionModalOpen,
+    removeSubscriptionModalClose,
+  ] = useModal();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { user } = useUser();
   const [form] = useForm();
 
+  /**
+   * 구독하는 쇼핑몰 사업자 ID
+   */
+  const companyID = Number(user?.company_id);
   const [buttonsVisible, setButtonsVisible] = useState(false);
-  const [paypleModalVisible, paypleModalOpen, paypleModalClose] = useModal();
+  const [isNewSubscription, setIsNewSubscription] = useState<boolean>();
+  const [serviceCost, setServiceCost] = useState(0);
+  const [currentSubscriptionStatus, setCurrentSubscriptionStatus] =
+    useState(false);
+  const [subscriptionData, setSubscriptionData] = useState<SubscriptionInfo>({
+    id: -1,
+    pay_name: '',
+    pay_number: '',
+    pay_type: '',
+    payer_id: '',
+    company_id: 0,
+    start_date: '',
+    end_date: '',
+    is_subscribed: false,
+  });
+
   const showButtons = () => {
     setButtonsVisible(true);
   };
@@ -41,20 +69,87 @@ function UserTab() {
     },
   });
 
-  /**
-   * 유저의 구독여부 찾기
-   */
-  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () => userAPI.getSubscriptionCheck({ company_id: companyID }),
+    {
+      onSuccess: (data) => {
+        setIsNewSubscription(data.data.is_new);
+        setCurrentSubscriptionStatus(data.data.is_expired);
+        setServiceCost(data.data.service_cost);
+        setSubscriptionData({
+          ...data.data.subscription_info,
+        });
+      },
+    },
   );
 
-  const subscriptionData =
-    getSubscriptionCheckQuery.data?.data.subscription_info;
+  const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
+    onSuccess: (data) => {
+      const requestData = {
+        PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
+        PCD_PAY_WORK: data.data.PCD_PAY_WORK,
+        PCD_CARD_VER: '01',
+        PCD_PAYER_NO: data.data.PCD_PAYER_NO,
+        PCD_PAYER_NAME: data.data.PCD_PAYER_NAME,
 
-  const isSubscription = getSubscriptionCheckQuery.data?.data.is_subscribed;
+        PCD_PAY_GOODS: data.data.PCD_PAY_GOODS,
+        PCD_PAY_TOTAL: data.data.PCD_PAY_TOTAL,
+        PCD_PAY_ISTAX: data.data.PCD_PAY_ISTAX,
+
+        PCD_PAY_URL: data.data.return_url,
+        PCD_AUTH_KEY: data.data.AuthKey,
+
+        PCD_RST_URL: `/setting?tab=user`,
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        callbackFunction: (res: any) => {
+          // 성공일때 redirect
+          if (res.PCD_PAY_RST !== 'success') return;
+
+          setSubscriptionData({
+            ...subscriptionData,
+            pay_name: res.PCD_PAY_CARDNAME,
+            pay_number: res.PCD_PAY_CARDNUM,
+          });
+
+          setTimeout(() => {
+            getSubscriptionCheckQuery.refetch();
+          }, 2000);
+
+          //구독신청 및 재구독시
+          if (res.PCD_PAY_WORK === 'PAY')
+            message.success(
+              t('your subscription is complete. you can use the payment'),
+              3,
+            );
+          //결제수단 변경시
+          if (res.PCD_PAY_WORK === 'AUTH')
+            message.success(t('card change is complete'), 3);
+
+          navigate('/setting?tab=user');
+        },
+      };
+
+      // payple 내장 함수 호출 (결제 요청)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).PaypleCpayAuthCheck(requestData);
+    },
+  });
+
+  /**
+   * 다음 결제일
+   */
   const nextPaymentDate = moment(subscriptionData?.end_date)
     .add(1, 'days')
     .format('YYYY년 MM월 DD일');
+
+  /**
+   * 구독 유효기간
+   */
+  const expirationDate = moment(subscriptionData.end_date).format(
+    'YYYY년 MM월 DD일',
+  );
 
   const resetStates = useCallback(
     (user: UserInfo) => {
@@ -71,11 +166,11 @@ function UserTab() {
   //이메일 유효성 검사
   const emailValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('이메일을 입력해주세요.'));
+      return Promise.reject(new Error(t('please input email')));
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
+      return Promise.reject(new Error(t('this email is not valid')));
     }
 
     return Promise.resolve();
@@ -84,11 +179,11 @@ function UserTab() {
   //휴대전화 번호 유효성 검사
   const mobileValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('휴대전화 번호를 입력해주세요.'));
+      return Promise.reject(new Error(t('please input phone number')));
     }
 
     if (!phonePattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 형식 입니다.'));
+      return Promise.reject(new Error(t('invalid format')));
     }
 
     return Promise.resolve();
@@ -103,16 +198,31 @@ function UserTab() {
     hideButtons();
   }, [resetStates, searchParams, user]);
 
+  // payple, jquery script 태그 동적 불러온다.
+  useEffect(() => {
+    const script = document.createElement('script');
+
+    script.src =
+      process.env.REACT_APP_SERVICE_TYPE === 'production'
+        ? 'https://cpay.payple.kr/js/cpay.payple.1.0.1.js' // 상용 payple script (prod)
+        : 'https://democpay.payple.kr/js/cpay.payple.1.0.1.js'; // 테스트 payple script (alpha)
+    script.async = true;
+
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <>
-      {/**페이플 결제하기 모달 */}
-      <PaypleModal
-        visible={paypleModalVisible}
-        closeModal={() => {
-          paypleModalClose();
-        }}
+      <RemoveSubscriptionModal
+        visible={removeSubscriptionModalvisible}
+        onClose={removeSubscriptionModalClose}
+        id={companyID}
       />
-      <UserCard title="기본정보" icon={<TurtleIcon name="user" />}>
+
+      <UserCard
+        title={t('basic information')}
+        icon={<TurtleIcon name="user" />}
+      >
         <Form
           form={form}
           colon={false}
@@ -129,18 +239,18 @@ function UserTab() {
             });
           }}
         >
-          <Form.Item label="이름" name="name">
+          <Form.Item label={t('user name')} name="name">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label="아이디" name="login_id">
+          <Form.Item label={t('auth.id')} name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
-            label="이메일"
+            label={t('email')}
             name="email"
             rules={[{ validator: emailValidator }]}
           >
-            <TurtleFormInput placeholder="이메일을 입력해주세요" />
+            <TurtleFormInput placeholder={t('please')} />
           </Form.Item>
           <Form.Item
             label="휴대전화 번호"
@@ -179,9 +289,10 @@ function UserTab() {
         {/*  */}
       </UserCard>
       <div css={marginTop}>
-        {!isSubscription ? (
+        {!subscriptionData.is_subscribed ? (
+          //구독 안한 상태
           <UserCard
-            title="요금플랜 결제"
+            title="구독 및 결제"
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -198,22 +309,88 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    요금플랜 결제
+                    유료플랜 구독
                   </span>
                 }
               >
-                <Button
-                  css={button}
-                  onClick={() => {
-                    paypleModalOpen();
-                  }}
+                <div
+                  css={css({
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: subscriptionData.is_subscribed
+                      ? `1px solid ${theme.grey200}`
+                      : '',
+                    paddingBottom: 20,
+                  })}
                 >
-                  결제하기
-                </Button>
+                  <div css={css({ marginRight: 16 })}>
+                    {!currentSubscriptionStatus ? (
+                      <Button
+                        css={button}
+                        onClick={() =>
+                          changeCreditCardInfoMutation.mutate({
+                            company_id: companyID,
+                            request_type: 'PAY',
+                          })
+                        }
+                      >
+                        구독하기
+                      </Button>
+                    ) : (
+                      <div
+                        css={css({
+                          display: 'flex',
+                          alignItems: 'center',
+                        })}
+                      >
+                        <Button
+                          css={button}
+                          onClick={() =>
+                            changeCreditCardInfoMutation.mutate({
+                              company_id: companyID,
+                              request_type: 'PAY',
+                            })
+                          }
+                        >
+                          재구독하기
+                        </Button>
+                        <span
+                          css={css({ marginLeft: 16, color: theme.grey500 })}
+                        >
+                          해지완료
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {/* 최초구독의 경우 */}
+                  {isNewSubscription && (
+                    <div
+                      css={css({
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: '#FBF0E6',
+                        color: theme.orangeTx,
+                        borderRadius: 8,
+                        width: 143,
+                        height: 26,
+                        padding: '6px 7px',
+                      })}
+                    >
+                      <TurtleIcon name="thunder" />
+                      <span>첫달 이용료 100원</span>
+                    </div>
+                  )}
+                </div>
+                {currentSubscriptionStatus && (
+                  <div css={css({ paddingTop: 10, color: theme.grey500 })}>
+                    <span>{`${expirationDate}까지 서비스 이용이 가능합니다.`}</span>
+                  </div>
+                )}
               </Form.Item>
             </Form>
           </UserCard>
         ) : (
+          //구독한 상태
           <UserCard
             title="구독 및 결제"
             icon={<TurtleIcon name="membership" />}
@@ -244,13 +421,21 @@ function UserTab() {
                 >
                   <Button
                     css={button}
-                    onClick={() => {
-                      paypleModalOpen();
-                    }}
+                    onClick={() =>
+                      changeCreditCardInfoMutation.mutate({
+                        company_id: companyID,
+                        request_type: 'AUTH',
+                      })
+                    }
                   >
                     결제수단 변경
                   </Button>
-                  <Button css={css({ color: theme.grey500 })}>해지하기</Button>
+                  <Button
+                    css={css({ color: theme.grey500 })}
+                    onClick={removeSubscriptionModalOpen}
+                  >
+                    해지하기
+                  </Button>
                 </div>
                 <div
                   css={css({
@@ -265,8 +450,15 @@ function UserTab() {
                     css={css({ marginLeft: 5 })}
                   >{`신용카드(${subscriptionData?.pay_name}) ${subscriptionData?.pay_number}`}</span>
                 </div>
-                <div css={css({ marginTop: 10 })}>
+                <div
+                  css={css({
+                    marginTop: 10,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  })}
+                >
                   <span>{`다음 결제일은 ${nextPaymentDate} 입니다.`}</span>
+                  <span>{`₩${serviceCost}`}</span>
                 </div>
               </Form.Item>
             </Form>
