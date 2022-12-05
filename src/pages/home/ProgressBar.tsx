@@ -33,7 +33,7 @@ function ProgressBar() {
   const getVendorListQuery = useQuery(
     ['getVendorListQuery', store.selected?.id],
     () =>
-      vendorAPI.get({
+      vendorAPI.getList({
         rt_store_id: store.selected?.id,
         search_string: '',
         page: 1,
