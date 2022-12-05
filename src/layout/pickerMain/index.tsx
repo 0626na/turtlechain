@@ -8,14 +8,14 @@ import useUser from '@hooks/useUser';
 import useLogin from '@hooks/useLogin';
 
 function MainLayout() {
-  const { user } = useUser();
+  const { user, isStaff } = useUser();
   const { isLogin } = useLogin();
 
   if (!isLogin) {
     return <Navigate to="/" replace={true} />;
   }
 
-  if (user?.type === 'rt' || user?.type === 'st') {
+  if (user?.type === 'rt' || isStaff) {
     return <Navigate to="/home" replace={true} />;
   }
 

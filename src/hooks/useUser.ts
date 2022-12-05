@@ -32,7 +32,7 @@ function useUser() {
     setUser(null);
   }, []);
 
-  const isStaff = user?.type === 'st';
+  const isStaff = user?.type === 'staff';
 
   return {
     user,
