@@ -14,8 +14,11 @@ export const numPattern = /[0-9]/;
 //숫자제외 패턴
 export const notNumPattern = /[^0-9]/g;
 
-// 휴대번호 패턴
+// 휴대전화 패턴
 export const phonePattern = /^(\d{3})-?(\d{4})-?(\d{4})$/;
+
+// 휴대전화번호 마스킹 패턴 ex. 000-****-0000
+export const phoneMaskingPattern = /^(\d{2,3})(\d|[*]{3,4})(\d{4})$/;
 
 // 금액 패턴
 export const pricePattern = /\B(?=(\d{3})+(?!\d))/g;
