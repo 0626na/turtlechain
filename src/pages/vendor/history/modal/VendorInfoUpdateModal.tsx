@@ -11,7 +11,7 @@ import {
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import { Vendor } from '@apis/vendorAPI';
+import vendorAPI, { Vendor } from '@apis/vendorAPI';
 
 import { css } from '@emotion/react';
 
@@ -46,28 +46,35 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
-  // 거래처 선택후 폼에 채워넣기
-  const fieldsFillIn = () => {
-    form.setFieldsValue({
-      ws_store_id: selectedRow?.ws_store_info.id,
-      rt_store_id: store.selected?.id as number,
-      name: selectedRow?.vendor_name,
-      tel: selectedRow?.ws_store_info.phone,
-      mobile: phoneMasking(selectedRow?.vendor_phone.phone),
-      building: selectedRow?.ws_store_info.building,
-      floor: selectedRow?.ws_store_info.floor,
-      col: selectedRow?.ws_store_info.col,
-      loc: selectedRow?.ws_store_info.loc,
-      colLoc: `${selectedRow?.ws_store_info.col} ${selectedRow?.ws_store_info.loc}`,
-      ext: selectedRow?.ws_store_info.ext,
+  const getVendorQuery = useQuery(
+    ['getVendorQuery', selectedRow?.id],
+    () => vendorAPI.get({ id: selectedRow.id }),
+    {
+      enabled: !!selectedRow?.id && !!visible,
+      onSuccess: (data) => {
+        console.log(data);
+        form.setFieldsValue({
+          ws_store_id: data?.ws_store_info.id,
+          rt_store_id: store.selected?.id as number,
+          name: data?.vendor_name,
+          tel: data?.ws_store_info.phone,
+          mobile: phoneMasking(data?.vendor_phone.phone),
+          building: data?.ws_store_info.building,
+          floor: data?.ws_store_info.floor,
+          col: data?.ws_store_info.col,
+          loc: data?.ws_store_info.loc,
+          colLoc: `${data?.ws_store_info.col} ${data?.ws_store_info.loc}`,
+          ext: data?.ws_store_info.ext,
 
-      bank: selectedRow?.vendor_account.bank,
-      account_number: selectedRow?.vendor_account.account_number,
-      account_holder: selectedRow?.vendor_account.account_holder,
+          bank: data?.vendor_account.bank,
+          account_number: data?.vendor_account.account_number,
+          account_holder: data?.vendor_account.account_holder,
 
-      file: undefined,
-    });
-  };
+          file: undefined,
+        });
+      },
+    },
+  );
 
   const normFile = (
     uploadFiles:
@@ -79,10 +86,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     }
     return uploadFiles && uploadFiles.fileList;
   };
-
-  useEffect(() => {
-    if (visible) fieldsFillIn();
-  }, [visible]);
 
   return (
     <>
