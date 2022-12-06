@@ -279,16 +279,13 @@ function FailTab({ loading, ...props }: Props) {
               render: (_, record) => {
                 const tempList = failListOutput();
 
-                if (record.mobile !== '')
-                  return record.mobile.replace(phonePattern, '$1-$2-$3');
                 if (record.id === 0) return failTablePhoneNumberInput(record);
                 if (
-                  tempList[record.id - 1].id === record.id
-                  // tempList[record.id - 1]. rt_store_name ===
-                  //   record.rt_store_name &&
-                  // tempList[record.id - 1].vendor_name === record.vendor_name &&
-                  // tempList[record.id - 1].vendor_address ===
-                  //   record.vendor_address
+                  tempList[record.id - 1].rt_store_name ===
+                    record.rt_store_name &&
+                  tempList[record.id - 1].vendor_name === record.vendor_name &&
+                  tempList[record.id - 1].vendor_address ===
+                    record.vendor_address
                 ) {
                   return null;
                 }

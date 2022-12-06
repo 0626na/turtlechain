@@ -74,7 +74,6 @@ function SuccessTab({ loading, ...props }: Props) {
   const {
     cart,
     setCart,
-    countOrders,
     setSuccessListToMemo,
     setSuccessListToOrderCount,
     setSuccessListToOrderType,
@@ -421,7 +420,12 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               title: t('table.countTotal'),
               width: 136,
-              render: (_, record) => countOrders(Number(record.id)),
+              render: (_, record) =>
+                record.orders.length !== 0 &&
+                record.orders.reduce(
+                  (acc, order) => acc + Number(order.product_count),
+                  0,
+                ),
             },
             {
               title: t('table.supplyPriceTotal'),

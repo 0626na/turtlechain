@@ -362,20 +362,6 @@ const useOrderCart = () => {
   }, [cart.successList, cart.failList]);
 
   /**
-   * 발주 수량합계
-   */
-  const countOrders = useCallback(
-    (id: number) => {
-      const store = cart.successList.filter((store) => store.id === id);
-      return store[0].orders.reduce(
-        (acc, order) => acc + Number(order.product_count),
-        0,
-      );
-    },
-    [cart.successList],
-  );
-
-  /**
    * 발주 수량 분류별 계산
    */
   const countOrdersForType = useCallback(() => {
@@ -618,7 +604,6 @@ const useOrderCart = () => {
     setSuccessListToOrderCount,
     setSuccessListToOrderType,
     translateOrderType,
-    countOrders,
   };
 };
 
