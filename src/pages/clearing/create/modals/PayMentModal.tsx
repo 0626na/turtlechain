@@ -25,6 +25,7 @@ interface Props {
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
+  const [requestCount, setRequestCount] = useState(0);
   const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
 
@@ -73,13 +74,8 @@ function PayMentModal({ visible, closeModal }: Props) {
           if (res.PCD_PAY_RST === 'success') {
             const check = setInterval(() => {
               getSubscriptionCheckQuery.refetch();
-
-              if (
-                getSubscriptionCheckQuery.data?.data.subscription_info !==
-                  null &&
-                getSubscriptionCheckQuery.data?.data.subscription_info
-                  .is_subscribed
-              ) {
+              setRequestCount(requestCount + 1);
+              if (getSubscriptionCheckQuery.data?.data.is_expired) {
                 clearInterval(check);
                 setButtonLoading(false);
                 closeModal();
@@ -88,7 +84,19 @@ function PayMentModal({ visible, closeModal }: Props) {
                   3,
                 );
               }
-            }, 500);
+
+              if (requestCount === 20) {
+                clearInterval(check);
+                setButtonLoading(false);
+                closeModal();
+                message.success(
+                  t(
+                    'subscription failed. please check the payment information again',
+                  ),
+                  3,
+                );
+              }
+            }, 1000);
 
             navigate('/clearing/create');
           }
