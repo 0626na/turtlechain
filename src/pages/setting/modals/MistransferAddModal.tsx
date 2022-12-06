@@ -56,7 +56,8 @@ function MistransferAddModal({ visible, closeModal }: Props) {
         floor: record.ws_info.floor,
         col: record.ws_info.col,
         loc: record.ws_info.loc,
-        loc_col: `${record.ws_info.loc}/${record.ws_info.col}`,
+
+        col_loc: `${record.ws_info.col}/${record.ws_info.loc}`,
         ext: record.ws_info.ext,
       },
       vendor_account: {
@@ -171,7 +172,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
-                <Form.Item name={['vendor_address', 'loc_col']} noStyle>
+                <Form.Item name={['vendor_address', 'col_loc']} noStyle>
                   <TurtleFormInput placeholder="열/호" disabled />
                 </Form.Item>
               </div>
