@@ -24,10 +24,17 @@ interface Props {
  */
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user } = useUser();
   const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
+
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckInPaymentModalQuery',
+    () =>
+      userAPI.getSubscriptionCheck({
+        company_id: user?.company_id ?? 0,
+      }),
+  );
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -64,17 +71,20 @@ function PayMentModal({ visible, closeModal }: Props) {
         callbackFunction: (res: any) => {
           // 성공일때 redirect
           if (res.PCD_PAY_RST === 'success') {
-            setTimeout(() => {
-              queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
-                active: true,
-              });
-              setButtonLoading(false);
-              closeModal();
-              message.success(
-                t('your subscription is complete. you can use the payment'),
-                3,
-              );
-            }, 2000);
+            const check = setInterval(() => {
+              getSubscriptionCheckQuery.refetch();
+
+              if (getSubscriptionCheckQuery.isSuccess) {
+                clearInterval(check);
+                setButtonLoading(false);
+                closeModal();
+                message.success(
+                  t('your subscription is complete. you can use the payment'),
+                  3,
+                );
+              }
+            }, 500);
+
             navigate('/clearing/create');
           }
         },
