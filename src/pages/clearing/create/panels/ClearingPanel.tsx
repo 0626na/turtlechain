@@ -34,6 +34,7 @@ import { t } from 'i18next';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { setInterval } from 'timers';
 
 import DetailModal from '../modals/DetailModal';
 import PayMentModal from '../modals/PayMentModal';
@@ -70,9 +71,13 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   const getSubscriptionCheckQuery = useQuery(
     'getSubscriptionCheckQuery',
     () =>
-      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+      userAPI.getSubscriptionCheck({
+        company_id: user?.company_id ?? 0,
+      }),
     {
-      onSuccess: (data) => setIsSubscription(data.data.is_expired),
+      onSuccess: (data) => {
+        setIsSubscription(data.data.is_expired);
+      },
     },
   );
 
