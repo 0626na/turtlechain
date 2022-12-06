@@ -60,9 +60,9 @@ function MistransferAddModal({ visible, closeModal }: Props) {
         ext: record.ws_store_id.ext,
       },
       vendor_account: {
-        bank: record.ws_store_id.store_account[0].bank,
-        account_number: record.ws_store_id.store_account[0].account_number,
-        account_holder: record.ws_store_id.store_account[0].account_holder,
+        bank: record.bank,
+        account_number: record.account_number,
+        account_holder: record.account_holder,
       },
       is_vat_included: record.is_vat_included,
     });
