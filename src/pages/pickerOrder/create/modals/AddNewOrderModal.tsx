@@ -47,6 +47,9 @@ function AddNewOrderModal({ visible, close }: Props) {
     },
   );
 
+  /**
+   * 모달창 닫으면 모달내의 데이터 리셋
+   */
   useEffect(() => form.resetFields(), [form, visible]);
 
   return (
@@ -194,7 +197,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           >
             <TurtleFormInput
               placeholder={t('please input etc address')}
-              disabled={building === t('order.types.etc') ? false : true}
+              disabled={building === t('etc.') ? false : true}
             />
           </Form.Item>
           {/* 휴대번호 */}

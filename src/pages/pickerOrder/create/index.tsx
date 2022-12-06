@@ -16,7 +16,6 @@ import { Tooltip } from 'antd';
 function PickerOrder() {
   const { cart, setCart } = useOrderCart();
   const [dateTooltipvisible, setdateToolipVisible] = useState(true);
-  const [date, setDate] = useState<moment.Moment>(cart.selectedDate);
 
   return (
     <>
@@ -34,10 +33,9 @@ function PickerOrder() {
           >
             <div onClick={() => setdateToolipVisible(false)}>
               <TurtleDatePicker
-                date={date}
+                date={cart.selectedDate}
                 onchange={(value) => {
                   setCart({ ...cart, selectedDate: value });
-                  setDate(value);
                 }}
               />
             </div>

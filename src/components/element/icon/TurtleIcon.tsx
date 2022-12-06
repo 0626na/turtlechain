@@ -65,6 +65,7 @@ import { ReactComponent as StorePlus } from '@icons/storePlus.svg';
 import { ReactComponent as CheckMark } from '@icons/checkMark.svg';
 import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
 import { ReactComponent as QuestionCircle } from '@icons/questioncircle.svg';
+import { ReactComponent as Thunder } from '@icons/thunder.svg';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -126,7 +127,8 @@ export type iconname =
   | 'mistransfer'
   | 'creditCard'
   | 'questioncircle'
-  | 'alertWarningRed';
+  | 'alertWarningRed'
+  | 'thunder';
 interface Props {
   danger?: boolean;
   name: iconname;
@@ -548,6 +550,10 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'alertWarningRed') {
     return <AlertWarnRedIcon />;
+  }
+
+  if (name === 'thunder') {
+    return <Thunder />;
   }
 
   return <></>;

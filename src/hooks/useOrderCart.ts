@@ -159,7 +159,6 @@ const useOrderCart = () => {
   const ready = useCallback(
     (data: ResponseCreateOrderItemExcelParsing) => {
       let id = 0;
-
       setCart({
         ...cart,
         successList: [
@@ -188,7 +187,7 @@ const useOrderCart = () => {
         parsingStatus: data.data.parsing_status,
       });
     },
-    [cart.failList, cart.successList, setCart, setStoreListItem],
+    [cart, setCart, setStoreListItem],
   );
 
   /**

@@ -126,6 +126,7 @@
   },
 
   "etc": {
+    "": "기타",
     "setting": "설정",
     "tutorial": "사용가이드"
   },
@@ -452,6 +453,7 @@
   "please input search query": "검색어를 입력하세요",
   "Add the mobile phone number you entered as your account information": "입력한 휴대전화 번호를 거래처 정보로 추가합니다.",
   "After addition, the client's order is classified as successful": "추가 이후에는 해당 거래처의 발주서를 성공으로 분류해요.",
+  "you can change order request date": "발주요청 일자를 변경할 수 있어요",
   "count except one": "{{name}} 외 {{count}}개",
   "Should I add it as account information?": "거래처 정보로 추가할까요?",
   "order dont create today": "2차 발주까지 완료된 쇼핑몰은 발주서 등록이 금일은 불가능합니다.",

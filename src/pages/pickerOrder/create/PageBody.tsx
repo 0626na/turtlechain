@@ -144,7 +144,7 @@ function PageBody() {
   const confirmModalItems = [
     {
       title: t('orderDate'),
-      content: moment(cart.selectedDate).format('YYYY-MM-DD'),
+      content: cart.selectedDate.format('YYYY-MM-DD'),
     },
     {
       title: t('orderStores'),
