@@ -75,6 +75,8 @@ function PayMentModal({ visible, closeModal }: Props) {
               getSubscriptionCheckQuery.refetch();
 
               if (
+                getSubscriptionCheckQuery.data?.data.subscription_info !==
+                  null &&
                 getSubscriptionCheckQuery.data?.data.subscription_info
                   .is_subscribed
               ) {
