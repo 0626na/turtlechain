@@ -156,7 +156,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
               ellipsis: true,
               title: t('table.accountInfo'),
               render: (_, record) =>
-                `${record.ws_store_id.store_account[0].bank} ${record.ws_store_id.store_account[0].account_number} ${record.ws_store_id.store_account[0].account_holder}`,
+                `${record.bank} ${record.account_number} ${record.account_holder}`,
             },
             {
               ellipsis: true,
