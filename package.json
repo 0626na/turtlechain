@@ -47,6 +47,7 @@
     "start": "export PORT=52273 && craco start",
     "build:devel": "env-cmd -f .env.development craco build",
     "build:alpha": "env-cmd -f .env.test craco build",
+    "build:demo": "env-cmd -f .env.demo craco build",
     "build:prod": "env-cmd -f .env.production craco build",
     "deploy:devel": "./deploy.sh --env devel --branch devel",
     "deploy:alpha": "./deploy.sh --env alpha --branch alpha",
