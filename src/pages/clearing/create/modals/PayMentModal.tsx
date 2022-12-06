@@ -74,7 +74,10 @@ function PayMentModal({ visible, closeModal }: Props) {
             const check = setInterval(() => {
               getSubscriptionCheckQuery.refetch();
 
-              if (getSubscriptionCheckQuery.isSuccess) {
+              if (
+                getSubscriptionCheckQuery.data?.data.subscription_info
+                  .is_subscribed
+              ) {
                 clearInterval(check);
                 setButtonLoading(false);
                 closeModal();
