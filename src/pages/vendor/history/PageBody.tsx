@@ -51,7 +51,7 @@ function PageBody() {
   const getVendorListQuery = useQuery(
     ['getVendorListQuery', searchQuery],
     () =>
-      vendorAPI.get({
+      vendorAPI.getList({
         ...searchQuery,
         rt_store_id: store.selected?.id as number,
       }),

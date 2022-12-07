@@ -68,7 +68,7 @@ export interface ClearingItemShow {
   supply_amount: number;
   vat_amount: number;
   complete_date: string;
-  ws_store_id: {
+  ws_info: {
     id: number;
     store_phone: Array<{
       phone: string;
