@@ -26,6 +26,7 @@ function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
   const [requestCount, setRequestCount] = useState(0);
+  const queryClient = useQueryClient();
   const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
 
@@ -36,11 +37,13 @@ function PayMentModal({ visible, closeModal }: Props) {
         company_id: user?.company_id ?? 0,
       }),
     {
+      enabled: visible,
       refetchInterval: (data) => {
         if (data?.data.is_expired) {
           setButtonLoading(false);
           closeModal();
           navigate('/clearing/create');
+          queryClient.refetchQueries('getSubscriptionCheckQuery');
           return false;
         }
         return 1000;
