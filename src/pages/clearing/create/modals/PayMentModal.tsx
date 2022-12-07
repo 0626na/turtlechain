@@ -35,6 +35,17 @@ function PayMentModal({ visible, closeModal }: Props) {
       userAPI.getSubscriptionCheck({
         company_id: user?.company_id ?? 0,
       }),
+    {
+      refetchInterval: (data) => {
+        if (data?.data.is_expired) {
+          setButtonLoading(false);
+          closeModal();
+          navigate('/clearing/create');
+          return false;
+        }
+        return 1000;
+      },
+    },
   );
 
   // payple, jquery script 태그 동적 불러온다.
@@ -71,35 +82,8 @@ function PayMentModal({ visible, closeModal }: Props) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
           // 성공일때 redirect
-          if (res.PCD_PAY_RST === 'success') {
-            const check = setInterval(() => {
-              getSubscriptionCheckQuery.refetch();
-              setRequestCount(requestCount + 1);
-              if (getSubscriptionCheckQuery.data?.data.is_expired) {
-                clearInterval(check);
-                setButtonLoading(false);
-                closeModal();
-                message.success(
-                  t('your subscription is complete. you can use the payment'),
-                  3,
-                );
-              }
-
-              if (requestCount === 20) {
-                clearInterval(check);
-                setButtonLoading(false);
-                closeModal();
-                message.success(
-                  t(
-                    'subscription failed. please check the payment information again',
-                  ),
-                  3,
-                );
-              }
-            }, 1000);
-
-            navigate('/clearing/create');
-          }
+          // if (res.PCD_PAY_RST === 'success') {
+          // }
         },
       };
 
