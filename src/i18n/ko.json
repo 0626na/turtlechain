@@ -497,7 +497,6 @@
   "search for accounts": "거래처 검색",
   "business information": "사업자 정보",
   "this email is not valid": "유효하지 않은 이메일 입니다.",
-  "invalid format": "유효하지 않은 형식입니다."
-
+  "invalid format": "유효하지 않은 형식입니다.",
   "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요."
 }
