@@ -90,16 +90,17 @@ function PageBody() {
         loading={loading}
         onCancel={loading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}
+        okText={t('save memo')}
         onOk={(value) => {
           updateProductQuery.mutate({
             id: selectedRow?.id ?? -1,
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('write freely anything thats important about this vendor'),
+          t('use this memo as your personal note'),
         ]}
       />
       {/**
@@ -120,7 +121,7 @@ function PageBody() {
         }}
       />
 
-      <PageTitle title="상품 리스트" />
+      {/* <PageTitle title="상품 리스트" /> */}
       <PageContent>
         <Table
           size="small"
@@ -134,7 +135,9 @@ function PageBody() {
               totalCount={getProductListQuery.data?.data.total_count ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'search by product name, inventory name, vendor name...',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

@@ -27,7 +27,8 @@
     "history": "Vendors"
   },
   "product": {
-    "create": "Add Product"
+    "create": "Add Product",
+    "history": "Products"
   },
   "warehousing": {
     "": "Inventory",
@@ -45,7 +46,15 @@
     "vatIncluded": "VAT Inclusive",
     "memo": "Memo",
     "wsStoreNumber": "Phone No.",
-    "vendorEtcAddress": "Other address"
+    "vendorEtcAddress": "Other address",
+    "product vendorName": "Vendor Name",
+    "product vendorAddress": "Vendor Address",
+    "productName": "Product Name",
+    "vendorProductName": "Reference",
+    "productCode": "Product ID",
+    "option": "Variant",
+    "imageUrl": "Image URL",
+    "price": "Price"
   },
   "etc": {
     "setting": "Settings",
@@ -98,6 +107,7 @@
   "check if VAT needs to be included with an invoice1": "Check if VAT needs to be",
   "check if VAT needs to be included with an invoice2": "included with an invoice ",
   "create vendor": "Add Vendor",
+  "save memo": "Save",
   "save vendor": "Save",
   "success": "success",
   "pending": "pending",
@@ -126,5 +136,12 @@
   "please input account holder": "please input account holder",
   "receipt": "Receipt",
   "add a copy of your receipt or invoice": "Add a copy of your receipt or invoice",
-  "please attach receipt": "Please attach your receipt"
+  "please attach receipt": "Please attach your receipt",
+  "product list": "Product List",
+  "preview of New Products": "Preview of New Products",
+  "your vendor list must be updated before adding new products": "Your vendor list must be updated before adding new products",
+  "add & save": "Add & Save",
+  "integrate inventory program": "Integrate inventory program",
+  "add product": "Add Product",
+  "search by product name, inventory name, vendor name...": "Search by product name, inventory name, vendor name..."
 }

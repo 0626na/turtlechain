@@ -16,7 +16,7 @@ function ProductCreate() {
         title={t('product.create')}
         button={
           <HistoryButton
-            text="상품목록"
+            text={t('product list')}
             onClick={() => {
               navigate('/product/history');
             }}

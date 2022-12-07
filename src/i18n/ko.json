@@ -536,5 +536,8 @@
   "vendor list": "거래처 목록",
   "preview of new vendors": "거래처등록 미리보기",
   "Inventory program linkage": "재고프로그램 연동",
-  "create vendor": "거래처 추가하기"
+  "create vendor": "거래처 추가하기",
+  "search by product name, inventory name, vendor name...": "거래처명, 상품명, 거래처 상품명 검색",
+  "write freely anything thats important about this vendor": "해당 건과 관련해 중요한 내용을 기록해보세요.",
+  "use this memo as your personal note": "개인 메모로도 자유롭게 활용할 수 있어요.👀"
 }

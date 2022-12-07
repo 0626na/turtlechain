@@ -74,7 +74,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
 
-              title: t('table.vendorName'),
+              title: t('table.product vendorName'),
               onCell: (record) => ({
                 style: {
                   backgroundColor: record.need_update
@@ -187,7 +187,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               align: 'center',
-              width: 50,
+              width: 100,
               title: t('table.memo'),
               onCell: (record) => ({
                 style: {
