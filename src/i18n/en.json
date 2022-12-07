@@ -23,7 +23,8 @@
     }
   },
   "vendor": {
-    "create": "Add Vendor"
+    "create": "Add Vendor",
+    "history": "Vendors"
   },
   "product": {
     "create": "Add Product"
@@ -42,7 +43,9 @@
     "mobile": "Mobile No",
     "accountInfo": "Banck Acct",
     "vatIncluded": "VAT Inclusive",
-    "memo": "Memo"
+    "memo": "Memo",
+    "wsStoreNumber": "Phone No.",
+    "vendorEtcAddress": "Other address"
   },
   "etc": {
     "setting": "Settings",
@@ -50,7 +53,8 @@
   },
   "button": {
     "at a time": "Add many",
-    "one by one": "Add single"
+    "one by one": "Add single",
+    "updateVendor": "Send Request"
   },
 
   "day": {
@@ -102,5 +106,25 @@
   "please select which dates you wish to integrate": "Please select which dates you wish to integrate.",
   "it may take up to 1 minute, depending on how much you wish to integrate": "It may take up to 1 minute, depending on how much you wish to integrate.",
   "cancel": "Cancel",
-  "integrate": "Integrate"
+  "integrate": "Integrate",
+  "vendors": "Vendors",
+  "search keyword": "Search Keyword",
+  "edit vendors name": "Edit vendor`s name",
+  "information update": "Information Update",
+  "delete": "Delete",
+  "delete from list": "Delete from list?",
+  "this will be permanently deleted from your list": "This will be permanently deleted from your list",
+  "write freely anything thats important about this vendor": "Write freely anything that`s important about this vendor.",
+  "use this memo as your personal note": "Use this memo as your personal note",
+  "ex, double check its invoices!": "Ex, double check its invoices!",
+  "modifying the account name": "Modifying the account name",
+  "modify the name of the selected account": "Modify the name of the selected account.",
+  "please enter the desired account name": "Please enter the desired account name",
+  "modify": "Modify",
+  "request for information Update": "Request for information Update",
+  "please input other address": "Please input other address",
+  "please input account holder": "please input account holder",
+  "receipt": "Receipt",
+  "add a copy of your receipt or invoice": "Add a copy of your receipt or invoice",
+  "please attach receipt": "Please attach your receipt"
 }

@@ -90,7 +90,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('vendor.updateInfo')}
+        title={t('request for information Update')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -221,7 +221,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Form.Item>
 
           <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
+            <TurtleFormInput placeholder={t('please input other address')} />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')} required>
@@ -252,7 +252,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
               <Form.Item
                 name="account_holder"
-                rules={[{ required: true, message: '예금주를 입력해주세요' }]}
+                rules={[
+                  { required: true, message: t('please input account holder') },
+                ]}
                 noStyle
               >
                 <TurtleFormInput placeholder="예금주명" />
@@ -262,12 +264,12 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
           <Form.Item
             name="file"
-            label="전자영수증"
+            label={t('receipt')}
             valuePropName="fileList"
             required={true}
             getValueFromEvent={normFile}
             rules={[
-              { required: true, message: '전자영수증 사진을 첨부해주세요.' },
+              { required: true, message: t('please attach your receipt') },
             ]}
           >
             <Upload
@@ -276,7 +278,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>사진 첨부하기</AddButton>
+              <AddButton>
+                {t('add a copy of your receipt or invoice')}
+              </AddButton>
             </Upload>
           </Form.Item>
 

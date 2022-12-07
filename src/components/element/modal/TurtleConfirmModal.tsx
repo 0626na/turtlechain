@@ -129,7 +129,7 @@ const $title = css`
 
 const $description = css`
   margin-top: 16px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.429;
   color: #5b5d63;
 `;
