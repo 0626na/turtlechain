@@ -521,5 +521,6 @@
   "service updates": "터틀체인 업데이트 소식",
   "pndg": "대기",
   "cmplt": "마감",
-  "exchange,returns,pending delivery": "교환/반품/미송"
+  "exchange,returns,pending delivery": "교환/반품/미송",
+  "vendor,product": "거래처/상품"
 }

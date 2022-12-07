@@ -12,12 +12,33 @@
     "aboutMembership": "Plans & Pricing"
   },
   "clearing": {
+    "": "Payment",
+    "create": "Make Payments",
+    "history": "Payments History",
+    "transaction": { "": "Ledger" },
     "status": {
       "request": "PNDG",
       "pending": "AUTH",
       "complet": "PAID"
     }
   },
+  "vendor": {
+    "create": "Add Vendor"
+  },
+  "product": {
+    "create": "Add Product"
+  },
+  "warehousing": {
+    "": "Inventory",
+    "create": "Add Stocked Qty",
+    "history": "Inventory History",
+    "adjustment": { "": "Exchange, Returns, Pending Delivery" }
+  },
+  "etc": {
+    "setting": "Settings",
+    "tutorial": "User Guide"
+  },
+
   "day": {
     "1": "Mon",
     "2": "Tue",
@@ -41,5 +62,7 @@
   "service updates": "Service Updates",
   "pndg": "PNDG",
   "cmplt": "CMPLT",
-  "exchange,returs,pending delivery": "Exchange,Returns,Pending Delivery"
+  "exchange,returs,pending delivery": "Exchange,Returns,Pending Delivery",
+  "home": "HOME",
+  "vendor,product": "Vendor, Product"
 }
