@@ -502,8 +502,24 @@
   "regular payment termination will be applied from the pay date of next month": "정기결제 해지는 다음 결제일 다음날부터 적용됩니다.",
   "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
   "do you really want me to unsubscribe": "정말 구독을 해지할까요?",
-  "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요."
+  "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요.",
   "unsubscription complete": "해지완료",
   "the first months fee is 100won": "첫달 이용료 100원",
-  "creditInfo": "신용카드 {{cardName}} {{cardNumber}}"
+  "creditInfo": "신용카드 {{cardName}} {{cardNumber}}",
+  "tax invoice to be issued": "{{month}}월 세금계산서 발행예정",
+  "Now, lets start with adding your vendors": "자! 거래처 등록부터 시작해볼까요? 🔥",
+  "add vendors": "거래처등록",
+  "add products": "상품등록",
+  "add stocked Qty": "입고등록",
+  "exchange, returns, pending, delivery": "교환/반품/미송",
+  "payments Authorized": "결제하기",
+  "paid": "이체하기",
+  "accumulated payments": "누적 결제금액",
+  "last week": "지난주",
+  "this week": "이번주",
+  "recent payments": "최근 결제현황",
+  "service updates": "터틀체인 업데이트 소식",
+  "pndg": "대기",
+  "cmplt": "마감",
+  "exchange,returns,pending delivery": "교환/반품/미송"
 }

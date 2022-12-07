@@ -7,8 +7,39 @@
     "resetPassword": "Find my password",
     "login": "Sign In",
     "notMember": "Not our member yet?",
-    "registration": "join today",
+    "registration": "Join today",
     "wonderMembership": "Are you curious about our various pricing plans?",
     "aboutMembership": "Plans & Pricing"
-  }
+  },
+  "clearing": {
+    "status": {
+      "request": "PNDG",
+      "pending": "AUTH",
+      "complet": "PAID"
+    }
+  },
+  "day": {
+    "1": "Mon",
+    "2": "Tue",
+    "3": "Wed",
+    "4": "Thu",
+    "5": "Fri"
+  },
+
+  "tax invoice to be issued": "Pending Tax Invoice ({{month}})",
+  "Now, lets start with adding your vendors": "Now, lets start with adding your vendors 🔥",
+  "add vendors": "add vendors",
+  "add products": "add products",
+  "add stocked Qty": "add stocked Qty",
+  "exchange, returns, pending delivery": "exchange, returns, pending delivery",
+  "payments Authorized": "Payments Authorized",
+  "paid": "Paid",
+  "accumulated payments": "Accumulated Payments",
+  "last week": "Last week",
+  "this week": "This week",
+  "recent payments": "Recent Payments",
+  "service updates": "Service Updates",
+  "pndg": "PNDG",
+  "cmplt": "CMPLT",
+  "exchange,returs,pending delivery": "Exchange,Returns,Pending Delivery"
 }
