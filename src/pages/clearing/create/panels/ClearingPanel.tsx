@@ -69,9 +69,9 @@ function ClearingPanel({ activeKey, ...props }: Props) {
    */
   const getSubscriptionCheckQuery = useQuery(
     'getSubscriptionCheckQuery',
-    () =>
-      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    () => userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? 0 }),
     {
+      enabled: !!user?.company_id,
       onSuccess: (data) => setIsSubscription(data.data.is_expired),
     },
   );

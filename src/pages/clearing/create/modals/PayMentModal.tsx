@@ -24,10 +24,31 @@ interface Props {
  */
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user } = useUser();
+  const queryClient = useQueryClient();
   const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
+
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckInPaymentModalQuery',
+    () =>
+      userAPI.getSubscriptionCheck({
+        company_id: user?.company_id ?? 0,
+      }),
+    {
+      enabled: visible,
+      refetchInterval: (data) => {
+        if (data?.data.is_expired) {
+          setButtonLoading(false);
+          closeModal();
+          navigate('/clearing/create');
+          queryClient.refetchQueries('getSubscriptionCheckQuery');
+          return false;
+        }
+        return 1000;
+      },
+    },
+  );
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -61,23 +82,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         PCD_RST_URL: `/clearing/create`,
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        callbackFunction: (res: any) => {
-          // 성공일때 redirect
-          if (res.PCD_PAY_RST === 'success') {
-            setTimeout(() => {
-              queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
-                active: true,
-              });
-              setButtonLoading(false);
-              closeModal();
-              message.success(
-                t('your subscription is complete. you can use the payment'),
-                3,
-              );
-            }, 2000);
-            navigate('/clearing/create');
-          }
-        },
+        callbackFunction: (res: any) => {},
       };
 
       // payple 내장 함수 호출 (결제 요청)
