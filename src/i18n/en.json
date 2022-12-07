@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "id": "ID",
+    "password": "Password",
+    "findId": "Find my ID",
+    "autoLogin": "Remember me",
+    "resetPassword": "Find my password",
+    "login": "Sign In",
+    "notMember": "Not our member yet?",
+    "registration": "join today",
+    "wonderMembership": "Are you curious about our various pricing plans?",
+    "aboutMembership": "Plans & Pricing"
+  }
+}
