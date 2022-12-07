@@ -127,7 +127,7 @@ interface Props {
     | 'accordionDown'
     | 'mistransfer'
     | 'alertWarningRed'
-    | 'creditCard'
+    | 'creditcard'
     | 'thunder';
 
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -529,7 +529,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     );
   }
 
-  if (name === 'creditCard') {
+  if (name === 'creditcard') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <CreditCard />
