@@ -106,10 +106,12 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title="재고프로그램 연동"
+        title={t('inventory program integration')}
         description={[
-          '선택한 기간의 재고 정보를 불러옵니다.',
-          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+          t('please select which dates you wish to integrate'),
+          t(
+            'it may take up to 1 minute, depending on how much you wish to integrate',
+          ),
         ]}
         loading={inventoryMutation.isLoading}
         onCancel={inventoryMutation.isLoading ? () => {} : closeInventoryModal}

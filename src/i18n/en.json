@@ -97,5 +97,10 @@
   "save vendor": "Save",
   "success": "success",
   "pending": "pending",
-  "fail": "fail"
+  "fail": "fail",
+  "inventory program integration": "Inventory program integration",
+  "please select which dates you wish to integrate": "Please select which dates you wish to integrate.",
+  "it may take up to 1 minute, depending on how much you wish to integrate": "It may take up to 1 minute, depending on how much you wish to integrate.",
+  "cancel": "Cancel",
+  "integrate": "Integrate"
 }
