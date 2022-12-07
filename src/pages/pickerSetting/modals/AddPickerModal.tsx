@@ -49,7 +49,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   useEffect(() => {
     if (!searched) return;
     if (searchStore === undefined) {
-      message.error('신규쇼핑몰입니다. 값을 입력해주세요');
+      message.error(t('message.new store'));
       form.setFieldsValue({
         store_id: '',
         store_url: '',
@@ -94,7 +94,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             label={t('store.name')}
           >
             <TurtleFormSearchInput
-              placeholder={t('placeholder.store')}
+              placeholder={t('please input store name')}
               onSearch={(value: string) => {
                 setSearchStore(
                   getStoreListQuery.data?.store_list.find(
@@ -112,7 +112,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('store.url')}
           >
-            <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
+            <TurtleFormInput placeholder={t('please input store url')} />
           </Form.Item>
 
           <Form.Item
@@ -120,13 +120,13 @@ function AddPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('store.phone')}
           >
-            <TurtleFormInput placeholder={t('placeholder.mobile')} />
+            <TurtleFormInput placeholder={t('please input phone number')} />
           </Form.Item>
         </Form>
 
         <Row css={{ marginTop: 40 }}>
           <Popconfirm
-            title={'정말 추가하시겠습니까?'}
+            title={t('message.add it')}
             okText={t('yes')}
             cancelText={t('no')}
             onConfirm={() => {
@@ -148,7 +148,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
               size="large"
               loading={createMutation.isLoading}
             >
-              추가하기
+              {t('message.add')}
             </SpecialButton>
           </Popconfirm>
         </Row>

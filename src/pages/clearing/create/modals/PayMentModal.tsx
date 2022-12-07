@@ -17,8 +17,7 @@ interface Props {
   closeModal: () => void;
 }
 
-/**
- * 구독 결제 모달창(payple)
+/* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */

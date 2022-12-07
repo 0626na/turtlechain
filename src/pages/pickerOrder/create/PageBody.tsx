@@ -22,7 +22,7 @@ import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI from '@apis/orderAPI';
+import orderAPI, { ResponseCreateOrderItemExcelParsing } from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
@@ -52,7 +52,7 @@ function PageBody() {
     useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
   const [
-    orderParsingProcessPresentModalVisible,
+    orderParsingProcessModalVisible,
     openParsingProcessModal,
     closeParsingProcessModal,
   ] = useModal();
@@ -61,45 +61,17 @@ function PageBody() {
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
       //2회 이상 발주 파일이 없는경우
-      if (data.parsingData) {
-        ready({ ...data.parsingData });
-        if (data.parsingData.data.parsing_status.fail_count)
-          openParsingProcessModal();
+      if (!data.parsingData) {
+        openPreparsingModal();
         return;
       }
-
-      openPreparsingModal();
+      if (!data.parsingData.data.parsing_status.fail_count) {
+        ready({ ...data.parsingData });
+        return;
+      }
+      openParsingProcessModal();
     },
   });
-
-  //쇼핑몰 갯수
-  const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
-    enabled: !!user,
-    onSuccess: (data) =>
-      setTodayordersCount({
-        ...todayOrdersCount,
-        total: data.data.total_count,
-      }),
-  });
-
-  //발주완료 갯수
-  const getOrdersCountQuery = useQuery(
-    'getOrdersCountQuery',
-    () =>
-      orderAPI.getOrderSheets({
-        start_date: moment().format('YYYY-MM-DD'),
-        end_date: moment().format('YYYY-MM-DD'),
-      }),
-    {
-      onSuccess: (data) =>
-        setTodayordersCount({
-          ...todayOrdersCount,
-          complete: data.data.order_sheet_list.filter(
-            (order) => order.type === 'new',
-          ).length,
-        }),
-    },
-  );
 
   return (
     <>
@@ -132,26 +104,41 @@ function PageBody() {
       />
 
       {/* 발주서 파싱 결과 모달 */}
-      {/* <OrderParsingProcessPresentModal
-        visible={orderParsingProcessPresentModalVisible}
-        title="발주서 처리 현황"
+      <OrderParsingProcessPresentModal
+        visible={orderParsingProcessModalVisible}
+        title={t('order is problem')}
         description={[
-          '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
-          '발주서 별 자세한 오류사항은 하나씩 올리면 확인 가능.',
+          t('there are orders to modify'),
+          t('please check error and reload'),
         ]}
         onCancel={closeParsingProcessModal}
-        onOk={() => {}}
-        successCount={cart.parsingStatus.success_count}
-        failCount={cart.parsingStatus.fail_count}
-        messages={cart.parsingStatus.error_messages}
+        onOk={() => {
+          ready({
+            ...(createPreParsingMutation.data
+              ?.parsingData as ResponseCreateOrderItemExcelParsing),
+          });
+          closeParsingProcessModal();
+        }}
+        successCount={Number(
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .success_count,
+        )}
+        failCount={Number(
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .fail_count,
+        )}
+        messages={
+          createPreParsingMutation.data?.parsingData?.data.parsing_status
+            .error_messages ?? []
+        }
         size="middle"
-      /> */}
+      />
 
       {/*
        * Page
        */}
       <PageTitle
-        title="발주서 미리보기"
+        title={t('order.preview')}
         buttons={[
           <TurtleText
             css={css({
@@ -159,26 +146,26 @@ function PageBody() {
               fontWeight: 500,
             })}
           >
-            {`당일 발주완료 ${todayOrdersCount.complete}`}{' '}
+            {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
             <span css={css({ color: theme.grey400 })}>
               {`/ 
-              ${todayOrdersCount.total}개 | `}
+              ${t('count', { count: todayOrdersCount.total })} | `}
             </span>
-            {`당일 미발주 ${
+            {`${t('incomplete orders today')} ${
               todayOrdersCount.total - todayOrdersCount.complete
             }`}{' '}
-            <span
-              css={css({ color: theme.grey400 })}
-            >{`/ ${todayOrdersCount.total}개`}</span>
+            <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
+              count: todayOrdersCount.total,
+            })}`}</span>
           </TurtleText>,
           <TertiaryButton
-            text="발주서 설정"
+            text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>발주 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('button.addOrder')}</SecondaryIconButton>
             }
             items={[
               {
@@ -190,6 +177,9 @@ function PageBody() {
                     beforeUpload={(_, list) => {
                       createPreParsingMutation.mutate({
                         files: list,
+                        request_date: moment(cart.selectedDate).format(
+                          'YYYY-MM-DD',
+                        ),
                       });
 
                       return false;
@@ -218,12 +208,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${countSuccessList()})`}
+            tab={`${t('success')}(${countSuccessList()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`실패(${countFailList()})`}
+            tab={`${t('fail')}(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -241,21 +231,27 @@ function PageBody() {
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                발주수량 합계{' '}
+                {t('orderTotalCount')}
               </span>
               {'   '}
-              {` ${countSuccessList()}개 `}
+              {` ${t('count', { count: countSuccessList() })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {`(발주 ${countOrdersForType().order}, 교환 ${
-                  countOrdersForType().exchange
-                }, 미송 ${countOrdersForType().notDelivery}, 샘플 ${
-                  countOrdersForType().sample
-                }, 픽업 ${countOrdersForType().pickup}, 기타 ${
-                  countOrdersForType().etc
-                })
-              / 발주금액 합계  `}
+                {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
+                  'order.types.exchange',
+                )} ${countOrdersForType().exchange}, ${t(
+                  'order.types.takeback',
+                )} ${countOrdersForType().takeback}, ${t(
+                  'order.types.reserve',
+                )} ${countOrdersForType().reserve}, ${t(
+                  'order.types.sample',
+                )} ${countOrdersForType().sample}, ${t('order.types.pickup')} ${
+                  countOrdersForType().pickup
+                }, ${t('order.types.extra')} ${countOrdersForType().extra})
+              / ${t('orderTotalPrice')}  `}
               </span>
-              {`${calculateTotalPrice().toLocaleString()}원`}
+              {`${t('price', {
+                price: calculateTotalPrice().toLocaleString(),
+              })}`}
             </TurtleText>
           </Col>
           <Col>
@@ -265,7 +261,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              발주 등록하기
+              {t('button.order')}
             </PrimaryButton>
           </Col>
         </Row>

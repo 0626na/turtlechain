@@ -101,7 +101,7 @@ function MistransferTab() {
               color: #242934;
             `}
           >
-            오입금 환불 내역
+            {t('mistransfer.list')}
           </Col>
         </Row>
 
@@ -111,7 +111,7 @@ function MistransferTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>오입금 환불요청</TurtleText>
+            <TurtleText>{t('mistransfer.create')}</TurtleText>
           </SecondaryButton>
         </Col>
       </Row>
@@ -202,7 +202,7 @@ function MistransferTab() {
                       openRemoveModal();
                     }}
                   >
-                    요청취소
+                    {t('request cancel')}
                   </SelectButton>
                 )}
               </>
