@@ -48,21 +48,22 @@ function MistransferAddModal({ visible, closeModal }: Props) {
     form.setFieldsValue({
       ...form.getFieldsValue(),
       clearing_item_id: record.id,
-      ws_store_id: record.ws_store_id.id,
+      ws_store_id: record.ws_info.id,
       vendor_name: record.vendor_name,
-      vendor_phone: record.ws_store_id.store_phone[0].phone,
+      vendor_phone: record.ws_info.store_phone[0].phone,
       vendor_address: {
-        building: record.ws_store_id.building,
-        floor: record.ws_store_id.floor,
-        col: record.ws_store_id.col,
-        loc: record.ws_store_id.loc,
-        loc_col: `${record.ws_store_id.loc}/${record.ws_store_id.col}`,
-        ext: record.ws_store_id.ext,
+        building: record.ws_info.building,
+        floor: record.ws_info.floor,
+        col: record.ws_info.col,
+        loc: record.ws_info.loc,
+
+        col_loc: `${record.ws_info.col}/${record.ws_info.loc}`,
+        ext: record.ws_info.ext,
       },
       vendor_account: {
-        bank: record.ws_store_id.store_account[0].bank,
-        account_number: record.ws_store_id.store_account[0].account_number,
-        account_holder: record.ws_store_id.store_account[0].account_holder,
+        bank: record.bank,
+        account_number: record.account_number,
+        account_holder: record.account_holder,
       },
       is_vat_included: record.is_vat_included,
     });
@@ -171,7 +172,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
-                <Form.Item name={['vendor_address', 'loc_col']} noStyle>
+                <Form.Item name={['vendor_address', 'col_loc']} noStyle>
                   <TurtleFormInput placeholder="열/호" disabled />
                 </Form.Item>
               </div>

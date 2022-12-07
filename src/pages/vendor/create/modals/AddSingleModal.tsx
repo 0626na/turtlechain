@@ -80,7 +80,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
         floor: ws_store.floor,
         loc: ws_store.loc,
         col: ws_store.col,
-        loc_col: `${ws_store.loc}/${ws_store.col}`,
+        col_loc: `${ws_store.col}/${ws_store.loc}`,
         ext: ws_store.ext,
       },
       company: {
@@ -202,7 +202,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
-                <Form.Item name={['ws_store_info', 'loc_col']} noStyle>
+                <Form.Item name={['ws_store_info', 'col_loc']} noStyle>
                   <TurtleFormInput placeholder="열/호" disabled />
                 </Form.Item>
               </div>

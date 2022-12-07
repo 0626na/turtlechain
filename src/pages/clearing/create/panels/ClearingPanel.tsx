@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
 import userAPI from '@apis/userAPI';
 import {
@@ -20,7 +21,6 @@ import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import useUser from '@hooks/useUser';
 import { message } from '@utils/message';
-
 import {
   Col,
   Collapse,
@@ -30,11 +30,8 @@ import {
   Typography,
 } from 'antd';
 import { t } from 'i18next';
-
-import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-
 import DetailModal from '../modals/DetailModal';
 import PayMentModal from '../modals/PayMentModal';
 import FullUseButton from './FullUseButton';
@@ -67,12 +64,17 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   /**
    * 유저의 구독여부 찾기
    */
-  const getSubscriptionCheckQuery = useQuery(
+  const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
     'getSubscriptionCheckQuery',
     () =>
-      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+      userAPI.getSubscriptionCheck({
+        company_id: user?.company_id ?? 0,
+      }),
     {
-      onSuccess: (data) => setIsSubscription(data.data.is_expired),
+      enabled: !!user?.company_id,
+      onSuccess: (data) => {
+        setIsSubscription(data.data.is_expired);
+      },
     },
   );
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import paypleAPI from '@apis/paypleAPI';
 import { TertiaryButton, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
@@ -24,9 +24,32 @@ interface Props {
  */
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user } = useUser();
+  const [requestCount, setRequestCount] = useState(0);
+  const queryClient = useQueryClient();
+  const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
+
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckInPaymentModalQuery',
+    () =>
+      userAPI.getSubscriptionCheck({
+        company_id: user?.company_id ?? 0,
+      }),
+    {
+      enabled: visible,
+      refetchInterval: (data) => {
+        if (data?.data.is_expired) {
+          setButtonLoading(false);
+          closeModal();
+          navigate('/clearing/create');
+          queryClient.refetchQueries('getSubscriptionCheckQuery');
+          return false;
+        }
+        return 1000;
+      },
+    },
+  );
 
   // payple, jquery script 태그 동적 불러온다.
   useEffect(() => {
@@ -62,20 +85,8 @@ function PayMentModal({ visible, closeModal }: Props) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callbackFunction: (res: any) => {
           // 성공일때 redirect
-          if (res.PCD_PAY_RST === 'success') {
-            setTimeout(() => {
-              queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
-                active: true,
-              });
-            }, 2000);
-
-            navigate('/clearing/create');
-            message.success(
-              t('your subscription is complete. you can use the payment'),
-              3,
-            );
-            closeModal();
-          }
+          // if (res.PCD_PAY_RST === 'success') {
+          // }
         },
       };
 
@@ -94,7 +105,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape' && !buttonLoading) closeModal();
     };
     window.addEventListener('keydown', escKeyModalClose);
     return () => window.removeEventListener('keydown', escKeyModalClose);
@@ -120,7 +131,7 @@ function PayMentModal({ visible, closeModal }: Props) {
             <TurtleIcon
               name="modalClose"
               onClick={() => {
-                closeModal();
+                !buttonLoading && closeModal();
               }}
             />
           </div>
@@ -137,6 +148,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
         <div css={modal.buttonContainer}>
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.subscription')}
             size="large"
             onClick={() => {
@@ -144,9 +156,11 @@ function PayMentModal({ visible, closeModal }: Props) {
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
               });
+              setButtonLoading(true);
             }}
           />
           <TertiaryButton
+            loading={buttonLoading}
             text={t('button.testNotificationKakaoTalk')}
             size="large"
             onClick={() => {

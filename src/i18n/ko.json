@@ -385,6 +385,9 @@
     "5": "금"
   },
 
+  "address": "주소",
+  "account": "계좌",
+
   "biz role": "직책",
   "biz type": "사업자 종류",
   "biz info": "사업자 정보",
@@ -446,7 +449,9 @@
   "totalOrderCountInConfirm": "총 발주수량: {{count}}개",
   "totalOrderPriceInComfirm": "총 발주금액: {{price}}원",
   "addSingleOrder": "발주 단건추가",
-  "mobile": "휴대전화 번호입력",
+
+  "mobile": "휴대전화 번호",
+
   "building": "상가",
   "floor": "층",
   "bank": "은행",
@@ -485,9 +490,8 @@
   "please input option": "옵션을 입력해주세요",
   "please input type": "분류를 선택헤주세요",
   "please input store url": "쇼핑몰 url을 입력해주세요.",
-  "please input your email": "이메일을 입력해주세요",
-  "please select inventory": "재고관리 프로그램을 선택하세요",
   "inventory link key": "재고프로그램 연동키",
+  "please input your email": "이메일을 입력해주세요",
   "quit a payment": "결제를 종료하였습니다.",
   "subscription paid plan": "유료플랜 구독",
   "payment feature is only available as a paid plan": "결제요청 기능은 유료플랜으로만 제공됩니다.",
@@ -498,6 +502,7 @@
   "regular payment termination will be applied from the pay date of next month": "정기결제 해지는 다음 결제일 다음날부터 적용됩니다.",
   "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
   "do you really want me to unsubscribe": "정말 구독을 해지할까요?",
+  "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요."
   "unsubscription complete": "해지완료",
   "the first months fee is 100won": "첫달 이용료 100원",
   "creditInfo": "신용카드 {{cardName}} {{cardNumber}}"
