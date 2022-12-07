@@ -445,7 +445,7 @@ function UserTab() {
                     paddingTop: 10,
                   })}
                 >
-                  <TurtleIcon name="creditCard" />{' '}
+                  <TurtleIcon name="creditcard" />{' '}
                   <span
                     css={css({ marginLeft: 5 })}
                   >{`신용카드(${subscriptionData?.pay_name}) ${subscriptionData?.pay_number}`}</span>
