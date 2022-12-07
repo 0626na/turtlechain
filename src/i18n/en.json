@@ -34,9 +34,23 @@
     "history": "Inventory History",
     "adjustment": { "": "Exchange, Returns, Pending Delivery" }
   },
+
+  "table": {
+    "vendorCode": "Vendor ID",
+    "vendorName": "Name",
+    "vendorAddress": "Address",
+    "mobile": "Mobile No",
+    "accountInfo": "Banck Acct",
+    "vatIncluded": "VAT Inclusive",
+    "memo": "Memo"
+  },
   "etc": {
     "setting": "Settings",
     "tutorial": "User Guide"
+  },
+  "button": {
+    "at a time": "Add many",
+    "one by one": "Add single"
   },
 
   "day": {
@@ -70,5 +84,18 @@
   "got any exchanges, returns, or pending deliveries?": "Got any exchanges, returns, or pending deliveries? 🧐",
   "what is the total amount of todays invoices?": "What is the total amount of today`s invoices? 🤔",
   "your invoices and payments are waiting to be processed": "Your invoices and payments are waiting to be processed 💸",
-  "nice work today! How about some beer after work?": "Nice work today! How about some beer after work? 🍺"
+  "nice work today! How about some beer after work?": "Nice work today! How about some beer after work? 🍺",
+  "got new vendors today? Update my list": "Got new vendors today? Update my list",
+  "add new vendor": "Add new vendor",
+  "add vendor": "Add Vendor",
+  "vendor list": "Vendor List",
+  "preview of new vendors": "Preview of New Vendors",
+  "inventory program linkage": "Inventory program",
+  "check if VAT needs to be included with an invoice1": "Check if VAT needs to be",
+  "check if VAT needs to be included with an invoice2": "included with an invoice ",
+  "create vendor": "Add Vendor",
+  "save vendor": "Save",
+  "success": "success",
+  "pending": "pending",
+  "fail": "fail"
 }

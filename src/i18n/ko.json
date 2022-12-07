@@ -521,6 +521,7 @@
   "service updates": "터틀체인 업데이트 소식",
   "pndg": "대기",
   "cmplt": "마감",
+  "pending": "보류",
   "exchange,returns,pending delivery": "교환/반품/미송",
   "vendor,product": "거래처/상품",
   "dont forget to add your products": "상품 등록은 하셨나요? 😳",
@@ -528,5 +529,12 @@
   "got any exchanges, returns, or pending deliveries?": "교환/반품/미송 상품이 있지는 않나요? 🧐",
   "what is the total amount of todays invoices?": "오늘 거래처 결제금액은 얼마일까요? 🤔",
   "your invoices and payments are waiting to be processed": "터틀체인이 이체여부를 확인하고 있어요! 💸",
-  "Nice work today! How about some beer after work?": "오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺"
+  "Nice work today! How about some beer after work?": "오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺",
+  "got new vendors today? Update my list": "등록하려는 거래처가 없나요? 새 거래처를 요청해주세요.",
+  "add new vendor": "신규거래처 요청",
+  "add vendor": "거래처등록",
+  "vendor list": "거래처 목록",
+  "preview of new vendors": "거래처등록 미리보기",
+  "Inventory program linkage": "재고프로그램 연동",
+  "create vendor": "거래처 추가하기"
 }

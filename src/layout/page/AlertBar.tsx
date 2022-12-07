@@ -3,6 +3,7 @@ import { AlertCloseIcon, SelectButton, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { theme } from '@styles/theme';
+import { t } from 'i18next';
 import React, { useState } from 'react';
 
 function AlertBar() {
@@ -24,7 +25,7 @@ function AlertBar() {
         <div css={alertBarCss.self}>
           <TurtleIcon name="exclamationMark" />
           <span css={alertBarCss.text}>
-            등록하려는 거래처가 없나요? 새 거래처를 요청해주세요.
+            {t('got new vendors today? Update my list')}
           </span>
 
           <SelectButton
@@ -33,7 +34,7 @@ function AlertBar() {
             }}
             icon={<TurtleIcon name="alertBarArrowRight" />}
           >
-            신규거래처 요청
+            {t('add new vendor')}
           </SelectButton>
 
           <div

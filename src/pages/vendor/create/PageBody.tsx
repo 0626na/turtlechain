@@ -168,10 +168,10 @@ function PageBody() {
       <AlertBar />
 
       <PageHeader
-        title="거래처등록"
+        title={t('add vendor')}
         button={
           <HistoryButton
-            text="거래처 목록"
+            text={t('vendor list')}
             onClick={() => {
               navigate('/vendor/history');
             }}
@@ -180,10 +180,10 @@ function PageBody() {
       />
 
       <PageTitle
-        title="거래처등록 미리보기"
+        title={t('preview of new vendors')}
         buttons={[
           <TertiaryButton
-            text="재고프로그램 연동"
+            text={t('inventory program linkage')}
             onClick={() => {
               openInventoryModal();
             }}
@@ -214,7 +214,7 @@ function PageBody() {
               },
             ]}
             triggerButton={
-              <SecondaryIconButton>거래처 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('create vendor')}</SecondaryIconButton>
             }
           />,
         ]}
@@ -222,17 +222,17 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane tab={`성공(${successCount})`} key="success">
+          <Tabs.TabPane tab={`${t('success')}(${successCount})`} key="success">
             <SuccessTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`보류(${pendingCount})`} key="pending">
+          <Tabs.TabPane tab={`${t('pending')}(${pendingCount})`} key="pending">
             <PendingTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`실패(${failCount})`} key="fail">
+          <Tabs.TabPane tab={`${t('fail')}(${failCount})`} key="fail">
             <FailTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
@@ -247,7 +247,7 @@ function PageBody() {
             openConfirmModal();
           }}
         >
-          거래처 등록하기
+          {t('save vendor')}
         </PrimaryButton>
       </PageBottomBar>
     </>
