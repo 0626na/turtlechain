@@ -64,5 +64,11 @@
   "cmplt": "CMPLT",
   "exchange,returs,pending delivery": "Exchange,Returns,Pending Delivery",
   "home": "HOME",
-  "vendor,product": "Vendor, Product"
+  "vendor,product": "Vendor, Product",
+  "Dont forget to add your products": "Don`t forget to add your products! 😳",
+  "make sure to update your current inventory status": "Make sure to update your current inventory status 🥸",
+  "got any exchanges, returns, or pending deliveries?": "Got any exchanges, returns, or pending deliveries? 🧐",
+  "what is the total amount of todays invoices?": "What is the total amount of today`s invoices? 🤔",
+  "your invoices and payments are waiting to be processed": "Your invoices and payments are waiting to be processed 💸",
+  "nice work today! How about some beer after work?": "Nice work today! How about some beer after work? 🍺"
 }

@@ -138,17 +138,17 @@ function ProgressBar() {
   const handleDescription = () => {
     if (gage < stage.vendor)
       return t('Now, lets start with adding your vendors');
-    if (gage < stage.product) return '상품 등록은 하셨나요? 😳';
+    if (gage < stage.product) return t('dont forget to add your products');
     if (gage < stage.warehousing)
-      return '입고된 상품도 빠짐없이 등록해주세요! 🥸';
+      return t('make sure to update your current inventory status');
     if (gage < stage.adjustment)
-      return '교환/반품/미송 상품이 있지는 않나요? 🧐';
+      return t('got any exchanges, returns, or pending deliveries?');
     if (gage < stage.requestClearing)
-      return '오늘 거래처 결제금액은 얼마일까요? 🤔';
+      return t('what is the total amount of todays invoices?');
     if (gage < stage.completedClearing)
-      return '터틀체인이 이체여부를 확인하고 있어요! 💸';
+      return t('your invoices and payments are waiting to be processed');
     if (gage === stage.completedClearing)
-      return '오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺';
+      return t('nice work today! How about some beer after work?');
   };
 
   useEffect(() => {

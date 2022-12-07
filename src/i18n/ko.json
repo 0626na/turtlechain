@@ -522,5 +522,11 @@
   "pndg": "대기",
   "cmplt": "마감",
   "exchange,returns,pending delivery": "교환/반품/미송",
-  "vendor,product": "거래처/상품"
+  "vendor,product": "거래처/상품",
+  "dont forget to add your products": "상품 등록은 하셨나요? 😳",
+  "make sure to update your current inventory status": "입고된 상품도 빠짐없이 등록해주세요! 🥸",
+  "got any exchanges, returns, or pending deliveries?": "교환/반품/미송 상품이 있지는 않나요? 🧐",
+  "what is the total amount of todays invoices?": "오늘 거래처 결제금액은 얼마일까요? 🤔",
+  "your invoices and payments are waiting to be processed": "터틀체인이 이체여부를 확인하고 있어요! 💸",
+  "Nice work today! How about some beer after work?": "오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺"
 }
