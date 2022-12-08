@@ -122,7 +122,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={'미송상품 추가'}
+        title={t('add pending delivery')}
         visible={visible}
         onClose={closeModal}
       >

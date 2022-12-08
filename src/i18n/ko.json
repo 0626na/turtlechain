@@ -1,170 +1,4 @@
 {
-  "turtleChain": "터틀체인",
-
-  "retailer": "쇼핑몰",
-  "home": "HOME",
-  "membershipInfo": "멤버십 정보",
-
-  "vendor": {
-    "create": "거래처등록",
-    "history": "거래처목록",
-    "addSingle": "거래처 추가",
-    "newCreate": "거래처 신규추가",
-    "updateInfo": "거래처 정보수정 요청",
-    "search": "거래처검색"
-  },
-
-  "product": {
-    "create": "상품등록",
-    "history": "상품목록",
-    "addSingle": "상품 추가",
-    "search": "상품 검색",
-    "duplicateCheckProductCode": "중복체크",
-    "notDuplication": "중복 없음",
-    "duplication": "중복 있음",
-    "message": {
-      "notDuplication": "등록 가능한 상품 바코드입니다.",
-      "duplication": "이미 등록 되어있는 상품 바코드 입니다. 다른 바코드를 입력하세요 ",
-      "inputProductCode": "바코드를 입력해주세요",
-      "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요."
-    }
-  },
-
-  "order": {
-    "": "발주",
-    "preview": "발주서 미리보기",
-    "create": "발주등록",
-    "types": {
-      "order": "발주",
-      "reserve": "미송",
-      "takeback": "반품",
-      "exchange": "교환",
-      "sample": "샘플",
-      "pickup": "픽업",
-      "extra": "기타"
-    }
-  },
-
-  "warehousing": {
-    "": "입고",
-    "create": "입고등록",
-    "history": "입고내역",
-    "adjustment": {
-      "": "교환/반품/미송",
-      "pending": "대기",
-      "confirmed": "마감"
-    },
-    "confirm": {
-      "true": "마감",
-      "false": "대기",
-      "all": "전체"
-    },
-    "addSingle": "입고 추가"
-  },
-
-  "adjustment": {
-    "process type": {
-      "": "처리방식",
-      "default": "매입조정 처리",
-      "subtract": "차감",
-      "reserve": "미송",
-      "refund": "환불",
-      "exchange": "교환",
-      "takeback": "반품"
-    }
-  },
-
-  "clearing": {
-    "": "결제",
-    "create": "결제하기",
-    "history": "결제내역",
-    "transaction": {
-      "": "터틀장부",
-      "add": "과거금액 추가"
-    },
-    "status": {
-      "all": "전체",
-      "request": "요청",
-      "pending": "대기",
-      "complete": "완료"
-    },
-    "complete date": "결제완료 일자",
-    "price": "결제 금액"
-  },
-
-  "transaction": {
-    "": "과거매입",
-    "warehousing": "입고",
-    "adjustment": "매입조정",
-    "reserve": "미송",
-    "subtract": "차감",
-    "refund": "환불",
-    "mistransfer": "오입금",
-    "clear_refund": "환불처리",
-    "reserve_payment": "미송결제",
-    "reserve_payment_subtract": "미송결제차감",
-    "reserve_subtract": "미송차감",
-    "reserve_warehousing": "미송입고",
-    "clearing_subtract": "매입차감",
-    "clearing": "정산",
-    "add_unpaid": "미결제 추가",
-    "remove_unpaid": "미결제 삭제",
-    "add_subtract": "차감 추가",
-    "remove_subtract": "차감 삭제",
-    "add_past_subtract": "과거매입 등록",
-    "add_past_unpaid": "과거매입 등록",
-    "remove_past_subtract": "과거 차감 삭제",
-    "remove_past_unpaid": "과거 미결제 삭제"
-  },
-
-  "inventory": {
-    "sellmate": "셀메이트",
-    "ezadmin": "이지어드민",
-    "turtlechain": "터틀체인",
-    "none": "없음",
-    "not used": "사용안함",
-    "etc": "기타"
-  },
-
-  "etc": {
-    "setting": "설정",
-    "tutorial": "사용가이드"
-  },
-
-  "auth": {
-    "findId": "아이디 찾기",
-    "login": "로그인",
-    "logout": "로그아웃",
-    "autoLogin": "자동 로그인",
-    "id": "아이디",
-    "password": "비밀번호",
-    "resetPassword": "비밀번호 재설정",
-    "registration": "서비스 가입",
-    "registrationReturn": "가입반려",
-    "registrationSelect": "가입 유형 선택",
-    "aboutMembership": "요금플랜 알아보기",
-    "wonderMembership": "다양한 요금제가 궁금하신가요?",
-    "notMember": "아직 회원이 아니신가요?",
-    "do": "인증하기",
-    "retry": "재발송",
-    "success": "인증 완료"
-  },
-
-  "store": {
-    "": "쇼핑몰",
-    "lists": "쇼핑몰 리스트",
-    "name": "쇼핑몰명",
-    "info": "쇼핑몰 정보",
-    "alimtalk name": "알림톡명",
-    "url": "쇼핑몰 URL",
-    "phone": "쇼핑몰 휴대전화 번호",
-    "create": "쇼핑몰 추가하기",
-    "update": "쇼핑몰 수정하기",
-    "address": "쇼핑몰 주소",
-    "management": "쇼핑몰 관리",
-    "selectButton": "{{store}} 외 {{storeCount}}개"
-  },
-
   "table": {
     "operatorStatus": "운영상태",
     "open": "운영",
@@ -238,6 +72,14 @@
     "totalPrice": "금액 합계"
   },
 
+  "placeholder": {
+    "alimtalk": "알림톡명을 입력해주세요.",
+    "mistransfer refundAmt": "오입금 환불 요청금액을 입력해주세요",
+    "request memo": "오입금 환불 요청사유를 입력해주세요",
+    "search product name and reference": "상품명 또는 거래처 상품명을 입력해주세요",
+    "select category": "분류선택"
+  },
+
   "button": {
     "uploadExcel": "엑셀 업로드",
     "at a time": "한번에 추가",
@@ -285,6 +127,9 @@
     "re-subscription": "재구독하기",
     "testNotificationKakaoTalk": "테스트 알림톡 받아보기",
     "payment method change": "결제수단 변경",
+    "process": "처리하기",
+    "next": "다음",
+    "register adjustment": "교환/반품 등록하기",
     "add product": "상품 추가하기",
     "add & save": "상품 등록하기",
     "save vendor": "거래처 등록하기",
@@ -334,14 +179,11 @@
     "product delete is completed": "상품을 삭제했어요",
     "product memo is updated": "상품 메모를 수정했어요",
     "update is complete": "수정이 완료되었습니다.",
-    "vendor is deleted": "거래처가 삭제되었습니다."
+    "vendor is deleted": "거래처가 삭제되었습니다.",
+    "successfully added exchange/returns": "교환/반품이 성공적으로 등록되었습니다."
   },
 
-  "placeholder": {
-    "alimtalk": "알림톡명을 입력해주세요.",
-    "mistransfer refundAmt": "오입금 환불 요청금액을 입력해주세요",
-    "request memo": "오입금 환불 요청사유를 입력해주세요"
-  },
+  "title": {},
 
   "description": {
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
@@ -354,13 +196,14 @@
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 
+  "type": {},
+
   "user": {
     "": "직책",
     "rt": "대표",
     "ub": "직원",
     "pi": "사입"
   },
-
   "agreement": {
     "all": "전체 동의",
     "service_use": "서비스 이용약관 동의(필수)",
@@ -368,7 +211,6 @@
     "third_party": "제 3자 정보제공 동의",
     "event_notificaton": "이벤트 소식 등 알림 정보받기"
   },
-
   "mistransfer": {
     "": "오입금 환불",
     "list": "오입금 환불내역",
@@ -390,7 +232,6 @@
     "management": "오입금 반환 관리",
     "complete date": "오입금 환불 처리날짜"
   },
-
   "day": {
     "1": "월",
     "2": "화",
@@ -398,10 +239,8 @@
     "4": "목",
     "5": "금"
   },
-
   "address": "주소",
   "account": "계좌",
-
   "biz role": "직책",
   "biz type": "사업자 종류",
   "biz info": "사업자 정보",
@@ -464,9 +303,7 @@
   "totalOrderPriceInComfirm": "총 발주금액: {{price}}원",
   "addSingleOrder": "발주 단건추가",
   "stocked product list": "입고서 리스트",
-
   "mobile": "휴대전화 번호",
-
   "building": "상가",
   "floor": "층",
   "vendors": "거래처 목록",
@@ -587,8 +424,166 @@
   "summary of invoice issues": "교환/반품/미송 현황",
   "add invoice issues": "교환/반품/미송 추가",
   "add exchange/returns": "교환/반품 추가",
-  "add pending delivery": "미송추가",
   "search vendor name, product name, and reference": "거래처명, 상품명, 거래처 상품명 검색",
+  "Detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
+
+  "turtleChain": "터틀체인",
+  "retailer": "쇼핑몰",
+  "home": "HOME",
+  "membershipInfo": "멤버십 정보",
+  "vendor": {
+    "create": "거래처등록",
+    "history": "거래처목록",
+    "addSingle": "거래처 추가",
+    "newCreate": "거래처 신규추가",
+    "updateInfo": "거래처 정보수정 요청",
+    "search": "거래처검색"
+  },
+  "product": {
+    "create": "상품등록",
+    "history": "상품목록",
+    "addSingle": "상품 추가",
+    "search": "상품 검색",
+    "duplicateCheckProductCode": "중복체크",
+    "notDuplication": "중복 없음",
+    "duplication": "중복 있음",
+    "message": {
+      "notDuplication": "등록 가능한 상품 바코드입니다.",
+      "duplication": "이미 등록 되어있는 상품 바코드 입니다. 다른 바코드를 입력하세요 ",
+      "inputProductCode": "바코드를 입력해주세요",
+      "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요."
+    }
+  },
+  "order": {
+    "": "발주",
+    "preview": "발주서 미리보기",
+    "create": "발주등록",
+    "types": {
+      "order": "발주",
+      "reserve": "미송",
+      "takeback": "반품",
+      "exchange": "교환",
+      "sample": "샘플",
+      "pickup": "픽업",
+      "extra": "기타"
+    }
+  },
+  "warehousing": {
+    "": "입고",
+    "create": "입고등록",
+    "history": "입고내역",
+    "adjustment": {
+      "": "교환/반품/미송",
+      "pending": "대기",
+      "confirmed": "마감"
+    },
+    "confirm": {
+      "true": "마감",
+      "false": "대기",
+      "all": "전체"
+    },
+    "addSingle": "입고 추가",
+    "addAdjustment": "교환/반품 추가",
+    "search from stock list": "입고상품 불러오기",
+    "preview of exchange and returns": "교환/반품 미리보기"
+  },
+  "adjustment": {
+    "process type": {
+      "": "처리방식",
+      "default": "매입조정 처리",
+      "subtract": "차감",
+      "reserve": "미송",
+      "refund": "환불",
+      "exchange": "교환",
+      "takeback": "반품"
+    }
+  },
+  "clearing": {
+    "": "결제",
+    "create": "결제하기",
+    "history": "결제내역",
+    "transaction": {
+      "": "터틀장부",
+      "add": "과거금액 추가"
+    },
+    "status": {
+      "all": "전체",
+      "request": "요청",
+      "pending": "대기",
+      "complete": "완료"
+    },
+    "complete date": "결제완료 일자",
+    "price": "결제 금액"
+  },
+  "transaction": {
+    "": "과거매입",
+    "warehousing": "입고",
+    "adjustment": "매입조정",
+    "reserve": "미송",
+    "subtract": "차감",
+    "refund": "환불",
+    "mistransfer": "오입금",
+    "clear_refund": "환불처리",
+    "reserve_payment": "미송결제",
+    "reserve_payment_subtract": "미송결제차감",
+    "reserve_subtract": "미송차감",
+    "reserve_warehousing": "미송입고",
+    "clearing_subtract": "매입차감",
+    "clearing": "정산",
+    "add_unpaid": "미결제 추가",
+    "remove_unpaid": "미결제 삭제",
+    "add_subtract": "차감 추가",
+    "remove_subtract": "차감 삭제",
+    "add_past_subtract": "과거매입 등록",
+    "add_past_unpaid": "과거매입 등록",
+    "remove_past_subtract": "과거 차감 삭제",
+    "remove_past_unpaid": "과거 미결제 삭제"
+  },
+  "inventory": {
+    "sellmate": "셀메이트",
+    "ezadmin": "이지어드민",
+    "turtlechain": "터틀체인",
+    "none": "없음",
+    "not used": "사용안함",
+    "etc": "기타"
+  },
+  "etc": {
+    "setting": "설정",
+    "tutorial": "사용가이드"
+  },
+  "auth": {
+    "findId": "아이디 찾기",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "autoLogin": "자동 로그인",
+    "id": "아이디",
+    "password": "비밀번호",
+    "resetPassword": "비밀번호 재설정",
+    "registration": "서비스 가입",
+    "registrationReturn": "가입반려",
+    "registrationSelect": "가입 유형 선택",
+    "aboutMembership": "요금플랜 알아보기",
+    "wonderMembership": "다양한 요금제가 궁금하신가요?",
+    "notMember": "아직 회원이 아니신가요?",
+    "do": "인증하기",
+    "retry": "재발송",
+    "success": "인증 완료"
+  },
+  "store": {
+    "": "쇼핑몰",
+    "lists": "쇼핑몰 리스트",
+    "name": "쇼핑몰명",
+    "info": "쇼핑몰 정보",
+    "alimtalk name": "알림톡명",
+    "url": "쇼핑몰 URL",
+    "phone": "쇼핑몰 휴대전화 번호",
+    "create": "쇼핑몰 추가하기",
+    "update": "쇼핑몰 수정하기",
+    "address": "쇼핑몰 주소",
+    "management": "쇼핑몰 관리",
+    "selectButton": "{{store}} 외 {{storeCount}}개"
+  },
+  "add pending delivery": "미송추가",
   "preview of New Products": "상품등록 미리보기",
   "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
 }
