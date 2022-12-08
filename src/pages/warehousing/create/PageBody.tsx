@@ -210,7 +210,7 @@ function PageBody() {
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('total stocked amount')}
+              {t('table.totalAmount')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalAmount.toLocaleString()}

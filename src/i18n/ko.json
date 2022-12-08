@@ -576,5 +576,6 @@
   "this will confirm stocked products for the invoice": "해당 입고서를 마감합니다.",
   "summary of invoice issues": "교환/반품/미송 현황",
   "add invoice issues": "교환/반품/미송 추가",
-  "add exchange/returns": "교환/반품 추가"
+  "add exchange/returns": "교환/반품 추가",
+  "search vendor name, product name, and reference": "거래처명, 상품명, 거래처 상품명 검색"
 }

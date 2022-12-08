@@ -333,7 +333,9 @@ function PageBody() {
 
                   <Col>
                     <SearchFilter
-                      placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                      placeholder={t(
+                        'search vendor name, product name, and reference',
+                      )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
                     />
