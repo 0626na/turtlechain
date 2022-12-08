@@ -380,7 +380,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+              width: 80,
               title: t('table.type'),
               render: (_, record) =>
                 t(`adjustment.process type.${record.type}`),
@@ -394,8 +394,9 @@ function PageBody() {
                   zIndex={1}
                   title={
                     <span>
-                      거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수
-                      있어요!
+                      {t(
+                        'Detailed history of credits can be found in the ledger',
+                      )}
                     </span>
                   }
                 >
@@ -438,7 +439,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+              width: 70,
               align: 'center',
               title: t('table.memo'),
               onCell: (record) => ({
@@ -476,7 +477,7 @@ function PageBody() {
                           adjustmentModalOpen();
                         }}
                       >
-                        처리하기
+                        {t('button.process')}
                       </ProcessButton>
                     )}
                 </>

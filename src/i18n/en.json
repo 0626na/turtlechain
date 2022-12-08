@@ -1,35 +1,16 @@
 {
-  "auth": {
-    "id": "ID",
-    "password": "Password",
-    "findId": "Find my ID",
-    "autoLogin": "Remember me",
-    "resetPassword": "Find my password",
-    "login": "Sign In",
-    "notMember": "Not our member yet?",
-    "registration": "Join today",
-    "wonderMembership": "Are you curious about our various pricing plans?",
-    "aboutMembership": "Plans & Pricing"
-  },
-  "clearing": {
-    "": "Payment",
-    "create": "Make Payments",
-    "history": "Payments History",
-    "transaction": { "": "Ledger" },
-    "status": {
-      "request": "PNDG",
-      "pending": "AUTH",
-      "complet": "PAID"
-    }
-  },
+  "home": "HOME",
+
   "vendor": {
     "create": "Add Vendor",
     "history": "Vendors"
   },
+
   "product": {
     "create": "Add Product",
     "history": "Products"
   },
+
   "warehousing": {
     "": "Inventory",
     "create": "Add Stocked Qty",
@@ -43,54 +24,151 @@
       "true": "Confirmed",
       "false": "Pending",
       "all": "All"
+    },
+    "addAdjustment": "Add exchange / returns",
+    "search from stock list": "Search from stock list"
+  },
+
+  "adjustment": {
+    "process type": {
+      "": "처리방식",
+      "default": "매입조정 처리",
+      "subtract": "차감",
+      "reserve": "미송",
+      "refund": "환불",
+      "exchange": "exchange",
+      "takeback": "returns"
+    },
+    "preview of exchange and returns": "Preview of exchange and returns"
+  },
+
+  "clearing": {
+    "": "Payment",
+    "create": "Make Payments",
+    "history": "Payments History",
+    "transaction": { "": "Ledger" },
+    "status": {
+      "request": "PNDG",
+      "pending": "AUTH",
+      "complet": "PAID"
     }
   },
 
-  "table": {
-    "vendorCode": "Vendor ID",
-    "vendorName": "Name",
-    "vendorAddress": "Address",
-    "mobile": "Mobile No",
-    "accountInfo": "Banck Acct",
-    "vatIncluded": "VAT Inclusive",
-    "memo": "Memo",
-    "wsStoreNumber": "Phone No.",
-    "vendorEtcAddress": "Other address",
-    "product vendorName": "Vendor Name",
-    "product vendorAddress": "Vendor Address",
-    "productName": "Product Name",
-    "vendorProductName": "Reference",
-    "productCode": "Product ID",
-    "option": "Variant",
-    "imageUrl": "Image URL",
-    "price": "Price",
-    "warehouseName": "WareHousse Name",
-    "warehousingCount": "Stocked Qty",
-    "isReserveWarehousing": "Pending Delivery",
-    "progressStatus": "Status",
-    "createdDate": "Updated date",
-    "totalWarehousingCount": "Total stocked product",
-    "totalAmount": "Total stocked amount",
-    "totalVendorCount": "Total vendors"
-  },
   "etc": {
     "setting": "Settings",
     "tutorial": "User Guide"
   },
+
+  "auth": {
+    "id": "ID",
+    "password": "Password",
+    "findId": "Find my ID",
+    "autoLogin": "Remember me",
+    "resetPassword": "Find my password",
+    "login": "Sign In",
+    "notMember": "Not our member yet?",
+    "registration": "Join today",
+    "wonderMembership": "Are you curious about our various pricing plans?",
+    "aboutMembership": "Plans & Pricing"
+  },
+
+  "table": {
+    "operatorStatus": "운영상태",
+    "open": "운영",
+    "closed": "폐점",
+    "paymentAccountInfo": "결제 계좌정보",
+    "recipientPrint": "받는분 통장인쇄",
+    "transactionEmail": "이체내역 수신메일",
+    "inventory": "재고관리 프로그램",
+    "vatIncluded": "VAT Inclusive",
+    "accountInfo": "Banck Acct",
+    "store": "쇼핑몰",
+    "vendor": "거래처",
+    "address": "주소",
+    "vendorName": "Vendor Name",
+    "useVendorName": "사용할 거래처명",
+    "vendorAddress": "Address",
+    "vendorCode": "Vendor ID",
+    "product": "상품",
+    "productName": "Product Name",
+    "supplyPrice": "공급가",
+    "supplyPriceTotal": "공급가 합계",
+    "supplyPriceRecord": "공급가 표시",
+    "vendorProductName": "Reference",
+    "alimtalkName": "알림톡명",
+    "productCode": "Product ID",
+    "option": "Variant",
+    "imageUrl": "Image URL",
+    "price": "Price",
+    "amount": "금액",
+    "totalAmount": "Total stocked amount",
+    "memo": "Memo",
+    "mobile": "Mobile No",
+    "retailerStoreInput": "쇼핑몰 입력값",
+    "retailerStoreName": "쇼핑몰명",
+    "retailerStoreURL": "쇼핑몰 URL",
+    "matching": "매칭",
+    "wsStoreNumber": "Phone No.",
+    "vendorEtcAddress": "Other address",
+    "wsStoreName": "상호명",
+    "wsCompanyNum": "사업자 번호",
+    "wsOwner": "대표자명",
+    "otherAddress": "기타주소",
+    "count": "Quantity",
+    "countTotal": "수량합계",
+    "type": "Category",
+    "proccessed totalCount": "Process/Total",
+    "warehouseName": "WareHouse Name",
+    "warehousingCount": "Stocked Qty",
+    "requestCount": "요청 수량",
+    "warehousingDate": "Stocked Date",
+    "totalWarehousingCount": "Total stocked product",
+    "isReserveWarehousing": "Pending Delivery",
+    "progressStatus": "Status",
+    "createdDate": "Updated date",
+    "overpaidAmount": "사용가능 금액",
+    "unpaidAmount": "결제요청 금액",
+    "unpaidPayment": "미결제 금액",
+    "refundAmount": "환불예정 금액",
+    "paymentStatus": "결제 상태",
+    "paymentRequestDate": "결제 요청 일자",
+    "paymentCompleteDate": "결제 완료 일자",
+    "paymentPrice": "결제금액",
+    "totalVendorCount": "Total vendors",
+    "subtract": "차감",
+    "refund": "환불",
+    "unpaid": "결제",
+    "orderDate": "발주일자",
+    "clientCount": "거래처 수",
+    "totalCount": "수량 합계",
+    "totalPrice": "Total credit amount"
+  },
+
   "button": {
     "at a time": "Add many",
     "one by one": "Add single",
     "updateVendor": "Send Request",
     "cancel": "Close",
     "confirm cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "process": "Process",
+    "next": "Next",
+    "register adjustment": "Save",
+    "addReserve": "Add Pending Delivery"
   },
+
   "message": {
     "success update vendor request": "I requested to modify the account information. I'll let you know when it's over",
     "product delete is completed": "Product delete is completed",
     "product memo is updated": "Product memo is updated",
     "update is complete": "Update is complete",
-    "vendor is deleted": "Vendor is deleted"
+    "vendor is deleted": "Vendor is deleted",
+    "successfully added exchange/returns": "Successfully added exchange/returns"
+  },
+
+  "placeholder": {
+    "search product name and reference": "search product name and reference",
+    "select category": "Select category"
   },
 
   "day": {
@@ -117,7 +195,6 @@
   "pndg": "PNDG",
   "cmplt": "CMPLT",
   "exchange,returs,pending delivery": "Exchange,Returns,Pending Delivery",
-  "home": "HOME",
   "vendor,product": "Vendor, Product",
   "Dont forget to add your products": "Don`t forget to add your products! 😳",
   "make sure to update your current inventory status": "Make sure to update your current inventory status 🥸",
@@ -200,5 +277,6 @@
   "add invoice issues": "Add Invoice Issues",
   "add exchange/returns": "Add exchange/returns",
   "add pending delivery": "Add Pending Delivery",
-  "search vendor name, product name, and reference": "Search vendor name, product name, and reference"
+  "search vendor name, product name, and reference": "Search vendor name, product name, and reference",
+  "Detailed history of credits can be found in the ledger": "Detailed history of credits can be found in the ledger"
 }
