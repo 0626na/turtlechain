@@ -62,7 +62,7 @@ function PageBody() {
                 color: theme.grey800,
               }}
             >
-              ₩
+              원
             </span>
           </h1>
 

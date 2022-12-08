@@ -80,7 +80,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('Inventory program linkage')}
+        title={t('inventory program integration')}
         description={[
           t('please select which dates you wish to integrate'),
           t(
@@ -145,14 +145,14 @@ function PageBody() {
         title={t('preview of todays stock products')}
         buttons={[
           <TertiaryButton
-            text={t('integrate inventory program')}
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('add stock')}</SecondaryIconButton>
+              <SecondaryIconButton>{t('button.add stock')}</SecondaryIconButton>
             }
             items={[
               {

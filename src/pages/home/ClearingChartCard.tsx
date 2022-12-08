@@ -175,7 +175,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
             color: theme.grey800,
           }}
         >
-          ₩
+          원
         </span>
       </h1>
 

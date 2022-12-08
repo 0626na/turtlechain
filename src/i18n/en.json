@@ -83,7 +83,12 @@
     "updateVendor": "Send Request",
     "cancel": "Close",
     "confirm cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "add product": "add product",
+    "add & save": "Add & Save",
+    "product list": "Product List",
+    "integrate inventory program": "Integrate inventory program",
+    "add stock": "Add Stock"
   },
   "message": {
     "success update vendor request": "I requested to modify the account information. I'll let you know when it's over",
@@ -104,7 +109,6 @@
   "tax invoice to be issued": "Pending Tax Invoice ({{month}})",
   "Now, lets start with adding your vendors": "Now, lets start with adding your vendors 🔥",
   "add vendors": "add vendors",
-  "add products": "add products",
   "add stocked Qty": "add stocked Qty",
   "exchange, returns, pending delivery": "exchange, returns, pending delivery",
   "payments Authorized": "Payments Authorized",
@@ -171,7 +175,6 @@
   "your vendor list must be updated before adding new products": "Your vendor list must be updated before adding new products",
   "add & save": "Add & Save",
   "integrate inventory program": "Integrate inventory program",
-  "add product": "Add Product",
   "search by product name, inventory name, vendor name...": "Search by product name, inventory name, vendor name...",
   "please input mobile number": "Please input mobile number",
   "accountNumber": "bank Acct Number",
