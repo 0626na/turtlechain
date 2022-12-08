@@ -79,7 +79,22 @@
     "search product name and reference": "상품명 또는 거래처 상품명을 입력해주세요",
     "select category": "분류선택",
     "id": "아이디",
-    "password": "비밀번호"
+    "password": "비밀번호",
+    "input vendor name": "거래처명을 입력해주세요",
+    "input phone number": "매장번호를 입력해주세요",
+    "input mobile number": "휴대전화번호를 입력해주세요",
+    "building": "상가",
+    "floor": "층",
+    "col loc": "열/호",
+    "input other address": "기타 주소를 입력해주세요",
+    "bank": "은행",
+    "account number": "계좌번호",
+    "account holder name": "예금주명",
+    "input vendor code": "거래처코드를 입력해주세요",
+    "input brand name": "상호명을 입력해주세요",
+    "input business number": "사업자 번호를 입력해주세요",
+    "input owner name": "대표자명을 입력해주세요",
+    "input memo": "메모를 입력해주세요"
   },
 
   "button": {
