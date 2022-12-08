@@ -12,6 +12,7 @@ import { useSearchParams } from 'react-router-dom';
 import CompanyTab from './tabs/CompanyTab';
 import StoreTab from './tabs/StoreTab';
 import MistransferTab from './tabs/MistransferTab';
+import { t } from 'i18next';
 
 function PageBody() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +24,7 @@ function PageBody() {
 
   return (
     <>
-      <PageHeader title="설정" />
+      <PageHeader title={t('etc.setting')} />
 
       <div // pageContent
         css={pageContent}
@@ -42,22 +43,22 @@ function PageBody() {
             setSearchParams({ tab: newKey });
           }}
         >
-          <Tabs.TabPane key="store" tab="쇼핑몰 관리">
+          <Tabs.TabPane key="store" tab={t('store.management')}>
             <div css={whiteContainer}>
               <StoreTab />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="user" tab="계정관리">
+          <Tabs.TabPane key="user" tab={t('accountManagement')}>
             <div css={greyContainer}>
               <UserTab />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="company" tab="사업자 관리">
+          <Tabs.TabPane key="company" tab={t('biz management')}>
             <div css={greyContainer}>
               <CompanyTab />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="mistransfer" tab="오입금 환불">
+          <Tabs.TabPane key="mistransfer" tab={t('mistransfer.')}>
             <div css={whiteContainer}>
               <MistransferTab />
             </div>

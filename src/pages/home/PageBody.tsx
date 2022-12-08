@@ -12,6 +12,7 @@ import AdjustmentStatusCard from './AdjustmentStatusCard';
 
 import ClearingStatusCard from './ClearingStatusCard';
 import AnnouncementCard from './AnnouncementCard';
+import { t } from 'i18next';
 
 function PageBody() {
   // 정산서 리스트 요청
@@ -47,7 +48,7 @@ function PageBody() {
           }}
         >
           <h3 css={{ fontSize: 20, color: theme.grey600 }}>
-            {thisMonth}월 세금계산서 발행예정
+            {t('tax invoice to be issued', { month: thisMonth })}
           </h3>
 
           <h1 css={{ marginTop: 14 }}>
@@ -61,7 +62,7 @@ function PageBody() {
                 color: theme.grey800,
               }}
             >
-              원
+              ₩
             </span>
           </h1>
 

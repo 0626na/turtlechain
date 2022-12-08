@@ -72,7 +72,7 @@ function PageBody() {
   // 거래처 부가세,메모,거래처이름 수정 요청
   const vendorUpdateMutation = useMutation(vendorAPI.update, {
     onSuccess: () => {
-      message.success('수정이 완료되었습니다.');
+      message.success(t('message.update is complete'));
       closeMemoModal();
       closeVatIncludedModal();
       closeUpdateVendorInfoModal();
@@ -83,7 +83,7 @@ function PageBody() {
   // 거래처 삭제 요청
   const vendorRemoveMutation = useMutation(vendorAPI.remove, {
     onSuccess: () => {
-      message.success('거래처가 삭제되었습니다.');
+      message.success(t('message.vendor is deleted'));
       closeRemoveModal();
       getVendorListQuery.refetch();
     },
@@ -116,12 +116,12 @@ function PageBody() {
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('write freely anything thats important about this vendor'),
+          t('use this memo as your personal note'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('ex, double check its invoices!')}
       />
       {/*
        * 거래처명 수정 모달
@@ -133,6 +133,7 @@ function PageBody() {
           vendorUpdateMutation.isLoading ? () => {} : closeupdateVendorNameModal
         }
         defaultValue={selectedRow?.vendor_name}
+        okText={t('modify')}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
             id: selectedRow?.id as number,
@@ -140,19 +141,19 @@ function PageBody() {
           });
           closeupdateVendorNameModal();
         }}
-        title="거래처명 수정"
+        title={t('modifying the account name')}
         description={[
-          '선택한 거래처의 이름을 수정합니다.',
-          '원하는 거래처명을 입력해주세요.',
+          t('modify the name of the selected account'),
+          t('please enter the desired account name'),
         ]}
       />
       {/**
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="삭제"
+        title={t('delete from list')}
+        description={[t('this will be permanently deleted from your list')]}
+        okText={t('Delete')}
         visible={removeModalVisible}
         loading={vendorUpdateMutation.isLoading}
         onCancel={vendorUpdateMutation.isLoading ? () => {} : closeRemoveModal}
@@ -190,7 +191,7 @@ function PageBody() {
         visible={updateVendorInfoModalVisible}
         closeModal={closeUpdateVendorInfoModal}
       />
-      <PageTitle title="거래처 리스트" />
+      {/* <PageTitle title="거래처 리스트" /> */}
       <PageContent>
         <Table
           size="small"
@@ -204,7 +205,7 @@ function PageBody() {
               totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 휴대전화 번호, 계좌번호 검색"
+                  placeholder={t('search keyword')}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -282,7 +283,7 @@ function PageBody() {
               ),
             },
             {
-              width: 50,
+              width: 100,
               align: 'center',
               title: t('table.memo'),
               onCell: (record) => ({
@@ -303,7 +304,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: '거래처명 수정',
+                      label: t('edit vendors name'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -313,7 +314,7 @@ function PageBody() {
 
                     {
                       key: '2',
-                      label: '정보수정 요청',
+                      label: t('information update'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -334,7 +335,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          삭제
+                          {t('delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,

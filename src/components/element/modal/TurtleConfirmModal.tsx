@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 import React, { useEffect } from 'react';
 import AnswerButton from '../button/AnswerButton';
 
@@ -23,15 +24,14 @@ function TurtleConfirmModal({
   description,
   children,
 
-  cancelText = '취소',
-  okText = '확인',
+  cancelText = `${t('cancel')}`,
+  okText = `${t('integrate')}`,
   okDisabled = false,
   size = 'small',
   loading,
   onCancel,
   onOk,
 }: Props) {
-  
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCancel();
@@ -129,7 +129,7 @@ const $title = css`
 
 const $description = css`
   margin-top: 16px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.429;
   color: #5b5d63;
 `;

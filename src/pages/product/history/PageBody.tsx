@@ -44,7 +44,7 @@ function PageBody() {
   const removeProductMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
       closeRemoveModal();
-      message.success(`상품을 삭제했어요`);
+      message.success(t('product delete is completed'));
       getProductListQuery.refetch();
     },
   });
@@ -52,7 +52,7 @@ function PageBody() {
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: () => {
-      message.success('상품 메모를 수정했어요');
+      message.success(t('product memo is updated'));
       closeMemoModal();
       getProductListQuery.refetch();
     },
@@ -90,23 +90,24 @@ function PageBody() {
         loading={loading}
         onCancel={loading ? () => {} : closeMemoModal}
         defaultValue={selectedRow?.memo}
+        okText={t('save memo')}
         onOk={(value) => {
           updateProductQuery.mutate({
             id: selectedRow?.id ?? -1,
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('write freely anything thats important about this vendor'),
+          t('use this memo as your personal note'),
         ]}
       />
       {/**
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
+        title={t('do you really want me to delete it?')}
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="삭제"
         visible={removeModalVisible}
@@ -120,7 +121,7 @@ function PageBody() {
         }}
       />
 
-      <PageTitle title="상품 리스트" />
+      {/* <PageTitle title="상품 리스트" /> */}
       <PageContent>
         <Table
           size="small"
@@ -134,7 +135,9 @@ function PageBody() {
               totalCount={getProductListQuery.data?.data.total_count ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'search by product name, inventory name, vendor name...',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -237,7 +240,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: '상품정보 수정',
+                      label: t('edit product information'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         selectRow(record);
@@ -256,7 +259,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          삭제
+                          {t('delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,

@@ -115,8 +115,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={confirmModalVisible}
-        title="정말 마감할까요?"
-        description={['해당 입고서를 마감합니다.']}
+        title={t('confirm this stock list?')}
+        description={[t('this will confirm stocked products for the invoice')]}
         onCancel={closeConfirmModal}
         onOk={() => {
           confirmSheetMutation.mutate({
@@ -124,8 +124,8 @@ function PageBody() {
             is_confirmed: true,
           });
         }}
-        cancelText="취소"
-        okText="마감"
+        cancelText={t('button.cancel')}
+        okText={t('button.confirm')}
         loading={confirmSheetMutation.isLoading}
       />
       {/**
@@ -133,8 +133,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={cancelModalVisible}
-        title="정말 취소할까요?"
-        description={['해당 입고서의 마감을 취소합니다.']}
+        title={t('cancel stock confirmation?')}
+        description={[t('this will cancel the confirmation')]}
         onCancel={closeCancelModal}
         onOk={() => {
           cancelSheetMutation.mutate({
@@ -142,14 +142,14 @@ function PageBody() {
             is_confirmed: false,
           });
         }}
-        cancelText="취소"
-        okText="마감취소"
+        cancelText={t('button.cancel')}
+        okText={t('confirm cancel')}
         loading={cancelSheetMutation.isLoading}
       />
       {/**
        * 페이지
        */}
-      <PageTitle title="입고서 리스트" />
+      <PageTitle title={t('stocked product list')} />
       <PageContent>
         <Table
           size="small"
@@ -271,7 +271,7 @@ function PageBody() {
                           openCancelModal();
                         }}
                       >
-                        마감취소
+                        {t('confirm cancel')}
                       </SelectButton>
                     )
                   ) : (
@@ -285,7 +285,7 @@ function PageBody() {
                         openConfirmModal();
                       }}
                     >
-                      마감하기
+                      {t('confirmed')}
                     </ProcessButton>
                   )}
                 </>
