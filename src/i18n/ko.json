@@ -94,7 +94,8 @@
     "input brand name": "상호명을 입력해주세요",
     "input business number": "사업자 번호를 입력해주세요",
     "input owner name": "대표자명을 입력해주세요",
-    "input memo": "메모를 입력해주세요"
+    "input memo": "메모를 입력해주세요",
+    "ex, double check its invoices!": "ex. 영수증 이중으로 확인 또 확인!"
   },
 
   "button": {
