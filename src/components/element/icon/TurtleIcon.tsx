@@ -125,7 +125,7 @@ export type iconname =
   | 'accordionUp'
   | 'accordionDown'
   | 'mistransfer'
-  | 'creditCard'
+  | 'creditcard'
   | 'questioncircle'
   | 'alertWarningRed'
   | 'thunder';
