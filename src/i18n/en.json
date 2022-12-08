@@ -33,11 +33,11 @@
   "warehousing": {
     "": "Inventory",
     "create": "Add Stocked Qty",
-    "history": "Inventory History",
+    "history": "Stocked Product History",
     "adjustment": {
       "": "Invocie Issue",
-      "pending": "대기",
-      "confirmed": "마감"
+      "pending": "Pending",
+      "confirmed": "Complete"
     },
     "confirm": {
       "true": "Confirmed",
@@ -199,5 +199,6 @@
   "summary of invoice issues": "Summary of Invoice Issues",
   "add invoice issues": "Add Invoice Issues",
   "add exchange/returns": "Add exchange/returns",
-  "add pending delivery": "Add Pending Delivery"
+  "add pending delivery": "Add Pending Delivery",
+  "search vendor name, product name, and reference": "Search vendor name, product name, and reference"
 }
