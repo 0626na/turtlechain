@@ -71,7 +71,7 @@ function PageBody() {
 
       <PageTitle
         title="장부 리스트"
-        subTitle="거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요."
+        subTitle="거래처별 잔금 및 여러 금액 정보를 확인해보세요. 과거매입은 우측 과거매입 추가에서 자유롭게 추가 할 수 있어요!"
         buttons={[
           <SecondaryIconButton
             onClick={() => {

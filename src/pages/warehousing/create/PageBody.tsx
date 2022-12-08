@@ -139,6 +139,7 @@ function PageBody() {
        */}
       <PageTitle
         title="입고서 미리보기"
+        subTitle="정확한 입고등록을 위해서는 거래처와 상품을 최신화 시켜주세요. 상품가격은 필수이니 잊지말고 입력해주세요!"
         buttons={[
           <TertiaryButton
             text="재고프로그램 연동"
