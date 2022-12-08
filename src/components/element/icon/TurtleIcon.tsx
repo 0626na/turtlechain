@@ -532,7 +532,7 @@ function TurtleIcon({ name, onClick, danger }: Props) {
     );
   }
 
-  if (name === 'creditCard') {
+  if (name === 'creditcard') {
     return (
       <div css={[iconContainer]} onClick={handleClick}>
         <CreditCard />

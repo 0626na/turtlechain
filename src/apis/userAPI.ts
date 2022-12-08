@@ -287,9 +287,7 @@ export interface SubscriptionInfo {
  */
 const getSubscriptionCheck = async (params: RequestGetSubscriptionCheck) => {
   const url = `/subscriptions/${params.company_id}`;
-  const response = await v2Axios.get<ResponseGetSubscriptionCheck>(url, {
-    params,
-  });
+  const response = await v2Axios.get<ResponseGetSubscriptionCheck>(url);
 
   return response.data;
 };

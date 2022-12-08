@@ -138,25 +138,46 @@ const excel = async (data: RequestExcel) => {
  *   거래처 리스트
  */
 
-export interface RequestGet {
+export interface RequestGetList {
   page: number;
   search_string: string;
   rt_store_id?: number;
 }
 
-export interface ResponseGet {
+export interface ResponseGetList {
   msg: string;
   data: { vendor_list: Vendor[]; total_count: number };
 }
 
-const get = async (query: RequestGet) => {
+const getList = async (query: RequestGetList) => {
   let url = 'provisioning/vendor?';
   for (const [key, value] of Object.entries(query)) {
     url = url + `${key}=${value}&`;
   }
-  const response = await v2Axios.get<ResponseGet>(url);
+  const response = await v2Axios.get<ResponseGetList>(url);
 
   return response.data;
+};
+
+/*
+ *   거래처 상세
+ */
+
+export interface RequestGet {
+  id: number;
+}
+
+export interface ResponseGet {
+  msg: string;
+  data: Vendor;
+}
+
+// 거래처 상세보기
+const get = async (params: RequestGet) => {
+  const url = `provisioning/vendor/${params.id}`;
+  const response = await v2Axios.get<ResponseGet>(url);
+
+  return response.data.data;
 };
 
 /*
@@ -278,6 +299,7 @@ const getWholesale = async (query: RequestGetWholesale) => {
 const vendorAPI = {
   inventory,
   excel,
+  getList,
   get,
   getCode,
   create,

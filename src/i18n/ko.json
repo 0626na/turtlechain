@@ -379,6 +379,9 @@
     "5": "금"
   },
 
+  "address": "주소",
+  "account": "계좌",
+
   "biz role": "직책",
   "biz type": "사업자 종류",
   "biz entity": "법인 사업자",
@@ -437,7 +440,9 @@
   "totalOrderPriceInComfirm": "총 발주금액",
 
   "addSingleOrder": "발주 단건추가",
-  "mobile": "휴대전화 번호입력",
+
+  "mobile": "휴대전화 번호",
+
   "building": "상가",
   "floor": "층",
   "col and loc": "열-호",
@@ -497,5 +502,6 @@
   "search for accounts": "거래처 검색",
   "business information": "사업자 정보",
   "this email is not valid": "유효하지 않은 이메일 입니다.",
-  "invalid format": "유효하지 않은 형식입니다."
+  "invalid format": "유효하지 않은 형식입니다.",
+  "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요."
 }
