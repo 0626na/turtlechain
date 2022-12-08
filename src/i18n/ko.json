@@ -44,6 +44,7 @@
     "count": "수량",
     "countTotal": "수량합계",
     "type": "분류",
+    "receipt": "전자 영수증",
     "proccessed totalCount": "처리/총수량",
     "product vendorName": "거래처명",
     "warehouseName": "창고명",
