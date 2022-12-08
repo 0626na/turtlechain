@@ -293,21 +293,9 @@ const useOrderCart = () => {
    * 발주 쇼핑몰 갯수
    */
   const countOrderStores = useCallback(() => {
-    let count = 0;
-
-    cart.successList.map((store) => {
-      count += store.orders.length;
-    });
-
-    //실패에서 성공으로 이전한 경우의 데이터 카운트 (실패에서 휴대전화번호 입력시)
-    cart.failList.map((store) => {
-      store.orders.map((order) => {
-        if (order.mobile !== '') count++;
-      });
-    });
-
+    const count = cart.successList.length;
     return count;
-  }, [cart.successList, cart.failList]);
+  }, [cart.successList]);
 
   /**
    * 실패데이터 카운팅
