@@ -45,6 +45,7 @@
     "countTotal": "수량합계",
     "type": "분류",
     "proccessed totalCount": "처리/총수량",
+    "product vendorName": "거래처명",
     "warehouseName": "창고명",
     "warehousingCount": "입고 수량",
     "requestCount": "요청 수량",
@@ -128,7 +129,14 @@
     "payment method change": "결제수단 변경",
     "process": "처리하기",
     "next": "다음",
-    "register adjustment": "교환/반품 등록하기"
+    "register adjustment": "교환/반품 등록하기",
+    "add product": "상품 추가하기",
+    "add & save": "상품 등록하기",
+    "save vendor": "거래처 등록하기",
+    "product list": "상품목록",
+    "integrate inventory program": "재고프로그램 연동",
+    "integrate": "확인",
+    "add stock": "입고 추가하기"
   },
 
   "message": {
@@ -298,9 +306,11 @@
   "mobile": "휴대전화 번호",
   "building": "상가",
   "floor": "층",
+  "vendors": "거래처 목록",
   "bank": "은행",
   "col and loc": "열-호",
   "accountManagement": "계정관리",
+  "exchange, returns, pending delivery": "교환/반품/미송",
   "vendorname modify": "거래처명 수정",
   "request info modify": "정보수정 요청",
   "store search results": "쇼핑몰 검색결과",
@@ -380,7 +390,7 @@
   "add vendor": "거래처등록",
   "vendor list": "거래처 목록",
   "preview of new vendors": "거래처등록 미리보기",
-  "Inventory program linkage": "재고프로그램 연동",
+  "inventory program integration": "재고프로그램 연동",
   "create vendor": "거래처 추가하기",
   "confirmed": "마감하기",
   "confirm cancel": "취소하기",
@@ -572,5 +582,8 @@
     "address": "쇼핑몰 주소",
     "management": "쇼핑몰 관리",
     "selectButton": "{{store}} 외 {{storeCount}}개"
-  }
+  },
+  "add pending delivery": "미송추가",
+  "preview of New Products": "상품등록 미리보기",
+  "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
 }
