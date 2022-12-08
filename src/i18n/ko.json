@@ -587,6 +587,7 @@
   "summary of invoice issues": "교환/반품/미송 현황",
   "add invoice issues": "교환/반품/미송 추가",
   "add exchange/returns": "교환/반품 추가",
+  "add pending delivery": "미송추가",
   "search vendor name, product name, and reference": "거래처명, 상품명, 거래처 상품명 검색",
   "preview of New Products": "상품등록 미리보기",
   "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
