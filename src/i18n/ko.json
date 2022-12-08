@@ -77,7 +77,9 @@
     "mistransfer refundAmt": "오입금 환불 요청금액을 입력해주세요",
     "request memo": "오입금 환불 요청사유를 입력해주세요",
     "search product name and reference": "상품명 또는 거래처 상품명을 입력해주세요",
-    "select category": "분류선택"
+    "select category": "분류선택",
+    "id": "아이디",
+    "password": "비밀번호"
   },
 
   "button": {
@@ -556,8 +558,7 @@
     "login": "로그인",
     "logout": "로그아웃",
     "autoLogin": "자동 로그인",
-    "id": "아이디",
-    "password": "비밀번호",
+
     "resetPassword": "비밀번호 재설정",
     "registration": "서비스 가입",
     "registrationReturn": "가입반려",
