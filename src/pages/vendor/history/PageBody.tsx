@@ -72,7 +72,7 @@ function PageBody() {
   // 거래처 부가세,메모,거래처이름 수정 요청
   const vendorUpdateMutation = useMutation(vendorAPI.update, {
     onSuccess: () => {
-      message.success('수정이 완료되었습니다.');
+      message.success(t('message.update is complete'));
       closeMemoModal();
       closeVatIncludedModal();
       closeUpdateVendorInfoModal();
@@ -83,7 +83,7 @@ function PageBody() {
   // 거래처 삭제 요청
   const vendorRemoveMutation = useMutation(vendorAPI.remove, {
     onSuccess: () => {
-      message.success('거래처가 삭제되었습니다.');
+      message.success(t('message.vendor is deleted'));
       closeRemoveModal();
       getVendorListQuery.refetch();
     },

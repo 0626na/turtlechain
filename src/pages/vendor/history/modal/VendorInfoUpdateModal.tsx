@@ -118,15 +118,20 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Form.Item>
 
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
-            <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
+            <TurtleFormInput
+              disabled
+              placeholder={t('please input store phone number')}
+            />
           </Form.Item>
 
           <Form.Item
             label={t('table.mobile')}
             name="mobile"
-            rules={[{ required: true, message: '휴대전화번호를 입력해주세요' }]}
+            rules={[
+              { required: true, message: t('please input mobile number') },
+            ]}
           >
-            <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
+            <TurtleFormInput placeholder={t('please input mobile number')} />
           </Form.Item>
 
           <Form.Item label={t('table.vendorAddress')} required>
@@ -141,7 +146,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
-                    placeholder="상가"
+                    placeholder={t('building')}
                     onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
@@ -173,7 +178,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                           value: floor,
                           name: floor,
                         }))}
-                        placeholder="층"
+                        placeholder={t('floor')}
                         onChange={() => {
                           form.setFieldsValue({
                             ...form.getFieldsValue(),
@@ -211,7 +216,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                             name: `${col} ${loc}`,
                           };
                         })}
-                        placeholder="열/호"
+                        placeholder={t('col and loc')}
                       />
                     </Form.Item>
                   )}
@@ -228,7 +233,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
-                  placeholder="은행"
+                  placeholder={t('bank')}
                   items={
                     Object.values(bankData?.data ?? []).map((bank) => ({
                       value: bank,
@@ -244,10 +249,15 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
               <Form.Item
                 name="account_number"
-                rules={[{ required: true, message: '계좌번호를 입력해주세요' }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('please input bank account number'),
+                  },
+                ]}
                 noStyle
               >
-                <TurtleFormInput placeholder="계좌번호" />
+                <TurtleFormInput placeholder={t('accountNumber')} />
               </Form.Item>
 
               <Form.Item
@@ -257,7 +267,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 ]}
                 noStyle
               >
-                <TurtleFormInput placeholder="예금주명" />
+                <TurtleFormInput placeholder={t('accountHolderName')} />
               </Form.Item>
             </div>
           </Form.Item>

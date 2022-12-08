@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { Col, Divider, Row } from 'antd';
+import { t } from 'i18next';
 import TurtleText from './TurtleText';
 
 interface Props {
@@ -40,22 +41,24 @@ function TurtleTableTitle({
         </TurtleText>
         {!!vendorCount && vendorCount >= 0 && (
           <TurtleText css={container}>
-            <Divider type="vertical" />총 거래처{' '}
-            <TurtleText css={count}>{vendorCount}</TurtleText>개
+            <Divider type="vertical" />
+            {t('total vendor')}{' '}
+            <TurtleText css={count}>{vendorCount}</TurtleText>
           </TurtleText>
         )}
         {!!searchAmount && searchAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            검색금액 합계{' '}
+            {t('total search amount')}{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
-            원
+            ₩
           </TurtleText>
         )}
         {!!searchCount && searchCount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            검색결과 <TurtleText css={count}>{searchCount}</TurtleText>건
+            {t('search result')}{' '}
+            <TurtleText css={count}>{searchCount}</TurtleText>
           </TurtleText>
         )}
         {!!totalRefundAmount && totalRefundAmount >= 0 && (

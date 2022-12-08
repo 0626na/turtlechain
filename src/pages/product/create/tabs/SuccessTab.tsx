@@ -39,19 +39,19 @@ function SuccessTab({ loading, ...props }: Props) {
           memoUpdate(value, selectedRow as Product);
           closeMemoModal();
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('write freely anything thats important about this vendor'),
+          t('use this memo as your personal note'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('ex, double check its invoices!')}
       />
 
       {/*
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
+        title={t('do you really want me to delete it?')}
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="네"
         visible={removeModalVisible}

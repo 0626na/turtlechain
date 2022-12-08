@@ -34,7 +34,16 @@
     "": "Inventory",
     "create": "Add Stocked Qty",
     "history": "Inventory History",
-    "adjustment": { "": "Exchange, Returns, Pending Delivery" }
+    "adjustment": {
+      "": "Invocie Issue",
+      "pending": "대기",
+      "confirmed": "마감"
+    },
+    "confirm": {
+      "true": "Confirmed",
+      "false": "Pending",
+      "all": "All"
+    }
   },
 
   "table": {
@@ -54,7 +63,15 @@
     "productCode": "Product ID",
     "option": "Variant",
     "imageUrl": "Image URL",
-    "price": "Price"
+    "price": "Price",
+    "warehouseName": "WareHousse Name",
+    "warehousingCount": "Stocked Qty",
+    "isReserveWarehousing": "Pending Delivery",
+    "progressStatus": "Status",
+    "createdDate": "Updated date",
+    "totalWarehousingCount": "Total stocked product",
+    "totalAmount": "Total stocked amount",
+    "totalVendorCount": "Total vendors"
   },
   "etc": {
     "setting": "Settings",
@@ -63,7 +80,17 @@
   "button": {
     "at a time": "Add many",
     "one by one": "Add single",
-    "updateVendor": "Send Request"
+    "updateVendor": "Send Request",
+    "cancel": "Close",
+    "confirm cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "message": {
+    "success update vendor request": "I requested to modify the account information. I'll let you know when it's over",
+    "product delete is completed": "Product delete is completed",
+    "product memo is updated": "Product memo is updated",
+    "update is complete": "Update is complete",
+    "vendor is deleted": "Vendor is deleted"
   },
 
   "day": {
@@ -112,6 +139,8 @@
   "success": "success",
   "pending": "pending",
   "fail": "fail",
+  "confirmed": "Confirm",
+  "confirm cancel": "Cancel",
   "inventory program integration": "Inventory program integration",
   "please select which dates you wish to integrate": "Please select which dates you wish to integrate.",
   "it may take up to 1 minute, depending on how much you wish to integrate": "It may take up to 1 minute, depending on how much you wish to integrate.",
@@ -132,7 +161,7 @@
   "please enter the desired account name": "Please enter the desired account name",
   "modify": "Modify",
   "request for information Update": "Request for information Update",
-  "please input other address": "Please input other address",
+  "please input other address": "Apt, Suite, P.O.Box, etc",
   "please input account holder": "please input account holder",
   "receipt": "Receipt",
   "add a copy of your receipt or invoice": "Add a copy of your receipt or invoice",
@@ -143,5 +172,32 @@
   "add & save": "Add & Save",
   "integrate inventory program": "Integrate inventory program",
   "add product": "Add Product",
-  "search by product name, inventory name, vendor name...": "Search by product name, inventory name, vendor name..."
+  "search by product name, inventory name, vendor name...": "Search by product name, inventory name, vendor name...",
+  "please input mobile number": "Please input mobile number",
+  "accountNumber": "bank Acct Number",
+  "accountHolderName": "account holder",
+  "please input store phone number": "Please input Phone No.",
+  "do you really want me to delete it?": "Do you really want me to delete it?",
+  "you cant go back to the past after deleting it": "You can't go back to the past after deleting it",
+  "edit product information": "Edit Product Information",
+  "preview of todays stock products": "Preview of today`s stock products",
+  "add stock": "Add Stock",
+  "total stocked quantity": "Total stocked quantity",
+  "register width warehousing": "Save",
+  "you have some pending deliveries!": "You have some pending deliveries!",
+  "please double check so that you dont miss out": "Please double check so that you dont miss out",
+  "total vendor": "Total Vendor",
+  "search result": "Search Result",
+  "total search amount": "Total Search Amount",
+  "do yo really want me to sign up?": "Do yo really want me to sign up?",
+  "products remaining in the failure are excluded from registration": "Products remaining in the failure are excluded from registration",
+  "create registration": "Registration",
+  "successfully saved todays stock": "Successfully saved today`s stock",
+  "stocked product list": "Stocked product list",
+  "cancel stock confirmation?": "Cancel stock confirmation?",
+  "this will cancel the confirmation": "This will cancel the confirmation",
+  "summary of invoice issues": "Summary of Invoice Issues",
+  "add invoice issues": "Add Invoice Issues",
+  "add exchange/returns": "Add exchange/returns",
+  "add pending delivery": "Add Pending Delivery"
 }

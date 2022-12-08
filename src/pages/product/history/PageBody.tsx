@@ -44,7 +44,7 @@ function PageBody() {
   const removeProductMutation = useMutation(productAPI.remove, {
     onSuccess: () => {
       closeRemoveModal();
-      message.success(`상품을 삭제했어요`);
+      message.success(t('product delete is completed'));
       getProductListQuery.refetch();
     },
   });
@@ -52,7 +52,7 @@ function PageBody() {
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: () => {
-      message.success('상품 메모를 수정했어요');
+      message.success(t('product memo is updated'));
       closeMemoModal();
       getProductListQuery.refetch();
     },
@@ -107,7 +107,7 @@ function PageBody() {
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
+        title={t('do you really want me to delete it?')}
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="삭제"
         visible={removeModalVisible}
@@ -240,7 +240,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: '상품정보 수정',
+                      label: t('edit product information'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         selectRow(record);
@@ -259,7 +259,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          삭제
+                          {t('delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,

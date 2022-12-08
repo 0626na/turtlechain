@@ -201,15 +201,15 @@ function PageBody() {
         }}
       />
 
-      <PageHeader title="교환/반품/미송" />
+      <PageHeader title={t('warehousing.adjustment.')} />
       <PageTitle
-        title="교환/반품/미송 현황"
+        title={t('summary of invoice issues')}
         buttons={[
           <TurtleDropdown
             items={[
               {
                 key: '0',
-                label: '교환/반품 추가',
+                label: t('add exchange/returns'),
                 icon: <TurtleIcon name="exchangeRefund" />,
                 onClick() {
                   addExchangeRefundModalOpen();
@@ -217,7 +217,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '미송상품 추가',
+                label: t('add pending delivery'),
                 icon: <TurtleIcon name="reserve" />,
                 onClick() {
                   addReserveModalOpen();
@@ -225,7 +225,9 @@ function PageBody() {
               },
             ]}
             triggerButton={
-              <SecondaryIconButton>교환/반품/미송 추가</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('add invoice issues')}
+              </SecondaryIconButton>
             }
           />,
         ]}
@@ -281,9 +283,12 @@ function PageBody() {
                         }));
                       }}
                       items={[
-                        { value: '', name: '전체' },
-                        { value: 'False', name: '대기' },
-                        { value: 'True', name: '마감' },
+                        { value: '', name: t('warehousing.confirm.all') },
+                        {
+                          value: 'False',
+                          name: t('warehousing.confirm.false'),
+                        },
+                        { value: 'True', name: t('warehousing.confirm.true') },
                       ]}
                     />
                   </Col>

@@ -62,7 +62,7 @@ function PageBody() {
   const createMutation = useMutation(warehousingAPI.create, {
     onSuccess: () => {
       reset();
-      message.success('성공적으로 등록했습니다.');
+      message.success(t('successfully saved todays stock'));
       navigate('/warehousing/history');
     },
   });
@@ -80,10 +80,12 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title="재고프로그램 연동"
+        title={t('Inventory program linkage')}
         description={[
-          '선택한 기간의 재고 정보를 불러옵니다.',
-          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+          t('please select which dates you wish to integrate'),
+          t(
+            'it may take up to 1 minute, depending on how much you wish to integrate',
+          ),
         ]}
         loading={loading}
         onCancel={closeInventoryModal}
@@ -107,9 +109,11 @@ function PageBody() {
        *  confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 등록할까요?"
-        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
-        okText="등록"
+        title={t('do yo really want me to sign up?')}
+        description={[
+          t('products remaining in the failure are excluded from registration'),
+        ]}
+        okText={t('create registration')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
@@ -138,17 +142,17 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="입고서 미리보기"
+        title={t('preview of todays stock products')}
         buttons={[
           <TertiaryButton
-            text="재고프로그램 연동"
+            text={t('integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>입고 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('add stock')}</SecondaryIconButton>
             }
             items={[
               {
@@ -182,12 +186,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${cart.successList.length})`}
+            tab={`${t('success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`실패(${cart.failList.length})`}
+            tab={`${t('fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>
@@ -197,19 +201,19 @@ function PageBody() {
         <Row justify="end" align="middle">
           <Col>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              입고 수량 합계
+              {t('total stocked quantity')}
             </span>
             <span style={{ fontWeight: 700 }}>
-              {totalCount.toLocaleString()}개
+              {totalCount.toLocaleString()}
             </span>
           </Col>
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              입고금액 합계
+              {t('total stocked amount')}
             </span>
             <span style={{ fontWeight: 700 }}>
-              {totalAmount.toLocaleString()}원
+              {totalAmount.toLocaleString()}
             </span>
           </Col>
           <Col>
@@ -217,7 +221,7 @@ function PageBody() {
               onClick={openConfirmModal}
               disabled={cart.successList.length === 0}
             >
-              입고서 등록하기
+              {t('register width warehousing')}
             </PrimaryButton>
           </Col>
         </Row>
