@@ -182,7 +182,7 @@ function SuccessTab({ loading, ...props }: Props) {
               backgroundColor: '#E2F6F7',
             },
           }}
-          scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
+          scroll={{ x: 950, y: 'auto', scrollToFirstRowOnChange: true }}
           dataSource={filterdList}
           loading={loading}
           size="small"
@@ -379,12 +379,10 @@ function SuccessTab({ loading, ...props }: Props) {
           columns={[
             {
               title: t('table.store'),
-              width: 184,
               render: (_, record) => record.rt_store_name ?? '',
             },
             {
               title: t('table.vendor'),
-              width: 488,
               render: (_, record) => {
                 if (record.type === 'single')
                   return record.orders.length
@@ -401,7 +399,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.product'),
-              width: 488,
               render: (_, record) => {
                 if (record.type === 'single')
                   return record.orders.length
@@ -419,7 +416,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.countTotal'),
-              width: 136,
               render: (_, record) =>
                 record.orders.length !== 0 &&
                 record.orders.reduce(
@@ -429,7 +425,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.supplyPriceTotal'),
-              width: 128,
               align: 'right',
               render: (_, record) =>
                 record.orders.length !== 0 &&
@@ -438,7 +433,6 @@ function SuccessTab({ loading, ...props }: Props) {
                   .toLocaleString(),
             },
             {
-              width: 124,
               onCell: (record) => ({
                 style: { cursor: 'pointer' },
                 onClick: (e) => {

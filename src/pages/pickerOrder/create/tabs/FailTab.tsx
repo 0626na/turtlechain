@@ -79,20 +79,12 @@ function FailTab({ loading, ...props }: Props) {
   };
 
   const filteredList = useMemo(() => {
-    if (searchQuery.type === 'name')
-      return failListOutput().filter((item) =>
-        item.rt_store_name.includes(searchQuery.search_string),
-      );
-    if (searchQuery.type === 'vendor_name')
-      return failListOutput().filter((item) =>
-        item.vendor_name.includes(searchQuery.search_string),
-      );
-    if (searchQuery.type === 'address')
-      return failListOutput().filter((item) =>
+    return failListOutput().filter(
+      (item) =>
+        item.rt_store_name.includes(searchQuery.search_string) ||
+        item.vendor_name.includes(searchQuery.search_string) ||
         item.vendor_address.includes(searchQuery.search_string),
-      );
-
-    return failListOutput();
+    );
   }, [cart.failList, searchQuery]);
 
   /**
@@ -214,7 +206,7 @@ function FailTab({ loading, ...props }: Props) {
       )}
       <Tabs.TabPane {...props}>
         <Table
-          scroll={{ x: 1608, y: 'auto', scrollToFirstRowOnChange: true }}
+          scroll={{ x: 950, y: 'auto', scrollToFirstRowOnChange: true }}
           loading={loading}
           size="small"
           dataSource={filteredList}
@@ -228,7 +220,7 @@ function FailTab({ loading, ...props }: Props) {
               totalCount={failListOutput().length ?? 0}
               rightContent={
                 <Row>
-                  <Col css={marginRight}>
+                  {/* <Col css={marginRight}>
                     <TurtleSearchSelect
                       value={searchQuery.type}
                       onChange={(value) => {
@@ -239,7 +231,7 @@ function FailTab({ loading, ...props }: Props) {
                       }}
                       items={options}
                     />
-                  </Col>
+                  </Col> */}
 
                   <Col>
                     <TurtleSearchInput
@@ -260,22 +252,18 @@ function FailTab({ loading, ...props }: Props) {
           columns={[
             {
               title: t('table.store'),
-              width: 148,
               render: (_, record) => record.rt_store_name,
             },
             {
               title: t('table.vendorName'),
-              width: 136,
               render: (_, record) => record.vendor_name,
             },
             {
               title: t('table.vendorAddress'),
-              width: 196,
               render: (_, record) => record.vendor_address,
             },
             {
               title: t('table.mobile'),
-              width: 156,
               render: (_, record) => {
                 const tempList = failListOutput();
 
@@ -305,7 +293,6 @@ function FailTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.type'),
-              width: 136,
               render: (_, record) => (
                 <TurtleTableSelect
                   items={category}
@@ -330,7 +317,6 @@ function FailTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.count'),
-              width: 136,
               render: (_, record) => (
                 <TurtleTableNumberInput
                   value={Number(record.product_count)}
@@ -357,14 +343,12 @@ function FailTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.price'),
-              width: 136,
               align: 'right',
               render: (_, record) => record.product_price,
             },
             {
               title: t('table.memo'),
               align: 'center',
-              width: 100,
               render: (_, record) => (
                 <MemoIcon
                   value={record.memo ?? ''}

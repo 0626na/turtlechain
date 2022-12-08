@@ -1,6 +1,7 @@
 import orderAPI from '@apis/orderAPI';
 import {
   TurtleCard,
+  TurtleDivider,
   TurtlePrimaryRangePicker,
   TurtleSearchSelect,
   TurtleTag,
@@ -16,6 +17,7 @@ import { useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
+import { SearchFilter } from '@components/combine';
 
 function PageBody() {
   const options = [
@@ -38,6 +40,7 @@ function PageBody() {
     type: 'entire',
     start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
+    search_string: '',
   });
 
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
@@ -52,20 +55,28 @@ function PageBody() {
 
   const filteredList = useMemo(() => {
     if (searchQuery.type === 'entire')
-      return getOrderSheetsQuery.data?.data.order_sheet_list ?? [];
+      return (
+        getOrderSheetsQuery.data?.data.order_sheet_list.filter((sheet) =>
+          sheet.rt_store_name.includes(searchQuery.search_string),
+        ) ?? []
+      );
 
     if (searchQuery.type === 'new')
       return (
-        getOrderSheetsQuery.data?.data.order_sheet_list.filter(
-          (sheet) => sheet.type === searchQuery.type,
-        ) ?? []
+        getOrderSheetsQuery.data?.data.order_sheet_list
+          .filter((sheet) => sheet.type === searchQuery.type)
+          .filter((sheet) =>
+            sheet.rt_store_name.includes(searchQuery.search_string),
+          ) ?? []
       );
 
     if (searchQuery.type === 'modify')
       return (
-        getOrderSheetsQuery.data?.data.order_sheet_list.filter(
-          (sheet) => sheet.type === searchQuery.type,
-        ) ?? []
+        getOrderSheetsQuery.data?.data.order_sheet_list
+          .filter((sheet) => sheet.type === searchQuery.type)
+          .filter((sheet) =>
+            sheet.rt_store_name.includes(searchQuery.search_string),
+          ) ?? []
       );
   }, [getOrderSheetsQuery.data?.data.order_sheet_list, searchQuery]);
 
@@ -129,7 +140,7 @@ function PageBody() {
 
         <Table
           size="small"
-          scroll={{ y: 432, x: 1608 }}
+          scroll={{ y: 'auto', x: 950 }}
           rowKey={(record) => record.id}
           dataSource={filteredList}
           pagination={{
@@ -151,7 +162,7 @@ function PageBody() {
               }
               rightContent={
                 <Row>
-                  <Col css={css({ marginRight: 16 })}>
+                  <Col>
                     <TurtleSearchSelect
                       items={options}
                       value={searchQuery.type}
@@ -160,11 +171,34 @@ function PageBody() {
                       }
                     />
                   </Col>
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
                   <Col>
                     <TurtlePrimaryRangePicker
                       onChange={(_, [start_date, end_date]) =>
                         setSearchQuery({ ...searchQuery, start_date, end_date })
                       }
+                    />
+                  </Col>
+                  <Col
+                    css={css`
+                      display: flex;
+                      align-items: center;
+                    `}
+                  >
+                    <TurtleDivider type="vertical" />
+                  </Col>
+                  <Col>
+                    <SearchFilter
+                      placeholder={t('please input search query')}
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
                     />
                   </Col>
                 </Row>
