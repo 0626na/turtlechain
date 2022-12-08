@@ -26,7 +26,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   const [keep, setKeep] = useState(false);
   const createMutation = useMutation(pickerAPI.create, {
     onSuccess: () => {
-      message.success(t('message.success update mall'));
+      message.success(t('message.success create store'));
       queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },

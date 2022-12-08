@@ -1,8 +1,8 @@
 import { OrderHistoryItem } from '@apis/orderAPI';
-import { TurtleTableTitle } from '@components/element';
+import { TurtleSearchInput, TurtleTableTitle } from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';
 import { t } from 'i18next';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
   data: OrderHistoryItem[];
@@ -10,18 +10,43 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ data, loading, ...props }: Props) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredList = useMemo(
+    () =>
+      data.filter(
+        (store) =>
+          store.vendor_name.includes(searchQuery) ||
+          store.address.includes(searchQuery) ||
+          store.mobile.includes(searchQuery) ||
+          store.name.includes(searchQuery),
+      ),
+
+    [data, searchQuery],
+  );
+
   return (
     <Tabs.TabPane {...props}>
       <Table
         size="small"
         rowKey={(record) => String(record.id)}
         loading={loading}
-        dataSource={data}
+        dataSource={filteredList}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
+        title={() => (
+          <TurtleTableTitle
+            totalCount={data.length ?? 0}
+            rightContent={
+              <TurtleSearchInput
+                placeholder={t('please input search query')}
+                value={searchQuery}
+                onChange={(value) => setSearchQuery(value.currentTarget.value)}
+              />
+            }
+          />
+        )}
         columns={[
           {
             title: t('table.vendorName'),

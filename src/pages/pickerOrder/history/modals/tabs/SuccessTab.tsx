@@ -1,6 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import orderAPI, { CreatingOrdersItem, OrderHistoryItem } from '@apis/orderAPI';
-import { MemoIcon, TurtleTableTitle } from '@components/element';
+import {
+  MemoIcon,
+  TurtleSearchInput,
+  TurtleTableTitle,
+} from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';
 import OrderMemoModal from '@components/combine/modal/OrderMemoModal';
 import useOrderCart from '@hooks/useOrderCart';
@@ -25,10 +29,20 @@ function SuccessTab({
 }: Props) {
   const [orderID, setOrderID] = useState(-1);
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [orderHistoryList, setOrderHistoryList] = useState<OrderHistoryItem[]>(
+    [],
+  );
   const { translateOrderType } = useOrderCart();
 
-  const getOrderHistoryQuery = useQuery(['getOrderHistory', sheetID], () =>
-    orderAPI.getOrderHistory({ sheet_id: sheetID }),
+  const getOrderHistoryQuery = useQuery(
+    ['getOrderHistory', sheetID],
+    () => orderAPI.getOrderHistory({ sheet_id: sheetID }),
+    {
+      onSuccess: (data) => {
+        setOrderHistoryList(data.data.successes);
+      },
+    },
   );
 
   const updateMemoQuery = useMutation(orderAPI.updateOrderHistoryMemo, {
@@ -39,7 +53,18 @@ function SuccessTab({
     },
   });
 
-  const orderHistoryList = getOrderHistoryQuery.data?.data.successes;
+  const filteredList = useMemo(
+    () =>
+      orderHistoryList.filter(
+        (store) =>
+          store.vendor_name.includes(searchQuery) ||
+          store.address.includes(searchQuery) ||
+          store.mobile.includes(searchQuery) ||
+          store.name.includes(searchQuery),
+      ),
+
+    [orderHistoryList, searchQuery],
+  );
 
   return (
     <Tabs.TabPane {...props}>
@@ -59,7 +84,7 @@ function SuccessTab({
         size="small"
         loading={getOrderHistoryQuery.isLoading}
         rowKey={(record) => String(record.id)}
-        dataSource={orderHistoryList ?? []}
+        dataSource={filteredList ?? []}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
@@ -67,6 +92,13 @@ function SuccessTab({
         title={() => (
           <TurtleTableTitle
             totalCount={getOrderHistoryQuery.data?.data.successes.length ?? 0}
+            rightContent={
+              <TurtleSearchInput
+                placeholder={t('please input search query')}
+                value={searchQuery}
+                onChange={(value) => setSearchQuery(value.currentTarget.value)}
+              />
+            }
           />
         )}
         columns={[

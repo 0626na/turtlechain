@@ -20,6 +20,9 @@ interface Props {
   close: () => void;
 }
 
+/**
+ * 단건 추가 모달
+ */
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
   const [selectStore, setSelectStore] = useState<PickerStore>({
@@ -44,6 +47,9 @@ function AddNewOrderModal({ visible, close }: Props) {
     },
   );
 
+  /**
+   * 모달창 닫으면 모달내의 데이터 리셋
+   */
   useEffect(() => form.resetFields(), [form, visible]);
 
   return (
@@ -74,7 +80,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   mobile: values.mobile,
                   product_name: values.vendor_product_name,
                   product_option: values.option,
-                  product_count: values.count,
+                  product_count: values.count ?? 0,
                   product_price: values.price,
                   order_type: values.type,
                   creation_type: 'single',
@@ -191,7 +197,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           >
             <TurtleFormInput
               placeholder={t('please input etc address')}
-              disabled={building === t('order.types.etc') ? false : true}
+              disabled={building === t('etc.') ? false : true}
             />
           </Form.Item>
           {/* 휴대번호 */}

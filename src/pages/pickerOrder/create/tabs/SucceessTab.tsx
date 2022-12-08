@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   MemoIcon,
   TurtleIcon,
@@ -18,6 +18,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import moment from 'moment';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -110,6 +111,20 @@ function SuccessTab({ loading, ...props }: Props) {
     return cart.successList;
   }, [cart.successList, searchQuery]);
 
+  /**
+   * 페이지 이동시 초기화
+   */
+  useEffect(
+    () =>
+      setCart({
+        successList: [],
+        failList: [],
+        parsingStatus: { success_count: 0, fail_count: 0, error_messages: [] },
+        selectedDate: moment(),
+      }),
+    [],
+  );
+
   return (
     <>
       <DeleteOrderModal
@@ -167,7 +182,7 @@ function SuccessTab({ loading, ...props }: Props) {
               backgroundColor: '#E2F6F7',
             },
           }}
-          scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
+          scroll={{ x: 950, y: 'auto', scrollToFirstRowOnChange: true }}
           dataSource={filterdList}
           loading={loading}
           size="small"
@@ -211,7 +226,9 @@ function SuccessTab({ loading, ...props }: Props) {
             />
           )}
           expandable={{
-            rowExpandable: (record) => record.type !== 'single',
+            rowExpandable: (record) => {
+              return record.type !== 'single';
+            },
             expandRowByClick: true,
             onExpand: (onExpand, record) => {
               if (!onExpand) {
@@ -222,17 +239,19 @@ function SuccessTab({ loading, ...props }: Props) {
               setSelectedRowID(Number(record.id));
             },
             expandIcon: ({ expanded, onExpand, record }) =>
-              expanded ? (
-                <TurtleIcon
-                  name="accordionUp"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ) : (
-                <TurtleIcon
-                  name="accordionDown"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ),
+              expanded
+                ? record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionUp"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  )
+                : record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionDown"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  ),
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
@@ -360,13 +379,15 @@ function SuccessTab({ loading, ...props }: Props) {
           columns={[
             {
               title: t('table.store'),
-              width: 184,
               render: (_, record) => record.rt_store_name ?? '',
             },
             {
               title: t('table.vendor'),
-              width: 488,
               render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].vendor_name
+                    : '';
                 return (
                   record.orders.length !== 0 &&
                   t('count except one', {
@@ -378,17 +399,23 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.product'),
-              width: 488,
-              render: (_, record) =>
-                record.orders.length !== 0 &&
-                t('count except one', {
-                  name: record.orders[0].product_name,
-                  count: record.orders.length - 1,
-                }),
+              render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].product_name
+                    : '';
+
+                return (
+                  record.orders.length !== 0 &&
+                  t('count except one', {
+                    name: record.orders[0].product_name,
+                    count: record.orders.length - 1,
+                  })
+                );
+              },
             },
             {
               title: t('table.countTotal'),
-              width: 136,
               render: (_, record) =>
                 record.orders.length !== 0 &&
                 record.orders.reduce(
@@ -398,7 +425,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.supplyPriceTotal'),
-              width: 128,
               align: 'right',
               render: (_, record) =>
                 record.orders.length !== 0 &&
@@ -407,7 +433,6 @@ function SuccessTab({ loading, ...props }: Props) {
                   .toLocaleString(),
             },
             {
-              width: 124,
               onCell: (record) => ({
                 style: { cursor: 'pointer' },
                 onClick: (e) => {

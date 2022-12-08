@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -13,7 +13,7 @@ import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
-import { Col, Row, Upload } from 'antd';
+import { Col, Row, Tooltip, Upload } from 'antd';
 
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
@@ -22,7 +22,10 @@ import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI, { ResponseCreateOrderItemExcelParsing } from '@apis/orderAPI';
+import orderAPI, {
+  ResponseCreateOrderItemExcelParsing,
+  ResponseCreatePreParsing,
+} from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
@@ -34,7 +37,7 @@ function PageBody() {
   const {
     cart,
     ready,
-    countSuccessList,
+    countOrderStores,
     countFailList,
     countOrdersForType,
     calculateTotalPrice,
@@ -44,7 +47,7 @@ function PageBody() {
     complete: 0,
     total: 0,
   });
-  //모달 data
+
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
@@ -57,7 +60,53 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
-  //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
+  const getStoreCountListQuery = useQuery(
+    ['getStoreCountListQuery'],
+    pickerAPI.getList,
+    {
+      enabled: !!user,
+      onSuccess: (data) => {
+        setTodayordersCount({
+          ...todayOrdersCount,
+          total: data.data.total_count,
+        });
+      },
+    },
+  );
+
+  const getCompletOrderCountQuery = useQuery(
+    ['getCompleteOrderCountQuery'],
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+      }),
+    {
+      onSuccess: (data) => {
+        setTodayordersCount({
+          ...todayOrdersCount,
+          complete: data.data.order_sheet_list.length,
+        });
+      },
+    },
+  );
+
+  /**
+   * 등록되어 있는 쇼핑몰
+   */
+  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
+
+  /**
+   * 금일 발주완료한 쇼핑몰 갯수
+   */
+  const completeStoreList =
+    getCompletOrderCountQuery.data?.data.order_sheet_list.map(
+      (store) => store.rt_store_name,
+    ) ?? [];
+
+  /**
+   * 엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
+   */
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
       //2회 이상 발주 파일이 없는경우
@@ -73,37 +122,75 @@ function PageBody() {
     },
   });
 
+  /**
+   * 파싱하려는 발주서 엑셀파일
+   */
+  const uploadFiles = createPreParsingMutation.data?.files ?? [];
+
+  /**
+   * 프리파싱 결과
+   */
+  const preParsingResult = createPreParsingMutation.data?.preParsingResult;
+
+  /**
+   * 발주서 엑셀파일 파싱 상태
+   */
+  const orderExcefilesParsingData =
+    createPreParsingMutation.data?.parsingData?.data.parsing_status;
+
+  /**
+   * 발주등록 최종 확인 모달 내용
+   */
+  const confirmModalItems = [
+    {
+      title: t('orderDate'),
+      content: cart.selectedDate.format('YYYY-MM-DD'),
+    },
+    {
+      title: t('orderStores'),
+      content: t('count', { count: countOrderStores() }),
+    },
+    {
+      title: t('totalOrderCountInConfirm'),
+      content: t('count', { count: countOrdersForType().total }),
+    },
+    {
+      title: t('totalOrderPriceInComfirm'),
+      content: t('price', { price: calculateTotalPrice() }),
+    },
+  ];
+
   return (
     <>
-      {/* 발주서 헤더 설정 모달 */}
       <AddOrderColumnModal
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
       />
-
-      {/* 단건 추가 모달 */}
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
-      {/* 재등록 모달 */}
       {createPreParsingMutation.isSuccess && (
         <PreparsingOrderModal
           visible={preparsingModalVisible}
           open={openPreparsingModal}
           close={closePreparsingModal}
           data={{
-            files: createPreParsingMutation.data?.files,
-            preParsingResult: createPreParsingMutation.data?.preParsingResult,
+            files: uploadFiles,
+            preParsingResult: preParsingResult as ResponseCreatePreParsing,
           }}
         />
       )}
 
-      {/* 발주등록 확인 모달 */}
       <ConfirmOrderModal
+        title={t('orderConfirm')}
+        description={[
+          t('failed orders are except'),
+          t('please check order info again'),
+        ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
+        items={confirmModalItems}
       />
 
-      {/* 발주서 파싱 결과 모달 */}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
         title={t('order is problem')}
@@ -119,45 +206,81 @@ function PageBody() {
           });
           closeParsingProcessModal();
         }}
-        successCount={Number(
-          createPreParsingMutation.data?.parsingData?.data.parsing_status
-            .success_count,
-        )}
-        failCount={Number(
-          createPreParsingMutation.data?.parsingData?.data.parsing_status
-            .fail_count,
-        )}
-        messages={
-          createPreParsingMutation.data?.parsingData?.data.parsing_status
-            .error_messages ?? []
-        }
-        size="middle"
+        successCount={Number(orderExcefilesParsingData?.success_count) ?? 0}
+        failCount={Number(orderExcefilesParsingData?.fail_count) ?? 0}
+        messages={orderExcefilesParsingData?.error_messages ?? []}
+        size="small"
       />
 
-      {/*
-       * Page
-       */}
       <PageTitle
         title={t('order.preview')}
         buttons={[
-          <TurtleText
-            css={css({
-              fontSize: 14,
-              fontWeight: 500,
-            })}
+          <Tooltip
+            placement="bottom"
+            title={
+              <div
+                css={css({
+                  width: 160,
+                  height: 174,
+                  fontSize: 12,
+                  overflowY: 'auto',
+                  color: theme.grey200,
+                })}
+              >
+                {completeStoreList.map((store) => (
+                  <div>{store}</div>
+                ))}
+              </div>
+            }
           >
-            {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
-            <span css={css({ color: theme.grey400 })}>
-              {`/ 
+            <TurtleText
+              css={css({
+                fontSize: 14,
+                fontWeight: 500,
+              })}
+            >
+              {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
+              <span css={css({ color: theme.grey400 })}>
+                {`/ 
               ${t('count', { count: todayOrdersCount.total })} | `}
-            </span>
-            {`${t('incomplete orders today')} ${
-              todayOrdersCount.total - todayOrdersCount.complete
-            }`}{' '}
-            <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
-              count: todayOrdersCount.total,
-            })}`}</span>
-          </TurtleText>,
+              </span>
+            </TurtleText>
+          </Tooltip>,
+          <Tooltip
+            css={css({ marginRight: 20 })}
+            placement="bottom"
+            title={
+              <div
+                css={css({
+                  width: 160,
+                  height: 174,
+                  fontSize: 12,
+                  overflowY: 'auto',
+                  color: theme.grey200,
+                })}
+              >
+                {entireStoreList.map((store) => {
+                  if (completeStoreList.includes(store.name)) return;
+
+                  return <div>{store.name}</div>;
+                })}
+              </div>
+            }
+          >
+            <TurtleText
+              css={css({
+                fontSize: 14,
+                fontWeight: 500,
+              })}
+            >
+              {`${t('incomplete orders today')} ${
+                todayOrdersCount.total - todayOrdersCount.complete
+              }`}{' '}
+              <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
+                count: todayOrdersCount.total,
+              })}`}</span>
+            </TurtleText>
+          </Tooltip>,
           <TertiaryButton
             text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}
@@ -208,7 +331,7 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${countSuccessList()})`}
+            tab={`${t('success')}(${countOrderStores()})`}
             loading={false}
           />
           <FailTab
@@ -234,7 +357,7 @@ function PageBody() {
                 {t('orderTotalCount')}
               </span>
               {'   '}
-              {` ${t('count', { count: countSuccessList() })}`}
+              {` ${t('count', { count: countOrdersForType().total })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
                   'order.types.exchange',

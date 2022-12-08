@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 
@@ -11,9 +11,12 @@ import {
 import TurtleDatePicker from '@components/element/rangePicker/TurtleDatePicker';
 import useOrderCart from '@hooks/useOrderCart';
 import moment from 'moment';
+import { Tooltip } from 'antd';
 
 function PickerOrder() {
   const { cart, setCart } = useOrderCart();
+  const [dateTooltipvisible, setdateToolipVisible] = useState(true);
+
   return (
     <>
       <Helmet
@@ -22,10 +25,21 @@ function PickerOrder() {
       <PageHeader
         title={t('order.create')}
         button={
-          <TurtleDatePicker
-            date={moment(cart.selectedDate)}
-            onchange={(value) => setCart({ ...cart, selectedDate: value })}
-          />
+          <Tooltip
+            visible={dateTooltipvisible}
+            title={t('you can change order request date')}
+            placement="bottom"
+            zIndex={1}
+          >
+            <div onClick={() => setdateToolipVisible(false)}>
+              <TurtleDatePicker
+                date={cart.selectedDate}
+                onchange={(value) => {
+                  setCart({ ...cart, selectedDate: value });
+                }}
+              />
+            </div>
+          </Tooltip>
         }
       />
       <PageBody />

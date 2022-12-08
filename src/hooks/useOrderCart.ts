@@ -30,7 +30,10 @@ export interface FailListForOutput {
   memo: string;
 }
 
-export type Icolumn =
+/**
+ * 발주서 헤더
+ */
+export type IorderColumn =
   | 'vendor_name'
   | 'vendor_address'
   | 'vendor_mobile'
@@ -60,7 +63,10 @@ const useOrderCart = () => {
     memo: [],
   });
 
-  //발주 등록 전, 발주 중복 데이터 및 실패=> 성공 이전데이터 통합
+  /**
+   * 발주 등록전, 발주 중복 데이터 및 실패 => 성공으로 이전데이터를 통합
+   * @returns {StoreOrderItemExcelParsing[]} 최종적으로 발주서로 등록될 발주데이터 array
+   */
   const integrationOrderList = () => {
     const organizedList: StoreOrderItemExcelParsing[] = [];
     let comparisonList = cart.successList;
@@ -117,8 +123,9 @@ const useOrderCart = () => {
     return organizedList;
   };
 
-  /*
+  /**
    * 발주데이터의 거래처 목록에 id 생성
+   * @returns {StoreOrder[]}
    */
   const createOrdersID = (orders: StoreOrder[], type: 'excel' | 'single') => {
     return orders.map<StoreOrder>((order, index) => ({
@@ -128,11 +135,15 @@ const useOrderCart = () => {
     }));
   };
 
-  /*
-   * 발주 데이터 초기가공
+  /**
+   * 발주 데이터에 id 부여, 이 id는 프론트엔드 영역에서만 쓰이며, 실제 api로 데이터 전송시에는 사용하지 않는다.
+   * @returns {StoreOrderItemExcelParsing}
    */
   const setStoreListItem = useCallback(
-    (store: StoreOrderItemExcelParsing, id: number) => {
+    (
+      store: StoreOrderItemExcelParsing,
+      id: number,
+    ): StoreOrderItemExcelParsing => {
       return {
         ...store,
         orders: createOrdersID(store.orders, 'excel'),
@@ -142,14 +153,14 @@ const useOrderCart = () => {
     [],
   );
 
-  /*
-   * 데이터 신규추가
+  /**
+   * 발주데이터 신규추가
    */
   const ready = useCallback(
     (data: ResponseCreateOrderItemExcelParsing) => {
       let id = 0;
-
       setCart({
+        ...cart,
         successList: [
           //기존 쇼핑몰
           ...cart.successList.map((store) => {
@@ -176,10 +187,10 @@ const useOrderCart = () => {
         parsingStatus: data.data.parsing_status,
       });
     },
-    [cart.failList, cart.successList, setCart, setStoreListItem],
+    [cart, setCart, setStoreListItem],
   );
 
-  /*
+  /**
    * 단건추가시, 해당 단건이 첫번째 발주목록이 되는지를 확인후, id 생성
    */
   const checkSuccessListAndIDCreate = useCallback(() => {
@@ -189,7 +200,7 @@ const useOrderCart = () => {
     return 1;
   }, [cart.successList]);
 
-  /*
+  /**
    * 단건추가 등록(Picker)
    */
   const addSingleOrder = useCallback(
@@ -210,21 +221,19 @@ const useOrderCart = () => {
     [cart.failList, cart.successList, checkSuccessListAndIDCreate, setCart],
   );
 
-  /*
+  /**
    * 기존의 발주배열에 단건으로 새 발주데이터를 추가
    */
-
   const addOrdersToSingleOrder = (
     orders: StoreOrder[],
     newOrder: StoreOrder,
-  ) => {
+  ): StoreOrder[] => {
     return [...orders, newOrder];
   };
 
-  /*
+  /**
    * 단건추가 등록 (쇼핑몰)
    */
-
   const addSingleOrderForStore = useCallback(
     (data: StoreOrderItemExcelParsing) => {
       setCart({
@@ -249,18 +258,18 @@ const useOrderCart = () => {
     [cart.successList],
   );
 
-  /*
-   * 실패 케이스 미리보기 출력을 위한 가공
+  /**
+   * 실패 케이스 미리보기 출력을 위한 데이터 구조 가공
    */
   const failListOutput = useCallback(() => {
     const failRowList: FailListForOutput[] = [];
-    let id = 0;
+    //let id = 0;
 
     cart.failList.map((store) => {
       let failRow: FailListForOutput;
-      store.orders.map((order) => {
+      store.orders.map((order, id) => {
         failRow = {
-          id: id++,
+          id,
           rt_store_id: store.rt_store_id,
           rt_store_name: store.rt_store_name,
           order_id: Number(order.order_id),
@@ -280,11 +289,10 @@ const useOrderCart = () => {
     return failRowList;
   }, [cart.failList]);
 
-  /*
-   * 성공데이터 카운팅
+  /**
+   * 발주 쇼핑몰 갯수
    */
-
-  const countSuccessList = useCallback(() => {
+  const countOrderStores = useCallback(() => {
     let count = 0;
 
     cart.successList.map((store) => {
@@ -292,7 +300,6 @@ const useOrderCart = () => {
     });
 
     //실패에서 성공으로 이전한 경우의 데이터 카운트 (실패에서 휴대전화번호 입력시)
-
     cart.failList.map((store) => {
       store.orders.map((order) => {
         if (order.mobile !== '') count++;
@@ -302,10 +309,9 @@ const useOrderCart = () => {
     return count;
   }, [cart.successList, cart.failList]);
 
-  /*
+  /**
    * 실패데이터 카운팅
    */
-
   const countFailList = useCallback(() => {
     let count = 0;
 
@@ -314,7 +320,6 @@ const useOrderCart = () => {
     });
 
     //실패에서 성공으로 넘어간 케이스 카운트
-
     cart.failList.map((store) => {
       store.orders.map((order) => {
         if (order.mobile !== '') count--;
@@ -324,6 +329,9 @@ const useOrderCart = () => {
     return count;
   }, [cart.failList]);
 
+  /**
+   * 발주데이터에서 발주 총 금액
+   */
   const calculateTotalPrice = useCallback(() => {
     let total = 0;
     total = cart.successList.reduce(
@@ -353,10 +361,9 @@ const useOrderCart = () => {
     return total;
   }, [cart.successList, cart.failList]);
 
-  /*
+  /**
    * 발주 수량 분류별 계산
    */
-
   const countOrdersForType = useCallback(() => {
     const orderCount = {
       order: 0,
@@ -366,23 +373,33 @@ const useOrderCart = () => {
       sample: 0,
       pickup: 0,
       extra: 0,
+      total: 0,
     };
     cart.successList.map((item) => {
       item.orders.map((order) => {
-        if (order.order_type === 'order') orderCount.order += 1;
-        if (order.order_type === 'reserve') orderCount.reserve += 1;
-        if (order.order_type === 'takeback') orderCount.takeback += 1;
-        if (order.order_type === 'exchange') orderCount.exchange += 1;
-        if (order.order_type === 'sample') orderCount.sample += 1;
-        if (order.order_type === 'pickup') orderCount.pickup += 1;
-        if (order.order_type === 'extra') orderCount.extra += 1;
+        if (order.order_type === 'order')
+          orderCount.order += Number(order.product_count);
+        if (order.order_type === 'reserve')
+          orderCount.reserve += Number(order.product_count);
+        if (order.order_type === 'takeback')
+          orderCount.takeback += Number(order.product_count);
+        if (order.order_type === 'exchange')
+          orderCount.exchange += Number(order.product_count);
+        if (order.order_type === 'sample')
+          orderCount.sample += Number(order.product_count);
+        if (order.order_type === 'pickup')
+          orderCount.pickup += Number(order.product_count);
+        if (order.order_type === 'extra')
+          orderCount.extra += Number(order.product_count);
+
+        orderCount.total += Number(order.product_count);
       });
     });
 
     return orderCount;
   }, [cart.successList]);
 
-  /*
+  /**
    * 발주 데이터 초기화
    */
   const reset = useCallback(() => {
@@ -390,39 +407,41 @@ const useOrderCart = () => {
       parsingStatus: { fail_count: 0, success_count: 0, error_messages: [] },
       successList: [],
       failList: [],
+      selectedDate: moment(),
     });
   }, [setCart]);
 
-  /*
-   * 발주서설정, 발주서 칼럼 추가
+  /**
+   * 발주서설정, 발주서 헤더 새로 추가
    */
-
-  const addNewOrderColumn = (column: Icolumn) => {
+  const addNewOrderColumn = (column: IorderColumn) => {
     setOrderFormat({
       ...orderFormat,
       [column]: [...orderFormat[column], ''],
     });
   };
 
-  /*
-   * 발주서설정, 등록되어 있는 발주서 칼럼 변경
+  /**
+   * 발주서설정, 등록되어 있는 발주서 헤더 변경
    */
-
-  const changeOrderColumn = (column: Icolumn, id: string, newValue: string) => {
+  const changeOrderColumn = (
+    column: IorderColumn,
+    id: string,
+    newColumn: string,
+  ) => {
     setOrderFormat({
       ...orderFormat,
       [column]: orderFormat[column].map((value, index) => {
-        if (String(index) === id) return newValue;
+        if (String(index) === id) return newColumn;
         return value;
       }),
     });
   };
 
-  /*
-   * 발주서설정, 등록되어있는 발주서 칼럼 제거
+  /**
+   * 발주서설정, 등록되어있는 발주서 헤더 제거
    */
-
-  const deleteOrderColumn = (column: Icolumn, columnName: string) => {
+  const deleteOrderColumn = (column: IorderColumn, columnName: string) => {
     setOrderFormat({
       ...orderFormat,
       [column]: orderFormat[column].filter(
@@ -431,7 +450,7 @@ const useOrderCart = () => {
     });
   };
 
-  /*
+  /**
    * 발주 메모 입력함수
    */
   const inputMemo = (
@@ -439,13 +458,13 @@ const useOrderCart = () => {
     value: string,
     orderRowID: number,
   ) => {
-    return store.orders.map((order) => ({
+    return store.orders.map<StoreOrder>((order) => ({
       ...order,
       memo: order.order_id === orderRowID ? value : order.memo,
     }));
   };
 
-  /*
+  /**
    * 메모 입력된 발주데이터 리스트에 추가
    */
   const setSuccessListToMemo = (
@@ -454,7 +473,7 @@ const useOrderCart = () => {
     orderRowID: number,
     memoValue: string,
   ) =>
-    list.map((store) => ({
+    list.map<StoreOrderItemExcelParsing>((store) => ({
       ...store,
       orders:
         store.id === rowID
@@ -462,9 +481,6 @@ const useOrderCart = () => {
           : store.orders,
     }));
 
-  /**
-   *
-   */
   /**
    * 발주 미리보기에서 수량 변경
    * @param orders 변경 하려는 발주 데이터가 속한 발주 array
@@ -477,7 +493,7 @@ const useOrderCart = () => {
     value: string,
     selectedOrderID: number,
   ) =>
-    orders.map((order) => ({
+    orders.map<StoreOrder>((order) => ({
       ...order,
       product_count:
         order.order_id === selectedOrderID && value !== 'null'
@@ -499,7 +515,7 @@ const useOrderCart = () => {
     storeID: number,
     value: string,
   ) =>
-    list.map((item) => ({
+    list.map<StoreOrderItemExcelParsing>((item) => ({
       ...item,
       orders:
         item.rt_store_id === storeID
@@ -519,13 +535,17 @@ const useOrderCart = () => {
     value: string,
     selectedOrderID: number,
   ) =>
-    orders.map((order) => ({
+    orders.map<StoreOrder>((order) => ({
       ...order,
       order_type: order.order_id === selectedOrderID ? value : order.order_type,
     }));
 
   /**
-   * 미리보기 변경한 데이터를 리스트에 추가
+   *  변경한 분류 데이터를 리스트에 적용
+   * @list 변경할 분류데이터가 속해있는 쇼핑몰 발주 목록
+   * @value 변경한 분류데이터
+   * @selectedStoreID 변경하려는 분류데이터의 쇼핑몰 데이터의 ID
+   * @selectedOrderID 변경하려는 분류데이터의 발주데이터의 ID
    */
   const setSuccessListToOrderType = (
     list: StoreOrderItemExcelParsing[],
@@ -533,7 +553,7 @@ const useOrderCart = () => {
     selectedStoreID: number,
     selectedOrderID: number,
   ) =>
-    list.map((item) => ({
+    list.map<StoreOrderItemExcelParsing>((item) => ({
       ...item,
       orders:
         item.rt_store_id === selectedStoreID
@@ -554,6 +574,8 @@ const useOrderCart = () => {
     if (orderType === 'sample') return t('order.types.sample');
     if (orderType === 'pickup') return t('order.types.pickup');
     if (orderType === 'extra') return t('order.types.extra');
+
+    return '';
   };
 
   return {
@@ -567,7 +589,7 @@ const useOrderCart = () => {
     integrationOrderList,
     addSingleOrder,
     addSingleOrderForStore,
-    countSuccessList,
+    countOrderStores,
     countFailList,
     calculateTotalPrice,
     orderFormat,

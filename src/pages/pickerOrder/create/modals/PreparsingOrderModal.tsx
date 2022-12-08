@@ -19,6 +19,9 @@ interface Props {
   };
 }
 
+/**
+ * 발주서 재등록 확인 여부
+ */
 function PreparsingOrderModal({ visible, close, open, data }: Props) {
   const { ready, cart } = useOrderCart();
 

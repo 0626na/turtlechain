@@ -17,7 +17,7 @@ import ColumnTitleInput from '@components/element/button/ColumnTitleInput';
 import PlusIcon from '@components/element/icon/PlusIcon';
 import TurtleStack from '@components/element/TurtleStack';
 import { css } from '@emotion/react';
-import useOrderCart, { Icolumn } from '@hooks/useOrderCart';
+import useOrderCart, { IorderColumn } from '@hooks/useOrderCart';
 import { PageTitle } from '@layout/page';
 import { message } from '@utils/message';
 import { Button, Col, Divider, Input, Modal, Row } from 'antd';
@@ -29,7 +29,9 @@ interface Props {
   visible: boolean;
   closeModal: () => void;
 }
-
+/**
+ *  발주서 헤더 설정 모달
+ */
 function AddOrderColumnModal({ visible, closeModal }: Props) {
   const {
     orderFormat,
@@ -60,12 +62,12 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
   const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
     onSuccess: (data) => {
       if (data.msg === 'success')
-        message.success(t('message.create format success'));
+        message.success(t('message.create new format'));
       closeModal();
     },
   });
 
-  const columnDataOutput = (column: Icolumn) => {
+  const columnDataOutput = (column: IorderColumn) => {
     return orderFormat[column].map((name, index) => (
       <ColumnTitleInput
         key={index}
@@ -115,7 +117,9 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               color: #6b6d73;
             `}
           >
-            {t('external header can create free')}
+            {t(
+              `is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form`,
+            )}
           </p>
         </div>
         {/* 종방향 정렬 container */}
@@ -164,7 +168,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               onClick={() => addNewOrderColumn('order_type')}
             />
             <AddColumnButton
-              required={true}
+              required={false}
               text={t('button.productCount')}
               onClick={() => addNewOrderColumn('product_count')}
             />

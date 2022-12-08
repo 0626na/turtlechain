@@ -34,7 +34,7 @@ function AddColumnButton({ text, onClick, required, ...props }: Props) {
       >
         {text}
 
-        {(text === '거래처명' || text === '거래처 주소' || text === '수량') && (
+        {required && (
           <span
             css={css`
               color: red;
