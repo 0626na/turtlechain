@@ -83,7 +83,7 @@ function UserStep({ visible, onClickNext }: Props) {
         name="user_name"
         label={t('user name')}
       >
-        <Input css={input} placeholder="ex. 김거북" />
+        <Input css={input} placeholder={t('placeholder.ex, id')} />
       </Form.Item>
 
       <Form.Item
@@ -92,7 +92,7 @@ function UserStep({ visible, onClickNext }: Props) {
         name="user_email"
         label={t('email')}
       >
-        <Input css={input} placeholder="ex. gbkim@gmail.com" />
+        <Input css={input} placeholder={t('placeholder.ex. email')} />
       </Form.Item>
 
       {/* 유효성 검사를 위해 user_mobile 폼아이템 태그를 만들어줌. */}
@@ -123,7 +123,7 @@ function UserStep({ visible, onClickNext }: Props) {
               onChange={() => {
                 setCheckDuplicated(false);
               }}
-              placeholder="아이디를 입력해주세요"
+              placeholder={t('placeholder.input id')}
               suffix={
                 <CheckDuplicatedButton
                   onClick={() => {
@@ -149,7 +149,7 @@ function UserStep({ visible, onClickNext }: Props) {
       >
         <Input.Password
           css={input}
-          placeholder="문자, 숫자, 기호를 조합해 8자 이상"
+          placeholder={t('placeholder.combination of passwords')}
         />
       </Form.Item>
 
@@ -162,7 +162,7 @@ function UserStep({ visible, onClickNext }: Props) {
       >
         <Input.Password
           css={input}
-          placeholder="비밀번호를 다시 한번 입력해주세요"
+          placeholder={t('placeholder.input password again')}
         />
       </Form.Item>
 

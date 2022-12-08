@@ -96,7 +96,19 @@
     "input business number": "사업자 번호를 입력해주세요",
     "input owner name": "대표자명을 입력해주세요",
     "input memo": "메모를 입력해주세요",
-    "ex, double check its invoices!": "ex. 영수증 이중으로 확인 또 확인!"
+    "ex, double check its invoices!": "ex. 영수증 이중으로 확인 또 확인!",
+    "ex. id": "ex. 김거북",
+    "ex. email": "ex. gbkim@gmail.com",
+    "ex. mobile": "ex. 010-1234-5678",
+    "input authentication number": "인증번호 입력",
+    "input id": "아이디를 입력하세요",
+    "combination of passwords": "문자, 숫자, 기호를 조합해 8자 이상",
+    "input password again": "비밀번호를 다시 한번 입력해주세요",
+    "ex. company": "ex. (주)터틀샵",
+    "ex. business number": "ex. 123-456-67890",
+    "input company address": "사업자 주소를 입력해주세요",
+    "input company detail address": "사업자 상세주소를 입력해주세요",
+    "ex. store url": "ex. www.turtleshop.com"
   },
 
   "button": {
