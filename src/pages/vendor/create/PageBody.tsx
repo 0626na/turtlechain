@@ -249,7 +249,7 @@ function PageBody() {
             openConfirmModal();
           }}
         >
-          {t('save vendor')}
+          {t('button.save vendor')}
         </PrimaryButton>
       </PageBottomBar>
     </>

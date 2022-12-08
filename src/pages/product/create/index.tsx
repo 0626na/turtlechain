@@ -16,7 +16,7 @@ function ProductCreate() {
         title={t('product.create')}
         button={
           <HistoryButton
-            text={t('product list')}
+            text={t('button.product list')}
             onClick={() => {
               navigate('/product/history');
             }}

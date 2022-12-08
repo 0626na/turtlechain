@@ -129,14 +129,16 @@ function PageBody() {
         )}
         buttons={[
           <TertiaryButton
-            text={t('integrate inventory program')}
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('add product')}</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add product')}
+              </SecondaryIconButton>
             }
             items={[
               {
@@ -188,7 +190,7 @@ function PageBody() {
           onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
-          {t('add & save')}
+          {t('button.add & save')}
         </PrimaryButton>
       </PageBottomBar>
     </>

@@ -211,6 +211,7 @@
     "countTotal": "수량합계",
     "type": "분류",
     "proccessed totalCount": "처리/총수량",
+    "product vendorName": "거래처명",
     "warehouseName": "창고명",
     "warehousingCount": "입고 수량",
     "requestCount": "요청 수량",
@@ -283,7 +284,14 @@
     "subscription": "구독하기",
     "re-subscription": "재구독하기",
     "testNotificationKakaoTalk": "테스트 알림톡 받아보기",
-    "payment method change": "결제수단 변경"
+    "payment method change": "결제수단 변경",
+    "add product": "상품 추가하기",
+    "add & save": "상품 등록하기",
+    "save vendor": "거래처 등록하기",
+    "product list": "상품목록",
+    "integrate inventory program": "재고프로그램 연동",
+    "integrate": "확인",
+    "add stock": "입고 추가하기"
   },
 
   "message": {
@@ -461,6 +469,7 @@
 
   "building": "상가",
   "floor": "층",
+  "vendors": "거래처 목록",
   "bank": "은행",
   "col and loc": "열-호",
   "accountManagement": "계정관리",
@@ -543,7 +552,7 @@
   "add vendor": "거래처등록",
   "vendor list": "거래처 목록",
   "preview of new vendors": "거래처등록 미리보기",
-  "Inventory program linkage": "재고프로그램 연동",
+  "inventory program linkage": "재고프로그램 연동",
   "create vendor": "거래처 추가하기",
   "confirmed": "마감하기",
   "confirm cancel": "취소하기",
@@ -577,5 +586,7 @@
   "summary of invoice issues": "교환/반품/미송 현황",
   "add invoice issues": "교환/반품/미송 추가",
   "add exchange/returns": "교환/반품 추가",
-  "search vendor name, product name, and reference": "거래처명, 상품명, 거래처 상품명 검색"
+  "search vendor name, product name, and reference": "거래처명, 상품명, 거래처 상품명 검색",
+  "preview of New Products": "상품등록 미리보기",
+  "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
 }
