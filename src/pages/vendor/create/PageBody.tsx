@@ -185,7 +185,7 @@ function PageBody() {
         title={t('preview of new vendors')}
         buttons={[
           <TertiaryButton
-            text={t('inventory program linkage')}
+            text={t('inventory program integration')}
             onClick={() => {
               openInventoryModal();
             }}

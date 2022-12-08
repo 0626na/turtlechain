@@ -80,7 +80,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('Inventory program linkage')}
+        title={t('inventory program integration')}
         description={[
           t('please select which dates you wish to integrate'),
           t(

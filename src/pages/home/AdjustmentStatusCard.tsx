@@ -105,7 +105,7 @@ function AdjustmentStatusCard() {
                 marginTop: 16,
               }}
             >
-              {price.toLocaleString()}₩
+              {price.toLocaleString()}원
             </div>
           </div>
         ))}

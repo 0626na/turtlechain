@@ -37,7 +37,7 @@ function TurtleTableTitle({
     <Row justify="space-between" align="middle" style={{ marginBottom: 12 }}>
       <Col>
         <TurtleText css={container}>
-          Total <TurtleText css={count}>{totalCount}</TurtleText>
+          총 <TurtleText css={count}>{totalCount}건</TurtleText>
         </TurtleText>
         {!!vendorCount && vendorCount >= 0 && (
           <TurtleText css={container}>
