@@ -82,7 +82,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   product_option: values.option,
                   product_count: values.count ?? 0,
                   product_price: values.price,
-                  order_type: values.type,
+                  order_type: values.type ?? 'order',
                   creation_type: 'single',
                   memo: values.memo,
                   ws_store_info: [],
@@ -236,11 +236,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             <TurtleFormInput placeholder={t('please input option')} />
           </Form.Item>
           {/* 분류 */}
-          <Form.Item
-            label={t('table.type')}
-            name="type"
-            rules={[{ required: true, message: t('please input type') }]}
-          >
+          <Form.Item label={t('table.type')} name="type">
             <Radio.Group>
               <Radio value="order">{t('order.types.order')}</Radio>
               <Radio value="reserve">{t('order.types.reserve')}</Radio>
@@ -259,7 +255,11 @@ function AddNewOrderModal({ visible, close }: Props) {
             <TurtleFormInput placeholder="ex 7,000" />
           </Form.Item>
           {/* 수량 */}
-          <Form.Item label={t('table.count')} name="count">
+          <Form.Item
+            label={t('table.count')}
+            name="count"
+            rules={[{ required: true, message: t('please input count') }]}
+          >
             <TurtleFormInput placeholder="ex 20" />
           </Form.Item>
           {/* 메모 */}
