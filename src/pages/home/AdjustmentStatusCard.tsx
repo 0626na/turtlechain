@@ -95,7 +95,6 @@ function AdjustmentStatusCard() {
               }}
             >
               {count}
-              {/* <span css={{ fontWeight: 500, fontSize: 20 }}>건</span> */}
             </div>
             <div
               css={{
@@ -105,7 +104,8 @@ function AdjustmentStatusCard() {
                 marginTop: 16,
               }}
             >
-              {price.toLocaleString()}원
+              {price.toLocaleString()}
+              {t('description.won')}
             </div>
           </div>
         ))}

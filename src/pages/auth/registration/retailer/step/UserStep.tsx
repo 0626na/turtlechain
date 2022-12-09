@@ -40,11 +40,11 @@ function UserStep({ visible, onClickNext }: Props) {
   // 아이디 유효성 검사
   const idValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('아이디를 입력해주세요.'));
+      return Promise.reject(new Error(t('message.enterId')));
     }
 
     if (!checkDuplicated && value) {
-      return Promise.reject(new Error('아이디 중복확인을 해주세요'));
+      return Promise.reject(new Error(t('message.check id dup')));
     }
 
     return Promise.resolve();
@@ -53,11 +53,11 @@ function UserStep({ visible, onClickNext }: Props) {
   //이메일 유효성 검사
   const emailValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('이메일을 입력해주세요.'));
+      return Promise.reject(new Error(t('message.please input your email')));
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
+      return Promise.reject(new Error(t('message.this email is not valid')));
     }
 
     return Promise.resolve();
@@ -66,11 +66,11 @@ function UserStep({ visible, onClickNext }: Props) {
   // 비밀번호 확인 유효성 검사
   const passwordValidator = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('비밀번호 입력해주세요.'));
+      return Promise.reject(new Error(t('message.enterPassword')));
     }
 
     if (value && value !== form.getFieldValue('user_password')) {
-      return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
+      return Promise.reject(new Error(t('message.not match password')));
     }
 
     return Promise.resolve();

@@ -67,7 +67,7 @@ function ResetPasswordForm() {
         <TurtleText css={cardCss.subTitle}>
           {!getIDQuery.data
             ? t('description.please phone auth')
-            : '새로운 비밀번호를 설정해주세요.'}
+            : t('description.input new password')}
         </TurtleText>
       </div>
 

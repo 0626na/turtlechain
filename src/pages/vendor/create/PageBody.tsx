@@ -59,7 +59,9 @@ function PageBody() {
       ready(data);
       closeInventoryModal();
       message.warn(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
+        t('message.vendor duplicated count', {
+          count: data.data.count.duplicated_count,
+        }),
       );
     },
   });
@@ -68,9 +70,9 @@ function PageBody() {
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
-      message.warn(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
-      );
+      t('message.vendor duplicated count', {
+        count: data.data.count.duplicated_count,
+      });
     },
   });
 
@@ -78,7 +80,10 @@ function PageBody() {
   const vendorCreateMutation = useMutation(vendorAPI.create, {
     onSuccess: (data) => {
       message.success(
-        `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+        t('message.success register vendor', {
+          success: data.data.success_count,
+          duplicated: data.data.fail_count,
+        }),
       );
       closeConfirmModal();
       navigate('/vendor/history');
@@ -140,7 +145,7 @@ function PageBody() {
 
       <TurtleConfirmModal
         visible={confirmModalVisivle}
-        okText="등록"
+        okText={t('button.register')}
         onOk={() => {
           vendorCreateMutation.mutate([
             ...cart.successList.map((vendor) =>
@@ -160,8 +165,8 @@ function PageBody() {
         onCancel={() => {
           closeConfirmModal();
         }}
-        title={'정말 등록할까요?'}
-        description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
+        title={t('title.really register')}
+        description={[t('description.register exclude fail')]}
       />
 
       {/*

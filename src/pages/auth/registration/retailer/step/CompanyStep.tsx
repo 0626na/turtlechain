@@ -56,11 +56,11 @@ function CompanyStep({ visible, loading }: Props) {
   // 사업자번호 유효성 검사
   const bizNumValidator = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('사업자 번호 입력해주세요'));
+      return Promise.reject(new Error(t('message.input biz num')));
     }
 
     if (!checkDuplicated && form.getFieldValue('company_biz_num')) {
-      return Promise.reject(new Error('사업자 번호 중복확인을 해주세요'));
+      return Promise.reject(new Error(t('message.check biz num dup')));
     }
 
     return Promise.resolve();
@@ -72,7 +72,7 @@ function CompanyStep({ visible, loading }: Props) {
       !value.includes('service_use') ||
       !value.includes('personal_information')
     ) {
-      return Promise.reject(new Error('필수항목을 체크해주세요.'));
+      return Promise.reject(new Error(t('message.check required')));
     }
 
     return Promise.resolve();
