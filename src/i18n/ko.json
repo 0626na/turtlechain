@@ -455,7 +455,7 @@
   "please check error and reload": "오류 내용을 확인하고 다시 업로드해주세요.",
   "complete orders today": "당일 발주완료",
   "incomplete orders today": "당일 미발주",
-  "please input search query": "검색어를 입력하세요",
+  "please input search query in order search": "쇼핑몰명, 거래처명, 상품명으로 검색해보세요",
   "Add the mobile phone number you entered as your account information": "입력한 휴대전화 번호를 거래처 정보로 추가합니다.",
   "After addition, the client's order is classified as successful": "추가 이후에는 해당 거래처의 발주서를 성공으로 분류해요.",
   "you can change order request date": "발주요청 일자를 변경할 수 있어요",

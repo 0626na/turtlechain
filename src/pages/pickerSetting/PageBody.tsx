@@ -23,7 +23,7 @@ import AddPickerModal from './modals/AddPickerModal';
 import DetailPickerModal from './modals/DetailPickerModal';
 
 function PageBody() {
-  const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
+  const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
