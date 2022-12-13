@@ -82,7 +82,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   product_name: values.vendor_product_name,
                   product_option: values.option,
                   product_count: values.count ?? 0,
-                  product_price: values.price,
+                  product_price: values.price ?? 0,
                   order_type: values.type ?? 'order',
                   creation_type: 'single',
                   memo: values.memo,
