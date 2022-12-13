@@ -64,7 +64,6 @@ export interface OrderVendor {
 
 function PageBody() {
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    search_type: 'store_name',
     search_string: '',
     page: 1,
     page_size: 17,
@@ -80,7 +79,6 @@ function PageBody() {
       'getWholesalerStoreListQuery',
       searchQuery.page,
       searchQuery.search_string,
-      //searchQuery.page,
     ],
     () => wholesalerAPI.getList(searchQuery),
   );
@@ -117,8 +115,8 @@ function PageBody() {
           scroll={{ y: 'auto', x: 950 }}
           loading={getWholesalerStoreListQuery.isLoading}
           dataSource={filterdList ?? []}
-          rowKey={(record) => record.id}
           pagination={false}
+          rowKey={(record) => record.id}
           title={() => (
             <TurtleTableTitle
               totalCount={
@@ -126,18 +124,6 @@ function PageBody() {
               }
               rightContent={
                 <Row>
-                  <Col css={marginRight}>
-                    <TurtleSearchSelect
-                      items={options}
-                      value={searchQuery.search_type}
-                      onChange={(value) =>
-                        setSearchQuery({
-                          ...searchQuery,
-                          search_type: String(value),
-                        })
-                      }
-                    />
-                  </Col>
                   <Col>
                     <TurtleSearchInput
                       placeholder={t(
@@ -162,6 +148,7 @@ function PageBody() {
                 size="small"
                 total={getWholesalerStoreListQuery.data?.data.total_count ?? 0}
                 showSizeChanger={false}
+                pageSize={searchQuery.page_size}
                 current={searchQuery.page}
                 onChange={(page) => {
                   setSearchQuery({ ...searchQuery, page });
