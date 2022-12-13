@@ -107,9 +107,9 @@ function PageBody() {
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title={t('do you really want me to delete it?')}
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="삭제"
+        title={t(t('title.really delete'))}
+        description={[t('description.cannot reset')]}
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={loading}
         onCancel={closeRemoveModal}

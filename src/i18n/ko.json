@@ -45,7 +45,6 @@
     "countTotal": "수량합계",
     "type": "분류",
     "proccessed totalCount": "처리/총수량",
-    "product vendorName": "거래처명",
     "warehouseName": "창고명",
     "warehousingCount": "입고 수량",
     "requestCount": "요청 수량",
@@ -141,7 +140,8 @@
     "select": "선택",
     "yes": "네",
     "register": "등록",
-    "change": "변경"
+    "change": "변경",
+    "delete": "삭제"
   },
 
   "message": {
@@ -192,7 +192,9 @@
     "check biz num dup": "사업자 번호 중복확인을 해주세요",
     "select vendor": "거래처를 선택해 주세요",
     "vendor duplicated count": "이미 등록된 거래처가 {{count}}건 있습니다.",
-    "success register vendor": "성공적으로 등록했습니다. 성공 : {{success}} 중복된 거래처 : {{duplicated}}"
+    "success register vendor": "성공적으로 등록했습니다. 성공 : {{success}} 중복된 거래처 : {{duplicated}}",
+    "success register product": "성공적으로 등록했습니다. 성공 : {{success}} 중복된 상품 : {{duplicated}}",
+    "success update product": "상품정보를 수정했어요"
   },
 
   "title": {
@@ -202,7 +204,8 @@
     "input company info": "사업자 정보 입력",
     "really delete": "정말 삭제할까요?",
     "really register": "정말 등록할까요?",
-    "really update": "정말 변경할까요?"
+    "really update": "정말 변경할까요?",
+    "update product": "상품정보 수정"
   },
 
   "description": {
@@ -228,7 +231,12 @@
     "another vendor name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.",
     "cannot reset": "삭제 후에는 이전으로 되돌릴 수 없어요.",
     "register exclude fail": "보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.",
-    "apply update info": "변경 후에는 변경된 방식으로 적용 됩니다."
+    "apply update info": "변경 후에는 변경된 방식으로 적용 됩니다.",
+    "need product update": "셀메이트 내 상품정보 수정이 필요해요",
+    "to correspond turtlechain": "터틀체인에 등록한 상품정보와 일치하도록",
+    "update sellmate product": "셀메이트 내 상품 세부정보를 업데이트해주세요.",
+    "go sellmate": "셀메이트 바로가기",
+    "except fail product": "실패에 남아있는 상품은 등록에서 제외됩니다."
   },
 
   "type": {},
