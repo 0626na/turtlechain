@@ -8,6 +8,7 @@ import { useMutation } from 'react-query';
 import { RcFile } from 'antd/lib/upload';
 import moment from 'moment';
 import { t } from 'i18next';
+import { css } from '@emotion/react';
 
 interface Props {
   visible: boolean;
@@ -59,6 +60,9 @@ function PreparsingOrderModal({ visible, close, open, data }: Props) {
         <p>
           {t('order dont create today')}
           <br />
+          <span css={css({ fontWeight: 600 })}>
+            {t('order not today store')}:{' '}
+          </span>
           {data.preParsingResult.data.third_order.map((store, index) =>
             data.preParsingResult.data.third_order.length !== index + 1
               ? `${store.rt_store_name}, `
