@@ -81,7 +81,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
                 store_name: value,
               }));
             }}
-            placeholder="거래처명을 입력해주세요."
+            placeholder={t('placeholder.input vendor name')}
           />
         </div>
 
@@ -137,7 +137,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('clearing.complete date'),
+              title: t('table.complete date'),
               render: (_, record) => record.complete_date,
             },
             {
@@ -161,7 +161,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              title: t('clearing.price'),
+              title: t('table.paymentPrice'),
               render: (_, record) => (
                 <span>
                   <span>
