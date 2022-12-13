@@ -5,6 +5,7 @@ import useStore from '@hooks/useStore';
 import { PageContent } from '@layout/page';
 import { theme } from '@styles/theme';
 import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
+import { t } from 'i18next';
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -66,7 +67,7 @@ function Service() {
                   }}
                   css={[$datePicker, isOtherDay && greenDatePicker]}
                   allowClear={false}
-                  placeholder="다른 일자선택"
+                  placeholder={t('placeholder.select different date')}
                 />
               </Tooltip>
             </Col>

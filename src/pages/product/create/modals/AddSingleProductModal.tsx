@@ -156,7 +156,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               onClick={openVendorModal}
               onSearch={openVendorModal}
               readOnly
-              placeholder="거래처명을 입력해주세요"
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
           <Form.Item
@@ -164,7 +164,10 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.vendorAddress')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput disabled placeholder="거래처주소를 입력해주세요" />
+            <TurtleFormInput
+              disabled
+              placeholder={t('placeholder.input vendor address')}
+            />
           </Form.Item>
 
           <Form.Item
@@ -174,7 +177,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput
               disabled
               value={form.getFieldValue('ws_store_info')?.ext ?? ''}
-              placeholder="기타 주소를 입력해주세요"
+              placeholder={t('placeholder.input other address')}
             />
           </Form.Item>
 
@@ -185,7 +188,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput
               disabled
-              placeholder="휴대전화 번호를 입력해주세요"
+              placeholder={t('placeholder.input mobile number')}
             />
           </Form.Item>
 
@@ -196,7 +199,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.productName')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput placeholder="ex.우디 투웨이 후드 집업" />
+            <TurtleFormInput
+              placeholder={t('placeholder.ex. product example')}
+            />
           </Form.Item>
 
           <Form.Item
@@ -204,7 +209,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.vendorProductName')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput placeholder="ex.우디 투웨이 후드 집업" />
+            <TurtleFormInput
+              placeholder={t('placeholder.ex. product example')}
+            />
           </Form.Item>
 
           <Form.Item
@@ -218,7 +225,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             ]}
           >
             <TurtleFormInput
-              placeholder={t('product.message.inputEnglishAndNumber')}
+              placeholder={t('placeholder.input english and number')}
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replace(
                   englishAndNumberPatten,
@@ -246,7 +253,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.option')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput placeholder="ex.블랙,one size" />
+            <TurtleFormInput placeholder={t('ex. option example')} />
           </Form.Item>
 
           <Form.Item
@@ -254,7 +261,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.price')}
             rules={[{ required: true }]}
           >
-            <TurtleNumberInput placeholder="ex.7,000" />
+            <TurtleNumberInput placeholder={t('ex. price example')} />
           </Form.Item>
 
           <Form.Item
@@ -262,7 +269,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             name="image_url"
             rules={[{ required: false }]}
           >
-            <TurtleFormInput placeholder="ex.https://kkobugi.co.kr/.." />
+            <TurtleFormInput placeholder={t('placeholder.ex. image url')} />
           </Form.Item>
 
           <Form.Item
@@ -270,7 +277,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.memo')}
             rules={[{ required: false }]}
           >
-            <TurtleFormInput placeholder="메모를 입력해주세요." />
+            <TurtleFormInput placeholder={t('placeholder.input memo')} />
           </Form.Item>
 
           <Form.Item noStyle shouldUpdate>

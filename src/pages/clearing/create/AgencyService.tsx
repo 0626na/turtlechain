@@ -11,6 +11,7 @@ import { theme } from '@styles/theme';
 import { message } from '@utils/message';
 import { Button, Col, DatePicker, Row, Tooltip, Upload } from 'antd';
 import { AxiosError } from 'axios';
+import { t } from 'i18next';
 
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -84,7 +85,7 @@ function AgencyService() {
                   css={[$datePicker, isOtherDay && greenDatePicker]}
                   onClick={() => closeToolTip()}
                   allowClear={false}
-                  placeholder="다른 일자선택"
+                  placeholder={t('placeholder.select different date')}
                 />
               </Tooltip>
             </Col>

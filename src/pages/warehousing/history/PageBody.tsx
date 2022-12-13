@@ -181,15 +181,15 @@ function PageBody() {
                     items={[
                       {
                         value: '',
-                        name: t('warehousing.confirm.all'),
+                        name: t('type.all'),
                       },
                       {
                         value: '0',
-                        name: t('warehousing.confirm.false'),
+                        name: t('type.pending'),
                       },
                       {
                         value: '1',
-                        name: t('warehousing.confirm.true'),
+                        name: t('type.finish'),
                       },
                     ]}
                   />

@@ -57,6 +57,7 @@
     "createdDate": "등록 일자",
     "overpaidAmount": "사용가능 금액",
     "unpaidAmount": "결제요청 금액",
+    "amount to be paid": "결제할 금액",
     "unpaidPayment": "미결제 금액",
     "refundAmount": "환불예정 금액",
     "paymentStatus": "결제 상태",
@@ -70,7 +71,9 @@
     "orderDate": "발주일자",
     "clientCount": "거래처 수",
     "totalCount": "수량 합계",
-    "totalPrice": "금액 합계"
+    "totalPrice": "금액 합계",
+    "proccessing time": "처리시간",
+    "proccessing details": "처리내용"
   },
 
   "placeholder": {
@@ -84,6 +87,11 @@
     "input vendor name": "거래처명을 입력해주세요",
     "input phone number": "매장번호를 입력해주세요",
     "input mobile number": "휴대전화번호를 입력해주세요",
+    "input vendor address": "거래처주소를 입력해주세요",
+    "input product name": "상품명을 입력해주세요",
+    "input vendor product name": "거래처 상품명을 입력해주세요",
+    "input product code": "코드를 입력해주세요",
+    "input option": "옵션을 입력해주세요",
     "building": "상가",
     "floor": "층",
     "col loc": "열/호",
@@ -108,7 +116,18 @@
     "ex. business number": "ex. 123-456-67890",
     "input company address": "사업자 주소를 입력해주세요",
     "input company detail address": "사업자 상세주소를 입력해주세요",
-    "ex. store url": "ex. www.turtleshop.com"
+    "ex. store url": "ex. www.turtleshop.com",
+    "ex. product example": "ex.우디 투웨이 후드 집업",
+    "input english and number": "영문 또는 숫자로만 입력해주세요",
+    "ex. option example": "ex.블랙,one size",
+    "ex. price example": "ex.7,000",
+    "ex. count example": "ex. 10",
+    "ex. image url": "ex.https://kkobugi.co.kr/..",
+    "search by product name, inventory name, vendor name": "거래처명, 상품명, 거래처 상품명 검색",
+    "search by vendor name, mobile, account number": "거래처명, 휴대전화 번호, 계좌번호 검색",
+    "select different date": "다른 일자선택",
+    "vendor search": "거래처 검색",
+    "amount input": "금액 입력"
   },
 
   "button": {
@@ -227,7 +246,11 @@
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
   },
 
-  "type": {},
+  "type": {
+    "all": "전체",
+    "pending": "대기",
+    "finish": "마감"
+  },
 
   "user": {
     "": "직책",
@@ -425,7 +448,6 @@
   "create vendor": "거래처 추가하기",
   "confirmed": "마감하기",
   "confirm cancel": "취소하기",
-  "search by product name, inventory name, vendor name...": "거래처명, 상품명, 거래처 상품명 검색",
   "write freely anything thats important about this vendor": "해당 건과 관련해 중요한 내용을 기록해보세요.",
   "use this memo as your personal note": "개인 메모로도 자유롭게 활용할 수 있어요.👀",
   "please input bank account number": "계좌번호를 입력해주세요",

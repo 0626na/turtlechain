@@ -205,7 +205,9 @@ function PageBody() {
               totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder={t('search keyword')}
+                  placeholder={t(
+                    'placeholder.search by vendor name, mobile, account number',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

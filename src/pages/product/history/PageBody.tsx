@@ -136,7 +136,7 @@ function PageBody() {
               rightContent={
                 <SearchFilter
                   placeholder={t(
-                    'search by product name, inventory name, vendor name...',
+                    'placeholder.search by product name, inventory name, vendor name',
                   )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
