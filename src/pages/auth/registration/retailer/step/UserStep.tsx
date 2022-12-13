@@ -83,7 +83,7 @@ function UserStep({ visible, onClickNext }: Props) {
         name="user_name"
         label={t('user name')}
       >
-        <Input css={input} placeholder={t('placeholder.ex, id')} />
+        <Input css={input} placeholder={t('placeholder.ex. id')} />
       </Form.Item>
 
       <Form.Item
