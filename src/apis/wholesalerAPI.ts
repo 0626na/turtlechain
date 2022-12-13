@@ -22,10 +22,9 @@ export interface WholesalerStore {
 }
 
 export interface RequestGetList {
-  search_type: string;
   search_string: string;
   page: number;
-  page_size: number;
+  page_size?: number;
 }
 
 export interface ResponseGetList {
