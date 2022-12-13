@@ -163,7 +163,7 @@ function FailTab({ loading, ...props }: Props) {
       title: t('table.vendor'),
       content:
         failListOutput().length !== 0
-          ? failListOutput()[failToSuccessRowData.id].rt_store_name
+          ? failListOutput()[failToSuccessRowData.id].vendor_name
           : '',
     },
     {
