@@ -464,7 +464,8 @@
   "you can change order request date": "발주요청 일자를 변경할 수 있어요",
   "count except one": "{{name}} 외 {{count}}개",
   "Should I add it as account information?": "거래처 정보로 추가할까요?",
-  "order dont create today": "2차 발주까지 완료된 쇼핑몰은 발주서 등록이 금일은 불가능합니다.",
+  "order dont create today": "아래 쇼핑몰은 오늘 2차 발주까지 완료하여 당일 추가 발주는 불가합니다.",
+  "order not today store": "발주 불가 쇼핑몰",
   "order can create this list": "위 쇼핑몰을 제외한 나머지 발주서만 등록합니다.",
   "please check to create file name is store name": "* 파일명의 쇼핑몰이 등록되었는지 확인해주세요",
   "please check essential header name": "* 필수헤더명을 다시 확인해주세요",
@@ -510,6 +511,7 @@
   "business information": "사업자 정보",
   "this email is not valid": "유효하지 않은 이메일 입니다.",
   "invalid format": "유효하지 않은 형식입니다.",
+  "input store name, mobile": "쇼핑몰명, 휴대전화 번호를 입력해주세요",
   "subscription failed. please check the payment information again": "구독에 실패했습니다. 결제정보를 다시 확인해주세요.",
   "missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order": "필수 헤더명이 누락되었거나 부정확한 정보 입력 또는 미등록 쇼핑몰인 경우, 오류 발주서로 분류돼요!"
 }
