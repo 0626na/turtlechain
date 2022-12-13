@@ -29,15 +29,14 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
   });
 
   // 장부 상세내역 요청
-  const { data, isLoading } = useQuery(
-    ['getTransactionDetail', searchQuery],
-    () => transactionAPI.getItem(searchQuery),
-    {
-      enabled: !!visible && !!searchQuery.vendor_id,
-    },
-  );
-
-  const items = data?.data ?? [];
+  const { data: { data: transactionDetailList = [] } = {}, isLoading } =
+    useQuery(
+      ['getTransactionDetail', searchQuery],
+      () => transactionAPI.getItem(searchQuery),
+      {
+        enabled: !!visible && !!searchQuery.vendor_id,
+      },
+    );
 
   useEffect(() => {
     if (!visible) return;
@@ -63,21 +62,21 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
           },
           {
             title: t('table.refundAmount'),
-            value: (
-              items.reduce((acc, item) => acc + item.refund_amount, 0) ?? ''
-            ).toLocaleString(),
+            value: transactionDetailList
+              ?.reduce((acc, item) => acc + item.refund_amount, 0)
+              .toLocaleString(),
           },
           {
             title: t('table.overpaidAmount'),
-            value: (
-              items.reduce((acc, item) => acc + item.overpaid_amount, 0) ?? ''
-            ).toLocaleString(),
+            value: transactionDetailList
+              .reduce((acc, item) => acc + item.overpaid_amount, 0)
+              .toLocaleString(),
           },
           {
             title: t('table.unpaidAmount'),
-            value: (
-              items.reduce((acc, item) => acc + item.unpaid_amount, 0) ?? ''
-            ).toLocaleString(),
+            value: transactionDetailList
+              .reduce((acc, item) => acc + item.unpaid_amount, 0)
+              .toLocaleString(),
           },
         ]}
       />
@@ -85,16 +84,16 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
       <Table
         title={() => (
           <TurtleTableTitle
-            totalCount={items.length ?? 0}
-            totalSubstractAmount={items.reduce(
+            totalCount={transactionDetailList.length ?? 0}
+            totalSubstractAmount={transactionDetailList.reduce(
               (acc, item) => acc + item.overpaid_amount,
               0,
             )}
-            totalRefundAmount={items.reduce(
+            totalRefundAmount={transactionDetailList.reduce(
               (acc, item) => acc + item.refund_amount,
               0,
             )}
-            totalUnpaidAmount={items.reduce(
+            totalUnpaidAmount={transactionDetailList.reduce(
               (acc, item) => acc + item.unpaid_amount,
               0,
             )}
@@ -124,8 +123,8 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
         )}
         size="small"
         scroll={{ y: 500, x: 'auto' }}
-        dataSource={items}
-        rowKey={(record) => items.indexOf(record)}
+        dataSource={transactionDetailList}
+        rowKey={(record) => transactionDetailList.indexOf(record)}
         loading={isLoading}
         pagination={false}
         columns={[
