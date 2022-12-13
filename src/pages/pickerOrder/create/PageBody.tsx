@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -60,11 +60,11 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
-  const getStoreCountListQuery = useQuery(
+  const { data: storecountData } = useQuery(
     ['getStoreCountListQuery'],
     pickerAPI.getList,
     {
-      enabled: !!user,
+      enabled: !!user?.company_id,
       onSuccess: (data) => {
         setTodayordersCount({
           ...todayOrdersCount,
@@ -74,7 +74,7 @@ function PageBody() {
     },
   );
 
-  const getCompletOrderCountQuery = useQuery(
+  const { data: orderCompleteStoreData } = useQuery(
     ['getCompleteOrderCountQuery'],
     () =>
       orderAPI.getOrderSheets({
@@ -91,16 +91,23 @@ function PageBody() {
     },
   );
 
+  useMemo(() => {
+    setTodayordersCount({
+      total: storecountData?.data.total_count ?? 0,
+      complete: orderCompleteStoreData?.data.order_sheet_list.length ?? 0,
+    });
+  }, [orderCompleteStoreData, storecountData]);
+
   /**
    * 등록되어 있는 쇼핑몰
    */
-  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
+  const entireStoreList = storecountData?.data.store_list ?? [];
 
   /**
    * 금일 발주완료한 쇼핑몰 갯수
    */
   const completeStoreList =
-    getCompletOrderCountQuery.data?.data.order_sheet_list.map(
+    orderCompleteStoreData?.data.order_sheet_list.map(
       (store) => store.rt_store_name,
     ) ?? [];
 
@@ -156,7 +163,7 @@ function PageBody() {
     },
     {
       title: t('totalOrderPriceInComfirm'),
-      content: t('price', { price: calculateTotalPrice() }),
+      content: t('price', { price: calculateTotalPrice().toLocaleString() }),
     },
   ];
 

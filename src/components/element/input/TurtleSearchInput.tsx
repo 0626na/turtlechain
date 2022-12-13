@@ -7,7 +7,7 @@ function TurtleSearchInput({ ...props }: SearchProps) {
 }
 
 const search = css`
-  width: 250px;
+  width: 360px;
 
   /* 검색 인풋 style */
   input {

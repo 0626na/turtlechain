@@ -147,7 +147,7 @@ function SuccessTab({ loading, ...props }: Props) {
                   ),
                 })),
               });
-          message.success(t('message.successDelete'));
+          message.success(t('message.successDeleteOrder'));
           closeDeleteModal();
         }}
       />
@@ -428,11 +428,11 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               title: t('table.supplyPriceTotal'),
               align: 'right',
-              render: (_, record) =>
-                record.orders.length !== 0 &&
-                record.orders
+              render: (_, record) => {
+                return record.orders
                   .reduce((acc, order) => acc + Number(order.product_price), 0)
-                  .toLocaleString(),
+                  .toLocaleString();
+              },
             },
             {
               onCell: (record) => ({

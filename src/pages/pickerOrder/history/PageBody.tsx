@@ -196,7 +196,7 @@ function PageBody() {
                   </Col>
                   <Col>
                     <SearchFilter
-                      placeholder={t('please input search query')}
+                      placeholder={t('please input search store name')}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
                     />

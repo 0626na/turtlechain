@@ -149,7 +149,7 @@ function PageBody() {
             },
           })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,

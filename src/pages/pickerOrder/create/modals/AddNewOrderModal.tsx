@@ -36,6 +36,7 @@ function AddNewOrderModal({ visible, close }: Props) {
   });
   const { addSingleOrder } = useOrderCart();
   const [building, setBuilding] = useState('');
+  const [floor, setFloor] = useState('');
   const { buildingData } = usePreset();
 
   //사입삼촌에 등록된 쇼핑몰 목록
@@ -144,8 +145,13 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_building" noStyle>
                   <TurtleFormSelect
+                    showSearch
                     placeholder={t('building')}
-                    onChange={(value) => setBuilding(value)}
+                    onChange={(value) => {
+                      setBuilding(value);
+                      form.resetFields(['vendor_address_floor']);
+                      form.resetFields(['vendor_address_col']);
+                    }}
                     items={
                       buildingData &&
                       Object.keys(buildingData.data).map((name) => {
@@ -165,7 +171,12 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_floor" noStyle>
                   <TurtleFormSelect
+                    showSearch
                     placeholder={t('floor')}
+                    onChange={(value) => {
+                      setFloor(value);
+                      form.resetFields(['vendor_address_col']);
+                    }}
                     items={
                       building !== ''
                         ? Object.keys(buildingData.data[building]).map(
@@ -185,7 +196,21 @@ function AddNewOrderModal({ visible, close }: Props) {
                 `}
               >
                 <Form.Item name="vendor_address_col" noStyle>
-                  <TurtleFormInput placeholder={t('col and loc')} />
+                  <TurtleFormSelect
+                    showSearch
+                    placeholder={t('col and loc')}
+                    items={
+                      building !== '' && floor !== ''
+                        ? buildingData.data[building][floor].map(
+                            (col: string) => ({
+                              value: col,
+                              name: col,
+                            }),
+                          )
+                        : []
+                    }
+                  />
+                  {/* <TurtleFormInput placeholder={t('col and loc')} /> */}
                 </Form.Item>
               </div>
             </div>
@@ -282,10 +307,10 @@ function AddNewOrderModal({ visible, close }: Props) {
                       !values.getFieldValue('mobile') ||
                       !values.getFieldValue('vendor_product_name') ||
                       !values.getFieldValue('option') ||
-                      !values.getFieldValue('type')
+                      !values.getFieldValue('count')
                     }
                   >
-                    {t('addSingleOrder')}
+                    {t('button.add single order')}
                   </PrimaryButton>
                 </Row>
               );

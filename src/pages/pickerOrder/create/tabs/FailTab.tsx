@@ -235,7 +235,9 @@ function FailTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder={t('please input search query')}
+                      placeholder={t(
+                        'please input search store name, product name, mobile',
+                      )}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
