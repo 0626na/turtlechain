@@ -109,11 +109,11 @@ function OrderVendorInfoUpdateModal({
           </Form.Item>
 
           <Form.Item label={t('table.vendorName')} name="name" required>
-            <TurtleFormSearchInput />
+            <TurtleFormInput />
           </Form.Item>
 
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
-            <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
+            <TurtleFormInput placeholder="매장번호를 입력해주세요" />
           </Form.Item>
 
           <Form.Item label={t('table.mobile')} name="mobile">
