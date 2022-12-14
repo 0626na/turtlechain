@@ -173,7 +173,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 20,
+              width: 90,
               title: t('table.operatorStatus'),
               render: (_, record) => {
                 const { is_closed } = record;
@@ -184,13 +184,13 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+
               title: t('table.retailerStoreName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 25,
+
               title: t('table.mobile'),
               render: (_, record) =>
                 record.store_phone[0]?.phone.replace(
