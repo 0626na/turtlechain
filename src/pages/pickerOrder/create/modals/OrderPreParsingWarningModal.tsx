@@ -73,7 +73,7 @@ function OrderPreParsingWarningModal({
       okDisabled={unabledOrders.length !== 0 && enabledOrders.length === 0}
       visible={visible}
       title={title}
-      titleIcon={true}
+      titleIcon={false}
       iconName="alertWarningRed"
       description={description}
       onCancel={onCancel}
