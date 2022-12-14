@@ -230,7 +230,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={0}
                     value="exchange"
                   >
-                    {t('adjustment.process type.exchange')}
+                    {t('type.adjustment.process type.exchange')}
                   </Select.Option>
                   <Select.Option
                     style={{
@@ -239,7 +239,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={1}
                     value="takeback"
                   >
-                    {t('adjustment.process type.takeback')}
+                    {t('type.adjustment.process type.takeback')}
                   </Select.Option>
                 </Select>
               ),
@@ -300,7 +300,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                 handleExchangeRefundCreate();
               }}
             >
-              {t('register adjustment')}
+              {t('button.register adjustment')}
             </PrimaryButton>
           </Col>
         </Row>

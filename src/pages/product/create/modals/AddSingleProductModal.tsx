@@ -253,7 +253,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.option')}
             rules={[{ required: true }]}
           >
-            <TurtleFormInput placeholder={t('ex. option example')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.ex. option example')}
+            />
           </Form.Item>
 
           <Form.Item
@@ -261,7 +263,9 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             label={t('table.price')}
             rules={[{ required: true }]}
           >
-            <TurtleNumberInput placeholder={t('ex. price example')} />
+            <TurtleNumberInput
+              placeholder={t('placeholder.ex. price example')}
+            />
           </Form.Item>
 
           <Form.Item

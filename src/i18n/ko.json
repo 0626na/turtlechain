@@ -98,7 +98,13 @@
     "request price": "요청 금액",
     "recipient_accountInfo": "환불받을 계좌정보",
     "request memo": "요청 사유",
-    "complete date": "오입금 환불 처리날짜"
+    "complete date": "오입금 환불 처리날짜",
+    "edit vendor name": "거래처명 수정",
+    "edit product information": "상품정보 수정",
+    "information update": "정보수정 요청",
+    "delete": "삭제",
+    "proceessed quantity / total quantity": "처리수량 / 총 수량",
+    "processing method": "처리방식"
   },
 
   "placeholder": {
@@ -159,6 +165,8 @@
     "vendor search": "거래처 검색",
     "amount input": "금액 입력",
     "domain": "도메인",
+    "select": "선택",
+    "zero": "0",
     "inventory key": "연동키",
     "input transfer details received mail": "이체내역 수신 메일을 입력하세요",
     "input search query": "검색어를 입력하세요"
@@ -290,7 +298,20 @@
     "ezadmin": "이지어드민",
     "turtlechain": "터틀체인",
     "etc": "기타",
-    "not used": "사용안함"
+    "not used": "사용안함",
+    "adjustment": {
+      "process type": {
+        "": "처리방식",
+        "default": "매입조정 처리",
+        "subtract": "차감",
+        "reserve": "미송",
+        "refund": "환불",
+        "exchange": "교환",
+        "takeback": "반품"
+      }
+    },
+    "refund": "환불",
+    "subtraction": "차감"
   },
 
   "user": {

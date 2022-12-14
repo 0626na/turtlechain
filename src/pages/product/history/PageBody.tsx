@@ -240,7 +240,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('edit product information'),
+                      label: t('table.edit product information'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         selectRow(record);
@@ -259,7 +259,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          {t('delete')}
+                          {t('table.delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,
