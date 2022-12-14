@@ -32,6 +32,7 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
+import OrderPreParsingWarningModal from './modals/OrderPreParsingWarningModal';
 
 function PageBody() {
   const {
@@ -175,7 +176,7 @@ function PageBody() {
       />
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
-      {createPreParsingMutation.isSuccess && (
+      {/* {createPreParsingMutation.isSuccess && (
         <PreparsingOrderModal
           visible={preparsingModalVisible}
           open={openPreparsingModal}
@@ -185,7 +186,7 @@ function PageBody() {
             preParsingResult: preParsingResult as ResponseCreatePreParsing,
           }}
         />
-      )}
+      )} */}
 
       <ConfirmOrderModal
         title={t('orderConfirm')}
@@ -198,6 +199,26 @@ function PageBody() {
         items={confirmModalItems}
       />
 
+      {createPreParsingMutation.isSuccess && (
+        <OrderPreParsingWarningModal
+          data={{
+            files: uploadFiles,
+            preParsingResult: preParsingResult as ResponseCreatePreParsing,
+          }}
+          visible={preparsingModalVisible}
+          title={t('you can only order up to the second round')}
+          description={[
+            t(
+              'shopping malls that have completed the second order cannot send additional orders',
+            ),
+            t(
+              'please check the shopping mall excluded from the additional order',
+            ),
+          ]}
+          onCancel={closePreparsingModal}
+          size="small"
+        />
+      )}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
         title={t('order is problem')}
