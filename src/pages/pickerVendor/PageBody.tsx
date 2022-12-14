@@ -217,23 +217,23 @@ function PageBody() {
                         vendorUpdateModalOpen();
                       },
                     },
-                    {
-                      key: '2',
-                      type: 'divider',
-                    },
-                    {
-                      key: '3',
-                      label: (
-                        <span
-                          css={css`
-                            color: red;
-                          `}
-                        >
-                          삭제
-                        </span>
-                      ),
-                      icon: <TurtleIcon name="delete" danger />,
-                    },
+                    // {
+                    //   key: '2',
+                    //   type: 'divider',
+                    // },
+                    // {
+                    //   key: '3',
+                    //   label: (
+                    //     <span
+                    //       css={css`
+                    //         color: red;
+                    //       `}
+                    //     >
+                    //       삭제
+                    //     </span>
+                    //   ),
+                    //   icon: <TurtleIcon name="delete" danger />,
+                    // },
                   ]}
                   triggerButton={<TurtleIcon name="more" />}
                 />

@@ -20,7 +20,6 @@ import useOrderCart from '@hooks/useOrderCart';
 
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
-import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
 import orderAPI, {
   ResponseCreateOrderItemExcelParsing,
@@ -175,18 +174,6 @@ function PageBody() {
         closeModal={closeSettingColumnModal}
       />
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
-
-      {/* {createPreParsingMutation.isSuccess && (
-        <PreparsingOrderModal
-          visible={preparsingModalVisible}
-          open={openPreparsingModal}
-          close={closePreparsingModal}
-          data={{
-            files: uploadFiles,
-            preParsingResult: preParsingResult as ResponseCreatePreParsing,
-          }}
-        />
-      )} */}
 
       <ConfirmOrderModal
         title={t('orderConfirm')}
