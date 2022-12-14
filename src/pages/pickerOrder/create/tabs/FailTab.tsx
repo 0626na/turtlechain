@@ -220,19 +220,6 @@ function FailTab({ loading, ...props }: Props) {
               totalCount={failListOutput().length ?? 0}
               rightContent={
                 <Row>
-                  {/* <Col css={marginRight}>
-                    <TurtleSearchSelect
-                      value={searchQuery.type}
-                      onChange={(value) => {
-                        setSearchQuery({
-                          ...searchQuery,
-                          type: value,
-                        });
-                      }}
-                      items={options}
-                    />
-                  </Col> */}
-
                   <Col>
                     <TurtleSearchInput
                       placeholder={t(
