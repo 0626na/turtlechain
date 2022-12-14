@@ -68,7 +68,9 @@
     "orderDate": "발주일자",
     "clientCount": "거래처 수",
     "totalCount": "수량 합계",
-    "totalPrice": "금액 합계"
+    "totalPrice": "금액 합계",
+    "process time": "처리시간",
+    "process content": "처리내용"
   },
 
   "placeholder": {
@@ -194,7 +196,15 @@
     "vendor duplicated count": "이미 등록된 거래처가 {{count}}건 있습니다.",
     "success register vendor": "성공적으로 등록했습니다. 성공 : {{success}} 중복된 거래처 : {{duplicated}}",
     "success register product": "성공적으로 등록했습니다. 성공 : {{success}} 중복된 상품 : {{duplicated}}",
-    "success update product": "상품정보를 수정했어요"
+    "success update product": "상품정보를 수정했어요",
+    "success register reserve": "미송상품이 성공적으로 등록되었습니다",
+    "check price": "가격을 확인해 주세요",
+    "input quantity": "수량을 입력해 주세요",
+    "success delete": "성공적으로 삭제되었습니다",
+    "update warehousing sheet": "입고서를 수정했습니다",
+    "confirm warehousing sheet": "입고서를 마감했어요",
+    "cancel confirm warehousing sheet": "입고서 마감을 취소했어요",
+    "delete warehousing sheet": "입고서를 삭제했습니다"
   },
 
   "title": {
@@ -205,7 +215,12 @@
     "really delete": "정말 삭제할까요?",
     "really register": "정말 등록할까요?",
     "really update": "정말 변경할까요?",
-    "update product": "상품정보 수정"
+    "update product": "상품정보 수정",
+    "detail": "상세보기",
+    "process list": "처리 내역",
+    "process": "처리",
+    "really close": "정말 닫을까요?",
+    "warehousing detail": "입고내역 상세보기"
   },
 
   "description": {
@@ -236,7 +251,11 @@
     "to correspond turtlechain": "터틀체인에 등록한 상품정보와 일치하도록",
     "update sellmate product": "셀메이트 내 상품 세부정보를 업데이트해주세요.",
     "go sellmate": "셀메이트 바로가기",
-    "except fail product": "실패에 남아있는 상품은 등록에서 제외됩니다."
+    "except fail product": "실패에 남아있는 상품은 등록에서 제외됩니다",
+    "input process type and quantity": "처리 방식과 수량을 입력해주세요",
+    "confirm adjustment": "교환/반품 가격,수량,종류를 확인해주세요",
+    "update warehousing sheet": "해당 입고서를 수정합니다",
+    "exist update content": "수정내용이 있습니다. 지금 닫으면 저장되지 않아요."
   },
 
   "type": {},

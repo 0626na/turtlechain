@@ -2,12 +2,9 @@ import { TurtleContentModal } from '@components/combine';
 import { TurtlePanelTitle } from '@components/element';
 import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
-
 import { Collapse } from 'antd';
 import { t } from 'i18next';
-
 import React, { useEffect, useState } from 'react';
-
 import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
 

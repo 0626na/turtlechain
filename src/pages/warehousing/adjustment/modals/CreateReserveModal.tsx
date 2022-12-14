@@ -36,8 +36,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   const createReserveMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success('미송상품이 성공적으로 등록되었습니다.');
-
+      message.success(t('message.success register reserve'));
       closeModal();
     },
   });
@@ -89,7 +88,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   // 가격, 수량  === 0 유효성 검사.
   const handlePriceValidationCheck = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('가격을 확인해 주세요.'));
+      return Promise.reject(new Error(t('message.check price')));
     }
 
     return Promise.resolve();
@@ -97,7 +96,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
 
   const handleCountValidationCheck = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('수량을 입력해 주세요.'));
+      return Promise.reject(new Error(t('message.input quantity')));
     }
 
     return Promise.resolve();
