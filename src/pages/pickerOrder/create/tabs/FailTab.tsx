@@ -266,21 +266,23 @@ function FailTab({ loading, ...props }: Props) {
             },
             {
               title: t('table.mobile'),
+              width: 140,
               render: (_, record) => {
-                const tempList = failListOutput();
+                const failList = failListOutput();
+                const vendorNameisSameList: FailListForOutput[] = [];
+                failList.map((failItem) => {
+                  if (failItem.vendor_name === record.vendor_name)
+                    vendorNameisSameList.push(failItem);
+                });
 
-                if (record.id === 0) return failTablePhoneNumberInput(record);
-                if (
-                  tempList[record.id - 1].rt_store_name ===
-                    record.rt_store_name &&
-                  tempList[record.id - 1].vendor_name === record.vendor_name &&
-                  tempList[record.id - 1].vendor_address ===
-                    record.vendor_address
-                ) {
-                  return null;
-                }
+                const firstTurnItem = vendorNameisSameList.filter(
+                  (item) => item.id < record.id && item.id !== record.id,
+                );
 
-                return failTablePhoneNumberInput(record);
+                if (firstTurnItem.length === 0)
+                  return failTablePhoneNumberInput(record);
+
+                return null;
               },
             },
             {
