@@ -5,6 +5,7 @@ import {
   GridIcon,
   SpecialButton,
   TurtleIcon,
+  TurtleSearchInput,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -16,7 +17,7 @@ import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
 import AddPickerModal from './modals/AddPickerModal';
@@ -26,12 +27,21 @@ function PageBody() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
+  const [searchQuery, setSearchQuery] = useState('');
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
   });
+
+  const filteredList = useMemo(() => {
+    return getStoreListQuery.data?.data.store_list.filter(
+      (store) =>
+        store.name.includes(searchQuery) ||
+        store.store_phone[0].phone.includes(searchQuery),
+    );
+  }, [getStoreListQuery, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -101,20 +111,30 @@ function PageBody() {
       <TurtleTableTitle
         totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
         rightContent={
-          <AddButton
-            icon={
-              mode === 'cardView' ? (
-                <TurtleIcon name="listView" />
-              ) : (
-                <GridIcon value="#6B6D73" />
-              )
-            }
-            onClick={() => {
-              changeMode();
-            }}
-          >
-            {mode === 'cardView' ? t('listView') : t('cardView')}
-          </AddButton>
+          <Row align="middle">
+            <Col css={css({ marginRight: 15 })}>
+              <TurtleSearchInput
+                placeholder={t('input store name, mobile')}
+                onChange={(e) => setSearchQuery(e.currentTarget.value)}
+              />
+            </Col>
+            <Col>
+              <AddButton
+                icon={
+                  mode === 'cardView' ? (
+                    <TurtleIcon name="listView" />
+                  ) : (
+                    <GridIcon value="#6B6D73" />
+                  )
+                }
+                onClick={() => {
+                  changeMode();
+                }}
+              >
+                {mode === 'cardView' ? t('listView') : t('cardView')}
+              </AddButton>
+            </Col>
+          </Row>
         }
       />
 
@@ -140,7 +160,7 @@ function PageBody() {
         <Table
           size="small"
           loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.data.store_list}
+          dataSource={filteredList}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
@@ -149,7 +169,7 @@ function PageBody() {
             },
           })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,

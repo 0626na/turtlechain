@@ -94,7 +94,9 @@ function SuccessTab({
             totalCount={getOrderHistoryQuery.data?.data.successes.length ?? 0}
             rightContent={
               <TurtleSearchInput
-                placeholder={t('please input search query')}
+                placeholder={t(
+                  'please input search store name, product name, mobile',
+                )}
                 value={searchQuery}
                 onChange={(value) => setSearchQuery(value.currentTarget.value)}
               />

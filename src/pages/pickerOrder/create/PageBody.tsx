@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -20,7 +20,6 @@ import useOrderCart from '@hooks/useOrderCart';
 
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
-import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
 import orderAPI, {
   ResponseCreateOrderItemExcelParsing,
@@ -32,6 +31,7 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
+import OrderPreParsingWarningModal from './modals/OrderPreParsingWarningModal';
 
 function PageBody() {
   const {
@@ -60,11 +60,11 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
-  const getStoreCountListQuery = useQuery(
+  const { data: storecountData } = useQuery(
     ['getStoreCountListQuery'],
     pickerAPI.getList,
     {
-      enabled: !!user,
+      enabled: !!user?.company_id,
       onSuccess: (data) => {
         setTodayordersCount({
           ...todayOrdersCount,
@@ -74,7 +74,7 @@ function PageBody() {
     },
   );
 
-  const getCompletOrderCountQuery = useQuery(
+  const { data: orderCompleteStoreData } = useQuery(
     ['getCompleteOrderCountQuery'],
     () =>
       orderAPI.getOrderSheets({
@@ -91,16 +91,23 @@ function PageBody() {
     },
   );
 
+  useMemo(() => {
+    setTodayordersCount({
+      total: storecountData?.data.total_count ?? 0,
+      complete: orderCompleteStoreData?.data.order_sheet_list.length ?? 0,
+    });
+  }, [orderCompleteStoreData, storecountData]);
+
   /**
    * 등록되어 있는 쇼핑몰
    */
-  const entireStoreList = getStoreCountListQuery.data?.data.store_list ?? [];
+  const entireStoreList = storecountData?.data.store_list ?? [];
 
   /**
    * 금일 발주완료한 쇼핑몰 갯수
    */
   const completeStoreList =
-    getCompletOrderCountQuery.data?.data.order_sheet_list.map(
+    orderCompleteStoreData?.data.order_sheet_list.map(
       (store) => store.rt_store_name,
     ) ?? [];
 
@@ -156,7 +163,7 @@ function PageBody() {
     },
     {
       title: t('totalOrderPriceInComfirm'),
-      content: t('price', { price: calculateTotalPrice() }),
+      content: t('price', { price: calculateTotalPrice().toLocaleString() }),
     },
   ];
 
@@ -167,18 +174,6 @@ function PageBody() {
         closeModal={closeSettingColumnModal}
       />
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
-
-      {createPreParsingMutation.isSuccess && (
-        <PreparsingOrderModal
-          visible={preparsingModalVisible}
-          open={openPreparsingModal}
-          close={closePreparsingModal}
-          data={{
-            files: uploadFiles,
-            preParsingResult: preParsingResult as ResponseCreatePreParsing,
-          }}
-        />
-      )}
 
       <ConfirmOrderModal
         title={t('orderConfirm')}
@@ -191,6 +186,26 @@ function PageBody() {
         items={confirmModalItems}
       />
 
+      {createPreParsingMutation.isSuccess && (
+        <OrderPreParsingWarningModal
+          data={{
+            files: uploadFiles,
+            preParsingResult: preParsingResult as ResponseCreatePreParsing,
+          }}
+          visible={preparsingModalVisible}
+          title={t('you can only order up to the second round')}
+          description={[
+            t(
+              'shopping malls that have completed the second order cannot send additional orders',
+            ),
+            t(
+              'please check the shopping mall excluded from the additional order',
+            ),
+          ]}
+          onCancel={closePreparsingModal}
+          size="small"
+        />
+      )}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
         title={t('order is problem')}

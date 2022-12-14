@@ -263,13 +263,18 @@ const useOrderCart = () => {
    */
   const failListOutput = useCallback(() => {
     const failRowList: FailListForOutput[] = [];
-    //let id = 0;
+    let failOrderId = 1;
 
-    cart.failList.map((store) => {
+    if (cart.failList.length !== 1)
+      cart.failList.map((item, index) => {
+        if (index !== 0) failOrderId += item.orders.length - 1;
+      });
+
+    cart.failList.map((store, storeIndex) => {
       let failRow: FailListForOutput;
-      store.orders.map((order, id) => {
+      store.orders.map((order, index) => {
         failRow = {
-          id,
+          id: storeIndex === 0 ? index : failOrderId + index,
           rt_store_id: store.rt_store_id,
           rt_store_name: store.rt_store_name,
           order_id: Number(order.order_id),
@@ -286,6 +291,7 @@ const useOrderCart = () => {
         failRowList.push(failRow);
       });
     });
+
     return failRowList;
   }, [cart.failList]);
 

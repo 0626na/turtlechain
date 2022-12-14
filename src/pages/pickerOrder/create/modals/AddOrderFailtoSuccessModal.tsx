@@ -33,6 +33,7 @@ function AddOrderFailtoSuccessModal({
       onOk={onOk}
       items={items}
       loading={loading}
+      okText={t('button.add')}
     />
   );
 }
