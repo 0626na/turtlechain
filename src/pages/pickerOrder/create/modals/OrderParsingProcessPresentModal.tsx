@@ -102,9 +102,11 @@ function OrderParsingProcessPresentModal({
           {messages.map((message, index) => {
             return (
               <div key={index}>
-                <span css={css({ color: '#FA5252' })}>
-                  {message.split(':')[0].slice(0, 5)}...:
-                </span>
+                <Tooltip title={message.split('_')[0]}>
+                  <span css={css({ color: '#FA5252' })}>
+                    {message.split(':')[0].slice(0, 5)}...:
+                  </span>
+                </Tooltip>
                 <span>{message.split(':')[1]}</span>
               </div>
             );

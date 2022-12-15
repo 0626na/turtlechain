@@ -198,6 +198,9 @@ function PageBody() {
                   '$1-$2-$3',
                 ) ?? '',
             },
+            // {
+            //   render: (_, record) => <TurtleIcon name="delete" />,
+            // },
           ]}
         />
       )}

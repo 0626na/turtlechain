@@ -464,7 +464,8 @@ function SuccessTab({ loading, ...props }: Props) {
                     ) : null}
                     <TurtleIcon
                       name="delete"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setSelectedRowID(Number(record.id));
                         setDeleteMode(true);
                         openDeleteModal();
