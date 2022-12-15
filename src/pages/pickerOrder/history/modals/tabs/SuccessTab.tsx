@@ -12,6 +12,8 @@ import useModal from '@hooks/useModal';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { message } from '@utils/message';
 import { t } from 'i18next';
+import { phoneMasking } from '@utils/phone';
+import { phonePattern } from '@utils/pattern';
 
 interface Props extends TabPaneProps {
   requestDate: string;
@@ -117,7 +119,8 @@ function SuccessTab({
           {
             title: t('table.mobile'),
             width: 176,
-            render: (_, record) => record.mobile,
+            render: (_, record) =>
+              record.mobile.replace(phonePattern, '$1-$2-$3'),
           },
           {
             title: t('table.vendorProductName'),

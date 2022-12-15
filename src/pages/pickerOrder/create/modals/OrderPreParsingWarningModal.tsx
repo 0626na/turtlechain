@@ -70,18 +70,18 @@ function OrderPreParsingWarningModal({
 
   return (
     <TurtleConfirmModal
-      okDisabled={unabledOrders.length !== 0 && enabledOrders.length === 0}
       visible={visible}
       title={title}
-      titleIcon={true}
+      titleIcon={false}
       iconName="alertWarningRed"
       description={description}
       onCancel={onCancel}
       onOk={() => {
-        createOrderExcelParseMutation.mutate({
-          files: data.files,
-          request_date: moment(cart.selectedDate).format('YYYY-MM-DD'),
-        });
+        if (enabledOrders.length !== 0)
+          createOrderExcelParseMutation.mutate({
+            files: data.files,
+            request_date: moment(cart.selectedDate).format('YYYY-MM-DD'),
+          });
         onCancel();
       }}
       size={size}

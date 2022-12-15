@@ -36,7 +36,7 @@ function OrderParsingProcessPresentModal({
     <TurtleConfirmModal
       visible={visible}
       title={title}
-      titleIcon={true}
+      titleIcon={false}
       iconName="alertWarningRed"
       description={description}
       onCancel={onCancel}
