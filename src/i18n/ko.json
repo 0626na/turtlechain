@@ -478,6 +478,7 @@
   "is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form": "별도로 사용중인 헤더명이 있나요? 여기에 헤더명을 추가하면, 터틀체인 발주양식의 헤더명과 달라도 문제없이 엑셀파일을 등록할 수 있어요.",
   "please input store name": "쇼핑몰명을 검색해주세요.",
   "please input vendor name": "거래처명을 입력해주세요",
+  "please inputcol and loc": "열-호를 입력해주세요.",
   "please input etc address": "기타 주소를 입력해주세요",
   "please input phone number": "휴대전화 번호를 입력해주세요",
   "please input product name": "상품명을 입력하세요.",

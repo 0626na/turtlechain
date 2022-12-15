@@ -48,6 +48,22 @@ function AddNewOrderModal({ visible, close }: Props) {
     },
   );
 
+  const storeValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error(t('please input store name')));
+    }
+
+    return Promise.resolve();
+  };
+
+  const addressColValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error(t('please input col and loc')));
+    }
+
+    return Promise.resolve();
+  };
+
   /**
    * 모달창 닫으면 모달내의 데이터 리셋
    */
@@ -99,7 +115,12 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.retailerStoreName')}
             name="store_name"
-            rules={[{ required: true, message: t('message.input store') }]}
+            rules={[
+              {
+                required: true,
+                validator: storeValidator,
+              },
+            ]}
           >
             <TurtleFormSelect
               showSearch
@@ -195,22 +216,12 @@ function AddNewOrderModal({ visible, close }: Props) {
                   flex-basis: 33%;
                 `}
               >
-                <Form.Item name="vendor_address_col" noStyle>
-                  <TurtleFormSelect
-                    showSearch
-                    placeholder={t('col and loc')}
-                    items={
-                      building !== '' && floor !== ''
-                        ? buildingData.data[building][floor].map(
-                            (col: string) => ({
-                              value: col,
-                              name: col,
-                            }),
-                          )
-                        : []
-                    }
-                  />
-                  {/* <TurtleFormInput placeholder={t('col and loc')} /> */}
+                <Form.Item
+                  name="vendor_address_col"
+                  noStyle
+                  rules={[{ validator: addressColValidator }]}
+                >
+                  <TurtleFormInput placeholder={t('col and loc')} />
                 </Form.Item>
               </div>
             </div>
@@ -226,7 +237,14 @@ function AddNewOrderModal({ visible, close }: Props) {
             />
           </Form.Item>
           {/* 휴대번호 */}
-          <Form.Item label={t('table.mobile')} name="mobile" required>
+          <Form.Item
+            label={t('table.mobile')}
+            name="mobile"
+            required
+            rules={[
+              { required: true, message: t('please input phone number') },
+            ]}
+          >
             <TurtleFormInput
               placeholder={t('please input phone number')}
               maxLength={11}
