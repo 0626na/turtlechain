@@ -435,15 +435,6 @@ function SuccessTab({ loading, ...props }: Props) {
               },
             },
             {
-              // onCell: (record) => ({
-              //   style: { cursor: 'pointer' },
-              //   onClick: (e) => {
-              //     e.stopPropagation();
-              //     setSelectedRowID(Number(record.id));
-              //     setDeleteMode(true);
-              //     openDeleteModal();
-              //   },
-              // }),
               render: (_, record) => {
                 return (
                   <div
