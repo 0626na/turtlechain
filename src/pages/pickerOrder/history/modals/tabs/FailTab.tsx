@@ -81,7 +81,7 @@ function FailTab({ data, loading, ...props }: Props) {
             render: (_, record) => record.type,
           },
           {
-            title: t('table.count'),
+            title: t('table.requestCount'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
