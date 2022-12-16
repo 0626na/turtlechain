@@ -97,7 +97,7 @@ function SuccessTab({
             rightContent={
               <TurtleSearchInput
                 placeholder={t(
-                  'placeholder.search by product name, inventory name, vendor name',
+                  'placeholder.search by vendor name, product name, mobile',
                 )}
                 value={searchQuery}
                 onChange={(value) => setSearchQuery(value.currentTarget.value)}
