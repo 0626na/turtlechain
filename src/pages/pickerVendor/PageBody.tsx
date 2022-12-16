@@ -127,7 +127,7 @@ function PageBody() {
                   <Col>
                     <TurtleSearchInput
                       placeholder={t(
-                        'please input vendor name, mobile, account number, account holder',
+                        'placeholder.search by vendor name, mobile, account number',
                       )}
                       onSearch={(value) =>
                         setSearchQuery({

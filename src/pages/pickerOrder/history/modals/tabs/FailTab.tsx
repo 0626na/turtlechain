@@ -40,7 +40,9 @@ function FailTab({ data, loading, ...props }: Props) {
             totalCount={data.length ?? 0}
             rightContent={
               <TurtleSearchInput
-                placeholder={t('please input search query')}
+                placeholder={t(
+                  'placeholder.search by product name, inventory name, vendor name',
+                )}
                 value={searchQuery}
                 onChange={(value) => setSearchQuery(value.currentTarget.value)}
               />

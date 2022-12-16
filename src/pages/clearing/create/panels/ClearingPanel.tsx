@@ -81,8 +81,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
     },
   });
 
-  const subscriptionData =
-    getSubscriptionCheckQuery.data?.data.subscription_info;
+  const subscriptionData = data?.data.subscription_info;
 
   const handleCreate = () => {
     createClearingMutation.mutate({

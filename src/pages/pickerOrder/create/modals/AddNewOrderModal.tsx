@@ -50,7 +50,7 @@ function AddNewOrderModal({ visible, close }: Props) {
 
   const storeValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error(t('please input store name')));
+      return Promise.reject(new Error(t('placeholder.select store')));
     }
 
     return Promise.resolve();
@@ -72,7 +72,7 @@ function AddNewOrderModal({ visible, close }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('addSingleOrder')}
+        title={t('title.add single order')}
         visible={visible}
         onClose={() => close()}
       >
@@ -124,7 +124,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           >
             <TurtleFormSelect
               showSearch
-              placeholder={t('please input store name')}
+              placeholder={t('placeholder.select store')}
               items={getPickerStoresQuery.data?.data.store_list.map((store) => {
                 return {
                   name: store.name,
@@ -152,9 +152,11 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
-            rules={[{ required: true, message: t('please input vendor name') }]}
+            rules={[
+              { required: true, message: t('placeholder.input vendor name') },
+            ]}
           >
-            <TurtleFormInput placeholder={t('please input vendor name')} />
+            <TurtleFormInput placeholder={t('placeholder.input vendor name')} />
           </Form.Item>
           {/* 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
@@ -167,7 +169,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                 <Form.Item name="vendor_address_building" noStyle>
                   <TurtleFormSelect
                     showSearch
-                    placeholder={t('building')}
+                    placeholder={t('placeholder.building')}
                     onChange={(value) => {
                       setBuilding(value);
                       form.resetFields(['vendor_address_floor']);
@@ -193,7 +195,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                 <Form.Item name="vendor_address_floor" noStyle>
                   <TurtleFormSelect
                     showSearch
-                    placeholder={t('floor')}
+                    placeholder={t('placeholder.floor')}
                     onChange={(value) => {
                       setFloor(value);
                       form.resetFields(['vendor_address_col']);
@@ -221,7 +223,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   noStyle
                   rules={[{ validator: addressColValidator }]}
                 >
-                  <TurtleFormInput placeholder={t('col and loc')} />
+                  <TurtleFormInput placeholder={t('placeholder.col loc')} />
                 </Form.Item>
               </div>
             </div>
@@ -232,7 +234,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             label={t('table.vendorEtcAddress')}
           >
             <TurtleFormInput
-              placeholder={t('please input etc address')}
+              placeholder={t('placeholder.input other address')}
               disabled={building === t('etc.') ? false : true}
             />
           </Form.Item>
@@ -242,11 +244,11 @@ function AddNewOrderModal({ visible, close }: Props) {
             name="mobile"
             required
             rules={[
-              { required: true, message: t('please input phone number') },
+              { required: true, message: t('placeholder.input mobile number') },
             ]}
           >
             <TurtleFormInput
-              placeholder={t('please input phone number')}
+              placeholder={t('placeholder.input mobile number')}
               maxLength={11}
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replaceAll(
@@ -263,39 +265,42 @@ function AddNewOrderModal({ visible, close }: Props) {
             label={t('table.vendorProductName')}
             name="vendor_product_name"
             rules={[
-              { required: true, message: t('please input product name') },
+              {
+                required: true,
+                message: t('placeholder.input vendor product name'),
+              },
             ]}
           >
             <TurtleFormInput
-              placeholder={t('please input vendorProduct name')}
+              placeholder={t('placeholder.input vendor product name')}
             />
           </Form.Item>
           {/* 옵션  */}
           <Form.Item
             label={t('table.option')}
             name="option"
-            rules={[{ required: true, message: t('please input option') }]}
+            rules={[{ required: true, message: t('placeholder.input option') }]}
           >
-            <TurtleFormInput placeholder={t('please input option')} />
+            <TurtleFormInput placeholder={t('placeholder.input option')} />
           </Form.Item>
           {/* 분류 */}
           <Form.Item label={t('table.type')} name="type">
             <Radio.Group>
-              <Radio value="order">{t('order.types.order')}</Radio>
-              <Radio value="reserve">{t('order.types.reserve')}</Radio>
-              <Radio value="takeback">{t('order.types.takeback')}</Radio>
-              <Radio value={t('order.types.exchange')}>
-                {t('order.types.exchange')}
+              <Radio value="order">{t('type.orderTypes.order')}</Radio>
+              <Radio value="reserve">{t('type.orderTypes.reserve')}</Radio>
+              <Radio value="takeback">{t('type.orderTypes.takeback')}</Radio>
+              <Radio value={t('type.orderTypes.exchange')}>
+                {t('type.orderTypes.exchange')}
               </Radio>
-              <Radio value="sample">{t('order.types.sample')}</Radio>
-              <Radio value="pickup">{t('order.types.pickup')}</Radio>
-              <Radio value="extra">{t('order.types.extra')}</Radio>
+              <Radio value="sample">{t('type.orderTypes.sample')}</Radio>
+              <Radio value="pickup">{t('type.orderTypes.pickup')}</Radio>
+              <Radio value="extra">{t('type.orderTypes.extra')}</Radio>
             </Radio.Group>
           </Form.Item>
 
           {/* 가격 */}
           <Form.Item label={t('table.price')} name="price">
-            <TurtleFormInput placeholder="ex 7,000" />
+            <TurtleFormInput placeholder={t('placeholder.ex. price example')} />
           </Form.Item>
           {/* 수량 */}
           <Form.Item
@@ -303,11 +308,11 @@ function AddNewOrderModal({ visible, close }: Props) {
             name="count"
             rules={[{ required: true, message: t('please input count') }]}
           >
-            <TurtleFormInput placeholder="ex 20" />
+            <TurtleFormInput placeholder={t('placeholder.ex. count example')} />
           </Form.Item>
           {/* 메모 */}
           <Form.Item label={t('table.memo')} name="memo">
-            <TurtleFormInput placeholder="ex 7,000" />
+            <TurtleFormInput placeholder={t('placeholder.ex. price example')} />
           </Form.Item>
           <Form.Item noStyle shouldUpdate>
             {(values) => {
@@ -328,7 +333,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                       !values.getFieldValue('count')
                     }
                   >
-                    {t('button.add single order')}
+                    {t('button.addOrder')}
                   </PrimaryButton>
                 </Row>
               );

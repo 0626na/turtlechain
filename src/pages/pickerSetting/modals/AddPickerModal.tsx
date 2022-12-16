@@ -73,7 +73,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('store.create')}
+        title={t('title.add store')}
         visible={visible}
         onClose={closeModal}
       >
@@ -91,10 +91,10 @@ function AddPickerModal({ visible, closeModal }: Props) {
           <Form.Item
             name="name"
             rules={[{ required: true }]}
-            label={t('store.name')}
+            label={t('table.retailerStoreName')}
           >
             <TurtleFormSearchInput
-              placeholder={t('please input store name')}
+              placeholder={t('placeholder.input store name')}
               onSearch={(value: string) => {
                 setSearchStore(
                   getStoreListQuery.data?.store_list.find(
@@ -110,17 +110,19 @@ function AddPickerModal({ visible, closeModal }: Props) {
           <Form.Item
             name="store_url"
             rules={[{ required: true }]}
-            label={t('store.url')}
+            label={t('table.retailerStoreURL')}
           >
-            <TurtleFormInput placeholder={t('please input store url')} />
+            <TurtleFormInput placeholder={t('placeholder.ex. store url')} />
           </Form.Item>
 
           <Form.Item
             name={['store_mobile', 'mobile']}
             rules={[{ required: true }]}
-            label={t('store.phone')}
+            label={t('table.store mobile number')}
           >
-            <TurtleFormInput placeholder={t('please input phone number')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
         </Form>
 

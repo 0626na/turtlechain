@@ -114,7 +114,7 @@ function PageBody() {
           <Row align="middle">
             <Col css={css({ marginRight: 15 })}>
               <TurtleSearchInput
-                placeholder={t('input store name, mobile')}
+                placeholder={t('placeholder.input store name, mobile')}
                 onChange={(e) => setSearchQuery(e.currentTarget.value)}
               />
             </Col>

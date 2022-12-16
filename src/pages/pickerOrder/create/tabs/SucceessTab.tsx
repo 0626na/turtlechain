@@ -211,9 +211,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder={t(
-                        'please input search query in order search',
-                      )}
+                      placeholder={t('placeholder.input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
