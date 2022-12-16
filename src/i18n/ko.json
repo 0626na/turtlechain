@@ -164,7 +164,7 @@
     "ex. price example": "ex.7,000",
     "ex. count example": "ex. 10",
     "ex. image url": "ex.https://kkobugi.co.kr/..",
-    "search by product name, inventory name, vendor name": "거래처명, 상품명, 거래처 상품명 검색",
+    "search by vendor name, product name, mobile": "거래처명, 상품명, 휴대전화 번호 검색",
     "search by vendor name, mobile, account number": "거래처명, 휴대전화 번호, 계좌번호 검색",
     "search by store name, product name, mobile": "쇼핑몰명, 상품명, 휴대전화 번호 검색",
     "select different date": "다른 일자선택",
