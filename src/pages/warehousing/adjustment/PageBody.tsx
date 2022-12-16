@@ -179,7 +179,7 @@ function PageBody() {
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
       {/*
        * 교환/반품/미송 삭제 모달
@@ -201,7 +201,7 @@ function PageBody() {
         }}
       />
 
-      <PageHeader title="교환/반품/미송" />
+      <PageHeader title={t('warehousing.adjustment.')} />
       <PageTitle
         title="교환/반품/미송 현황"
         subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
@@ -210,7 +210,7 @@ function PageBody() {
             items={[
               {
                 key: '0',
-                label: '교환/반품 추가',
+                label: t('add exchange/returns'),
                 icon: <TurtleIcon name="exchangeRefund" />,
                 onClick() {
                   addExchangeRefundModalOpen();
@@ -218,7 +218,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: '미송상품 추가',
+                label: t('add pending delivery'),
                 icon: <TurtleIcon name="reserve" />,
                 onClick() {
                   addReserveModalOpen();
@@ -226,7 +226,9 @@ function PageBody() {
               },
             ]}
             triggerButton={
-              <SecondaryIconButton>교환/반품/미송 추가</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('add invoice issues')}
+              </SecondaryIconButton>
             }
           />,
         ]}
@@ -282,9 +284,12 @@ function PageBody() {
                         }));
                       }}
                       items={[
-                        { value: '', name: '전체' },
-                        { value: 'False', name: '대기' },
-                        { value: 'True', name: '마감' },
+                        { value: '', name: t('type.all') },
+                        {
+                          value: 'False',
+                          name: t('type.pending'),
+                        },
+                        { value: 'True', name: t('type.finish') },
                       ]}
                     />
                   </Col>
@@ -329,7 +334,9 @@ function PageBody() {
 
                   <Col>
                     <SearchFilter
-                      placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                      placeholder={t(
+                        'placeholder.search by product name, inventory name, vendor name',
+                      )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
                     />
@@ -374,10 +381,10 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+              width: 80,
               title: t('table.type'),
               render: (_, record) =>
-                t(`adjustment.process type.${record.type}`),
+                t(`type.adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,
@@ -388,8 +395,9 @@ function PageBody() {
                   zIndex={1}
                   title={
                     <span>
-                      거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수
-                      있어요!
+                      {t(
+                        'Detailed history of credits can be found in the ledger',
+                      )}
                     </span>
                   }
                 >
@@ -432,7 +440,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+              width: 70,
               align: 'center',
               title: t('table.memo'),
               onCell: (record) => ({
@@ -470,7 +478,7 @@ function PageBody() {
                           adjustmentModalOpen();
                         }}
                       >
-                        처리하기
+                        {t('button.process')}
                       </ProcessButton>
                     )}
                 </>

@@ -71,7 +71,7 @@ function ClearingStatusCard({ clearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          최근 결제현황
+          {t('recent payments')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />

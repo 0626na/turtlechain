@@ -46,6 +46,7 @@ const button = css({
   fontWeight: 700,
   border: 'none',
   borderRadius: 8,
+  fontSize: 14,
 
   display: 'inline-flex',
   alignItems: 'center',

@@ -42,14 +42,14 @@ function LoginForm() {
       >
         <Input
           css={input}
-          placeholder={t('auth.id')}
+          placeholder={t('placeholder.id')}
           prefix={<UserOutlined />}
         />
       </Form.Item>
       <Form.Item name="password" rules={[{ required: false }]}>
         <Input.Password
           css={input}
-          placeholder={t('auth.password')}
+          placeholder={t('placeholder.password')}
           prefix={<LockOutlined />}
         />
       </Form.Item>

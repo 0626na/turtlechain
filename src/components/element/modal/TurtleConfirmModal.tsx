@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 import React, { useEffect } from 'react';
 import AnswerButton from '../button/AnswerButton';
 import TurtleIcon, { iconname } from '../icon/TurtleIcon';
@@ -25,8 +26,9 @@ function TurtleConfirmModal({
   title,
   description,
   children,
-  cancelText = '취소',
-  okText = '확인',
+
+  cancelText = `${t('cancel')}`,
+  okText = `${t('button.integrate')}`,
   okDisabled = false,
   size = 'small',
   loading,
@@ -142,7 +144,7 @@ const $title = css`
 
 const $description = css`
   margin-top: 16px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.429;
   color: #5b5d63;
 `;

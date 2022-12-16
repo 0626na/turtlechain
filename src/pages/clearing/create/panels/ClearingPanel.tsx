@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
 import userAPI from '@apis/userAPI';
 import {
@@ -20,7 +21,6 @@ import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import useUser from '@hooks/useUser';
 import { message } from '@utils/message';
-
 import {
   Col,
   Collapse,
@@ -30,11 +30,8 @@ import {
   Typography,
 } from 'antd';
 import { t } from 'i18next';
-
-import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-
 import DetailModal from '../modals/DetailModal';
 import PayMentModal from '../modals/PayMentModal';
 import FullUseButton from './FullUseButton';
@@ -67,7 +64,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   /**
    * 유저의 구독여부 찾기
    */
-  const getSubscriptionCheckQuery = useQuery(
+  const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
     'getSubscriptionCheckQuery',
     () => userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? 0 }),
     {
@@ -236,7 +233,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                     </Col>
                     <Col>
                       <SearchFilter
-                        placeholder={t('search for accounts')}
+                        placeholder={t('placeholder.vendor search')}
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />
@@ -298,14 +295,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              title: '결제요청 금액',
+              title: t('table.unpaidAmount'),
               render: (_, record) =>
                 record.clearing_amount?.toLocaleString() ?? 0,
             },
             {
               ellipsis: true,
               align: 'right',
-              title: '결제할 금액',
+              title: t('table.amount to be paid'),
               width: 250,
               onCell: () => ({
                 onClick: (e) => {
@@ -315,7 +312,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               render: (_, record) => (
                 <div css={{ width: '50%', display: 'inline-block' }}>
                   <TurtleTableNumberInput
-                    placeholder="금액 입력"
+                    placeholder={t('placeholder.amount input')}
                     value={
                       (record.clearing_payment_amount as number) > 0
                         ? (record.clearing_payment_amount as number)
