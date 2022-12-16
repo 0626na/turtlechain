@@ -239,10 +239,10 @@ function UserTab() {
             });
           }}
         >
-          <Form.Item label={t('user name')} name="name">
+          <Form.Item label={t('table.user name')} name="name">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label={t('auth.id')} name="login_id">
+          <Form.Item label={t('table.id')} name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
@@ -250,14 +250,16 @@ function UserTab() {
             name="email"
             rules={[{ validator: emailValidator }]}
           >
-            <TurtleFormInput placeholder={t('please')} />
+            <TurtleFormInput placeholder={t('placeholder.input email')} />
           </Form.Item>
           <Form.Item
-            label="휴대전화 번호"
+            label={t('table.mobile')}
             name="mobile_phone"
             rules={[{ validator: mobileValidator }]}
           >
-            <TurtleFormInput placeholder="휴대전화 번호를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           {buttonsVisible && (
@@ -272,7 +274,7 @@ function UserTab() {
               <Col>
                 <AnswerButton
                   type="NO"
-                  text="취소 "
+                  text={t('button.cancel')}
                   onClick={() => {
                     // 취소를 누르면 최초 값으로 초기화.
                     resetStates(user as UserInfo);
@@ -281,7 +283,11 @@ function UserTab() {
                 />
               </Col>
               <Col css={marginleft}>
-                <AnswerButton type="YES" text="저장" htmlType="submit" />
+                <AnswerButton
+                  type="YES"
+                  text={t('button.save')}
+                  htmlType="submit"
+                />
               </Col>
             </Row>
           )}
@@ -292,7 +298,7 @@ function UserTab() {
         {!subscriptionData.is_subscribed ? (
           //구독 안한 상태
           <UserCard
-            title="구독 및 결제"
+            title={t('subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -309,7 +315,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    유료플랜 구독
+                    {t('table.paid plan subscription')}
                   </span>
                 }
               >
@@ -334,7 +340,7 @@ function UserTab() {
                           })
                         }
                       >
-                        구독하기
+                        {t('button.subscription')}
                       </Button>
                     ) : (
                       <div
@@ -352,12 +358,12 @@ function UserTab() {
                             })
                           }
                         >
-                          재구독하기
+                          {t('button.re-subscription')}
                         </Button>
                         <span
                           css={css({ marginLeft: 16, color: theme.grey500 })}
                         >
-                          해지완료
+                          {t('unsubscription complete')}
                         </span>
                       </div>
                     )}
@@ -377,13 +383,20 @@ function UserTab() {
                       })}
                     >
                       <TurtleIcon name="thunder" />
-                      <span>첫달 이용료 100원</span>
+                      <span>{t('the first months fee is 100won')}</span>
                     </div>
                   )}
                 </div>
                 {currentSubscriptionStatus && (
                   <div css={css({ paddingTop: 10, color: theme.grey500 })}>
-                    <span>{`${expirationDate}까지 서비스 이용이 가능합니다.`}</span>
+                    <span>
+                      {t(
+                        'message.the service is available until expirationDate',
+                        {
+                          expirationDate,
+                        },
+                      )}
+                    </span>
                   </div>
                 )}
               </Form.Item>
@@ -392,7 +405,7 @@ function UserTab() {
         ) : (
           //구독한 상태
           <UserCard
-            title="구독 및 결제"
+            title={t('subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -409,7 +422,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    유료플랜 구독
+                    {t('subscription paid plan')}
                   </span>
                 }
               >
@@ -428,13 +441,13 @@ function UserTab() {
                       })
                     }
                   >
-                    결제수단 변경
+                    {t('button.payment method change')}
                   </Button>
                   <Button
                     css={css({ color: theme.grey500 })}
                     onClick={removeSubscriptionModalOpen}
                   >
-                    해지하기
+                    {t('subscription cancel')}
                   </Button>
                 </div>
                 <div
@@ -445,10 +458,13 @@ function UserTab() {
                     paddingTop: 10,
                   })}
                 >
-                  <TurtleIcon name="creditcard" />{' '}
-                  <span
-                    css={css({ marginLeft: 5 })}
-                  >{`신용카드(${subscriptionData?.pay_name}) ${subscriptionData?.pay_number}`}</span>
+                  <TurtleIcon name="creditCard" />{' '}
+                  <span css={css({ marginLeft: 5 })}>
+                    {t('creditInfo', {
+                      cardName: subscriptionData?.pay_name,
+                      cardNumber: subscriptionData?.pay_number,
+                    })}
+                  </span>
                 </div>
                 <div
                   css={css({
@@ -457,7 +473,9 @@ function UserTab() {
                     justifyContent: 'space-between',
                   })}
                 >
-                  <span>{`다음 결제일은 ${nextPaymentDate} 입니다.`}</span>
+                  <span>
+                    {t('message.nextPaymentDate', { nextPaymentDate })}
+                  </span>
                   <span>{`₩${serviceCost}`}</span>
                 </div>
               </Form.Item>

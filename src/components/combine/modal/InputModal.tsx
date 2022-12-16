@@ -9,6 +9,7 @@ interface Props {
   title: string;
   description: string[];
   loading?: boolean;
+  okText?: string;
   defaultValue?: string;
   placeholder?: string;
 }
@@ -18,6 +19,7 @@ function InputModal({
   onCancel,
   onOk,
   title,
+  okText,
   description,
   loading,
   placeholder,
@@ -35,6 +37,7 @@ function InputModal({
       visible={visible}
       loading={loading}
       onCancel={loading ? () => {} : onCancel}
+      okText={okText}
       onOk={() => {
         onOk(inputValue);
       }}

@@ -118,7 +118,7 @@ const menus = [
     children: [
       {
         key: 'home',
-        label: '홈',
+        label: t('home'),
         icon: (
           <span css={iconContainer}>
             <GridIcon />
@@ -135,7 +135,7 @@ const menus = [
       },
       {
         key: 'vendor&product',
-        label: '거래처/상품',
+        label: t('vendor,product'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="vendorProduct" />

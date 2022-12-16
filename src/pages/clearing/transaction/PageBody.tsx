@@ -104,7 +104,7 @@ function PageBody() {
               totalCount={itemList.length ?? 0}
               rightContent={
                 <TurtleSearchInput
-                  placeholder="거래처명을 입력하세요"
+                  placeholder={t('placeholder.input vendor name')}
                   onChange={(e) => {
                     filterVendor(e.currentTarget?.value);
                   }}

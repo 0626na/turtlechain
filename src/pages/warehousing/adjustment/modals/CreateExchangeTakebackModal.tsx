@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import useAdjustmentCart from '@hooks/useAdjustmentCart';
 
 import { Collapse } from 'antd';
+import { t } from 'i18next';
 
 import React, { useEffect, useState } from 'react';
 
@@ -33,7 +34,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
         <TurtleContentModal
           visible={visible}
           onClose={onClose}
-          title="교환/반품 추가"
+          title={t('warehousing.addAdjustment')}
           size="large"
         >
           <Collapse
@@ -55,7 +56,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                 <TurtlePanelTitle
                   count={1}
                   activeKey={activeKey}
-                  title="입고상품 불러오기"
+                  title={t('warehousing.search from stock list')}
                 />
               }
             />
@@ -66,7 +67,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                 <TurtlePanelTitle
                   count={2}
                   activeKey={activeKey}
-                  title="교환/반품 미리보기"
+                  title={t('warehousing.preview of exchange and returns')}
                 />
               }
               activeKey={activeKey}
