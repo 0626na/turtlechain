@@ -5,6 +5,7 @@ import {
   GridIcon,
   SpecialButton,
   TurtleIcon,
+  TurtleSearchInput,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -16,22 +17,31 @@ import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
 import AddPickerModal from './modals/AddPickerModal';
 import DetailPickerModal from './modals/DetailPickerModal';
 
 function PageBody() {
-  const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
+  const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
+  const [searchQuery, setSearchQuery] = useState('');
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
   });
+
+  const filteredList = useMemo(() => {
+    return getStoreListQuery.data?.data.store_list.filter(
+      (store) =>
+        store.name.includes(searchQuery) ||
+        store.store_phone[0].phone.includes(searchQuery),
+    );
+  }, [getStoreListQuery, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -82,7 +92,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>쇼핑몰 정보</TurtleText>
+              <TurtleText>{t('store.info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -93,7 +103,7 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
+            <TurtleText>{t('store.create')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -101,20 +111,30 @@ function PageBody() {
       <TurtleTableTitle
         totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
         rightContent={
-          <AddButton
-            icon={
-              mode === 'cardView' ? (
-                <TurtleIcon name="listView" />
-              ) : (
-                <GridIcon value="#6B6D73" />
-              )
-            }
-            onClick={() => {
-              changeMode();
-            }}
-          >
-            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
-          </AddButton>
+          <Row align="middle">
+            <Col css={css({ marginRight: 15 })}>
+              <TurtleSearchInput
+                placeholder={t('placeholder.input store name, mobile')}
+                onChange={(e) => setSearchQuery(e.currentTarget.value)}
+              />
+            </Col>
+            <Col>
+              <AddButton
+                icon={
+                  mode === 'cardView' ? (
+                    <TurtleIcon name="listView" />
+                  ) : (
+                    <GridIcon value="#6B6D73" />
+                  )
+                }
+                onClick={() => {
+                  changeMode();
+                }}
+              >
+                {mode === 'cardView' ? t('listView') : t('cardView')}
+              </AddButton>
+            </Col>
+          </Row>
         }
       />
 
@@ -140,7 +160,7 @@ function PageBody() {
         <Table
           size="small"
           loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.data.store_list}
+          dataSource={filteredList}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
@@ -149,11 +169,11 @@ function PageBody() {
             },
           })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 20,
+              width: 90,
               title: t('table.operatorStatus'),
               render: (_, record) => {
                 const { is_closed } = record;
@@ -164,13 +184,13 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+
               title: t('table.retailerStoreName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 25,
+
               title: t('table.mobile'),
               render: (_, record) =>
                 record.store_phone[0]?.phone.replace(
@@ -178,6 +198,9 @@ function PageBody() {
                   '$1-$2-$3',
                 ) ?? '',
             },
+            // {
+            //   render: (_, record) => <TurtleIcon name="delete" />,
+            // },
           ]}
         />
       )}

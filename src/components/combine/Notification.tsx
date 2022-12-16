@@ -18,6 +18,7 @@ import notificationAPI from '@apis/notificationAPI';
 import { ReactComponent as BellIcon } from '@icons/bell.svg';
 import { css } from '@emotion/react';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 //TODO: 추후 notificationAPI로 이동 리팩토링 해야함
 interface Noti {
@@ -44,6 +45,7 @@ const type = {
 
 function Notification() {
   const navigate = useNavigate();
+  const { user } = useUser();
   const [popoverVisible, setPopoverVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
 
@@ -57,7 +59,6 @@ function Notification() {
       staleTime: 60000,
     },
   );
-
   const updateNotificationMutate = useMutation(notificationAPI.update, {
     onSuccess: () => {
       getNotificationQuery.refetch();
@@ -81,7 +82,7 @@ function Notification() {
         result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
       }
     }
-    if (noti.type === 'modification_request') {
+    if (noti.type === 'modification_request' && user?.type !== 'pi') {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
         result.reason = `(반려사유 | ${noti.content.memo})`;
@@ -90,6 +91,18 @@ function Notification() {
         result.reason = `(${t(noti.content.component)} | ${
           noti.content.before
         } > ${noti.content.after})`;
+      }
+    }
+
+    if (noti.type === 'modification_request' && user?.type === 'pi') {
+      if (noti.content.status === 'reject') {
+        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
+        result.reason = `(반려사유 | ${noti.content.memo})`;
+      } else {
+        result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. `;
+        result.reason = `(신규 ${t(noti.content.component)}: ${
+          noti.content.after
+        })`;
       }
     }
 

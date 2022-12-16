@@ -1,7 +1,8 @@
 import { OrderHistoryItem } from '@apis/orderAPI';
-import { TurtleTableTitle } from '@components/element';
+import { TurtleSearchInput, TurtleTableTitle } from '@components/element';
 import { Table, TabPaneProps, Tabs } from 'antd';
-import React from 'react';
+import { t } from 'i18next';
+import React, { useMemo, useState } from 'react';
 
 interface Props extends TabPaneProps {
   data: OrderHistoryItem[];
@@ -9,62 +10,90 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ data, loading, ...props }: Props) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredList = useMemo(
+    () =>
+      data.filter(
+        (store) =>
+          store.vendor_name.includes(searchQuery) ||
+          store.address.includes(searchQuery) ||
+          store.mobile.includes(searchQuery) ||
+          store.name.includes(searchQuery),
+      ),
+
+    [data, searchQuery],
+  );
+
   return (
     <Tabs.TabPane {...props}>
       <Table
         size="small"
+        rowKey={(record) => String(record.id)}
         loading={loading}
-        dataSource={data}
+        dataSource={filteredList}
         pagination={{
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        title={() => <TurtleTableTitle totalCount={data.length ?? 0} />}
+        title={() => (
+          <TurtleTableTitle
+            totalCount={data.length ?? 0}
+            rightContent={
+              <TurtleSearchInput
+                placeholder={t(
+                  'placeholder.search by vendor name, product name, mobile',
+                )}
+                value={searchQuery}
+                onChange={(value) => setSearchQuery(value.currentTarget.value)}
+              />
+            }
+          />
+        )}
         columns={[
           {
-            title: '거래처명',
+            title: t('table.vendorName'),
             width: 188,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처 주소',
+            title: t('table.vendorAddress'),
             width: 196,
             render: (_, record) => record.address,
           },
           {
-            title: '휴대전화 번호',
+            title: t('table.mobile'),
             width: 176,
             render: (_, record) => record.mobile,
           },
           {
-            title: '거래처 상품명',
+            title: t('table.vendorProductName'),
             width: 196,
             render: (_, record) => record.name,
           },
           {
-            title: '옵션',
+            title: t('table.option'),
             width: 136,
             render: (_, record) => record.option,
           },
           {
-            title: '분류',
+            title: t('table.type'),
             width: 116,
             render: (_, record) => record.type,
           },
           {
-            title: '요청 수량',
+            title: t('table.requestCount'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
           },
           {
-            title: '공급가',
+            title: t('table.price'),
             align: 'right',
             width: 116,
             render: (_, record) => record.price.toLocaleString(),
           },
           {
-            title: '메모',
+            title: t('table.memo'),
           },
         ]}
       />

@@ -18,18 +18,20 @@ export interface Company {
  *  사업자 정보
  */
 
-interface ResponseGet {
-  msg: string;
-  data: {
-    company_list: Company[];
-  };
+interface RequestGet {
+  company_id: number;
 }
 
-const get = async () => {
-  const url = `/provisioning/retailer/companies`;
+interface ResponseGet {
+  msg: string;
+  data: Company;
+}
+
+const get = async (params: RequestGet) => {
+  const url = `/provisioning/retailer/companies/${params.company_id}`;
   const response = await v2Axios.get<ResponseGet>(url);
 
-  return response.data.data.company_list[0];
+  return response.data.data;
 };
 
 /*
@@ -51,8 +53,8 @@ interface ResponseUpdate {
   msg: string;
 }
 
-const update = async function (data: RequestUpdate) {
-  const url = `/provisioning/retailer_company/${data.company_id}`;
+const update = async (data: RequestUpdate) => {
+  const url = `/provisioning/retailer/companies/${data.company_id}`;
   const formData = new FormData();
   for (const [key, value] of Object.entries(data)) {
     formData.append(key, value);

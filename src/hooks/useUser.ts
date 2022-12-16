@@ -32,10 +32,13 @@ function useUser() {
     setUser(null);
   }, []);
 
+  const isStaff = user?.type === 'st';
+
   return {
     user,
     loadUser,
     resetUser,
+    isStaff,
   };
 }
 

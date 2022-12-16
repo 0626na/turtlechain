@@ -166,11 +166,11 @@ function UserTab() {
   //이메일 유효성 검사
   const emailValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error(t('please input your email')));
+      return Promise.reject(new Error(t('please input email')));
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error(t('this is not valid')));
+      return Promise.reject(new Error(t('this email is not valid')));
     }
 
     return Promise.resolve();
@@ -183,7 +183,7 @@ function UserTab() {
     }
 
     if (!phonePattern.test(value)) {
-      return Promise.reject(new Error(t('this format is not valid')));
+      return Promise.reject(new Error(t('invalid format')));
     }
 
     return Promise.resolve();
@@ -220,7 +220,7 @@ function UserTab() {
       />
 
       <UserCard
-        title={t('default information')}
+        title={t('basic information')}
         icon={<TurtleIcon name="user" />}
       >
         <Form
@@ -458,7 +458,7 @@ function UserTab() {
                     paddingTop: 10,
                   })}
                 >
-                  <TurtleIcon name="creditCard" />{' '}
+                  <TurtleIcon name="creditcard" />{' '}
                   <span css={css({ marginLeft: 5 })}>
                     {t('creditInfo', {
                       cardName: subscriptionData?.pay_name,

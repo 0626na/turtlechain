@@ -7,7 +7,7 @@ export interface UserInfo {
   email: string;
   mobile_phone: string;
   company_id?: number;
-  type: 'rt' | 'pi' | 'staff' | '';
+  type: 'rt' | 'pi' | 'st' | '';
 }
 
 /*

@@ -203,7 +203,8 @@ function PageBody() {
 
       <PageHeader title={t('warehousing.adjustment.')} />
       <PageTitle
-        title={t('summary of invoice issues')}
+        title="교환/반품/미송 현황"
+        subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
         buttons={[
           <TurtleDropdown
             items={[

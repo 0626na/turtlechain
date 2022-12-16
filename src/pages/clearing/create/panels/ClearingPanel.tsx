@@ -66,15 +66,10 @@ function ClearingPanel({ activeKey, ...props }: Props) {
    */
   const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
     'getSubscriptionCheckQuery',
-    () =>
-      userAPI.getSubscriptionCheck({
-        company_id: user?.company_id ?? 0,
-      }),
+    () => userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? 0 }),
     {
       enabled: !!user?.company_id,
-      onSuccess: (data) => {
-        setIsSubscription(data.data.is_expired);
-      },
+      onSuccess: (data) => setIsSubscription(data.data.is_expired),
     },
   );
 
@@ -85,6 +80,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       navigate('/clearing/history');
     },
   });
+
+  const subscriptionData = data?.data.subscription_info;
 
   const handleCreate = () => {
     createClearingMutation.mutate({
@@ -146,6 +143,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       />
 
       {/*
+       * 유료플랜 구독 모달
+       */}
+      <PayMentModal
+        visible={paymentModalVisible}
+        closeModal={paymentModalClose}
+      />
+
+      {/*
        * 결제요청 모달
        */}
       <CreateModal
@@ -155,26 +160,33 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title="정말 요청을 보낼까요?"
+        title={t('do you really want me to send a request')}
         description={[
-          '등록 후에는 이전으로 되돌릴 수 없어요.',
-          '결제 정보를 다시한번 확인해주세요.',
+          t('after registration, you cant go back to where you were'),
+          t('please check the payment information again'),
         ]}
         items={[
-          { title: '결제요청 일자', content: cart.clearingRequestDate },
           {
-            title: '결제요청 금액',
-            content: `${(
-              Math.round((clearingPaymentTotal * 1.1) / 10) * 10
-            ).toLocaleString()}
-            원(부가세
-          ${(
-            Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
-            clearingPaymentTotal
-          ).toLocaleString()}
-          원 포함)`,
+            title: t('payment request date'),
+            content: cart.clearingRequestDate,
           },
-          { title: '총 거래처수', content: `${cart.resultList.length}개` },
+          {
+            title: t('payment request amount'),
+            content: `${t('price', {
+              price: (
+                Math.round((clearingPaymentTotal * 1.1) / 10) * 10
+              ).toLocaleString(),
+            })}
+          ${t('vat include', {
+            price: Math.round(
+              ((clearingPaymentTotal * 1.1) / 10) * 10 - clearingPaymentTotal,
+            ).toLocaleString(),
+          })}`,
+          },
+          {
+            title: t('totalVendorCount'),
+            content: t('count', { count: cart.resultList.length }),
+          },
         ]}
       />
 
@@ -215,7 +227,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                   <Row>
                     <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
-                        전액결제
+                        {t('full payment')}
                       </FullUseButton>
                     </Col>
                     <Col>

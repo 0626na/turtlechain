@@ -26,7 +26,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   const [keep, setKeep] = useState(false);
   const createMutation = useMutation(pickerAPI.create, {
     onSuccess: () => {
-      message.success(t('message.success update mall'));
+      message.success(t('message.success create store'));
       queryClient.refetchQueries(['getStoreList']);
       closeModal();
     },
@@ -49,7 +49,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   useEffect(() => {
     if (!searched) return;
     if (searchStore === undefined) {
-      message.error('신규쇼핑몰입니다. 값을 입력해주세요');
+      message.error(t('message.new store'));
       form.setFieldsValue({
         store_id: '',
         store_url: '',
@@ -73,7 +73,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('store.create')}
+        title={t('title.add store')}
         visible={visible}
         onClose={closeModal}
       >
@@ -91,10 +91,10 @@ function AddPickerModal({ visible, closeModal }: Props) {
           <Form.Item
             name="name"
             rules={[{ required: true }]}
-            label={t('store.name')}
+            label={t('table.retailerStoreName')}
           >
             <TurtleFormSearchInput
-              placeholder={t('placeholder.store')}
+              placeholder={t('placeholder.input store name')}
               onSearch={(value: string) => {
                 setSearchStore(
                   getStoreListQuery.data?.store_list.find(
@@ -110,23 +110,25 @@ function AddPickerModal({ visible, closeModal }: Props) {
           <Form.Item
             name="store_url"
             rules={[{ required: true }]}
-            label={t('store.url')}
+            label={t('table.retailerStoreURL')}
           >
-            <TurtleFormInput placeholder={t('placeholder.storeUrl')} />
+            <TurtleFormInput placeholder={t('placeholder.ex. store url')} />
           </Form.Item>
 
           <Form.Item
             name={['store_mobile', 'mobile']}
             rules={[{ required: true }]}
-            label={t('store.phone')}
+            label={t('table.store mobile number')}
           >
-            <TurtleFormInput placeholder={t('placeholder.mobile')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
         </Form>
 
         <Row css={{ marginTop: 40 }}>
           <Popconfirm
-            title={'정말 추가하시겠습니까?'}
+            title={t('message.add it')}
             okText={t('yes')}
             cancelText={t('no')}
             onConfirm={() => {
@@ -148,7 +150,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
               size="large"
               loading={createMutation.isLoading}
             >
-              추가하기
+              {t('message.add')}
             </SpecialButton>
           </Popconfirm>
         </Row>

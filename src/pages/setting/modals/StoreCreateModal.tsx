@@ -39,11 +39,11 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('계좌번호를 입력해주세요'));
+      return Promise.reject(new Error(t('please input account number')));
     }
 
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('please input number only')));
     }
 
     return Promise.resolve();
@@ -51,7 +51,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleNumberValidation = (_: unknown, value: string) => {
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('please input number only')));
     }
 
     return Promise.resolve();
@@ -159,7 +159,9 @@ function StoreCreateModal({ visible, closeModal }: Props) {
             <Form.Item
               name={['store_account', 'account_holder']}
               noStyle
-              rules={[{ required: true, message: '예금주명을 입력해주세요' }]}
+              rules={[
+                { required: true, message: t('please input account holder') },
+              ]}
             >
               <TurtleFormInput
                 placeholder={t('placeholder.account holder name')}
