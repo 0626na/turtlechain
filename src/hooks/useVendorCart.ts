@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
   ParsedVendor,
+  RequestCreate,
   ResponseVendorInventory,
   VendorAccount,
   Wholesale,
@@ -203,7 +204,10 @@ const useVendorCart = () => {
     };
   };
 
-  const convertToMutateItem = (vendor: SuccessItem, rt_store_id: number) => ({
+  const convertToMutateItem = (
+    vendor: SuccessItem,
+    rt_store_id: number,
+  ): RequestCreate => ({
     rt_store_id: rt_store_id,
     vendor_code: vendor.vendor_code,
     vendor_account_id: Number(vendor.ws_store_info[0].store_account[0].id),
