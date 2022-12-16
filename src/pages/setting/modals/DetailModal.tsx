@@ -201,14 +201,16 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
               ]}
               noStyle
             >
-              <TurtleFormInput placeholder={t('accountNumber')} />
+              <TurtleFormInput placeholder={t('placeholder.account number')} />
             </Form.Item>
             <Form.Item
               name="account_holder"
               noStyle
               rules={[{ required: true }]}
             >
-              <TurtleFormInput placeholder={t('accountNumberName')} />
+              <TurtleFormInput
+                placeholder={t('placeholder.account holder name')}
+              />
             </Form.Item>
           </div>
         </Form.Item>
@@ -221,10 +223,10 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         >
           <Radio.Group>
             <Radio disabled value={false}>
-              {t('supplyPriceOnly')}
+              {t('type.supplyPriceOnly')}
             </Radio>
             <Radio disabled value={true}>
-              {t('supplyPrice + vat price')}
+              {t('type.supplyPrice + vat price')}
             </Radio>
           </Radio.Group>
         </Form.Item>
@@ -236,27 +238,41 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         >
           <TurtleFormSelect
             disabled
-            placeholder={t('please select inventory')}
+            placeholder={t('placeholder.select inventory')}
             items={[
-              { value: 'sellmate', name: t('inventory.sellmate') },
-              { value: 'ezadmin', name: t('inventory.ezadmin') },
-              { value: 'turtlechain', name: t('inventory.turtlechain') },
-              { value: 'etc', name: t('inventory.etc') },
-              { value: 'none', name: t('inventory.not used') },
+              { value: 'sellmate', name: t('type.sellmate') },
+              { value: 'ezadmin', name: t('type.ezadmin') },
+              { value: 'turtlechain', name: t('type.turtlechain') },
+              { value: 'etc', name: t('type.etc') },
+              { value: 'none', name: t('type.not used') },
             ]}
           />
         </Form.Item>
 
-        <Form.Item label={t('inventory link key')}>
+        <Form.Item label={t('table.inventory link key')}>
           <Row gutter={[4, 0]}>
             <Col span={11}>
-              <Form.Item name="inventory_domain" noStyle label="도메인">
-                <TurtleFormInput placeholder="도메인" disabled />
+              <Form.Item
+                name="inventory_domain"
+                noStyle
+                label={t('table.domain')}
+              >
+                <TurtleFormInput
+                  placeholder={t('placeholder.domain')}
+                  disabled
+                />
               </Form.Item>
             </Col>
             <Col span={13}>
-              <Form.Item name="inventory_key" noStyle label="연동 key">
-                <TurtleFormInput placeholder="연동키" disabled />
+              <Form.Item
+                name="inventory_key"
+                noStyle
+                label={t('table.inventory key')}
+              >
+                <TurtleFormInput
+                  placeholder={t('placeholder.invenyory key')}
+                  disabled
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -269,7 +285,9 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           label={t('table.transactionEmail')}
           required={false}
         >
-          <TurtleFormInput placeholder="이체내역 수신 메일을 입력하세요." />
+          <TurtleFormInput
+            placeholder={t('placeholder.input transfer details received mail')}
+          />
         </Form.Item>
 
         <Form.Item

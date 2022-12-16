@@ -152,7 +152,7 @@ function CompanyTab() {
             <TurtleFormInput hidden />
           </Form.Item>
 
-          <Form.Item label={t('biz type')} name="biz_type">
+          <Form.Item label={t('table.biz type')} name="biz_type">
             <Radio.Group>
               {['entity', 'personal', 'simple'].map((option) => (
                 <Radio key={option} value={option}>
@@ -163,7 +163,7 @@ function CompanyTab() {
           </Form.Item>
 
           <Form.Item
-            label={t('biz name')}
+            label={t('table.biz name')}
             required={false}
             rules={[{ required: true }]}
             name="name"
@@ -171,21 +171,21 @@ function CompanyTab() {
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label={t('biz num')} name="biz_num">
+          <Form.Item label={t('table.biz num')} name="biz_num">
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Form.Item label={t('biz address')} name="address_main">
+          <Form.Item label={t('table.biz address')} name="address_main">
             <TurtleFormInput onClick={() => setPostcodeModalVisible(true)} />
           </Form.Item>
 
-          <Form.Item label={t('biz detail address')} name="address_sub">
+          <Form.Item label={t('table.biz detail address')} name="address_sub">
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
             name="biz_license_file"
-            label={t('biz license')}
+            label={t('table.biz license')}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             required={false}
@@ -201,7 +201,7 @@ function CompanyTab() {
             </Upload>
           </Form.Item>
 
-          <Form.Item label={t('vat issued mail')} name="email">
+          <Form.Item label={t('table.vat issued mail')} name="email">
             <TurtleFormInput />
           </Form.Item>
 

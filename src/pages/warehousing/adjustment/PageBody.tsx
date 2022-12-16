@@ -179,7 +179,7 @@ function PageBody() {
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
       {/*
        * 교환/반품/미송 삭제 모달
@@ -283,12 +283,12 @@ function PageBody() {
                         }));
                       }}
                       items={[
-                        { value: '', name: t('warehousing.confirm.all') },
+                        { value: '', name: t('type.all') },
                         {
                           value: 'False',
-                          name: t('warehousing.confirm.false'),
+                          name: t('type.pending'),
                         },
-                        { value: 'True', name: t('warehousing.confirm.true') },
+                        { value: 'True', name: t('type.finish') },
                       ]}
                     />
                   </Col>
@@ -334,7 +334,7 @@ function PageBody() {
                   <Col>
                     <SearchFilter
                       placeholder={t(
-                        'search vendor name, product name, and reference',
+                        'placeholder.search by product name, inventory name, vendor name',
                       )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
@@ -383,7 +383,7 @@ function PageBody() {
               width: 80,
               title: t('table.type'),
               render: (_, record) =>
-                t(`adjustment.process type.${record.type}`),
+                t(`type.adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,

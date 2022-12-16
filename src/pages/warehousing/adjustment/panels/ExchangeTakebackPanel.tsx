@@ -103,7 +103,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       <Collapse.Panel
@@ -230,7 +230,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={0}
                     value="exchange"
                   >
-                    {t('adjustment.process type.exchange')}
+                    {t('type.adjustment.process type.exchange')}
                   </Select.Option>
                   <Select.Option
                     style={{
@@ -239,7 +239,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={1}
                     value="takeback"
                   >
-                    {t('adjustment.process type.takeback')}
+                    {t('type.adjustment.process type.takeback')}
                   </Select.Option>
                 </Select>
               ),
@@ -300,7 +300,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                 handleExchangeRefundCreate();
               }}
             >
-              {t('register adjustment')}
+              {t('button.register adjustment')}
             </PrimaryButton>
           </Col>
         </Row>

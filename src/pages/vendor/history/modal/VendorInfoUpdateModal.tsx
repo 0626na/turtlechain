@@ -52,7 +52,6 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     {
       enabled: !!selectedRow?.id && !!visible,
       onSuccess: (data) => {
-        console.log(data);
         form.setFieldsValue({
           ws_store_id: data?.ws_store_info.id,
           rt_store_id: store.selected?.id as number,
@@ -113,6 +112,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <Input hidden />
           </Form.Item>
 
+          {/*  */}
           <Form.Item label={t('table.vendorName')} name="name" required>
             <TurtleFormSearchInput disabled />
           </Form.Item>
@@ -120,7 +120,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
             <TurtleFormInput
               disabled
-              placeholder={t('please input store phone number')}
+              placeholder={t('placeholder.input phone number')}
             />
           </Form.Item>
 
@@ -131,7 +131,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               { required: true, message: t('please input mobile number') },
             ]}
           >
-            <TurtleFormInput placeholder={t('please input mobile number')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.vendorAddress')} required>
@@ -146,7 +148,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
-                    placeholder={t('building')}
+                    placeholder={t('placeholder.building')}
                     onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
@@ -178,7 +180,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                           value: floor,
                           name: floor,
                         }))}
-                        placeholder={t('floor')}
+                        placeholder={t('placeholder.floor')}
                         onChange={() => {
                           form.setFieldsValue({
                             ...form.getFieldsValue(),
@@ -216,7 +218,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                             name: `${col} ${loc}`,
                           };
                         })}
-                        placeholder={t('col and loc')}
+                        placeholder={t('placeholder.col loc')}
                       />
                     </Form.Item>
                   )}
@@ -226,14 +228,16 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Form.Item>
 
           <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
-            <TurtleFormInput placeholder={t('please input other address')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
-                  placeholder={t('bank')}
+                  placeholder={t('placeholder.bank')}
                   items={
                     Object.values(bankData?.data ?? []).map((bank) => ({
                       value: bank,
@@ -257,7 +261,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 ]}
                 noStyle
               >
-                <TurtleFormInput placeholder={t('accountNumber')} />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                />
               </Form.Item>
 
               <Form.Item
@@ -267,14 +273,16 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 ]}
                 noStyle
               >
-                <TurtleFormInput placeholder={t('accountHolderName')} />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                />
               </Form.Item>
             </div>
           </Form.Item>
 
           <Form.Item
             name="file"
-            label={t('receipt')}
+            label={t('table.receipt')}
             valuePropName="fileList"
             required={true}
             getValueFromEvent={normFile}

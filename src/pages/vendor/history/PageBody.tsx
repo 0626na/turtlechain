@@ -121,7 +121,7 @@ function PageBody() {
           t('write freely anything thats important about this vendor'),
           t('use this memo as your personal note'),
         ]}
-        placeholder={t('ex, double check its invoices!')}
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
       {/*
        * 거래처명 수정 모달
@@ -205,7 +205,9 @@ function PageBody() {
               totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder={t('search keyword')}
+                  placeholder={t(
+                    'placeholder.search by vendor name, mobile, account number',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -304,7 +306,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('edit vendors name'),
+                      label: t('table.edit vendor name'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -314,7 +316,7 @@ function PageBody() {
 
                     {
                       key: '2',
-                      label: t('information update'),
+                      label: t('table.information update'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -335,7 +337,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          {t('delete')}
+                          {t('table.delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,

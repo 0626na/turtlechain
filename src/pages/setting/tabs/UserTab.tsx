@@ -239,10 +239,10 @@ function UserTab() {
             });
           }}
         >
-          <Form.Item label={t('user name')} name="name">
+          <Form.Item label={t('table.user name')} name="name">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label={t('id')} name="login_id">
+          <Form.Item label={t('table.id')} name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
@@ -250,14 +250,16 @@ function UserTab() {
             name="email"
             rules={[{ validator: emailValidator }]}
           >
-            <TurtleFormInput placeholder={t('please input your email')} />
+            <TurtleFormInput placeholder={t('placeholder.input email')} />
           </Form.Item>
           <Form.Item
             label={t('table.mobile')}
             name="mobile_phone"
             rules={[{ validator: mobileValidator }]}
           >
-            <TurtleFormInput placeholder={t('please input phone number')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           {buttonsVisible && (
@@ -313,7 +315,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    {t('paid plan subscription')}
+                    {t('table.paid plan subscription')}
                   </span>
                 }
               >
@@ -439,7 +441,7 @@ function UserTab() {
                       })
                     }
                   >
-                    {t('payment method change')}
+                    {t('button.payment method change')}
                   </Button>
                   <Button
                     css={css({ color: theme.grey500 })}
@@ -471,7 +473,9 @@ function UserTab() {
                     justifyContent: 'space-between',
                   })}
                 >
-                  <span>{t('nextPaymentDate', { nextPaymentDate })}</span>
+                  <span>
+                    {t('message.nextPaymentDate', { nextPaymentDate })}
+                  </span>
                   <span>{`₩${serviceCost}`}</span>
                 </div>
               </Form.Item>
