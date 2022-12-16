@@ -193,13 +193,13 @@ function PageBody() {
             preParsingResult: preParsingResult as ResponseCreatePreParsing,
           }}
           visible={preparsingModalVisible}
-          title={t('you can only order up to the second round')}
+          title={t('title.you can only order up to the second round')}
           description={[
             t(
-              'shopping malls that have completed the second order cannot send additional orders',
+              'description.shopping malls that have completed the second order cannot send additional orders',
             ),
             t(
-              'please check the shopping mall excluded from the additional order',
+              'description.please check the shopping mall excluded from the additional order',
             ),
           ]}
           onCancel={closePreparsingModal}

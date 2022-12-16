@@ -27,7 +27,7 @@ function PickerOrder() {
         button={
           <Tooltip
             visible={dateTooltipvisible}
-            title={t('you can change order request date')}
+            title={t('description.you can change the order request date')}
             placement="bottom"
             zIndex={1}
           >

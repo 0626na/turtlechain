@@ -191,12 +191,14 @@ function FailTab({ loading, ...props }: Props) {
       />
       {failListOutput().length !== 0 && (
         <AddOrderFailtoSuccessModal
-          title={t('Should I add it as account information?')}
+          title={t('description.should I add it as account information?')}
           description={[
             t(
-              'Add the mobile phone number you entered as your account information',
+              'description.add the mobile phone number you entered as your account information',
             ),
-            t(`After addition, the client's order is classified as successful`),
+            t(
+              `description.after addition, the client's order is classified as successful`,
+            ),
           ]}
           visible={failtoSuccessModailvisible}
           onCancel={closeFailToSuccessModal}
@@ -223,7 +225,7 @@ function FailTab({ loading, ...props }: Props) {
                   <Col>
                     <TurtleSearchInput
                       placeholder={t(
-                        'please input search store name, product name, mobile',
+                        'placeholder.search by store name, product name, mobile',
                       )}
                       value={searchQuery.search_string}
                       onChange={(e) =>

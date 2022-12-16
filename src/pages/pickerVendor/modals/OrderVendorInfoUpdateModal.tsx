@@ -109,15 +109,19 @@ function OrderVendorInfoUpdateModal({
           </Form.Item>
 
           <Form.Item label={t('table.vendorName')} name="name" required>
-            <TurtleFormInput />
+            <TurtleFormInput placeholder={t('placeholder.input store name')} />
           </Form.Item>
 
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
-            <TurtleFormInput placeholder="매장번호를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input phone number')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.mobile')} name="mobile">
-            <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.vendorAddress')} required>
@@ -132,7 +136,7 @@ function OrderVendorInfoUpdateModal({
                     items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
-                    placeholder="상가"
+                    placeholder={t('placeholder.building')}
                     onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
@@ -164,7 +168,7 @@ function OrderVendorInfoUpdateModal({
                           value: floor,
                           name: floor,
                         }))}
-                        placeholder="층"
+                        placeholder={t('placeholder.floor')}
                         onChange={() => {
                           form.setFieldsValue({
                             ...form.getFieldsValue(),
@@ -202,7 +206,7 @@ function OrderVendorInfoUpdateModal({
                             name: `${col} ${loc}`,
                           };
                         })}
-                        placeholder="열/호"
+                        placeholder={t('placeholder.col loc')}
                       />
                     </Form.Item>
                   )}
@@ -212,14 +216,16 @@ function OrderVendorInfoUpdateModal({
           </Form.Item>
 
           <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')}>
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
-                  placeholder="은행"
+                  placeholder={t('placeholder.bank')}
                   items={
                     Object.values(bankData?.data ?? []).map((bank) => ({
                       value: bank,
@@ -234,23 +240,27 @@ function OrderVendorInfoUpdateModal({
               </Form.Item>
 
               <Form.Item name="account_number" noStyle>
-                <TurtleFormInput placeholder="계좌번호" />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                />
               </Form.Item>
 
               <Form.Item name="account_holder" noStyle>
-                <TurtleFormInput placeholder="예금주명" />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                />
               </Form.Item>
             </div>
           </Form.Item>
 
           <Form.Item
             name="file"
-            label="전자영수증"
+            label={t('table.receipt')}
             valuePropName="fileList"
             required={true}
             getValueFromEvent={normFile}
             rules={[
-              { required: true, message: '전자영수증 사진을 첨부해주세요.' },
+              { required: true, message: t('message.please attach receipt') },
             ]}
           >
             <Upload
@@ -259,7 +269,7 @@ function OrderVendorInfoUpdateModal({
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>사진 첨부하기</AddButton>
+              <AddButton>{t('attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 

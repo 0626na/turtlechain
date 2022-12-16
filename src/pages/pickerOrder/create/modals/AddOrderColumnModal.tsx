@@ -118,7 +118,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
             `}
           >
             {t(
-              `is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form`,
+              'description.is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form',
             )}
           </p>
         </div>
