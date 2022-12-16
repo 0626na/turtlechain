@@ -66,7 +66,7 @@ function FailTab({ data, loading, ...props }: Props) {
             render: (_, record) => record.mobile,
           },
           {
-            title: t('table.productName'),
+            title: t('table.vendorProductName'),
             width: 196,
             render: (_, record) => record.name,
           },
