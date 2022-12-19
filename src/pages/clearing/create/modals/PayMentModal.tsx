@@ -35,7 +35,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         company_id: user?.company_id ?? 0,
       }),
     {
-      enabled: visible && buttonLoading,
+      enabled: visible,
       refetchInterval: (data) => {
         if (data?.data.is_expired) {
           setButtonLoading(false);
