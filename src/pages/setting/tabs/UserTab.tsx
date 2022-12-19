@@ -73,6 +73,11 @@ function UserTab() {
     'getSubscriptionCheckInUserTabQuery',
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
+      refetchInterval: (data) => {
+        if (data?.data.is_expired) return false;
+
+        return 2000;
+      },
       onSuccess: (data) => {
         setIsNewSubscription(data.data.is_new);
         setCurrentSubscriptionStatus(data.data.is_expired);
@@ -85,9 +90,6 @@ function UserTab() {
   );
 
   const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
-    onSettled: () => {
-      console.log('취소눌러도 실행됨');
-    },
     onSuccess: (data) => {
       const requestData = {
         PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
@@ -115,8 +117,6 @@ function UserTab() {
             pay_name: res.PCD_PAY_CARDNAME,
             pay_number: res.PCD_PAY_CARDNUM,
           });
-
-          getSubscriptionCheckQuery.refetch();
 
           //구독신청 및 재구독시
           if (res.PCD_PAY_WORK === 'PAY')

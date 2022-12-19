@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
 import userAPI from '@apis/userAPI';
 import {
@@ -21,6 +20,7 @@ import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import useUser from '@hooks/useUser';
 import { message } from '@utils/message';
+
 import {
   Col,
   Collapse,
@@ -30,8 +30,11 @@ import {
   Typography,
 } from 'antd';
 import { t } from 'i18next';
+
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+
 import DetailModal from '../modals/DetailModal';
 import PayMentModal from '../modals/PayMentModal';
 import FullUseButton from './FullUseButton';
@@ -64,9 +67,10 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   /**
    * 유저의 구독여부 찾기
    */
-  const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
+  const getSubscriptionCheckQuery = useQuery(
     'getSubscriptionCheckQuery',
-    () => userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? 0 }),
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
     {
       enabled: !!user?.company_id,
       onSuccess: (data) => setIsSubscription(data.data.is_expired),
@@ -80,8 +84,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       navigate('/clearing/history');
     },
   });
-
-  const subscriptionData = data?.data.subscription_info;
 
   const handleCreate = () => {
     createClearingMutation.mutate({
@@ -143,14 +145,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       />
 
       {/*
-       * 유료플랜 구독 모달
-       */}
-      <PayMentModal
-        visible={paymentModalVisible}
-        closeModal={paymentModalClose}
-      />
-
-      {/*
        * 결제요청 모달
        */}
       <CreateModal
@@ -160,33 +154,26 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title={t('do you really want me to send a request')}
+        title="정말 요청을 보낼까요?"
         description={[
-          t('after registration, you cant go back to where you were'),
-          t('please check the payment information again'),
+          '등록 후에는 이전으로 되돌릴 수 없어요.',
+          '결제 정보를 다시한번 확인해주세요.',
         ]}
         items={[
+          { title: '결제요청 일자', content: cart.clearingRequestDate },
           {
-            title: t('payment request date'),
-            content: cart.clearingRequestDate,
+            title: '결제요청 금액',
+            content: `${(
+              Math.round((clearingPaymentTotal * 1.1) / 10) * 10
+            ).toLocaleString()}
+            원(부가세
+          ${(
+            Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+            clearingPaymentTotal
+          ).toLocaleString()}
+          원 포함)`,
           },
-          {
-            title: t('payment request amount'),
-            content: `${t('price', {
-              price: (
-                Math.round((clearingPaymentTotal * 1.1) / 10) * 10
-              ).toLocaleString(),
-            })}
-          ${t('vat include', {
-            price: Math.round(
-              ((clearingPaymentTotal * 1.1) / 10) * 10 - clearingPaymentTotal,
-            ).toLocaleString(),
-          })}`,
-          },
-          {
-            title: t('totalVendorCount'),
-            content: t('count', { count: cart.resultList.length }),
-          },
+          { title: '총 거래처수', content: `${cart.resultList.length}개` },
         ]}
       />
 
@@ -227,12 +214,12 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                   <Row>
                     <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
-                        {t('full payment')}
+                        전액결제
                       </FullUseButton>
                     </Col>
                     <Col>
                       <SearchFilter
-                        placeholder={t('placeholder.vendor search')}
+                        placeholder="거래처 검색"
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />
@@ -251,7 +238,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: t('table.vendorName'),
+              title: '거래처명',
               render: (_, record) => {
                 const isMark =
                   record.reserve_subtract_amount +
@@ -294,14 +281,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              title: t('table.unpaidAmount'),
+              title: '결제요청 금액',
               render: (_, record) =>
                 record.clearing_amount?.toLocaleString() ?? 0,
             },
             {
               ellipsis: true,
               align: 'right',
-              title: t('table.amount to be paid'),
+              title: '결제할 금액',
               width: 250,
               onCell: () => ({
                 onClick: (e) => {
@@ -311,7 +298,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               render: (_, record) => (
                 <div css={{ width: '50%', display: 'inline-block' }}>
                   <TurtleTableNumberInput
-                    placeholder={t('placeholder.amount input')}
+                    placeholder="금액 입력"
                     value={
                       (record.clearing_payment_amount as number) > 0
                         ? (record.clearing_payment_amount as number)
