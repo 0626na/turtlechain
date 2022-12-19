@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
 import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
@@ -85,6 +85,9 @@ function UserTab() {
   );
 
   const changeCreditCardInfoMutation = useMutation(paypleAPI.authenticate, {
+    onSettled: () => {
+      console.log('취소눌러도 실행됨');
+    },
     onSuccess: (data) => {
       const requestData = {
         PCD_PAY_TYPE: data.data.PCD_PAY_TYPE,
