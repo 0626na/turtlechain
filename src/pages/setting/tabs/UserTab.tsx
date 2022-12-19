@@ -74,7 +74,7 @@ function UserTab() {
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
       refetchInterval: (data) => {
-        if (data?.data.is_expired && data.data.subscription_info.is_subscribed)
+        if (data?.data.is_expired || data?.data.subscription_info.is_subscribed)
           return false;
 
         return 2000;
