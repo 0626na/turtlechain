@@ -126,6 +126,7 @@ function UserTab() {
             message.success(t('card change is complete'), 3);
 
           navigate('/setting?tab=user');
+          getSubscriptionCheckQuery.refetch();
         },
       };
 
