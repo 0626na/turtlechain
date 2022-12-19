@@ -4,6 +4,7 @@ import { TurtleIcon } from '@components/element';
 import { ClearingInfo } from '@apis/clearingAPI';
 import { theme } from '@styles/theme';
 import useClearingCart from '@hooks/useClearingCart';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -49,15 +50,16 @@ function DetailModal({
                 <div
                   css={[modalTopContentCss.item, modalTopContentCss.firstItem]}
                 >
-                  <span>거래처명</span>
+                  <span>{t('table.vendorName')}</span>
                   <span>{selectedRow.vendor_info.vendor_name}</span>
                 </div>
                 <div
                   css={[modalTopContentCss.item, modalTopContentCss.secondItem]}
                 >
-                  <span>결제요청 금액</span>
+                  <span>{t('table.unpaidAmount')}</span>
                   <span>
-                    {selectedRow.clearing_amount?.toLocaleString() ?? 0}원
+                    {selectedRow.clearing_amount?.toLocaleString() ?? 0}
+                    {t('description.won')}
                   </span>
                 </div>
               </div>
@@ -66,31 +68,33 @@ function DetailModal({
             <div css={divider} />
 
             <div>
-              <div css={modalBottomContentCss.title}>상세내역</div>
+              <div css={modalBottomContentCss.title}>
+                {t('title.detail list')}
+              </div>
 
               <ul css={modalBottomContentCss.content}>
                 <li css={[modalBottomContentCss.item]}>
-                  <span>교환/반품</span>
+                  <span>{t('table.exchange refund')}</span>
                   <span>
                     {(selectedRow.overpaid_payment_amount ?? 0) > 0 && '- '}
                     {selectedRow.overpaid_payment_amount?.toLocaleString() ?? 0}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
-                  <span>미송입고</span>
+                  <span>{t('table.reserve warehousing')}</span>
                   <span>
                     {selectedRow.reserve_subtract_amount > 0 && '- '}
                     {selectedRow.reserve_subtract_amount.toLocaleString()}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
-                  <span>당일미송</span>
+                  <span>{t('table.today reserve')}</span>
                   <span>
                     {selectedRow.reserve_payment_amount.toLocaleString()}
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
-                  <span>당일입고</span>
+                  <span>{t('table.today warehousing')}</span>
                   <span>
                     {(
                       selectedRow.warehousing_amount +
@@ -99,7 +103,7 @@ function DetailModal({
                   </span>
                 </li>
                 <li css={modalBottomContentCss.item}>
-                  <span>미결제</span>
+                  <span>{t('table.unpaid')}</span>
                   <span>{selectedRow.unpaid_amount.toLocaleString()}</span>
                 </li>
               </ul>

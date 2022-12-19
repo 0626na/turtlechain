@@ -155,26 +155,29 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title="정말 요청을 보낼까요?"
+        title={t('really register')}
         description={[
-          '등록 후에는 이전으로 되돌릴 수 없어요.',
-          '결제 정보를 다시한번 확인해주세요.',
+          t('description.cannot reset after register'),
+          t('description.confirm payment info'),
         ]}
         items={[
-          { title: '결제요청 일자', content: cart.clearingRequestDate },
+          { title: t('table.payment date'), content: cart.clearingRequestDate },
           {
-            title: '결제요청 금액',
-            content: `${(
-              Math.round((clearingPaymentTotal * 1.1) / 10) * 10
-            ).toLocaleString()}
-            원(부가세
-          ${(
-            Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
-            clearingPaymentTotal
-          ).toLocaleString()}
-          원 포함)`,
+            title: t('table.unpaidAmount'),
+            content: t('description.price include vat', {
+              price: (
+                Math.round((clearingPaymentTotal * 1.1) / 10) * 10
+              ).toLocaleString(),
+              vat: (
+                Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+                clearingPaymentTotal
+              ).toLocaleString(),
+            }),
           },
-          { title: '총 거래처수', content: `${cart.resultList.length}개` },
+          {
+            title: t('table.totalVendorCount'),
+            content: t('count', { count: cart.resultList.length }),
+          },
         ]}
       />
 
@@ -215,7 +218,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                   <Row>
                     <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
-                        전액결제
+                        {t('button.full payment')}
                       </FullUseButton>
                     </Col>
                     <Col>
@@ -264,11 +267,11 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               title: (
                 <TextWithTooltip
                   tooltipContent={[
-                    '당일결제 시, 부가세도 그 날에 함께',
-                    '전달되어야 하는 거래처',
+                    t('description.payment today'),
+                    t('desription.check vendor'),
                   ]}
                 >
-                  부가세 바로전달
+                  {t('table.vatIncluded')}
                 </TextWithTooltip>
               ),
               render: (_, record) => (
@@ -346,23 +349,23 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             }}
           >
             <Typography.Text style={{ color: ' #6B6D73', fontSize: 13 }}>
-              총 당일 결제 합계
+              {t('table.total today payment')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700, fontSize: 20 }}>
               {clearingPaymentTotal > 0 && (
                 <Typography.Text style={{ fontWeight: 500, fontSize: 16 }}>
-                  (부가세{' '}
-                  {(
-                    Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
-                    clearingPaymentTotal
-                  ).toLocaleString()}
-                  원 포함){' '}
+                  {t('description.include vat', {
+                    vat: (
+                      Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+                      clearingPaymentTotal
+                    ).toLocaleString(),
+                  })}
                 </Typography.Text>
               )}
               {(
                 Math.round((clearingPaymentTotal * 1.1) / 10) * 10
               ).toLocaleString()}
-              원
+              {t('description.won')}
             </Typography.Text>
           </Col>
 
@@ -374,7 +377,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >
-              결제요청 보내기
+              {t('button.send payment')}
             </PrimaryButton>
           </Col>
         </Row>

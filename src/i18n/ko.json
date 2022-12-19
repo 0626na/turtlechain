@@ -55,6 +55,7 @@
     "createdDate": "등록 일자",
     "overpaidAmount": "사용가능 금액",
     "unpaidAmount": "결제요청 금액",
+    "payment date": "결제요청 일자",
     "unpaidPayment": "미결제 금액",
     "refundAmount": "환불예정 금액",
     "paymentStatus": "결제 상태",
@@ -64,13 +65,19 @@
     "totalVendorCount": "총 거래처 수",
     "subtract": "차감",
     "refund": "환불",
-    "unpaid": "결제",
+    "paid": "결제",
     "orderDate": "발주일자",
     "clientCount": "거래처 수",
     "totalCount": "수량 합계",
     "totalPrice": "금액 합계",
     "process time": "처리시간",
-    "process content": "처리내용"
+    "process content": "처리내용",
+    "exchange refund": "교환/반품",
+    "reserve warehousing": "미송입고",
+    "today reserve": "당일미송",
+    "today warehousing": "당일입고",
+    "unpaid": "미결제",
+    "total today payment": "총 당일 결제 합계"
   },
 
   "placeholder": {
@@ -143,7 +150,16 @@
     "yes": "네",
     "register": "등록",
     "change": "변경",
-    "delete": "삭제"
+    "delete": "삭제",
+    "send payment": "결제요청 보내기",
+    "full payment": "전액결제",
+    "full use": "전액사용",
+    "see ledger": "장부보기",
+    "use price": "사용금액",
+    "confirm all": "모두 확인했어요",
+    "download clearing": "결제내역 다운",
+    "no": "아니요",
+    "cancel request": "요청취소"
   },
 
   "message": {
@@ -204,7 +220,9 @@
     "update warehousing sheet": "입고서를 수정했습니다",
     "confirm warehousing sheet": "입고서를 마감했어요",
     "cancel confirm warehousing sheet": "입고서 마감을 취소했어요",
-    "delete warehousing sheet": "입고서를 삭제했습니다"
+    "delete warehousing sheet": "입고서를 삭제했습니다",
+    "success send test alimtalk": "테스트 알림톡이 발송되었습니다",
+    "cancel clearing": "결제요청을 취소했습니다"
   },
 
   "title": {
@@ -217,10 +235,20 @@
     "really update": "정말 변경할까요?",
     "update product": "상품정보 수정",
     "detail": "상세보기",
+    "detail list": "상세내역",
     "process list": "처리 내역",
     "process": "처리",
     "really close": "정말 닫을까요?",
-    "warehousing detail": "입고내역 상세보기"
+    "warehousing detail": "입고내역 상세보기",
+    "upload clearing sheet": "정산서 업로드",
+    "can pay before": "지난 일자의 결제요청도 진행할 수 있어요!",
+    "confirm adjustment": "교환/반품/미송 확인하기",
+    "preview payment price": "결제금액 미리보기",
+    "clearing list detail": "결제내역 상세보기",
+    "clearing status": "결제현황",
+    "really cancel": "정말 취소할까요?",
+    "ledger detail": "장부 상세보기",
+    "ledger list": "장부 리스트"
   },
 
   "description": {
@@ -230,7 +258,6 @@
     "really delete": "정말 삭제하시겠습니까?",
     "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
     "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
-    "really cancel": "정말 취소할까요?",
     "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다.",
     "nim": "님",
@@ -243,6 +270,7 @@
     "select specific info": "정확한 세부정보를 선택해주세요",
     "payment today": "당일결제 시, 부가세도 그 날에 함께 ",
     "check vendor": "전달되어야 하는 거래처를 체크해주세요. ",
+    "vendor to pay": "전달되어야 하는 거래처",
     "another vendor name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.",
     "cannot reset": "삭제 후에는 이전으로 되돌릴 수 없어요.",
     "register exclude fail": "보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.",
@@ -255,7 +283,23 @@
     "input process type and quantity": "처리 방식과 수량을 입력해주세요",
     "confirm adjustment": "교환/반품 가격,수량,종류를 확인해주세요",
     "update warehousing sheet": "해당 입고서를 수정합니다",
-    "exist update content": "수정내용이 있습니다. 지금 닫으면 저장되지 않아요."
+    "exist update content": "수정내용이 있습니다. 지금 닫으면 저장되지 않아요.",
+    "cannot reset after register": "등록 후에는 이전으로 되돌릴 수 없어요",
+    "confirm payment info": "결제 정보를 다시한번 확인해주세요.",
+    "price include vat": "{price}원(부가세 {vat}원 포함)",
+    "include vat": "부가세 {vat}원 포함",
+    "exclude payment": "이번 결제에서 제외해요",
+    "include payment": "이번 결제에서 포함해요",
+    "to use price cannot over warehousing price": "사용할 금액은 당일 입고 금액을 초과할 수 없습니다.",
+    "total subtract": "총 차감 합계",
+    "total reserved": "총 미송 합계",
+    "today": "오늘",
+    "confirm adjustment payment": "결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.",
+    "input payment price": "거래처별 금액을 확인하고 결제할 금액을 입력해주세요.",
+    "cannot return clearing": "취소 휘에는 다시 결제요청을 보내야해요.",
+    "download selected clearing": "선택한 기간의 결제내역을 다운로드합니다.",
+    "one minute to download": "정보의 양에 따라 최대 1분 정도 걸릴 수 있어요.",
+    "look around ledger": "거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요."
   },
 
   "type": {},
@@ -469,7 +513,7 @@
   "total stocked amount": "입고금액 합계",
   "register width warehousing": "입고서 등록하기",
   "please select which dates you wish to integrate": "선택한 기간의 재고 정보를 불러옵니다.",
-  "it may take up to 1 minute, depending on how much you wish to integrate": "정보의 양에따라 최대 1분 정도 걸릴 수 있어요.",
+  "it may take up to 1 minute, depending on how much you wish to integrate": "정보의 양에 따라 최대 1분 정도 걸릴 수 있어요.",
   "you have some pending deliveries!": "당일 입고에 미송상품이 있네요!",
   "please double check so that you dont miss out": "누락되지 않도록 다시 한번 확인해주세요",
   "total vendor": "총 거래처",

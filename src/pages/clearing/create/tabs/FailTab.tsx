@@ -2,10 +2,12 @@ import { TextWithTooltip } from '@components/combine';
 import { TurtleTableTitle, TurtleTag } from '@components/element';
 import useExelClearingCart from '@hooks/useExelClearingCart';
 import { Table } from 'antd';
+import { t } from 'i18next';
 
 function FailTab() {
   const { cart } = useExelClearingCart();
   const totalCount = cart.failList.length;
+
   return (
     <Table
       scroll={{ y: 450, scrollToFirstRowOnChange: true }}
@@ -61,11 +63,11 @@ function FailTab() {
           title: (
             <TextWithTooltip
               tooltipContent={[
-                '당일결제 시, 부가세도 그 날에 함께',
-                '전달되어야 하는 거래처',
+                t('description.payment today'),
+                t('description.check vendor'),
               ]}
             >
-              부가세 바로전달
+              {t('table.vatIncluded')}
             </TextWithTooltip>
           ),
           render: (_, record) => (

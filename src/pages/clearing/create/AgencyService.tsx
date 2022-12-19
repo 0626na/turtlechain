@@ -11,6 +11,7 @@ import { theme } from '@styles/theme';
 import { message } from '@utils/message';
 import { Button, Col, DatePicker, Row, Tooltip, Upload } from 'antd';
 import { AxiosError } from 'axios';
+import { t } from 'i18next';
 
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -54,7 +55,7 @@ function AgencyService() {
       <ExelModal visible={modalVisible} onClose={closeModal} />
 
       <div css={inner}>
-        <span css={clearingDate}>결제요청 일자</span>
+        <span css={clearingDate}>{t('table.payment date')}</span>
         <Row justify="space-between">
           <Row>
             <Col>
@@ -64,7 +65,7 @@ function AgencyService() {
                   selectDate(moment().format('YYYY-MM-DD'));
                 }}
               >
-                오늘
+                {t('description.today')}
               </Button>
             </Col>
 
@@ -72,7 +73,7 @@ function AgencyService() {
               <Tooltip
                 visible={tooltipVisible}
                 placement="bottom"
-                title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+                title={<span>{t('title.can pay before')}</span>}
               >
                 <DatePicker
                   defaultValue={
@@ -105,7 +106,7 @@ function AgencyService() {
               fileList={[]}
             >
               <SecondaryIconButton loading={excelMutation.isLoading}>
-                정산서 업로드
+                {t('title.upload clearing sheet')}
               </SecondaryIconButton>
             </Upload>
           </Col>

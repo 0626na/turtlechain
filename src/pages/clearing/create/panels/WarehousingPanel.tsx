@@ -102,7 +102,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <div css={panelContentCSS.self}>
           <div css={panelContentCSS.titleContainer}>
             <TurtleIcon name="excludeWon" />
-            <span css={panelContentCSS.titleText}>이번 결제에서 제외해요</span>
+            <span css={panelContentCSS.titleText}>
+              {t('description.exclude payment')}
+            </span>
           </div>
 
           <Table
@@ -132,7 +134,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       fillAllAdjustmentSubtract();
                     }}
                   >
-                    전액사용
+                    {t('button.full use')}
                   </FullUseButton>
                 }
               />
@@ -173,7 +175,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                           cursor: 'pointer',
                         }}
                       >
-                        장부보기
+                        {t('button.see ledger')}
                       </span>
                     </div>
                   );
@@ -198,10 +200,12 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                   <TextWithTooltip
                     iconPlacement="left"
                     tooltipContent={[
-                      '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
+                      t(
+                        'description.to use price cannot over warehousing price',
+                      ),
                     ]}
                   >
-                    사용금액
+                    {t('button.use price')}
                   </TextWithTooltip>
                 ),
                 render: (_, record) => (
@@ -235,7 +239,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
 
         <div css={panelContentCSS.titleContainer}>
           <TurtleIcon name="includeWon" />
-          <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
+          <span css={panelContentCSS.titleText}>
+            {t('description.include payment')}
+          </span>
         </div>
         <Table
           css={{
@@ -280,24 +286,26 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <Row justify="end" align="middle" style={{ marginTop: 40 }}>
           <Col>
             <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-              총 차감 합계
+              {t('description.total subtract')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700 }}>
-              {subtractAmountTotal.toLocaleString()}원
+              {subtractAmountTotal.toLocaleString()}
+              {t('description.won')}
             </Typography.Text>
           </Col>
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-              총 미송 합계
+              {t('description.total reserved')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700 }}>
-              {reservePaymentAmountTotal.toLocaleString()}원
+              {reservePaymentAmountTotal.toLocaleString()}
+              {t('description.won')}
             </Typography.Text>
           </Col>
           <Col>
             <PrimaryButton
-              children={'모두 확인했어요'}
+              children={t('button.confirm all')}
               onClick={() => {
                 clickNext();
               }}
