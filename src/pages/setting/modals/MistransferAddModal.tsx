@@ -73,7 +73,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
   // 0원 유효성검사
   const refundAmountValidator = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('금액을 확인해 주세요.'));
+      return Promise.reject(new Error(t('message.confirm price')));
     }
 
     return Promise.resolve();
@@ -274,7 +274,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
                   htmlType="submit"
                   loading={createMutation.isLoading}
                 >
-                  오입금 환불 요청하기
+                  {t('button.request mistransfer')}
                 </PrimaryButton>
               </Row>
             )}

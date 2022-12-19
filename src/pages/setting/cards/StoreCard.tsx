@@ -1,11 +1,6 @@
 import { StoreShow } from '@apis/retailerStoreAPI';
 import { TextWithTooltip } from '@components/combine';
-import {
-  TurtleDivider,
-  TurtleIcon,
-  TurtleTag,
-  TurtleTooltip,
-} from '@components/element';
+import { TurtleDivider, TurtleIcon, TurtleTag } from '@components/element';
 import { css } from '@emotion/react';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row } from 'antd';
@@ -55,7 +50,7 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="phone" />
-          <span css={leftContentCss.title}>휴대전화 번호</span>
+          <span css={leftContentCss.title}>{t('table.mobile')}</span>
         </Col>
         <Col css={rightContentCss.self}>
           <span>
@@ -68,12 +63,10 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="account" />
-          <TextWithTooltip
-            tooltipContent={[
-              '터틀체인으로 입금 및 환불 반환에 사용되는 계좌입니다.',
-            ]}
-          >
-            <span css={leftContentCss.title}>결제 계좌정보</span>
+          <TextWithTooltip tooltipContent={[t('description.account info')]}>
+            <span css={leftContentCss.title}>
+              {t('table.paymentAccountInfo')}
+            </span>
           </TextWithTooltip>
         </Col>
         <Col css={rightContentCss.self}>
@@ -87,9 +80,9 @@ function StoreCard({ store }: Props) {
         <Col css={leftContentCss.self}>
           <TurtleIcon name="pencil" />
           <TextWithTooltip
-            tooltipContent={['이체시, 거래처 통장에 표시되는 내용입니다.']}
+            tooltipContent={[t('description.recipient print info')]}
           >
-            <span css={leftContentCss.title}>받는분 통장인쇄</span>
+            <span css={leftContentCss.title}>{t('table.recipientPrint')}</span>
           </TextWithTooltip>
         </Col>
         <Col>
@@ -104,7 +97,7 @@ function StoreCard({ store }: Props) {
       <Row css={marginBottom}>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="clip" />
-          <span css={leftContentCss.title}>재고관리 프로그램</span>
+          <span css={leftContentCss.title}>{t('table.inventory')}</span>
         </Col>
         <Col>
           <TurtleTag color={colors[store.inventory_type].color}>
@@ -116,7 +109,7 @@ function StoreCard({ store }: Props) {
       <Row>
         <Col css={leftContentCss.self}>
           <TurtleIcon name="at" />
-          <span css={leftContentCss.title}>이체내역 수신메일</span>
+          <span css={leftContentCss.title}>{t('table.transactionEmail')}</span>
         </Col>
         <Col>
           <span css={rightContentCss.self}>{store.email}</span>

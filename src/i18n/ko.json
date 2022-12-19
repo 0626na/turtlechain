@@ -159,7 +159,10 @@
     "confirm all": "모두 확인했어요",
     "download clearing": "결제내역 다운",
     "no": "아니요",
-    "cancel request": "요청취소"
+    "cancel request": "요청취소",
+    "add past price": "과거금액 추가",
+    "request mistransfer": "오입금 환불 요청하기",
+    "add": "추가하기"
   },
 
   "message": {
@@ -222,7 +225,9 @@
     "cancel confirm warehousing sheet": "입고서 마감을 취소했어요",
     "delete warehousing sheet": "입고서를 삭제했습니다",
     "success send test alimtalk": "테스트 알림톡이 발송되었습니다",
-    "cancel clearing": "결제요청을 취소했습니다"
+    "cancel clearing": "결제요청을 취소했습니다",
+    "confirm price": "금액을 확인해 주세요.",
+    "success cancel subscription": "구독해지가 완료되었습니다."
   },
 
   "title": {
@@ -299,7 +304,9 @@
     "cannot return clearing": "취소 휘에는 다시 결제요청을 보내야해요.",
     "download selected clearing": "선택한 기간의 결제내역을 다운로드합니다.",
     "one minute to download": "정보의 양에 따라 최대 1분 정도 걸릴 수 있어요.",
-    "look around ledger": "거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요."
+    "look around ledger": "거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요.",
+    "account info": "터틀체인으로 입금 및 환불 반환에 사용되는 계좌입니다.",
+    "recipient print info": "이체시, 거래처 통장에 표시되는 내용입니다."
   },
 
   "type": {},

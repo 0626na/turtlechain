@@ -165,9 +165,9 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
               render: (_, record) => (
                 <span>
                   <span>
-                    {`(부가세 ${(
-                      record.clearing_amount * 0.1
-                    ).toLocaleString()}원 포함)`}{' '}
+                    {`(${t('description.include vat', {
+                      vat: (record.clearing_amount * 0.1).toLocaleString(),
+                    })})`}
                   </span>
                   <span>{record.clearing_amount.toLocaleString()}</span>
                 </span>

@@ -39,11 +39,13 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('계좌번호를 입력해주세요'));
+      return Promise.reject(
+        new Error(t('message.please input account number')),
+      );
     }
 
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('message.please input number only')));
     }
 
     return Promise.resolve();
@@ -51,7 +53,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleNumberValidation = (_: unknown, value: string) => {
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error('숫자만 입력해주세요'));
+      return Promise.reject(new Error(t('message.please input number only')));
     }
 
     return Promise.resolve();
@@ -257,7 +259,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
                   !getFieldValue('inventory_type')
                 }
               >
-                추가하기
+                {t('button.add')}
               </SpecialButton>
             </Row>
           )}
