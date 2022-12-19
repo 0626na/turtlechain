@@ -70,7 +70,7 @@ function UserTab() {
   });
 
   const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckQuery',
+    'getSubscriptionCheckInUserTabQuery',
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
       onSuccess: (data) => {
@@ -113,9 +113,7 @@ function UserTab() {
             pay_number: res.PCD_PAY_CARDNUM,
           });
 
-          setTimeout(() => {
-            getSubscriptionCheckQuery.refetch();
-          }, 2000);
+          getSubscriptionCheckQuery.refetch();
 
           //구독신청 및 재구독시
           if (res.PCD_PAY_WORK === 'PAY')
