@@ -23,7 +23,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
       setTimeout(() => {
-        queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+        queryClient.refetchQueries(['getSubscriptionCheckInUserTabQuery'], {
           active: true,
         });
       }, 2000);
