@@ -163,7 +163,9 @@ function SuccessTab({ isLoading }: Props) {
             title: (
               <TextWithTooltip
                 tooltipContent={[
-                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
+                  t(
+                    'description.write freely of what you wish to use as vendors name',
+                  ),
                 ]}
               >
                 {t('table.useVendorName')}

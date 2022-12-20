@@ -46,7 +46,7 @@
     "type": "Category",
     "receipt": "Receipt",
     "proccessed totalCount": "Process/Total",
-    "product vendorName": "거래처명",
+    "product vendorName": "Vendor Name",
     "warehouseName": "Warehouse Name",
     "warehousingCount": "Stocked Qty",
     "requestCount": "요청 수량",
@@ -138,7 +138,7 @@
     "input business number": "사업자 번호를 입력해주세요",
     "input owner name": "대표자명을 입력해주세요",
     "input memo": "메모를 입력해주세요",
-    "ex, double check its invoices!": "ex. 영수증 이중으로 확인 또 확인!",
+    "ex, double check its invoices!": "Ex, double check its invoices!",
     "ex. id": "ex. 김거북",
     "ex. email": "ex. gbkim@gmail.com",
     "ex. mobile": "ex. 010-1234-5678",
@@ -285,7 +285,10 @@
     "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
     "really cancel": "정말 취소할까요?",
     "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
-    "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다."
+    "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다.",
+    "check if VAT needs to be included with an invoice1": "Check if VAT needs to be",
+    "check if VAT needs to be included with an invoice2": "included with an invoice",
+    "write freely of what you wish to use as vendors name": "Write freely of what you wish to use as vendors name"
   },
 
   "type": {

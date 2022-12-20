@@ -230,7 +230,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             </div>
           </Form.Item>
           {/*기타주소 */}
-          <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
+          <Form.Item name="ext" label={t('table.otherAddress')}>
             <TurtleFormInput
               placeholder={t('placeholder.input other address')}
             />
