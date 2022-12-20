@@ -73,7 +73,7 @@ function UserTab() {
     'getSubscriptionCheckInUserTabQuery',
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
-      staleTime: 3000,
+      refetchInterval: 4000,
       onSuccess: (data) => {
         setIsNewSubscription(data.data.is_new);
         setCurrentSubscriptionStatus(data.data.is_expired);
