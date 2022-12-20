@@ -46,10 +46,10 @@ function PendingTab({ isLoading }: Props) {
           memoUpdate(value, selectedRow as PendingItem, 'pendingList');
           closeMemoModal();
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요 👀',
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
         placeholder={t('placeholder.ex, double check its invoices!')}
       />
@@ -164,7 +164,7 @@ function PendingTab({ isLoading }: Props) {
                       alignItems: 'center',
                     }}
                   >
-                    <Tooltip title="정확한 세부정보를 선택해주세요">
+                    <Tooltip title={t('description.select specific info')}>
                       <div
                         css={{
                           marginRight: 4,
@@ -311,7 +311,7 @@ function PendingTab({ isLoading }: Props) {
                         alignItems: 'center',
                       }}
                     >
-                      <Tooltip title="정확한 세부정보를 선택해주세요">
+                      <Tooltip title={t('description.select specific info')}>
                         <div
                           css={{
                             marginRight: 4,
@@ -357,12 +357,8 @@ function PendingTab({ isLoading }: Props) {
             title: (
               <TextWithTooltip
                 tooltipContent={[
-                  t(
-                    'description.check if VAT needs to be included with an invoice1',
-                  ),
-                  t(
-                    'description.check if VAT needs to be included with an invoice2',
-                  ),
+                  t('description.payment today'),
+                  t('description.check vendor'),
                 ]}
               >
                 {t('table.vatIncluded')}
@@ -386,9 +382,7 @@ function PendingTab({ isLoading }: Props) {
             width: 150,
             title: (
               <TextWithTooltip
-                tooltipContent={[
-                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
-                ]}
+                tooltipContent={[t('description.another vendor name')]}
               >
                 {t('table.useVendorName')}
               </TextWithTooltip>

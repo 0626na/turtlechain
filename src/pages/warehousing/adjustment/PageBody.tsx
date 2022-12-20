@@ -72,7 +72,7 @@ function PageBody() {
   //메모 등록 요청
   const updateMemoMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
-      message.success('성공적으로 업데이트 되었습니다.');
+      message.success(t('message.success update'));
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
       memoModalClose();
@@ -82,7 +82,7 @@ function PageBody() {
   // 교환/반품/미송 삭제 요청
   const removeAdjustmentMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
-      message.success('성공적으로 삭제되었습니다.');
+      message.success(t('message.success delete'));
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
       removeModalClose();
@@ -174,10 +174,10 @@ function PageBody() {
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
         placeholder={t('placeholder.ex, double check its invoices!')}
       />
@@ -189,7 +189,7 @@ function PageBody() {
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
-        okText="삭제"
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={removeAdjustmentMutation.isLoading}
         onCancel={removeModalClose}

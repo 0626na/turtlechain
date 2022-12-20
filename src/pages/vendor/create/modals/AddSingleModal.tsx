@@ -98,7 +98,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
     }
 
     if (!form.getFieldValue('ws_store_info')?.name) {
-      message.warn('거래처를 선택해 주세요');
+      message.warn(t('message.select vendor'));
       return;
     }
 
@@ -293,7 +293,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
               }
               onClick={clickCreateVendorCode}
             >
-              코드만들기
+              {t('button.make code')}
             </AddButton>
           </div>
           <TurtleDivider marginBottom={37} marginTop={32} />

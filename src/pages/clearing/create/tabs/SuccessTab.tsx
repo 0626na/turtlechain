@@ -63,8 +63,8 @@ function SuccessTab() {
           title: (
             <TextWithTooltip
               tooltipContent={[
-                '당일결제 시, 부가세도 그 날에 함께',
-                '전달되어야 하는 거래처',
+                t('description.payment today'),
+                t('description.vendor to pay'),
               ]}
             >
               {t('table.vatIncluded')}

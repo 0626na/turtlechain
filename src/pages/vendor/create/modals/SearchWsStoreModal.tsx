@@ -46,12 +46,12 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
 
   const onClickSelect = (record: Wholesale) => {
     if (record.store_phone.length !== 1) {
-      message.warn('휴대번호를 선택해주세요');
+      message.warn(t('message.select mobile'));
       return;
     }
 
     if (record.store_account.length !== 1) {
-      message.warn('계좌번호를 선택해주세요');
+      message.warn(t('message.select account'));
       return;
     }
 
@@ -256,7 +256,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                     onClickSelect(record);
                   }}
                 >
-                  선택
+                  {t('button.select')}
                 </SelectButton>
               ),
             },

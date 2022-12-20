@@ -106,7 +106,7 @@ function CompanyTab() {
           form.setFieldsValue({ ...form.getFieldsValue, address_main });
         }}
       />
-      <Card title={t('biz info')} icon={<TurtleIcon name="company" />}>
+      <Card title={t('table.biz info')} icon={<TurtleIcon name="company" />}>
         <Form
           form={form}
           onValuesChange={() => {
@@ -138,7 +138,7 @@ function CompanyTab() {
             <Radio.Group>
               {['entity', 'personal', 'simple'].map((option) => (
                 <Radio key={option} value={option}>
-                  {t(`biz ${option}`)}
+                  {t(`type.biz.${option}`)}
                 </Radio>
               ))}
             </Radio.Group>
@@ -179,7 +179,7 @@ function CompanyTab() {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>{t('attachPicture')}</AddButton>
+              <AddButton>{t('button.attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 
@@ -215,7 +215,7 @@ function CompanyTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text={t('button.save')}
+                  text={t('button.saving')}
                   htmlType="submit"
                   loading={updateMutation.isLoading}
                 />

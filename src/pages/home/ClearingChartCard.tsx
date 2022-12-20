@@ -60,7 +60,7 @@ const chartOption = {
   },
 };
 
-const labels = [1, 2, 3, 4, 5].map((day) => t(`day.${day}`));
+const labels = [1, 2, 3, 4, 5].map((day) => t(`type.day.${day}`));
 const thisWeek = [
   moment().startOf('week').add(1, 'day'),
   moment().startOf('week').add(2, 'day'),
@@ -175,7 +175,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
             color: theme.grey800,
           }}
         >
-          원
+          {t('description.won')}
         </span>
       </h1>
 

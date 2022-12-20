@@ -92,7 +92,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
   const testAlimtalkMutation = useMutation(paypleAPI.updateTestalimTalk, {
     onSuccess: () => {
-      message.success('테스트 알림톡이 발송되었습니다.');
+      message.success(t('message.success send test alimtalk'));
       closeModal();
     },
   });

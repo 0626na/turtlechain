@@ -54,7 +54,10 @@ function PageBody() {
     onSuccess: (data) => {
       resetCart();
       message.success(
-        `성공적으로 등록했습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+        t('message.success register product', {
+          success: data.data.success,
+          duplicated: data.data.fail,
+        }),
       );
       navigate('/product/history');
     },
@@ -102,9 +105,9 @@ function PageBody() {
        *  confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 등록할까요?"
-        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
-        okText="등록"
+        title={t('title.really register')}
+        description={[t('description.except fail product')]}
+        okText={t('button.register')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}

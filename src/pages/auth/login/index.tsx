@@ -4,7 +4,6 @@ import { LoginPageBody } from '@layout/auth';
 import { Helmet } from 'react-helmet';
 import LoginForm from './LoginForm';
 import useModal from '@hooks/useModal';
-import OrderInfoModal from './OrderInfoModal';
 
 function LoginPage() {
   const title = `${t('turtleChain')} - ${t('auth.login')}`;
@@ -13,7 +12,6 @@ function LoginPage() {
   return (
     <>
       <Helmet title={title} />
-      <OrderInfoModal visible={visible} onClose={close} />
       <LoginPageBody>
         <LoginForm />
       </LoginPageBody>

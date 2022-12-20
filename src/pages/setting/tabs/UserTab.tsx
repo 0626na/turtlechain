@@ -218,7 +218,7 @@ function UserTab() {
       />
 
       <UserCard
-        title={t('basic information')}
+        title={t('title.basic information')}
         icon={<TurtleIcon name="user" />}
       >
         <Form
@@ -244,7 +244,7 @@ function UserTab() {
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
-            label={t('email')}
+            label={t('table.email')}
             name="email"
             rules={[{ validator: emailValidator }]}
           >
@@ -283,7 +283,7 @@ function UserTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text={t('button.save')}
+                  text={t('button.saving')}
                   htmlType="submit"
                 />
               </Col>
@@ -296,7 +296,7 @@ function UserTab() {
         {!subscriptionData.is_subscribed ? (
           //구독 안한 상태
           <UserCard
-            title={t('subscription and payment')}
+            title={t('title.subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -403,7 +403,7 @@ function UserTab() {
         ) : (
           //구독한 상태
           <UserCard
-            title={t('subscription and payment')}
+            title={t('title.subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form

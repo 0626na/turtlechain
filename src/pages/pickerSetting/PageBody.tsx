@@ -131,7 +131,9 @@ function PageBody() {
                   changeMode();
                 }}
               >
-                {mode === 'cardView' ? t('listView') : t('cardView')}
+                {mode === 'cardView'
+                  ? t('type.view.listView')
+                  : t('type.view.cardView')}
               </AddButton>
             </Col>
           </Row>

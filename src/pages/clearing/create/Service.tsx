@@ -6,6 +6,7 @@ import useStore from '@hooks/useStore';
 import { PageContent } from '@layout/page';
 import { theme } from '@styles/theme';
 import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
+import { t } from 'i18next';
 import { InfoCircleOutlined as InfoIcon } from '@ant-design/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -37,7 +38,7 @@ function Service() {
   return (
     <>
       <div css={inner}>
-        <span css={clearingDate}>결제요청 일자</span>
+        <span css={clearingDate}>{t('table.payment date')}</span>
         <Row>
           <Col>
             <Button
@@ -46,7 +47,7 @@ function Service() {
                 selectDate(moment().format('YYYY-MM-DD'));
               }}
             >
-              오늘
+              {t('description.today')}
             </Button>
           </Col>
 
@@ -56,7 +57,7 @@ function Service() {
               placement="topLeft"
               align={{ offset: [30, 2] }}
               zIndex={1}
-              title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+              title={<span>{t('title.can pay before')}</span>}
             >
               <DatePicker
                 defaultValue={
@@ -113,9 +114,11 @@ function Service() {
                   }}
                 />
                 <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>교환/반품/미송 확인하기</div>
+                  <div css={headerCss.title}>
+                    {t('title.confirm adjustment')}
+                  </div>
                   <div css={headerCss.subTitle}>
-                    결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
+                    {t('description.confirm adjustment payment')}
                   </div>
                 </div>
               </div>
@@ -136,10 +139,12 @@ function Service() {
                   }}
                 />
                 <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>결제금액 미리보기</div>
+                  <div css={headerCss.title}>
+                    {t('title.preview payment price')}
+                  </div>
 
                   <div css={headerCss.subTitle}>
-                    거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
+                    {t('description.input payment price')}
                   </div>
                 </div>
               </div>

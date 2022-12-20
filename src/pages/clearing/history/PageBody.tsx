@@ -55,7 +55,7 @@ function PageBody() {
     onSuccess: () => {
       getClearingSheetQuery.refetch();
       closeRemoveModal();
-      message.success('결제요청을 취소했습니다.');
+      message.success(t('message.cancel clearing'));
     },
   });
 
@@ -92,10 +92,10 @@ function PageBody() {
         selectedRow={selectedRow}
       />
       <PageTitle
-        title="결제현황"
+        title={t('title.clearing status')}
         buttons={[
           <TertiaryButton
-            text="결제내역 다운"
+            text={t('button.download clearing')}
             icon={<TurtleIcon name="download" />}
             onClick={() => {
               openDownloadModal();
@@ -106,8 +106,8 @@ function PageBody() {
       {/**요청 취소 모달 */}
       <TurtleConfirmModal
         visible={removeModalVisible}
-        title="정말 취소할까요?"
-        description={['취소 후에는 다시 결제요청을 보내야해요.']}
+        title={t('title.really cancel')}
+        description={[t('description.cannot return clearing')]}
         onCancel={closeRemoveModal}
         onOk={() => {
           removeSheetMutation.mutate({
@@ -115,8 +115,8 @@ function PageBody() {
             is_inactive: 1,
           });
         }}
-        cancelText="아니요"
-        okText="요청취소"
+        cancelText={t('button.no')}
+        okText={t('button.cancel request')}
         loading={loading}
       />
       {/** 결제내역 다운로드 모달 */}
@@ -130,10 +130,10 @@ function PageBody() {
             end_date,
           });
         }}
-        title="결제내역 다운"
+        title={t('button.download clearing')}
         description={[
-          '선택한 기간의 결제내역을 다운로드합니다.',
-          '정보의 양에 따라 최대 1분 정도 걸릴 수 있어요.',
+          t('description.download selected clearing'),
+          t('description.one minute to download'),
         ]}
         loading={loading}
       />
@@ -295,7 +295,7 @@ function PageBody() {
                         openRemoveModal();
                       }}
                     >
-                      요청취소
+                      {t('button.cancel request')}
                     </SelectButton>
                   )}
                 </>

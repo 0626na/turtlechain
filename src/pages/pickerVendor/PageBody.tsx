@@ -39,11 +39,11 @@ const options = [
     value: 'mobile',
   },
   {
-    name: t('accountNumber'),
+    name: t('table.accountNumber'),
     value: 'account_number',
   },
   {
-    name: t('accountHolder'),
+    name: t('table.accountHolder'),
     value: 'account_holder',
   },
 ];
