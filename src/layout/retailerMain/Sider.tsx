@@ -118,7 +118,7 @@ const menus = [
     children: [
       {
         key: 'home',
-        label: t('home'),
+        label: t('title.home'),
         icon: (
           <span css={iconContainer}>
             <GridIcon />
@@ -240,7 +240,7 @@ const menus = [
     children: [
       {
         key: pathnames.etc.setting,
-        label: t('etc.setting'),
+        label: t('title.setting'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="setting" />
@@ -256,7 +256,7 @@ const menus = [
             target="_blank"
             href="https://turtlechain-guide.oopy.io/"
           >
-            {t('etc.tutorial')}
+            {t('title.tutorial')}
           </a>
         ),
         icon: (

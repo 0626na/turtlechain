@@ -126,9 +126,9 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title={t('preview of New Products')}
+        title={t('title.preview of new products')}
         subTitle={t(
-          'your vendor list must be updated before adding new products',
+          'description.your vendor list must be updated before adding new products',
         )}
         buttons={[
           <TertiaryButton

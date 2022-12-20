@@ -1,4 +1,6 @@
 {
+  "turtleChain": "터틀체인",
+
   "table": {
     "operatorStatus": "운영상태",
     "open": "운영",
@@ -280,7 +282,8 @@
     "inventory program integration": "재고프로그램 연동",
     "confirming": "마감하기",
     "do cancel": "취소하기",
-    "register warehousing sheet": "입고서 등록하기"
+    "register warehousing sheet": "입고서 등록하기",
+    "add pending delivery": "미송추가"
   },
 
   "message": {
@@ -356,6 +359,7 @@
   },
 
   "title": {
+    "home": "HOME",
     "notice": "공지사항",
     "store owner": "쇼핑몰 대표",
     "input user info": "계정 정보 입력",
@@ -412,7 +416,11 @@
     "vendor,product": "거래처/상품",
     "really confirm": "정말 마감할까요?",
     "add adjustment": "교환/반품/미송 추가",
-    "add exchange/returns": "교환/반품 추가"
+    "add exchange/returns": "교환/반품 추가",
+    "membershipInfo": "멤버십 정보",
+    "preview of new products": "상품등록 미리보기",
+    "setting": "설정",
+    "tutorial": "사용가이드"
   },
 
   "description": {
@@ -519,7 +527,8 @@
     "products remaining in the failure are excluded from registration": "실패에 남아있는 상품은 등록에서 제외됩니다.",
     "this will cancel the confirmation": "해당 입고서의 마감을 취소합니다.",
     "this will confirm stocked products for the invoice": "해당 입고서를 마감합니다.",
-    "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!"
+    "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
+    "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
   },
 
   "type": {
@@ -590,10 +599,6 @@
     }
   },
 
-  "turtleChain": "터틀체인",
-  "retailer": "쇼핑몰",
-  "home": "HOME",
-  "membershipInfo": "멤버십 정보",
   "vendor": {
     "create": "거래처등록",
     "history": "거래처목록",
@@ -602,6 +607,7 @@
     "updateInfo": "거래처 정보수정 요청",
     "search": "거래처검색"
   },
+
   "product": {
     "create": "상품등록",
     "history": "상품목록",
@@ -617,6 +623,7 @@
       "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요."
     }
   },
+
   "order": {
     "": "발주",
     "preview": "발주서 미리보기",
@@ -650,6 +657,7 @@
     "search from stock list": "입고상품 불러오기",
     "preview of exchange and returns": "교환/반품 미리보기"
   },
+
   "adjustment": {
     "process type": {
       "": "처리방식",
@@ -661,6 +669,7 @@
       "takeback": "반품"
     }
   },
+
   "clearing": {
     "": "결제",
     "create": "결제하기",
@@ -678,6 +687,7 @@
     "complete date": "결제완료 일자",
     "price": "결제 금액"
   },
+
   "transaction": {
     "": "과거매입",
     "warehousing": "입고",
@@ -702,6 +712,7 @@
     "remove_past_subtract": "과거 차감 삭제",
     "remove_past_unpaid": "과거 미결제 삭제"
   },
+
   "inventory": {
     "sellmate": "셀메이트",
     "ezadmin": "이지어드민",
@@ -710,10 +721,7 @@
     "not used": "사용안함",
     "etc": "기타"
   },
-  "etc": {
-    "setting": "설정",
-    "tutorial": "사용가이드"
-  },
+
   "auth": {
     "findId": "아이디 찾기",
     "login": "로그인",
@@ -731,6 +739,7 @@
     "retry": "재발송",
     "success": "인증 완료"
   },
+
   "store": {
     "": "쇼핑몰",
     "lists": "쇼핑몰 리스트",
@@ -744,8 +753,5 @@
     "address": "쇼핑몰 주소",
     "management": "쇼핑몰 관리",
     "selectButton": "{{store}} 외 {{storeCount}}개"
-  },
-  "add pending delivery": "미송추가",
-  "preview of New Products": "상품등록 미리보기",
-  "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
+  }
 }

@@ -218,7 +218,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: t('add pending delivery'),
+                label: t('button.add pending delivery'),
                 icon: <TurtleIcon name="reserve" />,
                 onClick() {
                   addReserveModalOpen();
