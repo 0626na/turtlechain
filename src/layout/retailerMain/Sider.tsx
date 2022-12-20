@@ -135,7 +135,7 @@ const menus = [
       },
       {
         key: 'vendor&product',
-        label: t('vendor,product'),
+        label: t('title.vendor,product'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="vendorProduct" />

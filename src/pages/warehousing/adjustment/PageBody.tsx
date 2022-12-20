@@ -210,7 +210,7 @@ function PageBody() {
             items={[
               {
                 key: '0',
-                label: t('add exchange/returns'),
+                label: t('button.add exchange/returns'),
                 icon: <TurtleIcon name="exchangeRefund" />,
                 onClick() {
                   addExchangeRefundModalOpen();
@@ -227,7 +227,7 @@ function PageBody() {
             ]}
             triggerButton={
               <SecondaryIconButton>
-                {t('add invoice issues')}
+                {t('button.add adjustment')}
               </SecondaryIconButton>
             }
           />,
@@ -396,7 +396,7 @@ function PageBody() {
                   title={
                     <span>
                       {t(
-                        'Detailed history of credits can be found in the ledger',
+                        'description.detailed history of credits can be found in the ledger',
                       )}
                     </span>
                   }

@@ -72,7 +72,9 @@ function SuccessTab({ loading, ...props }: Props) {
        */}
       <TurtleConfirmModal
         title={t('title.do you really want me to delete it?')}
-        description={[t('you cant go back to the past after deleting it')]}
+        description={[
+          t('description.you cant go back to the past after deleting it'),
+        ]}
         okText={t('delete')}
         visible={removeModalVisible}
         onCancel={closeRemoveModal}

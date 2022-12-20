@@ -76,11 +76,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.inventory program integration')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={loading}

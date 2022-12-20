@@ -115,8 +115,10 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={confirmModalVisible}
-        title={t('confirm this stock list?')}
-        description={[t('this will confirm stocked products for the invoice')]}
+        title={t('title.really confirm')}
+        description={[
+          t('description.this will confirm stocked products for the invoice'),
+        ]}
         onCancel={closeConfirmModal}
         onOk={() => {
           confirmSheetMutation.mutate({
@@ -133,8 +135,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={cancelModalVisible}
-        title={t('cancel stock confirmation?')}
-        description={[t('this will cancel the confirmation')]}
+        title={t('title.really cancel')}
+        description={[t('description.this will cancel the confirmation')]}
         onCancel={closeCancelModal}
         onOk={() => {
           cancelSheetMutation.mutate({
@@ -143,7 +145,7 @@ function PageBody() {
           });
         }}
         cancelText={t('button.cancel')}
-        okText={t('confirm cancel')}
+        okText={t('button.do cancel')}
         loading={cancelSheetMutation.isLoading}
       />
       {/**
@@ -271,7 +273,7 @@ function PageBody() {
                           openCancelModal();
                         }}
                       >
-                        {t('confirm cancel')}
+                        {t('button.do cancel')}
                       </SelectButton>
                     )
                   ) : (
@@ -285,7 +287,7 @@ function PageBody() {
                         openConfirmModal();
                       }}
                     >
-                      {t('confirmed')}
+                      {t('button.confirming')}
                     </ProcessButton>
                   )}
                 </>

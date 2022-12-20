@@ -133,7 +133,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          {t('accumulated payments')}
+          {t('title.accumulated payments')}
         </h4>
 
         <div
@@ -150,7 +150,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
                 ['--backgroundColor' as string]: '#EAECEF',
               }}
             />
-            <span>{t('last week')}</span>
+            <span>{t('description.last week')}</span>
           </div>
 
           <div css={markCss.self}>
@@ -160,7 +160,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
                 ['--backgroundColor' as string]: '#13BCB2',
               }}
             />
-            <span>{t('this week')}</span>
+            <span>{t('description.this week')}</span>
           </div>
         </div>
       </div>

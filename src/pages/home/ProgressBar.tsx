@@ -138,17 +138,22 @@ function ProgressBar() {
   const handleDescription = () => {
     if (gage < stage.vendor)
       return t('description.now, lets start with adding your vendors');
-    if (gage < stage.product) return t('dont forget to add your products');
+    if (gage < stage.product)
+      return t('description.dont forget to add your products');
     if (gage < stage.warehousing)
-      return t('make sure to update your current inventory status');
+      return t('description.make sure to update your current inventory status');
     if (gage < stage.adjustment)
-      return t('got any exchanges, returns, or pending deliveries?');
+      return t(
+        'description.got any exchanges, returns, or pending deliveries?',
+      );
     if (gage < stage.requestClearing)
-      return t('what is the total amount of todays invoices?');
+      return t('description.what is the total amount of todays invoices?');
     if (gage < stage.completedClearing)
-      return t('your invoices and payments are waiting to be processed');
+      return t(
+        'description.your invoices and payments are waiting to be processed',
+      );
     if (gage === stage.completedClearing)
-      return t('nice work today! How about some beer after work?');
+      return t('description.nice work today! How about some beer after work?');
   };
 
   useEffect(() => {
@@ -173,12 +178,12 @@ function ProgressBar() {
       </div>
 
       <div css={textContainer}>
-        <span>{t('add vendors')}</span>
-        <span>{t('add products')}</span>
-        <span>{t('add stocked Qty')}</span>
+        <span>{t('title.create vendor')}</span>
+        <span>{t('title.create product')}</span>
+        <span>{t('title.create warehousing')}</span>
         <span>{t('title.adjustment')}</span>
-        <span>{t('payments Authorized')}</span>
-        <span>{t('paid')}</span>
+        <span>{t('title.create clearing')}</span>
+        <span>{t('title.transfer')}</span>
       </div>
     </>
   );

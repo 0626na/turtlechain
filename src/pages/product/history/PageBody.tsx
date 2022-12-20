@@ -99,8 +99,8 @@ function PageBody() {
         }}
         title={t('table.memo')}
         description={[
-          t('write freely anything thats important about this vendor'),
-          t('use this memo as your personal note'),
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
       />
       {/**

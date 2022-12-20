@@ -259,7 +259,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 rules={[
                   {
                     required: true,
-                    message: t('please input bank account number'),
+                    message: t('message.please input account number'),
                   },
                 ]}
                 noStyle

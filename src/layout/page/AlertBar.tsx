@@ -34,7 +34,7 @@ function AlertBar() {
             }}
             icon={<TurtleIcon name="alertBarArrowRight" />}
           >
-            {t('add new vendor')}
+            {t('button.add new vendor')}
           </SelectButton>
 
           <div

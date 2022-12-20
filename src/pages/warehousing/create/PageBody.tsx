@@ -62,7 +62,7 @@ function PageBody() {
   const createMutation = useMutation(warehousingAPI.create, {
     onSuccess: () => {
       reset();
-      message.success(t('successfully saved todays stock'));
+      message.success(t('message.successfully saved todays stock'));
       navigate('/warehousing/history');
     },
   });
@@ -80,11 +80,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.inventory program integration')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={loading}
@@ -111,9 +111,11 @@ function PageBody() {
       <TurtleConfirmModal
         title={t('do yo really want me to sign up?')}
         description={[
-          t('products remaining in the failure are excluded from registration'),
+          t(
+            'description.products remaining in the failure are excluded from registration',
+          ),
         ]}
-        okText={t('create registration')}
+        okText={t('button.register')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
@@ -202,7 +204,7 @@ function PageBody() {
         <Row justify="end" align="middle">
           <Col>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('total stocked quantity')}
+              {t('description.total stocked quantity')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalCount.toLocaleString()}
@@ -222,7 +224,7 @@ function PageBody() {
               onClick={openConfirmModal}
               disabled={cart.successList.length === 0}
             >
-              {t('register width warehousing')}
+              {t('button.register warehousing sheet')}
             </PrimaryButton>
           </Col>
         </Row>
