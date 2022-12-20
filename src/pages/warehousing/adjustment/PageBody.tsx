@@ -210,7 +210,7 @@ function PageBody() {
             items={[
               {
                 key: '0',
-                label: t('add exchange/returns'),
+                label: t('button.add exchange/returns'),
                 icon: <TurtleIcon name="exchangeRefund" />,
                 onClick() {
                   addExchangeRefundModalOpen();
@@ -218,7 +218,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: t('add pending delivery'),
+                label: t('button.add pending delivery'),
                 icon: <TurtleIcon name="reserve" />,
                 onClick() {
                   addReserveModalOpen();
@@ -227,7 +227,7 @@ function PageBody() {
             ]}
             triggerButton={
               <SecondaryIconButton>
-                {t('add invoice issues')}
+                {t('button.add adjustment')}
               </SecondaryIconButton>
             }
           />,
@@ -335,7 +335,7 @@ function PageBody() {
                   <Col>
                     <SearchFilter
                       placeholder={t(
-                        'placeholder.search by product name, inventory name, vendor name',
+                        'placeholder.search by vendor name, product name, vendor product name',
                       )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
@@ -396,7 +396,7 @@ function PageBody() {
                   title={
                     <span>
                       {t(
-                        'Detailed history of credits can be found in the ledger',
+                        'description.detailed history of credits can be found in the ledger',
                       )}
                     </span>
                   }

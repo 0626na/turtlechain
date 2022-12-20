@@ -121,7 +121,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={t('add pending delivery')}
+        title={t('button.add pending delivery')}
         visible={visible}
         onClose={closeModal}
       >

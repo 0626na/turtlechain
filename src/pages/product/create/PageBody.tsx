@@ -76,11 +76,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.inventory program integration')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={loading}
@@ -126,9 +126,9 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title={t('preview of New Products')}
+        title={t('title.preview of new products')}
         subTitle={t(
-          'your vendor list must be updated before adding new products',
+          'description.your vendor list must be updated before adding new products',
         )}
         buttons={[
           <TertiaryButton
@@ -177,12 +177,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${cart.successList.length})`}
+            tab={`${t('title.success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${cart.failList.length})`}
+            tab={`${t('title.fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>

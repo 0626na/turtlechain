@@ -71,7 +71,7 @@ function ClearingStatusCard({ clearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          {t('recent payments')}
+          {t('title.recent payments')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />

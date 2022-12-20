@@ -48,7 +48,7 @@ function PageBody() {
           }}
         >
           <h3 css={{ fontSize: 20, color: theme.grey600 }}>
-            {t('tax invoice to be issued', { month: thisMonth })}
+            {t('description.tax invoice to be issued', { month: thisMonth })}
           </h3>
 
           <h1 css={{ marginTop: 14 }}>

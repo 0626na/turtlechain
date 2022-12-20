@@ -120,7 +120,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         }}
       >
         <div css={modal.header}>
-          <h1 css={modal.headerTitle}>{t('subscription paid plan')}</h1>
+          <h1 css={modal.headerTitle}>{t('title.subscription paid plan')}</h1>
           <div>
             <TurtleIcon
               name="modalClose"
@@ -132,10 +132,12 @@ function PayMentModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>{t('payment feature is only available as a paid plan')}</p>
+          <p>
+            {t('description.payment feature is only available as a paid plan')}
+          </p>
           <p>
             {t(
-              'If you subscribe to the service, you can pay for all the client products at once',
+              'description.if you subscribe to the service, you can pay for all the client products at once',
             )}
           </p>
         </div>

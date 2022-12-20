@@ -26,7 +26,7 @@ function PageBody() {
 
   return (
     <>
-      <PageHeader title={t('etc.setting')} />
+      <PageHeader title={t('title.setting')} />
 
       <div // pageContent
         css={pageContent}

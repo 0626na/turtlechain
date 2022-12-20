@@ -53,7 +53,7 @@ function AdjustmentStatusCard() {
         }}
       >
         <h4 css={{ fontWeight: 500, color: theme.grey500 }}>
-          {t('exchange,returns,pending delivery')}
+          {t('title.adjustment')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />
@@ -65,13 +65,13 @@ function AdjustmentStatusCard() {
           [
             {
               color: 'orange',
-              title: t('pndg'),
+              title: t('type.adj status.pending'),
               count: pending.count,
               price: pending.price,
             },
             {
               color: 'skyblue',
-              title: t('cmplt'),
+              title: t('type.adj status.pending'),
               count: completed.count,
               price: completed.price,
             },

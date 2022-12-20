@@ -204,7 +204,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               rightContent={
                 <SearchFilter
                   placeholder={t(
-                    'placeholder.search by product name, inventory name, vendor name',
+                    'placeholder.search by vendor name, product name, vendor product name',
                   )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}

@@ -35,9 +35,9 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
       size="small"
       description={[
         t(
-          'regular payment termination will be applied from the pay date of next month',
+          'description.regular payment termination will be applied from the pay date of next month',
         ),
-        t('termination may restrict some use of the service'),
+        t('description.termination may restrict some use of the service'),
       ]}
       visible={visible}
       onCancel={onClose}
@@ -48,8 +48,8 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
         });
       }}
       loading={removeSubscriptionMutation.isLoading}
-      okText={t('subscription cancel')}
-      title={t('do you really want me to unsubscribe')}
+      okText={t('button.subscription cancel')}
+      title={t('title.do you really want me to unsubscribe')}
     />
   );
 }

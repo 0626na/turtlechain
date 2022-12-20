@@ -105,7 +105,7 @@ function ExelModal({ visible, onClose }: Props) {
           },
           {
             title: t('table.totalVendorCount'),
-            content: t('count', { count: successCount }),
+            content: t('description.count', { count: successCount }),
           },
         ]}
       />
@@ -117,11 +117,14 @@ function ExelModal({ visible, onClose }: Props) {
         size="large"
       >
         <TurtleTabs>
-          <Tabs.TabPane tab={`${t('success')}(${successCount})`} key="success">
+          <Tabs.TabPane
+            tab={`${t('title.success')}(${successCount})`}
+            key="success"
+          >
             <SuccessTab />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={`${t('fail')}(${failCount})`} key="fail">
+          <Tabs.TabPane tab={`${t('title.fail')}(${failCount})`} key="fail">
             <FailTab />
           </Tabs.TabPane>
         </TurtleTabs>

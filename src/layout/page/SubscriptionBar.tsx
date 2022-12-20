@@ -53,7 +53,9 @@ function SubscriptionBar() {
 
             navigate('/clearing/create');
             message.success(
-              t('your subscription is complete. you can use the payment'),
+              t(
+                'description.your subscription is complete. you can use the payment',
+              ),
               3,
             );
             modalClose();
