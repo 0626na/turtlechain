@@ -215,7 +215,7 @@ function CompanyTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text={t('button.save')}
+                  text={t('button.saving')}
                   htmlType="submit"
                   loading={updateMutation.isLoading}
                 />

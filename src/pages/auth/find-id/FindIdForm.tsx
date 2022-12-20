@@ -62,11 +62,11 @@ function FindIdForm() {
         )}
         <div css={footerCss.self}>
           <Link to="/" css={footerCss.content}>
-            {t('login')}
+            {t('button.login')}
           </Link>
           <TurtleDivider type="vertical" />
           <Link to="/reset-password" css={footerCss.content}>
-            {t('reset password')}
+            {t('button.reset password')}
           </Link>
         </div>
       </Form>

@@ -128,7 +128,9 @@ function StoreTab() {
               changeMode();
             }}
           >
-            {mode === 'cardView' ? t('listView') : t('cardView')}
+            {mode === 'cardView'
+              ? t('type.view.listView')
+              : t('type.view.cardView')}
           </AddButton>
         }
       />

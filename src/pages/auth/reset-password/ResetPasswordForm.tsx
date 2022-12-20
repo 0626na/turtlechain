@@ -63,7 +63,9 @@ function ResetPasswordForm() {
   return (
     <>
       <div css={cardCss.self}>
-        <TurtleText css={cardCss.title}>{t('reset password')}</TurtleText>
+        <TurtleText css={cardCss.title}>
+          {t('button.reset password')}
+        </TurtleText>
         <TurtleText css={cardCss.subTitle}>
           {!getIDQuery.data
             ? t('description.please phone auth')
@@ -136,7 +138,7 @@ function ResetPasswordForm() {
                   loading={resetPasswordMutation.isLoading}
                   onClick={handleReset}
                 >
-                  {t('reset password')}
+                  {t('button.reset password')}
                 </Button>
               )}
             </Form.Item>
@@ -145,7 +147,7 @@ function ResetPasswordForm() {
 
         <div css={footerCss.self}>
           <Link to="/" css={footerCss.content}>
-            {t('login')}
+            {t('button.login')}
           </Link>
           <TurtleDivider type="vertical" />
           <Link to="/find-id" css={footerCss.content}>

@@ -202,7 +202,7 @@ function MistransferTab() {
                       openRemoveModal();
                     }}
                   >
-                    {t('requestCancel')}
+                    {t('button.cancel request')}
                   </SelectButton>
                 )}
               </>

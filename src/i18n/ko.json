@@ -224,7 +224,8 @@
     "productCount": "수량",
     "productPrice": "가격",
     "memo": "메모",
-    "save": "저장하기",
+    "saving": "저장하기",
+    "save": "저장",
     "cancel": "취소",
     "confirm": "마감",
     "confirm cancel": "마감취소",
@@ -270,7 +271,9 @@
     "add": "추가하기",
     "attachPicture": "사진 첨부하기",
     "go login": "로그인 하기",
-    "registration": "가입하기"
+    "registration": "가입하기",
+    "login": "로그인",
+    "reset password": "비밀번호 재설정"
   },
 
   "message": {
@@ -370,7 +373,9 @@
     "add store": "쇼핑몰 추가하기",
     "create mistransfer": "오입금 환불요청",
     "mistransfer list": "오입금 환불내역",
-    "basic information": "기본정보"
+    "basic information": "기본정보",
+    "subscription and payment": "구독 및 결제",
+    "picker": "사입자"
   },
 
   "description": {
@@ -490,26 +495,13 @@
       "entity": "법인 사업자",
       "personal": "개인 사업자",
       "simple": "간이 사업자"
+    },
+    "view": {
+      "listView": "리스트로 보기",
+      "cardView": "카드뷰로 보기"
     }
   },
 
-  "listView": "리스트로 보기",
-  "cardView": "카드뷰로 보기",
-  "login": "로그인",
-  "reset password": "비밀번호 재설정",
-  "subscription and payment": "구독 및 결제",
-  "paid plan subscription": "유료플랜 구독",
-  "supplyPrice + vat price": "공급가 + 부가세 합산금액",
-  "no": "아니요",
-  "cancel": "취소",
-  "save": "저장",
-  "request": "요청",
-  "requestCancel": "요청취소",
-  "picker": "사입자",
-  "request cancel": "요청취소",
-  "the first order": "1차발주",
-  "the second order": "2차발주",
-  "orderTotalCount": "발주수량 합계",
   "orderStores": "발주 쇼핑몰",
   "orderDetail": "발주내역",
   "orderHeaderSettingSubtitle": "발주서 헤더명 추가",
