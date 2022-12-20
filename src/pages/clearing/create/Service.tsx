@@ -6,7 +6,6 @@ import useStore from '@hooks/useStore';
 import { PageContent } from '@layout/page';
 import { theme } from '@styles/theme';
 import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
-import { t } from 'i18next';
 import { InfoCircleOutlined as InfoIcon } from '@ant-design/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
