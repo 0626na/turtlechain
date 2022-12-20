@@ -137,7 +137,7 @@ function ProgressBar() {
 
   const handleDescription = () => {
     if (gage < stage.vendor)
-      return t('Now, lets start with adding your vendors');
+      return t('description.now, lets start with adding your vendors');
     if (gage < stage.product) return t('dont forget to add your products');
     if (gage < stage.warehousing)
       return t('make sure to update your current inventory status');
@@ -176,7 +176,7 @@ function ProgressBar() {
         <span>{t('add vendors')}</span>
         <span>{t('add products')}</span>
         <span>{t('add stocked Qty')}</span>
-        <span>{t('exchange, returns, pending delivery')}</span>
+        <span>{t('title.adjustment')}</span>
         <span>{t('payments Authorized')}</span>
         <span>{t('paid')}</span>
       </div>

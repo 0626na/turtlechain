@@ -9,7 +9,7 @@ function OrderHistoryPage() {
     <>
       <Helmet
         title={`${t('turtleChain')} - ${t('title.picker')} - ${t(
-          'orderDetail',
+          'title.orderDetail',
         )}`}
       />
       <PageBody />

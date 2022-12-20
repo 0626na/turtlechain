@@ -93,7 +93,7 @@ function FailTab({ loading, ...props }: Props) {
   const failTablePhoneNumberInput = (record: FailListForOutput) => {
     return (
       <TurtleTablePhoneNumberInput
-        placeholder={t('mobile')}
+        placeholder={t('table.mobile')}
         maxLength={13}
         onInput={(e) => {
           e.currentTarget.value = e.currentTarget.value

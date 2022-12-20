@@ -128,7 +128,10 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             label={t('table.mobile')}
             name="mobile"
             rules={[
-              { required: true, message: t('please input mobile number') },
+              {
+                required: true,
+                message: t('message.please input mobile number'),
+              },
             ]}
           >
             <TurtleFormInput

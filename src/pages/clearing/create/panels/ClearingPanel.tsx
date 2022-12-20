@@ -175,7 +175,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
           },
           {
             title: t('table.totalVendorCount'),
-            content: t('count', { count: cart.resultList.length }),
+            content: t('description.count', { count: cart.resultList.length }),
           },
         ]}
       />

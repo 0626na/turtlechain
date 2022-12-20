@@ -149,7 +149,7 @@ function PageBody() {
       {/**
        * 페이지
        */}
-      <PageTitle title={t('stocked product list')} />
+      <PageTitle title={t('title.warehousing sheet list')} />
       <PageContent>
         <Table
           size="small"

@@ -230,7 +230,10 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane tab={`${t('success')}(${successCount})`} key="success">
+          <Tabs.TabPane
+            tab={`${t('title.success')}(${successCount})`}
+            key="success"
+          >
             <SuccessTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
@@ -240,7 +243,7 @@ function PageBody() {
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${t('fail')}(${failCount})`} key="fail">
+          <Tabs.TabPane tab={`${t('title.fail')}(${failCount})`} key="fail">
             <FailTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />

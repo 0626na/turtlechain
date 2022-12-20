@@ -177,12 +177,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${cart.successList.length})`}
+            tab={`${t('title.success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${cart.failList.length})`}
+            tab={`${t('title.fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>

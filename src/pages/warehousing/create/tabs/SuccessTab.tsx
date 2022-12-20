@@ -71,7 +71,7 @@ function SuccessTab({ loading, ...props }: Props) {
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title={t('do you really want me to delete it?')}
+        title={t('title.do you really want me to delete it?')}
         description={[t('you cant go back to the past after deleting it')]}
         okText={t('delete')}
         visible={removeModalVisible}

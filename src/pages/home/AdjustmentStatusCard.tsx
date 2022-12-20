@@ -53,7 +53,7 @@ function AdjustmentStatusCard() {
         }}
       >
         <h4 css={{ fontWeight: 500, color: theme.grey500 }}>
-          {t('exchange,returns,pending delivery')}
+          {t('title.adjustment')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />
