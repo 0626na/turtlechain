@@ -22,7 +22,7 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const queryClient = useQueryClient();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
-      queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+      queryClient.refetchQueries(['getSubscriptionCheckInUserTabQuery'], {
         active: true,
       });
       navigate('/setting?tab=user');
