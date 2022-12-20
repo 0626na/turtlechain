@@ -32,17 +32,17 @@ function FailTab({ isLoading }: Props) {
             render: (_, record) =>
               record.vendor_code ?? <span css={fail}>(정보없음)</span>,
           },
-          {
-            ellipsis: true,
-            width: 300,
-            title: t('table.retailerStoreInput'),
-            render: (_, record) => {
-              if (!!record.name || !!record.address) {
-                return `${record.name}  ${record.address}`;
-              }
-              return <span css={fail}>(정보없음)</span>;
-            },
-          },
+          // {
+          //   ellipsis: true,
+          //   width: 300,
+          //   title: t('table.retailerStoreInput'),
+          //   render: (_, record) => {
+          //     if (!!record.name || !!record.address) {
+          //       return `${record.name}  ${record.address}`;
+          //     }
+          //     return <span css={fail}>(정보없음)</span>;
+          //   },
+          // },
         ]}
       />
     </>

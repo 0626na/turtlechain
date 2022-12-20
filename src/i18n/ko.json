@@ -542,11 +542,7 @@
   "addSingleOrder": "발주 단건추가",
   "stocked product list": "입고서 리스트",
   "mobile": "휴대전화 번호",
-  "building": "상가",
-  "floor": "층",
   "vendors": "거래처 목록",
-  "bank": "은행",
-  "col and loc": "열-호",
   "accountManagement": "계정관리",
   "exchange, returns, pending delivery": "교환/반품/미송",
   "vendorname modify": "거래처명 수정",
@@ -582,7 +578,6 @@
   "please input store url": "쇼핑몰 url을 입력해주세요.",
   "please input your email": "이메일을 입력해주세요",
   "quit a payment": "결제를 종료하였습니다.",
-  "subscription paid plan": "유료플랜 구독",
   "payment feature is only available as a paid plan": "결제요청 기능은 유료플랜으로만 제공됩니다.",
   "If you subscribe to the service, you can pay for all the client products at once": "서비스를 구독하면, 모든 거래처 상품을 한 번에 결제할 수 있어요.",
   "your subscription is complete. you can use the payment": "서비스 정기구독이 시작되었습니다. 이제 자유롭게 결제요청을 보낼 수 있어요!",
@@ -608,9 +603,6 @@
   "this week": "이번주",
   "recent payments": "최근 결제현황",
   "service updates": "터틀체인 업데이트 소식",
-  "pndg": "대기",
-  "cmplt": "마감",
-  "pending": "보류",
   "exchange,returns,pending delivery": "교환/반품/미송",
   "vendor,product": "거래처/상품",
   "dont forget to add your products": "상품 등록은 하셨나요? 😳",
@@ -690,16 +682,7 @@
   "order": {
     "": "발주",
     "preview": "발주서 미리보기",
-    "create": "발주등록",
-    "types": {
-      "order": "발주",
-      "reserve": "미송",
-      "takeback": "반품",
-      "exchange": "교환",
-      "sample": "샘플",
-      "pickup": "픽업",
-      "extra": "기타"
-    }
+    "create": "발주등록"
   },
   "warehousing": {
     "": "입고",
@@ -738,12 +721,6 @@
     "transaction": {
       "": "터틀장부",
       "add": "과거금액 추가"
-    },
-    "status": {
-      "all": "전체",
-      "request": "요청",
-      "pending": "대기",
-      "complete": "완료"
     },
     "complete date": "결제완료 일자",
     "price": "결제 금액"

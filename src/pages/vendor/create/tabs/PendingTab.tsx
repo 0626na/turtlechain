@@ -67,7 +67,7 @@ function PendingTab({ isLoading }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: 50,
+            width: 100,
             title: t('table.matching'),
             align: 'center',
             render: (_, record) => (
