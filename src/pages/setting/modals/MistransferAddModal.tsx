@@ -96,7 +96,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('mistransfer.create')}
+        title={t('title.create mistransfer')}
         visible={visible}
         onClose={closeModal}
       >

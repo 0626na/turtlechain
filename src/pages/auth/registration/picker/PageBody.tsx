@@ -139,7 +139,7 @@ function Pagebody() {
               <Form.Item
                 rules={[{ required: true }]}
                 name="user_name"
-                label={t('user name')}
+                label={t('table.user name')}
               >
                 <Input css={input} placeholder="ex. 김거북" />
               </Form.Item>
@@ -148,7 +148,7 @@ function Pagebody() {
                 required
                 rules={[{ validator: emailValidator }]}
                 name="user_email"
-                label={t('email')}
+                label={t('table.email')}
               >
                 <Input css={input} placeholder="ex. gbkim@gmail.com" />
               </Form.Item>
@@ -173,7 +173,7 @@ function Pagebody() {
                   <Form.Item
                     rules={[{ validator: idValidator }]}
                     required
-                    label={t('id')}
+                    label={t('table.id')}
                     name="user_login_id"
                   >
                     <Input
@@ -203,7 +203,7 @@ function Pagebody() {
               <Form.Item
                 rules={[{ required: true }]}
                 name="user_password"
-                label={t('password')}
+                label={t('table.password')}
               >
                 <Input.Password
                   css={input}
@@ -215,7 +215,7 @@ function Pagebody() {
                 rules={[{ validator: passwordValidator }]}
                 required
                 name="confirm_password"
-                label={t('confirm password')}
+                label={t('table.confirm password')}
                 dependencies={['user_password']}
               >
                 <Input.Password
@@ -263,7 +263,7 @@ function Pagebody() {
                       }
                       loading={registrationMutation.isLoading}
                     >
-                      {t('registration')}
+                      {t('button.registration')}
                     </SpecialButton>
                   </Row>
                 )}

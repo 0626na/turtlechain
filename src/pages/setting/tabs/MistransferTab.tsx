@@ -101,7 +101,7 @@ function MistransferTab() {
               color: #242934;
             `}
           >
-            {t('mistransfer.list')}
+            {t('title.mistransfer list')}
           </Col>
         </Row>
 
@@ -111,7 +111,7 @@ function MistransferTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('mistransfer.create')}</TurtleText>
+            <TurtleText>{t('title.create mistransfer')}</TurtleText>
           </SecondaryButton>
         </Col>
       </Row>
@@ -142,7 +142,7 @@ function MistransferTab() {
             title: t('table.mistransfer status'),
             render: (_, record) => (
               <TurtleTag color={tagColors[record.status]}>
-                {t(`mistransfer.status.${record.status}`)}
+                {t(`type.status.${record.status}`)}
               </TurtleTag>
             ),
           },

@@ -94,7 +94,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
         {({ getFieldValue }) => (
           <Form.Item
             name="phone"
-            label={t('phone')}
+            label={t('table.mobile')}
             rules={[{ required: type && true }]}
           >
             <Input

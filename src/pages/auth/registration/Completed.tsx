@@ -35,7 +35,7 @@ function Completed({ visible }: Props) {
             <br /> {t('description.enjoy turtlechain service')}
           </p>
 
-          <TertiaryButton text={t('go login')} onClick={onClickGoHome} />
+          <TertiaryButton text={t('button.go login')} onClick={onClickGoHome} />
         </section>
       )}
     </>

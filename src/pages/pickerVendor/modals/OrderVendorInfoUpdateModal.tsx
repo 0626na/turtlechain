@@ -269,7 +269,7 @@ function OrderVendorInfoUpdateModal({
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>{t('attachPicture')}</AddButton>
+              <AddButton>{t('button.attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 

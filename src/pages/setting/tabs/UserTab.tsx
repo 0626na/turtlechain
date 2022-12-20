@@ -218,7 +218,7 @@ function UserTab() {
       />
 
       <UserCard
-        title={t('basic information')}
+        title={t('title.basic information')}
         icon={<TurtleIcon name="user" />}
       >
         <Form
@@ -244,7 +244,7 @@ function UserTab() {
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
-            label={t('email')}
+            label={t('table.email')}
             name="email"
             rules={[{ validator: emailValidator }]}
           >

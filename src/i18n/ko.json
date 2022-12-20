@@ -91,6 +91,7 @@
     "alimtalk name": "알림톡명",
     "user name": "이름",
     "id": "아이디",
+    "password": "비밀번호",
     "paid plan subscription": "유료플랜 구독",
     "biz type": "사업자 종류",
     "biz name": "사업자명(법인명)",
@@ -98,6 +99,7 @@
     "biz address": "사업장 주소",
     "biz detail address": "사업장 상세주소",
     "biz license": "사업자등록증",
+    "biz info": "사업자 정보",
     "vat issued mail": "세금계산서 발행메일",
     "mistransfer status": "진행상태",
     "mistransfer request date": "요청 일자",
@@ -113,7 +115,12 @@
     "information update": "정보수정 요청",
     "delete": "삭제",
     "proceessed quantity / total quantity": "처리수량 / 총 수량",
-    "processing method": "처리방식"
+    "processing method": "처리방식",
+    "confirm password": "비밀번호 확인",
+    "new password": "새 비밀번호",
+    "email": "이메일",
+    "accountNumber": "계좌번호",
+    "accountHolder": "예금주"
   },
 
   "placeholder": {
@@ -260,7 +267,10 @@
     "cancel request": "요청취소",
     "add past price": "과거금액 추가",
     "request mistransfer": "오입금 환불 요청하기",
-    "add": "추가하기"
+    "add": "추가하기",
+    "attachPicture": "사진 첨부하기",
+    "go login": "로그인 하기",
+    "registration": "가입하기"
   },
 
   "message": {
@@ -357,7 +367,10 @@
     "ledger list": "장부 리스트",
     "add single order": "발주 추가",
     "you can only order up to the second round": "당일 발주는 2차까지만 가능해요",
-    "add store": "쇼핑몰 추가하기"
+    "add store": "쇼핑몰 추가하기",
+    "create mistransfer": "오입금 환불요청",
+    "mistransfer list": "오입금 환불내역",
+    "basic information": "기본정보"
   },
 
   "description": {
@@ -452,85 +465,34 @@
       "sample": "샘플",
       "pickup": "픽업",
       "extra": "기타"
-    }
-  },
-
-  "user": {
-    "": "직책",
-    "rt": "대표",
-    "ub": "직원",
-    "pi": "사입"
-  },
-  "agreement": {
-    "all": "전체 동의",
-    "service_use": "서비스 이용약관 동의(필수)",
-    "personal_information": "개인정보 수집 및 이용 동의(필수)",
-    "third_party": "제 3자 정보제공 동의",
-    "event_notificaton": "이벤트 소식 등 알림 정보받기"
-  },
-  "mistransfer": {
-    "": "오입금 환불",
-    "list": "오입금 환불내역",
-    "create": "오입금 환불요청",
+    },
+    "agreement": {
+      "all": "전체 동의",
+      "service_use": "서비스 이용약관 동의(필수)",
+      "personal_information": "개인정보 수집 및 이용 동의(필수)",
+      "third_party": "제 3자 정보제공 동의",
+      "event_notificaton": "이벤트 소식 등 알림 정보받기"
+    },
     "status": {
       "": "진행상태",
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
     },
-    "created date": "요청 일자",
-    "accountInfo": "오입금 계좌정보",
-    "recipient_accountInfo": "환불받을 계좌정보",
-    "recipient print": "받는분 통장인쇄",
-    "refund_memo": "환불 사유",
-    "request memo": "요청 사유",
-    "request price": "요청 금액",
+    "day": {
+      "1": "월",
+      "2": "화",
+      "3": "수",
+      "4": "목",
+      "5": "금"
+    },
+    "biz": {
+      "entity": "법인 사업자",
+      "personal": "개인 사업자",
+      "simple": "간이 사업자"
+    }
+  },
 
-    "management": "오입금 반환 관리",
-    "complete date": "오입금 환불 처리날짜"
-  },
-  "day": {
-    "1": "월",
-    "2": "화",
-    "3": "수",
-    "4": "목",
-    "5": "금"
-  },
-  "address": "주소",
-  "account": "계좌",
-  "biz role": "직책",
-  "biz type": "사업자 종류",
-  "biz info": "사업자 정보",
-  "biz management": "사업자 관리",
-  "biz entity": "법인 사업자",
-  "biz personal": "개인 사업자",
-  "biz simple": "간이 사업자",
-  "biz name": "사업자명(법인명)",
-  "biz num": "사업자번호",
-  "biz address": "사업장 주소",
-  "biz detail address": "사업장 상세주소",
-  "biz license": "사업자등록증",
-  "attachPicture": "사진 첨부하기",
-  "vat issued mail": "세금계산서 발행메일",
-  "go login": "로그인 하기",
-  "next": "다음",
-  "registration": "가입하기",
-  "phone": "휴대전화 번호",
-  "id": "아이디",
-  "password": "비밀번호",
-  "attaching pictures": "사진 첨부하기",
-  "confirm password": "비밀번호 확인",
-  "new password": "새 비밀번호",
-  "confirm new password": "새 비밀번호 확인",
-  "email": "이메일",
-  "basic information": "기본정보",
-  "tax invoice issue mail": "세금계산서 발행메일",
-  "user name": "이름",
-  "default information": "기본정보",
-  "accountNumber": "계좌번호",
-  "accountHolder": "예금주",
-  "accountHolderName": "예금주명",
-  "supplyPriceOnly": "공급가만",
   "listView": "리스트로 보기",
   "cardView": "카드뷰로 보기",
   "login": "로그인",

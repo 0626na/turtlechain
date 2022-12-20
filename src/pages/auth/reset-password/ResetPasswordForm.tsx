@@ -85,13 +85,13 @@ function ResetPasswordForm() {
           <>
             <Form.Item //
               name="login_id"
-              label={t('id')}
+              label={t('table.id')}
             >
               <TurtleFormLargeSelect items={userList ?? []} showSearch />
             </Form.Item>
             <Form.Item //
               name="password"
-              label={t('new password')}
+              label={t('table.new password')}
               rules={requiredRules}
             >
               <Input.Password
@@ -102,7 +102,7 @@ function ResetPasswordForm() {
 
             <Form.Item //
               name="confirmPassword"
-              label={t('confirm new password')}
+              label={t('table.confirm new password')}
               rules={[
                 ...requiredRules,
                 ({ getFieldValue }) => ({
