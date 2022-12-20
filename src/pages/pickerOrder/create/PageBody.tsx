@@ -37,7 +37,7 @@ function PageBody() {
   const {
     cart,
     ready,
-    countOrderStores,
+    countSucessOrdersCount,
     countFailList,
     countOrdersForType,
     calculateTotalPrice,
@@ -155,7 +155,7 @@ function PageBody() {
     },
     {
       title: t('orderStores'),
-      content: t('count', { count: countOrderStores() }),
+      content: t('count', { count: countSucessOrdersCount() }),
     },
     {
       title: t('totalOrderCountInConfirm'),
@@ -346,7 +346,7 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${countOrderStores()})`}
+            tab={`${t('success')}(${countSucessOrdersCount()})`}
             loading={false}
           />
           <FailTab

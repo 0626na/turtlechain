@@ -296,10 +296,13 @@ const useOrderCart = () => {
   }, [cart.failList]);
 
   /**
-   * 발주 쇼핑몰 갯수
+   * 성공 발주 갯수
    */
-  const countOrderStores = useCallback(() => {
-    const count = cart.successList.length;
+  const countSucessOrdersCount = useCallback(() => {
+    const count = cart.successList.reduce(
+      (acc, store) => acc + store.orders.length,
+      0,
+    );
     return count;
   }, [cart.successList]);
 
@@ -583,7 +586,7 @@ const useOrderCart = () => {
     integrationOrderList,
     addSingleOrder,
     addSingleOrderForStore,
-    countOrderStores,
+    countSucessOrdersCount,
     countFailList,
     calculateTotalPrice,
     orderFormat,

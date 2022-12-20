@@ -108,7 +108,8 @@ function SuccessTab({ loading, ...props }: Props) {
           order.mobile.includes(searchQuery.search_string),
         ),
       }));
-    return cart.successList;
+
+    return cart.successList.filter((store) => store.orders.length !== 0);
   }, [cart.successList, searchQuery]);
 
   /**
