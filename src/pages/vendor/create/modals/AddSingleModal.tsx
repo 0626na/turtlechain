@@ -121,7 +121,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('vendor.addSingle')}
+        title={t('title.add single vendor')}
         visible={visible}
         onClose={() => {
           closeModal();

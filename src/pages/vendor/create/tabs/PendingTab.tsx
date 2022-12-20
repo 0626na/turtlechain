@@ -83,13 +83,13 @@ function PendingTab({ isLoading }: Props) {
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
-          {
-            ellipsis: true,
-            title: t('table.retailerStoreInput'),
-            render: (_, record) => {
-              return `${record.name}  ${record.address}`;
-            },
-          },
+          // {
+          //   ellipsis: true,
+          //   title: t('table.retailerStoreInput'),
+          //   render: (_, record) => {
+          //     return `${record.name}  ${record.address}`;
+          //   },
+          // },
           {
             ellipsis: true,
             title: t('table.vendorName'),
@@ -377,33 +377,33 @@ function PendingTab({ isLoading }: Props) {
               );
             },
           },
+          // {
+          //   ellipsis: true,
+          //   width: 150,
+          //   title: (
+          //     <TextWithTooltip
+          //       tooltipContent={[t('description.another vendor name')]}
+          //     >
+          //       {t('table.useVendorName')}
+          //     </TextWithTooltip>
+          //   ),
+          //   render: (_, record) => (
+          //     <TurtleTableInput
+          //       size="small"
+          //       defaultValue={record.name}
+          //       onChange={(e) => {
+          //         handleUseVendorNameUpdate(
+          //           e.currentTarget.value,
+          //           record,
+          //           'pendingList',
+          //         );
+          //       }}
+          //     />
+          //   ),
+          // },
           {
             ellipsis: true,
-            width: 150,
-            title: (
-              <TextWithTooltip
-                tooltipContent={[t('description.another vendor name')]}
-              >
-                {t('table.useVendorName')}
-              </TextWithTooltip>
-            ),
-            render: (_, record) => (
-              <TurtleTableInput
-                size="small"
-                defaultValue={record.name}
-                onChange={(e) => {
-                  handleUseVendorNameUpdate(
-                    e.currentTarget.value,
-                    record,
-                    'pendingList',
-                  );
-                }}
-              />
-            ),
-          },
-          {
-            ellipsis: true,
-            width: 50,
+
             title: t('table.memo'),
             align: 'center',
             onCell: (record) => ({

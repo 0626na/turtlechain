@@ -385,6 +385,7 @@
     "ledger detail": "장부 상세보기",
     "ledger list": "장부 리스트",
     "add single order": "발주 추가",
+    "add single vendor": "거래처 추가",
     "you can only order up to the second round": "당일 발주는 2차까지만 가능해요",
     "add store": "쇼핑몰 추가하기",
     "create mistransfer": "오입금 환불요청",
