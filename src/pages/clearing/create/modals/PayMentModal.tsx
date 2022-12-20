@@ -45,7 +45,7 @@ function PayMentModal({ visible, closeModal }: Props) {
           queryClient.refetchQueries('getSubscriptionCheckQuery');
           return false;
         }
-        return 1000;
+        return 3000;
       },
     },
   );

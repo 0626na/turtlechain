@@ -22,11 +22,9 @@ function RemoveSubscriptionModal({ visible, onClose, id }: Props) {
   const queryClient = useQueryClient();
   const removeSubscriptionMutation = useMutation(paypleAPI.removeSubscription, {
     onSuccess: () => {
-      setTimeout(() => {
-        queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
-          active: true,
-        });
-      }, 2000);
+      queryClient.refetchQueries(['getSubscriptionCheckQuery'], {
+        active: true,
+      });
       navigate('/setting?tab=user');
       message.success('구독해지가 완료되었습니다.');
       onClose();
