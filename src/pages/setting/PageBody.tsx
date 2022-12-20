@@ -13,8 +13,10 @@ import CompanyTab from './tabs/CompanyTab';
 import StoreTab from './tabs/StoreTab';
 import MistransferTab from './tabs/MistransferTab';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 function PageBody() {
+  const { isStaff } = useUser();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -48,17 +50,23 @@ function PageBody() {
               <StoreTab />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane key="user" tab={t('accountManagement')}>
-            <div css={greyContainer}>
-              <UserTab />
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="company" tab={t('biz management')}>
-            <div css={greyContainer}>
-              <CompanyTab />
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="mistransfer" tab={t('mistransfer.')}>
+
+          {isStaff ? null : (
+            <>
+              <Tabs.TabPane key="user" tab="계정관리">
+                <div css={greyContainer}>
+                  <UserTab />
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane key="company" tab="사업자 관리">
+                <div css={greyContainer}>
+                  <CompanyTab />
+                </div>
+              </Tabs.TabPane>
+            </>
+          )}
+
+          <Tabs.TabPane key="mistransfer" tab="오입금 환불">
             <div css={whiteContainer}>
               <MistransferTab />
             </div>

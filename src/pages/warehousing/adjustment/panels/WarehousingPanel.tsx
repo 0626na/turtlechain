@@ -112,7 +112,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
           onSearch={(value) => {
             setSearchString(value);
           }}
-          placeholder={t('search product name and reference')}
+          placeholder={t('placeholder.search product name and reference')}
         />
       </div>
 

@@ -114,7 +114,7 @@ function CompanyStep({ visible, loading }: Props) {
         label={t('biz name')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder="ex. (주)터틀샵" />
+        <Input css={input} placeholder={t('placeholder.ex. company')} />
       </Form.Item>
 
       <Form.Item noStyle shouldUpdate>
@@ -130,7 +130,7 @@ function CompanyStep({ visible, loading }: Props) {
                 setCheckDuplicated(false);
               }}
               css={input}
-              placeholder="ex. 123-45-67890"
+              placeholder={t('placeholder.ex. business number')}
               suffix={
                 <CheckDuplicatedButton
                   onClick={() => {
@@ -160,7 +160,7 @@ function CompanyStep({ visible, loading }: Props) {
           onClick={() => {
             postcodeModalOpen();
           }}
-          placeholder="사업자 주소를 입력해주세요"
+          placeholder={t('placeholder.input company address')}
           suffix={
             <Button
               css={findAddressButton}
@@ -174,7 +174,10 @@ function CompanyStep({ visible, loading }: Props) {
       </Form.Item>
 
       <Form.Item name="company_sub_address" label={t('biz detail address')}>
-        <Input css={input} placeholder="사업자 상세주소를 입력해주세요" />
+        <Input
+          css={input}
+          placeholder={t('placeholder.input company detail address')}
+        />
       </Form.Item>
 
       <Form.Item
@@ -199,7 +202,7 @@ function CompanyStep({ visible, loading }: Props) {
         label={t('store.url')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder="ex. www.turtleshop.com" />
+        <Input css={input} placeholder={t('placeholder.ex. store url')} />
       </Form.Item>
 
       <Form.Item name="agreements" rules={[{ validator: agreementValidator }]}>

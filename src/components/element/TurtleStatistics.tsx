@@ -36,7 +36,7 @@ const $card = css`
   .ant-statistic-content-value {
     font-weight: 700;
     color: #242934;
-    size: 22px;
+    font-size: 20px;
   }
 `;
 

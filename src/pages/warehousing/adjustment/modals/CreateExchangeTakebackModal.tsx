@@ -31,7 +31,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
         <TurtleContentModal
           visible={visible}
           onClose={onClose}
-          title={t('addAdjustment')}
+          title={t('warehousing.addAdjustment')}
           size="large"
         >
           <Collapse
@@ -53,7 +53,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                 <TurtlePanelTitle
                   count={1}
                   activeKey={activeKey}
-                  title={t('search from stock list')}
+                  title={t('warehousing.search from stock list')}
                 />
               }
             />
@@ -64,7 +64,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                 <TurtlePanelTitle
                   count={2}
                   activeKey={activeKey}
-                  title={t('preview of exchange and returns')}
+                  title={t('warehousing.preview of exchange and returns')}
                 />
               }
               activeKey={activeKey}

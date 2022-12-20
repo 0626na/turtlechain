@@ -24,14 +24,19 @@ import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
 import { phoneMasking } from '@utils/phone';
+import wholesalerAPI, { WholesalerStore } from '@apis/wholesalerAPI';
+import { OrderVendor } from '../PageBody';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  selectedRow: Vendor;
+  selectedRow: WholesalerStore;
 }
 
-function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
-  const { store } = useStore();
+function OrderVendorInfoUpdateModal({
+  visible,
+  closeModal,
+  selectedRow,
+}: Props) {
   const [form] = Form.useForm();
   const { buildingData, bankData } = usePreset();
 
@@ -46,28 +51,23 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
-  const getVendorQuery = useQuery(
-    ['getVendorQuery', selectedRow?.id],
-    () => vendorAPI.get({ id: selectedRow.id }),
+  const { data } = useQuery(
+    ['getWholesalerQuery', selectedRow?.id],
+    () => wholesalerAPI.get({ storeId: selectedRow.id }),
     {
       enabled: !!selectedRow?.id && !!visible,
       onSuccess: (data) => {
         form.setFieldsValue({
-          ws_store_id: data?.ws_store_info.id,
-          rt_store_id: store.selected?.id as number,
-          name: data?.vendor_name,
-          tel: data?.ws_store_info.phone,
-          mobile: phoneMasking(data?.vendor_phone.phone),
-          building: data?.ws_store_info.building,
-          floor: data?.ws_store_info.floor,
-          col: data?.ws_store_info.col,
-          loc: data?.ws_store_info.loc,
-          colLoc: `${data?.ws_store_info.col} ${data?.ws_store_info.loc}`,
-          ext: data?.ws_store_info.ext,
-
-          bank: data?.vendor_account.bank,
-          account_number: data?.vendor_account.account_number,
-          account_holder: data?.vendor_account.account_holder,
+          ws_store_id: data?.data.id,
+          name: data?.data.name,
+          tel: data?.data.phone,
+          mobile: '',
+          building: data?.data.building,
+          floor: data?.data.floor,
+          col: data?.data.col,
+          loc: data?.data.loc,
+          colLoc: `${data?.data.col} ${data?.data.loc}`,
+          ext: data.data.ext,
 
           file: undefined,
         });
@@ -89,7 +89,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('request for information Update')}
+        title={t('vendor.updateInfo')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -104,33 +104,21 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           wrapperCol={{ span: 17 }}
         >
           {/*  서버 전달용 데이터 */}
-          <Form.Item name="rt_store_id" hidden>
-            <Input hidden />
-          </Form.Item>
-
           <Form.Item name="ws_store_id" hidden>
             <Input hidden />
           </Form.Item>
 
-          {/*  */}
           <Form.Item label={t('table.vendorName')} name="name" required>
-            <TurtleFormSearchInput disabled />
+            <TurtleFormInput placeholder={t('placeholder.input store name')} />
           </Form.Item>
 
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
             <TurtleFormInput
-              disabled
               placeholder={t('placeholder.input phone number')}
             />
           </Form.Item>
 
-          <Form.Item
-            label={t('table.mobile')}
-            name="mobile"
-            rules={[
-              { required: true, message: t('please input mobile number') },
-            ]}
-          >
+          <Form.Item label={t('table.mobile')} name="mobile">
             <TurtleFormInput
               placeholder={t('placeholder.input mobile number')}
             />
@@ -233,7 +221,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             />
           </Form.Item>
 
-          <Form.Item label={t('table.accountInfo')} required>
+          <Form.Item label={t('table.accountInfo')}>
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
@@ -251,28 +239,13 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                 />
               </Form.Item>
 
-              <Form.Item
-                name="account_number"
-                rules={[
-                  {
-                    required: true,
-                    message: t('please input bank account number'),
-                  },
-                ]}
-                noStyle
-              >
+              <Form.Item name="account_number" noStyle>
                 <TurtleFormInput
                   placeholder={t('placeholder.account number')}
                 />
               </Form.Item>
 
-              <Form.Item
-                name="account_holder"
-                rules={[
-                  { required: true, message: t('please input account holder') },
-                ]}
-                noStyle
-              >
+              <Form.Item name="account_holder" noStyle>
                 <TurtleFormInput
                   placeholder={t('placeholder.account holder name')}
                 />
@@ -287,7 +260,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             required={true}
             getValueFromEvent={normFile}
             rules={[
-              { required: true, message: t('please attach your receipt') },
+              { required: true, message: t('message.please attach receipt') },
             ]}
           >
             <Upload
@@ -296,9 +269,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>
-                {t('add a copy of your receipt or invoice')}
-              </AddButton>
+              <AddButton>{t('attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 
@@ -317,9 +288,11 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     type: 'update',
                     banks: [
                       {
-                        bank: form.getFieldValue('bank'),
-                        account_number: form.getFieldValue('account_number'),
-                        account_holder: form.getFieldValue('account_holder'),
+                        bank: form.getFieldValue('bank') ?? '',
+                        account_number:
+                          form.getFieldValue('account_number') ?? '',
+                        account_holder:
+                          form.getFieldValue('account_holder') ?? '',
                       },
                     ],
                     floor: form.getFieldValue('floor') ?? '',
@@ -362,4 +335,4 @@ const upload = css`
   }
 `;
 
-export default VendorInfoUpdateModal;
+export default OrderVendorInfoUpdateModal;

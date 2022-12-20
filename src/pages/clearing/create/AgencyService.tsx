@@ -85,7 +85,7 @@ function AgencyService() {
                   css={[$datePicker, isOtherDay && greenDatePicker]}
                   onClick={() => closeToolTip()}
                   allowClear={false}
-                  placeholder="다른 일자선택"
+                  placeholder={t('placeholder.select different date')}
                 />
               </Tooltip>
             </Col>

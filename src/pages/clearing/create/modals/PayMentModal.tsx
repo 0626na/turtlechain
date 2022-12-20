@@ -17,15 +17,13 @@ interface Props {
   closeModal: () => void;
 }
 
-/**
- * 구독 결제 모달창(payple)
+/* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
 function PayMentModal({ visible, closeModal }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
-  const [requestCount, setRequestCount] = useState(0);
   const queryClient = useQueryClient();
   const [buttonLoading, setButtonLoading] = useState(false);
   const { cart, clearingPaymentTotal } = useClearingCart();
@@ -46,7 +44,7 @@ function PayMentModal({ visible, closeModal }: Props) {
           queryClient.refetchQueries('getSubscriptionCheckQuery');
           return false;
         }
-        return 1000;
+        return 2000;
       },
     },
   );
@@ -83,11 +81,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         PCD_RST_URL: `/clearing/create`,
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        callbackFunction: (res: any) => {
-          // 성공일때 redirect
-          // if (res.PCD_PAY_RST === 'success') {
-          // }
-        },
+        callbackFunction: (res: any) => {},
       };
 
       // payple 내장 함수 호출 (결제 요청)

@@ -1,6 +1,9 @@
 import { CreateModal, TurtleContentModal } from '@components/combine';
-import { TurtleConfirmModal } from '@components/element';
+import { TurtleConfirmModal, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
+import { Tooltip } from 'antd';
+import { t } from 'i18next';
 import React from 'react';
 
 interface Props {
@@ -15,6 +18,9 @@ interface Props {
   size?: 'small' | 'middle' | 'large';
 }
 
+/**
+ * 발주서 파싱 결과 모달
+ */
 function OrderParsingProcessPresentModal({
   visible,
   title,
@@ -30,6 +36,8 @@ function OrderParsingProcessPresentModal({
     <TurtleConfirmModal
       visible={visible}
       title={title}
+      titleIcon={false}
+      iconName="alertWarningRed"
       description={description}
       onCancel={onCancel}
       onOk={onOk}
@@ -38,24 +46,118 @@ function OrderParsingProcessPresentModal({
       <div
         css={css({ display: 'flex', flexDirection: 'column', marginTop: 40 })}
       >
-        <div css={css({ display: 'flex' })}>
-          <span css={css({ marginRight: 16 })}>문제 없는 발주서</span>
-          <span>{successCount}개</span>
-        </div>
-        <div css={css({ marginTop: 24 })}>
-          <span css={css({ marginRight: 16 })}>문제 있는 발주서</span>
-          <span>{failCount}개</span>
-        </div>
+        {/* 에러 발주서 갯수 */}
         <div
-          css={css({ display: 'flex', flexDirection: 'column', marginTop: 15 })}
-        >
-          {messages.map((message) => {
-            return <span>{message}</span>;
+          css={css({
+            display: 'flex',
+            marginLeft: 2,
+            color: '#434852',
+            fontWeight: 500,
+            fontSize: 14,
+            letterSpacing: '0.005em',
           })}
+        >
+          <span>{t('errorOrder')} </span>
+          <span css={css({ color: '#FA5252', marginLeft: 4, marginRight: 3 })}>
+            {failCount}
+          </span>
+          <div
+            css={css({
+              display: 'flex',
+              color: 'none',
+              alignItems: 'center',
+            })}
+          >
+            <span css={css({ marginRight: 4 })}>
+              / {failCount + successCount}{' '}
+            </span>
+            {
+              <Tooltip
+                title={t(
+                  'missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order',
+                )}
+                trigger="click"
+              >
+                <TurtleIcon name="questioncircle" />
+              </Tooltip>
+            }
+          </div>
+        </div>
+
+        {/* 발주서 에러 메세지 */}
+        <div
+          css={css({
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: 17,
+            padding: 14,
+            backgroundColor: '#F0F3F6',
+            borderRadius: 10,
+            fontWeight: 500,
+            fontSize: 14,
+            lineHeight: '140%',
+            letterSpacing: '-0.005em',
+          })}
+        >
+          {messages.map((message, index) => {
+            return (
+              <div key={index}>
+                <Tooltip title={message.split('_')[0]}>
+                  <span css={css({ color: '#FA5252' })}>
+                    {message.split(':')[0].slice(0, 5)}...:
+                  </span>
+                </Tooltip>
+                <span>{message.split(':')[1]}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 예상 에러원인 */}
+        <div
+          css={css({
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: 12,
+            fontSize: 13,
+            backgroundColor: '#383B43',
+            color: theme.grey200,
+            padding: '10px 14px',
+            lineHeight: '160%',
+            letterSpacing: '-0.005em',
+            fontWeight: 400,
+            fontFamily: 'Spoqa Han Sans Neo',
+            borderRadius: 10,
+          })}
+        >
+          <span>{t('please check to create file name is store name')}</span>
+          <span>{t('please check essential header name')}</span>
+          <span>
+            {t('quantity and amount can only be numbers greater than zero')}
+          </span>
         </div>
       </div>
     </TurtleConfirmModal>
   );
 }
+
+const modalMask = css`
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.45);
+`;
+
+const container = css({
+  backgroundColor: '#ffffff',
+  width: 400,
+  heigth: 479,
+  borderRadius: 12,
+  boxShadow: '0px 8px 28px rgba(34,44,56,0.28)',
+});
 
 export default OrderParsingProcessPresentModal;

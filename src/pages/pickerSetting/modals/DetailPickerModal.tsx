@@ -36,7 +36,7 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('store.info')}
+      title={t('table.store info')}
       visible={visible}
       onClose={() => {
         closeModal();
@@ -60,17 +60,20 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
         >
           <Radio.Group disabled>
-            <Radio value={false}>운영</Radio>
-            <Radio value={true}>폐점</Radio>
+            <Radio value={false}>{t('button.operation')}</Radio>
+            <Radio value={true}>{t('button.closed')}</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
           name="name"
           rules={[{ required: true }]}
-          label={t('store.name')}
+          label={t('table.retailerStoreName')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store')} disabled />
+          <TurtleFormInput
+            placeholder={t('placeholder.input store name')}
+            disabled
+          />
         </Form.Item>
 
         <Form.Item
@@ -78,7 +81,10 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
           label={t('table.retailerStoreURL')}
         >
-          <TurtleFormInput placeholder={t('placeholder.store url')} disabled />
+          <TurtleFormInput
+            placeholder={t('placeholder.input store URL')}
+            disabled
+          />
         </Form.Item>
 
         <Form.Item
@@ -86,7 +92,10 @@ function DetailPickerModal({ visible, closeModal, selectedRow }: Props) {
           rules={[{ required: true }]}
           label={t('table.mobile')}
         >
-          <TurtleFormInput placeholder={t('placeholder.mobile')} disabled />
+          <TurtleFormInput
+            placeholder={t('placeholder.input mobile number')}
+            disabled
+          />
         </Form.Item>
       </Form>
     </TurtleContentModal>

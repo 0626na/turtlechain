@@ -8,12 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import useUser from '@hooks/useUser';
 import { ReactComponent as StoreIcon } from '@icons/store.svg';
 import pickerAPI from '@apis/pickerAPI';
+import { t } from 'i18next';
 
 function StoreButton() {
   const navigate = useNavigate();
   const { store, fillStoreList } = useStore();
   const { user } = useUser();
-
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
     onSuccess: (data) => {
@@ -36,8 +36,13 @@ function StoreButton() {
         </div>
 
         <div css={buttonCss.textContainer}>
-          <span css={buttonCss.topText}>연결된 쇼핑몰</span>
-          <span css={buttonCss.bottomText}>{store.selected?.name} 외 19개</span>
+          <span css={buttonCss.topText}>{t('button.connectedStores')}</span>
+          <span css={buttonCss.bottomText}>
+            {t('store.selectButton', {
+              store: store.selected?.name,
+              storeCount: (getStoreListQuery.data?.data.total_count ?? 0) - 1,
+            })}
+          </span>
         </div>
       </div>
 

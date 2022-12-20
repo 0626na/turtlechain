@@ -1,3 +1,4 @@
+import { TurtleText } from '@components/element';
 import { css } from '@emotion/react';
 import useClearingCart from '@hooks/useClearingCart';
 
@@ -6,7 +7,7 @@ import { PageContent } from '@layout/page';
 import { theme } from '@styles/theme';
 import { Badge, Button, Col, Collapse, DatePicker, Row, Tooltip } from 'antd';
 import { t } from 'i18next';
-
+import { InfoCircleOutlined as InfoIcon } from '@ant-design/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -37,42 +38,50 @@ function Service() {
     <>
       <div css={inner}>
         <span css={clearingDate}>{t('table.payment date')}</span>
-        <Row justify="space-between">
-          <Row>
-            <Col>
-              <Button
-                css={[$button, isToday && greenButton]}
-                onClick={() => {
-                  selectDate(moment().format('YYYY-MM-DD'));
-                }}
-              >
-                {t('description.today')}
-              </Button>
-            </Col>
+        <Row>
+          <Col>
+            <Button
+              css={[$button, isToday && greenButton]}
+              onClick={() => {
+                selectDate(moment().format('YYYY-MM-DD'));
+              }}
+            >
+              {t('description.today')}
+            </Button>
+          </Col>
 
-            <Col>
-              <Tooltip
-                visible={tooltipVisible}
-                placement="bottom"
-                zIndex={1}
-                title={<span>{t('title.can pay before')}</span>}
-              >
-                <DatePicker
-                  defaultValue={
-                    isOtherDay ? moment(cart.clearingRequestDate) : undefined
-                  }
-                  onClick={() => setTooltipVisible(false)}
-                  onChange={(_, date) => {
-                    selectDate(date);
-                  }}
-                  css={[$datePicker, isOtherDay && greenDatePicker]}
-                  allowClear={false}
-                  placeholder="다른 일자선택"
-                />
-              </Tooltip>
-            </Col>
-          </Row>
+          <Col>
+            <Tooltip
+              visible={tooltipVisible}
+              placement="topLeft"
+              align={{ offset: [30, 2] }}
+              zIndex={1}
+              title={<span>{t('title.can pay before')}</span>}
+            >
+              <DatePicker
+                defaultValue={
+                  isOtherDay ? moment(cart.clearingRequestDate) : undefined
+                }
+                onClick={() => setTooltipVisible(false)}
+                onChange={(_, date) => {
+                  selectDate(date);
+                }}
+                css={[$datePicker, isOtherDay && greenDatePicker]}
+                allowClear={false}
+                placeholder="다른 일자선택"
+              />
+            </Tooltip>
+          </Col>
         </Row>
+
+        <TurtleText css={$subtitle}>
+          <span css={subTitleIcon}>
+            <InfoIcon />
+          </span>
+          오늘 결제에 필요한 차감과 미송결제 확인은 1번에서, 최종 결제한 금액
+          설정은 2번에서 해주세요. 금액이 틀릴 경우, 아래 문의하기를 통해
+          문의주세요!
+        </TurtleText>
       </div>
 
       <PageContent gray>
@@ -147,7 +156,7 @@ function Service() {
 }
 
 const inner = css({
-  padding: '18px 36px',
+  padding: '18px 36px 5px 36px',
 });
 const clearingDate = css({
   display: 'inline-block',
@@ -271,5 +280,16 @@ const collapse = css`
     padding: 0px 36px 36px 36px !important;
   }
 `;
+
+const $subtitle = css`
+  margin: 6px 4px 4px 3px;
+
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b6d73;
+`;
+const subTitleIcon = css({
+  marginRight: 5,
+});
 
 export default Service;

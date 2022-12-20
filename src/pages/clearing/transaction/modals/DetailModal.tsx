@@ -72,7 +72,7 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
             title: t('table.overpaidAmount'),
             value: (
               getTransactionDetailQuery?.data?.data.reduce(
-                (acc, item) => acc + item.overpaid_amount,
+                (acc, item) => acc + Number(item.overpaid_amount),
                 0,
               ) ?? ''
             ).toLocaleString(),
@@ -92,9 +92,11 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
         title={() => (
           <TurtleTableTitle
             totalCount={getTransactionDetailQuery?.data?.data.length ?? 0}
-            totalSubstractAmount={getTransactionDetailQuery?.data?.data.reduce(
-              (acc, item) => acc + item.overpaid_amount,
-              0,
+            totalSubstractAmount={Number(
+              getTransactionDetailQuery?.data?.data.reduce(
+                (acc, item) => acc + Number(item.overpaid_amount),
+                0,
+              ),
             )}
             totalRefundAmount={getTransactionDetailQuery?.data?.data.reduce(
               (acc, item) => acc + item.refund_amount,
@@ -170,7 +172,7 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
             title: t('table.overpaidAmount'),
             render: (_, record) =>
               record.overpaid_amount > 0
-                ? '+' + record.overpaid_amount.toLocaleString()
+                ? `+ ${record.overpaid_amount.toLocaleString()}`
                 : record.overpaid_amount.toLocaleString(),
           },
           {
@@ -180,7 +182,7 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
             title: t('table.unpaidAmount'),
             render: (_, record) =>
               record.unpaid_amount > 0
-                ? '+' + record.unpaid_amount.toLocaleString()
+                ? `+ ${record.unpaid_amount.toLocaleString()}`
                 : record.unpaid_amount.toLocaleString(),
           },
         ]}

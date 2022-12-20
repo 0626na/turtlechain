@@ -203,7 +203,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               )}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'placeholder.search by product name, inventory name, vendor name',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

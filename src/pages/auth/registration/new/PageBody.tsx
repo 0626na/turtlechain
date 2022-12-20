@@ -32,7 +32,7 @@ function Pagebody() {
           <ArrowRightIcon />
         </div>
 
-        {/* <div
+        <div
           css={boxCss.item}
           onClick={() => {
             goPicker();
@@ -43,7 +43,7 @@ function Pagebody() {
             <span css={boxCss.text}>사입자</span>
           </div>
           <ArrowRightIcon />
-        </div> */}
+        </div>
       </div>
     </>
   );

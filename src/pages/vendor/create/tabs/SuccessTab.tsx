@@ -51,7 +51,7 @@ function SuccessTab({ isLoading }: Props) {
           t('description.input important memo'),
           t('description.make use of memo'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       {/*

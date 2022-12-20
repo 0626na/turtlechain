@@ -179,7 +179,7 @@ function PageBody() {
           t('description.input important memo'),
           t('description.make use of memo'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
       {/*
        * 교환/반품/미송 삭제 모달
@@ -203,7 +203,8 @@ function PageBody() {
 
       <PageHeader title={t('warehousing.adjustment.')} />
       <PageTitle
-        title={t('summary of invoice issues')}
+        title="교환/반품/미송 현황"
+        subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
         buttons={[
           <TurtleDropdown
             items={[
@@ -283,12 +284,12 @@ function PageBody() {
                         }));
                       }}
                       items={[
-                        { value: '', name: t('warehousing.confirm.all') },
+                        { value: '', name: t('type.all') },
                         {
                           value: 'False',
-                          name: t('warehousing.confirm.false'),
+                          name: t('type.pending'),
                         },
-                        { value: 'True', name: t('warehousing.confirm.true') },
+                        { value: 'True', name: t('type.finish') },
                       ]}
                     />
                   </Col>
@@ -334,7 +335,7 @@ function PageBody() {
                   <Col>
                     <SearchFilter
                       placeholder={t(
-                        'search vendor name, product name, and reference',
+                        'placeholder.search by product name, inventory name, vendor name',
                       )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
@@ -383,7 +384,7 @@ function PageBody() {
               width: 80,
               title: t('table.type'),
               render: (_, record) =>
-                t(`adjustment.process type.${record.type}`),
+                t(`type.adjustment.process type.${record.type}`),
             },
             {
               ellipsis: true,

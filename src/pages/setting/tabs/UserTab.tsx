@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
 import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
@@ -70,9 +70,10 @@ function UserTab() {
   });
 
   const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckQuery',
+    'getSubscriptionCheckInUserTabQuery',
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
+      staleTime: 3000,
       onSuccess: (data) => {
         setIsNewSubscription(data.data.is_new);
         setCurrentSubscriptionStatus(data.data.is_expired);
@@ -113,10 +114,6 @@ function UserTab() {
             pay_number: res.PCD_PAY_CARDNUM,
           });
 
-          setTimeout(() => {
-            getSubscriptionCheckQuery.refetch();
-          }, 2000);
-
           //구독신청 및 재구독시
           if (res.PCD_PAY_WORK === 'PAY')
             message.success(
@@ -128,6 +125,7 @@ function UserTab() {
             message.success(t('card change is complete'), 3);
 
           navigate('/setting?tab=user');
+          getSubscriptionCheckQuery.refetch();
         },
       };
 
@@ -166,11 +164,11 @@ function UserTab() {
   //이메일 유효성 검사
   const emailValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error(t('please input your email')));
+      return Promise.reject(new Error(t('please input email')));
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error(t('this is not valid')));
+      return Promise.reject(new Error(t('this email is not valid')));
     }
 
     return Promise.resolve();
@@ -183,7 +181,7 @@ function UserTab() {
     }
 
     if (!phonePattern.test(value)) {
-      return Promise.reject(new Error(t('this format is not valid')));
+      return Promise.reject(new Error(t('invalid format')));
     }
 
     return Promise.resolve();
@@ -220,7 +218,7 @@ function UserTab() {
       />
 
       <UserCard
-        title={t('default information')}
+        title={t('basic information')}
         icon={<TurtleIcon name="user" />}
       >
         <Form
@@ -239,10 +237,10 @@ function UserTab() {
             });
           }}
         >
-          <Form.Item label={t('user name')} name="name">
+          <Form.Item label={t('table.user name')} name="name">
             <TurtleFormInput disabled />
           </Form.Item>
-          <Form.Item label={t('id')} name="login_id">
+          <Form.Item label={t('table.id')} name="login_id">
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
@@ -250,14 +248,16 @@ function UserTab() {
             name="email"
             rules={[{ validator: emailValidator }]}
           >
-            <TurtleFormInput placeholder={t('please input your email')} />
+            <TurtleFormInput placeholder={t('placeholder.input email')} />
           </Form.Item>
           <Form.Item
             label={t('table.mobile')}
             name="mobile_phone"
             rules={[{ validator: mobileValidator }]}
           >
-            <TurtleFormInput placeholder={t('please input phone number')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           {buttonsVisible && (
@@ -313,7 +313,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    {t('paid plan subscription')}
+                    {t('table.paid plan subscription')}
                   </span>
                 }
               >
@@ -439,7 +439,7 @@ function UserTab() {
                       })
                     }
                   >
-                    {t('payment method change')}
+                    {t('button.payment method change')}
                   </Button>
                   <Button
                     css={css({ color: theme.grey500 })}
@@ -456,7 +456,7 @@ function UserTab() {
                     paddingTop: 10,
                   })}
                 >
-                  <TurtleIcon name="creditCard" />{' '}
+                  <TurtleIcon name="creditcard" />{' '}
                   <span css={css({ marginLeft: 5 })}>
                     {t('creditInfo', {
                       cardName: subscriptionData?.pay_name,
@@ -471,7 +471,9 @@ function UserTab() {
                     justifyContent: 'space-between',
                   })}
                 >
-                  <span>{t('nextPaymentDate', { nextPaymentDate })}</span>
+                  <span>
+                    {t('message.nextPaymentDate', { nextPaymentDate })}
+                  </span>
                   <span>{`₩${serviceCost}`}</span>
                 </div>
               </Form.Item>

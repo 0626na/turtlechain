@@ -10,9 +10,13 @@ import useUser from '@hooks/useUser';
 
 function ClearingCreatePage() {
   const { user } = useUser();
-  const getSubscriptionCheckQuery = useQuery('getSubscriptionCheckQuery', () =>
-    userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? -1 }),
+  const getSubscriptionCheckQuery = useQuery(
+    'getSubscriptionCheckQuery',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    { enabled: !!user?.company_id },
   );
+
   return (
     <>
       <Helmet title={`${t('turtleChain')} - ${t('clearing.create')}`} />

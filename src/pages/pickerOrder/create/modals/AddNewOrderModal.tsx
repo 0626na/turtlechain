@@ -20,6 +20,9 @@ interface Props {
   close: () => void;
 }
 
+/**
+ * 단건 추가 모달
+ */
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();
   const [selectStore, setSelectStore] = useState<PickerStore>({
@@ -31,8 +34,9 @@ function AddNewOrderModal({ visible, close }: Props) {
       },
     ],
   });
-  const { updateSuccess } = useOrderCart();
+  const { addSingleOrder } = useOrderCart();
   const [building, setBuilding] = useState('');
+  const [floor, setFloor] = useState('');
   const { buildingData } = usePreset();
 
   //사입삼촌에 등록된 쇼핑몰 목록
@@ -44,12 +48,31 @@ function AddNewOrderModal({ visible, close }: Props) {
     },
   );
 
+  const storeValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error(t('placeholder.select store')));
+    }
+
+    return Promise.resolve();
+  };
+
+  const addressColValidator = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error(t('please input col and loc')));
+    }
+
+    return Promise.resolve();
+  };
+
+  /**
+   * 모달창 닫으면 모달내의 데이터 리셋
+   */
   useEffect(() => form.resetFields(), [form, visible]);
 
   return (
     <>
       <TurtleContentModal
-        title="발주 단건추가"
+        title={t('title.add single order')}
         visible={visible}
         onClose={() => close()}
       >
@@ -60,7 +83,7 @@ function AddNewOrderModal({ visible, close }: Props) {
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
           onFinish={(values) => {
-            updateSuccess({
+            addSingleOrder({
               rt_store_id: selectStore.id,
               rt_store_name: selectStore.name,
               type: 'single',
@@ -74,9 +97,9 @@ function AddNewOrderModal({ visible, close }: Props) {
                   mobile: values.mobile,
                   product_name: values.vendor_product_name,
                   product_option: values.option,
-                  product_count: values.count,
-                  product_price: values.price,
-                  order_type: values.type,
+                  product_count: values.count ?? 0,
+                  product_price: values.price ?? 0,
+                  order_type: values.type ?? 'order',
                   creation_type: 'single',
                   memo: values.memo,
                   ws_store_info: [],
@@ -90,13 +113,18 @@ function AddNewOrderModal({ visible, close }: Props) {
         >
           {/* 쇼핑몰 */}
           <Form.Item
-            label="쇼핑몰명"
+            label={t('table.retailerStoreName')}
             name="store_name"
-            rules={[{ required: true, message: '쇼핑몰을 입력해주세요' }]}
+            rules={[
+              {
+                required: true,
+                validator: storeValidator,
+              },
+            ]}
           >
             <TurtleFormSelect
               showSearch
-              placeholder="쇼핑몰을 입력해주세요"
+              placeholder={t('placeholder.select store')}
               items={getPickerStoresQuery.data?.data.store_list.map((store) => {
                 return {
                   name: store.name,
@@ -124,9 +152,11 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
-            rules={[{ required: true, message: '거래처명을 입력해주세요' }]}
+            rules={[
+              { required: true, message: t('placeholder.input vendor name') },
+            ]}
           >
-            <TurtleFormInput placeholder="거래처명을 입력해주세요" />
+            <TurtleFormInput placeholder={t('placeholder.input vendor name')} />
           </Form.Item>
           {/* 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
@@ -138,8 +168,13 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_building" noStyle>
                   <TurtleFormSelect
-                    placeholder="상가"
-                    onChange={(value) => setBuilding(value)}
+                    showSearch
+                    placeholder={t('placeholder.building')}
+                    onChange={(value) => {
+                      setBuilding(value);
+                      form.resetFields(['vendor_address_floor']);
+                      form.resetFields(['vendor_address_col']);
+                    }}
                     items={
                       buildingData &&
                       Object.keys(buildingData.data).map((name) => {
@@ -159,7 +194,12 @@ function AddNewOrderModal({ visible, close }: Props) {
               >
                 <Form.Item name="vendor_address_floor" noStyle>
                   <TurtleFormSelect
-                    placeholder="층"
+                    showSearch
+                    placeholder={t('placeholder.floor')}
+                    onChange={(value) => {
+                      setFloor(value);
+                      form.resetFields(['vendor_address_col']);
+                    }}
                     items={
                       building !== ''
                         ? Object.keys(buildingData.data[building]).map(
@@ -178,8 +218,12 @@ function AddNewOrderModal({ visible, close }: Props) {
                   flex-basis: 33%;
                 `}
               >
-                <Form.Item name="vendor_address_col" noStyle>
-                  <TurtleFormInput placeholder="열-호" />
+                <Form.Item
+                  name="vendor_address_col"
+                  noStyle
+                  rules={[{ validator: addressColValidator }]}
+                >
+                  <TurtleFormInput placeholder={t('placeholder.col loc')} />
                 </Form.Item>
               </div>
             </div>
@@ -190,14 +234,21 @@ function AddNewOrderModal({ visible, close }: Props) {
             label={t('table.vendorEtcAddress')}
           >
             <TurtleFormInput
-              placeholder="기타 주소를 입력해주세요"
-              disabled={building === '기타' ? false : true}
+              placeholder={t('placeholder.input other address')}
+              disabled={building === t('etc.') ? false : true}
             />
           </Form.Item>
           {/* 휴대번호 */}
-          <Form.Item label={t('table.mobile')} name="mobile" required>
+          <Form.Item
+            label={t('table.mobile')}
+            name="mobile"
+            required
+            rules={[
+              { required: true, message: t('placeholder.input mobile number') },
+            ]}
+          >
             <TurtleFormInput
-              placeholder="휴대전화번호를 입력해주세요"
+              placeholder={t('placeholder.input mobile number')}
               maxLength={11}
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replaceAll(
@@ -213,46 +264,55 @@ function AddNewOrderModal({ visible, close }: Props) {
           <Form.Item
             label={t('table.vendorProductName')}
             name="vendor_product_name"
-            rules={[{ required: true, message: '상품명을 입력해주세요' }]}
+            rules={[
+              {
+                required: true,
+                message: t('placeholder.input vendor product name'),
+              },
+            ]}
           >
-            <TurtleFormInput placeholder="거래처 상품명을 입력하세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input vendor product name')}
+            />
           </Form.Item>
           {/* 옵션  */}
           <Form.Item
             label={t('table.option')}
             name="option"
-            rules={[{ required: true, message: '옵션을 입력해주세요' }]}
+            rules={[{ required: true, message: t('placeholder.input option') }]}
           >
-            <TurtleFormInput placeholder="옵션을 입력해주세요" />
+            <TurtleFormInput placeholder={t('placeholder.input option')} />
           </Form.Item>
           {/* 분류 */}
-          <Form.Item
-            label={t('table.type')}
-            name="type"
-            rules={[{ required: true, message: '분류를 선택해주세요' }]}
-          >
+          <Form.Item label={t('table.type')} name="type">
             <Radio.Group>
-              <Radio value="발주">발주</Radio>
-              <Radio value="미송">미송</Radio>
-              <Radio value="반품">반품</Radio>
-              <Radio value="교환">교환</Radio>
-              <Radio value="샘플">샘플</Radio>
-              <Radio value="픽업">픽업</Radio>
-              <Radio value="기타">기타</Radio>
+              <Radio value="order">{t('type.orderTypes.order')}</Radio>
+              <Radio value="reserve">{t('type.orderTypes.reserve')}</Radio>
+              <Radio value="takeback">{t('type.orderTypes.takeback')}</Radio>
+              <Radio value={t('type.orderTypes.exchange')}>
+                {t('type.orderTypes.exchange')}
+              </Radio>
+              <Radio value="sample">{t('type.orderTypes.sample')}</Radio>
+              <Radio value="pickup">{t('type.orderTypes.pickup')}</Radio>
+              <Radio value="extra">{t('type.orderTypes.extra')}</Radio>
             </Radio.Group>
           </Form.Item>
 
           {/* 가격 */}
           <Form.Item label={t('table.price')} name="price">
-            <TurtleFormInput placeholder="ex 7,000" />
+            <TurtleFormInput placeholder={t('placeholder.ex. price example')} />
           </Form.Item>
           {/* 수량 */}
-          <Form.Item label={t('table.count')} name="count">
-            <TurtleFormInput placeholder="ex 20" />
+          <Form.Item
+            label={t('table.count')}
+            name="count"
+            rules={[{ required: true, message: t('please input count') }]}
+          >
+            <TurtleFormInput placeholder={t('placeholder.ex. count example')} />
           </Form.Item>
           {/* 메모 */}
           <Form.Item label={t('table.memo')} name="memo">
-            <TurtleFormInput placeholder="ex 7,000" />
+            <TurtleFormInput placeholder={t('placeholder.ex. price example')} />
           </Form.Item>
           <Form.Item noStyle shouldUpdate>
             {(values) => {
@@ -270,10 +330,10 @@ function AddNewOrderModal({ visible, close }: Props) {
                       !values.getFieldValue('mobile') ||
                       !values.getFieldValue('vendor_product_name') ||
                       !values.getFieldValue('option') ||
-                      !values.getFieldValue('type')
+                      !values.getFieldValue('count')
                     }
                   >
-                    발주 추가하기
+                    {t('button.addOrder')}
                   </PrimaryButton>
                 </Row>
               );

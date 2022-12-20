@@ -8,6 +8,7 @@ export interface WholesalerStore {
   col: string;
   loc: string;
   ext: string;
+  phone: string;
   store_phone: {
     phone: string;
   }[];
@@ -21,10 +22,9 @@ export interface WholesalerStore {
 }
 
 export interface RequestGetList {
-  search_type: string;
   search_string: string;
   page: number;
-  page_size: number;
+  page_size?: number;
 }
 
 export interface ResponseGetList {
@@ -35,14 +35,32 @@ export interface ResponseGetList {
   };
 }
 
+export interface RequestGet {
+  storeId: number;
+}
+
+export interface ResponseGet {
+  msg: string;
+  data: WholesalerStore;
+}
+
 const getList = async (params: RequestGetList) => {
   const url = 'provisioning/wholesaler/stores';
   const response = await v2Axios.get<ResponseGetList>(url, { params });
+
+  return response.data;
+};
+
+const get = async (params: RequestGet) => {
+  const url = `provisioning/wholesaler/stores/${params.storeId}`;
+  const response = await v2Axios.get<ResponseGet>(url);
+
   return response.data;
 };
 
 const wholesalerAPI = {
   getList,
+  get,
 };
 
 export default wholesalerAPI;
