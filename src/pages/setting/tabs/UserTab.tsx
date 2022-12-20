@@ -70,9 +70,10 @@ function UserTab() {
   });
 
   const getSubscriptionCheckQuery = useQuery(
-    'getSubscriptionCheckQuery',
+    'getSubscriptionCheckInUserTabQuery',
     () => userAPI.getSubscriptionCheck({ company_id: companyID }),
     {
+      refetchInterval: 3000,
       onSuccess: (data) => {
         setIsNewSubscription(data.data.is_new);
         setCurrentSubscriptionStatus(data.data.is_expired);
@@ -112,10 +113,6 @@ function UserTab() {
             pay_name: res.PCD_PAY_CARDNAME,
             pay_number: res.PCD_PAY_CARDNUM,
           });
-
-          setTimeout(() => {
-            getSubscriptionCheckQuery.refetch();
-          }, 2000);
 
           //구독신청 및 재구독시
           if (res.PCD_PAY_WORK === 'PAY')
