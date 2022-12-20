@@ -183,6 +183,7 @@
     "ex. image url": "ex.https://kkobugi.co.kr/..",
     "search by vendor name, product name, mobile": "거래처명, 상품명, 휴대전화 번호 검색",
     "search by vendor name, mobile, account number": "거래처명, 휴대전화 번호, 계좌번호 검색",
+    "search by vendor name, product name, vendor product name": "거래처명, 상품명, 거래처 상품명 검색",
     "search by store name, product name, mobile": "쇼핑몰명, 상품명, 휴대전화 번호 검색",
     "select different date": "다른 일자선택",
     "vendor search": "거래처 검색",
@@ -246,12 +247,14 @@
     "process": "처리하기",
     "next": "다음",
     "register adjustment": "교환/반품 등록하기",
+    "add vendor": "거래처 추가하기",
     "add product": "상품 추가하기",
     "add & save": "상품 등록하기",
     "save vendor": "거래처 등록하기",
     "product list": "상품목록",
     "integrate inventory program": "재고프로그램 연동",
     "integrate": "확인",
+    "check": "확인",
     "add stock": "입고 추가하기",
     "make code": "코드 만들기",
     "select": "선택",
@@ -283,7 +286,9 @@
     "confirming": "마감하기",
     "do cancel": "취소하기",
     "register warehousing sheet": "입고서 등록하기",
-    "add pending delivery": "미송추가"
+    "add pending delivery": "미송추가",
+    "add adjustment": "교환/반품/미송 추가",
+    "add exchange/returns": "교환/반품 추가"
   },
 
   "message": {
@@ -415,12 +420,12 @@
     "service updates": "터틀체인 업데이트 소식",
     "vendor,product": "거래처/상품",
     "really confirm": "정말 마감할까요?",
-    "add adjustment": "교환/반품/미송 추가",
-    "add exchange/returns": "교환/반품 추가",
     "membershipInfo": "멤버십 정보",
     "preview of new products": "상품등록 미리보기",
     "setting": "설정",
-    "tutorial": "사용가이드"
+    "tutorial": "사용가이드",
+    "update vendor name": "거래처명 수정",
+    "request update vendor": "거래처 정보수정 요청"
   },
 
   "description": {
@@ -528,7 +533,9 @@
     "this will cancel the confirmation": "해당 입고서의 마감을 취소합니다.",
     "this will confirm stocked products for the invoice": "해당 입고서를 마감합니다.",
     "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
-    "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요."
+    "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
+    "update select vendor": "선택한 거래처의 이름을 수정합니다.",
+    "input vendor name": "원하는 거래처명을 입력해주세요."
   },
 
   "type": {
@@ -727,7 +734,6 @@
     "login": "로그인",
     "logout": "로그아웃",
     "autoLogin": "자동 로그인",
-
     "resetPassword": "비밀번호 재설정",
     "registration": "서비스 가입",
     "registrationReturn": "가입반려",

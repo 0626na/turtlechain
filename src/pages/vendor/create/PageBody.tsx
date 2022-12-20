@@ -113,7 +113,7 @@ function PageBody() {
         visible={inventoryModalVisible}
         title={t('button.inventory program integration')}
         description={[
-          t('description.please select which dates you wish to integrate.'),
+          t('description.please select which dates you wish to integrate'),
           t(
             'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),

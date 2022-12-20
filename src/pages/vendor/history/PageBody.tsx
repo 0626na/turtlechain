@@ -132,7 +132,7 @@ function PageBody() {
           vendorUpdateMutation.isLoading ? () => {} : closeupdateVendorNameModal
         }
         defaultValue={selectedRow?.vendor_name}
-        okText={t('modify')}
+        okText={t('button.check')}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
             id: selectedRow?.id as number,
@@ -140,10 +140,10 @@ function PageBody() {
           });
           closeupdateVendorNameModal();
         }}
-        title={t('modifying the account name')}
+        title={t('title.update vendor name')}
         description={[
-          t('modify the name of the selected account'),
-          t('please enter the desired account name'),
+          t('description.update select vendor'),
+          t('description.input vendor name'),
         ]}
       />
       {/**

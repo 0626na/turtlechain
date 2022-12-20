@@ -89,7 +89,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('request for information Update')}
+        title={t('title.request update vendor')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -299,9 +299,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>
-                {t('add a copy of your receipt or invoice')}
-              </AddButton>
+              <AddButton>{t('button.attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 
