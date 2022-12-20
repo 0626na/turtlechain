@@ -66,7 +66,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
    */
   const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
     'getSubscriptionCheckQuery',
-    () => userAPI.getSubscriptionCheck({ company_id: user?.company_id ?? 0 }),
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
     {
       enabled: !!user?.company_id,
       onSuccess: (data) => setIsSubscription(data.data.is_expired),
