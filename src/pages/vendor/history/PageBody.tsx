@@ -266,8 +266,12 @@ function PageBody() {
               title: (
                 <TextWithTooltip
                   tooltipContent={[
-                    '당일결제 시, 부가세도 그 날에 함께 ',
-                    '전달되어야 하는 거래처를 체크해주세요. ',
+                    t(
+                      'description.check if VAT needs to be included with an invoice1',
+                    ),
+                    t(
+                      'description.check if VAT needs to be included with an invoice2',
+                    ),
                   ]}
                 >
                   {t('table.vatIncluded')}

@@ -420,7 +420,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    {t('subscription paid plan')}
+                    {t('table.subscription paid plan')}
                   </span>
                 }
               >

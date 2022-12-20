@@ -145,7 +145,7 @@ function PageBody() {
           value={[
             {
               color: 'green',
-              title: '요청',
+              title: t('table.request'),
               count:
                 getClearingSheetQuery.data?.data.clearing_summary.request
                   .count ?? 0,
@@ -155,7 +155,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: '대기',
+              title: t('table.pending'),
               count:
                 getClearingSheetQuery.data?.data.clearing_summary.pending
                   .count ?? 0,
@@ -165,7 +165,7 @@ function PageBody() {
             },
             {
               color: 'cyan',
-              title: '완료',
+              title: t('table.complete'),
               count:
                 getClearingSheetQuery.data?.data.clearing_summary.complete
                   .count ?? 0,
@@ -201,19 +201,19 @@ function PageBody() {
                     items={[
                       {
                         value: 'all',
-                        name: t('clearing.status.all'),
+                        name: t('table.all'),
                       },
                       {
                         value: 'request',
-                        name: t('clearing.status.request'),
+                        name: t('table.request'),
                       },
                       {
                         value: 'pending',
-                        name: t('clearing.status.pending'),
+                        name: t('table.pending'),
                       },
                       {
                         value: 'complete',
-                        name: t('clearing.status.complete'),
+                        name: t('table.complete'),
                       },
                     ]}
                   />
@@ -261,7 +261,7 @@ function PageBody() {
                     : status === 'pending'
                     ? 'orange'
                     : 'cyan';
-                const text = t(`clearing.status.${status}`);
+                const text = t(`table.${status}`);
                 return <TurtleTag color={color}>{text}</TurtleTag>;
               },
             },

@@ -154,7 +154,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         <Form.Item
           name="name"
           rules={[{ required: true }]}
-          label={t('store.name')}
+          label={t('table.retailerStoreName')}
         >
           <TurtleFormInput placeholder={t('placeholder.store')} />
         </Form.Item>

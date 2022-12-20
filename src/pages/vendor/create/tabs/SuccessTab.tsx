@@ -93,11 +93,11 @@ function SuccessTab({ isLoading }: Props) {
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
-          // {
-          //   ellipsis: true,
-          //   title: t('table.retailerStoreInput'),
-          //   render: (_, record) => `${record.name}  ${record.address}`,
-          // },
+          {
+            ellipsis: true,
+            title: t('table.retailerStoreInput'),
+            render: (_, record) => `${record.name}  ${record.address}`,
+          },
           {
             ellipsis: true,
             title: t('table.vendorName'),
@@ -134,8 +134,12 @@ function SuccessTab({ isLoading }: Props) {
             title: (
               <TextWithTooltip
                 tooltipContent={[
-                  t('check if VAT needs to be included with an invoice1'),
-                  t('check if VAT needs to be included with an invoice2'),
+                  t(
+                    'description.check if VAT needs to be included with an invoice1',
+                  ),
+                  t(
+                    'description.check if VAT needs to be included with an invoice2',
+                  ),
                 ]}
               >
                 {t('table.vatIncluded')}
@@ -153,33 +157,33 @@ function SuccessTab({ isLoading }: Props) {
             ),
           },
 
-          // {
-          //   ellipsis: true,
-          //   width: 130,
-          //   title: (
-          //     <TextWithTooltip
-          //       tooltipContent={[
-          //         '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
-          //       ]}
-          //     >
-          //       {t('table.useVendorName')}
-          //     </TextWithTooltip>
-          //   ),
+          {
+            ellipsis: true,
+            width: 130,
+            title: (
+              <TextWithTooltip
+                tooltipContent={[
+                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
+                ]}
+              >
+                {t('table.useVendorName')}
+              </TextWithTooltip>
+            ),
 
-          //   render: (_, record) => (
-          //     <TurtleTableInput
-          //       size="small"
-          //       defaultValue={record.useVendorName}
-          //       onChange={(e) => {
-          //         handleUseVendorNameUpdate(
-          //           e.currentTarget.value,
-          //           record,
-          //           'successList',
-          //         );
-          //       }}
-          //     />
-          //   ),
-          // },
+            render: (_, record) => (
+              <TurtleTableInput
+                size="small"
+                defaultValue={record.useVendorName}
+                onChange={(e) => {
+                  handleUseVendorNameUpdate(
+                    e.currentTarget.value,
+                    record,
+                    'successList',
+                  );
+                }}
+              />
+            ),
+          },
           {
             ellipsis: true,
             width: 100,

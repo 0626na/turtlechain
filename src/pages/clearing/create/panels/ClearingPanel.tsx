@@ -219,7 +219,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                     </Col>
                     <Col>
                       <SearchFilter
-                        placeholder="거래처 검색"
+                        placeholder={t('placeholder.vendor search')}
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                       />
@@ -238,7 +238,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: '거래처명',
+              title: t('table.vendorName'),
               render: (_, record) => {
                 const isMark =
                   record.reserve_subtract_amount +
@@ -267,7 +267,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                     '전달되어야 하는 거래처',
                   ]}
                 >
-                  부가세 바로전달
+                  {t('table.vatIncluded')}
                 </TextWithTooltip>
               ),
               render: (_, record) => (
@@ -281,14 +281,14 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              title: '결제요청 금액',
+              title: t('table.unpaidAmount'),
               render: (_, record) =>
                 record.clearing_amount?.toLocaleString() ?? 0,
             },
             {
               ellipsis: true,
               align: 'right',
-              title: '결제할 금액',
+              title: t('table.amount to be paid'),
               width: 250,
               onCell: () => ({
                 onClick: (e) => {
@@ -298,7 +298,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               render: (_, record) => (
                 <div css={{ width: '50%', display: 'inline-block' }}>
                   <TurtleTableNumberInput
-                    placeholder="금액 입력"
+                    placeholder={t('placeholder.amount input')}
                     value={
                       (record.clearing_payment_amount as number) > 0
                         ? (record.clearing_payment_amount as number)

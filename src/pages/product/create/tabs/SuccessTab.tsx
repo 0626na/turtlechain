@@ -44,7 +44,7 @@ function SuccessTab({ loading, ...props }: Props) {
           t('write freely anything thats important about this vendor'),
           t('use this memo as your personal note'),
         ]}
-        placeholder={t('ex, double check its invoices!')}
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       {/*

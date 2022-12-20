@@ -140,18 +140,18 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             columns={[
               {
                 ellipsis: true,
-                title: '등록 일자',
+                title: t('table.createdDate'),
                 render: (_, record) =>
                   moment(record.created_date).format('YYYY-MM-DD'),
               },
               {
                 ellipsis: true,
-                title: '분류',
+                title: t('table.type'),
                 render: (_, record) =>
                   // i18
                   record.type === 'adjustment_subtract'
-                    ? '매입 차감'
-                    : '미송 차감',
+                    ? t('table.purchase subtract')
+                    : t('table.reserve subtract'),
               },
               {
                 ellipsis: true,
@@ -183,7 +183,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               {
                 ellipsis: true,
                 align: 'right',
-                title: '사용가능 금액',
+                title: t('table.overpaidAmount'),
                 render: (_, record) =>
                   record.type === 'adjustment_subtract'
                     ? record.overpaid_amount.toLocaleString()
@@ -201,7 +201,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
                     ]}
                   >
-                    사용금액
+                    {t('table.used amount')}
                   </TextWithTooltip>
                 ),
                 render: (_, record) => (
@@ -209,7 +209,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                     {record.type === 'adjustment_subtract' ? (
                       <TurtleTableNumberInput
                         step={1000}
-                        placeholder="금액 입력"
+                        placeholder={t('placeholder.amount input')}
                         value={record.overpaid_payment_amount as number}
                         max={record.overpaid_amount}
                         onChange={(value) => {
@@ -255,18 +255,18 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: '등록 날짜',
+              title: t('table.registartion date'),
               render: (_, record) =>
                 moment(record.created_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
-              title: '거래처명',
+              title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              title: '당일 미송 금액',
+              title: t('table.today reserve amount'),
               align: 'right',
               render: (_, record) =>
                 record.reserve_payment_amount.toLocaleString(),

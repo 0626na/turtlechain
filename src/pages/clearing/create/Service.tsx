@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 import ClearingPanel from './panels/ClearingPanel';
 import WarehousingPanel from './panels/WarehousingPanel';
+import { t } from 'i18next';
 
 // 2.0
 function Service() {
@@ -67,7 +68,7 @@ function Service() {
                 }}
                 css={[$datePicker, isOtherDay && greenDatePicker]}
                 allowClear={false}
-                placeholder="다른 일자선택"
+                placeholder={t('placeholder.select different date')}
               />
             </Tooltip>
           </Col>

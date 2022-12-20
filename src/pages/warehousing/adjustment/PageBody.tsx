@@ -366,9 +366,9 @@ function PageBody() {
               render: (_, { is_cleared }) => (
                 <div>
                   {is_cleared ? (
-                    <TurtleTag color="cyan">마감</TurtleTag>
+                    <TurtleTag color="cyan">{t('type.finish')}</TurtleTag>
                   ) : (
-                    <TurtleTag color="orange">대기</TurtleTag>
+                    <TurtleTag color="orange">{t('type.pending')}</TurtleTag>
                   )}
                 </div>
               ),

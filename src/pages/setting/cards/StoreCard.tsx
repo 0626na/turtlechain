@@ -48,7 +48,9 @@ function StoreCard({ store }: Props) {
                 : '#00b3be',
             }}
           />
-          <span css={marginLeft}>{store.is_closed ? '폐점' : '운영'}</span>
+          <span css={marginLeft}>
+            {store.is_closed ? t('table.closed') : t('table.open')}
+          </span>
         </div>
       </div>
 
