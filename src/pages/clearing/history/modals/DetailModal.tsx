@@ -53,7 +53,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
         value={[
           {
             title: t('table.paymentStatus'),
-            value: t(`clearing.status.${selectedRow?.status}`).toString(),
+            value: t(`type.status.${selectedRow?.status}`).toString(),
           },
           {
             title: t('table.paymentRequestDate'),

@@ -597,7 +597,6 @@
       "event_notificaton": "이벤트 소식 등 알림 정보받기"
     },
     "status": {
-      "": "진행상태",
       "request": "요청",
       "pending": "대기",
       "complete": "완료"
