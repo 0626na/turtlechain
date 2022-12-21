@@ -134,9 +134,7 @@
     "processing method": "처리방식",
     "confirm password": "비밀번호 확인",
     "new password": "새 비밀번호",
-    "email": "이메일",
-    "accountNumber": "계좌번호",
-    "accountHolder": "예금주"
+    "email": "이메일"
   },
 
   "placeholder": {
@@ -175,6 +173,7 @@
     "input business number": "사업자 번호를 입력해주세요",
     "input owner name": "대표자명을 입력해주세요",
     "input memo": "메모를 입력해주세요",
+    "ex, double check its invoices!": "Ex, 영수증 이중으로 확인 또 확인!",
     "ex. id": "ex. 김거북",
     "ex. email": "ex. gbkim@gmail.com",
     "ex. mobile": "ex. 010-1234-5678",
@@ -450,11 +449,11 @@
     "please phone auth": "가입 시 입력한 휴대전화 번호를 인증해주세요.",
     "correct id list": "고객님의 정보와 일치하는 아이디 목록입니다.",
     "required item": "필수 입력값입니다.",
-    "really delete": "정말 삭제하시겠습니까?",
-    "memoInput1": "해당 건과 관련해 중요한 내용을 기록해보세요.",
-    "memoInput2": "개인 메모로도 자유롭게 활용할수 있어요.",
     "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다.",
+    "check if VAT needs to be included with an invoice1": "당일결제 시, 부가세도 그 날에 함께",
+    "check if VAT needs to be included with an invoice2": "전달되어야 하는 거래처를 체크해주세요.",
+    "write freely of what you wish to use as vendors name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.",
     "nim": "님",
     "won": "원",
     "welcome turtlechain": "터틀체인 신규가입을 환영합니다!",
@@ -553,10 +552,7 @@
     "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
     "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
     "update select vendor": "선택한 거래처의 이름을 수정합니다.",
-    "input vendor name": "원하는 거래처명을 입력해주세요.",
-    "check if VAT needs to be included with an invoice1": "당일결제 시, 부가세도 그 날에 함께",
-    "check if VAT needs to be included with an invoice2": "전달되어야 하는 거래처를 체크해주세요.",
-    "write freely of what you wish to use as vendors name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요."
+    "input vendor name": "원하는 거래처명을 입력해주세요."
   },
 
   "type": {
@@ -657,6 +653,7 @@
     "preview": "발주서 미리보기",
     "create": "발주등록"
   },
+
   "warehousing": {
     "adjustment": {
       "": "교환/반품/미송",

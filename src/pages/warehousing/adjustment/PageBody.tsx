@@ -185,7 +185,7 @@ function PageBody() {
        * 교환/반품/미송 삭제 모달
        */}
       <TurtleConfirmModal
-        title={t('description.really delete')}
+        title={t('title.really delete')}
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
