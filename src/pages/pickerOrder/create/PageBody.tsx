@@ -37,6 +37,7 @@ function PageBody() {
   const {
     cart,
     ready,
+    countOrderStores,
     countSucessOrdersCount,
     countFailList,
     countOrdersForType,
@@ -155,7 +156,7 @@ function PageBody() {
     },
     {
       title: t('title.orderStores'),
-      content: t('description.count', { count: countSucessOrdersCount() }),
+      content: t('description.count', { count: countOrderStores() }),
     },
     {
       title: t('title.totalOrderCountInConfirm'),

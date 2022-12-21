@@ -296,15 +296,28 @@ const useOrderCart = () => {
   }, [cart.failList]);
 
   /**
+   * 발주 쇼핑몰 갯수
+   */
+  const countOrderStores = useCallback(() => {
+    return cart.successList.length;
+  }, [cart.successList]);
+
+  /**
    * 성공 발주 갯수
    */
   const countSucessOrdersCount = useCallback(() => {
-    const count = cart.successList.reduce(
+    let count = cart.successList.reduce(
       (acc, store) => acc + store.orders.length,
       0,
     );
+
+    cart.failList.map((store) => {
+      store.orders.map((order) => {
+        if (order.mobile !== '') count++;
+      });
+    });
     return count;
-  }, [cart.successList]);
+  }, [cart.successList, cart.failList]);
 
   /**
    * 실패데이터 카운팅
@@ -588,6 +601,7 @@ const useOrderCart = () => {
     addSingleOrderForStore,
     countSucessOrdersCount,
     countFailList,
+    countOrderStores,
     calculateTotalPrice,
     orderFormat,
     setOrderFormat,
