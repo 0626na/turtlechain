@@ -65,13 +65,13 @@ function AdjustmentStatusCard() {
           [
             {
               color: 'orange',
-              title: t('type.adj status.pending'),
+              title: t('type.adj status.true'),
               count: pending.count,
               price: pending.price,
             },
             {
               color: 'skyblue',
-              title: t('type.adj status.pending'),
+              title: t('type.adj status.false'),
               count: completed.count,
               price: completed.price,
             },
