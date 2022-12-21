@@ -54,7 +54,10 @@ function PageBody() {
     onSuccess: (data) => {
       resetCart();
       message.success(
-        `성공적으로 등록했습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+        t('message.success register product', {
+          success: data.data.success,
+          duplicated: data.data.fail,
+        }),
       );
       navigate('/product/history');
     },
@@ -73,11 +76,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.inventory program integration')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={loading}
@@ -102,9 +105,9 @@ function PageBody() {
        *  confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 등록할까요?"
-        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
-        okText="등록"
+        title={t('title.really register')}
+        description={[t('description.except fail product')]}
+        okText={t('button.register')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
@@ -123,9 +126,9 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title={t('preview of New Products')}
+        title={t('title.preview of new products')}
         subTitle={t(
-          'your vendor list must be updated before adding new products',
+          'description.your vendor list must be updated before adding new products',
         )}
         buttons={[
           <TertiaryButton
@@ -174,12 +177,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${cart.successList.length})`}
+            tab={`${t('title.success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${cart.failList.length})`}
+            tab={`${t('title.fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>

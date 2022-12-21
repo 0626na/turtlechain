@@ -154,7 +154,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         <Form.Item
           name="name"
           rules={[{ required: true }]}
-          label={t('store.name')}
+          label={t('table.retailerStoreName')}
         >
           <TurtleFormInput placeholder={t('placeholder.store')} />
         </Form.Item>
@@ -179,7 +179,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           <div css={flexGap}>
             <Form.Item name="bank" rules={[{ required: true }]} noStyle>
               <TurtleFormSelect
-                placeholder={t('bank')}
+                placeholder={t('table.bank')}
                 items={
                   Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,

@@ -49,7 +49,7 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title="장부 상세보기"
+      title={t('title.ledger detail')}
       visible={visible}
       onClose={onClose}
     >

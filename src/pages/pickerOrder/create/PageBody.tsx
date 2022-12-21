@@ -150,16 +150,16 @@ function PageBody() {
    */
   const confirmModalItems = [
     {
-      title: t('orderDate'),
+      title: t('table.orderDate'),
       content: cart.selectedDate.format('YYYY-MM-DD'),
     },
     {
-      title: t('orderStores'),
-      content: t('count', { count: countSucessOrdersCount() }),
+      title: t('title.orderStores'),
+      content: t('description.count', { count: countSucessOrdersCount() }),
     },
     {
       title: t('totalOrderCountInConfirm'),
-      content: t('count', { count: countOrdersForType().total }),
+      content: t('description.count', { count: countOrdersForType().total }),
     },
     {
       title: t('totalOrderPriceInComfirm'),
@@ -176,10 +176,10 @@ function PageBody() {
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
       <ConfirmOrderModal
-        title={t('orderConfirm')}
+        title={t('title.really order')}
         description={[
-          t('failed orders are except'),
-          t('please check order info again'),
+          t('description.failed orders are except'),
+          t('description.please check order info again'),
         ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
@@ -208,10 +208,10 @@ function PageBody() {
       )}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
-        title={t('order is problem')}
+        title={t('title.order is problem')}
         description={[
-          t('there are orders to modify'),
-          t('please check error and reload'),
+          t('description.there are orders to modify'),
+          t('description.please check error and reload'),
         ]}
         onCancel={closeParsingProcessModal}
         onOk={() => {
@@ -254,10 +254,12 @@ function PageBody() {
                 fontWeight: 500,
               })}
             >
-              {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
+              {`${t('description.complete orders today')} ${
+                todayOrdersCount.complete
+              }`}{' '}
               <span css={css({ color: theme.grey400 })}>
                 {`/ 
-              ${t('count', { count: todayOrdersCount.total })} | `}
+              ${t('description.count', { count: todayOrdersCount.total })} | `}
               </span>
             </TurtleText>
           </Tooltip>,
@@ -288,12 +290,15 @@ function PageBody() {
                 fontWeight: 500,
               })}
             >
-              {`${t('incomplete orders today')} ${
+              {`${t('description.incomplete orders today')} ${
                 todayOrdersCount.total - todayOrdersCount.complete
               }`}{' '}
-              <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
-                count: todayOrdersCount.total,
-              })}`}</span>
+              <span css={css({ color: theme.grey400 })}>{`/ ${t(
+                'description.count',
+                {
+                  count: todayOrdersCount.total,
+                },
+              )}`}</span>
             </TurtleText>
           </Tooltip>,
           <TertiaryButton
@@ -346,12 +351,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${countSucessOrdersCount()})`}
+            tab={`${t('title.success')}(${countSucessOrdersCount()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${countFailList()})`}
+            tab={`${t('title.fail')}(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -372,7 +377,9 @@ function PageBody() {
                 {t('orderTotalCount')}
               </span>
               {'   '}
-              {` ${t('count', { count: countOrdersForType().total })}`}
+              {` ${t('description.count', {
+                count: countOrdersForType().total,
+              })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
                   'order.types.exchange',

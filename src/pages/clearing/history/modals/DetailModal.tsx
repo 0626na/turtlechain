@@ -46,14 +46,14 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
     <TurtleContentModal
       size="large"
       visible={visible}
-      title="결제내역 상세보기"
+      title={t('title.clearing list detail')}
       onClose={onClose}
     >
       <TurtleStatistics
         value={[
           {
             title: t('table.paymentStatus'),
-            value: t(`clearing.status.${selectedRow?.status}`).toString(),
+            value: t(`type.status.${selectedRow?.status}`).toString(),
           },
           {
             title: t('table.paymentRequestDate'),
@@ -117,9 +117,11 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             align: 'right',
             title: t('table.paymentPrice'),
             render: (_, record) =>
-              `(부가세 ${(
-                record.total_amount - record.supply_amount
-              ).toLocaleString()}원 포함) ${record.total_amount.toLocaleString()}`,
+              `${t('description.include vat', {
+                vat: (
+                  record.total_amount - record.supply_amount
+                ).toLocaleString(),
+              })} ${record.total_amount.toLocaleString()}`,
           },
         ]}
       />

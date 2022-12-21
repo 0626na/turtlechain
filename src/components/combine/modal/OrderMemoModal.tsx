@@ -16,7 +16,10 @@ function OrderMemoModal({ visible, close, onOk, defaultValue }: Props) {
       visible={visible}
       onCancel={close}
       title={t('table.memo')}
-      description={[t('description.memoInput1'), t('description.memoInput2')]}
+      description={[
+        t('description.input important memo'),
+        t('description.make use of memo'),
+      ]}
       onOk={onOk}
     />
   );

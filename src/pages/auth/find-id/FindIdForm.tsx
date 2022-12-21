@@ -29,7 +29,7 @@ function FindIdForm() {
         <TurtleText css={cardCss.subTitle}>
           {!auth.token
             ? t('description.please phone auth')
-            : '고객님의 정보와 일치하는 아이디 목록입니다.'}
+            : t('description.correct id list')}
         </TurtleText>
       </div>
 
@@ -62,11 +62,11 @@ function FindIdForm() {
         )}
         <div css={footerCss.self}>
           <Link to="/" css={footerCss.content}>
-            {t('login')}
+            {t('button.login')}
           </Link>
           <TurtleDivider type="vertical" />
           <Link to="/reset-password" css={footerCss.content}>
-            {t('reset password')}
+            {t('button.reset password')}
           </Link>
         </div>
       </Form>
@@ -86,7 +86,6 @@ const button = css`
     background: #00b3be;
   }
 
-  // active 상태
   &.ant-btn:focus {
     color: #fff;
     background: #00b3be;

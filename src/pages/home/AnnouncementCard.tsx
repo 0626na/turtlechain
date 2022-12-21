@@ -9,7 +9,7 @@ function AnnouncementCard() {
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <span>🔊</span>
         <div css={{ marginLeft: 16, color: theme.grey800 }}>
-          {t('service updates')}⚡️
+          {t('title.service updates')}⚡️
         </div>
       </div>
       <ArrowRightIcon value={theme.grey300} />

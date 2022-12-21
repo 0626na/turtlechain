@@ -40,7 +40,7 @@ function AgreeCheckbox({ onChange, value = [] }: Props) {
       <AgreementModal visible={modalVisible} onClose={modalClose} />
 
       <Checkbox onChange={onCheckAllChange} checked={checkAll}>
-        {t(`agreement.all`)}
+        {t(`type.agreement.all`)}
       </Checkbox>
 
       <TurtleDivider marginTop={16} marginBottom={16} />
@@ -48,7 +48,7 @@ function AgreeCheckbox({ onChange, value = [] }: Props) {
       <Checkbox.Group css={checkboxGroup} value={value} onChange={handleChange}>
         {options.map((option, idx) => (
           <Checkbox key={idx} css={item} value={option}>
-            <div>{t(`agreement.${option}`)}</div>
+            <div>{t(`type.agreement.${option}`)}</div>
             <div
               css={itemDetail}
               onClick={() => {

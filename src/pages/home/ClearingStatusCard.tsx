@@ -18,7 +18,7 @@ const item = (data: ClearingSheetShow) => (
   <div key={data.id} css={{ display: 'flex', justifyContent: 'space-between' }}>
     <div css={{ display: 'flex' }}>
       <TurtleTag color={statusColor[data.status]} size="large">
-        {t(`clearing.status.${data.status}`)}
+        {t(`type.status.${data.status}`)}
       </TurtleTag>
 
       <div
@@ -71,7 +71,7 @@ function ClearingStatusCard({ clearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          {t('recent payments')}
+          {t('title.recent payments')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />

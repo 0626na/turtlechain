@@ -42,14 +42,14 @@ function TurtleTableTitle({
         {!!vendorCount && vendorCount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('total vendor')}{' '}
+            {t('table.totalVendorCount')}{' '}
             <TurtleText css={count}>{vendorCount}</TurtleText>
           </TurtleText>
         )}
         {!!searchAmount && searchAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('total search amount')}{' '}
+            {t('description.total search amount')}{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
             ₩
           </TurtleText>
@@ -57,7 +57,7 @@ function TurtleTableTitle({
         {!!searchCount && searchCount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('search result')}{' '}
+            {t('description.search result')}{' '}
             <TurtleText css={count}>{searchCount}</TurtleText>
           </TurtleText>
         )}

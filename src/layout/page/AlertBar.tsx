@@ -25,7 +25,7 @@ function AlertBar() {
         <div css={alertBarCss.self}>
           <TurtleIcon name="exclamationMark" />
           <span css={alertBarCss.text}>
-            {t('got new vendors today? Update my list')}
+            {t('description.got new vendors today? Update my list')}
           </span>
 
           <SelectButton
@@ -34,7 +34,7 @@ function AlertBar() {
             }}
             icon={<TurtleIcon name="alertBarArrowRight" />}
           >
-            {t('add new vendor')}
+            {t('button.add new vendor')}
           </SelectButton>
 
           <div

@@ -2,10 +2,12 @@ import { TextWithTooltip } from '@components/combine';
 import { TurtleTableTitle, TurtleTag } from '@components/element';
 import useExelClearingCart from '@hooks/useExelClearingCart';
 import { Table } from 'antd';
+import { t } from 'i18next';
 
 function FailTab() {
   const { cart } = useExelClearingCart();
   const totalCount = cart.failList.length;
+
   return (
     <Table
       scroll={{ y: 450, scrollToFirstRowOnChange: true }}
@@ -20,39 +22,39 @@ function FailTab() {
       columns={[
         {
           ellipsis: true,
-          title: '거래처명',
+          title: t('table.vendorName'),
           render: (_, record) => record.ws_store_name,
         },
         {
           ellipsis: true,
-          title: '거래처 주소',
+          title: t('table.vendorAddress'),
           render: (_, record) => record.vendor_address,
         },
         {
           ellipsis: true,
-          title: '은행명',
+          title: t('table.bankName'),
           render: (_, record) => record.bank,
         },
         {
           ellipsis: true,
-          title: '계좌번호',
+          title: t('table.account number'),
           render: (_, record) => record.account_number,
         },
         {
           ellipsis: true,
-          title: '예금주',
+          title: t('table.account holder'),
           render: (_, record) => record.account_holder,
         },
         {
           ellipsis: true,
           align: 'right',
-          title: '금액',
+          title: t('table.amount'),
           render: (_, record) => record.credit_amount.toLocaleString(),
         },
         {
           ellipsis: true,
           align: 'right',
-          title: '받는분통장인쇄내용',
+          title: t('table.mistransfer recipient print content'),
           render: (_, record) => record.recipient_print,
         },
         {
@@ -61,16 +63,18 @@ function FailTab() {
           title: (
             <TextWithTooltip
               tooltipContent={[
-                '당일결제 시, 부가세도 그 날에 함께',
-                '전달되어야 하는 거래처',
+                t('description.payment today'),
+                t('description.check vendor'),
               ]}
             >
-              부가세 바로전달
+              {t('table.vatIncluded')}
             </TextWithTooltip>
           ),
           render: (_, record) => (
             <TurtleTag color={record.is_vat_included ? 'orange' : 'gray'}>
-              {record.is_vat_included ? '바로전달' : '일반'}
+              {record.is_vat_included
+                ? t('table.right delivery')
+                : t('table.general')}
             </TurtleTag>
           ),
         },
