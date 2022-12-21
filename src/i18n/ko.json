@@ -302,7 +302,7 @@
     "register warehousing sheet": "입고서 등록하기",
     "add pending delivery": "미송추가",
     "add adjustment": "교환/반품/미송 추가",
-    "add exchange/returns": "교환/반품 추가"
+    "add exchange/returns": "교환/반품 추가",
     "subscription paid plan": "유료플랜 구독"
   },
 
@@ -551,7 +551,7 @@
     "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
     "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
     "update select vendor": "선택한 거래처의 이름을 수정합니다.",
-    "input vendor name": "원하는 거래처명을 입력해주세요."
+    "input vendor name": "원하는 거래처명을 입력해주세요.",
     "check if VAT needs to be included with an invoice1": "당일결제 시, 부가세도 그 날에 함께",
     "check if VAT needs to be included with an invoice2": "전달되어야 하는 거래처를 체크해주세요.",
     "write freely of what you wish to use as vendors name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요."
