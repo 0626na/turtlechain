@@ -76,7 +76,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
             }}
           />
         </Form.Item>
-        <Form.Item label={t('table.proceessed quantity / total quantity')}>
+        <Form.Item label={t('table.processed quantity / total quantity')}>
           <Row align="middle">
             <Col span={20}>
               <Form.Item noStyle>

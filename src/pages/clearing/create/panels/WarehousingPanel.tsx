@@ -261,7 +261,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: t('table.registartion date'),
+              title: t('table.registration date'),
               render: (_, record) =>
                 moment(record.created_date).format('YYYY-MM-DD'),
             },
