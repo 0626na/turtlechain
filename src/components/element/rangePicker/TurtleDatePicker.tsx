@@ -4,16 +4,19 @@ import { theme } from '@styles/theme';
 import { DatePicker, DatePickerProps } from 'antd';
 import moment from 'moment';
 import useOrderCart from '@hooks/useOrderCart';
+import { RangePickerProps } from 'antd/lib/date-picker';
 
 interface Props {
   date: moment.Moment;
   onchange: (value: moment.Moment) => void;
+  disabledDate?: (current: moment.Moment) => boolean;
 }
 
-function TurtleDatePicker({ date, onchange }: Props) {
+function TurtleDatePicker({ date, onchange, disabledDate }: Props) {
   return (
     <div>
       <DatePicker
+        disabledDate={disabledDate}
         css={datePicker}
         value={date}
         onChange={(value) => onchange(moment(value))}

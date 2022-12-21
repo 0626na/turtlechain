@@ -34,6 +34,14 @@ function PickerOrder() {
             <div onClick={() => setdateToolipVisible(false)}>
               <TurtleDatePicker
                 date={cart.selectedDate}
+                disabledDate={(current) => {
+                  const yesterday = moment().subtract(1, 'day');
+
+                  return (
+                    yesterday.date() > current.date() ||
+                    moment().date() < current.date()
+                  );
+                }}
                 onchange={(value) => {
                   setCart({ ...cart, selectedDate: value });
                 }}
