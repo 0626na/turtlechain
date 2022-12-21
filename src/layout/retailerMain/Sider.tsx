@@ -179,7 +179,7 @@ const menus = [
       // },
       {
         key: 'warehousing',
-        label: t('warehousing.'),
+        label: t('title.warehousing'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="warehousing" />
@@ -189,17 +189,17 @@ const menus = [
         children: [
           {
             key: pathnames.warehousing.create,
-            label: t('warehousing.create'),
+            label: t('title.create warehousing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.warehousing.history,
-            label: t('warehousing.history'),
+            label: t('title.history warehousing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.warehousing.adjustment,
-            label: t('warehousing.adjustment.'),
+            label: t('title.adjustment'),
             style: mainMenuContentStyle,
           },
         ],

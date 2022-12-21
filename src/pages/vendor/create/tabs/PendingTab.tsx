@@ -83,13 +83,13 @@ function PendingTab({ isLoading }: Props) {
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
-          // {
-          //   ellipsis: true,
-          //   title: t('table.retailerStoreInput'),
-          //   render: (_, record) => {
-          //     return `${record.name}  ${record.address}`;
-          //   },
-          // },
+          {
+            ellipsis: true,
+            title: t('table.retailerStoreInput'),
+            render: (_, record) => {
+              return `${record.name}  ${record.address}`;
+            },
+          },
           {
             ellipsis: true,
             title: t('table.vendorName'),

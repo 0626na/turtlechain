@@ -217,7 +217,7 @@ function PageBody() {
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
                 <TurtleTag color={is_confirmed ? 'cyan' : 'orange'}>
-                  {t(`warehousing.confirm.${is_confirmed}`)}
+                  {t(`type.adj status.${is_confirmed}`)}
                 </TurtleTag>
               ),
             },

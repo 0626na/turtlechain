@@ -428,7 +428,9 @@
     "do you really want me to unsubscribe": "정말 구독을 해지할까요?",
     "create vendor": "거래처등록",
     "create product": "상품등록",
+    "warehousing": "입고",
     "create warehousing": "입고등록",
+    "history warehousing": "입고내역",
     "create clearing": "결제하기",
     "transfer": "이체하기",
     "accumulated payments": "누적 결제금액",
@@ -620,8 +622,8 @@
       "cardView": "카드뷰로 보기"
     },
     "adj status": {
-      "pending": "대기",
-      "complete": "마감"
+      "true": "대기",
+      "false": "마감"
     }
   },
 
@@ -656,9 +658,6 @@
     "create": "발주등록"
   },
   "warehousing": {
-    "": "입고",
-    "create": "입고등록",
-    "history": "입고내역",
     "adjustment": {
       "": "교환/반품/미송",
       "pending": "대기",
