@@ -126,7 +126,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         onClickSelect={selectVendor}
       />
       <TurtleContentModal
-        title={t('product.addSingle')}
+        title={t('title.add single product')}
         visible={visible}
         onClose={closeModal}
       >
@@ -247,7 +247,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                 checkProductCodeDuplication();
               }}
             >
-              {t('product.duplicateCheckProductCode')}
+              {t('button.duplicateCheckProductCode')}
             </AddButton>
           </div>
 

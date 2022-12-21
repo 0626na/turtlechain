@@ -19,9 +19,9 @@ function ClearingCreatePage() {
 
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('clearing.create')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('title.create clearing')}`} />
       {getSubscriptionCheckQuery.data?.data.is_new ? <SubscriptionBar /> : null}
-      <PageHeader title={t('clearing.create')} />
+      <PageHeader title={t('title.create clearing')} />
       <PageBody />
     </>
   );

@@ -145,12 +145,12 @@ const menus = [
         children: [
           {
             key: pathnames.vendor.create,
-            label: t('vendor.create'),
+            label: t('title.create vendor'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.product.create,
-            label: t('product.create'),
+            label: t('title.create product'),
             style: mainMenuContentStyle,
           },
         ],
@@ -206,7 +206,7 @@ const menus = [
       },
       {
         key: 'clearing',
-        label: t('clearing.'),
+        label: t('title.clearing'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="clearing" />
@@ -216,17 +216,17 @@ const menus = [
         children: [
           {
             key: pathnames.clearing.create,
-            label: t('clearing.create'),
+            label: t('title.create clearing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.clearing.history,
-            label: t('clearing.history'),
+            label: t('title.history clearing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.clearing.transaction,
-            label: t('clearing.transaction.'),
+            label: t('title.ledger'),
             style: lastMainMenuContentStyle,
           },
         ],

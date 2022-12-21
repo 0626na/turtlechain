@@ -273,7 +273,7 @@ function PageBody() {
                           openCancelModal();
                         }}
                       >
-                        {t('button.do cancel')}
+                        {t('button.confirm cancel')}
                       </SelectButton>
                     )
                   ) : (
