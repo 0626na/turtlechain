@@ -337,7 +337,8 @@ function FailTab({ loading, ...props }: Props) {
             {
               title: t('table.price'),
               align: 'right',
-              render: (_, record) => record.product_price,
+              render: (_, record) =>
+                Number(record.product_price).toLocaleString(),
             },
             {
               title: t('table.memo'),

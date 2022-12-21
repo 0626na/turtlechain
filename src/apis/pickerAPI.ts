@@ -47,9 +47,21 @@ const create = async (data: RequestCreateStore) => {
   return response.data;
 };
 
+export interface ResponseRemoveStore {
+  msg: string;
+}
+
+const remove = async (storeId: number) => {
+  const url = `provisioning/picker/stores/${storeId}`;
+  const response = await v2Axios.delete<ResponseRemoveStore>(url);
+
+  return response.data;
+};
+
 const pickerAPI = {
   getList,
   create,
+  remove,
 };
 
 export default pickerAPI;
