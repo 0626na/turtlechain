@@ -51,7 +51,7 @@ function ConfirmOrderModal({
         loading={createOrderItemMutation.isLoading}
         onClose={close}
         title={title}
-        okText={t('order.')}
+        okText={t('button.order')}
         description={description}
         onOk={() => {
           createOrderItemMutation.mutate({

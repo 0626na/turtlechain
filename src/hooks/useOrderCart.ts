@@ -564,13 +564,13 @@ const useOrderCart = () => {
    * @returns 발주 분류데이터 (한글)
    */
   const translateOrderType = (orderType: string) => {
-    if (orderType === 'order') return t('order.types.order');
-    if (orderType === 'reserve') return t('order.types.reserve');
-    if (orderType === 'takeback') return t('order.types.takeback');
-    if (orderType === 'exchange') return t('order.types.exchange');
-    if (orderType === 'sample') return t('order.types.sample');
-    if (orderType === 'pickup') return t('order.types.pickup');
-    if (orderType === 'extra') return t('order.types.extra');
+    if (orderType === 'order') return t('type.orderTypes.order');
+    if (orderType === 'reserve') return t('type.orderTypes.reserve');
+    if (orderType === 'takeback') return t('type.orderTypes.takeback');
+    if (orderType === 'exchange') return t('type.orderTypes.exchange');
+    if (orderType === 'sample') return t('type.orderTypes.sample');
+    if (orderType === 'pickup') return t('type.orderTypes.pickup');
+    if (orderType === 'extra') return t('type.orderTypes.extra');
 
     return '';
   };

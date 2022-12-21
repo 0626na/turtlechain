@@ -114,7 +114,6 @@
     "biz address": "Business Address 1",
     "biz detail address": "Business Address 2",
     "biz license": "Business Registration Certificate",
-    "biz info": "사업자 정보",
     "vat issued mail": "Email for Tax Receipts",
     "mistransfer status": "Status",
     "mistransfer request date": "Request Date",
@@ -553,7 +552,9 @@
     "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
     "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
     "update select vendor": "선택한 거래처의 이름을 수정합니다.",
-    "input vendor name": "원하는 거래처명을 입력해주세요."
+    "input vendor name": "원하는 거래처명을 입력해주세요.",
+    "orderTotalCount": "발주수량 합계",
+    "orderTotalPrice": "발주금액 합계"
   },
 
   "type": {

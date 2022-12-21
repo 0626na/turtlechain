@@ -27,31 +27,31 @@ interface Props extends TabPaneProps {
 export const category = [
   {
     value: 'order',
-    name: t('order.types.order'),
+    name: t('type.orderTypes.order'),
   },
   {
     value: 'reserve',
-    name: t('order.types.reserve'),
+    name: t('type.orderTypes.reserve'),
   },
   {
     value: 'takeback',
-    name: t('order.types.takeback'),
+    name: t('type.orderTypes.takeback'),
   },
   {
     value: 'exchange',
-    name: t('order.types.exchange'),
+    name: t('type.orderTypes.exchange'),
   },
   {
     value: 'sample',
-    name: t('order.types.sample'),
+    name: t('type.orderTypes.sample'),
   },
   {
     value: 'pickup',
-    name: t('order.types.pickup'),
+    name: t('type.orderTypes.pickup'),
   },
   {
     value: 'extra',
-    name: t('order.types.extra'),
+    name: t('type.orderTypes.extra'),
   },
 ];
 

@@ -21,11 +21,11 @@ function PickerOrder() {
     <>
       <Helmet
         title={`${t('turtleChain')} - ${t('title.picker')} - ${t(
-          'order.create',
+          'title.orderCreate',
         )}`}
       />
       <PageHeader
-        title={t('order.create')}
+        title={t('title.orderCreate')}
         button={
           <Tooltip
             visible={dateTooltipvisible}

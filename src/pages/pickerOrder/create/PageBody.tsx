@@ -150,7 +150,7 @@ function PageBody() {
    */
   const confirmModalItems = [
     {
-      title: t('table.orderDate'),
+      title: t('title.orderDate'),
       content: cart.selectedDate.format('YYYY-MM-DD'),
     },
     {
@@ -158,12 +158,14 @@ function PageBody() {
       content: t('description.count', { count: countSucessOrdersCount() }),
     },
     {
-      title: t('totalOrderCountInConfirm'),
+      title: t('title.totalOrderCountInConfirm'),
       content: t('description.count', { count: countOrdersForType().total }),
     },
     {
-      title: t('totalOrderPriceInComfirm'),
-      content: t('price', { price: calculateTotalPrice().toLocaleString() }),
+      title: t('title.totalOrderPriceInConfirm'),
+      content: `${calculateTotalPrice().toLocaleString()} ${t(
+        'description.won',
+      )}`,
     },
   ];
 
@@ -228,7 +230,7 @@ function PageBody() {
       />
 
       <PageTitle
-        title={t('order.preview')}
+        title={t('title.orderPreview')}
         buttons={[
           <Tooltip
             placement="bottom"
@@ -374,29 +376,31 @@ function PageBody() {
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {t('orderTotalCount')}
+                {t('description.orderTotalCount')}
               </span>
               {'   '}
               {` ${t('description.count', {
                 count: countOrdersForType().total,
               })}`}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
-                  'order.types.exchange',
-                )} ${countOrdersForType().exchange}, ${t(
-                  'order.types.takeback',
-                )} ${countOrdersForType().takeback}, ${t(
-                  'order.types.reserve',
-                )} ${countOrdersForType().reserve}, ${t(
-                  'order.types.sample',
-                )} ${countOrdersForType().sample}, ${t('order.types.pickup')} ${
+                {`(${t('type.orderTypes.order')} ${
+                  countOrdersForType().order
+                }, ${t('type.orderTypes.exchange')} ${
+                  countOrdersForType().exchange
+                }, ${t('type.orderTypes.takeback')} ${
+                  countOrdersForType().takeback
+                }, ${t('type.orderTypes.reserve')} ${
+                  countOrdersForType().reserve
+                }, ${t('type.orderTypes.sample')} ${
+                  countOrdersForType().sample
+                }, ${t('type.orderTypes.pickup')} ${
                   countOrdersForType().pickup
-                }, ${t('order.types.extra')} ${countOrdersForType().extra})
-              / ${t('orderTotalPrice')}  `}
+                }, ${t('type.orderTypes.extra')} ${countOrdersForType().extra})
+              / ${t('description.orderTotalPrice')}  `}
               </span>
-              {`${t('price', {
-                price: calculateTotalPrice().toLocaleString(),
-              })}`}
+              {`${calculateTotalPrice().toLocaleString()} ${t(
+                'description.won',
+              )}`}
             </TurtleText>
           </Col>
           <Col>
@@ -406,7 +410,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              {t('button.order')}
+              {t('button.do order')}
             </PrimaryButton>
           </Col>
         </Row>

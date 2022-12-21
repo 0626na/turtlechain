@@ -226,7 +226,8 @@
     "updateProduct": "상품정보 수정하기",
     "connectedStores": "연결된 쇼핑몰",
     "addOrder": "발주 추가하기",
-    "order": "발주하기",
+    "do order": "발주하기",
+    "order": "발주",
     "operation": "운영",
     "closed": "폐점",
     "recreate": "재등록하기",
@@ -412,9 +413,16 @@
     "basic information": "기본정보",
     "subscription and payment": "구독 및 결제",
     "picker": "사입자",
+    "order": "발주",
+    "orderCreate": "발주등록",
+    "orderPreview": "발주서 미리보기",
     "orderDetail": "발주내역",
     "orderStatus": "발주현황",
     "really order": "정말 발주할까요?",
+    "orderDate": "발주일자",
+    "orderStores": "발주 쇼핑몰",
+    "totalOrderCountInConfirm": "총 발주수량",
+    "totalOrderPriceInConfirm": "총 발주금액",
     "success": "성공",
     "fail": "실패",
     "pending": "보류",
@@ -553,7 +561,9 @@
     "detailed history of credits can be found in the ledger": "거래처별 사용가능 금액 확인은 터틀장부에서 확인할 수 있어요!",
     "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
     "update select vendor": "선택한 거래처의 이름을 수정합니다.",
-    "input vendor name": "원하는 거래처명을 입력해주세요."
+    "input vendor name": "원하는 거래처명을 입력해주세요.",
+    "orderTotalCount": "발주수량 합계",
+    "orderTotalPrice": "발주금액 합계"
   },
 
   "type": {
@@ -646,12 +656,6 @@
       "inputProductCode": "바코드를 입력해주세요",
       "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요."
     }
-  },
-
-  "order": {
-    "": "발주",
-    "preview": "발주서 미리보기",
-    "create": "발주등록"
   },
 
   "warehousing": {
