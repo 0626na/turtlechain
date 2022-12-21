@@ -27,7 +27,7 @@ function TurtleConfirmModal({
   description,
   children,
 
-  cancelText = `${t('cancel')}`,
+  cancelText = `${t('button.cancel')}`,
   okText = `${t('button.integrate')}`,
   okDisabled = false,
   size = 'small',

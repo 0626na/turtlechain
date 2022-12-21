@@ -89,7 +89,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('request for information Update')}
+        title={t('title.request update vendor')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -112,30 +112,33 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <Input hidden />
           </Form.Item>
 
-          {/*  */}
+          {/*거래처명*/}
           <Form.Item label={t('table.vendorName')} name="name" required>
             <TurtleFormSearchInput disabled />
           </Form.Item>
-
+          {/* 매장번호 */}
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
             <TurtleFormInput
               disabled
               placeholder={t('placeholder.input phone number')}
             />
           </Form.Item>
-
+          {/* 휴대전화 번호 */}
           <Form.Item
             label={t('table.mobile')}
             name="mobile"
             rules={[
-              { required: true, message: t('please input mobile number') },
+              {
+                required: true,
+                message: t('message.please input mobile number'),
+              },
             ]}
           >
             <TurtleFormInput
               placeholder={t('placeholder.input mobile number')}
             />
           </Form.Item>
-
+          {/* 거래처 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
               <div
@@ -143,6 +146,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   flex-basis: 46.05%;
                 `}
               >
+                {/* 빌딩 */}
                 <Form.Item name="building" noStyle>
                   <TurtleFormSelect
                     items={Object.keys(buildingData?.data ?? []).map(
@@ -164,6 +168,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   flex-basis: 30%;
                 `}
               >
+                {/* 층 */}
                 <Form.Item
                   noStyle
                   shouldUpdate={(prevValues, curValues) =>
@@ -198,6 +203,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   flex-basis: 30%;
                 `}
               >
+                {/* 열-호 */}
                 <Form.Item
                   noStyle
                   shouldUpdate={(prevValues, curValues) =>
@@ -226,15 +232,16 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               </div>
             </div>
           </Form.Item>
-
-          <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
+          {/*기타주소 */}
+          <Form.Item name="ext" label={t('table.otherAddress')}>
             <TurtleFormInput
               placeholder={t('placeholder.input other address')}
             />
           </Form.Item>
-
+          {/* 계좌정보 */}
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
+              {/* 은행 */}
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
                   placeholder={t('placeholder.bank')}
@@ -250,13 +257,13 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   }
                 />
               </Form.Item>
-
+              {/* 계좌번호 */}
               <Form.Item
                 name="account_number"
                 rules={[
                   {
                     required: true,
-                    message: t('please input bank account number'),
+                    message: t('message.please input account number'),
                   },
                 ]}
                 noStyle
@@ -265,7 +272,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   placeholder={t('placeholder.account number')}
                 />
               </Form.Item>
-
+              {/* 예금주 */}
               <Form.Item
                 name="account_holder"
                 rules={[
@@ -296,9 +303,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>
-                {t('add a copy of your receipt or invoice')}
-              </AddButton>
+              <AddButton>{t('button.attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 

@@ -391,7 +391,7 @@ function SuccessTab({ loading, ...props }: Props) {
                     : '';
                 return (
                   record.orders.length !== 0 &&
-                  t('count except one', {
+                  t('description.count except one', {
                     name: record.orders[0].vendor_name,
                     count: record.orders.length - 1,
                   })
@@ -408,7 +408,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                 return (
                   record.orders.length !== 0 &&
-                  t('count except one', {
+                  t('description.count except one', {
                     name: record.orders[0].product_name,
                     count: record.orders.length - 1,
                   })

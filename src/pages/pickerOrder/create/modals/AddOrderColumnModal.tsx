@@ -269,7 +269,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               <PrimaryButton
                 onClick={() => createOrderFormatMutation.mutate(orderFormat)}
               >
-                {t('button.save')}
+                {t('button.saving')}
               </PrimaryButton>
             </div>
           </div>

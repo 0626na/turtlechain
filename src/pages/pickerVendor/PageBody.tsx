@@ -39,11 +39,11 @@ const options = [
     value: 'mobile',
   },
   {
-    name: t('accountNumber'),
+    name: t('table.account number'),
     value: 'account_number',
   },
   {
-    name: t('accountHolder'),
+    name: t('table.account holder'),
     value: 'account_holder',
   },
 ];
@@ -210,7 +210,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('request info modify'),
+                      label: t('button.request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {
                         setSelectedRow(record);

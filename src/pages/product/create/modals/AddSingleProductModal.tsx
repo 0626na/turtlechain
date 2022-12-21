@@ -147,6 +147,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <Input hidden />
           </Form.Item>
 
+          {/* 거래처명 */}
           <Form.Item
             name="vendor_name"
             label={t('table.vendorName')}
@@ -159,6 +160,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
+          {/* 거래처 주소 */}
           <Form.Item
             name="vendor_address"
             label={t('table.vendorAddress')}
@@ -169,7 +171,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input vendor address')}
             />
           </Form.Item>
-
+          {/* 기타주소 */}
           <Form.Item
             label={t('table.otherAddress')}
             rules={[{ required: false }]}
@@ -180,7 +182,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input other address')}
             />
           </Form.Item>
-
+          {/* 휴대전화 번호 */}
           <Form.Item
             name="vendor_phone"
             label={t('table.mobile')}
@@ -194,6 +196,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
 
           <TurtleDivider marginTop={32} marginBottom={32} />
 
+          {/* 상품명 */}
           <Form.Item
             name="name"
             label={t('table.productName')}
@@ -203,7 +206,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.ex. product example')}
             />
           </Form.Item>
-
+          {/* 거래처 상품명 */}
           <Form.Item
             name="vendor_product_name"
             label={t('table.vendorProductName')}
@@ -213,7 +216,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.ex. product example')}
             />
           </Form.Item>
-
+          {/* 상품 바코드 */}
           <Form.Item
             name="product_code"
             label={t('table.productCode')}
@@ -248,6 +251,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             </AddButton>
           </div>
 
+          {/* 옵션 */}
           <Form.Item
             name="option"
             label={t('table.option')}
@@ -258,6 +262,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 가격 */}
           <Form.Item
             name="price"
             label={t('table.price')}
@@ -268,6 +273,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 이미지 URL */}
           <Form.Item
             label={t('table.imageUrl')}
             name="image_url"
@@ -276,6 +282,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormInput placeholder={t('placeholder.ex. image url')} />
           </Form.Item>
 
+          {/* 메모 */}
           <Form.Item
             name="memo"
             label={t('table.memo')}

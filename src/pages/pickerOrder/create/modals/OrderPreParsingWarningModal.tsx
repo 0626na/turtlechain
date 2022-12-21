@@ -100,7 +100,7 @@ function OrderPreParsingWarningModal({
             letterSpacing: '0.005em',
           })}
         >
-          <span>{t('unable additional order')} </span>
+          <span>{t('description.unable additional order')} </span>
           <span css={css({ color: '#FA5252', marginLeft: 4, marginRight: 3 })}>
             {unabledOrders.length}
           </span>
@@ -153,7 +153,7 @@ function OrderPreParsingWarningModal({
             letterSpacing: '0.005em',
           })}
         >
-          <span>{t('enable additional order')} </span>
+          <span>{t('description.enable additional order')} </span>
           <span css={css({ marginRight: 3 })}>{enabledOrders.length}</span>
           <div
             css={css({
