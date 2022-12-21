@@ -65,7 +65,7 @@ function MistransferTab() {
        * 오입금요청 취소모달
        */}
       <TurtleConfirmModal
-        title={t('description.really delete')}
+        title={t('title.really delete')}
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
