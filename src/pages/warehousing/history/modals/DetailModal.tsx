@@ -169,11 +169,11 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             },
             {
               title: t('table.totalWarehousingCount'),
-              value: `${selectedRow?.total_item_count}건`,
+              value: t('number', { number: selectedRow?.total_item_count }),
             },
             {
               title: t('table.totalVendorCount'),
-              value: `${selectedRow?.total_store_count}개`,
+              value: t('count', { count: selectedRow?.total_store_count }),
             },
 
             {
