@@ -409,7 +409,7 @@
     "add single vendor": "Add Vendor",
     "add single product": "Add Product",
     "you can only order up to the second round": "당일 발주는 2차까지만 가능해요",
-    "add store": "쇼핑몰 추가하기",
+    "add store": "Add my stores",
     "create mistransfer": "Request for Wrong Transfer Reversal",
     "mistransfer list": "Wrong Transfer Reversal Details",
     "basic information": "Basic Information",
@@ -599,7 +599,8 @@
     "manage accounts": "Manage Accounts",
     "manage business info": "Manage Business Info",
     "wrong transfer reversal": "Wrong Transfer Reversal",
-    "number": "{{number}}"
+    "number": "{{number}}",
+    "at least one store": "At least one store is needed to use Turtlechain"
   },
 
   "type": {
