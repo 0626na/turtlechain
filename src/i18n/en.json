@@ -302,7 +302,8 @@
     "add pending delivery": "미송추가",
     "add adjustment": "교환/반품/미송 추가",
     "add exchange/returns": "교환/반품 추가",
-    "subscription paid plan": "유료플랜 구독"
+    "subscription paid plan": "유료플랜 구독",
+    "add store": "쇼핑몰 추가하기"
   },
 
   "message": {
@@ -411,6 +412,8 @@
     "basic information": "기본정보",
     "subscription and payment": "구독 및 결제",
     "picker": "사입자",
+    "vendor": "거래처",
+    "order": "발주",
     "orderDetail": "발주내역",
     "orderStatus": "발주현황",
     "really order": "정말 발주할까요?",
@@ -442,7 +445,8 @@
     "setting": "Settings",
     "tutorial": "Usesr Guide",
     "update vendor name": "거래처명 수정",
-    "request update vendor": "거래처 정보수정 요청"
+    "request update vendor": "거래처 정보수정 요청",
+    "first, add store": " 운영중인 쇼핑몰을 먼저 추가해주세요!"
   },
 
   "description": {

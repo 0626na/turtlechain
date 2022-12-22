@@ -97,7 +97,7 @@ const menus = [
     children: [
       {
         key: 'vendor',
-        label: '거래처',
+        label: t('title.vendor'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="vendorProduct" />

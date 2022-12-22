@@ -40,7 +40,7 @@ function StoreSelector() {
       {isStoreEmpty ? (
         <Tooltip
           placement="right"
-          title="운영중인 쇼핑몰을 먼저 추가해주세요!"
+          title={t('title.first, add store')}
           defaultVisible
         >
           <Button
