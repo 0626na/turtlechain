@@ -39,7 +39,7 @@
     "mobile": "Mobile No.",
     "right delivery": "바로전달",
     "general": "일반",
-    "retailerStoreInput": "쇼핑몰 입력값",
+    "retailerStoreInput": "",
     "retailerStoreName": "Store Name",
     "retailerStoreURL": "Store URL",
     "matching": "Matching",
@@ -289,7 +289,7 @@
     "reset password": "비밀번호 재설정",
     "request info modify": "정보수정 요청",
     "subscription cancel": "Cancel Subscription",
-    "add new vendor": "신규거래처 요청",
+    "add new vendor": "Add new vendor",
     "confirming": "Confirm",
     "do cancel": "Cancel",
     "register warehousing sheet": "Save",
@@ -409,7 +409,7 @@
     "add single vendor": "Add Vendor",
     "add single product": "Add Product",
     "you can only order up to the second round": "당일 발주는 2차까지만 가능해요",
-    "add store": "쇼핑몰 추가하기",
+    "add store": "Add my stores",
     "create mistransfer": "Request for Wrong Transfer Reversal",
     "mistransfer list": "Wrong Transfer Reversal Details",
     "basic information": "Basic Information",
@@ -559,7 +559,7 @@
     "what is the total amount of todays invoices?": "오늘 거래처 결제금액은 얼마일까요? 🤔",
     "your invoices and payments are waiting to be processed": "터틀체인이 이체여부를 확인하고 있어요! 💸",
     "Nice work today! How about some beer after work?": "오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺",
-    "got new vendors today? Update my list": "등록하려는 거래처가 없나요? 새 거래처를 요청해주세요.",
+    "got new vendors today? Update my list": "Get new vendors today? Update my list",
     "you cant go back to the past after deleting it": "삭제 후에는 이전으로 되돌릴 수 없어요.",
     "total stocked quantity": "Total stocked quantity",
     "total stocked amount": "Total stocked amount",
@@ -601,7 +601,8 @@
     "manage accounts": "Manage Accounts",
     "manage business info": "Manage Business Info",
     "wrong transfer reversal": "Wrong Transfer Reversal",
-    "number": "{{number}}"
+    "number": "{{number}}",
+    "at least one store": "At least one store is needed to use Turtlechain"
   },
 
   "type": {

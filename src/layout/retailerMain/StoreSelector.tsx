@@ -40,7 +40,7 @@ function StoreSelector() {
       {isStoreEmpty ? (
         <Tooltip
           placement="right"
-          title={t('title.first, add store')}
+          title={t('description.at least one store')}
           defaultVisible
         >
           <Button
@@ -49,7 +49,7 @@ function StoreSelector() {
               navigate('/setting');
             }}
           >
-            쇼핑몰 추가하기
+            {t('description.create store')}
             <TurtleIcon name="storePlus" />
           </Button>
         </Tooltip>
