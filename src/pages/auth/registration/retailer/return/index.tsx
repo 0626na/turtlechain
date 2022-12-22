@@ -8,9 +8,9 @@ function index() {
   return (
     <>
       <Helmet
-        title={`${t('turtleChain')} - ${t('auth.registrationReturn')}- ${t(
-          'store.',
-        )}`}
+        title={`${t('turtleChain')} - ${t(
+          'description.registrationReturn',
+        )}- ${t('title.store')}`}
       />
       <PageBody />
     </>

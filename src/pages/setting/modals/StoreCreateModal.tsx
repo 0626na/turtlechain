@@ -66,7 +66,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('store.create')}
+      title={t('description.create store')}
       visible={visible}
       onClose={closeModal}
     >
@@ -121,7 +121,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
         <Form.Item
           name="store_url"
           rules={[{ required: true }]}
-          label={t('store.url')}
+          label={t('table.retailerStoreURL')}
         >
           <TurtleFormInput placeholder={t('placeholder.input store url')} />
         </Form.Item>

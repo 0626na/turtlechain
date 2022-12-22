@@ -45,7 +45,8 @@ const item = (data: ClearingSheetShow) => (
         fontSize: 18,
       }}
     >
-      {data.total_deposit_amount.toLocaleString()}원
+      {data.total_deposit_amount.toLocaleString()}
+      {t('description.won')}
     </div>
   </div>
 );

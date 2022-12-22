@@ -55,15 +55,15 @@ function LoginForm() {
       </Form.Item>
       <Space>
         <Form.Item name="autoLogin" valuePropName="checked">
-          <Checkbox>{t('auth.autoLogin')}</Checkbox>
+          <Checkbox>{t('description.autoLogin')}</Checkbox>
         </Form.Item>
         <Form.Item>
           <Link style={{ color: '#7C7D82' }} to="/find-id">
-            {t('auth.findId')}
+            {t('description.findId')}
           </Link>
           <Divider type="vertical" />
           <Link style={{ color: '#7C7D82' }} to="/reset-password">
-            {t('auth.resetPassword')}
+            {t('description.resetPassword')}
           </Link>
         </Form.Item>
       </Space>
@@ -83,24 +83,24 @@ function LoginForm() {
           htmlType="submit"
           size="large"
         >
-          {t('auth.login')}
+          {t('description.login')}
         </Button>
       </Form.Item>
       <Divider />
       <Row justify="center">
         <Typography.Text type="secondary">
-          {t('auth.notMember')}{' '}
+          {t('description.notMember')}{' '}
         </Typography.Text>
         <Link to="/registration" style={{ color: '#00B594' }}>
-          &nbsp;&nbsp;{t('auth.registration')}
+          &nbsp;&nbsp;{t('description.registration')}
         </Link>
       </Row>
       <Row>
         <Typography.Text type="secondary">
-          {t('auth.wonderMembership')}{' '}
+          {t('description.wonderMembership')}{' '}
         </Typography.Text>
         <Link to="/membership-info" style={{ color: '#00B594' }}>
-          &nbsp;&nbsp;{t('auth.aboutMembership')}
+          &nbsp;&nbsp;{t('description.aboutMembership')}
         </Link>
       </Row>
       <Row justify="center">
