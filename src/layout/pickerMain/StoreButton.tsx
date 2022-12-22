@@ -24,8 +24,8 @@ function StoreButton() {
 
   return (
     <>
-      {data?.data.total_count === 0 ? (
-        <Tooltip placement="right" title={t('title.first, add store')}>
+      {data?.data.store_list.length === 0 ? (
+        <Tooltip placement="right" title={t('description.create store')}>
           <Button
             css={buttonCss.self}
             onClick={() => {

@@ -530,6 +530,7 @@
     "unable additional order": "추가 발주불가",
     "enable additional order": "추가 발주가능",
     "count": "{{count}}",
+    "number": "{{number}}",
     "price": "{{price}}₩",
     "there are orders to modify": "수정이 필요한 발주서가 있습니다.",
     "please check error and reload": "오류 내용을 확인하고 다시 업로드해주세요.",
@@ -601,7 +602,6 @@
     "manage accounts": "Manage Accounts",
     "manage business info": "Manage Business Info",
     "wrong transfer reversal": "Wrong Transfer Reversal",
-    "number": "{{number}}",
     "at least one store": "At least one store is needed to use Turtlechain"
   },
 
