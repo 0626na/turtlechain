@@ -27,7 +27,7 @@ function StoreButton() {
       {data?.data.store_list.length === 0 ? (
         <Tooltip placement="right" title={t('description.create store')}>
           <Button
-            css={buttonCss.self}
+            css={[buttonCss.self, buttonCss.borderActive]}
             onClick={() => {
               navigate('/picker/setting');
             }}
@@ -37,7 +37,7 @@ function StoreButton() {
         </Tooltip>
       ) : (
         <Button
-          css={buttonCss.self}
+          css={[buttonCss.self]}
           onClick={() => {
             navigate('/picker/setting');
           }}
@@ -128,6 +128,14 @@ const buttonCss = {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  }),
+  borderActive: css({
+    border: '4px solid #00B3BE',
+    padding: 16,
+
+    '&:focus,&:hover': {
+      borderColor: '#00B3BE',
+    },
   }),
 };
 
