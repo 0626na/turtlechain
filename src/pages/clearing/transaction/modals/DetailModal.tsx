@@ -147,7 +147,8 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
             ellipsis: true,
             width: 140,
             title: t('table.type'),
-            render: (_, record) => t(`transaction.${record.transaction_type}`),
+            render: (_, record) =>
+              t(`description.transaction${record.transaction_type}`),
           },
           {
             ellipsis: true,

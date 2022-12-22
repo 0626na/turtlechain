@@ -6,7 +6,7 @@ import LoginForm from './LoginForm';
 import useModal from '@hooks/useModal';
 
 function LoginPage() {
-  const title = `${t('turtleChain')} - ${t('auth.login')}`;
+  const title = `${t('turtleChain')} - ${t('description.login')}`;
   const [visible, open, close] = useModal(true);
 
   return (
