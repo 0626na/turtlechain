@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Tooltip } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon } from '@components/element';
+import { ArrowRightIcon, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useStore from '@hooks/useStore';
 
@@ -37,6 +37,7 @@ function StoreButton() {
             }}
           >
             {t('button.add store')}
+            <TurtleIcon name="storePlus" />
           </Button>
         </Tooltip>
       ) : (

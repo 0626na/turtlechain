@@ -600,12 +600,16 @@
     "create store": "쇼핑몰 추가하기",
     "store management": "쇼핑몰 관리",
     "store selectButton": "{{store}} 외 {{storeCount}}개",
+    "orderTotalCount": "발주수량 합계",
+    "orderTotalPrice": "발주금액 합계",
+    "total": "총",
+    "accumulated pending refund": "Accumulated Pending Refund",
+    "accumulated credit": "Accumulated credit",
+    "accumulated amount due": "Accumulated Amount Due",
     "manage accounts": "계정관리",
     "manage business info": "사업자 관리",
     "wrong transfer reversal": "오입금 환불",
-    "orderTotalCount": "발주수량 합계",
-    "orderTotalPrice": "발주금액 합계",
-    "total": "총"
+    "at least one store": "운영중인 쇼핑몰을 먼저 추가해주세요!"
   },
 
   "type": {
