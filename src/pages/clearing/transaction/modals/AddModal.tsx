@@ -79,7 +79,7 @@ function AddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('clearing.transaction.add')}
+        title={t('button.add past price')}
         visible={visible}
         onClose={() => {
           form.resetFields();

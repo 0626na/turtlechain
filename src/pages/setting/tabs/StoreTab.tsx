@@ -210,7 +210,8 @@ function StoreTab() {
               ellipsis: true,
               width: 140,
               title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}`),
+              render: (_, record) =>
+                t(`type.inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,

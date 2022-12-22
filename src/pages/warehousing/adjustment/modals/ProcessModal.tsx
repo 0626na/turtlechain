@@ -44,7 +44,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
       }}
       okDisabled={item?.process_count === 0 || !item?.adjustment_process_type}
       loading={updateMutation.isLoading}
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)} ${t(
+      title={`${t(`type.adj process.${selectedRow?.type}`)} ${t(
         'title.process',
       )}`}
       description={[t('description.input process type and quantity')]}
