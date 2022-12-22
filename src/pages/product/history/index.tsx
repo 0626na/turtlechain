@@ -10,9 +10,9 @@ function Index() {
 
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('product.history')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('title.product list')}`} />
       <PageHeader
-        title={t('product.history')}
+        title={t('title.product list')}
         onClickBefore={() => {
           navigate('/product/create');
         }}
