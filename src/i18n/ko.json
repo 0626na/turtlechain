@@ -457,7 +457,8 @@
     "preview of exchange and returns": "교환/반품 미리보기",
     "search product": "상품 검색",
     "add warehousing": "입고 추가",
-    "store info": "쇼핑몰 정보"
+    "store info": "쇼핑몰 정보",
+    "preview of todays stock products": "입고서 미리보기"
   },
 
   "description": {
@@ -586,7 +587,10 @@
     "store info": "쇼핑몰 정보",
     "create store": "쇼핑몰 추가하기",
     "store management": "쇼핑몰 관리",
-    "store selectButton": "{{store}} 외 {{storeCount}}개"
+    "store selectButton": "{{store}} 외 {{storeCount}}개",
+    "manage accounts": "계정관리",
+    "manage business info": "사업자 관리",
+    "wrong transfer reversal": "오입금 환불"
   },
 
   "type": {
