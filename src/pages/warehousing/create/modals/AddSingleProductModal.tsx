@@ -64,7 +64,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={t('title.add warehouing')}
+        title={t('title.add warehousing')}
         visible={visible}
         onClose={closeModal}
       >
