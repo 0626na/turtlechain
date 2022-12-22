@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 
 import React from 'react';
 import TurtleTag from './TurtleTag';
@@ -22,10 +23,14 @@ function TurtleCard({ value }: Props) {
 
           <div css={metaContainer}>
             <TurtleText css={metaLeft}>{count}</TurtleText>
-            <TurtleText css={metaRight}>건</TurtleText>
+            <TurtleText css={metaRight}>
+              {t('description.number', { number: '' })}
+            </TurtleText>
           </div>
 
-          <TurtleText css={$price}>{`${price.toLocaleString()}원`}</TurtleText>
+          <TurtleText css={$price}>{`${price.toLocaleString()}${t(
+            'description.won',
+          )}`}</TurtleText>
         </div>
       ))}
     </div>
