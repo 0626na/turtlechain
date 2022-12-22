@@ -80,7 +80,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('button.inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
           t('description.please select which dates you wish to integrate'),
           t(
@@ -213,7 +213,7 @@ function PageBody() {
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('table.totalAmount')}
+              {t('description.total stocked amount')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalAmount.toLocaleString()}

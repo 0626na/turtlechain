@@ -67,7 +67,7 @@ function PageBody() {
         onClose={detailModalClose}
       />
 
-      <PageHeader title={t('clearing.transaction.')} />
+      <PageHeader title={t('title.ledger')} />
 
       <PageTitle
         title={t('title.ledger list')}
