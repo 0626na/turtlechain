@@ -112,7 +112,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>{t('store.info')}</TurtleText>
+              <TurtleText>{t('description.store info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -123,7 +123,7 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('store.create')}</TurtleText>
+            <TurtleText>{t('description.create store')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>

@@ -76,7 +76,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('button.inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
           t('description.please select which dates you wish to integrate'),
           t(

@@ -80,7 +80,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('button.inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
           t('description.please select which dates you wish to integrate'),
           t(
@@ -144,7 +144,7 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="입고서 미리보기"
+        title={t('title.preview of todays stock products')}
         subTitle="정확한 입고등록을 위해서는 거래처와 상품을 최신화 시켜주세요. 상품가격은 필수이니 잊지말고 입력해주세요!"
         buttons={[
           <TertiaryButton
@@ -155,7 +155,9 @@ function PageBody() {
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('button.add stock')}</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add warehousing')}
+              </SecondaryIconButton>
             }
             items={[
               {
@@ -213,7 +215,7 @@ function PageBody() {
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('table.totalAmount')}
+              {t('description.total stocked amount')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalAmount.toLocaleString()}
