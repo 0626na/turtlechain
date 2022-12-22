@@ -1,5 +1,5 @@
 {
-  "turtleChain": "터틀체인",
+  "turtleChain": "Turtlechain",
 
   "table": {
     "operatorStatus": "Status",
@@ -109,7 +109,7 @@
     "biz address": "Business Address 1",
     "biz detail address": "Business Address 2",
     "biz license": "Business Registration Certificate",
-    "biz info": "사업자 정보",
+    "biz info": "Business Information",
     "vat issued mail": "Email for Tax Receipts",
     "mistransfer status": "Status",
     "mistransfer request date": "Request Date",
@@ -251,7 +251,7 @@
     "subscription": "구독하기",
     "re-subscription": "재구독하기",
     "testNotificationKakaoTalk": "테스트 알림톡 받아보기",
-    "payment method change": "결제수단 변경",
+    "payment method change": "Change Payment Method",
     "process": "처리하기",
     "next": "Next",
     "register adjustment": "교환/반품 등록하기",
@@ -288,7 +288,7 @@
     "login": "로그인",
     "reset password": "비밀번호 재설정",
     "request info modify": "정보수정 요청",
-    "subscription cancel": "해지하기",
+    "subscription cancel": "Cancel Subscription",
     "add new vendor": "신규거래처 요청",
     "confirming": "Confirm",
     "do cancel": "취소하기",
@@ -338,7 +338,7 @@
     "add it": "정말 추가하시겠습니까?",
     "add": "추가하기",
     "the service is available until expirationDate": "{{expirationDate}}까지 서비스 이용이 가능합니다",
-    "nextPaymentDate": "다음 결제일은 {{nextPaymentDate}} 입니다.",
+    "nextPaymentDate": "Your next billing date is {{nextPaymentDate}}",
     "please input account number": "계좌번호를 입력해주세요",
     "please input number only": "숫자만 입력해주세요",
     "product delete is completed": "상품을 삭제했어요",
@@ -410,7 +410,7 @@
     "add store": "쇼핑몰 추가하기",
     "create mistransfer": "오입금 환불요청",
     "mistransfer list": "오입금 환불내역",
-    "basic information": "기본정보",
+    "basic information": "Basic Information",
     "subscription and payment": "구독 및 결제",
     "picker": "사입자",
     "orderDetail": "발주내역",
@@ -455,7 +455,10 @@
     "preview of exchange and returns": "Preview of exchange and returns",
     "search product": "상품 검색",
     "add warehousing": "입고 추가",
-    "product list": "상품목록"
+    "product list": "상품목록",
+    "manage accounts": "Manage Accounts",
+    "manage business info": "Manage Business Info.",
+    "wrong transfer reversal": "Wrong Transfer Reversal"
   },
 
   "description": {
@@ -539,7 +542,7 @@
     "termination may restrict some use of the service": "해지 시 서비스 사용에 일부 제한될 수 있습니다.",
     "unsubscription complete": "해지완료",
     "the first months fee is 100won": "첫달 이용료 100원",
-    "creditInfo": "신용카드 {{cardName}} {{cardNumber}}",
+    "creditInfo": "Credit card {{cardName}} {{cardNumber}}",
     "tax invoice to be issued": "{{month}}월 세금계산서 발행예정",
     "now, lets start with adding your vendors": "Now, let`s start with adding your vendors 🔥",
     "last week": "Last week",
@@ -627,8 +630,8 @@
       "simple": "Simplified"
     },
     "view": {
-      "listView": "리스트로 보기",
-      "cardView": "카드뷰로 보기"
+      "listView": "List View",
+      "cardView": "Card View"
     },
     "adj status": {
       "true": "Pending",

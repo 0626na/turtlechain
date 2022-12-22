@@ -53,12 +53,12 @@ function PageBody() {
 
           {isStaff ? null : (
             <>
-              <Tabs.TabPane key="user" tab="계정관리">
+              <Tabs.TabPane key="user" tab={t('title.manage accounts')}>
                 <div css={greyContainer}>
                   <UserTab />
                 </div>
               </Tabs.TabPane>
-              <Tabs.TabPane key="company" tab="사업자 관리">
+              <Tabs.TabPane key="company" tab={t('title.manage business info')}>
                 <div css={greyContainer}>
                   <CompanyTab />
                 </div>
@@ -66,7 +66,10 @@ function PageBody() {
             </>
           )}
 
-          <Tabs.TabPane key="mistransfer" tab="오입금 환불">
+          <Tabs.TabPane
+            key="mistransfer"
+            tab={t('title.wrong transfer reversal')}
+          >
             <div css={whiteContainer}>
               <MistransferTab />
             </div>
