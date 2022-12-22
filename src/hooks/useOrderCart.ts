@@ -73,12 +73,14 @@ const useOrderCart = () => {
     let orderArrayToMerge: StoreOrder[] = [];
 
     cart.successList.map((store) => {
+      //같은 쇼핑몰을 2개 이상 등록한 경우 탐색
       comparisonList.map((item) => {
         if (item.id !== store.id && item.rt_store_id === store.rt_store_id) {
           orderArrayToMerge = item.orders;
         }
       });
 
+      //이미 병합해서 등록되어 있는지를 탐색
       if (
         !organizedList.find(
           (fStore) => fStore.rt_store_id === store.rt_store_id,
@@ -89,12 +91,14 @@ const useOrderCart = () => {
           orders: [...store.orders, ...orderArrayToMerge],
         });
 
+      //병합 끝낸 쇼핑몰 제거
       comparisonList = comparisonList.filter(
         (item) => item.rt_store_id !== store.rt_store_id,
       );
       orderArrayToMerge = [];
     });
 
+    //실패 케이스 데이터
     comparisonList = cart.failList;
 
     organizedList.map((store) => {
@@ -104,10 +108,12 @@ const useOrderCart = () => {
         }
       });
 
+      //이미 존재하는 쇼핑몰의 array index 탐색
       const replaceArrayIndex = organizedList.findIndex(
         (item) => item.rt_store_id === store.rt_store_id,
       );
 
+      //실패케이스에 있는 발주데이터의 쇼핑몰이 없는경우 새로 추가
       if (replaceArrayIndex !== -1) {
         organizedList[replaceArrayIndex] = {
           ...store,

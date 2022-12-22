@@ -43,11 +43,8 @@ function FailTab({ loading, ...props }: Props) {
   ];
 
   const { cart, setCart, failListOutput } = useOrderCart();
-  const [selectRowID, setSelectRowID] = useState(-1);
-  const [failToSuccessRowData, setfailToSuccessRowData] = useState({
-    id: 0,
-    mobile: '',
-  });
+  const [selectRowID, setSelectRowID] = useState(0);
+
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
     search_string: '',
@@ -95,19 +92,22 @@ function FailTab({ loading, ...props }: Props) {
       <TurtleTablePhoneNumberInput
         placeholder={t('table.mobile')}
         maxLength={13}
+        value={failListOutput()[record.id].mobile}
         onInput={(e) => {
-          e.currentTarget.value = e.currentTarget.value
-            .replace(notNumPattern, '')
-            .replace(phonePattern, '$1-$2-$3');
+          e.currentTarget.value = e.currentTarget.value.replace(
+            notNumPattern,
+            '',
+          );
 
-          if (e.currentTarget.value.length === 13) {
-            setfailToSuccessRowData({
-              id: record.id,
-              mobile: e.currentTarget.value,
-            });
-
+          inputMobileToFailList(e.currentTarget.value, record.id);
+          if (e.currentTarget.value.length === 11) {
+            setSelectRowID(record.id);
             openFailToSuccessModal();
           }
+        }}
+        onBlur={(e) => {
+          if (failListOutput()[record.id].mobile.length !== 11)
+            inputMobileToFailList('', record.id);
         }}
       />
     );
@@ -137,8 +137,8 @@ function FailTab({ loading, ...props }: Props) {
     closeMemoModal();
   };
 
-  const moveOrderFromFailtoSuccess = () => {
-    const failToSuccessRecord = failListOutput()[failToSuccessRowData.id];
+  const inputMobileToFailList = (mobileValue: string, id: number) => {
+    const failToSuccessRecord = failListOutput()[id];
     setCart({
       ...cart,
       failList: cart.failList.map((failItem) => ({
@@ -148,13 +148,16 @@ function FailTab({ loading, ...props }: Props) {
           mobile:
             failItem.rt_store_id === failToSuccessRecord.rt_store_id &&
             order.vendor_name === failToSuccessRecord.vendor_name
-              ? failToSuccessRowData.mobile.replaceAll('-', '')
+              ? mobileValue.replaceAll('-', '')
               : order.mobile,
         })),
       })),
     });
+  };
 
+  const moveOrderFromFailtoSuccess = () => {
     message.success(t('message.success update'));
+
     closeFailToSuccessModal();
   };
 
@@ -163,19 +166,22 @@ function FailTab({ loading, ...props }: Props) {
       title: t('table.vendor'),
       content:
         failListOutput().length !== 0
-          ? failListOutput()[failToSuccessRowData.id].vendor_name
+          ? failListOutput()[selectRowID].vendor_name
           : '',
     },
     {
       title: t('table.address'),
       content:
         failListOutput().length !== 0
-          ? failListOutput()[failToSuccessRowData.id].vendor_address
+          ? failListOutput()[selectRowID].vendor_address
           : '',
     },
     {
       title: t('table.mobile'),
-      content: failToSuccessRowData.mobile ?? '',
+      content:
+        failListOutput().length !== 0
+          ? failListOutput()[selectRowID].mobile
+          : '',
     },
   ];
 
@@ -201,7 +207,10 @@ function FailTab({ loading, ...props }: Props) {
             ),
           ]}
           visible={failtoSuccessModailvisible}
-          onCancel={closeFailToSuccessModal}
+          onCancel={() => {
+            inputMobileToFailList('', selectRowID);
+            closeFailToSuccessModal();
+          }}
           items={modalItems}
           onOk={() => moveOrderFromFailtoSuccess()}
         />
