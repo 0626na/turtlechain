@@ -221,7 +221,8 @@
     "updateProduct": "상품정보 수정하기",
     "connectedStores": "연결된 쇼핑몰",
     "addOrder": "발주 추가하기",
-    "order": "발주하기",
+    "do order": "발주하기",
+    "order": "발주",
     "operation": "운영",
     "closed": "폐점",
     "recreate": "재등록하기",
@@ -297,7 +298,8 @@
     "add pending delivery": "미송추가",
     "add adjustment": "교환/반품/미송 추가",
     "add exchange/returns": "교환/반품 추가",
-    "subscription paid plan": "유료플랜 구독"
+    "subscription paid plan": "유료플랜 구독",
+    "add store": "쇼핑몰 추가하기"
   },
 
   "message": {
@@ -415,9 +417,18 @@
     "basic information": "기본정보",
     "subscription and payment": "구독 및 결제",
     "picker": "사입자",
+    "vendor": "거래처",
+    "order": "발주",
+    "orderCreate": "발주등록",
+    "orderPreview": "발주서 미리보기",
     "orderDetail": "발주내역",
     "orderStatus": "발주현황",
+    "orderHeaderSettingSubtitle": "발주서 헤더명 추가",
     "really order": "정말 발주할까요?",
+    "orderDate": "발주일자",
+    "orderStores": "발주 쇼핑몰",
+    "totalOrderCountInConfirm": "총 발주수량",
+    "totalOrderPriceInConfirm": "총 발주금액",
     "success": "성공",
     "fail": "실패",
     "pending": "보류",
@@ -524,6 +535,7 @@
     "unable additional order": "추가 발주불가",
     "enable additional order": "추가 발주가능",
     "count": "{{count}}개",
+    "number": "{{number}}건",
     "price": "{{price}}원",
     "there are orders to modify": "수정이 필요한 발주서가 있습니다.",
     "please check error and reload": "오류 내용을 확인하고 다시 업로드해주세요.",
@@ -591,7 +603,9 @@
     "manage accounts": "계정관리",
     "manage business info": "사업자 관리",
     "wrong transfer reversal": "오입금 환불",
-    "at least one store": "운영중인 쇼핑몰을 먼저 추가해주세요!"
+    "orderTotalCount": "발주수량 합계",
+    "orderTotalPrice": "발주금액 합계",
+    "total": "총"
   },
 
   "type": {

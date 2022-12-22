@@ -66,9 +66,9 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             },
             {
               title: t('table.totalPrice'),
-              value: t('price', {
-                price: Number(orderTotalPrice).toLocaleString(),
-              }),
+              value: `${Number(orderTotalPrice).toLocaleString()} ${t(
+                'description.won',
+              )} `,
             },
           ]}
         />
