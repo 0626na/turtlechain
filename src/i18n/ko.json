@@ -263,7 +263,7 @@
     "integrate inventory program": "재고프로그램 연동",
     "integrate": "확인",
     "check": "확인",
-    "add stock": "입고 추가하기",
+    "add warehousing": "입고 추가하기",
     "make code": "코드 만들기",
     "select": "선택",
     "yes": "네",
@@ -459,6 +459,7 @@
     "add warehousing": "입고 추가",
     "store info": "쇼핑몰 정보",
     "preview of todays stock products": "입고서 미리보기"
+    "product list": "상품목록"
   },
 
   "description": {

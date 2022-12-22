@@ -155,7 +155,9 @@ function PageBody() {
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('button.add stock')}</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add warehousing')}
+              </SecondaryIconButton>
             }
             items={[
               {

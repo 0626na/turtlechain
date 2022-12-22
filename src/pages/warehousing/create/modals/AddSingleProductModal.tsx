@@ -197,7 +197,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                   size="large"
                   htmlType="submit"
                 >
-                  {t('button.addWarehousing')}
+                  {t('button.add warehousing')}
                 </PrimaryButton>
               </Row>
             )}
