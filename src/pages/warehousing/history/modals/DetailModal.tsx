@@ -178,7 +178,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
 
             {
               title: t('table.totalAmount'),
-              value: `${selectedRow?.total_amount.toLocaleString()}원`,
+              value: `${selectedRow?.total_amount.toLocaleString()}${t(
+                'description.won',
+              )}`,
             },
           ]}
         />
