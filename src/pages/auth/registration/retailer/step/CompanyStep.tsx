@@ -202,7 +202,7 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item
         name="company_store_url"
-        label={t('store.url')}
+        label={t('table.retailerStoreURL')}
         rules={[{ required: true }]}
       >
         <Input css={input} placeholder={t('placeholder.ex. store url')} />

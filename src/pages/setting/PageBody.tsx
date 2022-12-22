@@ -45,7 +45,7 @@ function PageBody() {
             setSearchParams({ tab: newKey });
           }}
         >
-          <Tabs.TabPane key="store" tab={t('store.management')}>
+          <Tabs.TabPane key="store" tab={t('description.store management')}>
             <div css={whiteContainer}>
               <StoreTab />
             </div>

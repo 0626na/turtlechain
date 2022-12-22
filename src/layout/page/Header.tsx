@@ -43,7 +43,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
                     key: 1,
                     label: (
                       <Button type="text" onClick={logout}>
-                        {t('auth.logout')}
+                        {t('description.logout')}
                       </Button>
                     ),
                   },

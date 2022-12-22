@@ -95,7 +95,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('store.info')}
+      title={t('title.store info')}
       visible={visible}
       onClose={() => {
         closeModal();

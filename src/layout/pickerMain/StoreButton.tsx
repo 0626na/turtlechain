@@ -38,7 +38,7 @@ function StoreButton() {
         <div css={buttonCss.textContainer}>
           <span css={buttonCss.topText}>{t('button.connectedStores')}</span>
           <span css={buttonCss.bottomText}>
-            {t('store.selectButton', {
+            {t('description.store selectButton', {
               store: store.selected?.name,
               storeCount: (getStoreListQuery.data?.data.total_count ?? 0) - 1,
             })}

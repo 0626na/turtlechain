@@ -375,12 +375,14 @@
     "duplication": "이미 등록 되어있는 상품 바코드 입니다. 다른 바코드를 입력하세요 ",
     "inputProductCode": "바코드를 입력해주세요",
     "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요.",
-    "no duplication": "중복 없음"
+    "no duplication": "중복 없음",
+    "authentication number does not match": "인증번호가 일치하지 않습니다."
   },
 
   "title": {
     "home": "HOME",
     "notice": "공지사항",
+    "store": "쇼핑몰",
     "store owner": "쇼핑몰 대표",
     "input user info": "계정 정보 입력",
     "input company info": "사업자 정보 입력",
@@ -458,7 +460,8 @@
     "product list": "상품목록",
     "manage accounts": "Manage Accounts",
     "manage business info": "Manage Business Info.",
-    "wrong transfer reversal": "Wrong Transfer Reversal"
+    "wrong transfer reversal": "Wrong Transfer Reversal",
+    "store info": "쇼핑몰 정보"
   },
 
   "description": {
@@ -569,7 +572,25 @@
     "detailed history of credits can be found in the ledger": "Detailed history of credits can be found in the ledger",
     "your vendor list must be updated before adding new products": "거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패 될 수 있어요.",
     "update select vendor": "선택한 거래처의 이름을 수정합니다.",
-    "input vendor name": "원하는 거래처명을 입력해주세요."
+    "input vendor name": "원하는 거래처명을 입력해주세요.",
+    "transaction": "과거매입",
+    "findId": "아이디 찾기",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "autoLogin": "자동 로그인",
+    "resetPassword": "비밀번호 재설정",
+    "registration": "서비스 가입",
+    "registrationReturn": "가입반려",
+    "registrationSelect": "가입 유형 선택",
+    "aboutMembership": "요금플랜 알아보기",
+    "wonderMembership": "다양한 요금제가 궁금하신가요?",
+    "notMember": "아직 회원이 아니신가요?",
+    "do": "인증하기",
+    "retry": "재발송",
+    "store info": "쇼핑몰 정보",
+    "create store": "쇼핑몰 추가하기",
+    "store management": "쇼핑몰 관리",
+    "selectButton": "{{store}} 외 {{storeCount}}개"
   },
 
   "type": {
@@ -654,62 +675,5 @@
       "not used": "사용안함",
       "etc": "기타"
     }
-  },
-
-  "transaction": {
-    "": "과거매입",
-    "warehousing": "입고",
-    "adjustment": "매입조정",
-    "reserve": "미송",
-    "subtract": "차감",
-    "refund": "환불",
-    "mistransfer": "오입금",
-    "clear_refund": "환불처리",
-    "reserve_payment": "미송결제",
-    "reserve_payment_subtract": "미송결제차감",
-    "reserve_subtract": "미송차감",
-    "reserve_warehousing": "미송입고",
-    "clearing_subtract": "매입차감",
-    "clearing": "정산",
-    "add_unpaid": "미결제 추가",
-    "remove_unpaid": "미결제 삭제",
-    "add_subtract": "차감 추가",
-    "remove_subtract": "차감 삭제",
-    "add_past_subtract": "과거매입 등록",
-    "add_past_unpaid": "과거매입 등록",
-    "remove_past_subtract": "과거 차감 삭제",
-    "remove_past_unpaid": "과거 미결제 삭제"
-  },
-
-  "auth": {
-    "findId": "아이디 찾기",
-    "login": "로그인",
-    "logout": "로그아웃",
-    "autoLogin": "자동 로그인",
-    "resetPassword": "비밀번호 재설정",
-    "registration": "서비스 가입",
-    "registrationReturn": "가입반려",
-    "registrationSelect": "가입 유형 선택",
-    "aboutMembership": "요금플랜 알아보기",
-    "wonderMembership": "다양한 요금제가 궁금하신가요?",
-    "notMember": "아직 회원이 아니신가요?",
-    "do": "인증하기",
-    "retry": "재발송",
-    "success": "인증 완료"
-  },
-
-  "store": {
-    "": "쇼핑몰",
-    "lists": "쇼핑몰 리스트",
-    "name": "쇼핑몰명",
-    "info": "쇼핑몰 정보",
-    "alimtalk name": "알림톡명",
-    "url": "쇼핑몰 URL",
-    "phone": "쇼핑몰 휴대전화 번호",
-    "create": "쇼핑몰 추가하기",
-    "update": "쇼핑몰 수정하기",
-    "address": "쇼핑몰 주소",
-    "management": "쇼핑몰 관리",
-    "selectButton": "{{store}} 외 {{storeCount}}개"
   }
 }
