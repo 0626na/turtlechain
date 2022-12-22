@@ -28,7 +28,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)} ${t(
+      title={`${t(`type.adj process.${selectedRow?.type}`)} ${t(
         'title.detail',
       )}`}
       visible={visible}
@@ -50,8 +50,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           {
             ellipsis: true,
             title: t('table.type'),
-            render: (_, record) =>
-              t(`adjustment.process type.${selectedRow?.type}`),
+            render: (_, record) => t(`type.adj process.${selectedRow?.type}`),
           },
           {
             ellipsis: true,

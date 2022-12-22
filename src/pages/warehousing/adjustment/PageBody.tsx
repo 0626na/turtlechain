@@ -201,9 +201,9 @@ function PageBody() {
         }}
       />
 
-      <PageHeader title={t('warehousing.adjustment.')} />
+      <PageHeader title={t('title.adjustment')} />
       <PageTitle
-        title="교환/반품/미송 현황"
+        title={t('title.summary of invoice issues')}
         subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
         buttons={[
           <TurtleDropdown
@@ -242,13 +242,13 @@ function PageBody() {
           value={[
             {
               color: 'orange',
-              title: t('warehousing.adjustment.pending'),
+              title: t('type.pending'),
               count: totalPendingCount,
               price: totalPendingPrice,
             },
             {
               color: 'cyan',
-              title: t('warehousing.adjustment.confirmed'),
+              title: t('type.finish'),
               count: totalClearingCount,
               price: totalClearingPrice,
             },

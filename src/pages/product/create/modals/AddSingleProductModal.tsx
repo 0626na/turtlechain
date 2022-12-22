@@ -65,19 +65,19 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         //미리보기에 등록된 상품중에 중복이 있는 경우
 
         if (duplicationInCart) {
-          message.warn(t('product.message.duplication'));
+          message.warn(t('message.duplication'));
 
           return;
         }
 
         //중복없음, 등록가능
-        if (data.data.msg === t('product.notDuplication')) {
-          message.success(t('product.message.notDuplication'));
+        if (data.data.msg === t('message.no duplication')) {
+          message.success(t('message.no duplication'));
         }
       },
       //기존에 등록되어 있는 상품중에 중복이 있는 경우
       onError: (error: AxiosError) => {
-        message.warn(t('product.message.duplication'));
+        message.warn(t('message.duplication'));
       },
     },
   );
@@ -102,7 +102,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
   //중복체크 버튼 클릭시 동작
   const checkProductCodeDuplication = () => {
     if (!form.getFieldValue('product_code')) {
-      message.warn(t('product.message.inputProductCode'));
+      message.warn(t('message.inputProductCode'));
       return;
     }
     getProductCodeDuplicationCheckQuery.refetch();
@@ -126,7 +126,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
         onClickSelect={selectVendor}
       />
       <TurtleContentModal
-        title={t('product.addSingle')}
+        title={t('title.add single product')}
         visible={visible}
         onClose={closeModal}
       >
@@ -223,7 +223,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             rules={[
               {
                 required: true,
-                message: t('product.message.inputEnglishAndNumber'),
+                message: t('message.inputEnglishAndNumber'),
               },
             ]}
           >
@@ -247,7 +247,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                 checkProductCodeDuplication();
               }}
             >
-              {t('product.duplicateCheckProductCode')}
+              {t('button.duplicateCheckProductCode')}
             </AddButton>
           </div>
 

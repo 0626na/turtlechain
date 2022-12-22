@@ -111,7 +111,7 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('button.inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
           t('description.please select which dates you wish to integrate'),
           t(
@@ -187,11 +187,11 @@ function PageBody() {
       />
 
       <PageTitle
-        title="거래처등록 미리보기"
+        title={t('title.preview of new vendors')}
         subTitle="거래처명과 계좌번호만 있다면 쉽게 대량등록(xlsx)을 할 수 있어요! 보류에서 계좌정보 선택은 유의해주세요."
         buttons={[
           <TertiaryButton
-            text={t('button.inventory program integration')}
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}

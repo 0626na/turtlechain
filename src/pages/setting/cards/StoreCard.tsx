@@ -103,7 +103,7 @@ function StoreCard({ store }: Props) {
         </Col>
         <Col>
           <TurtleTag color={colors[store.inventory_type].color}>
-            {t(`inventory.${store.inventory_type}`)}
+            {t(`type.inventory.${store.inventory_type}`)}
           </TurtleTag>
         </Col>
       </Row>

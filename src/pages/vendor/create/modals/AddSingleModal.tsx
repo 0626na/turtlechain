@@ -346,7 +346,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                     !getFieldValue('vendor_code')
                   }
                 >
-                  {t('button.addVendor')}
+                  {t('button.add vendor')}
                 </PrimaryButton>
               </div>
             )}

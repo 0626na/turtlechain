@@ -296,7 +296,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             <TextWithTooltip
               tooltipContent={['거래처에게 보여지는 쇼핑몰명을 입력해주세요']}
             >
-              {t('table.alimtalkName')}
+              {t('table.alimtalk name')}
             </TextWithTooltip>
           }
           required={false}
