@@ -469,8 +469,7 @@
     "search product": "상품 검색",
     "add warehousing": "입고 추가",
     "store info": "쇼핑몰 정보",
-    "preview of todays stock products": "입고서 미리보기",
-
+    "preview of todays stock products": "입고서 미리보기"
   },
 
   "description": {
@@ -536,6 +535,7 @@
     "unable additional order": "추가 발주불가",
     "enable additional order": "추가 발주가능",
     "count": "{{count}}개",
+    "number": "{{number}}건",
     "price": "{{price}}원",
     "there are orders to modify": "수정이 필요한 발주서가 있습니다.",
     "please check error and reload": "오류 내용을 확인하고 다시 업로드해주세요.",
