@@ -74,14 +74,14 @@ function Service() {
           </Col>
         </Row>
 
-        <TurtleText css={$subtitle}>
+        {/* <TurtleText css={$subtitle}>
           <span css={subTitleIcon}>
             <InfoIcon />
           </span>
           오늘 결제에 필요한 차감과 미송결제 확인은 1번에서, 최종 결제한 금액
           설정은 2번에서 해주세요. 금액이 틀릴 경우, 아래 문의하기를 통해
           문의주세요!
-        </TurtleText>
+        </TurtleText> */}
       </div>
 
       <PageContent gray>
