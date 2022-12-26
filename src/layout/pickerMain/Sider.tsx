@@ -97,7 +97,7 @@ const menus = [
     children: [
       {
         key: 'vendor',
-        label: '거래처',
+        label: t('title.vendor'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="vendorProduct" />
@@ -114,7 +114,7 @@ const menus = [
       },
       {
         key: 'order',
-        label: t('order.'),
+        label: t('title.order'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="order" />
@@ -124,7 +124,7 @@ const menus = [
         children: [
           {
             key: pathnames.order.create,
-            label: t('order.create'),
+            label: t('title.orderCreate'),
             style: mainMenuContentStyle,
           },
           {

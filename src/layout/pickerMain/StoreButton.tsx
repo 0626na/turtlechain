@@ -1,6 +1,7 @@
-import { Button } from 'antd';
+import React from 'react';
+import { Button, Tooltip } from 'antd';
 import { useQuery } from 'react-query';
-import { ArrowRightIcon } from '@components/element';
+import { ArrowRightIcon, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useStore from '@hooks/useStore';
 
@@ -14,7 +15,7 @@ function StoreButton() {
   const navigate = useNavigate();
   const { store, fillStoreList } = useStore();
   const { user } = useUser();
-  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+  const { data } = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
     onSuccess: (data) => {
       fillStoreList(data.data.store_list);
@@ -22,34 +23,54 @@ function StoreButton() {
   });
 
   return (
-    <Button
-      css={buttonCss.self}
-      onClick={() => {
-        navigate('/picker/setting');
-      }}
-    >
-      <div css={buttonCss.container}>
-        <div css={buttonCss.logoContainer}>
-          <div css={buttonCss.logo}>
-            <StoreIcon css={buttonCss.icon} />
+    <>
+      {data?.data.store_list.length === 0 ? (
+        <Tooltip
+          defaultVisible
+          placement="right"
+          title={t('description.at least one store')}
+        >
+          <Button
+            css={[buttonCss.self, buttonCss.borderActive]}
+            onClick={() => {
+              navigate('/picker/setting');
+            }}
+          >
+            {t('button.add store')}
+            <TurtleIcon name="storePlus" />
+          </Button>
+        </Tooltip>
+      ) : (
+        <Button
+          css={[buttonCss.self]}
+          onClick={() => {
+            navigate('/picker/setting');
+          }}
+        >
+          <div css={buttonCss.container}>
+            <div css={buttonCss.logoContainer}>
+              <div css={buttonCss.logo}>
+                <StoreIcon css={buttonCss.icon} />
+              </div>
+            </div>
+
+            <div css={buttonCss.textContainer}>
+              <span css={buttonCss.topText}>{t('button.connectedStores')}</span>
+              <span css={buttonCss.bottomText}>
+                {t('description.store selectButton', {
+                  store: store.selected?.name,
+                  storeCount: (data?.data.total_count ?? 0) - 1,
+                })}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div css={buttonCss.textContainer}>
-          <span css={buttonCss.topText}>{t('button.connectedStores')}</span>
-          <span css={buttonCss.bottomText}>
-            {t('description.store selectButton', {
-              store: store.selected?.name,
-              storeCount: (getStoreListQuery.data?.data.total_count ?? 0) - 1,
-            })}
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <ArrowRightIcon value="#AAADB3" />
-      </div>
-    </Button>
+          <div>
+            <ArrowRightIcon value="#AAADB3" />
+          </div>
+        </Button>
+      )}
+    </>
   );
 }
 
@@ -112,6 +133,14 @@ const buttonCss = {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  }),
+  borderActive: css({
+    border: '4px solid #00B3BE',
+    padding: 16,
+
+    '&:focus,&:hover': {
+      borderColor: '#00B3BE',
+    },
   }),
 };
 

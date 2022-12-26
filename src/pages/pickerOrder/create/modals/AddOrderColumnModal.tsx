@@ -107,7 +107,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               font-size: 20px;
             `}
           >
-            {t('orderHeaderSettingSubtitle')}
+            {t('title.orderHeaderSettingSubtitle')}
           </span>
           <p
             css={css`

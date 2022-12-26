@@ -69,7 +69,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           },
           {
             title: t('table.totalVendorCount'),
-            value: `${getClearingItemQuery.data?.data.total_count}개`,
+            value: t('count', {
+              count: getClearingItemQuery.data?.data.total_count,
+            }),
           },
         ]}
       />
