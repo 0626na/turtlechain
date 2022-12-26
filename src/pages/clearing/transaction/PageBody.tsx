@@ -71,7 +71,7 @@ function PageBody() {
 
       <PageTitle
         title={t('title.ledger list')}
-        subTitle={t('description.look around ledger')}
+        // subTitle={t('description.look around ledger')}
         buttons={[
           <SecondaryIconButton
             onClick={() => {
