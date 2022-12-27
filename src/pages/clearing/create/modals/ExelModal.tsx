@@ -41,6 +41,7 @@ function ExelModal({ visible, onClose }: Props) {
     () =>
       userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
     {
+      enabled: !!user?.company_id,
       onSuccess: (data) => {
         setIsSubscribed(data.data.is_expired);
       },
