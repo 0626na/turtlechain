@@ -176,7 +176,7 @@ function AddModal({ visible, closeModal }: Props) {
 
           <TurtleDivider marginBottom={37} marginTop={32} />
 
-          <Form.Item label={t('table.overpaidAmount')} name="overpaid_amount">
+          <Form.Item label={t('table.credit')} name="overpaid_amount">
             <TurtleNumberInput
               step={1000}
               min={0}
