@@ -131,7 +131,8 @@
     "processing method": "처리방식",
     "confirm password": "비밀번호 확인",
     "new password": "새 비밀번호",
-    "email": "이메일"
+    "email": "이메일",
+    "proccessed date": "처리일자"
   },
 
   "placeholder": {
