@@ -277,7 +277,9 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                 <TurtleTag
                   color={record.vendor_info.is_vat_included ? 'orange' : 'gray'}
                 >
-                  {record.vendor_info.is_vat_included ? '바로전달' : '일반'}
+                  {record.vendor_info.is_vat_included
+                    ? t('table.right delivery')
+                    : t('table.general')}
                 </TurtleTag>
               ),
             },
