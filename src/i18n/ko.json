@@ -507,8 +507,8 @@
     "exist update content": "수정내용이 있습니다. 지금 닫으면 저장되지 않아요.",
     "cannot reset after register": "등록 후에는 이전으로 되돌릴 수 없어요",
     "confirm payment info": "결제 정보를 다시한번 확인해주세요.",
-    "price include vat": "{price}원(부가세 {vat}원 포함)",
-    "include vat": "부가세 {vat}원 포함",
+    "price include vat": "{{price}}원(부가세 {{vat}}원 포함)",
+    "include vat": "부가세 {{vat}}원 포함",
     "exclude payment": "이번 결제에서 제외해요",
     "include payment": "이번 결제에서 포함해요",
     "to use price cannot over warehousing price": "사용할 금액은 당일 입고 금액을 초과할 수 없습니다.",
@@ -717,6 +717,7 @@
       "turtlechain": "터틀체인",
       "none": "없음",
       "not used": "사용안함",
+      "cafe24": "카페24",
       "etc": "기타"
     }
   }
