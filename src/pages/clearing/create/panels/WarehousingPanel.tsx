@@ -113,7 +113,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 background: '#E2F6F7',
               },
             }}
-            scroll={{ y: 80 }}
+            scroll={{ y: 100 }}
             size="small"
             pagination={false}
             loading={getStoreClearingQuery.isLoading}
@@ -249,7 +249,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               background: '#E2F6F7',
             },
           }}
-          scroll={{ y: 80 }}
+          scroll={{ y: 100 }}
           size="small"
           pagination={false}
           loading={getStoreClearingQuery.isLoading}
