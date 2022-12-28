@@ -478,8 +478,6 @@
     "required item": "필수 입력값입니다.",
     "can not go back to the past after the cancellation.": "취소 후에는 이전으로 되돌릴 수 없어요.",
     "displayed in the vendor`s account when transferring money.": "이체 시, 거래처 통장에 표시되는 내용입니다.",
-    "check if VAT needs to be included with an invoice1": "당일결제 시, 부가세도 그 날에 함께",
-    "check if VAT needs to be included with an invoice2": "전달되어야 하는 거래처를 체크해주세요.",
     "write freely of what you wish to use as vendors name": "추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.",
     "nim": "님",
     "won": "원",

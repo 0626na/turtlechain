@@ -267,7 +267,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                 <TextWithTooltip
                   tooltipContent={[
                     t('description.payment today'),
-                    t('desription.check vendor'),
+                    t('description.check vendor'),
                   ]}
                 >
                   {t('table.vatIncluded')}
