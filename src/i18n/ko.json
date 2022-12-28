@@ -604,7 +604,7 @@
     "orderTotalPrice": "발주금액 합계",
     "total": "총",
     "accumulated pending refund": "Accumulated Pending Refund",
-    "accumulated credit": "Accumulated credit",
+    "accumulated credit": "누적 사용가능 금액",
     "accumulated amount due": "누적 환불예정금액",
     "manage accounts": "계정관리",
     "manage business info": "사업자 관리",
@@ -634,6 +634,31 @@
         "takeback": "반품"
       }
     },
+    "transaction": {
+      "": "과거매입",
+      "warehousing": "입고",
+      "adjustment": "매입조정",
+      "reserve": "미송",
+      "subtract": "차감",
+      "refund": "환불",
+      "mistransfer": "오입금",
+      "clear_refund": "환불처리",
+      "reserve_payment": "미송결제",
+      "reserve_payment_subtract": "미송결제차감",
+      "reserve_subtract": "미송차감",
+      "reserve_warehousing": "미송입고",
+      "clearing_subtract": "매입차감",
+      "clearing": "정산",
+      "add_unpaid": "미결제 추가",
+      "remove_unpaid": "미결제 삭제",
+      "add_subtract": "차감 추가",
+      "remove_subtract": "차감 삭제",
+      "add_past_subtract": "과거매입 등록",
+      "add_past_unpaid": "과거매입 등록",
+      "remove_past_subtract": "과거 차감 삭제",
+      "remove_past_unpaid": "과거 미결제 삭제"
+    },
+
     "refund": "환불",
     "subtraction": "차감",
     "orderTypes": {
