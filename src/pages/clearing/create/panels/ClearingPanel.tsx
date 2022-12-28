@@ -154,7 +154,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title={t('really register')}
+        title={t('title.really register')}
         description={[
           t('description.cannot reset after register'),
           t('description.confirm payment info'),
