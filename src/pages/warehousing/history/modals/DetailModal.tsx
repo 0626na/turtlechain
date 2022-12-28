@@ -169,11 +169,15 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             },
             {
               title: t('table.totalWarehousingCount'),
-              value: t('number', { number: selectedRow?.total_item_count }),
+              value: t('description.number', {
+                number: selectedRow?.total_item_count,
+              }),
             },
             {
               title: t('table.totalVendorCount'),
-              value: t('count', { count: selectedRow?.total_store_count }),
+              value: t('description.count', {
+                count: selectedRow?.total_store_count,
+              }),
             },
 
             {

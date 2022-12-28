@@ -605,7 +605,7 @@
     "total": "총",
     "accumulated pending refund": "Accumulated Pending Refund",
     "accumulated credit": "Accumulated credit",
-    "accumulated amount due": "Accumulated Amount Due",
+    "accumulated amount due": "누적 환불예정금액",
     "manage accounts": "계정관리",
     "manage business info": "사업자 관리",
     "wrong transfer reversal": "오입금 환불",
