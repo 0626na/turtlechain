@@ -59,8 +59,7 @@ function StoreSelector() {
           overlay={
             <Menu
               css={menu}
-              selectable
-              onSelect={({ key }) => {
+              onClick={({ key }) => {
                 selectStore(Number(key));
               }}
               items={store.list.map((store, idx) => ({
