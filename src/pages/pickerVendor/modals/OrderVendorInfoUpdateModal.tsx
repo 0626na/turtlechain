@@ -51,7 +51,7 @@ function OrderVendorInfoUpdateModal({
     },
   });
 
-  const { data } = useQuery(
+  useQuery(
     ['getWholesalerQuery', selectedRow?.id],
     () => wholesalerAPI.get({ storeId: selectedRow.id }),
     {

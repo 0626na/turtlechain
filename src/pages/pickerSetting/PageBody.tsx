@@ -31,17 +31,21 @@ function PageBody() {
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
 
-  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
-    enabled: !!user,
-  });
+  const { data: storeList, isLoading } = useQuery(
+    ['getStoreList'],
+    pickerAPI.getList,
+    {
+      enabled: !!user,
+    },
+  );
 
   const filteredList = useMemo(() => {
-    return getStoreListQuery.data?.data.store_list.filter(
+    return storeList?.data.store_list.filter(
       (store) =>
         store.name.includes(searchQuery) ||
         store.store_phone[0].phone.includes(searchQuery),
     );
-  }, [getStoreListQuery, searchQuery]);
+  }, [storeList, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -109,7 +113,7 @@ function PageBody() {
       </Row>
 
       <TurtleTableTitle
-        totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
+        totalCount={storeList?.data.store_list.length ?? 0}
         rightContent={
           <Row align="middle">
             <Col css={css({ marginRight: 15 })}>
@@ -140,7 +144,7 @@ function PageBody() {
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {getStoreListQuery.data?.data.store_list.map((item, idx) => (
+          {storeList?.data.store_list.map((item, idx) => (
             <Col
               key={idx}
               span={8}
@@ -159,7 +163,7 @@ function PageBody() {
       ) : (
         <Table
           size="small"
-          loading={getStoreListQuery.isLoading}
+          loading={isLoading}
           dataSource={filteredList}
           rowKey={(record) => record.id}
           onRow={(record) => ({

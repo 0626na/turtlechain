@@ -37,7 +37,14 @@ function SuccessTab({
   );
   const { translateOrderType } = useOrderCart();
 
-  const getOrderHistoryQuery = useQuery(
+  /**
+   * 발주내역 react-query
+   */
+  const {
+    data: orderHistorySuccessData,
+    refetch,
+    isLoading,
+  } = useQuery(
     ['getOrderHistory', sheetID],
     () => orderAPI.getOrderHistory({ sheet_id: sheetID }),
     {
@@ -47,10 +54,13 @@ function SuccessTab({
     },
   );
 
-  const updateMemoQuery = useMutation(orderAPI.updateOrderHistoryMemo, {
+  /**
+   * 발주내역 메모 mutation
+   */
+  const { mutate } = useMutation(orderAPI.updateOrderHistoryMemo, {
     onSuccess: () => {
       message.success(t('message.successMemoInput'));
-      getOrderHistoryQuery.refetch();
+      refetch();
       closeMemoModal();
     },
   });
@@ -72,19 +82,19 @@ function SuccessTab({
     <Tabs.TabPane {...props}>
       <OrderMemoModal
         defaultValue={
-          getOrderHistoryQuery.data?.data.successes.find(
+          orderHistorySuccessData?.data.successes.find(
             (order) => order.id === orderID,
           )?.memo ?? ''
         }
         visible={visibleMemoModal}
         close={closeMemoModal}
         onOk={(value) => {
-          updateMemoQuery.mutate({ memo: value, id: orderID });
+          mutate({ memo: value, id: orderID });
         }}
       />
       <Table
         size="small"
-        loading={getOrderHistoryQuery.isLoading}
+        loading={isLoading}
         rowKey={(record) => String(record.id)}
         dataSource={filteredList ?? []}
         pagination={{
@@ -93,7 +103,7 @@ function SuccessTab({
         }}
         title={() => (
           <TurtleTableTitle
-            totalCount={getOrderHistoryQuery.data?.data.successes.length ?? 0}
+            totalCount={orderHistorySuccessData?.data.successes.length ?? 0}
             rightContent={
               <TurtleSearchInput
                 placeholder={t(
