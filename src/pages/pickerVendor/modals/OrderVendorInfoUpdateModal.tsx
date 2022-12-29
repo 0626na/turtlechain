@@ -1,37 +1,32 @@
+import React from 'react';
 import { t } from 'i18next';
 import { Form, Input, Upload } from 'antd';
-import React, { useEffect } from 'react';
-
 import {
   AddButton,
   PrimaryButton,
   TurtleFormInput,
-  TurtleFormSearchInput,
   TurtleFormSelect,
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
-
-import vendorAPI, { Vendor } from '@apis/vendorAPI';
-
 import { css } from '@emotion/react';
-
-import useStore from '@hooks/useStore';
-
 import { useMutation, useQuery } from 'react-query';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
-import { phoneMasking } from '@utils/phone';
 import wholesalerAPI, { WholesalerStore } from '@apis/wholesalerAPI';
-import { OrderVendor } from '../PageBody';
+
 interface Props {
   visible: boolean;
   closeModal: () => void;
   selectedRow: WholesalerStore;
 }
 
+/**
+ * 거래처 정보 수정 요청 모달
+ * @param selectedRow 테이블에서 수정하려는 거래처 데이터
+ */
 function OrderVendorInfoUpdateModal({
   visible,
   closeModal,
@@ -41,7 +36,7 @@ function OrderVendorInfoUpdateModal({
   const { buildingData, bankData } = usePreset();
 
   // 거래처 정보수정
-  const createVendorMutation = useMutation(bucketListAPI.create, {
+  const { mutate } = useMutation(bucketListAPI.create, {
     onSuccess: () => {
       message.success(t('message.success update vendor request'));
       closeModal();
@@ -283,7 +278,7 @@ function OrderVendorInfoUpdateModal({
                     ' ',
                   );
 
-                  createVendorMutation.mutate({
+                  mutate({
                     ...form.getFieldsValue(),
                     type: 'update',
                     banks: [
