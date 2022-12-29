@@ -20,6 +20,10 @@ interface Props {
 
 /**
  * 발주등록 최종 확인 모달
+ * @param visible 모달 표시 유무
+ * @param close 모달 닫을때 이벤트 함수
+ * @param title 모달 제목
+ * @param description 모달 설명 파라미터
  */
 function ConfirmOrderModal({
   visible,
@@ -31,7 +35,9 @@ function ConfirmOrderModal({
   const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
 
-  //발주서 등록
+  /**
+   * 발주서 등록 react-query 함수
+   */
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
