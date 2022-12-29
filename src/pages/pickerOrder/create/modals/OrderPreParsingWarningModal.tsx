@@ -27,6 +27,12 @@ interface Props {
 
 /**
  * 발주서 프리파싱(재등록 가능 여부 확인) 결과 모달
+ * @param visible 모달 표시 유무
+ * @param title 모달 타이틀 파라미터
+ * @param description 모달 설명 파라미터
+ * @param onCancel 모달 닫을시 이벤트 함수
+ * @param size 모달 크기 파라미터
+ * @param data 파싱된 발주서 데이터
  */
 function OrderPreParsingWarningModal({
   visible,
@@ -37,7 +43,9 @@ function OrderPreParsingWarningModal({
   data,
 }: Props) {
   const { ready, cart } = useOrderCart();
-  //발주서 파싱
+  /**
+   * 업로드한 발주서(엑셀파일) 파싱 react-query 함수
+   */
   const createOrderExcelParseMutation = useMutation(
     orderAPI.createOrderExcelParsing,
     {

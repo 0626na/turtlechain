@@ -31,6 +31,8 @@ interface Props {
 }
 /**
  *  발주서 헤더 설정 모달
+ * @param visible 모달 표시 유무
+ * @param closeModal 모달 닫을시 이벤트 함수
  */
 function AddOrderColumnModal({ visible, closeModal }: Props) {
   const {

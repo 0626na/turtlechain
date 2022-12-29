@@ -60,6 +60,9 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
+  /**
+   * 등록된 전체 쇼핑몰 갯수
+   */
   const { data: storecountData } = useQuery(
     ['getStoreCountListQuery'],
     pickerAPI.getList,
@@ -74,6 +77,9 @@ function PageBody() {
     },
   );
 
+  /**
+   * 발주서 발송한 쇼핑몰 갯수
+   */
   const { data: orderCompleteStoreData } = useQuery(
     ['getCompleteOrderCountQuery'],
     () =>
@@ -91,6 +97,9 @@ function PageBody() {
     },
   );
 
+  /**
+   * 발주서 전송할때 마다 발주 완료한 쇼핑몰 갯수 카운팅
+   */
   useMemo(() => {
     setTodayordersCount({
       total: storecountData?.data.total_count ?? 0,
