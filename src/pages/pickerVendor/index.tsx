@@ -13,7 +13,7 @@ function PickerVendor() {
           'vendor.history',
         )}`}
       />
-      <PageHeader title="거래처 목록" />
+      <PageHeader title={t('title.vendor list')} />
       <PageBody />
     </>
   );
