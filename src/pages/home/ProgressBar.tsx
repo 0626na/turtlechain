@@ -6,6 +6,7 @@ import warehousingAPI from '@apis/warehousingAPI';
 import { css } from '@emotion/react';
 import useStore from '@hooks/useStore';
 import { theme } from '@styles/theme';
+import { t } from 'i18next';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -33,7 +34,7 @@ function ProgressBar() {
   const getVendorListQuery = useQuery(
     ['getVendorListQuery', store.selected?.id],
     () =>
-      vendorAPI.get({
+      vendorAPI.getList({
         rt_store_id: store.selected?.id,
         search_string: '',
         page: 1,
@@ -135,18 +136,19 @@ function ProgressBar() {
   );
 
   const handleDescription = () => {
-    if (gage < stage.vendor) return '자! 거래처 등록부터 시작해볼까요? 🔥';
-    if (gage < stage.product) return '상품 등록은 하셨나요? 😳';
+    if (gage < stage.vendor)
+      return t('Now, lets start with adding your vendors');
+    if (gage < stage.product) return t('dont forget to add your products');
     if (gage < stage.warehousing)
-      return '입고된 상품도 빠짐없이 등록해주세요! 🥸';
+      return t('make sure to update your current inventory status');
     if (gage < stage.adjustment)
-      return '교환/반품/미송 상품이 있지는 않나요? 🧐';
+      return t('got any exchanges, returns, or pending deliveries?');
     if (gage < stage.requestClearing)
-      return '오늘 거래처 결제금액은 얼마일까요? 🤔';
+      return t('what is the total amount of todays invoices?');
     if (gage < stage.completedClearing)
-      return '터틀체인이 이체여부를 확인하고 있어요! 💸';
+      return t('your invoices and payments are waiting to be processed');
     if (gage === stage.completedClearing)
-      return '오늘 업무 끝! 퇴근하고 치맥은 어떄요? 🍺';
+      return t('nice work today! How about some beer after work?');
   };
 
   useEffect(() => {
@@ -171,12 +173,12 @@ function ProgressBar() {
       </div>
 
       <div css={textContainer}>
-        <span>거래처등록</span>
-        <span>상품등록</span>
-        <span>입고등록</span>
-        <span>교환/반품/미송</span>
-        <span>결제하기</span>
-        <span>이체하기</span>
+        <span>{t('add vendors')}</span>
+        <span>{t('add products')}</span>
+        <span>{t('add stocked Qty')}</span>
+        <span>{t('exchange, returns, pending delivery')}</span>
+        <span>{t('payments Authorized')}</span>
+        <span>{t('paid')}</span>
       </div>
     </>
   );

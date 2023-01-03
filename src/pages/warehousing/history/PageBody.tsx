@@ -115,8 +115,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={confirmModalVisible}
-        title="정말 마감할까요?"
-        description={['해당 입고서를 마감합니다.']}
+        title={t('confirm this stock list?')}
+        description={[t('this will confirm stocked products for the invoice')]}
         onCancel={closeConfirmModal}
         onOk={() => {
           confirmSheetMutation.mutate({
@@ -124,8 +124,8 @@ function PageBody() {
             is_confirmed: true,
           });
         }}
-        cancelText="취소"
-        okText="마감"
+        cancelText={t('button.cancel')}
+        okText={t('button.confirm')}
         loading={confirmSheetMutation.isLoading}
       />
       {/**
@@ -133,8 +133,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={cancelModalVisible}
-        title="정말 취소할까요?"
-        description={['해당 입고서의 마감을 취소합니다.']}
+        title={t('cancel stock confirmation?')}
+        description={[t('this will cancel the confirmation')]}
         onCancel={closeCancelModal}
         onOk={() => {
           cancelSheetMutation.mutate({
@@ -142,14 +142,14 @@ function PageBody() {
             is_confirmed: false,
           });
         }}
-        cancelText="취소"
-        okText="마감취소"
+        cancelText={t('button.cancel')}
+        okText={t('confirm cancel')}
         loading={cancelSheetMutation.isLoading}
       />
       {/**
        * 페이지
        */}
-      <PageTitle title="입고서 리스트" />
+      <PageTitle title={t('stocked product list')} />
       <PageContent>
         <Table
           size="small"
@@ -157,7 +157,7 @@ function PageBody() {
           dataSource={getWarehousingSheetQuery.data?.sheet_list}
           rowKey={(record) => record.id}
           pagination={false}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
               selectRow(record);
@@ -181,15 +181,15 @@ function PageBody() {
                     items={[
                       {
                         value: '',
-                        name: t('warehousing.confirm.all'),
+                        name: t('type.all'),
                       },
                       {
                         value: '0',
-                        name: t('warehousing.confirm.false'),
+                        name: t('type.pending'),
                       },
                       {
                         value: '1',
-                        name: t('warehousing.confirm.true'),
+                        name: t('type.finish'),
                       },
                     ]}
                   />
@@ -210,7 +210,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 70,
+              width: 100,
               align: 'center',
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
@@ -221,39 +221,36 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'center',
               title: t('table.createdDate'),
               render: (_, record) => record.created_date,
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalWarehousingCount'),
               render: (_, record) => record.total_item_count.toLocaleString(),
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalVendorCount'),
               render: (_, record) => record.total_store_count,
             },
             {
               ellipsis: true,
-              width: 200,
+              // width: 200,
               align: 'right',
               title: t('table.totalAmount'),
               render: (_, record) => record.total_amount.toLocaleString(),
             },
             {
-              width: 200,
-            },
-            {
               ellipsis: true,
               align: 'center',
-              width: 70,
+              width: 130,
               onCell: () => ({
                 onClick: (e) => {
                   e.stopPropagation();
@@ -274,7 +271,7 @@ function PageBody() {
                           openCancelModal();
                         }}
                       >
-                        마감취소
+                        {t('confirm cancel')}
                       </SelectButton>
                     )
                   ) : (
@@ -288,7 +285,7 @@ function PageBody() {
                         openConfirmModal();
                       }}
                     >
-                      마감하기
+                      {t('confirmed')}
                     </ProcessButton>
                   )}
                 </>
@@ -296,7 +293,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 30,
+              width: 50,
               onCell: (record) => ({
                 style: { cursor: 'pointer' },
                 onClick: (e) => {

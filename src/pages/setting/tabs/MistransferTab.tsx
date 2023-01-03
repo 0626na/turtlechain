@@ -101,7 +101,7 @@ function MistransferTab() {
               color: #242934;
             `}
           >
-            오입금 환불 내역
+            {t('mistransfer.list')}
           </Col>
         </Row>
 
@@ -111,7 +111,7 @@ function MistransferTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>오입금 환불요청</TurtleText>
+            <TurtleText>{t('mistransfer.create')}</TurtleText>
           </SecondaryButton>
         </Col>
       </Row>
@@ -134,12 +134,12 @@ function MistransferTab() {
           };
         }}
         pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-        scroll={{ x: 1400, y: 'auto' }}
+        scroll={{ x: 950, y: 'auto' }}
         columns={[
           {
             ellipsis: true,
             width: 100,
-            title: t('mistransfer.status.'),
+            title: t('table.mistransfer status'),
             render: (_, record) => (
               <TurtleTag color={tagColors[record.status]}>
                 {t(`mistransfer.status.${record.status}`)}
@@ -149,25 +149,23 @@ function MistransferTab() {
           {
             ellipsis: true,
             width: 100,
-            title: t('mistransfer.created date'),
+            title: t('table.mistransfer request date'),
             render: (_, record) => record.created_date,
           },
           {
             ellipsis: true,
-            width: 200,
             title: t('table.vendorName'),
             render: (_, record) => record.ws_store_name,
           },
           {
             ellipsis: true,
-            width: 200,
-            title: t('mistransfer.accountInfo'),
+            title: t('table.mistransfer accountInfo'),
             render: (_, { ws_bank, ws_account_number, ws_account_holder }) =>
               `${ws_bank} ${ws_account_number} ${ws_account_holder}`,
           },
           {
             ellipsis: true,
-            width: 200,
+            width: 150,
             title: (
               <TextWithTooltip
                 tooltipContent={[
@@ -176,22 +174,20 @@ function MistransferTab() {
                   ),
                 ]}
               >
-                {t('mistransfer.recipient print')}
+                {t('table.mistransfer recipient print')}
               </TextWithTooltip>
             ),
             render: (_, record) => record.recipient_print,
           },
           {
             ellipsis: true,
-            width: 250,
-            title: t('mistransfer.refund_memo'),
+            title: t('table.refund_memo'),
             render: (_, record) => record.memo,
           },
           {
             ellipsis: true,
-            width: 150,
             align: 'right',
-            title: t('mistransfer.request price'),
+            title: t('table.request price'),
             render: (_, record) => record.transfer_amount.toLocaleString(),
           },
           {
@@ -206,7 +202,7 @@ function MistransferTab() {
                       openRemoveModal();
                     }}
                   >
-                    요청취소
+                    {t('requestCancel')}
                   </SelectButton>
                 )}
               </>

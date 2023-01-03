@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 import React, { useEffect } from 'react';
 import AnswerButton from '../button/AnswerButton';
+import TurtleIcon, { iconname } from '../icon/TurtleIcon';
 
 interface Props {
   visible: boolean;
@@ -11,6 +13,8 @@ interface Props {
 
   children?: React.ReactNode;
   cancelText?: string;
+  titleIcon?: boolean;
+  iconName?: iconname;
   okText?: string;
   okDisabled?: boolean;
   loading?: boolean;
@@ -23,15 +27,16 @@ function TurtleConfirmModal({
   description,
   children,
 
-  cancelText = '취소',
-  okText = '확인',
+  cancelText = `${t('cancel')}`,
+  okText = `${t('button.integrate')}`,
   okDisabled = false,
   size = 'small',
   loading,
   onCancel,
   onOk,
+  titleIcon,
+  iconName = 'mark',
 }: Props) {
-  
   useEffect(() => {
     const escKeyModalClose = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCancel();
@@ -55,7 +60,17 @@ function TurtleConfirmModal({
               e.stopPropagation(); // TODO: 추후 마스크를 분리하여 리택토링 예정
             }}
           >
-            <h1 css={$title}>{title}</h1>
+            <h1 css={$title}>
+              {' '}
+              <div css={css({ display: 'flex', alignItems: 'center' })}>
+                {titleIcon && (
+                  <span css={css({ marginRight: 8 })}>
+                    <TurtleIcon name={iconName} />
+                  </span>
+                )}
+                {title}
+              </div>
+            </h1>
             <p css={$description}>
               {description.map((item, index) => (
                 <React.Fragment key={index}>
@@ -129,7 +144,7 @@ const $title = css`
 
 const $description = css`
   margin-top: 16px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.429;
   color: #5b5d63;
 `;

@@ -1,13 +1,13 @@
 import { v2Axios } from '.';
 
 export interface UserInfo {
-  id: number | undefined;
+  id: number;
   login_id: string;
   name: string;
   email: string;
   mobile_phone: string;
-  company_id: number | undefined;
-  type: 'rt' | 'pi' | 'staff' | '';
+  company_id?: number;
+  type: 'rt' | 'pi' | 'st' | '';
 }
 
 /*

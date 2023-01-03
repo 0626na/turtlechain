@@ -8,7 +8,12 @@ import { PhoneAuthForm } from '@components/combine';
 import userAPI from '@apis/userAPI';
 import React from 'react';
 import { css } from '@emotion/react';
-import { TurtleDivider, TurtleText } from '@components/element';
+import {
+  TurtleDivider,
+  TurtleFormLargeSelect,
+  TurtleText,
+} from '@components/element';
+import { theme } from '@styles/theme';
 
 const requiredRules = [
   { required: true, message: t('description.required item') },
@@ -35,9 +40,6 @@ function ResetPasswordForm() {
   // 비밀번호 재설정 요청
   const resetPasswordMutation = useMutation(userAPI.resetPassword, {
     onSuccess: () => {
-      // form.resetFields();
-      // setPhone('');
-      // setToken('');
       message.success(t('message.success reset password'));
       navigate('/');
     },
@@ -52,6 +54,11 @@ function ResetPasswordForm() {
         resetPasswordMutation.mutate({ login_id, password, phone, token });
       });
   };
+
+  const userList = getIDQuery.data?.map((user) => ({
+    value: user.login_id,
+    name: user.login_id,
+  }));
 
   return (
     <>
@@ -80,7 +87,7 @@ function ResetPasswordForm() {
               name="login_id"
               label={t('id')}
             >
-              <Input css={input} disabled />
+              <TurtleFormLargeSelect items={userList ?? []} showSearch />
             </Form.Item>
             <Form.Item //
               name="password"
@@ -152,6 +159,7 @@ function ResetPasswordForm() {
 const input = css({
   height: 44,
   borderRadius: 8,
+  border: `1px solid ${theme.grey300} `,
 });
 
 const formItemMargin = css({

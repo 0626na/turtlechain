@@ -7,7 +7,7 @@ export interface OrderCartState {
   successList: StoreOrderItemExcelParsing[];
   failList: StoreOrderItemExcelParsing[];
   parsingStatus: ParsingStatus;
-  selectedDate?: moment.Moment;
+  selectedDate: moment.Moment;
 }
 
 export const orderCartState = atom<OrderCartState>({

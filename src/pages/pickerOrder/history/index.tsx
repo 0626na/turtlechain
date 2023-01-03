@@ -7,7 +7,9 @@ import PageBody from './PageBody';
 function OrderHistoryPage() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('order.history.title')}`} />
+      <Helmet
+        title={`${t('turtleChain')} - ${t('picker')} - ${t('orderDetail')}`}
+      />
       <PageBody />
     </>
   );

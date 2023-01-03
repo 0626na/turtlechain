@@ -23,6 +23,7 @@ import AddSingleProductModal from './modals/AddSingleProductModal';
 import useModal from '@hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import { Date } from '@components/combine/modal/RangeDateModal';
 
 function PageBody() {
   const navigate = useNavigate();
@@ -72,14 +73,16 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title="재고프로그램 연동"
+        title={t('inventory program integration')}
         description={[
-          '선택한 기간의 재고 정보를 불러옵니다.',
-          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+          t('please select which dates you wish to integrate'),
+          t(
+            'it may take up to 1 minute, depending on how much you wish to integrate',
+          ),
         ]}
         loading={loading}
         onCancel={closeInventoryModal}
-        onOk={({ start_date, end_date }) => {
+        onOk={({ start_date, end_date }: Date) => {
           if (!isStoreSelected()) return;
           connectInventoryMutation.mutate({
             rt_store_id: store.selected?.id as number,
@@ -120,18 +123,22 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="상품등록 미리보기"
-        subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."
+        title={t('preview of New Products')}
+        subTitle={t(
+          'your vendor list must be updated before adding new products',
+        )}
         buttons={[
           <TertiaryButton
-            text="재고프로그램 연동"
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>상품 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add product')}
+              </SecondaryIconButton>
             }
             items={[
               {
@@ -167,12 +174,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${cart.successList.length})`}
+            tab={`${t('success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`실패(${cart.failList.length})`}
+            tab={`${t('fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>
@@ -183,7 +190,7 @@ function PageBody() {
           onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
-          상품 등록하기
+          {t('button.add & save')}
         </PrimaryButton>
       </PageBottomBar>
     </>

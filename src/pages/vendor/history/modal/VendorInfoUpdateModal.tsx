@@ -11,7 +11,7 @@ import {
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
 
-import { Vendor } from '@apis/vendorAPI';
+import vendorAPI, { Vendor } from '@apis/vendorAPI';
 
 import { css } from '@emotion/react';
 
@@ -23,6 +23,7 @@ import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
+import { phoneMasking } from '@utils/phone';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -45,29 +46,34 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     },
   });
 
-  // 거래처 선택후 폼에 채워넣기
-  const fieldsFillIn = () => {
-    form.setFieldsValue({
-      ws_store_id: selectedRow?.ws_store_info.id,
-      rt_store_id: store.selected?.id as number,
+  const getVendorQuery = useQuery(
+    ['getVendorQuery', selectedRow?.id],
+    () => vendorAPI.get({ id: selectedRow.id }),
+    {
+      enabled: !!selectedRow?.id && !!visible,
+      onSuccess: (data) => {
+        form.setFieldsValue({
+          ws_store_id: data?.ws_store_info.id,
+          rt_store_id: store.selected?.id as number,
+          name: data?.vendor_name,
+          tel: data?.ws_store_info.phone,
+          mobile: phoneMasking(data?.vendor_phone.phone),
+          building: data?.ws_store_info.building,
+          floor: data?.ws_store_info.floor,
+          col: data?.ws_store_info.col,
+          loc: data?.ws_store_info.loc,
+          colLoc: `${data?.ws_store_info.col} ${data?.ws_store_info.loc}`,
+          ext: data?.ws_store_info.ext,
 
-      name: selectedRow?.vendor_name,
-      tel: selectedRow?.ws_store_info.phone,
-      mobile: selectedRow?.vendor_phone.phone,
-      building: selectedRow?.ws_store_info.building,
-      floor: selectedRow?.ws_store_info.floor,
-      col: selectedRow?.ws_store_info.col,
-      loc: selectedRow?.ws_store_info.loc,
-      colLoc: `${selectedRow?.ws_store_info.col} ${selectedRow?.ws_store_info.loc}`,
-      ext: selectedRow?.ws_store_info.ext,
+          bank: data?.vendor_account.bank,
+          account_number: data?.vendor_account.account_number,
+          account_holder: data?.vendor_account.account_holder,
 
-      bank: selectedRow?.vendor_account.bank,
-      account_number: selectedRow?.vendor_account.account_number,
-      account_holder: selectedRow?.vendor_account.account_holder,
-
-      file: undefined,
-    });
-  };
+          file: undefined,
+        });
+      },
+    },
+  );
 
   const normFile = (
     uploadFiles:
@@ -80,14 +86,10 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
     return uploadFiles && uploadFiles.fileList;
   };
 
-  useEffect(() => {
-    if (visible) fieldsFillIn();
-  }, [visible]);
-
   return (
     <>
       <TurtleContentModal
-        title={t('vendor.updateInfo')}
+        title={t('request for information Update')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -110,20 +112,28 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
             <Input hidden />
           </Form.Item>
 
+          {/*  */}
           <Form.Item label={t('table.vendorName')} name="name" required>
             <TurtleFormSearchInput disabled />
           </Form.Item>
 
           <Form.Item name="tel" label={t('table.wsStoreNumber')}>
-            <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
+            <TurtleFormInput
+              disabled
+              placeholder={t('placeholder.input phone number')}
+            />
           </Form.Item>
 
           <Form.Item
             label={t('table.mobile')}
             name="mobile"
-            rules={[{ required: true, message: '휴대전화번호를 입력해주세요' }]}
+            rules={[
+              { required: true, message: t('please input mobile number') },
+            ]}
           >
-            <TurtleFormInput placeholder="휴대전화번호를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input mobile number')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.vendorAddress')} required>
@@ -138,7 +148,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                     items={Object.keys(buildingData?.data ?? []).map(
                       (building) => ({ value: building, name: building }),
                     )}
-                    placeholder="상가"
+                    placeholder={t('placeholder.building')}
                     onChange={() => {
                       form.setFieldsValue({
                         ...form.getFieldsValue(),
@@ -170,7 +180,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                           value: floor,
                           name: floor,
                         }))}
-                        placeholder="층"
+                        placeholder={t('placeholder.floor')}
                         onChange={() => {
                           form.setFieldsValue({
                             ...form.getFieldsValue(),
@@ -208,7 +218,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                             name: `${col} ${loc}`,
                           };
                         })}
-                        placeholder="열/호"
+                        placeholder={t('placeholder.col loc')}
                       />
                     </Form.Item>
                   )}
@@ -218,14 +228,16 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
           </Form.Item>
 
           <Form.Item name="ext" label={t('table.vendorEtcAddress')}>
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+            />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name="bank" noStyle>
                 <TurtleFormSelect
-                  placeholder="은행"
+                  placeholder={t('placeholder.bank')}
                   items={
                     Object.values(bankData?.data ?? []).map((bank) => ({
                       value: bank,
@@ -241,30 +253,41 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
 
               <Form.Item
                 name="account_number"
-                rules={[{ required: true, message: '계좌번호를 입력해주세요' }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('please input bank account number'),
+                  },
+                ]}
                 noStyle
               >
-                <TurtleFormInput placeholder="계좌번호" />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                />
               </Form.Item>
 
               <Form.Item
                 name="account_holder"
-                rules={[{ required: true, message: '예금주를 입력해주세요' }]}
+                rules={[
+                  { required: true, message: t('please input account holder') },
+                ]}
                 noStyle
               >
-                <TurtleFormInput placeholder="예금주명" />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                />
               </Form.Item>
             </div>
           </Form.Item>
 
           <Form.Item
             name="file"
-            label="전자영수증"
+            label={t('table.receipt')}
             valuePropName="fileList"
             required={true}
             getValueFromEvent={normFile}
             rules={[
-              { required: true, message: '전자영수증 사진을 첨부해주세요.' },
+              { required: true, message: t('please attach your receipt') },
             ]}
           >
             <Upload
@@ -273,7 +296,9 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>사진 첨부하기</AddButton>
+              <AddButton>
+                {t('add a copy of your receipt or invoice')}
+              </AddButton>
             </Upload>
           </Form.Item>
 
@@ -286,6 +311,7 @@ function VendorInfoUpdateModal({ visible, closeModal, selectedRow }: Props) {
                   const [col, loc] = (form.getFieldValue('colLoc') ?? '').split(
                     ' ',
                   );
+
                   createVendorMutation.mutate({
                     ...form.getFieldsValue(),
                     type: 'update',

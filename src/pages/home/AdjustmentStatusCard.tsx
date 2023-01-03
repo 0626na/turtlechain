@@ -5,6 +5,7 @@ import adjustmentAPI from '@apis/adjustmentAPI';
 import { theme } from '@styles/theme';
 import { ArrowRightIcon, TurtleTag } from '@components/element';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 function AdjustmentStatusCard() {
   const navigate = useNavigate();
@@ -51,7 +52,9 @@ function AdjustmentStatusCard() {
           paddingBottom: 66,
         }}
       >
-        <h4 css={{ fontWeight: 500, color: theme.grey500 }}>교환/반품/미송</h4>
+        <h4 css={{ fontWeight: 500, color: theme.grey500 }}>
+          {t('exchange,returns,pending delivery')}
+        </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />
         </div>
@@ -62,13 +65,13 @@ function AdjustmentStatusCard() {
           [
             {
               color: 'orange',
-              title: '대기',
+              title: t('pndg'),
               count: pending.count,
               price: pending.price,
             },
             {
               color: 'skyblue',
-              title: '마감',
+              title: t('cmplt'),
               count: completed.count,
               price: completed.price,
             },
@@ -77,7 +80,7 @@ function AdjustmentStatusCard() {
           <div
             key={index}
             css={{
-              width: 150,
+              flexBasis: '150px',
               height: 160,
               textAlign: 'center',
             }}
@@ -92,7 +95,7 @@ function AdjustmentStatusCard() {
               }}
             >
               {count}
-              <span css={{ fontWeight: 500, fontSize: 20 }}>건</span>
+              {/* <span css={{ fontWeight: 500, fontSize: 20 }}>건</span> */}
             </div>
             <div
               css={{
@@ -102,7 +105,7 @@ function AdjustmentStatusCard() {
                 marginTop: 16,
               }}
             >
-              {price}원
+              {price.toLocaleString()}원
             </div>
           </div>
         ))}

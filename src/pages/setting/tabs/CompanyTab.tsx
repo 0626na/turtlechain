@@ -17,9 +17,11 @@ import { bizNumPattern } from '@utils/pattern';
 import { DaumPostcodeModal } from '@components/combine';
 import { useSearchParams } from 'react-router-dom';
 import { RcFile } from 'antd/lib/upload';
+import useUser from '@hooks/useUser';
 
 function CompanyTab() {
   const [searchParams] = useSearchParams();
+  const { user } = useUser();
   const [form] = Form.useForm();
   const [postcodeModalVisible, setPostcodeModalVisible] = useState(false);
 
@@ -33,11 +35,16 @@ function CompanyTab() {
     setButtonsVisible(false);
   };
 
-  const getCompanyQuery = useQuery('getCompany', retailerCompanyAPI.get, {
-    onSuccess: (data) => {
-      resetStates(data);
+  const getCompanyQuery = useQuery(
+    'getCompany',
+    () => retailerCompanyAPI.get({ company_id: Number(user?.company_id) }),
+    {
+      enabled: !!user,
+      onSuccess: (data: Company) => {
+        resetStates(data);
+      },
     },
-  });
+  );
 
   const updateMutation = useMutation(retailerCompanyAPI.update, {
     onSuccess: () => {
@@ -46,28 +53,6 @@ function CompanyTab() {
       hideButtons();
     },
   });
-
-  //세금계산서 유효성검사
-  // const checkEmailValidityQuery = useMutation(
-  //   retailerCompanyAPI.checkEmailValidity,
-  //   {
-  //     onSuccess: (data) => {
-  //       message.success(data.msg);
-
-  //       form.setFieldsValue({
-  //         ...form.getFieldsValue(),
-  //         email: [
-  //           ...form.getFieldValue('email'),
-  //           form.getFieldValue('newEmail'),
-  //         ],
-  //       });
-  //       form.resetFields(['newEmail']);
-  //     },
-  //     onError: (data: AxiosError) => {
-  //       message.error(data.response?.data.msg);
-  //     },
-  //   },
-  // );
 
   const normFile = (
     uploadFiles:
@@ -79,6 +64,7 @@ function CompanyTab() {
     }
     return uploadFiles && uploadFiles.fileList;
   };
+
   const resetStates = useCallback(
     (data: Company) => {
       form.setFieldsValue({
@@ -104,13 +90,9 @@ function CompanyTab() {
   );
 
   useEffect(() => {
-    resetStates(getCompanyQuery.data as Company);
-  }, [getCompanyQuery.data, resetStates]);
-
-  useEffect(() => {
-    if (searchParams.get('tab') !== 'company') {
+    if (searchParams.get('tab') !== 'company' && !!getCompanyQuery.data) {
       hideButtons();
-      resetStates(getCompanyQuery.data as Company);
+      resetStates(getCompanyQuery.data);
       return;
     }
   }, [getCompanyQuery.data, resetStates, searchParams]);
@@ -124,7 +106,7 @@ function CompanyTab() {
           form.setFieldsValue({ ...form.getFieldsValue, address_main });
         }}
       />
-      <Card title="사업자 정보" icon={<TurtleIcon name="company" />}>
+      <Card title={t('biz info')} icon={<TurtleIcon name="company" />}>
         <Form
           form={form}
           onValuesChange={() => {
@@ -152,7 +134,7 @@ function CompanyTab() {
             <TurtleFormInput hidden />
           </Form.Item>
 
-          <Form.Item label="사업자 종류" name="biz_type">
+          <Form.Item label={t('table.biz type')} name="biz_type">
             <Radio.Group>
               {['entity', 'personal', 'simple'].map((option) => (
                 <Radio key={option} value={option}>
@@ -163,7 +145,7 @@ function CompanyTab() {
           </Form.Item>
 
           <Form.Item
-            label="사업자명(법인명)"
+            label={t('table.biz name')}
             required={false}
             rules={[{ required: true }]}
             name="name"
@@ -171,21 +153,21 @@ function CompanyTab() {
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label="사업자번호" name="biz_num">
+          <Form.Item label={t('table.biz num')} name="biz_num">
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Form.Item label="사업장주소" name="address_main">
+          <Form.Item label={t('table.biz address')} name="address_main">
             <TurtleFormInput onClick={() => setPostcodeModalVisible(true)} />
           </Form.Item>
 
-          <Form.Item label="사업장 상세주소" name="address_sub">
+          <Form.Item label={t('table.biz detail address')} name="address_sub">
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
             name="biz_license_file"
-            label="사업자등록증"
+            label={t('table.biz license')}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             required={false}
@@ -197,15 +179,15 @@ function CompanyTab() {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>사진 첨부하기</AddButton>
+              <AddButton>{t('attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 
-          <Form.Item label="세금계산서 발행메일" name="email">
+          <Form.Item label={t('table.vat issued mail')} name="email">
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label="메모" name="memo">
+          <Form.Item label={t('table.memo')} name="memo">
             <TurtleFormInput />
           </Form.Item>
 
@@ -220,10 +202,11 @@ function CompanyTab() {
               <Col>
                 <AnswerButton
                   type="NO"
-                  text="취소 "
+                  text="취소"
                   onClick={() => {
+                    if (!getCompanyQuery.data) return;
                     // 취소를 누르면 최초 값으로 초기화.
-                    resetStates(getCompanyQuery.data as Company);
+                    resetStates(getCompanyQuery.data);
                     hideButtons();
                   }}
                 />
@@ -232,7 +215,7 @@ function CompanyTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text="저장"
+                  text={t('button.save')}
                   htmlType="submit"
                   loading={updateMutation.isLoading}
                 />

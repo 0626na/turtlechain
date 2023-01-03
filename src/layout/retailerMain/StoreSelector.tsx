@@ -59,9 +59,8 @@ function StoreSelector() {
           overlay={
             <Menu
               css={menu}
-              selectable
-              onSelect={({ key }) => {
-                selectStore(Number(key), t('message.warningChangeStore'));
+              onClick={({ key }) => {
+                selectStore(Number(key));
               }}
               items={store.list.map((store, idx) => ({
                 style: menuItemCss.self,

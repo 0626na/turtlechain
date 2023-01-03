@@ -99,7 +99,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
           >
             <Input
               css={input}
-              placeholder="ex. 010-1234-5678"
+              placeholder={t('placeholder.ex. mobile')}
               suffix={
                 <Button
                   disabled={!getFieldValue('phone')}
@@ -127,7 +127,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
         <>
           <Form.Item name="otp_code">
             <Input
-              placeholder="인증번호 입력"
+              placeholder={t('placeholder.input authentication number')}
               css={input}
               suffix={
                 <span css={otpText}>

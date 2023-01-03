@@ -23,43 +23,25 @@ function FailTab({ isLoading }: Props) {
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        scroll={{ y: 'auto', x: 1400 }}
+        scroll={{ y: 'auto', x: 1000 }}
         columns={[
           {
             ellipsis: true,
-            width: 85,
+            width: 50,
             title: t('table.vendorCode'),
             render: (_, record) =>
               record.vendor_code ?? <span css={fail}>(정보없음)</span>,
           },
           {
             ellipsis: true,
-            width: 200,
+            width: 300,
             title: t('table.retailerStoreInput'),
             render: (_, record) => {
               if (!!record.name || !!record.address) {
-                return <span css={fail}>(정보없음)</span>;
+                return `${record.name}  ${record.address}`;
               }
-              return `${record.name}  ${record.address}`;
+              return <span css={fail}>(정보없음)</span>;
             },
-          },
-          {
-            ellipsis: true,
-            width: 150,
-            title: t('table.vendorAddress'),
-            render: (_) => <span css={fail}>(정보없음)</span>,
-          },
-          {
-            ellipsis: true,
-            width: 130,
-            title: t('table.mobile'),
-            render: (_) => <span css={fail}>(정보없음)</span>,
-          },
-          {
-            ellipsis: true,
-            width: 300,
-            title: t('table.accountInfo'),
-            render: (_) => <span css={fail}>(정보없음)</span>,
           },
         ]}
       />

@@ -4,7 +4,7 @@ import { Pagination, Row, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { phonePattern } from '@utils/pattern';
-import vendorAPI, { RequestGet, Vendor } from '@apis/vendorAPI';
+import vendorAPI, { RequestGetList, Vendor } from '@apis/vendorAPI';
 import { TurtleTableTitle } from '@components/element';
 
 import { css } from '@emotion/react';
@@ -22,7 +22,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   const { store } = useStore();
 
   // 거래처 목록 불러오기 query
-  const [searchQuery, setSearchQuery] = useState<RequestGet>({
+  const [searchQuery, setSearchQuery] = useState<RequestGetList>({
     page: 1,
     search_string: '',
     rt_store_id: store.selected?.id,
@@ -31,7 +31,8 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
   // 거래처 목록 불러오기 요청
   const getListQuery = useQuery(
     ['getVendor', searchQuery], //
-    () => vendorAPI.get({ ...searchQuery, rt_store_id: store.selected?.id }),
+    () =>
+      vendorAPI.getList({ ...searchQuery, rt_store_id: store.selected?.id }),
     {
       enabled: visible && !!store.selected,
     },

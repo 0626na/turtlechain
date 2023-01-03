@@ -188,7 +188,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           loading={getWarehousingItemQuery.isLoading}
           dataSource={filteredList}
           rowKey={(record) => record.id}
-          scroll={{ x: 1300, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           pagination={{
             position: ['bottomCenter'],
             showSizeChanger: false,
@@ -203,7 +203,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               )}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'placeholder.search by product name, inventory name, vendor name',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -214,50 +216,45 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             {
               ellipsis: true,
               title: t('table.warehousingDate'),
-              width: 80,
+              width: 110,
               render: (_, record) => record.warehousing_date,
             },
             {
               ellipsis: true,
-              width: 100,
               title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              width: 100,
               title: t('table.vendorAddress'),
               render: (_, record) => record.vendor_info.vendor_address,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productName'),
               render: (_, record) => record.product_info.name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorProductName'),
               render: (_, record) => record.product_info.vendor_product_name,
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.option'),
               render: (_, record) => record.product_info.option,
             },
             {
               ellipsis: true,
               align: 'right',
-              width: 80,
+              width: 100,
               title: t('table.price'),
               render: (_, record) => record.price.toLocaleString(),
             },
             {
               ellipsis: true,
               align: 'right',
-              width: 60,
+              width: 80,
               title: t('table.warehousingCount'),
               render: (_, record) => (
                 <TurtleTableNumberInput
@@ -290,7 +287,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               ),
             },
             {
-              width: 20,
+              width: 50,
               align: 'center',
               onCell: (record) => ({
                 style: { cursor: 'pointer' },

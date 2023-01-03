@@ -112,7 +112,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
           onSearch={(value) => {
             setSearchString(value);
           }}
-          placeholder="상품명 또는 거래처 상품명을 입력해주세요."
+          placeholder={t('placeholder.search product name and reference')}
         />
       </div>
 
@@ -122,7 +122,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
         dataSource={filteredItemList}
         rowKey={(record) => record.id}
         pagination={false}
-        scroll={{ x: 1400, y: 320 }}
+        scroll={{ x: 950, y: 320 }}
         rowSelection={{
           selectedRowKeys: cart.selectedWarehousingItemList.map(
             (item) => item.id,
@@ -214,7 +214,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
             fillExchangeTakeBack();
           }}
         >
-          다음
+          {t('next')}
         </PrimaryButton>
       </div>
     </Collapse.Panel>

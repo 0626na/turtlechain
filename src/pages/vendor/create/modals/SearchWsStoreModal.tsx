@@ -18,6 +18,7 @@ import {
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 import { message } from '@utils/message';
+import { phoneMasking } from '@utils/phone';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -159,10 +160,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
               title: <span css={tableTitle}>{t('table.mobile')}</span>,
               render: (_, record) => {
                 if (record.store_phone.length === 1) {
-                  return record.store_phone[0].phone.replace(
-                    phonePattern,
-                    `$1-$2-$3`,
-                  );
+                  return phoneMasking(record.store_phone[0].phone);
                 }
 
                 return (
@@ -180,10 +178,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                                     selectStorePhone(record, storePhone);
                                   }}
                                 >
-                                  {storePhone.phone.replace(
-                                    phonePattern,
-                                    `$1-$2-$3`,
-                                  )}
+                                  {phoneMasking(storePhone.phone)}
                                 </Radio>
                               ))}
                             </Space>
@@ -192,10 +187,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                       }
                     >
                       <span style={{ color: '#a1a2a6', cursor: 'pointer' }}>
-                        {record.store_phone[0]?.phone.replace(
-                          phonePattern,
-                          `$1-$2-$3`,
-                        )}
+                        {phoneMasking(record.store_phone[0]?.phone)}
                       </span>
                     </Popover>
                   </TurtleBadge>

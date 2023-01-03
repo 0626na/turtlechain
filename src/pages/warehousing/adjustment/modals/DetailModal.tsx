@@ -122,13 +122,13 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             ellipsis: true,
             width: 200,
             align: 'center',
-            title: '처리시간',
+            title: t('table.proccessing time'),
             render: (_, record) =>
               moment(record.created_datetime).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
             ellipsis: true,
-            title: '처리내용',
+            title: t('table.proccessing details'),
             render: (_, record) => record.memo,
           },
         ]}

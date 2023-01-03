@@ -1,5 +1,6 @@
 import { TurtleConfirmModal } from '@components/element';
 import { css } from '@emotion/react';
+import { t } from 'i18next';
 
 import React from 'react';
 
@@ -10,16 +11,38 @@ interface Props {
   onClose: () => void;
   onOk: () => void;
   loading: boolean;
+  okText?: string;
   items: { title: string; content: string }[];
 }
-
-function CreateModal({ onClose, onOk, items, ...props }: Props) {
+/**
+ * 다목적 모달. 제목:콘텐츠 형식으로 데이터를 모달에 표시할때 사용한다.
+ *
+ * ex)
+ *
+ * 쇼핑몰 갯수: 12개
+ *
+ * 거래처 갯수: 30개
+ *
+ * 발주수량: 50개
+ * @param onClose 모달 닫을때 이벤트 함수
+ * @param onOK  모달 실행할때 이벤트 함수
+ * @param items 모달에 표시할 데이터 array
+ * @param okText 실행버튼의 텍스트 설정 파라미터, 기본은 '요청'
+ * @returns
+ */
+function CreateModal({
+  onClose,
+  onOk,
+  items,
+  okText = t('button.request'),
+  ...props
+}: Props) {
   return (
     <div>
       <TurtleConfirmModal
         onOk={onOk}
         onCancel={onClose}
-        okText="요청"
+        okText={okText}
         {...props}
       >
         <div css={contentCss.self}>
@@ -58,6 +81,8 @@ const contentCss = {
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
+    zIndex: 1,
+    position: 'relative',
   }),
 };
 

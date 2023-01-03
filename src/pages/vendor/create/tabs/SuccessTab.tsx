@@ -7,7 +7,7 @@ import {
   TurtleTableInput,
 } from '@components/element';
 import { SuccessItem } from '@store/vendorCartState';
-import { Input, Switch, Table } from 'antd';
+import { Switch, Table } from 'antd';
 
 import { css } from '@emotion/react';
 
@@ -15,6 +15,8 @@ import useVendorCart from '@hooks/useVendorCart';
 import InputModal from '@components/combine/modal/InputModal';
 import useModal from '@hooks/useModal';
 import { TextWithTooltip } from '@components/combine';
+import { phoneMaskingPattern } from '@utils/pattern';
+import { phoneMasking } from '@utils/phone';
 
 interface Props {
   isLoading: boolean;
@@ -57,7 +59,7 @@ function SuccessTab({ isLoading }: Props) {
           '해당 건과 관련해 중요한 내용을 기록해보세요.',
           '개인 메모로도 자유롭게 활용할 수 있어요👀',
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       {/*
@@ -83,29 +85,26 @@ function SuccessTab({ isLoading }: Props) {
           position: ['bottomCenter'],
           showSizeChanger: false,
         }}
-        scroll={{ y: 'auto', x: 1400 }}
+        scroll={{ y: 'auto', x: 950 }}
         columns={[
           {
             ellipsis: true,
-            width: 85,
+            width: 90,
             title: t('table.vendorCode'),
             render: (_, record) => record.vendor_code,
           },
+          // {
+          //   ellipsis: true,
+          //   title: t('table.retailerStoreInput'),
+          //   render: (_, record) => `${record.name}  ${record.address}`,
+          // },
           {
             ellipsis: true,
-            width: 200,
-            title: t('table.retailerStoreInput'),
-            render: (_, record) => `${record.name}  ${record.address}`,
-          },
-          {
-            ellipsis: true,
-            width: 250,
             title: t('table.vendorName'),
             render: (_, record) => record.ws_store_info[0]?.name,
           },
           {
             ellipsis: true,
-            width: 150,
             title: t('table.vendorAddress'),
             render: (_, record) => record.ws_store_info[0]?.address,
           },
@@ -114,13 +113,10 @@ function SuccessTab({ isLoading }: Props) {
             width: 130,
             title: t('table.mobile'),
             render: (_, record) =>
-              record.ws_store_info[0]?.store_phone[0]?.phone
-                .replace(/[^0-9]/, '')
-                .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`),
+              phoneMasking(record.ws_store_info[0]?.store_phone[0]?.phone),
           },
           {
             ellipsis: true,
-            width: 300,
             title: t('table.accountInfo'),
             render: (_, record) => {
               const {
@@ -134,12 +130,12 @@ function SuccessTab({ isLoading }: Props) {
           },
           {
             ellipsis: true,
-            width: 150,
+            width: 130,
             title: (
               <TextWithTooltip
                 tooltipContent={[
-                  '당일결제 시, 부가세도 그 날에 함께 ',
-                  '전달되어야 하는 거래처를 체크해주세요. ',
+                  t('check if VAT needs to be included with an invoice1'),
+                  t('check if VAT needs to be included with an invoice2'),
                 ]}
               >
                 {t('table.vatIncluded')}
@@ -157,36 +153,36 @@ function SuccessTab({ isLoading }: Props) {
             ),
           },
 
-          {
-            ellipsis: true,
-            width: 200,
-            title: (
-              <TextWithTooltip
-                tooltipContent={[
-                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
-                ]}
-              >
-                {t('table.useVendorName')}
-              </TextWithTooltip>
-            ),
+          // {
+          //   ellipsis: true,
+          //   width: 130,
+          //   title: (
+          //     <TextWithTooltip
+          //       tooltipContent={[
+          //         '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
+          //       ]}
+          //     >
+          //       {t('table.useVendorName')}
+          //     </TextWithTooltip>
+          //   ),
 
-            render: (_, record) => (
-              <TurtleTableInput
-                size="small"
-                defaultValue={record.useVendorName}
-                onChange={(e) => {
-                  handleUseVendorNameUpdate(
-                    e.currentTarget.value,
-                    record,
-                    'successList',
-                  );
-                }}
-              />
-            ),
-          },
+          //   render: (_, record) => (
+          //     <TurtleTableInput
+          //       size="small"
+          //       defaultValue={record.useVendorName}
+          //       onChange={(e) => {
+          //         handleUseVendorNameUpdate(
+          //           e.currentTarget.value,
+          //           record,
+          //           'successList',
+          //         );
+          //       }}
+          //     />
+          //   ),
+          // },
           {
             ellipsis: true,
-            width: 50,
+            width: 100,
             title: t('table.memo'),
             align: 'center',
             onCell: (record) => ({

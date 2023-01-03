@@ -39,19 +39,19 @@ function SuccessTab({ loading, ...props }: Props) {
           memoUpdate(value, selectedRow as Product);
           closeMemoModal();
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('write freely anything thats important about this vendor'),
+          t('use this memo as your personal note'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('ex, double check its invoices!')}
       />
 
       {/*
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
+        title={t('do you really want me to delete it?')}
         description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
         okText="네"
         visible={removeModalVisible}
@@ -69,12 +69,12 @@ function SuccessTab({ loading, ...props }: Props) {
           dataSource={cart.successList}
           rowKey={(record) => record.product_code}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 150,
-              title: t('table.vendorName'),
+
+              title: t('table.product vendorName'),
               onCell: (record) => ({
                 style: {
                   backgroundColor: record.need_update
@@ -86,7 +86,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.vendorAddress'),
               onCell: (record) => ({
                 style: {
@@ -99,7 +98,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 250,
               title: (
                 <NeedUpdatePopover>{t('table.productName')}</NeedUpdatePopover>
               ),
@@ -114,7 +112,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 250,
               title: t('table.vendorProductName'),
               onCell: (record) => ({
                 style: {
@@ -127,7 +124,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 150,
               title: t('table.productCode'),
               onCell: (record) => ({
                 style: {
@@ -140,7 +136,6 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 100,
               title: t('table.option'),
               onCell: (record) => ({
                 style: {
@@ -154,7 +149,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               title: t('table.imageUrl'),
-              width: 150,
+              width: 100,
               onCell: (record) => ({
                 style: {
                   backgroundColor: record.need_update
@@ -171,7 +166,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               align: 'right',
-              width: 150,
+              width: 120,
               title: t('table.price'),
               onCell: (record) => ({
                 style: {
@@ -192,7 +187,7 @@ function SuccessTab({ loading, ...props }: Props) {
             {
               ellipsis: true,
               align: 'center',
-              width: 50,
+              width: 100,
               title: t('table.memo'),
               onCell: (record) => ({
                 style: {

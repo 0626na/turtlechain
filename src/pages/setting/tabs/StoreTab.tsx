@@ -97,7 +97,7 @@ function StoreTab() {
                 color: #242934;
               `}
             >
-              <TurtleText>쇼핑몰 정보</TurtleText>
+              <TurtleText>{t('store.info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -108,7 +108,7 @@ function StoreTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
+            <TurtleText>{t('store.create')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -128,7 +128,7 @@ function StoreTab() {
               changeMode();
             }}
           >
-            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
+            {mode === 'cardView' ? t('listView') : t('cardView')}
           </AddButton>
         }
       />
@@ -164,11 +164,11 @@ function StoreTab() {
             },
           })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 20,
+              width: 100,
               title: t('table.operatorStatus'),
               render: (_, record) => {
                 const { is_closed } = record;
@@ -179,13 +179,11 @@ function StoreTab() {
             },
             {
               ellipsis: true,
-              width: 50,
               title: t('table.retailerStoreName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 25,
               title: t('table.mobile'),
               render: (_, record) =>
                 record.store_phone[0]?.phone.replace(
@@ -195,7 +193,6 @@ function StoreTab() {
             },
             {
               ellipsis: true,
-              width: 50,
               title: t('table.paymentAccountInfo'),
               render: (_, record) =>
                 `${record.store_account[0]?.bank ?? ''} ${
@@ -204,19 +201,17 @@ function StoreTab() {
             },
             {
               ellipsis: true,
-              width: 50,
               title: t('table.recipientPrint'),
               render: (_, record) => record.recipient_print,
             },
             {
               ellipsis: true,
-              width: 25,
+              width: 140,
               title: t('table.inventory'),
               render: (_, record) => t(`inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,
-              width: 50,
               title: t('table.transactionEmail'),
               render: (_, record) => record.email,
             },

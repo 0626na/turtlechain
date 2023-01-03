@@ -75,14 +75,13 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
       >
         <div css={inputContainer}>
           <TurtleFormSearchInput
-            value={searchQuery.store_name}
             onSearch={(value) => {
               setSearchQuery((searchQuery) => ({
                 ...searchQuery,
                 store_name: value,
               }));
             }}
-            placeholder="거래처명을 입력해주세요."
+            placeholder={t('placeholder.input vendor name')}
           />
         </div>
 
@@ -138,7 +137,7 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
             {
               ellipsis: true,
               width: '20%',
-              title: t('clearing.complete date'),
+              title: t('table.complete date'),
               render: (_, record) => record.complete_date,
             },
             {
@@ -157,12 +156,12 @@ function SearchClearingModal({ visible, closeModal, onClickSelect }: Props) {
               ellipsis: true,
               title: t('table.accountInfo'),
               render: (_, record) =>
-                `${record.ws_store_id.store_account[0].bank} ${record.ws_store_id.store_account[0].account_number} ${record.ws_store_id.store_account[0].account_holder}`,
+                `${record.bank} ${record.account_number} ${record.account_holder}`,
             },
             {
               ellipsis: true,
               align: 'right',
-              title: t('clearing.price'),
+              title: t('table.paymentPrice'),
               render: (_, record) => (
                 <span>
                   <span>

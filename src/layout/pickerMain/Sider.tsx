@@ -129,7 +129,7 @@ const menus = [
           },
           {
             key: pathnames.order.history,
-            label: t('order.history.title'),
+            label: t('orderDetail'),
             style: lastMainMenuContentStyle,
           },
         ],

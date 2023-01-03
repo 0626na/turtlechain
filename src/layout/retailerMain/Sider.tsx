@@ -118,7 +118,7 @@ const menus = [
     children: [
       {
         key: 'home',
-        label: '홈',
+        label: t('home'),
         icon: (
           <span css={iconContainer}>
             <GridIcon />
@@ -135,7 +135,7 @@ const menus = [
       },
       {
         key: 'vendor&product',
-        label: '거래처/상품',
+        label: t('vendor,product'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="vendorProduct" />
@@ -155,28 +155,28 @@ const menus = [
           },
         ],
       },
-      {
-        key: 'order',
-        label: t('order.'),
-        icon: (
-          <div css={iconContainer}>
-            <TurtleIcon name="order" />
-          </div>
-        ),
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.order.create,
-            label: t('order.create'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.order.history,
-            label: t('order.history.title'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
+      // {
+      //   key: 'order',
+      //   label: t('order.'),
+      //   icon: (
+      //     <div css={iconContainer}>
+      //       <TurtleIcon name="order" />
+      //     </div>
+      //   ),
+      //   style: mainMenuTitleStyle,
+      //   children: [
+      //     {
+      //       key: pathnames.order.create,
+      //       label: t('order.create'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //     {
+      //       key: pathnames.order.history,
+      //       label: t('order.history.title'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //   ],
+      // },
       {
         key: 'warehousing',
         label: t('warehousing.'),
@@ -252,14 +252,9 @@ const menus = [
         key: pathnames.etc.tutorial,
         label: (
           <a
-            onClick={() => {
-              window.alert(
-                '최근 개편된 내용으로 현재 업데이트 중입니다. 빠른 시일내에 제공할 예정이니 잠시만 기다려주세요!',
-              );
-            }}
-            // rel="stylesheet"
-            // target="_blank"
-            // href="https://turtlechain-guide.oopy.io/"
+            rel="stylesheet"
+            target="_blank"
+            href="https://turtlechain-guide.oopy.io/"
           >
             {t('etc.tutorial')}
           </a>
