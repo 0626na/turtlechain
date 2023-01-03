@@ -97,7 +97,7 @@ function StoreTab() {
                 color: #242934;
               `}
             >
-              <TurtleText>{t('store.info')}</TurtleText>
+              <TurtleText>{t('description.store info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -108,7 +108,7 @@ function StoreTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('store.create')}</TurtleText>
+            <TurtleText>{t('description.create store')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -128,7 +128,9 @@ function StoreTab() {
               changeMode();
             }}
           >
-            {mode === 'cardView' ? t('listView') : t('cardView')}
+            {mode === 'cardView'
+              ? t('type.view.listView')
+              : t('type.view.cardView')}
           </AddButton>
         }
       />
@@ -208,7 +210,8 @@ function StoreTab() {
               ellipsis: true,
               width: 140,
               title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}`),
+              render: (_, record) =>
+                t(`type.inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,

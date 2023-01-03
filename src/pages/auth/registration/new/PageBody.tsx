@@ -3,6 +3,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { ArrowRightIcon, TurtleIcon } from '@components/element';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 function Pagebody() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function Pagebody() {
         >
           <div css={boxCss.left}>
             <TurtleIcon name="userCheck" />
-            <span css={boxCss.text}>쇼핑몰 대표</span>
+            <span css={boxCss.text}>{t('title.store owner')}</span>
           </div>
           <ArrowRightIcon />
         </div>

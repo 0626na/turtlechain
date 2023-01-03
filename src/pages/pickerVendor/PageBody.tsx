@@ -19,6 +19,25 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import OrderVendorInfoUpdateModal from './modals/OrderVendorInfoUpdateModal';
 
+const options = [
+  {
+    name: t('table.retailerStoreName'),
+    value: 'store_name',
+  },
+  {
+    name: t('table.mobile'),
+    value: 'mobile',
+  },
+  {
+    name: t('table.account number'),
+    value: 'account_number',
+  },
+  {
+    name: t('table.account holder'),
+    value: 'account_holder',
+  },
+];
+
 export interface OrderVendor {
   id: number;
   vendor_code: string;
@@ -179,7 +198,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('request info modify'),
+                      label: t('button.request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {
                         setSelectedRow(record);

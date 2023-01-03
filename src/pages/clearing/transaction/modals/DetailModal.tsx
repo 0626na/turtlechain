@@ -50,7 +50,7 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title="장부 상세보기"
+      title={t('title.ledger detail')}
       visible={visible}
       onClose={onClose}
     >
@@ -138,7 +138,8 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
             ellipsis: true,
             width: 140,
             title: t('table.type'),
-            render: (_, record) => t(`transaction.${record.transaction_type}`),
+            render: (_, record) =>
+              t(`type.transaction.${record.transaction_type}`),
           },
           {
             ellipsis: true,

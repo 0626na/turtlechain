@@ -98,7 +98,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
     }
 
     if (!form.getFieldValue('ws_store_info')?.name) {
-      message.warn('거래처를 선택해 주세요');
+      message.warn(t('message.select vendor'));
       return;
     }
 
@@ -121,7 +121,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('vendor.addSingle')}
+        title={t('title.add single vendor')}
         visible={visible}
         onClose={() => {
           closeModal();
@@ -155,6 +155,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
           <Form.Item name={['ws_store_info', 'id']} hidden>
             <TurtleFormSearchInput />
           </Form.Item>
+          {/* 거래처명 */}
           <Form.Item
             label={t('table.vendorName')}
             name={['ws_store_info', 'name']}
@@ -167,6 +168,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
+          {/* 매장번호 */}
           <Form.Item
             name={['ws_store_info', 'phone']}
             label={t('table.wsStoreNumber')}
@@ -179,6 +181,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
           <Form.Item name={['ws_store_info', 'store_phone', 'id']} hidden>
             <TurtleFormInput />
           </Form.Item>
+          {/* 휴대전화 번호 */}
           <Form.Item
             label={t('table.mobile')}
             name={['ws_store_info', 'store_phone', 'phone']}
@@ -189,12 +192,14 @@ function AddSingleModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input mobile number')}
             />
           </Form.Item>
+          {/* 거래처 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
               <div css={{ flexBasis: '50%' }}>
                 <Form.Item name={['ws_store_info', 'address']} hidden>
                   <TurtleFormSelect />
                 </Form.Item>
+                {/* 빌딩 */}
                 <Form.Item name={['ws_store_info', 'building']} noStyle>
                   <TurtleFormSelect
                     placeholder={t('placeholder.building')}
@@ -203,6 +208,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '20%' }}>
+                {/* 층 */}
                 <Form.Item name={['ws_store_info', 'floor']} noStyle>
                   <TurtleFormInput
                     placeholder={t('placeholder.floor')}
@@ -211,6 +217,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
+                {/* 열-호 */}
                 <Form.Item name={['ws_store_info', 'col_loc']} noStyle>
                   <TurtleFormInput
                     placeholder={t('placeholder.col loc')}
@@ -220,6 +227,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
               </div>
             </div>
           </Form.Item>
+          {/* 기타 주소 */}
           <Form.Item
             name={['ws_store_info', 'ext']}
             label={t('table.vendorEtcAddress')}
@@ -229,6 +237,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
               disabled
             />
           </Form.Item>
+          {/* 계좌정보 */}
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name={['ws_store_info', 'store_account', 'id']} hidden>
@@ -265,6 +274,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
               </Form.Item>
             </div>
           </Form.Item>
+          {/* 거래처코드 */}
           <Form.Item
             label={t('table.vendorCode')}
             name="vendor_code"
@@ -283,10 +293,11 @@ function AddSingleModal({ visible, closeModal }: Props) {
               }
               onClick={clickCreateVendorCode}
             >
-              코드만들기
+              {t('button.make code')}
             </AddButton>
           </div>
           <TurtleDivider marginBottom={37} marginTop={32} />
+          {/* 부가세 바로전달 */}
           <Form.Item
             name="isVatIncluded"
             label={t('table.vatIncluded')}
@@ -295,13 +306,14 @@ function AddSingleModal({ visible, closeModal }: Props) {
           >
             <Switch css={$switch} />
           </Form.Item>
-
+          {/* 상호명 */}
           <Form.Item name={['company', 'name']} label={t('table.wsStoreName')}>
             <TurtleFormInput
               placeholder={t('placeholder.input brand name')}
               disabled
             />
           </Form.Item>
+          {/* 사업자 번호 */}
           <Form.Item
             name={['company', 'biz_num']}
             label={t('table.wsCompanyNum')}
@@ -311,12 +323,14 @@ function AddSingleModal({ visible, closeModal }: Props) {
               disabled
             />
           </Form.Item>
+          {/* 대표자명 */}
           <Form.Item name={['company', 'owner']} label={t('table.wsOwner')}>
             <TurtleFormInput
               placeholder={t('placeholder.input owner name')}
               disabled
             />
           </Form.Item>
+          {/* 메모 */}
           <Form.Item name="memo" label={t('table.memo')}>
             <TurtleFormInput placeholder={t('placeholder.input memo')} />
           </Form.Item>
@@ -332,7 +346,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                     !getFieldValue('vendor_code')
                   }
                 >
-                  {t('button.addVendor')}
+                  {t('button.add vendor')}
                 </PrimaryButton>
               </div>
             )}

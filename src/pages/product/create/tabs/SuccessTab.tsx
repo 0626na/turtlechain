@@ -41,19 +41,19 @@ function SuccessTab({ loading, ...props }: Props) {
         }}
         title={t('table.memo')}
         description={[
-          t('write freely anything thats important about this vendor'),
-          t('use this memo as your personal note'),
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
-        placeholder={t('ex, double check its invoices!')}
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       {/*
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title={t('do you really want me to delete it?')}
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="네"
+        title={t('title.really delete')}
+        description={[t('description.cannot reset')]}
+        okText={t('button.yes')}
         visible={removeModalVisible}
         onCancel={closeRemoveModal}
         onOk={() => {
@@ -73,8 +73,7 @@ function SuccessTab({ loading, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-
-              title: t('table.product vendorName'),
+              title: t('table.vendorName'),
               onCell: (record) => ({
                 style: {
                   backgroundColor: record.need_update

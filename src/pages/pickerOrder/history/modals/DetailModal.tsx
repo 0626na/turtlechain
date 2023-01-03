@@ -41,7 +41,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
   return (
     <>
       <TurtleContentModal
-        title={t('look orderDetail')}
+        title={t('title.look orderDetail')}
         size="large"
         onClose={onclose}
         visible={visible}
@@ -58,21 +58,21 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
             },
             {
               title: t('table.clientCount'),
-              value: t('count', {
+              value: t('description.count', {
                 count: Number(vendorCount.toLocaleString()),
               }),
             },
             {
               title: t('table.totalCount'),
-              value: t('count', {
+              value: t('description.count', {
                 count: Number(orderTotalCount.toLocaleString()),
               }),
             },
             {
               title: t('table.totalPrice'),
-              value: t('price', {
-                price: Number(orderTotalPrice).toLocaleString(),
-              }),
+              value: `${Number(orderTotalPrice).toLocaleString()} ${t(
+                'description.won',
+              )} `,
             },
           ]}
         />

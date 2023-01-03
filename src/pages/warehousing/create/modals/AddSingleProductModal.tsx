@@ -64,7 +64,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={t('warehousing.addSingle')}
+        title={t('title.add warehousing')}
         visible={visible}
         onClose={closeModal}
       >
@@ -86,6 +86,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <Input hidden />
           </Form.Item>
 
+          {/* 상품명 */}
           <Form.Item
             name="product_name"
             label={t('table.productName')}
@@ -98,7 +99,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
               readOnly
             />
           </Form.Item>
-
+          {/* 거래처 상품명 */}
           <Form.Item
             label={t('table.vendorProductName')}
             name="vendor_product_name"
@@ -110,6 +111,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 상품 바코드 */}
           <Form.Item
             label={t('table.productCode')}
             name="product_code"
@@ -121,6 +123,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 옵션 */}
           <Form.Item
             label={t('table.option')}
             name="product_option"
@@ -132,6 +135,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 가격 */}
           <Form.Item
             label={t('table.price')}
             name="price"
@@ -143,6 +147,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 수량 */}
           <Form.Item
             label={t('table.count')}
             name="count"
@@ -156,6 +161,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
 
           <Divider />
 
+          {/* 거래처명 */}
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
@@ -167,6 +173,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
+          {/* 거래처 주소 */}
           <Form.Item
             name="vendor_address"
             label={t('table.vendorAddress')}
@@ -190,7 +197,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                   size="large"
                   htmlType="submit"
                 >
-                  {t('button.addWarehousing')}
+                  {t('button.add warehousing')}
                 </PrimaryButton>
               </Row>
             )}

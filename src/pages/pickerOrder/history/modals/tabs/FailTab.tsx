@@ -1,5 +1,6 @@
 import { OrderHistoryItem } from '@apis/orderAPI';
 import { TurtleSearchInput, TurtleTableTitle } from '@components/element';
+import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
@@ -11,6 +12,7 @@ interface Props extends TabPaneProps {
 
 function FailTab({ data, loading, ...props }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
+  const { translateOrderType } = useOrderCart();
   const filteredList = useMemo(
     () =>
       data.filter(
@@ -78,7 +80,7 @@ function FailTab({ data, loading, ...props }: Props) {
           {
             title: t('table.type'),
             width: 116,
-            render: (_, record) => record.type,
+            render: (_, record) => translateOrderType(record.type),
           },
           {
             title: t('table.requestCount'),

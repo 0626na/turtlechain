@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 import ClearingPanel from './panels/ClearingPanel';
 import WarehousingPanel from './panels/WarehousingPanel';
+import { t } from 'i18next';
 
 // 2.0
 function Service() {
@@ -36,7 +37,7 @@ function Service() {
   return (
     <>
       <div css={inner}>
-        <span css={clearingDate}>결제요청 일자</span>
+        <span css={clearingDate}>{t('table.payment date')}</span>
         <Row>
           <Col>
             <Button
@@ -45,7 +46,7 @@ function Service() {
                 selectDate(moment().format('YYYY-MM-DD'));
               }}
             >
-              오늘
+              {t('description.today')}
             </Button>
           </Col>
 
@@ -55,7 +56,7 @@ function Service() {
               placement="topLeft"
               align={{ offset: [30, 2] }}
               zIndex={1}
-              title={<span>지난 일자의 결제요청도 진행할 수 있어요!</span>}
+              title={<span>{t('title.can pay before')}</span>}
             >
               <DatePicker
                 defaultValue={
@@ -67,20 +68,20 @@ function Service() {
                 }}
                 css={[$datePicker, isOtherDay && greenDatePicker]}
                 allowClear={false}
-                placeholder="다른 일자선택"
+                placeholder={t('placeholder.select different date')}
               />
             </Tooltip>
           </Col>
         </Row>
 
-        <TurtleText css={$subtitle}>
+        {/* <TurtleText css={$subtitle}>
           <span css={subTitleIcon}>
             <InfoIcon />
           </span>
           오늘 결제에 필요한 차감과 미송결제 확인은 1번에서, 최종 결제한 금액
           설정은 2번에서 해주세요. 금액이 틀릴 경우, 아래 문의하기를 통해
           문의주세요!
-        </TurtleText>
+        </TurtleText> */}
       </div>
 
       <PageContent gray>
@@ -112,9 +113,11 @@ function Service() {
                   }}
                 />
                 <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>교환/반품/미송 확인하기</div>
+                  <div css={headerCss.title}>
+                    {t('title.confirm adjustment')}
+                  </div>
                   <div css={headerCss.subTitle}>
-                    결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.
+                    {t('description.confirm adjustment payment')}
                   </div>
                 </div>
               </div>
@@ -135,10 +138,12 @@ function Service() {
                   }}
                 />
                 <div css={headerCss.textInner}>
-                  <div css={headerCss.title}>결제금액 미리보기</div>
+                  <div css={headerCss.title}>
+                    {t('title.preview payment price')}
+                  </div>
 
                   <div css={headerCss.subTitle}>
-                    거래처별 금액을 확인하고 결제할 금액을 입력해주세요.
+                    {t('description.input payment price')}
                   </div>
                 </div>
               </div>
