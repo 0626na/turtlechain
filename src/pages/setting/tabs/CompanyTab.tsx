@@ -106,8 +106,7 @@ function CompanyTab() {
           form.setFieldsValue({ ...form.getFieldsValue, address_main });
         }}
       />
-
-      <Card title="사업자 정보" icon={<TurtleIcon name="company" />}>
+      <Card title={t('table.biz info')} icon={<TurtleIcon name="company" />}>
         <Form
           form={form}
           onValuesChange={() => {
@@ -135,18 +134,18 @@ function CompanyTab() {
             <TurtleFormInput hidden />
           </Form.Item>
 
-          <Form.Item label={t('biz type')} name="biz_type">
+          <Form.Item label={t('table.biz type')} name="biz_type">
             <Radio.Group>
               {['entity', 'personal', 'simple'].map((option) => (
                 <Radio key={option} value={option}>
-                  {t(`biz ${option}`)}
+                  {t(`type.biz.${option}`)}
                 </Radio>
               ))}
             </Radio.Group>
           </Form.Item>
 
           <Form.Item
-            label={t('biz name')}
+            label={t('table.biz name')}
             required={false}
             rules={[{ required: true }]}
             name="name"
@@ -154,21 +153,21 @@ function CompanyTab() {
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label={t('biz_num')} name="biz_num">
+          <Form.Item label={t('table.biz num')} name="biz_num">
             <TurtleFormInput disabled />
           </Form.Item>
 
-          <Form.Item label={t('biz address')} name="address_main">
+          <Form.Item label={t('table.biz address')} name="address_main">
             <TurtleFormInput onClick={() => setPostcodeModalVisible(true)} />
           </Form.Item>
 
-          <Form.Item label={t('biz detail address')} name="address_sub">
+          <Form.Item label={t('table.biz detail address')} name="address_sub">
             <TurtleFormInput />
           </Form.Item>
 
           <Form.Item
             name="biz_license_file"
-            label={t('biz license')}
+            label={t('table.biz license')}
             valuePropName="fileList"
             getValueFromEvent={normFile}
             required={false}
@@ -180,15 +179,15 @@ function CompanyTab() {
               accept=".jpg, .png, .jpeg, .pdf"
               beforeUpload={() => false}
             >
-              <AddButton>{t('attaching pictures')}</AddButton>
+              <AddButton>{t('button.attachPicture')}</AddButton>
             </Upload>
           </Form.Item>
 
-          <Form.Item label={t('tax invoice issue mail')} name="email">
+          <Form.Item label={t('table.vat issued mail')} name="email">
             <TurtleFormInput />
           </Form.Item>
 
-          <Form.Item label={t('memo')} name="memo">
+          <Form.Item label={t('table.memo')} name="memo">
             <TurtleFormInput />
           </Form.Item>
 
@@ -203,7 +202,7 @@ function CompanyTab() {
               <Col>
                 <AnswerButton
                   type="NO"
-                  text={t('cancel')}
+                  text="취소"
                   onClick={() => {
                     if (!getCompanyQuery.data) return;
                     // 취소를 누르면 최초 값으로 초기화.
@@ -216,7 +215,7 @@ function CompanyTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text={t('save')}
+                  text={t('button.saving')}
                   htmlType="submit"
                   loading={updateMutation.isLoading}
                 />

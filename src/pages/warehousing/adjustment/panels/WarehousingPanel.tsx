@@ -112,7 +112,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
           onSearch={(value) => {
             setSearchString(value);
           }}
-          placeholder="상품명 또는 거래처 상품명을 입력해주세요."
+          placeholder={t('placeholder.search product name and reference')}
         />
       </div>
 
@@ -214,7 +214,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
             fillExchangeTakeBack();
           }}
         >
-          다음
+          {t('button.next')}
         </PrimaryButton>
       </div>
     </Collapse.Panel>

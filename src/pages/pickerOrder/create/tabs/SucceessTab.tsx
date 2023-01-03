@@ -27,31 +27,31 @@ interface Props extends TabPaneProps {
 export const category = [
   {
     value: 'order',
-    name: t('order.types.order'),
+    name: t('type.orderTypes.order'),
   },
   {
     value: 'reserve',
-    name: t('order.types.reserve'),
+    name: t('type.orderTypes.reserve'),
   },
   {
     value: 'takeback',
-    name: t('order.types.takeback'),
+    name: t('type.orderTypes.takeback'),
   },
   {
     value: 'exchange',
-    name: t('order.types.exchange'),
+    name: t('type.orderTypes.exchange'),
   },
   {
     value: 'sample',
-    name: t('order.types.sample'),
+    name: t('type.orderTypes.sample'),
   },
   {
     value: 'pickup',
-    name: t('order.types.pickup'),
+    name: t('type.orderTypes.pickup'),
   },
   {
     value: 'extra',
-    name: t('order.types.extra'),
+    name: t('type.orderTypes.extra'),
   },
 ];
 
@@ -108,7 +108,8 @@ function SuccessTab({ loading, ...props }: Props) {
           order.mobile.includes(searchQuery.search_string),
         ),
       }));
-    return cart.successList;
+
+    return cart.successList.filter((store) => store.orders.length !== 0);
   }, [cart.successList, searchQuery]);
 
   /**
@@ -211,9 +212,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder={t(
-                        'please input search query in order search',
-                      )}
+                      placeholder={t('placeholder.input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -392,7 +391,7 @@ function SuccessTab({ loading, ...props }: Props) {
                     : '';
                 return (
                   record.orders.length !== 0 &&
-                  t('count except one', {
+                  t('description.count except one', {
                     name: record.orders[0].vendor_name,
                     count: record.orders.length - 1,
                   })
@@ -409,7 +408,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                 return (
                   record.orders.length !== 0 &&
-                  t('count except one', {
+                  t('description.count except one', {
                     name: record.orders[0].product_name,
                     count: record.orders.length - 1,
                   })

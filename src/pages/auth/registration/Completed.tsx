@@ -30,11 +30,12 @@ function Completed({ visible }: Props) {
           />
           <h1 css={completedCss.title}>{t('message.success registration')}</h1>
           <p css={completedCss.description}>
-            {`${params.get('user_name')}`}님, 터틀체인 신규가입을 환영합니다!
-            <br /> 지금 바로 터틀체인의 다양한 서비스를 이용해보세요.
+            {`${params.get('user_name')}`}
+            {t('description.nim')}, {t('description.welcome turtlechain')}
+            <br /> {t('description.enjoy turtlechain service')}
           </p>
 
-          <TertiaryButton text={t('go login')} onClick={onClickGoHome} />
+          <TertiaryButton text={t('button.go login')} onClick={onClickGoHome} />
         </section>
       )}
     </>

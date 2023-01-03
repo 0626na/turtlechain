@@ -79,7 +79,7 @@ function AddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('clearing.transaction.add')}
+        title={t('button.add past price')}
         visible={visible}
         onClose={() => {
           form.resetFields();
@@ -124,7 +124,7 @@ function AddModal({ visible, closeModal }: Props) {
               readOnly
               onClick={openVendorModal}
               onSearch={openVendorModal}
-              placeholder="거래처명을 입력해주세요"
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
 
@@ -133,39 +133,62 @@ function AddModal({ visible, closeModal }: Props) {
             name="vendor_address"
             required
           >
-            <TurtleFormInput placeholder="거래처 주소" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.vendor address')}
+              disabled
+            />
           </Form.Item>
 
           <Form.Item
             name="vendor_address_ext"
             label={t('table.vendorEtcAddress')}
           >
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+              disabled
+            />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name="vendor_account_bank" noStyle>
-                <TurtleFormSelect placeholder="은행" disabled />
+                <TurtleFormSelect
+                  placeholder={t('placeholder.bank')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name="vendor_account_number" noStyle>
-                <TurtleFormInput placeholder="계좌번호" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name="vendor_account_holder" noStyle>
-                <TurtleFormInput placeholder="예금주명" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                  disabled
+                />
               </Form.Item>
             </div>
           </Form.Item>
 
           <TurtleDivider marginBottom={37} marginTop={32} />
 
-          <Form.Item label={t('table.overpaidAmount')} name="overpaid_amount">
-            <TurtleNumberInput step={1000} min={0} placeholder="ex. 7,000" />
+          <Form.Item label={t('table.credit')} name="overpaid_amount">
+            <TurtleNumberInput
+              step={1000}
+              min={0}
+              placeholder={t('placeholder.ex. price example')}
+            />
           </Form.Item>
           <Form.Item label={t('table.unpaidPayment')} name="unpaid_amount">
-            <TurtleNumberInput step={1000} min={0} placeholder="ex. 7,000" />
+            <TurtleNumberInput
+              step={1000}
+              min={0}
+              placeholder={t('placeholder.ex. price example')}
+            />
           </Form.Item>
 
           <Form.Item shouldUpdate noStyle>

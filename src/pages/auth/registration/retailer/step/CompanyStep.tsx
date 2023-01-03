@@ -56,11 +56,11 @@ function CompanyStep({ visible, loading }: Props) {
   // 사업자번호 유효성 검사
   const bizNumValidator = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('사업자 번호 입력해주세요'));
+      return Promise.reject(new Error(t('message.input biz num')));
     }
 
     if (!checkDuplicated && form.getFieldValue('company_biz_num')) {
-      return Promise.reject(new Error('사업자 번호 중복확인을 해주세요'));
+      return Promise.reject(new Error(t('message.check biz num dup')));
     }
 
     return Promise.resolve();
@@ -72,7 +72,7 @@ function CompanyStep({ visible, loading }: Props) {
       !value.includes('service_use') ||
       !value.includes('personal_information')
     ) {
-      return Promise.reject(new Error('필수항목을 체크해주세요.'));
+      return Promise.reject(new Error(t('message.check required')));
     }
 
     return Promise.resolve();
@@ -97,13 +97,13 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item
         name="company_biz_type"
-        label={t('biz type')}
+        label={t('table.biz type')}
         rules={[{ required: true }]}
       >
         <Radio.Group>
           {['entity', 'personal', 'simple'].map((option) => (
             <Radio key={option} value={option}>
-              {t(`biz ${option}`)}
+              {t(`type.biz.${option}`)}
             </Radio>
           ))}
         </Radio.Group>
@@ -111,16 +111,16 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item
         name="company_name"
-        label={t('biz name')}
+        label={t('table.biz name')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder="ex. (주)터틀샵" />
+        <Input css={input} placeholder={t('placeholder.ex. company')} />
       </Form.Item>
 
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Form.Item
-            label={t('biz num')}
+            label={t('table.biz num')}
             required
             name="company_biz_num"
             rules={[{ validator: bizNumValidator }]}
@@ -130,7 +130,7 @@ function CompanyStep({ visible, loading }: Props) {
                 setCheckDuplicated(false);
               }}
               css={input}
-              placeholder="ex. 123-45-67890"
+              placeholder={t('placeholder.ex. business number')}
               suffix={
                 <CheckDuplicatedButton
                   onClick={() => {
@@ -151,7 +151,7 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item
         rules={[{ required: true }]}
-        label={t('biz address')}
+        label={t('table.biz address')}
         name="company_main_address"
       >
         <Input
@@ -160,7 +160,7 @@ function CompanyStep({ visible, loading }: Props) {
           onClick={() => {
             postcodeModalOpen();
           }}
-          placeholder="사업자 주소를 입력해주세요"
+          placeholder={t('placeholder.input company address')}
           suffix={
             <Button
               css={findAddressButton}
@@ -173,13 +173,19 @@ function CompanyStep({ visible, loading }: Props) {
         />
       </Form.Item>
 
-      <Form.Item name="company_sub_address" label={t('biz detail address')}>
-        <Input css={input} placeholder="사업자 상세주소를 입력해주세요" />
+      <Form.Item
+        name="company_sub_address"
+        label={t('table.biz detail address')}
+      >
+        <Input
+          css={input}
+          placeholder={t('placeholder.input company detail address')}
+        />
       </Form.Item>
 
       <Form.Item
         name="company_biz_license_file"
-        label={t('biz license')}
+        label={t('table.biz license')}
         valuePropName="fileList"
         getValueFromEvent={normFile}
         rules={[{ required: true, message: '사업자 등록증 업로드해 주세요' }]}
@@ -196,10 +202,10 @@ function CompanyStep({ visible, loading }: Props) {
 
       <Form.Item
         name="company_store_url"
-        label={t('store.url')}
+        label={t('table.retailerStoreURL')}
         rules={[{ required: true }]}
       >
-        <Input css={input} placeholder="ex. www.turtleshop.com" />
+        <Input css={input} placeholder={t('placeholder.ex. store url')} />
       </Form.Item>
 
       <Form.Item name="agreements" rules={[{ validator: agreementValidator }]}>
@@ -233,7 +239,7 @@ function CompanyStep({ visible, loading }: Props) {
             css={button}
             loading={loading}
           >
-            {t('registration')}
+            {t('button.registration')}
           </Button>
         )}
       </Form.Item>

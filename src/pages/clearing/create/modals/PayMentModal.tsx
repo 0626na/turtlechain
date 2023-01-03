@@ -44,7 +44,7 @@ function PayMentModal({ visible, closeModal }: Props) {
           queryClient.refetchQueries('getSubscriptionCheckQuery');
           return false;
         }
-        return 1000;
+        return 3000;
       },
     },
   );
@@ -92,7 +92,7 @@ function PayMentModal({ visible, closeModal }: Props) {
 
   const testAlimtalkMutation = useMutation(paypleAPI.updateTestalimTalk, {
     onSuccess: () => {
-      message.success('테스트 알림톡이 발송되었습니다.');
+      message.success(t('message.success send test alimtalk'));
       closeModal();
     },
   });
@@ -120,7 +120,7 @@ function PayMentModal({ visible, closeModal }: Props) {
         }}
       >
         <div css={modal.header}>
-          <h1 css={modal.headerTitle}>{t('subscription paid plan')}</h1>
+          <h1 css={modal.headerTitle}>{t('title.subscription paid plan')}</h1>
           <div>
             <TurtleIcon
               name="modalClose"
@@ -132,10 +132,12 @@ function PayMentModal({ visible, closeModal }: Props) {
         </div>
 
         <div css={modal.description}>
-          <p>{t('payment feature is only available as a paid plan')}</p>
+          <p>
+            {t('description.payment feature is only available as a paid plan')}
+          </p>
           <p>
             {t(
-              'If you subscribe to the service, you can pay for all the client products at once',
+              'description.if you subscribe to the service, you can pay for all the client products at once',
             )}
           </p>
         </div>

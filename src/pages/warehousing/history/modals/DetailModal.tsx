@@ -48,7 +48,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   // 입고장 상세내역 수정 요청
   const updateWarehousingItemMutation = useMutation(warehousingAPI.updateItem, {
     onSuccess: () => {
-      message.success('입고서를 수정했습니다.');
+      message.success(t('update warehousing sheet'));
       queryClient.refetchQueries('getWarehousingSheetQuery');
       closeConfirmModal();
       setIsUpdated(false);
@@ -121,11 +121,11 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
        */}
       <TurtleConfirmModal
         visible={confirmModalVisible}
-        title="정말 수정할까요?"
-        description={['해당 입고서를 수정합니다.']}
+        title={t('title.really update')}
+        description={[t('description.update warehousing sheet')]}
         onCancel={closeConfirmModal}
         loading={loading}
-        okText="수정"
+        okText={t('button.update')}
         onOk={() => {
           updateWarehousingItemMutation.mutate({
             sheet_id: selectedRow?.id as number,
@@ -143,14 +143,14 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
        */}
       <TurtleConfirmModal
         visible={closeModalVisible}
-        title="정말 닫을까요?"
-        description={['수정내용이 있습니다. 지금 닫으면 저장되지 않아요.']}
+        title={t('title.really close')}
+        description={[t('description.exist update content')]}
         onCancel={closeCloseModal}
         onOk={() => {
           closeCloseModal();
           onClose();
         }}
-        okText="닫기"
+        okText={t('button.close')}
       />
       {/**
        * main modal
@@ -158,7 +158,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
       <TurtleContentModal
         size="large"
         visible={visible}
-        title="입고내역 상세보기"
+        title={t('title.warehousing detail')}
         onClose={confirmClose}
       >
         <TurtleStatistics
@@ -169,16 +169,22 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             },
             {
               title: t('table.totalWarehousingCount'),
-              value: `${selectedRow?.total_item_count}건`,
+              value: t('description.number', {
+                number: selectedRow?.total_item_count,
+              }),
             },
             {
               title: t('table.totalVendorCount'),
-              value: `${selectedRow?.total_store_count}개`,
+              value: t('description.count', {
+                count: selectedRow?.total_store_count,
+              }),
             },
 
             {
               title: t('table.totalAmount'),
-              value: `${selectedRow?.total_amount.toLocaleString()}원`,
+              value: `${selectedRow?.total_amount.toLocaleString()}${t(
+                'description.won',
+              )}`,
             },
           ]}
         />
@@ -203,7 +209,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
               )}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'placeholder.search by vendor name, product name, vendor product name',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />

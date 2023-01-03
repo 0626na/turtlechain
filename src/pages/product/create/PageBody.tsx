@@ -54,7 +54,10 @@ function PageBody() {
     onSuccess: (data) => {
       resetCart();
       message.success(
-        `성공적으로 등록했습니다. 성공 : ${data.data.success} 중복된 상품 : ${data.data.fail}`,
+        t('message.success register product', {
+          success: data.data.success,
+          duplicated: data.data.fail,
+        }),
       );
       navigate('/product/history');
     },
@@ -73,10 +76,12 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title="재고프로그램 연동"
+        title={t('button.integrate inventory program')}
         description={[
-          '선택한 기간의 재고 정보를 불러옵니다.',
-          '정보의 양에따라 최대 1분 정도 걸릴 수 있어요.',
+          t('description.please select which dates you wish to integrate'),
+          t(
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
+          ),
         ]}
         loading={loading}
         onCancel={closeInventoryModal}
@@ -100,9 +105,9 @@ function PageBody() {
        *  confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 등록할까요?"
-        description={['실패에 남아있는 상품은 등록에서 제외됩니다.']}
-        okText="등록"
+        title={t('title.really register')}
+        description={[t('description.except fail product')]}
+        okText={t('button.register')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
@@ -121,18 +126,22 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="상품등록 미리보기"
-        subTitle="거래처 또는 일부 상품정보가 정확하지 않은 경우 등록이 실패될 수 있어요."
+        title={t('title.preview of new products')}
+        // subTitle={t(
+        //   'description.your vendor list must be updated before adding new products',
+        // )}
         buttons={[
           <TertiaryButton
-            text="재고프로그램 연동"
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>상품 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add product')}
+              </SecondaryIconButton>
             }
             items={[
               {
@@ -168,12 +177,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${cart.successList.length})`}
+            tab={`${t('title.success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`실패(${cart.failList.length})`}
+            tab={`${t('title.fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>
@@ -184,7 +193,7 @@ function PageBody() {
           onClick={openConfirmModal}
           disabled={cart.successList.length === 0}
         >
-          상품 등록하기
+          {t('button.add & save')}
         </PrimaryButton>
       </PageBottomBar>
     </>

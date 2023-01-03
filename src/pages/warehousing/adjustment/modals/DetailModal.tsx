@@ -28,7 +28,9 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   return (
     <TurtleContentModal
       size="large"
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)} 상세보기`}
+      title={`${t(`type.adj process.${selectedRow?.type}`)} ${t(
+        'title.detail',
+      )}`}
       visible={visible}
       onClose={onClose}
     >
@@ -48,8 +50,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
           {
             ellipsis: true,
             title: t('table.type'),
-            render: (_, record) =>
-              t(`adjustment.process type.${selectedRow?.type}`),
+            render: (_, record) => t(`type.adj process.${selectedRow?.type}`),
           },
           {
             ellipsis: true,
@@ -99,7 +100,7 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             font-size: 20px;
           `}
         >
-          처리 내역
+          {t('title.process list')}
         </TurtleText>
       </Row>
 
@@ -122,13 +123,13 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
             ellipsis: true,
             width: 200,
             align: 'center',
-            title: '처리시간',
+            title: t('table.process time'),
             render: (_, record) =>
               moment(record.created_datetime).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
             ellipsis: true,
-            title: '처리내용',
+            title: t('table.process content'),
             render: (_, record) => record.memo,
           },
         ]}

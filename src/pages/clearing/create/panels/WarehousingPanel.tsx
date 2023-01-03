@@ -102,7 +102,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <div css={panelContentCSS.self}>
           <div css={panelContentCSS.titleContainer}>
             <TurtleIcon name="excludeWon" />
-            <span css={panelContentCSS.titleText}>이번 결제에서 제외해요</span>
+            <span css={panelContentCSS.titleText}>
+              {t('description.exclude payment')}
+            </span>
           </div>
 
           <Table
@@ -111,7 +113,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                 background: '#E2F6F7',
               },
             }}
-            scroll={{ y: 80 }}
+            scroll={{ y: 100 }}
             size="small"
             pagination={false}
             loading={getStoreClearingQuery.isLoading}
@@ -132,7 +134,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                       fillAllAdjustmentSubtract();
                     }}
                   >
-                    전액사용
+                    {t('button.full use')}
                   </FullUseButton>
                 }
               />
@@ -140,18 +142,18 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
             columns={[
               {
                 ellipsis: true,
-                title: '등록 일자',
+                title: t('table.createdDate'),
                 render: (_, record) =>
                   moment(record.created_date).format('YYYY-MM-DD'),
               },
               {
                 ellipsis: true,
-                title: '분류',
+                title: t('table.type'),
                 render: (_, record) =>
                   // i18
                   record.type === 'adjustment_subtract'
-                    ? '매입 차감'
-                    : '미송 차감',
+                    ? t('table.purchase subtract')
+                    : t('table.reserve subtract'),
               },
               {
                 ellipsis: true,
@@ -173,7 +175,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                           cursor: 'pointer',
                         }}
                       >
-                        장부보기
+                        {t('button.see ledger')}
                       </span>
                     </div>
                   );
@@ -183,7 +185,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               {
                 ellipsis: true,
                 align: 'right',
-                title: '사용가능 금액',
+                title: t('table.overpaidAmount'),
                 render: (_, record) =>
                   record.type === 'adjustment_subtract'
                     ? record.overpaid_amount.toLocaleString()
@@ -198,10 +200,12 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                   <TextWithTooltip
                     iconPlacement="left"
                     tooltipContent={[
-                      '사용할 금액은 당일 입고 금액을 초과할 수 없습니다.',
+                      t(
+                        'description.to use price cannot over warehousing price',
+                      ),
                     ]}
                   >
-                    사용금액
+                    {t('button.use price')}
                   </TextWithTooltip>
                 ),
                 render: (_, record) => (
@@ -209,7 +213,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
                     {record.type === 'adjustment_subtract' ? (
                       <TurtleTableNumberInput
                         step={1000}
-                        placeholder="금액 입력"
+                        placeholder={t('placeholder.amount input')}
                         value={record.overpaid_payment_amount as number}
                         max={record.overpaid_amount}
                         onChange={(value) => {
@@ -235,7 +239,9 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
 
         <div css={panelContentCSS.titleContainer}>
           <TurtleIcon name="includeWon" />
-          <span css={panelContentCSS.titleText}>이번 결제에서 포함해요</span>
+          <span css={panelContentCSS.titleText}>
+            {t('description.include payment')}
+          </span>
         </div>
         <Table
           css={{
@@ -243,7 +249,7 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
               background: '#E2F6F7',
             },
           }}
-          scroll={{ y: 80 }}
+          scroll={{ y: 100 }}
           size="small"
           pagination={false}
           loading={getStoreClearingQuery.isLoading}
@@ -255,18 +261,18 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
           columns={[
             {
               ellipsis: true,
-              title: '등록 날짜',
+              title: t('table.registration date'),
               render: (_, record) =>
                 moment(record.created_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
-              title: '거래처명',
+              title: t('table.vendorName'),
               render: (_, record) => record.vendor_info.vendor_name,
             },
             {
               ellipsis: true,
-              title: '당일 미송 금액',
+              title: t('table.today reserve amount'),
               align: 'right',
               render: (_, record) =>
                 record.reserve_payment_amount.toLocaleString(),
@@ -280,24 +286,26 @@ function WarehousingPanel({ activeKey, clickNext, ...props }: Props) {
         <Row justify="end" align="middle" style={{ marginTop: 40 }}>
           <Col>
             <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-              총 차감 합계
+              {t('description.total subtract')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700 }}>
-              {subtractAmountTotal.toLocaleString()}원
+              {subtractAmountTotal.toLocaleString()}
+              {t('description.won')}
             </Typography.Text>
           </Col>
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <Typography.Text style={{ color: ' #6B6D73', marginRight: 8 }}>
-              총 미송 합계
+              {t('description.total reserved')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700 }}>
-              {reservePaymentAmountTotal.toLocaleString()}원
+              {reservePaymentAmountTotal.toLocaleString()}
+              {t('description.won')}
             </Typography.Text>
           </Col>
           <Col>
             <PrimaryButton
-              children={'모두 확인했어요'}
+              children={t('button.confirm all')}
               onClick={() => {
                 clickNext();
               }}

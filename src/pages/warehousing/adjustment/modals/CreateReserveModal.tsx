@@ -36,8 +36,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   const createReserveMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success('미송상품이 성공적으로 등록되었습니다.');
-
+      message.success(t('message.success register reserve'));
       closeModal();
     },
   });
@@ -89,7 +88,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
   // 가격, 수량  === 0 유효성 검사.
   const handlePriceValidationCheck = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('가격을 확인해 주세요.'));
+      return Promise.reject(new Error(t('message.check price')));
     }
 
     return Promise.resolve();
@@ -97,7 +96,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
 
   const handleCountValidationCheck = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('수량을 입력해 주세요.'));
+      return Promise.reject(new Error(t('message.input quantity')));
     }
 
     return Promise.resolve();
@@ -122,7 +121,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={'미송상품 추가'}
+        title={t('button.add pending delivery')}
         visible={visible}
         onClose={closeModal}
       >
@@ -152,7 +151,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
             <TurtleFormSearchInput // 상품 검색 Input
               onClick={openProductModal}
               onSearch={openProductModal}
-              placeholder="상품명을 입력해주세요"
+              placeholder={t('placeholder.input product name')}
               readOnly
             />
           </Form.Item>
@@ -164,7 +163,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 상품명 Input
               disabled
-              placeholder="거래처 상품명을 입력해주세요"
+              placeholder={t('placeholder.input vendor product name')}
             />
           </Form.Item>
 
@@ -175,7 +174,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 바코드 Input
               disabled
-              placeholder="코드를 입력해주세요"
+              placeholder={t('placeholder.input product code')}
             />
           </Form.Item>
 
@@ -186,7 +185,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 옵션 Input
               disabled
-              placeholder="옵션을 입력해주세요"
+              placeholder={t('placeholder.input option')}
             />
           </Form.Item>
 
@@ -204,7 +203,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
               >
                 <TurtleNumberInput
                   formatter={(value) => `${value}`.replace(pricePattern, ',')}
-                  placeholder="ex. 7,000"
+                  placeholder={t('placeholder.ex. price example')}
                 />
               </Form.Item>
             )}
@@ -222,13 +221,17 @@ function AddReserveModal({ visible, closeModal }: Props) {
                   },
                 ]}
               >
-                <TurtleNumberInput step={1} min={1} placeholder="ex. 10" />
+                <TurtleNumberInput
+                  step={1}
+                  min={1}
+                  placeholder={t('placeholder.ex. count example')}
+                />
               </Form.Item>
             )}
           </Form.Item>
 
           <Form.Item name="memo" label={t('table.memo')}>
-            <TurtleFormInput placeholder="메모를 입력해주세요" />
+            <TurtleFormInput placeholder={t('placeholder.input memo')} />
           </Form.Item>
 
           <TurtleDivider marginTop={32} marginBottom={32} />
@@ -240,7 +243,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처명 검색 Input
               disabled
-              placeholder="거래처명을 입력해주세요"
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
 
@@ -250,7 +253,7 @@ function AddReserveModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
           >
             <TurtleFormInput // 거래처 주소 Input
-              placeholder="거래처주소를 입력해주세요"
+              placeholder={t('placeholder.input vendor address')}
               disabled
             />
           </Form.Item>

@@ -65,7 +65,7 @@ function MistransferTab() {
        * 오입금요청 취소모달
        */}
       <TurtleConfirmModal
-        title={t('description.really delete')}
+        title={t('title.really delete')}
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
@@ -101,7 +101,7 @@ function MistransferTab() {
               color: #242934;
             `}
           >
-            {t('mistransfer.list')}
+            {t('title.mistransfer list')}
           </Col>
         </Row>
 
@@ -111,7 +111,7 @@ function MistransferTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('mistransfer.create')}</TurtleText>
+            <TurtleText>{t('title.create mistransfer')}</TurtleText>
           </SecondaryButton>
         </Col>
       </Row>
@@ -139,17 +139,17 @@ function MistransferTab() {
           {
             ellipsis: true,
             width: 100,
-            title: t('mistransfer.status.'),
+            title: t('table.mistransfer status'),
             render: (_, record) => (
               <TurtleTag color={tagColors[record.status]}>
-                {t(`mistransfer.status.${record.status}`)}
+                {t(`type.status.${record.status}`)}
               </TurtleTag>
             ),
           },
           {
             ellipsis: true,
             width: 100,
-            title: t('mistransfer.created date'),
+            title: t('table.mistransfer request date'),
             render: (_, record) => record.created_date,
           },
           {
@@ -159,7 +159,7 @@ function MistransferTab() {
           },
           {
             ellipsis: true,
-            title: t('mistransfer.accountInfo'),
+            title: t('table.mistransfer accountInfo'),
             render: (_, { ws_bank, ws_account_number, ws_account_holder }) =>
               `${ws_bank} ${ws_account_number} ${ws_account_holder}`,
           },
@@ -174,20 +174,20 @@ function MistransferTab() {
                   ),
                 ]}
               >
-                {t('mistransfer.recipient print')}
+                {t('table.mistransfer recipient print')}
               </TextWithTooltip>
             ),
             render: (_, record) => record.recipient_print,
           },
           {
             ellipsis: true,
-            title: t('mistransfer.refund_memo'),
+            title: t('table.refund_memo'),
             render: (_, record) => record.memo,
           },
           {
             ellipsis: true,
             align: 'right',
-            title: t('mistransfer.request price'),
+            title: t('table.request price'),
             render: (_, record) => record.transfer_amount.toLocaleString(),
           },
           {
@@ -202,7 +202,7 @@ function MistransferTab() {
                       openRemoveModal();
                     }}
                   >
-                    {t('request cancel')}
+                    {t('button.cancel request')}
                   </SelectButton>
                 )}
               </>

@@ -12,6 +12,7 @@ import { useSearchParams } from 'react-router-dom';
 import CompanyTab from './tabs/CompanyTab';
 import StoreTab from './tabs/StoreTab';
 import MistransferTab from './tabs/MistransferTab';
+import { t } from 'i18next';
 import useUser from '@hooks/useUser';
 
 function PageBody() {
@@ -25,7 +26,7 @@ function PageBody() {
 
   return (
     <>
-      <PageHeader title="설정" />
+      <PageHeader title={t('title.setting')} />
 
       <div // pageContent
         css={pageContent}
@@ -44,7 +45,7 @@ function PageBody() {
             setSearchParams({ tab: newKey });
           }}
         >
-          <Tabs.TabPane key="store" tab="쇼핑몰 관리">
+          <Tabs.TabPane key="store" tab={t('description.store management')}>
             <div css={whiteContainer}>
               <StoreTab />
             </div>
@@ -52,12 +53,15 @@ function PageBody() {
 
           {isStaff ? null : (
             <>
-              <Tabs.TabPane key="user" tab="계정관리">
+              <Tabs.TabPane key="user" tab={t('description.manage accounts')}>
                 <div css={greyContainer}>
                   <UserTab />
                 </div>
               </Tabs.TabPane>
-              <Tabs.TabPane key="company" tab="사업자 관리">
+              <Tabs.TabPane
+                key="company"
+                tab={t('description.manage business info')}
+              >
                 <div css={greyContainer}>
                   <CompanyTab />
                 </div>
@@ -65,7 +69,10 @@ function PageBody() {
             </>
           )}
 
-          <Tabs.TabPane key="mistransfer" tab="오입금 환불">
+          <Tabs.TabPane
+            key="mistransfer"
+            tab={t('description.wrong transfer reversal')}
+          >
             <div css={whiteContainer}>
               <MistransferTab />
             </div>

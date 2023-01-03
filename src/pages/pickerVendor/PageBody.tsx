@@ -117,7 +117,7 @@ function PageBody() {
                   <Col>
                     <TurtleSearchInput
                       placeholder={t(
-                        'please input vendor name, mobile, account number, account holder',
+                        'placeholder.search by vendor name, mobile, account number',
                       )}
                       onSearch={(value) =>
                         setSearchQuery({
@@ -200,7 +200,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('request info modify'),
+                      label: t('button.request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {
                         setSelectedRow(record);

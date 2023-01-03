@@ -18,10 +18,12 @@ import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
 import AddPickerModal from './modals/AddPickerModal';
 import DetailPickerModal from './modals/DetailPickerModal';
+import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
+import { message } from '@utils/message';
 
 function PageBody() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
@@ -30,9 +32,17 @@ function PageBody() {
   const [searchQuery, setSearchQuery] = useState('');
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
+  const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
   const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
+  });
+
+  const removeStoreMutation = useMutation(pickerAPI.remove, {
+    onSuccess: () => {
+      message.success(t('message.delete store'), 3);
+      getStoreListQuery.refetch();
+    },
   });
 
   const filteredList = useMemo(() => {
@@ -52,6 +62,16 @@ function PageBody() {
 
   return (
     <PageContent>
+      <DeleteOrderModal
+        visible={removeModalVisible}
+        onCancel={closeRemoveModal}
+        onOK={() => {
+          removeStoreMutation.mutate(Number(selectedRow?.id));
+
+          closeRemoveModal();
+        }}
+      />
+
       {/*
        * 쇼핑몰 상세보기 모달
        */}
@@ -92,7 +112,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>{t('store.info')}</TurtleText>
+              <TurtleText>{t('description.store info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -103,7 +123,7 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>{t('store.create')}</TurtleText>
+            <TurtleText>{t('description.create store')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -114,7 +134,7 @@ function PageBody() {
           <Row align="middle">
             <Col css={css({ marginRight: 15 })}>
               <TurtleSearchInput
-                placeholder={t('input store name, mobile')}
+                placeholder={t('placeholder.input store name, mobile')}
                 onChange={(e) => setSearchQuery(e.currentTarget.value)}
               />
             </Col>
@@ -131,7 +151,9 @@ function PageBody() {
                   changeMode();
                 }}
               >
-                {mode === 'cardView' ? t('listView') : t('cardView')}
+                {mode === 'cardView'
+                  ? t('type.view.listView')
+                  : t('type.view.cardView')}
               </AddButton>
             </Col>
           </Row>
@@ -198,9 +220,18 @@ function PageBody() {
                   '$1-$2-$3',
                 ) ?? '',
             },
-            // {
-            //   render: (_, record) => <TurtleIcon name="delete" />,
-            // },
+            {
+              render: (_, record) => (
+                <TurtleIcon
+                  name="delete"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRow({ ...record });
+                    openRemoveModal();
+                  }}
+                />
+              ),
+            },
           ]}
         />
       )}

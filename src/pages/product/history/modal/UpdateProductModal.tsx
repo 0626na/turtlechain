@@ -24,7 +24,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
   // 상품 수정 요청
   const updateProductQuery = useMutation('updateProduct', productAPI.update, {
     onSuccess: () => {
-      message.success('상품정보를 수정했어요');
+      message.success(t('message.success update product'));
       queryClient.invalidateQueries('getProductListQuery');
       closeModal();
     },
@@ -50,7 +50,7 @@ function UpdateProductModal({ visible, closeModal, selectedRow }: Props) {
 
   return (
     <TurtleContentModal
-      title="상품정보 수정"
+      title={t('title.update product')}
       visible={visible}
       onClose={closeModal}
     >

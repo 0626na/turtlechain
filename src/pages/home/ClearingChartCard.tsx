@@ -60,7 +60,7 @@ const chartOption = {
   },
 };
 
-const labels = [1, 2, 3, 4, 5].map((day) => t(`day.${day}`));
+const labels = [1, 2, 3, 4, 5].map((day) => t(`type.day.${day}`));
 const thisWeek = [
   moment().startOf('week').add(1, 'day'),
   moment().startOf('week').add(2, 'day'),
@@ -133,7 +133,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          누적 결제금액
+          {t('title.accumulated payments')}
         </h4>
 
         <div
@@ -150,7 +150,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
                 ['--backgroundColor' as string]: '#EAECEF',
               }}
             />
-            <span>지난주</span>
+            <span>{t('description.last week')}</span>
           </div>
 
           <div css={markCss.self}>
@@ -160,7 +160,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
                 ['--backgroundColor' as string]: '#13BCB2',
               }}
             />
-            <span>이번주</span>
+            <span>{t('description.this week')}</span>
           </div>
         </div>
       </div>
@@ -175,7 +175,7 @@ function ClearingChartCard({ completedClearingSheetList }: Props) {
             color: theme.grey800,
           }}
         >
-          원
+          {t('description.won')}
         </span>
       </h1>
 

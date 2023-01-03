@@ -4,6 +4,7 @@ import { Col, Popover, PopoverProps, Row, Typography } from 'antd';
 import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import useProductCart from '@hooks/useProductCart';
+import { t } from 'i18next';
 
 interface Props extends PopoverProps {}
 
@@ -35,7 +36,7 @@ function NeedUpdatePopover({ ...props }: Props) {
     <Popover
       {...props}
       visible={visible}
-      overlayInnerStyle={{ borderRadius: 10, width: 380 }}
+      overlayInnerStyle={styles.overlayInnerStyle}
       content={
         <Row align="top">
           <Col span={3}>
@@ -45,33 +46,18 @@ function NeedUpdatePopover({ ...props }: Props) {
             <Row
               align="middle"
               justify="space-between"
-              css={css`
-                margin-bottom: 8px;
-              `}
+              css={styles.marginBottom}
             >
-              <TurtleText
-                css={css`
-                  font-weight: 700;
-                  font-size: 16px;
-                `}
-              >
-                셀메이트 내 상품정보 수정이 필요해요
+              <TurtleText css={styles.font}>
+                {t('description.need product update')}
               </TurtleText>
               <CloseOutlined style={{ color: 'grey' }} onClick={close} />
             </Row>
-            <Row
-              css={css`
-                margin-bottom: 8px;
-              `}
-            >
-              <Typography
-                css={css`
-                  color: #5b5d63;
-                `}
-              >
-                터틀체인에 등록한 상품정보와 일치하도록
+            <Row css={styles.marginBottom}>
+              <Typography css={styles.grey}>
+                {t('description.to correspond turtlechain')}
                 <br />
-                셀메이트 내 상품 세부정보를 업데이트해주세요.
+                {t('description.update sellmate product')}
               </Typography>
             </Row>
             <Row justify="end">
@@ -80,7 +66,7 @@ function NeedUpdatePopover({ ...props }: Props) {
                 href="https://www.sellmate.co.kr/login"
                 target="_blank"
               >
-                셀메이트 바로가기
+                {t('description.go sellmate')}
               </PrimaryButton>
             </Row>
           </Col>
@@ -91,3 +77,17 @@ function NeedUpdatePopover({ ...props }: Props) {
 }
 
 export default NeedUpdatePopover;
+
+const styles = {
+  marginBottom: css({
+    marginBottom: 8,
+  }),
+  font: css({
+    fontWeight: 700,
+    fontSize: 16,
+  }),
+  grey: css({
+    color: '#5b5d63',
+  }),
+  overlayInnerStyle: { borderRadius: 10, width: 380 },
+};

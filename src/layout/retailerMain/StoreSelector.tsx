@@ -40,7 +40,7 @@ function StoreSelector() {
       {isStoreEmpty ? (
         <Tooltip
           placement="right"
-          title="운영중인 쇼핑몰을 먼저 추가해주세요!"
+          title={t('description.at least one store')}
           defaultVisible
         >
           <Button
@@ -49,7 +49,7 @@ function StoreSelector() {
               navigate('/setting');
             }}
           >
-            쇼핑몰 추가하기
+            {t('description.create store')}
             <TurtleIcon name="storePlus" />
           </Button>
         </Tooltip>
@@ -59,8 +59,7 @@ function StoreSelector() {
           overlay={
             <Menu
               css={menu}
-              selectable
-              onSelect={({ key }) => {
+              onClick={({ key }) => {
                 selectStore(Number(key));
               }}
               items={store.list.map((store, idx) => ({

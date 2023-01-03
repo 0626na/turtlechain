@@ -1,5 +1,6 @@
 import { OrderHistoryItem } from '@apis/orderAPI';
 import { TurtleSearchInput, TurtleTableTitle } from '@components/element';
+import useOrderCart from '@hooks/useOrderCart';
 import { Table, TabPaneProps, Tabs } from 'antd';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
@@ -11,6 +12,7 @@ interface Props extends TabPaneProps {
 
 function FailTab({ data, loading, ...props }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
+  const { translateOrderType } = useOrderCart();
   const filteredList = useMemo(
     () =>
       data.filter(
@@ -40,7 +42,9 @@ function FailTab({ data, loading, ...props }: Props) {
             totalCount={data.length ?? 0}
             rightContent={
               <TurtleSearchInput
-                placeholder={t('please input search query')}
+                placeholder={t(
+                  'placeholder.search by vendor name, product name, mobile',
+                )}
                 value={searchQuery}
                 onChange={(value) => setSearchQuery(value.currentTarget.value)}
               />
@@ -64,7 +68,7 @@ function FailTab({ data, loading, ...props }: Props) {
             render: (_, record) => record.mobile,
           },
           {
-            title: t('table.productName'),
+            title: t('table.vendorProductName'),
             width: 196,
             render: (_, record) => record.name,
           },
@@ -76,10 +80,10 @@ function FailTab({ data, loading, ...props }: Props) {
           {
             title: t('table.type'),
             width: 116,
-            render: (_, record) => record.type,
+            render: (_, record) => translateOrderType(record.type),
           },
           {
-            title: t('table.count'),
+            title: t('table.requestCount'),
             align: 'right',
             width: 116,
             render: (_, record) => record.count.toLocaleString(),
