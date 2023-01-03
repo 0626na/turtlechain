@@ -1,29 +1,15 @@
-import {
-  DeleteOutlined,
-  PlusCircleOutlined,
-  PlusCircleTwoTone,
-} from '@ant-design/icons';
-import orderAPI, { RequestCreateOrderFormat } from '@apis/orderAPI';
+import { useEffect } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import orderAPI from '@apis/orderAPI';
 import { TurtleContentModal } from '@components/combine';
-import {
-  PrimaryButton,
-  TurtleDivider,
-  TurtleFormInput,
-  TurtleIcon,
-  TurtleText,
-} from '@components/element';
+import { PrimaryButton, TurtleDivider } from '@components/element';
 import AddColumnButton from '@components/element/button/AddColumnButton';
 import ColumnTitleInput from '@components/element/button/ColumnTitleInput';
-import PlusIcon from '@components/element/icon/PlusIcon';
 import TurtleStack from '@components/element/TurtleStack';
 import { css } from '@emotion/react';
 import useOrderCart, { IorderColumn } from '@hooks/useOrderCart';
-import { PageTitle } from '@layout/page';
 import { message } from '@utils/message';
-import { Button, Col, Divider, Input, Modal, Row } from 'antd';
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
 
 interface Props {
   visible: boolean;
@@ -41,7 +27,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     deleteOrderColumn,
   } = useOrderCart();
 
-  const getOrderFormatQuery = useQuery(
+  const { refetch } = useQuery(
     'getOrderFormatQuery',
     () => orderAPI.getOrderFormat(),
     {
@@ -59,7 +45,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
         }),
     },
   );
-  const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
+  const { mutate } = useMutation(orderAPI.createOrderFormat, {
     onSuccess: (data) => {
       if (data.msg === 'success')
         message.success(t('message.create new format'));
@@ -83,7 +69,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
 
   useEffect(() => {
     if (!visible) return;
-    getOrderFormatQuery.refetch();
+    refetch();
   }, [visible]);
 
   return (
@@ -266,9 +252,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
                 justify-content: flex-end;
               `}
             >
-              <PrimaryButton
-                onClick={() => createOrderFormatMutation.mutate(orderFormat)}
-              >
+              <PrimaryButton onClick={() => mutate(orderFormat)}>
                 {t('button.saving')}
               </PrimaryButton>
             </div>
@@ -278,35 +262,5 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     </TurtleContentModal>
   );
 }
-
-const $title = css`
-  font-size: 20px;
-  font-weight: 500;
-  color: #242934;
-`;
-
-const wrapper = css`
-  padding: 12px 36px 12px 36px;
-`;
-
-const columnHeader = css`
-  background-color: #f7f8f9;
-  width: 160px;
-  height: 40px;
-`;
-
-const columnContent = css`
-  width: 160px;
-  height: 40px;
-  border-radius: 14px;
-  margin-bottom: 10px;
-`;
-
-const columnVisibleContent = css`
-  width: 160px;
-  height: 40px;
-  border-radius: 14px;
-  visibility: hidden;
-`;
 
 export default AddOrderColumnModal;

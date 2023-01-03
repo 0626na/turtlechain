@@ -1,31 +1,22 @@
+import React from 'react';
 import { t } from 'i18next';
 import { Form, Input, Upload } from 'antd';
-import React, { useEffect } from 'react';
-
 import {
   AddButton,
   PrimaryButton,
   TurtleFormInput,
-  TurtleFormSearchInput,
   TurtleFormSelect,
 } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
-
-import vendorAPI, { Vendor } from '@apis/vendorAPI';
-
 import { css } from '@emotion/react';
-
-import useStore from '@hooks/useStore';
-
 import { useMutation, useQuery } from 'react-query';
 import bucketListAPI from '@apis/bucketListAPI';
 import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
-import { phoneMasking } from '@utils/phone';
 import wholesalerAPI, { WholesalerStore } from '@apis/wholesalerAPI';
-import { OrderVendor } from '../PageBody';
+
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -51,7 +42,7 @@ function OrderVendorInfoUpdateModal({
     },
   });
 
-  const { data } = useQuery(
+  useQuery(
     ['getWholesalerQuery', selectedRow?.id],
     () => wholesalerAPI.get({ storeId: selectedRow.id }),
     {

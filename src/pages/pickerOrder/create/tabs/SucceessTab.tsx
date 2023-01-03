@@ -17,7 +17,7 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
-import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import { StoreOrder } from '@apis/orderAPI';
 import moment from 'moment';
 
 interface Props extends TabPaneProps {

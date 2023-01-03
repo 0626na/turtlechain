@@ -10,7 +10,6 @@ import {
   TurtleSearchInput,
   TurtleTableTitle,
 } from '@components/element';
-import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
@@ -18,25 +17,6 @@ import { Col, Pagination, Row, Table } from 'antd';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import OrderVendorInfoUpdateModal from './modals/OrderVendorInfoUpdateModal';
-
-// const options = [
-//   {
-//     name: t('table.retailerStoreName'),
-//     value: 'store_name',
-//   },
-//   {
-//     name: t('table.mobile'),
-//     value: 'mobile',
-//   },
-//   {
-//     name: t('accountNumber'),
-//     value: 'account_number',
-//   },
-//   {
-//     name: t('accountHolder'),
-//     value: 'account_holder',
-//   },
-// ];
 
 export interface OrderVendor {
   id: number;
@@ -207,23 +187,6 @@ function PageBody() {
                         vendorUpdateModalOpen();
                       },
                     },
-                    // {
-                    //   key: '2',
-                    //   type: 'divider',
-                    // },
-                    // {
-                    //   key: '3',
-                    //   label: (
-                    //     <span
-                    //       css={css`
-                    //         color: red;
-                    //       `}
-                    //     >
-                    //       삭제
-                    //     </span>
-                    //   ),
-                    //   icon: <TurtleIcon name="delete" danger />,
-                    // },
                   ]}
                   triggerButton={<TurtleIcon name="more" />}
                 />
@@ -236,7 +199,4 @@ function PageBody() {
   );
 }
 
-const marginRight = css`
-  margin-right: 6px;
-`;
 export default PageBody;

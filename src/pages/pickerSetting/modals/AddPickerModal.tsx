@@ -32,10 +32,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
     },
   });
 
-  const getStoreListQuery = useQuery(
-    'getStoreListQuery',
-    retailerStoreAPI.getList,
-  );
+  const { data } = useQuery('getStoreListQuery', retailerStoreAPI.getList);
 
   const resetFields = useCallback(() => {
     form.resetFields();
@@ -97,9 +94,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
               placeholder={t('placeholder.input store name')}
               onSearch={(value: string) => {
                 setSearchStore(
-                  getStoreListQuery.data?.store_list.find(
-                    (store) => store.name === value,
-                  ),
+                  data?.store_list.find((store) => store.name === value),
                 );
                 setSearched(true);
                 setKeep(() => !keep);

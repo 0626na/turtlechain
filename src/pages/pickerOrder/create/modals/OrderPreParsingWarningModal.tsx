@@ -1,14 +1,11 @@
+import React from 'react';
 import orderAPI, { ResponseCreatePreParsing } from '@apis/orderAPI';
-import { CreateModal, TurtleContentModal } from '@components/combine';
-import { TurtleConfirmModal, TurtleIcon } from '@components/element';
+import { TurtleConfirmModal } from '@components/element';
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
-import { theme } from '@styles/theme';
-import { Tooltip } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { t } from 'i18next';
 import moment from 'moment';
-import React from 'react';
 import { useMutation } from 'react-query';
 
 interface Props {
@@ -195,24 +192,5 @@ function OrderPreParsingWarningModal({
     </TurtleConfirmModal>
   );
 }
-
-const modalMask = css`
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 5;
-  background: rgba(0, 0, 0, 0.45);
-`;
-
-const container = css({
-  backgroundColor: '#ffffff',
-  width: 400,
-  heigth: 479,
-  borderRadius: 12,
-  boxShadow: '0px 8px 28px rgba(34,44,56,0.28)',
-});
 
 export default OrderPreParsingWarningModal;
