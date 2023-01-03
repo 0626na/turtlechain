@@ -11,8 +11,8 @@ import {
   HomePage,
   LoginPage,
   NotFoundPage,
-  //OrderCreatePage,
-  //OrderHistoryPage,
+  OrderCreatePage,
+  OrderHistoryPage,
   ProductCreatePage,
   ProductHistoryPage,
   SettingPage,
@@ -23,10 +23,10 @@ import {
   WarehousingCreatePage,
   WarehousingHistoryPage,
   WarehousingAdjustmentPage,
-  // PickerVendorPage,
-  // PickerOrderCreatePage,
-  // PickerOrderHistoryPage,
-  // PickerSettingPage,
+  PickerVendorPage,
+  PickerOrderCreatePage,
+  PickerOrderHistoryPage,
+  PickerSettingPage,
   ResetPasswordPage,
   MembershipInfoPage,
   RetailerPage,
@@ -118,7 +118,7 @@ function App() {
            * 발주
            */}
 
-          {/* <Route
+          <Route
             path="order/create"
             element={
               <Suspense fallback={<></>}>
@@ -134,7 +134,7 @@ function App() {
                 <OrderHistoryPage />
               </Suspense>
             }
-          /> */}
+          />
 
           {/*
            * 입고
@@ -230,7 +230,7 @@ function App() {
          *
          */}
 
-        {/* <Route path="/picker" element={<PickerMainLayout />}>
+        <Route path="/picker" element={<PickerMainLayout />}>
           <Route
             path="vendor"
             element={
@@ -266,7 +266,7 @@ function App() {
               </Suspense>
             }
           />
-        </Route> */}
+        </Route>
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

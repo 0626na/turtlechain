@@ -8,9 +8,9 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
+import DetailModal from '@pages/pickerOrder/history/modals/DetailModal';
 
 function PageBody() {
   const [sheetId, setSheetId] = useState(0);

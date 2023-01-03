@@ -12,15 +12,10 @@ import TurtleTabs from '@components/element/TurtleTabs';
 import SuccessTab from './tabs/SucceessTab';
 import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
-import AddOrderColumnModal from './modals/AddOrderColumnModal';
+import AddOrderColumnModal from '@pages/pickerOrder/create/modals/AddOrderColumnModal';
 import { Col, Row, Upload } from 'antd';
-
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
-
-import AddNewOrderModal from './modals/AddNewOrderModal';
-import ConfirmOrderModal from './modals/ConfirmOrderModal';
-import PreparsingOrderModal from './modals/PreparsingOrderModal';
 import { useMutation, useQuery } from 'react-query';
 import orderAPI from '@apis/orderAPI';
 import { css } from '@emotion/react';
@@ -29,12 +24,13 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import useStore from '@hooks/useStore';
+import AddNewOrderModal from '@pages/pickerOrder/create/modals/AddNewOrderModal';
+import ConfirmOrderModal from '@pages/pickerOrder/create/modals/ConfirmOrderModal';
 
 function PageBody() {
   const {
     cart,
     ready,
-    countSuccessList,
     countFailList,
     countOrdersForType,
     calculateTotalPrice,
@@ -116,23 +112,12 @@ function PageBody() {
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
       {/* 재등록 모달 */}
-      {createPreParsingMutation.isSuccess && (
-        <PreparsingOrderModal
-          visible={preparsingModalVisible}
-          open={openPreparsingModal}
-          close={closePreparsingModal}
-          data={{
-            files: createPreParsingMutation.data?.files,
-            preParsingResult: createPreParsingMutation.data?.preParsingResult,
-          }}
-        />
-      )}
 
       {/* 발주등록 확인 모달 */}
-      <ConfirmOrderModal
+      {/* <ConfirmOrderModal
         visible={confirmModalVisible}
         close={closeConfirmModal}
-      />
+      /> */}
 
       {/*
        * Page
@@ -189,11 +174,7 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <SuccessTab
-            key="success"
-            tab={`성공(${countSuccessList()})`}
-            loading={false}
-          />
+          <SuccessTab key="success" tab={`성공()`} loading={false} />
           <FailTab
             key="fail"
             tab={`실패(${countFailList()})`}
@@ -217,14 +198,14 @@ function PageBody() {
                 발주수량 합계{' '}
               </span>
               {'   '}
-              {` ${countSuccessList()}개 `}
+              {` 개 `}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
                 {`(발주 ${countOrdersForType().order}, 교환 ${
                   countOrdersForType().exchange
-                }, 미송 ${countOrdersForType().notDelivery}, 샘플 ${
+                }, 미송 ${countOrdersForType().reserve}, 샘플 ${
                   countOrdersForType().sample
                 }, 픽업 ${countOrdersForType().pickup}, 기타 ${
-                  countOrdersForType().etc
+                  countOrdersForType().extra
                 })
               / 발주금액 합계  `}
               </span>
