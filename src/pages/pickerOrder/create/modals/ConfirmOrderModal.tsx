@@ -9,6 +9,7 @@ import moment from 'moment';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 interface Props {
   visible: boolean;
@@ -34,6 +35,7 @@ function ConfirmOrderModal({
 }: Props) {
   const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
+  const { user } = useUser();
 
   /**
    * 발주서 등록 react-query 함수
@@ -44,7 +46,9 @@ function ConfirmOrderModal({
         message.success(t('message.complete order'), 4);
         close();
         reset();
-        navigate('/picker/order/history');
+        user?.type === 'pi'
+          ? navigate('/picker/order/history')
+          : navigate('/order/history');
       }
     },
   });

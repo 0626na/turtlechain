@@ -33,6 +33,7 @@ function PageBody() {
     ready,
     countFailList,
     countOrdersForType,
+    countSucessOrdersCount,
     calculateTotalPrice,
   } = useOrderCart();
   const { store } = useStore();
@@ -41,7 +42,7 @@ function PageBody() {
     complete: 0,
     total: 0,
   });
-  //모달 data
+
   const [orderColumnVisible, openSettingColumnModal, closeSettingColumnModal] =
     useModal();
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
@@ -57,6 +58,7 @@ function PageBody() {
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
+      console.log(data);
       //2회 이상 발주 파일이 없는경우
       if (data.parsingData) {
         ready({ ...data.parsingData });
@@ -100,6 +102,27 @@ function PageBody() {
     },
   );
 
+  /**
+   * 발주등록 최종 확인 모달 내용
+   */
+  const confirmModalItems = [
+    {
+      title: t('table.orderDate'),
+      content: cart.selectedDate.format('YYYY-MM-DD'),
+    },
+
+    {
+      title: t('title.totalOrderCountInConfirm'),
+      content: t('description.count', { count: countOrdersForType().total }),
+    },
+    {
+      title: t('title.totalOrderPriceInConfirm'),
+      content: t('description.price', {
+        price: calculateTotalPrice().toLocaleString(),
+      }),
+    },
+  ];
+
   return (
     <>
       {/* 발주서 헤더 설정 모달 */}
@@ -114,10 +137,16 @@ function PageBody() {
       {/* 재등록 모달 */}
 
       {/* 발주등록 확인 모달 */}
-      {/* <ConfirmOrderModal
+      <ConfirmOrderModal
+        title={t('title.really order')}
+        description={[
+          t('description.failed orders are except'),
+          t('description.please check order info again'),
+        ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
-      /> */}
+        items={confirmModalItems}
+      />
 
       {/*
        * Page
@@ -174,7 +203,11 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <SuccessTab key="success" tab={`성공()`} loading={false} />
+          <SuccessTab
+            key="success"
+            tab={`성공(${countSucessOrdersCount()})`}
+            loading={false}
+          />
           <FailTab
             key="fail"
             tab={`실패(${countFailList()})`}
@@ -198,18 +231,26 @@ function PageBody() {
                 발주수량 합계{' '}
               </span>
               {'   '}
-              {` 개 `}
+              {`${countOrdersForType().total} 개 `}
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {`(발주 ${countOrdersForType().order}, 교환 ${
+                {`(${t('type.orderTypes.order')} ${
+                  countOrdersForType().order
+                }, ${t('type.orderTypes.exchange')} ${
                   countOrdersForType().exchange
-                }, 미송 ${countOrdersForType().reserve}, 샘플 ${
+                }, ${t('type.orderTypes.takeback')} ${
+                  countOrdersForType().takeback
+                }, ${t('type.orderTypes.reserve')} ${
+                  countOrdersForType().reserve
+                }, ${t('type.orderTypes.sample')} ${
                   countOrdersForType().sample
-                }, 픽업 ${countOrdersForType().pickup}, 기타 ${
-                  countOrdersForType().extra
-                })
-              / 발주금액 합계  `}
+                }, ${t('type.orderTypes.pickup')} ${
+                  countOrdersForType().pickup
+                }, ${t('type.orderTypes.extra')} ${countOrdersForType().extra})
+              / ${t('description.orderTotalPrice')}  `}
               </span>
-              {`${calculateTotalPrice().toLocaleString()}원`}
+              {`${calculateTotalPrice().toLocaleString()}${t(
+                'description.won',
+              )}`}
             </TurtleText>
           </Col>
           <Col>
@@ -219,7 +260,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              발주 등록하기
+              {t('button.do order')}
             </PrimaryButton>
           </Col>
         </Row>

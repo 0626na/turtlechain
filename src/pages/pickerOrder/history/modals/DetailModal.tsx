@@ -25,6 +25,7 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
   const { data: orderHistoryData, isLoading } = useQuery(
     ['getOrderHistoryCount', sheetId],
     () => orderAPI.getOrderHistory({ sheet_id: sheetId }),
+    { enabled: visible },
   );
 
   const storeName = orderHistoryData?.data.order_sheet.rt_store_name ?? '';
@@ -84,14 +85,16 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
               orderHistoryData?.data.order_sheet.request_date,
             )}
             key={'successHistory'}
-            tab={`${t('success')}(${
+            tab={`${t('title.success')}(${
               orderHistoryData?.data.successes.length ?? 0
             })`}
             loading={isLoading}
           />
           <FailTab
             key={'failHistory'}
-            tab={`${t('fail')}(${orderHistoryData?.data.fails.length ?? 0})`}
+            tab={`${t('title.fail')}(${
+              orderHistoryData?.data.fails.length ?? 0
+            })`}
             data={
               orderHistoryData?.data.fails.map((item, index) => ({
                 ...item,

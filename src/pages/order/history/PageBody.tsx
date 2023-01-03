@@ -3,7 +3,6 @@ import { TertiaryButton, TurtleCard, TurtleIcon } from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
-import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -22,7 +21,7 @@ function PageBody() {
       orderAPI.getOrderSheets({
         start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
         end_date: moment().format('YYYY-MM-DD'),
-        rt_store_id: store.selected?.id ?? 0,
+        rt_store_id: Number(store.selected?.id),
       }),
     {
       enabled: !!store.selected,
@@ -30,12 +29,13 @@ function PageBody() {
   );
   return (
     <>
-      <DetailModal
-        visible={detailModalVisible}
-        onclose={closeDetailModal}
-        sheetId={sheetId}
-      />
-      <PageHeader title="발주내역" />
+      {!!sheetId && (
+        <DetailModal
+          visible={detailModalVisible}
+          onclose={closeDetailModal}
+          sheetId={sheetId}
+        />
+      )}
       <PageTitle
         title="발주현황"
         buttons={[

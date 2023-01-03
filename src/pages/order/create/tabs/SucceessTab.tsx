@@ -72,10 +72,9 @@ export const options = [
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
-  const { cart, setCart } = useOrderCart();
+  const { cart, setCart, setSuccessListToOrderCount } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
 
-  const [deleteMode, setDeleteMode] = useState(false); //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
   const [visibleDeleteModal, openDeleteModal, closeDeleteModal] = useModal();
   const [visibleMemoModal, openMemoModal, closeMemoModal] = useModal();
   const [searchQuery, setSearchQuery] = useState({
@@ -198,7 +197,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력하세요"
+                      placeholder={t('placeholder.input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -214,33 +213,33 @@ function SuccessTab({ loading, ...props }: Props) {
           )}
           columns={[
             {
-              title: '거래처명',
+              title: t('table.vendorName'),
               width: 188,
               render: (_, record) => record.vendor_name,
             },
             {
-              title: '거래처주소',
+              title: t('table.vendorName'),
               width: 196,
               render: (_, record) => record.vendor_address,
             },
             {
-              title: '휴대전화 번호',
+              title: t('table.mobile'),
               width: 176,
               render: (_, record) =>
                 record.mobile.replace(phonePattern, '$1-$2-$3'),
             },
             {
-              title: '거래처 상품명',
+              title: t('table.vendorProductName'),
               width: 240,
               render: (_, record) => record.product_name,
             },
             {
-              title: '옵션',
+              title: t('table.option'),
               width: 150,
               render: (_, record) => record.product_option,
             },
             {
-              title: '분류',
+              title: t('table.type'),
               width: 136,
               render: (_, record) => (
                 <TurtleTableSelect
@@ -267,7 +266,7 @@ function SuccessTab({ loading, ...props }: Props) {
               ),
             },
             {
-              title: '요청 수량',
+              title: t('table.requestCount'),
               width: 136,
               align: 'right',
               render: (_, record) => (
@@ -277,31 +276,25 @@ function SuccessTab({ loading, ...props }: Props) {
                   onChange={(value: valueType) =>
                     setCart({
                       ...cart,
-                      successList: [
-                        {
-                          ...cart.successList[0],
-                          orders: cart.successList[0].orders.map((order) => ({
-                            ...order,
-                            product_count:
-                              record.order_id === order.order_id
-                                ? String(value)
-                                : order.product_count,
-                          })),
-                        },
-                      ],
+                      successList: setSuccessListToOrderCount(
+                        cart.successList,
+                        Number(record.order_id),
+                        cart.successList[0].rt_store_id,
+                        String(value),
+                      ),
                     })
                   }
                 />
               ),
             },
             {
-              title: '가격',
+              title: t('table.supplyPrice'),
               width: 136,
               align: 'right',
               render: (_, record) => record.product_price.toLocaleString(),
             },
             {
-              title: <div css={css({ marginLeft: 25 })}>메모</div>,
+              title: <div css={css({ marginLeft: 25 })}>{t('table.memo')}</div>,
               width: 308,
               render: (_, record) => {
                 return (
@@ -326,7 +319,6 @@ function SuccessTab({ loading, ...props }: Props) {
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedRowID(Number(record.order_id));
-                          setDeleteMode(true);
                           openDeleteModal();
                         }}
                       />
