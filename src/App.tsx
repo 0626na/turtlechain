@@ -23,10 +23,10 @@ import {
   WarehousingCreatePage,
   WarehousingHistoryPage,
   WarehousingAdjustmentPage,
-  PickerVendorPage,
-  PickerOrderCreatePage,
-  PickerOrderHistoryPage,
-  PickerSettingPage,
+  // PickerVendorPage,
+  // PickerOrderCreatePage,
+  // PickerOrderHistoryPage,
+  // PickerSettingPage,
   ResetPasswordPage,
   MembershipInfoPage,
   RetailerPage,
@@ -230,7 +230,7 @@ function App() {
          *
          */}
 
-        <Route path="/picker" element={<PickerMainLayout />}>
+        {/* <Route path="/picker" element={<PickerMainLayout />}>
           <Route
             path="vendor"
             element={
@@ -266,7 +266,7 @@ function App() {
               </Suspense>
             }
           />
-        </Route>
+        </Route> */}
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
