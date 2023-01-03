@@ -35,9 +35,9 @@ function PageBody() {
         onclose={closeDetailModal}
         sheetId={sheetId}
       />
-      <PageHeader title={`${t('order.history')}`} />
+      <PageHeader title="발주내역" />
       <PageTitle
-        title={`${t('order.present')}`}
+        title="발주현황"
         buttons={[
           <TertiaryButton
             text="발주서 다운"

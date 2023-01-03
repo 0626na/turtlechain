@@ -3,11 +3,12 @@ import {
   TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
+import TurtleTablePhoneNumberInput from '@components/element/input/TurtleTablePhoneNumberInput';
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { useMemo, useState } from 'react';
-import { options } from './SucceessTab';
+import { category, options } from './SucceessTab';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -39,10 +40,14 @@ function FailTab({ loading, ...props }: Props) {
     return [];
   }, [cart.failList, searchQuery]);
 
+  const PhoneNumberInput = () => {
+    return <TurtleTablePhoneNumberInput />;
+  };
+
   return (
     <Tabs.TabPane {...props}>
       <Table
-        scroll={{ x: 1400, y: 'auto', scrollToFirstRowOnChange: true }}
+        scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
         loading={loading}
         size="small"
         dataSource={filterdList}
@@ -88,48 +93,50 @@ function FailTab({ loading, ...props }: Props) {
         columns={[
           {
             title: '거래처명',
-            width: 196,
+            width: 130,
             render: (_, record) => record.vendor_name,
           },
           {
             title: '거래처 주소',
-            width: 196,
+            width: 140,
             render: (_, record) => record.vendor_address,
           },
           {
             title: '휴대전화 번호',
-            width: 176,
-            render: (_, record) => record.mobile,
+            width: 140,
+            render: (_, record) => PhoneNumberInput(),
           },
           {
             title: '거래처 상품명',
-            width: 196,
+            width: 240,
             render: (_, record) => record.product_name,
           },
           {
             title: '옵션',
-            width: 136,
+            width: 150,
             render: (_, record) => record.product_option,
           },
           {
             title: '분류',
-            width: 136,
-            render: (_, record) => record.order_type,
+            width: 80,
+            render: (_, record) =>
+              category.find((item) => item.value === record.order_type)?.name,
           },
           {
             title: '요청 수량',
-            width: 136,
+            width: 120,
             align: 'right',
             render: (_, record) => record.product_count,
           },
           {
             title: '가격',
-            width: 136,
+            width: 120,
             align: 'right',
             render: (_, record) => record.product_price.toLocaleString(),
           },
           {
             title: '메모',
+            width: 100,
           },
         ]}
       />

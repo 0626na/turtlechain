@@ -28,31 +28,31 @@ interface Props extends TabPaneProps {
 
 export const category = [
   {
-    value: '발주',
+    value: 'order',
     name: '발주',
   },
   {
-    value: '미송',
+    value: 'reserve',
     name: '미송',
   },
   {
-    value: '반품',
+    value: 'takeback',
     name: '반품',
   },
   {
-    value: '교환',
+    value: 'exchange',
     name: '교환',
   },
   {
-    value: '샘플',
+    value: 'sample',
     name: '샘플',
   },
   {
-    value: '픽업',
+    value: 'pickup',
     name: '픽업',
   },
   {
-    value: '기타',
+    value: 'extra',
     name: '기타',
   },
 ];
@@ -170,7 +170,7 @@ function SuccessTab({ loading, ...props }: Props) {
       />
       <Tabs.TabPane {...props}>
         <Table
-          scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
+          scroll={{ x: 'auto', y: 400, scrollToFirstRowOnChange: true }}
           dataSource={filterdList}
           loading={loading}
           size="small"
@@ -232,12 +232,12 @@ function SuccessTab({ loading, ...props }: Props) {
             },
             {
               title: '거래처 상품명',
-              width: 196,
+              width: 240,
               render: (_, record) => record.product_name,
             },
             {
               title: '옵션',
-              width: 136,
+              width: 150,
               render: (_, record) => record.product_option,
             },
             {

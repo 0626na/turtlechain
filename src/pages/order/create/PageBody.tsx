@@ -29,7 +29,6 @@ import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import useStore from '@hooks/useStore';
-//import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
 
 function PageBody() {
   const {
@@ -135,46 +134,12 @@ function PageBody() {
         close={closeConfirmModal}
       />
 
-      {/* 발주서 파싱 결과 모달 */}
-      {/* <OrderParsingProcessPresentModal
-        visible={orderParsingProcessPresentModalVisible}
-        title="발주서 처리 현황"
-        description={[
-          '문제 있는 발주서는 아래사항을 확인후, 다시시도해주세요',
-          '발주서 별 자세한 오류사항은 하나씩 올리면 확인 가능.',
-        ]}
-        onCancel={closeParsingProcessModal}
-        onOk={() => {}}
-        successCount={cart.parsingStatus.success_count}
-        failCount={cart.parsingStatus.fail_count}
-        messages={cart.parsingStatus.error_messages}
-        size="middle"
-      /> */}
-
       {/*
        * Page
        */}
       <PageTitle
         title="발주서 미리보기"
         buttons={[
-          <TurtleText
-            css={css({
-              fontSize: 14,
-              fontWeight: 500,
-            })}
-          >
-            {`당일 발주완료 ${todayOrdersCount.complete}`}{' '}
-            <span css={css({ color: theme.grey400 })}>
-              {`/ 
-              ${todayOrdersCount.total}개 | `}
-            </span>
-            {`당일 미발주 ${
-              todayOrdersCount.total - todayOrdersCount.complete
-            }`}{' '}
-            <span
-              css={css({ color: theme.grey400 })}
-            >{`/ ${todayOrdersCount.total}개`}</span>
-          </TurtleText>,
           <TertiaryButton
             text="발주서 설정"
             onClick={openSettingColumnModal}
