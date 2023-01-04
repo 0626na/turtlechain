@@ -17,7 +17,10 @@ import { Col, Row, Upload } from 'antd';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI from '@apis/orderAPI';
+import orderAPI, {
+  ResponseCreateOrderItemExcelParsing,
+  ResponseCreatePreParsing,
+} from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
@@ -26,6 +29,9 @@ import { theme } from '@styles/theme';
 import useStore from '@hooks/useStore';
 import AddNewOrderModal from '@pages/pickerOrder/create/modals/AddNewOrderModal';
 import ConfirmOrderModal from '@pages/pickerOrder/create/modals/ConfirmOrderModal';
+import OrderParsingProcessPresentModal from '@pages/pickerOrder/create/modals/OrderParsingProcessPresentModal';
+import OrderPreParsingWarningModal from '@pages/pickerOrder/create/modals/OrderPreParsingWarningModal';
+import OrderCreateBlockModal from './modals/OrderCreateBlockModal';
 
 function PageBody() {
   const {
@@ -50,29 +56,35 @@ function PageBody() {
     useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
   const [
-    orderParsingProcessPresentModalVisible,
-    openParsingProcessModal,
-    closeParsingProcessModal,
+    orderParsingResultModalVisible,
+    openParsingResultModal,
+    closeParsingResultModal,
   ] = useModal();
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
-  const createPreParsingMutation = useMutation(orderAPI.createPreParsing, {
+  const {
+    data: preParsingData,
+    mutate,
+    isSuccess,
+  } = useMutation(orderAPI.createPreParsing, {
     onSuccess: (data) => {
-      console.log(data);
       //2회 이상 발주 파일이 없는경우
-      if (data.parsingData) {
-        ready({ ...data.parsingData });
-        if (data.parsingData.data.parsing_status.fail_count)
-          openParsingProcessModal();
+      if (!data.parsingData) {
+        openPreparsingModal();
         return;
       }
 
-      openPreparsingModal();
+      if (!data.parsingData.data.parsing_status.fail_count) {
+        ready({ ...data.parsingData });
+        return;
+      }
+
+      openParsingResultModal();
     },
   });
 
   //쇼핑몰 갯수
-  const getStoreCountQuery = useQuery(['getStoreCount'], pickerAPI.getList, {
+  useQuery(['getStoreCount'], pickerAPI.getList, {
     enabled: !!user?.id,
     onSuccess: (data) =>
       setTodayordersCount({
@@ -82,7 +94,7 @@ function PageBody() {
   });
 
   //발주완료 갯수
-  const getOrdersCountQuery = useQuery(
+  useQuery(
     'getOrdersCountQuery',
     () =>
       orderAPI.getOrderSheets({
@@ -101,6 +113,22 @@ function PageBody() {
         }),
     },
   );
+
+  /**
+   * 파싱하려는 발주서 엑셀파일
+   */
+  const uploadFiles = preParsingData?.files ?? [];
+
+  /**
+   * 프리파싱 결과
+   */
+  const preParsingResult = preParsingData?.preParsingResult;
+
+  /**
+   * 발주서 엑셀파일 파싱 상태
+   */
+  const orderExcefilesParsingData =
+    preParsingData?.parsingData?.data.parsing_status;
 
   /**
    * 발주등록 최종 확인 모달 내용
@@ -125,18 +153,41 @@ function PageBody() {
 
   return (
     <>
-      {/* 발주서 헤더 설정 모달 */}
       <AddOrderColumnModal
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
       />
 
-      {/* 단건 추가 모달 */}
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
-      {/* 재등록 모달 */}
+      {isSuccess && (
+        <OrderCreateBlockModal
+          visible={preparsingModalVisible}
+          onCancel={closePreparsingModal}
+          onOk={closePreparsingModal}
+        />
+      )}
 
-      {/* 발주등록 확인 모달 */}
+      <OrderParsingProcessPresentModal
+        visible={orderParsingResultModalVisible}
+        title={t('title.order is problem')}
+        description={[
+          t('description.there are orders to modify'),
+          t('description.please check error and reload'),
+        ]}
+        onCancel={closeParsingResultModal}
+        onOk={() => {
+          ready({
+            ...(preParsingData?.parsingData as ResponseCreateOrderItemExcelParsing),
+          });
+          closeParsingResultModal();
+        }}
+        successCount={Number(orderExcefilesParsingData?.success_count) ?? 0}
+        failCount={Number(orderExcefilesParsingData?.fail_count) ?? 0}
+        messages={orderExcefilesParsingData?.error_messages ?? []}
+        size="small"
+      />
+
       <ConfirmOrderModal
         title={t('title.really order')}
         description={[
@@ -171,7 +222,7 @@ function PageBody() {
                     accept=".csv, .xls, .xlsx"
                     multiple
                     beforeUpload={(_, list) => {
-                      createPreParsingMutation.mutate({
+                      mutate({
                         files: list,
                         rt_store_id: store.selected?.id,
                         request_date: moment(cart.selectedDate).format(

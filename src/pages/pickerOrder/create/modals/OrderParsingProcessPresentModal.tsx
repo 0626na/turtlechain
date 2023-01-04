@@ -83,7 +83,7 @@ function OrderParsingProcessPresentModal({
             {
               <Tooltip
                 title={t(
-                  'missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order',
+                  'description.missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order',
                 )}
                 trigger="click"
               >
@@ -153,24 +153,5 @@ function OrderParsingProcessPresentModal({
     </TurtleConfirmModal>
   );
 }
-
-const modalMask = css`
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 5;
-  background: rgba(0, 0, 0, 0.45);
-`;
-
-const container = css({
-  backgroundColor: '#ffffff',
-  width: 400,
-  heigth: 479,
-  borderRadius: 12,
-  boxShadow: '0px 8px 28px rgba(34,44,56,0.28)',
-});
 
 export default OrderParsingProcessPresentModal;

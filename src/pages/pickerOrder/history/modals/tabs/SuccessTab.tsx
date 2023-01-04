@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import orderAPI, { CreatingOrdersItem, OrderHistoryItem } from '@apis/orderAPI';
+import React, { useMemo, useState } from 'react';
+import orderAPI, { OrderHistoryItem } from '@apis/orderAPI';
 import {
   MemoIcon,
   TurtleSearchInput,
@@ -9,10 +9,10 @@ import { Table, TabPaneProps, Tabs } from 'antd';
 import OrderMemoModal from '@components/combine/modal/OrderMemoModal';
 import useOrderCart from '@hooks/useOrderCart';
 import useModal from '@hooks/useModal';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { message } from '@utils/message';
 import { t } from 'i18next';
-import { phoneMasking } from '@utils/phone';
+
 import { phonePattern } from '@utils/pattern';
 
 interface Props extends TabPaneProps {

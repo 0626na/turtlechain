@@ -7,6 +7,7 @@ import TurtleTablePhoneNumberInput from '@components/element/input/TurtleTablePh
 import { css } from '@emotion/react';
 import useOrderCart from '@hooks/useOrderCart';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
+import { t } from 'i18next';
 import { useMemo, useState } from 'react';
 import { category, options } from './SucceessTab';
 
@@ -41,7 +42,12 @@ function FailTab({ loading, ...props }: Props) {
   }, [cart.failList, searchQuery]);
 
   const PhoneNumberInput = () => {
-    return <TurtleTablePhoneNumberInput />;
+    return (
+      <TurtleTablePhoneNumberInput
+        placeholder={t('table.mobile')}
+        maxLength={13}
+      />
+    );
   };
 
   return (
@@ -76,7 +82,9 @@ function FailTab({ loading, ...props }: Props) {
 
                 <Col>
                   <TurtleSearchInput
-                    placeholder="검색어를 입력하세요"
+                    placeholder={t(
+                      'placeholder.search by store name, product name, mobile',
+                    )}
                     value={searchQuery.search_string}
                     onChange={(e) =>
                       setSearchQuery({
@@ -92,50 +100,50 @@ function FailTab({ loading, ...props }: Props) {
         )}
         columns={[
           {
-            title: '거래처명',
+            title: t('table.vendorName'),
             width: 130,
             render: (_, record) => record.vendor_name,
           },
           {
-            title: '거래처 주소',
+            title: t('table.vendorAddress'),
             width: 140,
             render: (_, record) => record.vendor_address,
           },
           {
-            title: '휴대전화 번호',
+            title: t('table.mobile'),
             width: 140,
             render: (_, record) => PhoneNumberInput(),
           },
           {
-            title: '거래처 상품명',
+            title: t('table.vendorProductName'),
             width: 240,
             render: (_, record) => record.product_name,
           },
           {
-            title: '옵션',
+            title: t('table.option'),
             width: 150,
             render: (_, record) => record.product_option,
           },
           {
-            title: '분류',
+            title: t('table.type'),
             width: 80,
             render: (_, record) =>
               category.find((item) => item.value === record.order_type)?.name,
           },
           {
-            title: '요청 수량',
+            title: t('table.count'),
             width: 120,
             align: 'right',
             render: (_, record) => record.product_count,
           },
           {
-            title: '가격',
+            title: t('table.price'),
             width: 120,
             align: 'right',
             render: (_, record) => record.product_price.toLocaleString(),
           },
           {
-            title: '메모',
+            title: t('table.memo'),
             width: 100,
           },
         ]}
