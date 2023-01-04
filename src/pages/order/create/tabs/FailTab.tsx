@@ -96,7 +96,9 @@ function FailTab({ loading, ...props }: Props) {
         placeholder={t('table.mobile')}
         maxLength={11}
         value={
-          cart.failList[0].orders.find((order) => order.order_id === id)?.mobile
+          cart.failList[0].orders.find(
+            (order) => order.order_id === record.order_id,
+          )?.mobile
         }
         onInput={(e) => {
           e.currentTarget.value = e.currentTarget.value.replace(
@@ -113,8 +115,9 @@ function FailTab({ loading, ...props }: Props) {
         }}
         onBlur={(e) => {
           if (
-            cart.failList[0].orders.find((order) => order.order_id === id)
-              ?.mobile.length !== 11
+            cart.failList[0].orders.find(
+              (order) => order.order_id === record.order_id,
+            )?.mobile.length !== 11
           )
             inputMobileToFailList('', record);
         }}
@@ -138,9 +141,9 @@ function FailTab({ loading, ...props }: Props) {
         onCancel={() => {
           inputMobileToFailList(
             '',
-            cart.failList[0].orders.find(
+            cart.failList[0].orders.filter(
               (order) => Number(order?.order_id) === selectRowID,
-            ),
+            )[0],
           );
           closeFailToSuccessModal();
         }}
@@ -206,8 +209,7 @@ function FailTab({ loading, ...props }: Props) {
                     Number(order.order_id) !== Number(record.order_id),
                 );
 
-                if (firstTurnItem.length === 0)
-                  return PhoneNumberInput(Number(record.order_id));
+                if (firstTurnItem.length === 0) return PhoneNumberInput(record);
 
                 return null;
               },
