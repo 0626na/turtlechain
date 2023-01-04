@@ -1,3 +1,4 @@
+import { StoreOrder } from '@apis/orderAPI';
 import {
   TurtleSearchInput,
   TurtleSearchSelect,
@@ -23,19 +24,12 @@ function FailTab({ loading, ...props }: Props) {
   });
   const filterdList = useMemo(() => {
     if (cart.failList.length !== 0) {
-      if (searchQuery.type === 'vendor_name')
-        return cart.failList[0].orders.filter((item) =>
-          item.vendor_name.includes(searchQuery.search_string),
-        );
-      if (searchQuery.type === 'vendor_address')
-        return cart.failList[0].orders.filter((order) =>
-          order.vendor_address.includes(searchQuery.search_string),
-        );
-
-      if (searchQuery.type === 'mobile')
-        return cart.failList[0].orders.filter((order) =>
+      return cart.failList[0].orders.filter(
+        (order) =>
+          order.vendor_name.includes(searchQuery.search_string) ||
+          order.product_name.includes(searchQuery.search_string) ||
           order.mobile.includes(searchQuery.search_string),
-        );
+      );
     }
 
     return [];
@@ -66,35 +60,18 @@ function FailTab({ loading, ...props }: Props) {
           <TurtleTableTitle
             totalCount={cart.failList.length ?? 0}
             rightContent={
-              <Row>
-                <Col css={css({ marginRight: 6 })}>
-                  <TurtleSearchSelect
-                    value={searchQuery.type}
-                    onChange={(value) => {
-                      setSearchQuery({
-                        ...searchQuery,
-                        type: value,
-                      });
-                    }}
-                    items={options}
-                  />
-                </Col>
-
-                <Col>
-                  <TurtleSearchInput
-                    placeholder={t(
-                      'placeholder.search by store name, product name, mobile',
-                    )}
-                    value={searchQuery.search_string}
-                    onChange={(e) =>
-                      setSearchQuery({
-                        ...searchQuery,
-                        search_string: e.currentTarget.value,
-                      })
-                    }
-                  />
-                </Col>
-              </Row>
+              <TurtleSearchInput
+                placeholder={t(
+                  'placeholder.search by store name, product name, mobile',
+                )}
+                value={searchQuery.search_string}
+                onChange={(e) =>
+                  setSearchQuery({
+                    ...searchQuery,
+                    search_string: e.currentTarget.value,
+                  })
+                }
+              />
             }
           />
         )}
@@ -112,7 +89,22 @@ function FailTab({ loading, ...props }: Props) {
           {
             title: t('table.mobile'),
             width: 140,
-            render: (_, record) => PhoneNumberInput(),
+            render: (_, record) => {
+              const vendorNameSameList: StoreOrder[] = [];
+              cart.failList[0].orders.map((order) => {
+                if (order.vendor_name === record.vendor_name)
+                  vendorNameSameList.push(order);
+              });
+              const firstTurnItem = vendorNameSameList.filter(
+                (order) =>
+                  Number(order?.order_id) < Number(record?.order_id) &&
+                  Number(order.order_id) !== Number(record.order_id),
+              );
+
+              if (firstTurnItem.length === 0) return PhoneNumberInput();
+
+              return null;
+            },
           },
           {
             title: t('table.vendorProductName'),
