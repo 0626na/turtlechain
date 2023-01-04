@@ -27,24 +27,8 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const options = [
-    {
-      name: t('button.storeName'),
-      value: 'name',
-    },
-    {
-      name: t('button.vendorName'),
-      value: 'vendor_name',
-    },
-    {
-      name: t('button.vendorAddress'),
-      value: 'address',
-    },
-  ];
-
   const { cart, setCart, failListOutput } = useOrderCart();
   const [selectRowID, setSelectRowID] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState({
     type: 'name',
     search_string: '',
