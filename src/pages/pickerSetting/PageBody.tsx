@@ -34,18 +34,18 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
-  const { data: storeList, isLoading } = useQuery(
-    ['getStoreList'],
-    pickerAPI.getList,
-    {
-      enabled: !!user,
-    },
-  );
+  const {
+    data: storeList,
+    isLoading,
+    refetch,
+  } = useQuery(['getStoreList'], pickerAPI.getList, {
+    enabled: !!user,
+  });
 
   const removeStoreMutation = useMutation(pickerAPI.remove, {
     onSuccess: () => {
       message.success(t('message.delete store'), 3);
-      getStoreListQuery.refetch();
+      refetch();
     },
   });
 
