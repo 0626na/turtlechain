@@ -62,7 +62,7 @@ function PageBody() {
   const createMutation = useMutation(warehousingAPI.create, {
     onSuccess: () => {
       reset();
-      message.success(t('successfully saved todays stock'));
+      message.success(t('message.successfully saved todays stock'));
       navigate('/warehousing/history');
     },
   });
@@ -80,11 +80,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={loading}
@@ -111,9 +111,11 @@ function PageBody() {
       <TurtleConfirmModal
         title={t('do yo really want me to sign up?')}
         description={[
-          t('products remaining in the failure are excluded from registration'),
+          t(
+            'description.products remaining in the failure are excluded from registration',
+          ),
         ]}
-        okText={t('create registration')}
+        okText={t('button.register')}
         loading={loading}
         visible={confirmModalVisible}
         onCancel={closeConfirmModal}
@@ -142,8 +144,8 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="입고서 미리보기"
-        subTitle="정확한 입고등록을 위해서는 거래처와 상품을 최신화 시켜주세요. 상품가격은 필수이니 잊지말고 입력해주세요!"
+        title={t('title.preview of todays stock products')}
+        // subTitle="정확한 입고등록을 위해서는 거래처와 상품을 최신화 시켜주세요. 상품가격은 필수이니 잊지말고 입력해주세요!"
         buttons={[
           <TertiaryButton
             text={t('button.integrate inventory program')}
@@ -153,7 +155,9 @@ function PageBody() {
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>{t('button.add stock')}</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add warehousing')}
+              </SecondaryIconButton>
             }
             items={[
               {
@@ -187,12 +191,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${cart.successList.length})`}
+            tab={`${t('title.success')}(${cart.successList.length})`}
             loading={loading}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${cart.failList.length})`}
+            tab={`${t('title.fail')}(${cart.failList.length})`}
             loading={loading}
           />
         </TurtleTabs>
@@ -202,7 +206,7 @@ function PageBody() {
         <Row justify="end" align="middle">
           <Col>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('total stocked quantity')}
+              {t('description.total stocked quantity')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalCount.toLocaleString()}
@@ -211,7 +215,7 @@ function PageBody() {
           <Col style={{ marginLeft: 8, marginRight: 8 }}>/</Col>
           <Col style={{ marginRight: 24 }}>
             <span style={{ color: ' #6B6D73', marginRight: 8 }}>
-              {t('table.totalAmount')}
+              {t('description.total stocked amount')}
             </span>
             <span style={{ fontWeight: 700 }}>
               {totalAmount.toLocaleString()}
@@ -222,7 +226,7 @@ function PageBody() {
               onClick={openConfirmModal}
               disabled={cart.successList.length === 0}
             >
-              {t('register width warehousing')}
+              {t('button.register warehousing sheet')}
             </PrimaryButton>
           </Col>
         </Row>

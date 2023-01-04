@@ -59,7 +59,9 @@ function PageBody() {
       ready(data);
       closeInventoryModal();
       message.warn(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
+        t('message.vendor duplicated count', {
+          count: data.data.count.duplicated_count,
+        }),
       );
     },
   });
@@ -68,9 +70,9 @@ function PageBody() {
   const excelMutation = useMutation(vendorAPI.excel, {
     onSuccess: (data) => {
       ready(data);
-      message.warn(
-        `이미 등록된 거래처가 ${data.data.count.duplicated_count}건 있습니다.`,
-      );
+      t('message.vendor duplicated count', {
+        count: data.data.count.duplicated_count,
+      });
     },
   });
 
@@ -78,7 +80,10 @@ function PageBody() {
   const vendorCreateMutation = useMutation(vendorAPI.create, {
     onSuccess: (data) => {
       message.success(
-        `성공적으로 등록하였습니다. 성공 : ${data.data.success_count} 중복된 거래처 : ${data.data.fail_count}`,
+        t('message.success register vendor', {
+          success: data.data.success_count,
+          duplicated: data.data.fail_count,
+        }),
       );
       closeConfirmModal();
       navigate('/vendor/history');
@@ -106,11 +111,11 @@ function PageBody() {
       <RangeDateModal
         inThreeMonth
         visible={inventoryModalVisible}
-        title={t('inventory program integration')}
+        title={t('button.integrate inventory program')}
         description={[
-          t('please select which dates you wish to integrate'),
+          t('description.please select which dates you wish to integrate'),
           t(
-            'it may take up to 1 minute, depending on how much you wish to integrate',
+            'description.it may take up to 1 minute, depending on how much you wish to integrate',
           ),
         ]}
         loading={inventoryMutation.isLoading}
@@ -140,7 +145,7 @@ function PageBody() {
 
       <TurtleConfirmModal
         visible={confirmModalVisivle}
-        okText="등록"
+        okText={t('button.register')}
         onOk={() => {
           vendorCreateMutation.mutate([
             ...cart.successList.map((vendor) =>
@@ -160,8 +165,8 @@ function PageBody() {
         onCancel={() => {
           closeConfirmModal();
         }}
-        title={'정말 등록할까요?'}
-        description={['보류와 실패에 남아있는 거래처는 등록에서 제외됩니다.']}
+        title={t('title.really register')}
+        description={[t('description.register exclude fail')]}
       />
 
       {/*
@@ -170,10 +175,10 @@ function PageBody() {
       <AlertBar />
 
       <PageHeader
-        title={t('add vendor')}
+        title={t('title.create vendor')}
         button={
           <HistoryButton
-            text={t('vendor list')}
+            text={t('title.vendor list')}
             onClick={() => {
               navigate('/vendor/history');
             }}
@@ -182,11 +187,11 @@ function PageBody() {
       />
 
       <PageTitle
-        title="거래처등록 미리보기"
-        subTitle="거래처명과 계좌번호만 있다면 쉽게 대량등록(xlsx)을 할 수 있어요! 보류에서 계좌정보 선택은 유의해주세요."
+        title={t('title.preview of new vendors')}
+        //subTitle="거래처명과 계좌번호만 있다면 쉽게 대량등록(xlsx)을 할 수 있어요! 보류에서 계좌정보 선택은 유의해주세요."
         buttons={[
           <TertiaryButton
-            text={t('inventory program integration')}
+            text={t('button.integrate inventory program')}
             onClick={() => {
               openInventoryModal();
             }}
@@ -217,7 +222,9 @@ function PageBody() {
               },
             ]}
             triggerButton={
-              <SecondaryIconButton>{t('create vendor')}</SecondaryIconButton>
+              <SecondaryIconButton>
+                {t('button.add vendor')}
+              </SecondaryIconButton>
             }
           />,
         ]}
@@ -225,17 +232,23 @@ function PageBody() {
 
       <PageContent>
         <TurtleTabs>
-          <Tabs.TabPane tab={`${t('success')}(${successCount})`} key="success">
+          <Tabs.TabPane
+            tab={`${t('title.success')}(${successCount})`}
+            key="success"
+          >
             <SuccessTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${t('pending')}(${pendingCount})`} key="pending">
+          <Tabs.TabPane
+            tab={`${t('title.pending')}(${pendingCount})`}
+            key="pending"
+          >
             <PendingTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${t('fail')}(${failCount})`} key="fail">
+          <Tabs.TabPane tab={`${t('title.fail')}(${failCount})`} key="fail">
             <FailTab
               isLoading={inventoryMutation.isLoading || excelMutation.isLoading}
             />

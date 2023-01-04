@@ -3,7 +3,7 @@ import { PhoneAuthForm } from '@components/combine';
 import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 import { css } from '@emotion/react';
 import { emailPattern } from '@utils/pattern';
-import { Button, Form, Input, Row } from 'antd';
+import { Form, Input, Row } from 'antd';
 
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
@@ -20,6 +20,7 @@ function UserStep({ visible, onClickNext }: Props) {
   const form = Form.useFormInstance();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
   const [searchParams] = useSearchParams();
+
   // 아이디 중복체크 요청
   const dupCheckMutation = useMutation(userAPI.dupCheck, {
     onSuccess: (data) => {
@@ -41,11 +42,11 @@ function UserStep({ visible, onClickNext }: Props) {
   // 아이디 유효성 검사
   const idValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('아이디를 입력해주세요.'));
+      return Promise.reject(new Error(t('message.enterId')));
     }
 
     if (!checkDuplicated && value) {
-      return Promise.reject(new Error('아이디 중복확인을 해주세요'));
+      return Promise.reject(new Error(t('message.check id dup')));
     }
 
     return Promise.resolve();
@@ -54,11 +55,11 @@ function UserStep({ visible, onClickNext }: Props) {
   //이메일 유효성 검사
   const emailValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error('이메일을 입력해주세요.'));
+      return Promise.reject(new Error(t('message.please input your email')));
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error('유효하지 않은 이메일 입니다.'));
+      return Promise.reject(new Error(t('message.this email is not valid')));
     }
 
     return Promise.resolve();
@@ -67,11 +68,11 @@ function UserStep({ visible, onClickNext }: Props) {
   // 비밀번호 확인 유효성 검사
   const passwordValidation = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('비밀번호 입력해주세요.'));
+      return Promise.reject(new Error(t('message.enterPassword')));
     }
 
     if (value && value !== form.getFieldValue('user_password')) {
-      return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
+      return Promise.reject(new Error(t('message.not match password')));
     }
 
     return Promise.resolve();
@@ -82,7 +83,7 @@ function UserStep({ visible, onClickNext }: Props) {
       <Form.Item
         rules={[{ required: true }]}
         name="user_name"
-        label={t('user name')}
+        label={t('table.user name')}
       >
         <Input css={input} placeholder="ex. 김거북" />
       </Form.Item>
@@ -91,7 +92,7 @@ function UserStep({ visible, onClickNext }: Props) {
         required
         rules={[{ validator: emailValidation }]}
         name="user_email"
-        label={t('email')}
+        label={t('table.email')}
       >
         <Input css={input} placeholder="ex. gbkim@gmail.com" />
       </Form.Item>
@@ -116,7 +117,7 @@ function UserStep({ visible, onClickNext }: Props) {
           <Form.Item
             rules={[{ validator: idValidation }]}
             required
-            label={t('id')}
+            label={t('table.id')}
             name="user_login_id"
           >
             <Input
@@ -149,7 +150,7 @@ function UserStep({ visible, onClickNext }: Props) {
       <Form.Item
         rules={[{ required: true }]}
         name="user_password"
-        label={t('password')}
+        label={t('table.password')}
       >
         <Input.Password
           css={input}
@@ -161,7 +162,7 @@ function UserStep({ visible, onClickNext }: Props) {
         rules={[{ validator: passwordValidation }]}
         required
         name="confirm_password"
-        label={t('confirm password')}
+        label={t('table.confirm password')}
         dependencies={['user_password']}
       >
         <Input.Password
@@ -189,7 +190,7 @@ function UserStep({ visible, onClickNext }: Props) {
                 onClickNext();
               }}
             >
-              {t('next')}
+              {t('button.next')}
             </SpecialButton>
           </Row>
         )}

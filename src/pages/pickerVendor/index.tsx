@@ -9,7 +9,9 @@ function PickerVendor() {
   return (
     <>
       <Helmet
-        title={`${t('turtleChain')} - ${t('picker')}- ${t('vendor.history')}`}
+        title={`${t('turtleChain')} - ${t('title.picker')}- ${t(
+          'vendor.history',
+        )}`}
       />
       <PageHeader title="거래처 목록" />
       <PageBody />

@@ -10,8 +10,8 @@ import {
 } from '@components/element';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
-import { PageContent, PageTitle } from '@layout/page';
-import { Pagination, Popconfirm, Row, Switch, Table } from 'antd';
+import { PageContent } from '@layout/page';
+import { Pagination, Row, Switch, Table } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';
@@ -20,7 +20,6 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
-import { phoneMaskingPattern, phonePattern } from '@utils/pattern';
 import { phoneMasking } from '@utils/phone';
 
 function PageBody() {
@@ -118,8 +117,8 @@ function PageBody() {
         }}
         title={t('table.memo')}
         description={[
-          t('write freely anything thats important about this vendor'),
-          t('use this memo as your personal note'),
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
         placeholder={t('placeholder.ex, double check its invoices!')}
       />
@@ -133,7 +132,7 @@ function PageBody() {
           vendorUpdateMutation.isLoading ? () => {} : closeupdateVendorNameModal
         }
         defaultValue={selectedRow?.vendor_name}
-        okText={t('modify')}
+        okText={t('button.check')}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
             id: selectedRow?.id as number,
@@ -141,10 +140,10 @@ function PageBody() {
           });
           closeupdateVendorNameModal();
         }}
-        title={t('modifying the account name')}
+        title={t('title.update vendor name')}
         description={[
-          t('modify the name of the selected account'),
-          t('please enter the desired account name'),
+          t('description.update select vendor'),
+          t('description.input vendor name'),
         ]}
       />
       {/**
@@ -168,9 +167,9 @@ function PageBody() {
        * 부가세 바로전달 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 변경할까요?"
-        description={['변경 후에는 변경된 방식으로 적용 됩니다.']}
-        okText="변경"
+        title={t('title.really update')}
+        description={[t('description.apply update info')]}
+        okText={t('button.change')}
         visible={vatIncludedModalVisible}
         loading={vendorUpdateMutation.isLoading}
         onCancel={
@@ -191,7 +190,6 @@ function PageBody() {
         visible={updateVendorInfoModalVisible}
         closeModal={closeUpdateVendorInfoModal}
       />
-      {/* <PageTitle title="거래처 리스트" /> */}
       <PageContent>
         <Table
           size="small"
@@ -266,8 +264,8 @@ function PageBody() {
               title: (
                 <TextWithTooltip
                   tooltipContent={[
-                    '당일결제 시, 부가세도 그 날에 함께 ',
-                    '전달되어야 하는 거래처를 체크해주세요. ',
+                    t('description.payment today'),
+                    t('description.check vendor'),
                   ]}
                 >
                   {t('table.vatIncluded')}

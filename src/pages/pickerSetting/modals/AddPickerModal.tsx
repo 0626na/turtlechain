@@ -129,8 +129,8 @@ function AddPickerModal({ visible, closeModal }: Props) {
         <Row css={{ marginTop: 40 }}>
           <Popconfirm
             title={t('message.add it')}
-            okText={t('yes')}
-            cancelText={t('no')}
+            okText={t('button.yes')}
+            cancelText={t('button.no')}
             onConfirm={() => {
               form.validateFields().then((value) => {
                 mutate({

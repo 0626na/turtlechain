@@ -179,7 +179,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: t('request info modify'),
+                      label: t('button.request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: (e) => {
                         setSelectedRow(record);

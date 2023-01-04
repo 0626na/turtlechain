@@ -39,11 +39,13 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleAccountValidation = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error(t('please input account number')));
+      return Promise.reject(
+        new Error(t('message.please input account number')),
+      );
     }
 
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error(t('please input number only')));
+      return Promise.reject(new Error(t('message.please input number only')));
     }
 
     return Promise.resolve();
@@ -51,7 +53,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   const handleNumberValidation = (_: unknown, value: string) => {
     if (!numPattern.test(value)) {
-      return Promise.reject(new Error(t('please input number only')));
+      return Promise.reject(new Error(t('message.please input number only')));
     }
 
     return Promise.resolve();
@@ -64,7 +66,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('store.create')}
+      title={t('description.create store')}
       visible={visible}
       onClose={closeModal}
     >
@@ -119,7 +121,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
         <Form.Item
           name="store_url"
           rules={[{ required: true }]}
-          label={t('store.url')}
+          label={t('table.retailerStoreURL')}
         >
           <TurtleFormInput placeholder={t('placeholder.input store url')} />
         </Form.Item>
@@ -281,7 +283,7 @@ function StoreCreateModal({ visible, closeModal }: Props) {
                   !getFieldValue('inventory_type')
                 }
               >
-                추가하기
+                {t('button.add')}
               </SpecialButton>
             </Row>
           )}
