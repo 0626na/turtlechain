@@ -89,9 +89,9 @@ function PageBody() {
           sheetId={sheetId}
         />
       )}
-      <PageHeader title={`${t('orderDetail')}`} />
+      <PageHeader title={`${t('title.orderDetail')}`} />
       <PageTitle
-        title={`${t('orderStatus')}`}
+        title={`${t('title.orderStatus')}`}
         // buttons={[
         //   <TertiaryButton
         //     text="발주서 다운"
@@ -108,7 +108,7 @@ function PageBody() {
           value={[
             {
               color: 'cyan',
-              title: t('success'),
+              title: t('title.success'),
               count:
                 orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_store_count,
@@ -123,7 +123,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: t('fail'),
+              title: t('title.fail'),
               count:
                 orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_fail_count,

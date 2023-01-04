@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
 import paypleAPI from '@apis/paypleAPI';
 import userAPI from '@apis/userAPI';
@@ -118,14 +118,17 @@ function UserTab() {
           //구독신청 및 재구독시
           if (res.PCD_PAY_WORK === 'PAY')
             message.success(
-              t('your subscription is complete. you can use the payment'),
+              t(
+                'description.your subscription is complete. you can use the payment',
+              ),
               3,
             );
           //결제수단 변경시
           if (res.PCD_PAY_WORK === 'AUTH')
-            message.success(t('card change is complete'), 3);
+            message.success(t('message.card change is complete'), 3);
 
           navigate('/setting?tab=user');
+          getSubscriptionCheckQuery.refetch();
         },
       };
 
@@ -168,7 +171,7 @@ function UserTab() {
     }
 
     if (!emailPattern.test(value)) {
-      return Promise.reject(new Error(t('this email is not valid')));
+      return Promise.reject(new Error(t('message.this email is not valid')));
     }
 
     return Promise.resolve();
@@ -177,7 +180,7 @@ function UserTab() {
   //휴대전화 번호 유효성 검사
   const mobileValidator = (_: unknown, value: string) => {
     if (!value) {
-      return Promise.reject(new Error(t('please input phone number')));
+      return Promise.reject(new Error(t('placeholder.input mobile number')));
     }
 
     if (!phonePattern.test(value)) {
@@ -218,7 +221,7 @@ function UserTab() {
       />
 
       <UserCard
-        title={t('basic information')}
+        title={t('title.basic information')}
         icon={<TurtleIcon name="user" />}
       >
         <Form
@@ -244,7 +247,7 @@ function UserTab() {
             <TurtleFormInput disabled />
           </Form.Item>
           <Form.Item
-            label={t('email')}
+            label={t('table.email')}
             name="email"
             rules={[{ validator: emailValidator }]}
           >
@@ -283,7 +286,7 @@ function UserTab() {
               <Col css={marginleft}>
                 <AnswerButton
                   type="YES"
-                  text={t('button.save')}
+                  text={t('button.saving')}
                   htmlType="submit"
                 />
               </Col>
@@ -296,7 +299,7 @@ function UserTab() {
         {!subscriptionData.is_subscribed ? (
           //구독 안한 상태
           <UserCard
-            title={t('subscription and payment')}
+            title={t('title.subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -361,7 +364,7 @@ function UserTab() {
                         <span
                           css={css({ marginLeft: 16, color: theme.grey500 })}
                         >
-                          {t('unsubscription complete')}
+                          {t('description.unsubscription complete')}
                         </span>
                       </div>
                     )}
@@ -381,7 +384,9 @@ function UserTab() {
                       })}
                     >
                       <TurtleIcon name="thunder" />
-                      <span>{t('the first months fee is 100won')}</span>
+                      <span>
+                        {t('description.the first months fee is 100won')}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -403,7 +408,7 @@ function UserTab() {
         ) : (
           //구독한 상태
           <UserCard
-            title={t('subscription and payment')}
+            title={t('title.subscription and payment')}
             icon={<TurtleIcon name="membership" />}
           >
             <Form
@@ -420,7 +425,7 @@ function UserTab() {
                       fontSize: 15,
                     }}
                   >
-                    {t('subscription paid plan')}
+                    {t('title.subscription paid plan')}
                   </span>
                 }
               >
@@ -445,7 +450,7 @@ function UserTab() {
                     css={css({ color: theme.grey500 })}
                     onClick={removeSubscriptionModalOpen}
                   >
-                    {t('subscription cancel')}
+                    {t('button.subscription cancel')}
                   </Button>
                 </div>
                 <div
@@ -458,7 +463,7 @@ function UserTab() {
                 >
                   <TurtleIcon name="creditcard" />{' '}
                   <span css={css({ marginLeft: 5 })}>
-                    {t('creditInfo', {
+                    {t('description.creditInfo', {
                       cardName: subscriptionData?.pay_name,
                       cardNumber: subscriptionData?.pay_number,
                     })}

@@ -13,6 +13,7 @@ import { css } from '@emotion/react';
 
 import Completed from '../Completed';
 import { useSearchParams } from 'react-router-dom';
+import { t } from 'i18next';
 
 function Pagebody() {
   const [form] = Form.useForm();
@@ -56,7 +57,9 @@ function Pagebody() {
           </div>
 
           <div css={header}>
-            {currentStep === 0 ? '계정정보 입력' : '사업자정보 입력'}
+            {currentStep === 0
+              ? t('title.input user info')
+              : t('title.input company info')}
           </div>
 
           <div css={content}>

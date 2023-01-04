@@ -38,6 +38,7 @@ function PageBody() {
     cart,
     ready,
     countOrderStores,
+    countSucessOrdersCount,
     countFailList,
     countOrdersForType,
     calculateTotalPrice,
@@ -159,20 +160,22 @@ function PageBody() {
    */
   const confirmModalItems = [
     {
-      title: t('orderDate'),
+      title: t('title.orderDate'),
       content: cart.selectedDate.format('YYYY-MM-DD'),
     },
     {
-      title: t('orderStores'),
-      content: t('count', { count: countOrderStores() }),
+      title: t('title.orderStores'),
+      content: t('description.count', { count: countOrderStores() }),
     },
     {
-      title: t('totalOrderCountInConfirm'),
-      content: t('count', { count: countOrdersForType().total }),
+      title: t('title.totalOrderCountInConfirm'),
+      content: t('description.count', { count: countOrdersForType().total }),
     },
     {
-      title: t('totalOrderPriceInComfirm'),
-      content: t('price', { price: calculateTotalPrice().toLocaleString() }),
+      title: t('title.totalOrderPriceInConfirm'),
+      content: `${calculateTotalPrice().toLocaleString()} ${t(
+        'description.won',
+      )}`,
     },
   ];
 
@@ -185,10 +188,10 @@ function PageBody() {
       <AddNewOrderModal visible={newAddModalVisible} close={closeNewAddModal} />
 
       <ConfirmOrderModal
-        title={t('orderConfirm')}
+        title={t('title.really order')}
         description={[
-          t('failed orders are except'),
-          t('please check order info again'),
+          t('description.failed orders are except'),
+          t('description.please check order info again'),
         ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
@@ -217,10 +220,10 @@ function PageBody() {
       )}
       <OrderParsingProcessPresentModal
         visible={orderParsingProcessModalVisible}
-        title={t('order is problem')}
+        title={t('title.order is problem')}
         description={[
-          t('there are orders to modify'),
-          t('please check error and reload'),
+          t('description.there are orders to modify'),
+          t('description.please check error and reload'),
         ]}
         onCancel={closeParsingProcessModal}
         onOk={() => {
@@ -237,7 +240,7 @@ function PageBody() {
       />
 
       <PageTitle
-        title={t('order.preview')}
+        title={t('title.orderPreview')}
         buttons={[
           <Tooltip
             placement="bottom"
@@ -263,10 +266,12 @@ function PageBody() {
                 fontWeight: 500,
               })}
             >
-              {`${t('complete orders today')} ${todayOrdersCount.complete}`}{' '}
+              {`${t('description.complete orders today')} ${
+                todayOrdersCount.complete
+              }`}{' '}
               <span css={css({ color: theme.grey400 })}>
                 {`/ 
-              ${t('count', { count: todayOrdersCount.total })} | `}
+              ${t('description.count', { count: todayOrdersCount.total })} | `}
               </span>
             </TurtleText>
           </Tooltip>,
@@ -297,12 +302,15 @@ function PageBody() {
                 fontWeight: 500,
               })}
             >
-              {`${t('incomplete orders today')} ${
+              {`${t('description.incomplete orders today')} ${
                 todayOrdersCount.total - todayOrdersCount.complete
               }`}{' '}
-              <span css={css({ color: theme.grey400 })}>{`/ ${t('count', {
-                count: todayOrdersCount.total,
-              })}`}</span>
+              <span css={css({ color: theme.grey400 })}>{`/ ${t(
+                'description.count',
+                {
+                  count: todayOrdersCount.total,
+                },
+              )}`}</span>
             </TurtleText>
           </Tooltip>,
           <TertiaryButton
@@ -355,12 +363,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`${t('success')}(${countOrderStores()})`}
+            tab={`${t('title.success')}(${countSucessOrdersCount()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`${t('fail')}(${countFailList()})`}
+            tab={`${t('title.fail')}(${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -378,27 +386,31 @@ function PageBody() {
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
               <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {t('orderTotalCount')}
+                {t('description.orderTotalCount')}
               </span>
               {'   '}
-              {` ${t('count', { count: countOrdersForType().total })}`}
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                {`(${t('order.types.order')} ${countOrdersForType().order}, ${t(
-                  'order.types.exchange',
-                )} ${countOrdersForType().exchange}, ${t(
-                  'order.types.takeback',
-                )} ${countOrdersForType().takeback}, ${t(
-                  'order.types.reserve',
-                )} ${countOrdersForType().reserve}, ${t(
-                  'order.types.sample',
-                )} ${countOrdersForType().sample}, ${t('order.types.pickup')} ${
-                  countOrdersForType().pickup
-                }, ${t('order.types.extra')} ${countOrdersForType().extra})
-              / ${t('orderTotalPrice')}  `}
-              </span>
-              {`${t('price', {
-                price: calculateTotalPrice().toLocaleString(),
+              {` ${t('description.count', {
+                count: countOrdersForType().total,
               })}`}
+              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+                {`(${t('type.orderTypes.order')} ${
+                  countOrdersForType().order
+                }, ${t('type.orderTypes.exchange')} ${
+                  countOrdersForType().exchange
+                }, ${t('type.orderTypes.takeback')} ${
+                  countOrdersForType().takeback
+                }, ${t('type.orderTypes.reserve')} ${
+                  countOrdersForType().reserve
+                }, ${t('type.orderTypes.sample')} ${
+                  countOrdersForType().sample
+                }, ${t('type.orderTypes.pickup')} ${
+                  countOrdersForType().pickup
+                }, ${t('type.orderTypes.extra')} ${countOrdersForType().extra})
+              / ${t('description.orderTotalPrice')}  `}
+              </span>
+              {`${calculateTotalPrice().toLocaleString()} ${t(
+                'description.won',
+              )}`}
             </TurtleText>
           </Col>
           <Col>
@@ -408,7 +420,7 @@ function PageBody() {
                 openConfirmModal();
               }}
             >
-              {t('button.order')}
+              {t('button.do order')}
             </PrimaryButton>
           </Col>
         </Row>

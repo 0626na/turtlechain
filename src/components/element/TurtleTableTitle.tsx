@@ -37,19 +37,22 @@ function TurtleTableTitle({
     <Row justify="space-between" align="middle" style={{ marginBottom: 12 }}>
       <Col>
         <TurtleText css={container}>
-          총 <TurtleText css={count}>{totalCount}건</TurtleText>
+          {t('description.total')}{' '}
+          <TurtleText css={count}>
+            {t('description.count', { count: totalCount })}
+          </TurtleText>
         </TurtleText>
         {!!vendorCount && vendorCount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('total vendor')}{' '}
+            {t('table.totalVendorCount')}{' '}
             <TurtleText css={count}>{vendorCount}</TurtleText>
           </TurtleText>
         )}
         {!!searchAmount && searchAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('total search amount')}{' '}
+            {t('description.total search amount')}{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
             ₩
           </TurtleText>
@@ -57,38 +60,38 @@ function TurtleTableTitle({
         {!!searchCount && searchCount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            {t('search result')}{' '}
+            {t('description.search result')}{' '}
             <TurtleText css={count}>{searchCount}</TurtleText>
           </TurtleText>
         )}
         {!!totalRefundAmount && totalRefundAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 환불예정금액{' '}
+            {t('description.accumulated pending refund')}{' '}
             <TurtleText css={count}>
               {totalRefundAmount.toLocaleString()}
             </TurtleText>
-            원
+            {t('description.won')}
           </TurtleText>
         )}
         {!!totalSubstractAmount && totalSubstractAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 사용가능 금액{' '}
+            {t('description.accumulated credit')}{' '}
             <TurtleText css={count}>
               {totalSubstractAmount.toLocaleString()}
             </TurtleText>
-            원
+            {t('description.won')}
           </TurtleText>
         )}
         {!!totalUnpaidAmount && totalUnpaidAmount >= 0 && (
           <TurtleText css={container}>
             <Divider type="vertical" />
-            누적 결제요청금액{' '}
+            {t('description.accumulated amount due')}{' '}
             <TurtleText css={count}>
               {totalUnpaidAmount.toLocaleString()}
             </TurtleText>
-            원
+            {t('description.won')}
           </TurtleText>
         )}
       </Col>

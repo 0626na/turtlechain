@@ -72,7 +72,7 @@ function PageBody() {
   //메모 등록 요청
   const updateMemoMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
-      message.success('성공적으로 업데이트 되었습니다.');
+      message.success(t('message.success update'));
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
       memoModalClose();
@@ -82,7 +82,7 @@ function PageBody() {
   // 교환/반품/미송 삭제 요청
   const removeAdjustmentMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
-      message.success('성공적으로 삭제되었습니다.');
+      message.success(t('message.success delete'));
       setSearchQuery({ ...searchQuery, page: 1 });
       getAdjustmentListQuery.refetch();
       removeModalClose();
@@ -174,10 +174,10 @@ function PageBody() {
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
         placeholder={t('placeholder.ex, double check its invoices!')}
       />
@@ -185,11 +185,11 @@ function PageBody() {
        * 교환/반품/미송 삭제 모달
        */}
       <TurtleConfirmModal
-        title={t('description.really delete')}
+        title={t('title.really delete')}
         description={[
           t('description.can not go back to the past after the cancellation.'),
         ]}
-        okText="삭제"
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={removeAdjustmentMutation.isLoading}
         onCancel={removeModalClose}
@@ -201,16 +201,16 @@ function PageBody() {
         }}
       />
 
-      <PageHeader title={t('warehousing.adjustment.')} />
+      <PageHeader title={t('title.adjustment')} />
       <PageTitle
-        title="교환/반품/미송 현황"
-        subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
+        title={t('title.summary of invoice issues')}
+        // subTitle="마감처리한 교환, 반품 및 당일 등록된 미송은 결제하기에 자동으로 반영돼요. 추가 도움이 필요하면 아래 문의하기를 통해 문의주세요!"
         buttons={[
           <TurtleDropdown
             items={[
               {
                 key: '0',
-                label: t('add exchange/returns'),
+                label: t('button.add exchange/returns'),
                 icon: <TurtleIcon name="exchangeRefund" />,
                 onClick() {
                   addExchangeRefundModalOpen();
@@ -218,7 +218,7 @@ function PageBody() {
               },
               {
                 key: '1',
-                label: t('add pending delivery'),
+                label: t('button.add pending delivery'),
                 icon: <TurtleIcon name="reserve" />,
                 onClick() {
                   addReserveModalOpen();
@@ -227,7 +227,7 @@ function PageBody() {
             ]}
             triggerButton={
               <SecondaryIconButton>
-                {t('add invoice issues')}
+                {t('button.add adjustment')}
               </SecondaryIconButton>
             }
           />,
@@ -242,13 +242,13 @@ function PageBody() {
           value={[
             {
               color: 'orange',
-              title: t('warehousing.adjustment.pending'),
+              title: t('type.pending'),
               count: totalPendingCount,
               price: totalPendingPrice,
             },
             {
               color: 'cyan',
-              title: t('warehousing.adjustment.confirmed'),
+              title: t('type.finish'),
               count: totalClearingCount,
               price: totalClearingPrice,
             },
@@ -335,7 +335,7 @@ function PageBody() {
                   <Col>
                     <SearchFilter
                       placeholder={t(
-                        'placeholder.search by product name, inventory name, vendor name',
+                        'placeholder.search by vendor name, product name, vendor product name',
                       )}
                       searchQuery={searchQuery}
                       setSearchQuery={setSearchQuery}
@@ -366,9 +366,9 @@ function PageBody() {
               render: (_, { is_cleared }) => (
                 <div>
                   {is_cleared ? (
-                    <TurtleTag color="cyan">마감</TurtleTag>
+                    <TurtleTag color="cyan">{t('type.finish')}</TurtleTag>
                   ) : (
-                    <TurtleTag color="orange">대기</TurtleTag>
+                    <TurtleTag color="orange">{t('type.pending')}</TurtleTag>
                   )}
                 </div>
               ),
@@ -396,7 +396,7 @@ function PageBody() {
                   title={
                     <span>
                       {t(
-                        'Detailed history of credits can be found in the ledger',
+                        'description.detailed history of credits can be found in the ledger',
                       )}
                     </span>
                   }

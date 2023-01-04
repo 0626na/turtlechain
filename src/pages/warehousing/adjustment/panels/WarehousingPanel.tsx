@@ -214,7 +214,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
             fillExchangeTakeBack();
           }}
         >
-          {t('next')}
+          {t('button.next')}
         </PrimaryButton>
       </div>
     </Collapse.Panel>

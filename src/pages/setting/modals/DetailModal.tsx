@@ -95,7 +95,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
 
   return (
     <TurtleContentModal
-      title={t('store.info')}
+      title={t('title.store info')}
       visible={visible}
       onClose={() => {
         closeModal();
@@ -154,7 +154,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
         <Form.Item
           name="name"
           rules={[{ required: true }]}
-          label={t('store.name')}
+          label={t('table.retailerStoreName')}
         >
           <TurtleFormInput placeholder={t('placeholder.store')} />
         </Form.Item>
@@ -179,7 +179,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           <div css={flexGap}>
             <Form.Item name="bank" rules={[{ required: true }]} noStyle>
               <TurtleFormSelect
-                placeholder={t('bank')}
+                placeholder={t('table.bank')}
                 items={
                   Object.values(bankData?.data ?? []).map((bank) => ({
                     value: bank,
@@ -296,7 +296,7 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
             <TextWithTooltip
               tooltipContent={['거래처에게 보여지는 쇼핑몰명을 입력해주세요']}
             >
-              {t('table.alimtalkName')}
+              {t('table.alimtalk name')}
             </TextWithTooltip>
           }
           required={false}

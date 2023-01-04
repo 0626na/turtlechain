@@ -99,17 +99,17 @@ function PageBody() {
         }}
         title={t('table.memo')}
         description={[
-          t('write freely anything thats important about this vendor'),
-          t('use this memo as your personal note'),
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
       />
       {/**
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title={t('do you really want me to delete it?')}
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="삭제"
+        title={t(t('title.really delete'))}
+        description={[t('description.cannot reset')]}
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={loading}
         onCancel={closeRemoveModal}
@@ -136,7 +136,7 @@ function PageBody() {
               rightContent={
                 <SearchFilter
                   placeholder={t(
-                    'placeholder.search by product name, inventory name, vendor name',
+                    'placeholder.search by vendor name, product name, vendor product name',
                   )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}

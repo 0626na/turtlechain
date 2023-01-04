@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clearingAPI, { ClearingInfo } from '@apis/clearingAPI';
 import userAPI from '@apis/userAPI';
 import {
@@ -21,6 +20,7 @@ import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import useUser from '@hooks/useUser';
 import { message } from '@utils/message';
+
 import {
   Col,
   Collapse,
@@ -30,8 +30,11 @@ import {
   Typography,
 } from 'antd';
 import { t } from 'i18next';
+
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+
 import DetailModal from '../modals/DetailModal';
 import PayMentModal from '../modals/PayMentModal';
 import FullUseButton from './FullUseButton';
@@ -64,7 +67,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   /**
    * 유저의 구독여부 찾기
    */
-  const { data, isFetched, isLoading, isSuccess, refetch } = useQuery(
+  const getSubscriptionCheckQuery = useQuery(
     'getSubscriptionCheckQuery',
     () =>
       userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
@@ -81,8 +84,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       navigate('/clearing/history');
     },
   });
-
-  const subscriptionData = data?.data.subscription_info;
 
   const handleCreate = () => {
     createClearingMutation.mutate({
@@ -144,14 +145,6 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       />
 
       {/*
-       * 유료플랜 구독 모달
-       */}
-      <PayMentModal
-        visible={paymentModalVisible}
-        closeModal={paymentModalClose}
-      />
-
-      {/*
        * 결제요청 모달
        */}
       <CreateModal
@@ -161,32 +154,28 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         loading={createClearingMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title={t('do you really want me to send a request')}
+        title={t('title.really register')}
         description={[
-          t('after registration, you cant go back to where you were'),
-          t('please check the payment information again'),
+          t('description.cannot reset after register'),
+          t('description.confirm payment info'),
         ]}
         items={[
+          { title: t('table.payment date'), content: cart.clearingRequestDate },
           {
-            title: t('payment request date'),
-            content: cart.clearingRequestDate,
-          },
-          {
-            title: t('payment request amount'),
-            content: `${t('price', {
+            title: t('table.unpaidAmount'),
+            content: t('description.price include vat', {
               price: (
                 Math.round((clearingPaymentTotal * 1.1) / 10) * 10
               ).toLocaleString(),
-            })}
-          ${t('vat include', {
-            price: Math.round(
-              ((clearingPaymentTotal * 1.1) / 10) * 10 - clearingPaymentTotal,
-            ).toLocaleString(),
-          })}`,
+              vat: (
+                Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+                clearingPaymentTotal
+              ).toLocaleString(),
+            }),
           },
           {
-            title: t('totalVendorCount'),
-            content: t('count', { count: cart.resultList.length }),
+            title: t('table.totalVendorCount'),
+            content: t('description.count', { count: cart.resultList.length }),
           },
         ]}
       />
@@ -228,7 +217,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
                   <Row>
                     <Col css={marginRight}>
                       <FullUseButton onClick={fillAllClearingAmount}>
-                        {t('full payment')}
+                        {t('button.full payment')}
                       </FullUseButton>
                     </Col>
                     <Col>
@@ -277,18 +266,20 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               title: (
                 <TextWithTooltip
                   tooltipContent={[
-                    '당일결제 시, 부가세도 그 날에 함께',
-                    '전달되어야 하는 거래처',
+                    t('description.payment today'),
+                    t('description.check vendor'),
                   ]}
                 >
-                  부가세 바로전달
+                  {t('table.vatIncluded')}
                 </TextWithTooltip>
               ),
               render: (_, record) => (
                 <TurtleTag
                   color={record.vendor_info.is_vat_included ? 'orange' : 'gray'}
                 >
-                  {record.vendor_info.is_vat_included ? '바로전달' : '일반'}
+                  {record.vendor_info.is_vat_included
+                    ? t('table.right delivery')
+                    : t('table.general')}
                 </TurtleTag>
               ),
             },
@@ -359,23 +350,23 @@ function ClearingPanel({ activeKey, ...props }: Props) {
             }}
           >
             <Typography.Text style={{ color: ' #6B6D73', fontSize: 13 }}>
-              총 당일 결제 합계
+              {t('table.total today payment')}
             </Typography.Text>
             <Typography.Text style={{ fontWeight: 700, fontSize: 20 }}>
               {clearingPaymentTotal > 0 && (
                 <Typography.Text style={{ fontWeight: 500, fontSize: 16 }}>
-                  (부가세{' '}
-                  {(
-                    Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
-                    clearingPaymentTotal
-                  ).toLocaleString()}
-                  원 포함){' '}
+                  {t('description.include vat', {
+                    vat: (
+                      Math.round((clearingPaymentTotal * 1.1) / 10) * 10 -
+                      clearingPaymentTotal
+                    ).toLocaleString(),
+                  })}
                 </Typography.Text>
               )}
               {(
                 Math.round((clearingPaymentTotal * 1.1) / 10) * 10
               ).toLocaleString()}
-              원
+              {t('description.won')}
             </Typography.Text>
           </Col>
 
@@ -387,7 +378,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >
-              결제요청 보내기
+              {t('button.send payment')}
             </PrimaryButton>
           </Col>
         </Row>

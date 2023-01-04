@@ -71,8 +71,10 @@ function SuccessTab({ loading, ...props }: Props) {
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title={t('do you really want me to delete it?')}
-        description={[t('you cant go back to the past after deleting it')]}
+        title={t('title.do you really want me to delete it?')}
+        description={[
+          t('description.you cant go back to the past after deleting it'),
+        ]}
         okText={t('delete')}
         visible={removeModalVisible}
         onCancel={closeRemoveModal}
@@ -100,7 +102,7 @@ function SuccessTab({ loading, ...props }: Props) {
               rightContent={
                 <SearchFilter
                   placeholder={t(
-                    'placeholder.search by product name, inventory name, vendor name',
+                    'placeholder.search by vendor name, product name, vendor product name',
                   )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}

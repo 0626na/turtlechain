@@ -109,7 +109,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               font-size: 20px;
             `}
           >
-            {t('orderHeaderSettingSubtitle')}
+            {t('title.orderHeaderSettingSubtitle')}
           </span>
           <p
             css={css`
@@ -271,7 +271,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               <PrimaryButton
                 onClick={() => createOrderFormatMutation.mutate(orderFormat)}
               >
-                {t('button.save')}
+                {t('button.saving')}
               </PrimaryButton>
             </div>
           </div>

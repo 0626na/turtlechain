@@ -93,33 +93,39 @@ function ExelModal({ visible, onClose }: Props) {
         loading={createMutation.isLoading}
         visible={createModalVisible}
         onClose={createModalClose}
-        title="정말 요청을 보낼까요?"
+        title={t('title.really register')}
         description={[
-          '등록 후에는 이전으로 되돌릴 수 없어요.',
-          '결제 정보를 다시한번 확인해주세요.',
+          t('description.cannot reset after register'),
+          t('description.confirm payment info'),
         ]}
         items={[
-          { title: '결제요청 일자', content: cart.clearingRequestDate },
+          { title: t('table.payment date'), content: cart.clearingRequestDate },
           {
-            title: '결제요청 금액',
-            content: `${amount.toLocaleString()}원`,
+            title: t('table.unpaidAmount'),
+            content: `${amount.toLocaleString()}${t('description.won')}`,
           },
-          { title: '총 거래처수', content: `${successCount}개` },
+          {
+            title: t('table.totalVendorCount'),
+            content: t('description.count', { count: successCount }),
+          },
         ]}
       />
 
       <TurtleContentModal
         visible={visible}
         onClose={onClose}
-        title="정산서 업로드"
+        title={t('title.upload clearing sheet')}
         size="large"
       >
         <TurtleTabs>
-          <Tabs.TabPane tab={`성공(${successCount})`} key="success">
+          <Tabs.TabPane
+            tab={`${t('title.success')}(${successCount})`}
+            key="success"
+          >
             <SuccessTab />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={`실패(${failCount})`} key="fail">
+          <Tabs.TabPane tab={`${t('title.fail')}(${failCount})`} key="fail">
             <FailTab />
           </Tabs.TabPane>
         </TurtleTabs>
@@ -127,14 +133,12 @@ function ExelModal({ visible, onClose }: Props) {
         <footer css={footerCss.self}>
           <div css={footerCss.leftContentCss.self}>
             <span css={footerCss.leftContentCss.smallText}>
-              총 당일 결제 합계
+              {t('table.total today payment')}
             </span>
 
             <span css={footerCss.leftContentCss.middleText}>
-              {/* <span css={footerCss.leftContentCss.larginText}>
-                (부가세 {vat}원 포함){' '}
-              </span> */}
-              {amount.toLocaleString()}원
+              {amount.toLocaleString()}
+              {t('description.won')}
             </span>
           </div>
 
@@ -145,7 +149,7 @@ function ExelModal({ visible, onClose }: Props) {
             }}
             icon={<TurtleIcon name="rightTriangle" />}
           >
-            결제요청 보내기
+            {t('button.send payment')}
           </PrimaryButton>
         </footer>
       </TurtleContentModal>
