@@ -44,7 +44,7 @@ function PageBody() {
     vendorUpdateModalClose,
   ] = useModal();
   const [selectedRow, setSelectedRow] = useState<WholesalerStore>();
-  const getWholesalerStoreListQuery = useQuery(
+  const { data: wholeSalerStoreList, isLoading } = useQuery(
     [
       'getWholesalerStoreListQuery',
       searchQuery.page,
@@ -55,7 +55,7 @@ function PageBody() {
 
   const filterdList = useMemo(
     () =>
-      getWholesalerStoreListQuery.data?.data.store_list.filter((store) => {
+      wholeSalerStoreList?.data.store_list.filter((store) => {
         return (
           store.name.includes(searchQuery.search_string) ||
           store.building.includes(searchQuery.search_string) ||
@@ -69,7 +69,7 @@ function PageBody() {
           )
         );
       }),
-    [getWholesalerStoreListQuery, searchQuery],
+    [wholeSalerStoreList, searchQuery],
   );
 
   return (
@@ -83,15 +83,13 @@ function PageBody() {
         <Table
           size="small"
           scroll={{ y: 'auto', x: 950 }}
-          loading={getWholesalerStoreListQuery.isLoading}
+          loading={isLoading}
           dataSource={filterdList ?? []}
           pagination={false}
           rowKey={(record) => record.id}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getWholesalerStoreListQuery.data?.data.total_count ?? 0
-              }
+              totalCount={wholeSalerStoreList?.data.total_count ?? 0}
               rightContent={
                 <Row>
                   <Col>
@@ -116,7 +114,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={getWholesalerStoreListQuery.data?.data.total_count ?? 0}
+                total={wholeSalerStoreList?.data.total_count ?? 0}
                 showSizeChanger={false}
                 pageSize={searchQuery.page_size}
                 current={searchQuery.page}

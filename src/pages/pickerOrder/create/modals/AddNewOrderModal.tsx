@@ -22,6 +22,8 @@ interface Props {
 
 /**
  * 단건 추가 모달
+ * @param visible 모달 표시 유무
+ * @param close 모달 닫을때 이벤트 함수
  */
 function AddNewOrderModal({ visible, close }: Props) {
   const [form] = Form.useForm();

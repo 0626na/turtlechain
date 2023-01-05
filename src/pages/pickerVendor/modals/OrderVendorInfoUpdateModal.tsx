@@ -23,6 +23,10 @@ interface Props {
   selectedRow: WholesalerStore;
 }
 
+/**
+ * 거래처 정보 수정 요청 모달
+ * @param selectedRow 테이블에서 수정하려는 거래처 데이터
+ */
 function OrderVendorInfoUpdateModal({
   visible,
   closeModal,
@@ -32,7 +36,7 @@ function OrderVendorInfoUpdateModal({
   const { buildingData, bankData } = usePreset();
 
   // 거래처 정보수정
-  const createVendorMutation = useMutation(bucketListAPI.create, {
+  const { mutate } = useMutation(bucketListAPI.create, {
     onSuccess: () => {
       message.success(t('message.success update vendor request'));
       closeModal();
@@ -274,7 +278,7 @@ function OrderVendorInfoUpdateModal({
                     ' ',
                   );
 
-                  createVendorMutation.mutate({
+                  mutate({
                     ...form.getFieldsValue(),
                     type: 'update',
                     banks: [

@@ -24,7 +24,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
   const [searchStore, setSearchStore] = useState<StoreShow>();
   const [searched, setSearched] = useState(false);
   const [keep, setKeep] = useState(false);
-  const createMutation = useMutation(pickerAPI.create, {
+  const { mutate, isLoading } = useMutation(pickerAPI.create, {
     onSuccess: () => {
       message.success(t('message.success create store'));
       queryClient.refetchQueries(['getStoreList']);
@@ -128,7 +128,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
             cancelText={t('button.no')}
             onConfirm={() => {
               form.validateFields().then((value) => {
-                createMutation.mutate({
+                mutate({
                   name: value.name,
                   store_url: value.store_url,
                   rt_store_id: value.store_id,
@@ -143,7 +143,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
           >
             <SpecialButton // 수정하기 Button
               size="large"
-              loading={createMutation.isLoading}
+              loading={isLoading}
             >
               {t('message.add')}
             </SpecialButton>

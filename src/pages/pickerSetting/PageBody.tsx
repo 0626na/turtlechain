@@ -34,13 +34,13 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
-  const { data, refetch, isLoading } = useQuery(
-    ['getStoreList'],
-    pickerAPI.getList,
-    {
-      enabled: !!user,
-    },
-  );
+  const {
+    data: storeList,
+    isLoading,
+    refetch,
+  } = useQuery(['getStoreList'], pickerAPI.getList, {
+    enabled: !!user,
+  });
 
   const removeStoreMutation = useMutation(pickerAPI.remove, {
     onSuccess: () => {
@@ -50,12 +50,12 @@ function PageBody() {
   });
 
   const filteredList = useMemo(() => {
-    return data?.data.store_list.filter(
+    return storeList?.data.store_list.filter(
       (store) =>
         store.name.includes(searchQuery) ||
         store.store_phone[0].phone.includes(searchQuery),
     );
-  }, [data, searchQuery]);
+  }, [storeList, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -133,7 +133,7 @@ function PageBody() {
       </Row>
 
       <TurtleTableTitle
-        totalCount={data?.data.store_list.length ?? 0}
+        totalCount={storeList?.data.store_list.length ?? 0}
         rightContent={
           <Row align="middle">
             <Col css={css({ marginRight: 15 })}>
@@ -166,7 +166,7 @@ function PageBody() {
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {data?.data.store_list.map((item, idx) => (
+          {storeList?.data.store_list.map((item, idx) => (
             <Col
               key={idx}
               span={8}

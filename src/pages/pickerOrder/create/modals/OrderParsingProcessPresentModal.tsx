@@ -19,6 +19,15 @@ interface Props {
 
 /**
  * 발주서 파싱 결과 모달
+ * @param visible 모달 표시 유무 boolean
+ * @param title 모달 타이틀 데이터 파라미터
+ * @param description 모달 설명문 데이터 파라미터
+ * @param onCancel 모달 닫을때 이벤트 함수
+ * @param onOK 모달에서 설명하는 내용을 실행시, 이벤트 함수
+ * @param successCount 발주성공한 갯수
+ * @param failCount 파싱 과정에서 어떤 이유로 발주를 할수 없는 발주갯수
+ * @message 발주 실패한 이유
+ * @size 모달 크기 파라미터
  */
 function OrderParsingProcessPresentModal({
   visible,
