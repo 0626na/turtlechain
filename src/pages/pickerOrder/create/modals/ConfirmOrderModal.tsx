@@ -1,14 +1,13 @@
 import React from 'react';
 import orderAPI, { CreatingOrdersItem, OrderItemList } from '@apis/orderAPI';
-import { CreateModal, TurtleContentModal } from '@components/combine';
-import { AnswerButton } from '@components/element';
+import { CreateModal } from '@components/combine';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Space, Typography } from 'antd';
 import { message } from '@utils/message';
 import moment from 'moment';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 interface Props {
   visible: boolean;
@@ -34,6 +33,7 @@ function ConfirmOrderModal({
 }: Props) {
   const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
+  const { user } = useUser();
 
   /**
    * 발주서 등록 react-query 함수
@@ -44,7 +44,9 @@ function ConfirmOrderModal({
         message.success(t('message.complete order'), 4);
         close();
         reset();
-        navigate('/picker/order/history');
+        user?.type === 'pi'
+          ? navigate('/picker/order/history')
+          : navigate('/order/history');
       }
     },
   });

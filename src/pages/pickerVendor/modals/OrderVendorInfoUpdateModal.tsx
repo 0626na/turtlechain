@@ -84,7 +84,7 @@ function OrderVendorInfoUpdateModal({
   return (
     <>
       <TurtleContentModal
-        title={t('vendor.updateInfo')}
+        title={t('title.request update vendor')}
         visible={visible}
         onClose={() => {
           form.resetFields();

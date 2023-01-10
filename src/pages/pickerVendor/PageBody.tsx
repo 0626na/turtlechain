@@ -10,7 +10,6 @@ import {
   TurtleSearchInput,
   TurtleTableTitle,
 } from '@components/element';
-import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
@@ -198,7 +197,4 @@ function PageBody() {
   );
 }
 
-const marginRight = css`
-  margin-right: 6px;
-`;
 export default PageBody;

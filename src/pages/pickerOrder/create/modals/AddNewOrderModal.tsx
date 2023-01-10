@@ -38,17 +38,12 @@ function AddNewOrderModal({ visible, close }: Props) {
   });
   const { addSingleOrder } = useOrderCart();
   const [building, setBuilding] = useState('');
-  const [floor, setFloor] = useState('');
   const { buildingData } = usePreset();
 
   //사입삼촌에 등록된 쇼핑몰 목록
-  const getPickerStoresQuery = useQuery(
-    'getPickerStores',
-    orderAPI.getPickerStores,
-    {
-      enabled: visible,
-    },
-  );
+  const { data } = useQuery('getPickerStores', orderAPI.getPickerStores, {
+    enabled: visible,
+  });
 
   const storeValidator = (_: unknown, value: string) => {
     if (!value) {
@@ -127,7 +122,7 @@ function AddNewOrderModal({ visible, close }: Props) {
             <TurtleFormSelect
               showSearch
               placeholder={t('placeholder.select store')}
-              items={getPickerStoresQuery.data?.data.store_list.map((store) => {
+              items={data?.data.store_list.map((store) => {
                 return {
                   name: store.name,
                   value: store.name,
@@ -135,7 +130,7 @@ function AddNewOrderModal({ visible, close }: Props) {
               })}
               onChange={(store: string) => {
                 setSelectStore(
-                  getPickerStoresQuery.data?.data.store_list.find(
+                  data?.data.store_list.find(
                     (fstore) => fstore.name === store,
                   ) ?? {
                     id: 0,
@@ -198,8 +193,7 @@ function AddNewOrderModal({ visible, close }: Props) {
                   <TurtleFormSelect
                     showSearch
                     placeholder={t('placeholder.floor')}
-                    onChange={(value) => {
-                      setFloor(value);
+                    onChange={() => {
                       form.resetFields(['vendor_address_col']);
                     }}
                     items={

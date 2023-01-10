@@ -50,6 +50,12 @@ export interface StoreShow {
 }
 
 // 쇼핑몰 리스트 가져오기
+
+export interface RequestGetList {
+  page: number;
+  page_size: number;
+  name?: string;
+}
 export interface ResponseGetList {
   data: {
     total_count: number;
@@ -57,9 +63,9 @@ export interface ResponseGetList {
   };
 }
 
-const getList = async () => {
+const getList = async (params: RequestGetList) => {
   const url = '/provisioning/retailer/stores';
-  const response = await v2Axios.get<ResponseGetList>(url);
+  const response = await v2Axios.get<ResponseGetList>(url, { params });
 
   return response.data.data;
 };

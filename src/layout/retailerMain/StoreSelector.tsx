@@ -26,7 +26,7 @@ function StoreSelector() {
 
   const getStoreListQuery = useQuery(
     ['getStoreList', 'sider'],
-    retailerStoreAPI.getList,
+    () => retailerStoreAPI.getList({ page: 1, page_size: 100 }),
     {
       enabled: !!user,
       onSuccess: (data) => {

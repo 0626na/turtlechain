@@ -1,3 +1,4 @@
+import React, { useMemo, useState } from 'react';
 import pickerAPI from '@apis/pickerAPI';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import {
@@ -14,10 +15,10 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
+import StoreCard from '@pages/setting/cards/StoreCard';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
 import AddPickerModal from './modals/AddPickerModal';

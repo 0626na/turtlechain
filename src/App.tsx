@@ -11,8 +11,8 @@ import {
   HomePage,
   LoginPage,
   NotFoundPage,
-  //OrderCreatePage,
-  //OrderHistoryPage,
+  OrderCreatePage,
+  OrderHistoryPage,
   ProductCreatePage,
   ProductHistoryPage,
   SettingPage,
@@ -118,7 +118,7 @@ function App() {
            * 발주
            */}
 
-          {/* <Route
+          <Route
             path="order/create"
             element={
               <Suspense fallback={<></>}>
@@ -134,7 +134,7 @@ function App() {
                 <OrderHistoryPage />
               </Suspense>
             }
-          /> */}
+          />
 
           {/*
            * 입고
