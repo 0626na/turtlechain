@@ -85,7 +85,18 @@ export function TurtleFormSelectSearchInDropDown({
           key={idx}
           value={item.value}
         >
-          {item.name}
+          {
+            <div
+              css={css({ display: 'flex', justifyContent: 'space-between' })}
+            >
+              <span css={css({ paddingLeft: 4 })}>
+                {item.name.split(' ')[0]}
+              </span>{' '}
+              <span css={css({ paddingRight: 4 })}>
+                {item.name.split(' ')[1]}
+              </span>
+            </div>
+          }
         </Select.Option>
       ))}
     </Select>

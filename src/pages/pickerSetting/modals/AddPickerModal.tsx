@@ -135,7 +135,7 @@ function AddPickerModal({ visible, closeModal }: Props) {
               items={storeList
                 .filter((store) => store.name.includes(searchQuery))
                 .map((item) => ({
-                  name: `${item.name} ${item.mobile}`,
+                  name: `${item.name.replaceAll(' ', '')} ${item.mobile}`,
                   value: item.name,
                 }))}
             />
