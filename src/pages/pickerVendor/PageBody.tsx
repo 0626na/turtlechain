@@ -19,25 +19,6 @@ import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import OrderVendorInfoUpdateModal from './modals/OrderVendorInfoUpdateModal';
 
-const options = [
-  {
-    name: t('table.retailerStoreName'),
-    value: 'store_name',
-  },
-  {
-    name: t('table.mobile'),
-    value: 'mobile',
-  },
-  {
-    name: t('table.account number'),
-    value: 'account_number',
-  },
-  {
-    name: t('table.account holder'),
-    value: 'account_holder',
-  },
-];
-
 export interface OrderVendor {
   id: number;
   vendor_code: string;
