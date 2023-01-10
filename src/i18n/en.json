@@ -378,7 +378,8 @@
     "inputProductCode": "바코드를 입력해주세요",
     "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요.",
     "no duplication": "중복 없음",
-    "authentication number does not match": "인증번호가 일치하지 않습니다."
+    "authentication number does not match": "인증번호가 일치하지 않습니다.",
+    "already added store": "이미 같은 이름으로 등록된 쇼핑몰이 있어요. 구분할 수 있는 이름으로 다시 추가해주세요"
   },
 
   "title": {

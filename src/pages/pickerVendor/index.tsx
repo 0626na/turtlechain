@@ -10,7 +10,7 @@ function PickerVendor() {
     <>
       <Helmet
         title={`${t('turtleChain')} - ${t('title.picker')}- ${t(
-          'vendor.history',
+          'title.vendor list',
         )}`}
       />
       <PageHeader title={t('title.vendor list')} />
