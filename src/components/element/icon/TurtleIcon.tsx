@@ -1,3 +1,6 @@
+import React from 'react';
+import { css } from '@emotion/react';
+
 import { ReactComponent as RemoveIcon } from '@icons/remove.svg';
 import { ReactComponent as ModalCloseIcon } from '@icons/modalClose.svg';
 
@@ -67,8 +70,7 @@ import { ReactComponent as CreditCard } from '@icons/creditcard.svg';
 import { ReactComponent as QuestionCircle } from '@icons/questioncircle.svg';
 import { ReactComponent as Thunder } from '@icons/thunder.svg';
 import { ReactComponent as MenuPlus } from '@icons/menuplus.svg';
-import { css } from '@emotion/react';
-import React from 'react';
+import { ReactComponent as MemoMessage } from '@icons/memoMessage.svg';
 
 export type iconname =
   | 'checkMark'
@@ -129,7 +131,8 @@ export type iconname =
   | 'questioncircle'
   | 'alertWarningRed'
   | 'menuplus'
-  | 'thunder';
+  | 'thunder'
+  | 'memoMessage';
 interface Props {
   danger?: boolean;
   name: iconname;
@@ -559,6 +562,10 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'thunder') {
     return <Thunder />;
+  }
+
+  if (name === 'memoMessage') {
+    return <MemoMessage />;
   }
 
   return <></>;

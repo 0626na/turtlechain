@@ -3,6 +3,7 @@ import orderAPI from '@apis/orderAPI';
 import {
   TurtleCard,
   TurtleDivider,
+  TurtleIcon,
   TurtlePrimaryRangePicker,
   TurtleSearchSelect,
   TurtleTag,
@@ -238,6 +239,12 @@ function PageBody() {
               width: 136,
               title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
+            },
+            {
+              title: t('table.vendorMessage'),
+              width: 100,
+              align: 'center',
+              render: (_, record) => <TurtleIcon name="memoMessage" />,
             },
             {},
           ]}

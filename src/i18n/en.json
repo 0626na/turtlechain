@@ -132,7 +132,8 @@
     "confirm password": "비밀번호 확인",
     "new password": "새 비밀번호",
     "email": "Email",
-    "proccessed date": "Proccessed Date"
+    "proccessed date": "Proccessed Date",
+    "vendorMessage": "거래처 쪽지"
   },
 
   "placeholder": {
@@ -467,7 +468,8 @@
     "manage business info": "Manage Business Info.",
     "wrong transfer reversal": "Wrong Transfer Reversal",
     "store info": "쇼핑몰 정보",
-    "preview of todays stock products": "Preview of today`s stock products"
+    "preview of todays stock products": "Preview of today`s stock products",
+    "vendor detail message": "거래처 쪽지 상세보기"
   },
 
   "description": {
