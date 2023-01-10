@@ -1,3 +1,4 @@
+import React, { useMemo, useState } from 'react';
 import pickerAPI from '@apis/pickerAPI';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import {
@@ -14,10 +15,10 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
+import StoreCard from '@pages/setting/cards/StoreCard';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
 import AddPickerModal from './modals/AddPickerModal';
@@ -34,24 +35,28 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
-  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+  const {
+    data: storeList,
+    isLoading,
+    refetch,
+  } = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
   });
 
   const removeStoreMutation = useMutation(pickerAPI.remove, {
     onSuccess: () => {
       message.success(t('message.delete store'), 3);
-      getStoreListQuery.refetch();
+      refetch();
     },
   });
 
   const filteredList = useMemo(() => {
-    return getStoreListQuery.data?.data.store_list.filter(
+    return storeList?.data.store_list.filter(
       (store) =>
         store.name.includes(searchQuery) ||
         store.store_phone[0].phone.includes(searchQuery),
     );
-  }, [getStoreListQuery, searchQuery]);
+  }, [storeList, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -129,7 +134,7 @@ function PageBody() {
       </Row>
 
       <TurtleTableTitle
-        totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
+        totalCount={storeList?.data.store_list.length ?? 0}
         rightContent={
           <Row align="middle">
             <Col css={css({ marginRight: 15 })}>
@@ -162,7 +167,7 @@ function PageBody() {
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {getStoreListQuery.data?.data.store_list.map((item, idx) => (
+          {storeList?.data.store_list.map((item, idx) => (
             <Col
               key={idx}
               span={8}
@@ -181,7 +186,7 @@ function PageBody() {
       ) : (
         <Table
           size="small"
-          loading={getStoreListQuery.isLoading}
+          loading={isLoading}
           dataSource={filteredList}
           rowKey={(record) => record.id}
           onRow={(record) => ({

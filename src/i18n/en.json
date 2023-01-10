@@ -132,7 +132,8 @@
     "confirm password": "비밀번호 확인",
     "new password": "새 비밀번호",
     "email": "Email",
-    "proccessed date": "Proccessed Date"
+    "proccessed date": "Proccessed Date",
+    "vendorMessage": "거래처 쪽지"
   },
 
   "placeholder": {
@@ -378,7 +379,8 @@
     "inputProductCode": "바코드를 입력해주세요",
     "inputEnglishAndNumber": "영문 또는 숫자로만 입력해주세요.",
     "no duplication": "중복 없음",
-    "authentication number does not match": "인증번호가 일치하지 않습니다."
+    "authentication number does not match": "인증번호가 일치하지 않습니다.",
+    "already added store": "이미 같은 이름으로 등록된 쇼핑몰이 있어요. 구분할 수 있는 이름으로 다시 추가해주세요"
   },
 
   "title": {
@@ -466,7 +468,8 @@
     "manage business info": "Manage Business Info.",
     "wrong transfer reversal": "Wrong Transfer Reversal",
     "store info": "쇼핑몰 정보",
-    "preview of todays stock products": "Preview of today`s stock products"
+    "preview of todays stock products": "Preview of today`s stock products",
+    "vendor detail message": "거래처 쪽지 상세보기"
   },
 
   "description": {
@@ -604,7 +607,8 @@
     "manage accounts": "Manage Accounts",
     "manage business info": "Manage Business Info",
     "wrong transfer reversal": "Wrong Transfer Reversal",
-    "at least one store": "At least one store is needed to use Turtlechain"
+    "at least one store": "At least one store is needed to use Turtlechain",
+    "missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order": "필수 헤더명이 제외된 경우, 오류발주서로 분류됩니다."
   },
 
   "type": {

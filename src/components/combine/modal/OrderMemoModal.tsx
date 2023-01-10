@@ -9,6 +9,13 @@ interface Props {
   defaultValue: string;
 }
 
+/**
+ * 발주 메모 모달
+ * @param visible 모달 표시 유무 boolean
+ * @param close 모달 닫을때 이벤트 함수
+ * @param onOk 모달의 내용 실행할때 이벤트 함수
+ * @param defaultValue 메모가 이미 존재할 경우에 defaultValue로 표시
+ */
 function OrderMemoModal({ visible, close, onOk, defaultValue }: Props) {
   return (
     <InputModal

@@ -6,6 +6,12 @@ interface Props {
   onOK: () => void;
 }
 
+/**
+ * 발주 삭제 모달
+ * @param {boolean} visible 모달의 표시 유무
+ * @param {() => void} onOK 모달의 내용을 실행할때 이벤트 함수
+ * @param onCancel 모달을 닫을때 이벤트 함수
+ */
 function DeleteOrderModal({ visible, onOK, onCancel }: Props) {
   return (
     <TurtleConfirmModal

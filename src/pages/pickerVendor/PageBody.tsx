@@ -1,52 +1,22 @@
-import vendorAPI, {
-  VendorAccount,
-  VendorPhone,
-  Wholesale,
-} from '@apis/vendorAPI';
+import React, { useMemo, useState } from 'react';
+import { VendorAccount, VendorPhone, Wholesale } from '@apis/vendorAPI';
 import wholesalerAPI, {
   RequestGetList,
   WholesalerStore,
 } from '@apis/wholesalerAPI';
-import { SearchFilter } from '@components/combine';
-import InputModal from '@components/combine/modal/InputModal';
 import {
-  MemoIcon,
   TurtleDropdown,
   TurtleIcon,
   TurtleSearchInput,
-  TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
-import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { PageContent } from '@layout/page';
-import VendorInfoUpdateModal from '@pages/vendor/history/modal/VendorInfoUpdateModal';
 import { phonePattern } from '@utils/pattern';
 import { Col, Pagination, Row, Table } from 'antd';
-import { message } from '@utils/message';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import OrderVendorInfoUpdateModal from './modals/OrderVendorInfoUpdateModal';
-
-const options = [
-  {
-    name: t('table.retailerStoreName'),
-    value: 'store_name',
-  },
-  {
-    name: t('table.mobile'),
-    value: 'mobile',
-  },
-  {
-    name: t('table.account number'),
-    value: 'account_number',
-  },
-  {
-    name: t('table.account holder'),
-    value: 'account_holder',
-  },
-];
 
 export interface OrderVendor {
   id: number;
@@ -74,7 +44,7 @@ function PageBody() {
     vendorUpdateModalClose,
   ] = useModal();
   const [selectedRow, setSelectedRow] = useState<WholesalerStore>();
-  const getWholesalerStoreListQuery = useQuery(
+  const { data: wholeSalerStoreList, isLoading } = useQuery(
     [
       'getWholesalerStoreListQuery',
       searchQuery.page,
@@ -85,7 +55,7 @@ function PageBody() {
 
   const filterdList = useMemo(
     () =>
-      getWholesalerStoreListQuery.data?.data.store_list.filter((store) => {
+      wholeSalerStoreList?.data.store_list.filter((store) => {
         return (
           store.name.includes(searchQuery.search_string) ||
           store.building.includes(searchQuery.search_string) ||
@@ -99,7 +69,7 @@ function PageBody() {
           )
         );
       }),
-    [getWholesalerStoreListQuery, searchQuery],
+    [wholeSalerStoreList, searchQuery],
   );
 
   return (
@@ -113,15 +83,13 @@ function PageBody() {
         <Table
           size="small"
           scroll={{ y: 'auto', x: 950 }}
-          loading={getWholesalerStoreListQuery.isLoading}
+          loading={isLoading}
           dataSource={filterdList ?? []}
           pagination={false}
           rowKey={(record) => record.id}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getWholesalerStoreListQuery.data?.data.total_count ?? 0
-              }
+              totalCount={wholeSalerStoreList?.data.total_count ?? 0}
               rightContent={
                 <Row>
                   <Col>
@@ -146,7 +114,7 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={getWholesalerStoreListQuery.data?.data.total_count ?? 0}
+                total={wholeSalerStoreList?.data.total_count ?? 0}
                 showSizeChanger={false}
                 pageSize={searchQuery.page_size}
                 current={searchQuery.page}
@@ -217,23 +185,6 @@ function PageBody() {
                         vendorUpdateModalOpen();
                       },
                     },
-                    // {
-                    //   key: '2',
-                    //   type: 'divider',
-                    // },
-                    // {
-                    //   key: '3',
-                    //   label: (
-                    //     <span
-                    //       css={css`
-                    //         color: red;
-                    //       `}
-                    //     >
-                    //       삭제
-                    //     </span>
-                    //   ),
-                    //   icon: <TurtleIcon name="delete" danger />,
-                    // },
                   ]}
                   triggerButton={<TurtleIcon name="more" />}
                 />
@@ -246,7 +197,4 @@ function PageBody() {
   );
 }
 
-const marginRight = css`
-  margin-right: 6px;
-`;
 export default PageBody;

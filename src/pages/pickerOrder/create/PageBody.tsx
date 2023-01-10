@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -14,10 +14,8 @@ import FailTab from './tabs/FailTab';
 import useModal from '@hooks/useModal';
 import AddOrderColumnModal from './modals/AddOrderColumnModal';
 import { Col, Row, Tooltip, Upload } from 'antd';
-
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
-
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import { useMutation, useQuery } from 'react-query';
@@ -61,6 +59,9 @@ function PageBody() {
     closeParsingProcessModal,
   ] = useModal();
 
+  /**
+   * 등록된 전체 쇼핑몰 갯수
+   */
   const { data: storecountData } = useQuery(
     ['getStoreCountListQuery'],
     pickerAPI.getList,
@@ -75,6 +76,9 @@ function PageBody() {
     },
   );
 
+  /**
+   * 발주서 발송한 쇼핑몰 갯수
+   */
   const { data: orderCompleteStoreData } = useQuery(
     ['getCompleteOrderCountQuery'],
     () =>
@@ -92,6 +96,9 @@ function PageBody() {
     },
   );
 
+  /**
+   * 발주서 전송할때 마다 발주 완료한 쇼핑몰 갯수 카운팅
+   */
   useMemo(() => {
     setTodayordersCount({
       total: storecountData?.data.total_count ?? 0,

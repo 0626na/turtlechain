@@ -1,6 +1,4 @@
 import { CreateModal } from '@components/combine';
-import { TurtleConfirmModal, TurtleText } from '@components/element';
-import { FailListForOutput } from '@hooks/useOrderCart';
 import { t } from 'i18next';
 
 interface Props {

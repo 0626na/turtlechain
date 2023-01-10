@@ -1,14 +1,13 @@
 import React from 'react';
 import orderAPI, { CreatingOrdersItem, OrderItemList } from '@apis/orderAPI';
-import { CreateModal, TurtleContentModal } from '@components/combine';
-import { AnswerButton } from '@components/element';
+import { CreateModal } from '@components/combine';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Space, Typography } from 'antd';
 import { message } from '@utils/message';
 import moment from 'moment';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 interface Props {
   visible: boolean;
@@ -20,6 +19,10 @@ interface Props {
 
 /**
  * 발주등록 최종 확인 모달
+ * @param visible 모달 표시 유무
+ * @param close 모달 닫을때 이벤트 함수
+ * @param title 모달 제목
+ * @param description 모달 설명 파라미터
  */
 function ConfirmOrderModal({
   visible,
@@ -30,15 +33,20 @@ function ConfirmOrderModal({
 }: Props) {
   const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
+  const { user } = useUser();
 
-  //발주서 등록
+  /**
+   * 발주서 등록 react-query 함수
+   */
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
         message.success(t('message.complete order'), 4);
         close();
         reset();
-        navigate('/picker/order/history');
+        user?.type === 'pi'
+          ? navigate('/picker/order/history')
+          : navigate('/order/history');
       }
     },
   });

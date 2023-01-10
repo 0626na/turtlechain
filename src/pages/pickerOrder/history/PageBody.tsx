@@ -1,18 +1,19 @@
+import React, { useMemo, useState } from 'react';
 import orderAPI from '@apis/orderAPI';
 import {
   TurtleCard,
   TurtleDivider,
+  TurtleIcon,
   TurtlePrimaryRangePicker,
   TurtleSearchSelect,
   TurtleTag,
 } from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
-import { Col, DatePicker, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
@@ -44,7 +45,7 @@ function PageBody() {
   });
 
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
-  const getOrderSheetsQuery = useQuery(
+  const { data: orderHistoryData } = useQuery(
     ['getOrderSheetsQuery', searchQuery.end_date, searchQuery.end_date],
     () =>
       orderAPI.getOrderSheets({
@@ -56,14 +57,14 @@ function PageBody() {
   const filteredList = useMemo(() => {
     if (searchQuery.type === 'entire')
       return (
-        getOrderSheetsQuery.data?.data.order_sheet_list.filter((sheet) =>
+        orderHistoryData?.data.order_sheet_list.filter((sheet) =>
           sheet.rt_store_name.includes(searchQuery.search_string),
         ) ?? []
       );
 
     if (searchQuery.type === 'new')
       return (
-        getOrderSheetsQuery.data?.data.order_sheet_list
+        orderHistoryData?.data.order_sheet_list
           .filter((sheet) => sheet.type === searchQuery.type)
           .filter((sheet) =>
             sheet.rt_store_name.includes(searchQuery.search_string),
@@ -72,13 +73,13 @@ function PageBody() {
 
     if (searchQuery.type === 'modify')
       return (
-        getOrderSheetsQuery.data?.data.order_sheet_list
+        orderHistoryData?.data.order_sheet_list
           .filter((sheet) => sheet.type === searchQuery.type)
           .filter((sheet) =>
             sheet.rt_store_name.includes(searchQuery.search_string),
           ) ?? []
       );
-  }, [getOrderSheetsQuery.data?.data.order_sheet_list, searchQuery]);
+  }, [orderHistoryData?.data.order_sheet_list, searchQuery]);
 
   return (
     <>
@@ -110,13 +111,13 @@ function PageBody() {
               color: 'cyan',
               title: t('title.success'),
               count:
-                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_store_count,
                   0,
                 ) ?? 0,
 
               price:
-                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_success_price,
                   0,
                 ) ?? 0,
@@ -125,12 +126,12 @@ function PageBody() {
               color: 'orange',
               title: t('title.fail'),
               count:
-                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_fail_count,
                   0,
                 ) ?? 0,
               price:
-                getOrderSheetsQuery.data?.data.order_sheet_list.reduce(
+                orderHistoryData?.data.order_sheet_list.reduce(
                   (acc, sheet) => acc + sheet.total_fail_price,
                   0,
                 ) ?? 0,
@@ -157,9 +158,7 @@ function PageBody() {
           }}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0
-              }
+              totalCount={orderHistoryData?.data.order_sheet_list.length ?? 0}
               rightContent={
                 <Row>
                   <Col>
@@ -240,6 +239,12 @@ function PageBody() {
               width: 136,
               title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
+            },
+            {
+              title: t('table.vendorMessage'),
+              width: 100,
+              align: 'center',
+              render: (_, record) => <TurtleIcon name="memoMessage" />,
             },
             {},
           ]}
