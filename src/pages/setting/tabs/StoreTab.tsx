@@ -33,7 +33,7 @@ function StoreTab() {
 
   const getStoreListQuery = useQuery(
     ['getStoreList'],
-    retailerStoreAPI.getList,
+    () => retailerStoreAPI.getList({ page: 1, page_size: 100 }),
     {
       enabled: !!user,
       onSuccess: (data) => {

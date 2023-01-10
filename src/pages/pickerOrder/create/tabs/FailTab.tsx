@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import {
   MemoIcon,
   TurtleSearchInput,
-  TurtleSearchSelect,
   TurtleTableNumberInput,
   TurtleTableTitle,
 } from '@components/element';
@@ -17,7 +16,7 @@ import { category } from './SucceessTab';
 import { t } from 'i18next';
 import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
 import TurtleTablePhoneNumberInput from '@components/element/input/TurtleTablePhoneNumberInput';
-import { notNumPattern, phonePattern } from '@utils/pattern';
+import { notNumPattern } from '@utils/pattern';
 import AddOrderFailtoSuccessModal from '../modals/AddOrderFailtoSuccessModal';
 import { valueType } from 'antd/lib/statistic/utils';
 import { css } from '@emotion/react';
@@ -33,7 +32,6 @@ function FailTab({ loading, ...props }: Props) {
     type: 'name',
     search_string: '',
   });
-
   const [memoModalvisible, openMemoModal, closeMemoModal] = useModal();
   const [
     failtoSuccessModailvisible,
@@ -89,7 +87,7 @@ function FailTab({ loading, ...props }: Props) {
             openFailToSuccessModal();
           }
         }}
-        onBlur={(e) => {
+        onBlur={() => {
           if (failListOutput()[record.id].mobile.length !== 11)
             inputMobileToFailList('', record.id);
         }}
@@ -352,9 +350,5 @@ function FailTab({ loading, ...props }: Props) {
     </>
   );
 }
-
-const marginRight = css`
-  margin-right: 6px;
-`;
 
 export default FailTab;

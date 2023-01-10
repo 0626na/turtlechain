@@ -1,9 +1,7 @@
 import React from 'react';
 import orderAPI, { CreatingOrdersItem, OrderItemList } from '@apis/orderAPI';
-import { CreateModal, TurtleContentModal } from '@components/combine';
-import { AnswerButton } from '@components/element';
+import { CreateModal } from '@components/combine';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Space, Typography } from 'antd';
 import { message } from '@utils/message';
 import moment from 'moment';
 import { useMutation } from 'react-query';

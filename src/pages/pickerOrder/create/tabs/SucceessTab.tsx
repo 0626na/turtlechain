@@ -17,7 +17,7 @@ import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
 import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
-import { StoreOrder, StoreOrderItemExcelParsing } from '@apis/orderAPI';
+import { StoreOrder } from '@apis/orderAPI';
 import moment from 'moment';
 
 interface Props extends TabPaneProps {
@@ -434,15 +434,6 @@ function SuccessTab({ loading, ...props }: Props) {
               },
             },
             {
-              // onCell: (record) => ({
-              //   style: { cursor: 'pointer' },
-              //   onClick: (e) => {
-              //     e.stopPropagation();
-              //     setSelectedRowID(Number(record.id));
-              //     setDeleteMode(true);
-              //     openDeleteModal();
-              //   },
-              // }),
               render: (_, record) => {
                 return (
                   <div

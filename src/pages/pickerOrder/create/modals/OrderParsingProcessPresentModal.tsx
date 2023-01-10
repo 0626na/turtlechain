@@ -1,10 +1,9 @@
-import { CreateModal, TurtleContentModal } from '@components/combine';
+import React from 'react';
 import { TurtleConfirmModal, TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import { theme } from '@styles/theme';
 import { Tooltip } from 'antd';
 import { t } from 'i18next';
-import React from 'react';
 
 interface Props {
   visible: boolean;
