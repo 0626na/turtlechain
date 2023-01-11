@@ -133,7 +133,8 @@
     "new password": "새 비밀번호",
     "email": "이메일",
     "proccessed date": "처리일자",
-    "vendorMessage": "거래처 쪽지"
+    "vendorMessage": "거래처 쪽지",
+    "message": "쪽지"
   },
 
   "placeholder": {

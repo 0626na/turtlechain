@@ -19,6 +19,8 @@ import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
 import { css } from '@emotion/react';
 import { SearchFilter } from '@components/combine';
+import WholesalerMessageModal from './modals/WholesalerMessageModal';
+import { theme } from '@styles/theme';
 
 function PageBody() {
   const options = [
@@ -45,6 +47,12 @@ function PageBody() {
   });
 
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
+  const [
+    detailMessageModalVisible,
+    openDetailMessageModal,
+    closeDetailMessageModal,
+  ] = useModal();
+
   const { data: orderHistoryData } = useQuery(
     ['getOrderSheetsQuery', searchQuery.end_date, searchQuery.end_date],
     () =>
@@ -88,6 +96,13 @@ function PageBody() {
           visible={detailModalVisible}
           onclose={closeDetailModal}
           sheetId={sheetId}
+        />
+      )}
+      {!!sheetId && (
+        <WholesalerMessageModal
+          visible={detailMessageModalVisible}
+          onClose={closeDetailMessageModal}
+          sheetID={sheetId}
         />
       )}
       <PageHeader title={`${t('title.orderDetail')}`} />
@@ -244,7 +259,26 @@ function PageBody() {
               title: t('table.vendorMessage'),
               width: 100,
               align: 'center',
-              render: (_, record) => <TurtleIcon name="memoMessage" />,
+              render: (_, record) => {
+                return record.total_comment_count !== 0 ? (
+                  <div
+                    css={css({
+                      width: '100%',
+                      ':hover': {
+                        cursor: 'pointer',
+                        backgroundColor: theme.greenBg,
+                      },
+                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSheetId(record.id);
+                      openDetailMessageModal();
+                    }}
+                  >
+                    <TurtleIcon name="memoMessage" />
+                  </div>
+                ) : null;
+              },
             },
             {},
           ]}
