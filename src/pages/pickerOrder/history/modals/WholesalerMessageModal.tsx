@@ -13,7 +13,7 @@ interface Props {
 }
 
 function WholesalerMessageModal({ visible, onClose, sheetID }: Props) {
-  const { data: orderVendorMessageData, isLoading } = useQuery(
+  const { data: orderVendorMessageData } = useQuery(
     ['getOrderVendorMessage', sheetID],
     () => orderAPI.getOrderHistory({ sheet_id: sheetID }),
     { enabled: visible },
