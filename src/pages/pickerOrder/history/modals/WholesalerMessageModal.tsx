@@ -10,12 +10,19 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   sheetID: number;
+  isComment: boolean;
 }
 
-function WholesalerMessageModal({ visible, onClose, sheetID }: Props) {
-  const { data: orderVendorMessageData, isLoading } = useQuery(
+function WholesalerMessageModal({
+  visible,
+  onClose,
+  sheetID,
+  isComment,
+}: Props) {
+  const { data: orderVendorMessageData } = useQuery(
     ['getOrderVendorMessage', sheetID],
-    () => orderAPI.getOrderHistory({ sheet_id: sheetID }),
+    () =>
+      orderAPI.getOrderHistory({ sheet_id: sheetID, is_commented: isComment }),
     { enabled: visible },
   );
   const { translateOrderType } = useOrderCart();
