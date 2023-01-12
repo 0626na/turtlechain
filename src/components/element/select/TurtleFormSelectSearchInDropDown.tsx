@@ -1,4 +1,4 @@
-import { Input, Select } from 'antd';
+import { Button, Input, Select } from 'antd';
 import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
 import React, { ChangeEvent, RefObject, useState } from 'react';
 import { css } from '@emotion/react';
@@ -11,12 +11,14 @@ import { t } from 'i18next';
 interface Props {
   value?: string;
   onChange?: (value: string) => void;
+  onSelect?: (value: string) => void;
   items?: { value: string; name: string; icon?: React.ReactNode }[];
   disabled?: boolean;
   showSearch?: boolean;
   addStore?: (value: string) => void;
   onSearch?: (value: string) => void;
   placeholder?: string;
+  removeDuplication?: () => void;
 }
 
 export function TurtleFormSelectSearchInDropDown({
@@ -25,7 +27,9 @@ export function TurtleFormSelectSearchInDropDown({
   showSearch,
   onChange,
   onSearch,
+  onSelect,
   addStore,
+  removeDuplication,
   ...props
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -34,6 +38,7 @@ export function TurtleFormSelectSearchInDropDown({
       value={value}
       showSearch={showSearch}
       onChange={onChange}
+      onSelect={onSelect}
       onSearch={onSearch}
       css={select}
       {...props}
@@ -55,6 +60,9 @@ export function TurtleFormSelectSearchInDropDown({
             onChange={(e) => {
               onChange && onChange(e.currentTarget.value);
             }}
+            onPressEnter={() => {
+              !!removeDuplication && removeDuplication();
+            }}
           />
           {items?.length === 0 && (
             <div
@@ -65,7 +73,10 @@ export function TurtleFormSelectSearchInDropDown({
                 color: theme.skyblueTx,
                 '&:hover': { cursor: 'pointer' },
               })}
-              onClick={() => setOpen((prev) => !prev)}
+              onClick={() => {
+                setOpen((prev) => !prev);
+                !!removeDuplication && removeDuplication();
+              }}
             >
               <TurtleIcon name="menuplus" />{' '}
               <span css={css({ marginLeft: 3 })}>
@@ -102,36 +113,6 @@ export function TurtleFormSelectSearchInDropDown({
     </Select>
   );
 }
-
-const largeSelect = css`
-  height: 44px;
-  background-color: #fff;
-  border-radius: 8px;
-
-  border: 1px solid #cbccd1;
-  box-shadow: 0px 1px 2px rgba(27, 62, 114, 0.1);
-  color: #5b5d63;
-
-  line-height: 40px;
-
-  &.ant-select-single .ant-select-selector {
-    .ant-select-selection-item,
-    .ant-select-selection-placeholder {
-      height: 44px;
-      line-height: 40px;
-    }
-  }
-
-  &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    height: 36px;
-    font-size: 14px;
-    padding: 0px 10px;
-    border-radius: 8px;
-  }
-  &.ant-select-disabled {
-    background-color: #f6f7f8;
-  }
-`;
 
 const select = css`
   height: 36px;
