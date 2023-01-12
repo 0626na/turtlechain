@@ -61,7 +61,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
   /**
    * picker 계정에 등록된 쇼핑몰 리스트를 가져오는 react-query
    */
-  useQuery('addedStoreListQuery', pickerAPI.getList, {
+  useQuery(['addedStoreListQuery', visible], pickerAPI.getList, {
     enabled: !!user,
     onSuccess: (data) => {
       setStoreList(data.data.store_list);
@@ -72,7 +72,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
    * 터틀체인에 존재하는 모든 쇼핑몰 리스트를 가져오는 react-query
    */
   useQuery(
-    ['getStoreListQuery'],
+    ['getStoreListQuery', visible],
     () => retailerStoreAPI.getList({ page: 1, page_size: 700 }),
     {
       onSuccess: (data) =>
@@ -194,6 +194,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                   );
                 }}
                 onSelect={(value) => {
+                  setSearchQuery(value.split(' ')[0]);
                   if (
                     storeList.find(
                       (store) => store.name === value.split(' ')[0],
@@ -203,7 +204,6 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                     setAddDisabled(true);
                     return;
                   }
-                  setSearchQuery(value.split(' ')[0]);
                   setAddDisabled(false);
                 }}
                 items={entireStoreList
