@@ -400,6 +400,7 @@ export interface OrderHistorySheet {
 
 export interface RequestGetOrderItem {
   sheet_id: number;
+  is_commented?: boolean;
 }
 
 export interface ResponseGetOrderItem {

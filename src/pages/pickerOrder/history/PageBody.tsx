@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import orderAPI from '@apis/orderAPI';
+import orderAPI, { OrderSheetList } from '@apis/orderAPI';
 import {
   TurtleCard,
   TurtleDivider,
@@ -38,7 +38,7 @@ function PageBody() {
     },
   ];
 
-  const [sheetId, setSheetId] = useState(0);
+  const [selectOrderSheet, setSelectOrderSheet] = useState<OrderSheetList>();
   const [searchQuery, setSearchQuery] = useState({
     type: 'entire',
     start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
@@ -91,18 +91,19 @@ function PageBody() {
 
   return (
     <>
-      {!!sheetId && (
+      {!!selectOrderSheet && (
         <DetailModal
           visible={detailModalVisible}
           onclose={closeDetailModal}
-          sheetId={sheetId}
+          sheetId={selectOrderSheet.id}
         />
       )}
-      {!!sheetId && (
+      {!!selectOrderSheet && (
         <WholesalerMessageModal
           visible={detailMessageModalVisible}
           onClose={closeDetailMessageModal}
-          sheetID={sheetId}
+          sheetID={selectOrderSheet?.id}
+          isComment={selectOrderSheet.total_comment_count === 0 ? false : true}
         />
       )}
       <PageHeader title={`${t('title.orderDetail')}`} />
@@ -166,7 +167,7 @@ function PageBody() {
           onRow={(record) => {
             return {
               onClick: () => {
-                setSheetId(record.id);
+                setSelectOrderSheet(record);
                 openDetailModal();
               },
             };
@@ -271,7 +272,7 @@ function PageBody() {
                     })}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSheetId(record.id);
+                      setSelectOrderSheet(record);
                       openDetailMessageModal();
                     }}
                   >
