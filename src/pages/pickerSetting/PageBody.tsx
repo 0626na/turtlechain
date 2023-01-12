@@ -15,16 +15,15 @@ import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
-import StoreCard from '@pages/setting/cards/StoreCard';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
-import AddPickerModal from './modals/AddPickerModal';
 import DetailPickerModal from './modals/DetailPickerModal';
 import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
 import { message } from '@utils/message';
+import AddStoreForPickerModal from './modals/AddStoreForPickerModal';
 
 function PageBody() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
@@ -35,6 +34,9 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
+  /**
+   * 현재 picker 계정에 등록된 쇼핑몰 리스트 불러오는 react-query
+   */
   const {
     data: storeList,
     isLoading,
@@ -89,7 +91,7 @@ function PageBody() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <AddPickerModal
+      <AddStoreForPickerModal
         visible={addModalVisible}
         closeModal={closeAddDetailModal}
       />

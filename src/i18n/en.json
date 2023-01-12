@@ -300,7 +300,9 @@
     "add adjustment": "Add Invoice Issues",
     "add exchange/returns": "Add Exchange/Returns",
     "subscription paid plan": "Subscribe",
-    "duplicateCheckProductCode": "Duplicate Check"
+    "duplicateCheckProductCode": "Duplicate Check",
+    "add store": "쇼핑몰 추가하기",
+    "modify store name": "쇼핑몰명 수정하기"
   },
 
   "message": {
@@ -468,6 +470,7 @@
     "manage business info": "Manage Business Info.",
     "wrong transfer reversal": "Wrong Transfer Reversal",
     "store info": "쇼핑몰 정보",
+    "store modification": "쇼핑몰 수정",
     "preview of todays stock products": "Preview of today`s stock products",
     "vendor detail message": "거래처 쪽지 상세보기"
   },
@@ -511,6 +514,8 @@
     "include vat": "(VAT ₩{{vat}} included)",
     "exclude payment": "Exclude from this payment",
     "include payment": "Include in this payment",
+    "currently, store is already registered": "현재 쇼핑몰은 이미 등록되어 있습니다.",
+    "input another store name": "다른 이름을 입력해주세요",
     "to use price cannot over warehousing price": "사용할 금액은 당일 입고 금액을 초과할 수 없습니다.",
     "total subtract": "Total deducted amount",
     "total reserved": "Total pending delivery amount",
