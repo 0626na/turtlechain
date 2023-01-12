@@ -133,7 +133,8 @@
     "new password": "새 비밀번호",
     "email": "이메일",
     "proccessed date": "처리일자",
-    "vendorMessage": "거래처 쪽지"
+    "vendorMessage": "거래처 쪽지",
+    "message": "쪽지"
   },
 
   "placeholder": {
@@ -302,7 +303,8 @@
     "add adjustment": "교환/반품/미송 추가",
     "add exchange/returns": "교환/반품 추가",
     "subscription paid plan": "유료플랜 구독",
-    "add store": "쇼핑몰 추가하기"
+    "add store": "쇼핑몰 추가하기",
+    "modify store name": "쇼핑몰명 수정하기"
   },
 
   "message": {
@@ -316,7 +318,7 @@
     "success update": "성공적으로 수정했어요",
     "success registration": "가입이 완료되었습니다",
     "success update store": "정보를 수정했어요",
-    "success create store": "쇼핑몰이 추가되었어요",
+    "success create store": "쇼핑몰 등록을 완료했어요.",
     "input store": "쇼핑몰을 입력해주세요",
     "delete store": "쇼핑몰을 삭제했어요.",
     "success create clearing": "결제요청이 완료됐어요",
@@ -473,6 +475,7 @@
     "search product": "상품 검색",
     "add warehousing": "입고 추가",
     "store info": "쇼핑몰 정보",
+    "store modification": "쇼핑몰 수정",
     "preview of todays stock products": "입고서 미리보기",
     "vendor detail message": "거래처 쪽지 상세보기"
   },
@@ -514,6 +517,8 @@
     "include vat": "부가세 {{vat}}원 포함",
     "exclude payment": "이번 결제에서 제외해요",
     "include payment": "이번 결제에서 포함해요",
+    "currently, store is already registered": "현재 쇼핑몰은 이미 등록되어 있습니다.",
+    "input another store name": "다른 이름을 입력해주세요",
     "to use price cannot over warehousing price": "사용할 금액은 당일 입고 금액을 초과할 수 없습니다.",
     "total subtract": "총 차감 합계",
     "total reserved": "총 미송 합계",

@@ -217,7 +217,6 @@ export interface ResponseCreatePreParsing {
 
 /**
  * 발주서 프리파싱 함수
- * @constructor sdfsdf
  * @param {RequestCreatePreParsing} data 프리파싱에 필요한 발주서 파일
  * @returns 프리파싱 결과 데이터
  */
@@ -331,6 +330,7 @@ export interface OrderSheetList {
   total_fail_count: number; //총 실패 건수
   total_success_price: number; //총 성공 금액
   total_fail_price: number; //총 실패 금액
+  total_comment_count: number;
   order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify
 }
@@ -364,6 +364,12 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
  *  발주내역 상세조회
  */
 
+export interface OrderVendorComment {
+  content: string;
+  created_tiem: string;
+  id: number;
+}
+
 export interface OrderHistoryItem {
   id: number;
   ws_store_id: number; //도매 ID
@@ -377,6 +383,7 @@ export interface OrderHistoryItem {
   count: number; //요청수량
   price: number; //공급가
   memo: string;
+  comments: OrderVendorComment[];
 }
 
 export interface OrderHistorySheet {
@@ -388,10 +395,12 @@ export interface OrderHistorySheet {
   total_success_count: number;
   total_item_subcount: number;
   total_success_price: number;
+  total_comment_count: number;
 }
 
 export interface RequestGetOrderItem {
   sheet_id: number;
+  is_commented?: boolean;
 }
 
 export interface ResponseGetOrderItem {
