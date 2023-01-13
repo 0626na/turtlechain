@@ -1,9 +1,7 @@
-import { Button, Input, Select } from 'antd';
+import { Input, Select } from 'antd';
 import { ReactComponent as ArrowDown } from '@icons/arrowDown.svg';
-import React, { ChangeEvent, RefObject, useState } from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/react';
-import { BaseSelectRef } from 'rc-select';
-import { OptionProps } from 'antd/lib/select';
 import TurtleIcon from '../icon/TurtleIcon';
 import { theme } from '@styles/theme';
 import { t } from 'i18next';
@@ -101,10 +99,10 @@ export function TurtleFormSelectSearchInDropDown({
               css={css({ display: 'flex', justifyContent: 'space-between' })}
             >
               <span css={css({ paddingLeft: 4 })}>
-                {item.name.split(' ')[0]}
+                {item.name.split('/')[0]}
               </span>{' '}
               <span css={css({ paddingRight: 4 })}>
-                {item.name.split(' ')[1]}
+                {item.name.split('/')[1]}
               </span>
             </div>
           }
