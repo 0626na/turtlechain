@@ -150,6 +150,17 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
           wrapperCol={{ span: 17 }}
           onFinish={() => {
             if (
+              form.getFieldValue('mobile').slice(0, 2) !== '010' ||
+              form.getFieldValue('mobile').length !== 11
+            ) {
+              message.warn(
+                t(
+                  'description.please enter a valid format for your mobile phone number',
+                ),
+              );
+              return;
+            }
+            if (
               storeList.filter((store) => store.name === searchQuery).length !==
               0
             ) {
