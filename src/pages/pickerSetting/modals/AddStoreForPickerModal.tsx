@@ -2,7 +2,7 @@ import React from 'react';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Button, Form, Popconfirm, Row, Select } from 'antd';
+import { Button, Form, Row } from 'antd';
 import { message } from '@utils/message';
 import { SpecialButton, TurtleFormInput } from '@components/element';
 import { TurtleContentModal } from '@components/combine';
@@ -13,7 +13,7 @@ import useUser from '@hooks/useUser';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
-
+import { notNumPattern } from '@utils/pattern';
 interface Props {
   visible: boolean;
   closeModal: () => void;
@@ -209,8 +209,8 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                 items={entireStoreList
                   .filter((store) => store.name.includes(searchQuery))
                   .map((item) => ({
-                    name: `${item.name.replaceAll(' ', '')} ${item.mobile}`,
-                    value: `${item.name.replaceAll(' ', '')} ${item.mobile}`,
+                    name: `${item.name}/${item.mobile}`,
+                    value: `${item.name} ${item.mobile}`,
                   }))}
                 removeDuplication={() => {
                   if (storeList.find((store) => store.name === searchQuery)) {
@@ -245,7 +245,14 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
             label={t('table.store mobile number')}
           >
             <TurtleFormInput
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  notNumPattern,
+                  '',
+                );
+              }}
               placeholder={t('placeholder.input mobile number')}
+              maxLength={11}
             />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
