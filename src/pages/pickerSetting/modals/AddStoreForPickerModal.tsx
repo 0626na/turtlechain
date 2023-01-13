@@ -188,17 +188,16 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                   setSearchStore(
                     entireStoreList.find(
                       (store) =>
-                        store.name.replaceAll(' ', '') ===
-                          value.split(' ')[0] &&
-                        store.mobile === value.split(' ')[1],
+                        store.name === value.split('/')[0] &&
+                        store.mobile === value.split('/')[1],
                     ),
                   );
                 }}
                 onSelect={(value) => {
-                  setSearchQuery(value.split(' ')[0]);
+                  setSearchQuery(value.split('/')[0]);
                   if (
                     storeList.find(
-                      (store) => store.name === value.split(' ')[0],
+                      (store) => store.name === value.split('/')[0],
                     )
                   ) {
                     message.error(t('message.already added store'), 2);
@@ -211,7 +210,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                   .filter((store) => store.name.includes(searchQuery))
                   .map((item) => ({
                     name: `${item.name}/${item.mobile}`,
-                    value: `${item.name} ${item.mobile}`,
+                    value: `${item.name}/${item.mobile}`,
                   }))}
                 removeDuplication={() => {
                   if (storeList.find((store) => store.name === searchQuery)) {
