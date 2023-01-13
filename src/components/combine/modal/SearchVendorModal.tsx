@@ -63,7 +63,7 @@ function SearchVendorModal({ visible, closeModal, onClickSelect }: Props) {
       <TurtleContentModal
         size="middle"
         visible={visible}
-        title={t('vendor.search')}
+        title={t('title.vendor search')}
         onClose={closeModal}
       >
         <Table
