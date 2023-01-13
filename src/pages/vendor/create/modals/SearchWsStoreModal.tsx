@@ -100,7 +100,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     >
       <TurtleContentModal
         size="middle"
-        title={t('vendor.search')}
+        title={t('title.vendor search')}
         visible={visible}
         onClose={() => {
           closeModal();
