@@ -7,7 +7,7 @@ import PageBody from './PageBody';
 function VendorCreatePage() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('vendor.create')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('title.create vendor')}`} />
 
       <PageBody />
     </>
