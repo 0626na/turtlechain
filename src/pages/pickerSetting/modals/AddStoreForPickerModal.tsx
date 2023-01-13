@@ -119,6 +119,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
     <>
       {/*선택한 쇼핑몰명이 이미 있는경우, 쇼핑몰명 수정 모달 */}
       <InputModal
+        defaultValue={searchQuery}
         visible={modifiedModalVisible}
         onCancel={closeModifiedModal}
         title={t('title.store modification')}
