@@ -41,6 +41,7 @@ const type = {
   name: '거래처명',
   address: '주소',
   account: '계좌',
+  mobile: '휴대전화 번호',
 };
 
 function Notification() {
@@ -94,15 +95,21 @@ function Notification() {
       }
     }
 
+    console.log(noti);
     if (noti.type === 'modification_request' && user?.type === 'pi') {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
         result.reason = `(반려사유 | ${noti.content.memo})`;
       } else {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 승인되었어요. `;
-        result.reason = `(신규 ${t(noti.content.component)}: ${
-          noti.content.after
-        })`;
+        result.reason = `(신규 ${
+          type[
+            (noti.content.component as 'name') ||
+              'address' ||
+              'account' ||
+              'mobile'
+          ]
+        }: ${noti.content.after})`;
       }
     }
 
