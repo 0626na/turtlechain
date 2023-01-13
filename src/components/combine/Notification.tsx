@@ -39,8 +39,8 @@ interface Noti {
 
 const type = {
   name: '거래처명',
-  address: '주소',
-  account: '계좌',
+  address: '거래처 주소',
+  account: '계좌정보',
   mobile: '휴대전화 번호',
 };
 
