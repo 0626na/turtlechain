@@ -155,28 +155,28 @@ const menus = [
           },
         ],
       },
-      {
-        key: 'order',
-        label: t('title.order'),
-        icon: (
-          <div css={iconContainer}>
-            <TurtleIcon name="order" />
-          </div>
-        ),
-        style: mainMenuTitleStyle,
-        children: [
-          {
-            key: pathnames.order.create,
-            label: t('title.orderCreate'),
-            style: mainMenuContentStyle,
-          },
-          {
-            key: pathnames.order.history,
-            label: t('title.orderDetail'),
-            style: mainMenuContentStyle,
-          },
-        ],
-      },
+      // {
+      //   key: 'order',
+      //   label: t('title.order'),
+      //   icon: (
+      //     <div css={iconContainer}>
+      //       <TurtleIcon name="order" />
+      //     </div>
+      //   ),
+      //   style: mainMenuTitleStyle,
+      //   children: [
+      //     {
+      //       key: pathnames.order.create,
+      //       label: t('title.orderCreate'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //     {
+      //       key: pathnames.order.history,
+      //       label: t('title.orderDetail'),
+      //       style: mainMenuContentStyle,
+      //     },
+      //   ],
+      // },
       {
         key: 'warehousing',
         label: t('title.warehousing'),

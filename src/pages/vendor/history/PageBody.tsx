@@ -150,9 +150,9 @@ function PageBody() {
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title={t('delete from list')}
-        description={[t('this will be permanently deleted from your list')]}
-        okText={t('Delete')}
+        title={t('title.really delete')}
+        description={[t('description.cannot reset')]}
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={vendorUpdateMutation.isLoading}
         onCancel={vendorUpdateMutation.isLoading ? () => {} : closeRemoveModal}
