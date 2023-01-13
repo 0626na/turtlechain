@@ -39,7 +39,8 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const [searchStore, setSearchStore] = useState<IaddStore>();
-  const [addDisabled, setAddDisabled] = useState(false);
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [entireStoreList, setEntireStoreList] = useState<IaddStore[]>([]);
   const [storeList, setStoreList] = useState<StoreShow[]>([]);
@@ -105,6 +106,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
         store_url: '',
         mobile: '',
       });
+      setInputDisabled(false);
       return;
     }
 
@@ -113,6 +115,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
       store_url: searchStore.url,
       mobile: searchStore.mobile,
     });
+    setInputDisabled(true);
   }, [form, searchStore]);
 
   return (
@@ -133,7 +136,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
             return;
           }
           setSearchQuery(value);
-          setAddDisabled(false);
+          setAddButtonDisabled(false);
           closeModifiedModal();
         }}
       />
@@ -212,10 +215,10 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                     )
                   ) {
                     message.error(t('message.already added store'), 2);
-                    setAddDisabled(true);
+                    setAddButtonDisabled(true);
                     return;
                   }
-                  setAddDisabled(false);
+                  setAddButtonDisabled(false);
                 }}
                 items={entireStoreList
                   .filter((store) => store.name.includes(searchQuery))
@@ -226,14 +229,14 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                 removeDuplication={() => {
                   if (storeList.find((store) => store.name === searchQuery)) {
                     message.error(t('message.already added store'), 2);
-                    setAddDisabled(true);
+                    setAddButtonDisabled(true);
                     return;
                   }
 
-                  setAddDisabled(false);
+                  setAddButtonDisabled(false);
                 }}
               />
-              {addDisabled && (
+              {addButtonDisabled && (
                 <div css={css({ display: 'flex', justifyContent: 'right' })}>
                   <Button type="link" onClick={openModifiedModal}>
                     {t('button.modify store name')}
@@ -247,7 +250,10 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
             rules={[{ required: true }]}
             label={t('table.retailerStoreURL')}
           >
-            <TurtleFormInput placeholder={t('placeholder.ex. store url')} />
+            <TurtleFormInput
+              placeholder={t('placeholder.ex. store url')}
+              disabled={inputDisabled}
+            />
           </Form.Item>
 
           <Form.Item
@@ -264,6 +270,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
               }}
               placeholder={t('placeholder.input mobile number')}
               maxLength={11}
+              disabled={inputDisabled}
             />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
@@ -272,7 +279,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
                 size="large"
                 htmlType="submit"
                 loading={isLoading}
-                disabled={addDisabled}
+                disabled={addButtonDisabled}
                 onClick={() => {
                   form.setFieldsValue({ name: searchQuery });
                 }}
