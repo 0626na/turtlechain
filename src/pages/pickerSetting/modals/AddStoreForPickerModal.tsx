@@ -153,7 +153,7 @@ function AddStoreForPickerModal({ visible, closeModal }: Props) {
           wrapperCol={{ span: 17 }}
           onFinish={() => {
             if (
-              form.getFieldValue('mobile').slice(0, 2) !== '010' ||
+              form.getFieldValue('mobile').slice(0, 3) !== '010' ||
               form.getFieldValue('mobile').length !== 11
             ) {
               message.warn(
