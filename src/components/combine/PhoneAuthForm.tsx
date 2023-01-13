@@ -20,13 +20,13 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
   const form = Form.useFormInstance();
   const [session_key, setSessionKey] = useState('');
   const [expire_time, setExpireTime] = useState<null | number>(null);
-  const [authStatus, setAuthStatus] = useState<Auth>(t('auth.do'));
+  const [authStatus, setAuthStatus] = useState<Auth>(t('description.do'));
 
   // 인증번호 생성 요청
   const createOTPQuery = useMutation(authAPI.createPhoneOTP, {
     onSuccess: ({ session_key, expire_time }) => {
       message.success(t('message.success create auth num'));
-      setAuthStatus(t('auth.retry'));
+      setAuthStatus(t('description.retry'));
       setSessionKey(session_key);
       setExpireTime(calculateExpireTime(expire_time));
     },
@@ -38,14 +38,14 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
       message.success(t('message.success verify auth num'));
       const token = data;
       const phone = form.getFieldValue('phone');
-      setAuthStatus(t('auth.success'));
+      setAuthStatus(t('description.success'));
       onSuccess && onSuccess({ token, phone });
       setSessionKey('');
       setExpireTime(null);
       form.setFieldsValue({ ...form.getFieldsValue(), otp_code: '' });
     },
     onError: () => {
-      message.warn('인증번호가 일치하지 않습니다.');
+      message.warn(t('message.authentication number does not match'));
     },
   });
 
@@ -56,7 +56,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
 
   // 인증코드 생성
   const handleCreate = () => {
-    if (authStatus === t('auth.success')) return;
+    if (authStatus === t('description.success')) return;
 
     const { phone } = form.getFieldsValue();
     createOTPQuery.mutate({ phone });
@@ -94,12 +94,12 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
         {({ getFieldValue }) => (
           <Form.Item
             name="phone"
-            label={t('phone')}
+            label={t('table.mobile')}
             rules={[{ required: type && true }]}
           >
             <Input
               css={input}
-              placeholder="ex. 010-1234-5678"
+              placeholder={t('placeholder.ex. mobile')}
               suffix={
                 <Button
                   disabled={!getFieldValue('phone')}
@@ -108,7 +108,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                   onClick={handleCreate}
                   loading={createOTPQuery.isLoading}
                 >
-                  {authStatus === t('auth.success') ? (
+                  {authStatus === t('description.success') ? (
                     <div css={authCheckCss.container}>
                       <span css={authCheckCss.text}>인증완료</span>
                       <TurtleIcon name="checkMark" />
@@ -127,7 +127,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
         <>
           <Form.Item name="otp_code">
             <Input
-              placeholder="인증번호 입력"
+              placeholder={t('placeholder.input authentication number')}
               css={input}
               suffix={
                 <span css={otpText}>

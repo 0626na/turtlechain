@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { TurtleTabs } from '@components/element';
 import SuccessTab from './tabs/SuccessTab';
 import FailTab from './tabs/FailTab';
+import { t } from 'i18next';
 
 interface Props {
   visible: boolean;
@@ -14,19 +15,34 @@ interface Props {
   sheetId: number;
 }
 
+/**
+ * 발주 상세내역 모달
+ * @param visible 발주 표시 유무 boolean
+ * @param onclose 모달 닫을때 이벤트 함수
+ * @param sheetId 보고자 하는 발주내역 ID
+ */
 function DetailModal({ visible, onclose, sheetId }: Props) {
-  const getOrderHistoryQuery = useQuery(
-    ['getOrderHistory', sheetId],
+  const { data: orderHistoryData, isLoading } = useQuery(
+    ['getOrderHistoryCount', sheetId],
     () => orderAPI.getOrderHistory({ sheet_id: sheetId }),
-    {
-      enabled: sheetId !== 0,
-    },
+    { enabled: visible },
   );
+
+  const storeName = orderHistoryData?.data.order_sheet.rt_store_name ?? '';
+  const orderDate =
+    moment(orderHistoryData?.data.order_sheet.request_date).format(
+      'YYYY-MM-DD',
+    ) ?? '';
+  const vendorCount = orderHistoryData?.data.order_sheet.total_store_count ?? 0;
+  const orderTotalCount =
+    orderHistoryData?.data.order_sheet.total_item_subcount ?? 0;
+  const orderTotalPrice =
+    orderHistoryData?.data.order_sheet.total_success_price ?? 0;
 
   return (
     <>
       <TurtleContentModal
-        title="발주내역 상세보기"
+        title={t('title.look orderDetail')}
         size="large"
         onClose={onclose}
         visible={visible}
@@ -34,49 +50,58 @@ function DetailModal({ visible, onclose, sheetId }: Props) {
         <TurtleStatistics
           value={[
             {
-              title: '쇼핑몰',
-              value:
-                getOrderHistoryQuery.data?.data.order_sheet.rt_store_name ?? '',
+              title: t('table.retailerStoreName'),
+              value: storeName,
             },
             {
-              title: '발주 일자',
-              value:
-                moment(
-                  getOrderHistoryQuery.data?.data.order_sheet.created_time,
-                ).format('YYYY-MM-DD') ?? '',
+              title: t('table.orderDate'),
+              value: orderDate,
             },
             {
-              title: '발주 거래처',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_store_count.toString()}개` ??
-                '0개',
+              title: t('table.clientCount'),
+              value: t('description.count', {
+                count: Number(vendorCount.toLocaleString()),
+              }),
             },
             {
-              title: '발주수량 합계',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_item_subcount.toString()}개` ??
-                '0개',
+              title: t('table.totalCount'),
+              value: t('description.count', {
+                count: Number(orderTotalCount.toLocaleString()),
+              }),
             },
             {
-              title: '발주금액 합계',
-              value:
-                `${getOrderHistoryQuery.data?.data.order_sheet.total_success_price.toLocaleString()}원` ??
-                '0원',
+              title: t('table.totalPrice'),
+              value: `${Number(orderTotalPrice).toLocaleString()} ${t(
+                'description.won',
+              )} `,
             },
           ]}
         />
         <TurtleTabs>
           <SuccessTab
+            sheetID={sheetId}
+            storeID={Number(orderHistoryData?.data.order_sheet.rt_store_id)}
+            requestDate={String(
+              orderHistoryData?.data.order_sheet.request_date,
+            )}
             key={'successHistory'}
-            tab={`성공(${getOrderHistoryQuery.data?.data.successes.length})`}
-            data={getOrderHistoryQuery.data?.data.successes ?? []}
-            loading={getOrderHistoryQuery.isLoading}
+            tab={`${t('title.success')}(${
+              orderHistoryData?.data.successes.length ?? 0
+            })`}
+            loading={isLoading}
           />
           <FailTab
             key={'failHistory'}
-            tab={`실패(${getOrderHistoryQuery.data?.data.fails.length})`}
-            data={getOrderHistoryQuery.data?.data.fails ?? []}
-            loading={getOrderHistoryQuery.isLoading}
+            tab={`${t('title.fail')}(${
+              orderHistoryData?.data.fails.length ?? 0
+            })`}
+            data={
+              orderHistoryData?.data.fails.map((item, index) => ({
+                ...item,
+                id: index,
+              })) ?? []
+            }
+            loading={isLoading}
           />
         </TurtleTabs>
       </TurtleContentModal>

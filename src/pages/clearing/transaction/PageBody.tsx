@@ -67,18 +67,18 @@ function PageBody() {
         onClose={detailModalClose}
       />
 
-      <PageHeader title={t('clearing.transaction.')} />
+      <PageHeader title={t('title.ledger')} />
 
       <PageTitle
-        title="장부 리스트"
-        subTitle="거래처별 잔금 및 여러 금액 정보를 확인해보세요. 과거매입은 우측 과거매입 추가에서 자유롭게 추가 할 수 있어요!"
+        title={t('title.ledger list')}
+        // subTitle={t('description.look around ledger')}
         buttons={[
           <SecondaryIconButton
             onClick={() => {
               addModalOpen();
             }}
           >
-            과거금액 추가
+            {t('button.add past price')}
           </SecondaryIconButton>,
         ]}
       />
@@ -104,7 +104,7 @@ function PageBody() {
               totalCount={itemList.length ?? 0}
               rightContent={
                 <TurtleSearchInput
-                  placeholder="거래처명을 입력하세요"
+                  placeholder={t('placeholder.input vendor name')}
                   onChange={(e) => {
                     filterVendor(e.currentTarget?.value);
                   }}

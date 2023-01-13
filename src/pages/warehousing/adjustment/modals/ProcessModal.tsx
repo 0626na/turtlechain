@@ -22,8 +22,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
   const updateMutation = useMutation(adjustmentAPI.update, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success('성공적으로 업데이트 되었습니다.');
-
+      message.success(t('message.success update'));
       onClose();
     },
   });
@@ -45,8 +44,10 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
       }}
       okDisabled={item?.process_count === 0 || !item?.adjustment_process_type}
       loading={updateMutation.isLoading}
-      title={`${t(`adjustment.process type.${selectedRow?.type}`)} 처리`}
-      description={['처리 방식과 수량을 설정해주세요.']}
+      title={`${t(`type.adj process.${selectedRow?.type}`)} ${t(
+        'title.process',
+      )}`}
+      description={[t('description.input process type and quantity')]}
     >
       <Form
         css={css`
@@ -57,15 +58,15 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
         wrapperCol={{ span: 16 }}
       >
         <Form.Item
-          label="처리방식"
+          label={t('table.processing method')}
           name="adjustment_process_type"
           css={{ marginBottom: 12 }}
         >
           <TurtleFormSelect
-            placeholder="선택"
+            placeholder={t('placeholder.select')}
             items={[
-              { value: 'subtract', name: '차감' },
-              { value: 'refund', name: '환불' },
+              { value: 'subtract', name: t('type.subtraction') },
+              { value: 'refund', name: t('type.refund') },
             ]}
             onChange={(value: string) => {
               setItem((item) => ({
@@ -75,7 +76,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
             }}
           />
         </Form.Item>
-        <Form.Item label="처리수량 / 총 수량">
+        <Form.Item label={t('table.processed quantity / total quantity')}>
           <Row align="middle">
             <Col span={20}>
               <Form.Item noStyle>
@@ -89,7 +90,7 @@ function ProcessModal({ visible, onClose, selectedRow }: Props) {
                   }}
                   max={item?.count_left}
                   min={1}
-                  placeholder="0"
+                  placeholder={t('placeholder.zero')}
                 />
               </Form.Item>
             </Col>

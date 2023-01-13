@@ -63,11 +63,13 @@ function ResetPasswordForm() {
   return (
     <>
       <div css={cardCss.self}>
-        <TurtleText css={cardCss.title}>{t('reset password')}</TurtleText>
+        <TurtleText css={cardCss.title}>
+          {t('button.reset password')}
+        </TurtleText>
         <TurtleText css={cardCss.subTitle}>
           {!getIDQuery.data
             ? t('description.please phone auth')
-            : '새로운 비밀번호를 설정해주세요.'}
+            : t('description.input new password')}
         </TurtleText>
       </div>
 
@@ -85,13 +87,13 @@ function ResetPasswordForm() {
           <>
             <Form.Item //
               name="login_id"
-              label={t('id')}
+              label={t('table.id')}
             >
               <TurtleFormLargeSelect items={userList ?? []} showSearch />
             </Form.Item>
             <Form.Item //
               name="password"
-              label={t('new password')}
+              label={t('table.new password')}
               rules={requiredRules}
             >
               <Input.Password
@@ -102,7 +104,7 @@ function ResetPasswordForm() {
 
             <Form.Item //
               name="confirmPassword"
-              label={t('confirm new password')}
+              label={t('table.confirm new password')}
               rules={[
                 ...requiredRules,
                 ({ getFieldValue }) => ({
@@ -136,7 +138,7 @@ function ResetPasswordForm() {
                   loading={resetPasswordMutation.isLoading}
                   onClick={handleReset}
                 >
-                  {t('reset password')}
+                  {t('button.reset password')}
                 </Button>
               )}
             </Form.Item>
@@ -145,11 +147,11 @@ function ResetPasswordForm() {
 
         <div css={footerCss.self}>
           <Link to="/" css={footerCss.content}>
-            {t('login')}
+            {t('button.login')}
           </Link>
           <TurtleDivider type="vertical" />
           <Link to="/find-id" css={footerCss.content}>
-            {t('auth.findId')}
+            {t('description.findId')}
           </Link>
         </div>
       </Form>

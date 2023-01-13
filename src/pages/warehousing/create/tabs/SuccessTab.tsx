@@ -71,9 +71,11 @@ function SuccessTab({ loading, ...props }: Props) {
        * 삭제 확인 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="삭제"
+        title={t('title.do you really want me to delete it?')}
+        description={[
+          t('description.you cant go back to the past after deleting it'),
+        ]}
+        okText={t('delete')}
         visible={removeModalVisible}
         onCancel={closeRemoveModal}
         onOk={() => {
@@ -99,7 +101,9 @@ function SuccessTab({ loading, ...props }: Props) {
               )}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 상품명, 거래처 상품명 검색"
+                  placeholder={t(
+                    'placeholder.search by vendor name, product name, vendor product name',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -139,9 +143,9 @@ function SuccessTab({ loading, ...props }: Props) {
                     visible={tooltipVisible}
                     title={
                       <span>
-                        당일 입고에 미송상품이 있네요!
+                        {t('you have some pending deliveries!')}
                         <br />
-                        누락되지 않도록 다시 한번 확인해주세요.
+                        {t('please double check so that you dont miss out')}
                       </span>
                     }
                     zIndex={1}

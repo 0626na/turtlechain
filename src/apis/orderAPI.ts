@@ -2,9 +2,17 @@ import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
 /*
- * 발주서 양식 조회
+ * 발주기능에 관한 API 명세 및 목록파일 입니다.
+ * 발주에 관한 모든 API는 이 파일에 작성해주세요.
  */
 
+/**
+ * 여기서 부터 발주서 헤더설정에 관한 인터페이스 및 함수입니다.
+ */
+
+/**
+ * 발주서 양식 조회 (발주서 설정 modal) response 인터페이스
+ */
 export interface ResponseGetOrderFormat {
   msg: string;
   data: {
@@ -20,6 +28,10 @@ export interface ResponseGetOrderFormat {
   };
 }
 
+/**
+ * 발주서 양식 조회 (발주서 설정 modal)
+ * @returns 조회한 발주서 양식(헤더) 데이터 오브젝트
+ */
 const getOrderFormat = async () => {
   const url = 'order/format';
   const response = await v2Axios.get<ResponseGetOrderFormat>(url);
@@ -27,10 +39,9 @@ const getOrderFormat = async () => {
   return response.data;
 };
 
-/*
- * 발주서 양식 생성
+/**
+ * 발주서 헤더 설정 요청 인터페이스
  */
-
 export interface RequestCreateOrderFormat {
   vendor_name: string[];
   vendor_address: string[];
@@ -43,10 +54,18 @@ export interface RequestCreateOrderFormat {
   memo: string[];
 }
 
+/**
+ * 발주서 헤더 설정 결과 인터페이스
+ */
 export interface ResponseCreateOrderFormat {
   msg: string;
 }
 
+/**
+ * 발주서 헤더 설정 함수
+ * @param data 생성 및 수정 하려는 발주서 헤더 양식 데이터
+ * @returns 결과 메세지
+ */
 const createOrderFormat = async (data: RequestCreateOrderFormat) => {
   const url = 'order/format';
   const response = await v2Axios.post<ResponseCreateOrderFormat>(url, data);
@@ -55,7 +74,7 @@ const createOrderFormat = async (data: RequestCreateOrderFormat) => {
 };
 
 /*
- * 발주서 엑셀 파싱
+ * 여기서부터 발주서 파싱 관련 인터페이스 및 함수입니다.
  */
 
 interface WholesalerMobile {
@@ -70,6 +89,9 @@ interface WholesalerStore {
   mobiles: WholesalerMobile[];
 }
 
+/**
+ * 발주 데이터 인터페이스
+ */
 export interface StoreOrder {
   order_id?: number;
   vendor_name: string;
@@ -95,14 +117,22 @@ export interface StoreOrderItemExcelParsing {
   orders: StoreOrder[];
 }
 
+/**
+ * 발주서 파싱 결과의 데이터 인터페이스, 파싱에 성공/실패 갯수와 실패의 경우의 설명 메세지가 있다.
+ */
 export interface ParsingStatus {
   success_count: number;
   fail_count: number;
   error_messages: string[];
 }
 
+/**
+ * 파싱하려는 발주서 파일 (엑셀파일) 인터페이스
+ */
 export interface RequestCreateOrderItemExcelParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
 export interface ResponseCreateOrderItemExcelParsing {
@@ -114,12 +144,22 @@ export interface ResponseCreateOrderItemExcelParsing {
   };
 }
 
+const setFormData = (
+  formdata: FormData,
+  data: RequestCreateOrderItemExcelParsing | RequestCreatePreParsing,
+) => {
+  data.files.map((file) => formdata.append('files', file));
+  if (data.rt_store_id)
+    formdata.append('rt_store_id', String(data.rt_store_id));
+  formdata.append('request_date', data.request_date);
+};
+
 const createOrderExcelParsing = async (
   data: RequestCreateOrderItemExcelParsing,
 ) => {
   const url = 'order/parsing';
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
+  setFormData(formData, data);
   const response = await v2Axios.post<ResponseCreateOrderItemExcelParsing>(
     url,
     formData,
@@ -134,35 +174,57 @@ const createOrderExcelParsing = async (
 };
 
 /*
- * 발주 등록 여부 확인 (프리파싱)
- * 발주 등록은 쇼핑몰당 하루 2회 가능하다.
+ * 여기서부터 발주 등록 여부 확인 (프리파싱) 관련 인터페이스 및 함수입니다.
+ *
  */
 
+/**
+ * 발주서 프리파싱 인터페이스
+ */
 interface PreParsingOrder {
   rt_store_id: number;
   rt_store_name: string;
 }
 
+/**
+ * 발주서 프리파싱 결과 데이터 인터페이스
+ *
+ * 발주는 쇼핑몰당 하루 2회 가능하다. 2회를 넘기면 금일은 발주가 불가능 하다.
+ * first_order는 한번도 안한 경우, second_order는 두번째인 경우, third_order는 이미 횟수를 넘긴 발주서가 들어간다.
+ */
 export interface PreParsingOrderList {
   first_order: PreParsingOrder[];
   second_order: PreParsingOrder[];
   third_order: PreParsingOrder[];
 }
 
+/**
+ * 프리파싱에 필요한 발주서 엑셀 파일 인터페이스
+ */
 export interface RequestCreatePreParsing {
   files: RcFile[];
+  rt_store_id?: number;
+  request_date: string;
 }
 
+/**
+ * 프리파싱 결과 인터페이스
+ */
 export interface ResponseCreatePreParsing {
   msg: string;
   data: PreParsingOrderList;
 }
 
-const createPreParsing = async (data: RequestCreatePreParsing) => {
+/**
+ * 발주서 프리파싱 함수
+ * @param {RequestCreatePreParsing} data 프리파싱에 필요한 발주서 파일
+ * @returns 프리파싱 결과 데이터
+ */
+export const createPreParsing = async function (data: RequestCreatePreParsing) {
   let url = 'order/parsing/pre-parsing';
   let parsingResponse;
   const formData = new FormData();
-  data.files.map((file) => formData.append('files', file));
+  setFormData(formData, data);
 
   const preParsingResponse = await v2Axios.post<ResponseCreatePreParsing>(
     url,
@@ -195,9 +257,12 @@ const createPreParsing = async (data: RequestCreatePreParsing) => {
 };
 
 /*
- * 발주 등록
+ * 여기서부터 발주등록 관련 인터페이스 및 함수 목록입니다.
  */
 
+/**
+ * 발주데이터 인터페이스
+ */
 export interface CreatingOrdersItem {
   vendor_name: string;
   vendor_address: string;
@@ -213,19 +278,36 @@ export interface CreatingOrdersItem {
   ws_store_id: number | null;
 }
 
+/**
+ * 발주데이터 리스트 인터페이스. 쇼핑몰마다 발주리스트를 가진다.
+ */
 export interface OrderItemList {
   rt_store_id: number;
+  request_date: string;
   orders: CreatingOrdersItem[];
 }
 
+/**
+ * 발주등록 요청 인터페이스.
+ *
+ * 발주하려는 데이터들이다.
+ */
 export interface RequestCreateOrderItem {
   rt_stores: OrderItemList[];
 }
 
+/**
+ * 발주등록 결과 인터페이스
+ */
 export interface ResponseCreateOrderItem {
   msg: string;
 }
 
+/**
+ * 발주서 등록
+ * @param data 미리보기 테이블의 발주데이터
+ * @returns 등록 결과 메세지
+ */
 const createOrderItem = async (data: RequestCreateOrderItem) => {
   const url = 'order/item';
   const response = await v2Axios.post<ResponseCreateOrderItem>(url, data);
@@ -233,27 +315,28 @@ const createOrderItem = async (data: RequestCreateOrderItem) => {
   return response.data;
 };
 
-/*
- * 발주내역 조회
+/**
+ * 발주서 내역 인터페이스
  */
-
 export interface OrderSheetList {
   id: number;
   rt_store_name: string; //쇼핑몰명
   is_inactive: boolean; //삭제여부
   created_time: string;
+  request_date: string;
   fails: number; //실패수량
   total_store_count: number;
   total_success_count: number; //총 성공 건수
   total_fail_count: number; //총 실패 건수
   total_success_price: number; //총 성공 금액
   total_fail_price: number; //총 실패 금액
+  total_comment_count: number;
   order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify
 }
 
 export interface RequestGetOrderSheet {
-  //rt_store_id: number;
+  rt_store_id?: number;
   start_date: string;
   end_date: string;
 }
@@ -265,6 +348,11 @@ export interface ResponseGetOrderSheet {
   };
 }
 
+/**
+ * 발주서 내역 조회
+ * @param params 조회하려는 날짜 (쇼핑몰의 경우는 해당 쇼핑몰의 아이디)
+ * @returns 발주서 내역 데이터
+ */
 const getOrderSheets = async (params: RequestGetOrderSheet) => {
   const url = 'order/sheet';
   const response = await v2Axios.get<ResponseGetOrderSheet>(url, { params });
@@ -276,7 +364,14 @@ const getOrderSheets = async (params: RequestGetOrderSheet) => {
  *  발주내역 상세조회
  */
 
+export interface OrderVendorComment {
+  content: string;
+  created_tiem: string;
+  id: number;
+}
+
 export interface OrderHistoryItem {
+  id: number;
   ws_store_id: number; //도매 ID
   vendor_name: string; //거래처명
   address: string; //거래처주소
@@ -284,23 +379,28 @@ export interface OrderHistoryItem {
   name: string; //상품명
   option: string;
   type: string; //분류
+  creation_type: 'excel' | 'single';
   count: number; //요청수량
   price: number; //공급가
   memo: string;
+  comments: OrderVendorComment[];
 }
 
 export interface OrderHistorySheet {
   rt_store_id: number;
   rt_store_name: string;
   created_time: string;
+  request_date: string;
   total_store_count: number;
   total_success_count: number;
   total_item_subcount: number;
   total_success_price: number;
+  total_comment_count: number;
 }
 
 export interface RequestGetOrderItem {
   sheet_id: number;
+  is_commented?: boolean;
 }
 
 export interface ResponseGetOrderItem {
@@ -371,6 +471,22 @@ const createSingleStore = async (data: RequestCreateStore) => {
   return response.data;
 };
 
+export interface RequestUpdateOrderHistoryMemo {
+  memo: string;
+  id: number;
+}
+
+export interface ResponseUpdateOrderHistoryMemo {
+  msg: string;
+}
+
+const updateOrderHistoryMemo = async (data: RequestUpdateOrderHistoryMemo) => {
+  const url = `order/item/${data.id}`;
+  const response = await v2Axios.patch(url, data);
+
+  return response.data;
+};
+
 const orderAPI = {
   getOrderFormat,
   createOrderFormat,
@@ -381,6 +497,7 @@ const orderAPI = {
   getOrderHistory,
   createSingleStore,
   getPickerStores,
+  updateOrderHistoryMemo,
 };
 
 export default orderAPI;

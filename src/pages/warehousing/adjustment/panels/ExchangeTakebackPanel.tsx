@@ -39,7 +39,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
   const createMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success('교환/반품이 성공적으로 등록되었습니다.');
+      message.success(t('successfully added exchange/returns'));
       onClose();
     },
     onError: (error: AxiosError) => {
@@ -61,7 +61,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
 
   const handleExchangeRefundCreate = () => {
     if (!handleValidation()) {
-      message.warn('교환/반품 가격,수량,종류를 확인해주세요.');
+      message.warn(t('message.confirm adjustment'));
       return;
     }
 
@@ -98,12 +98,12 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
           );
           memoModalClose();
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('description.make use of memo'),
+          t('description.select specific info'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       <Collapse.Panel
@@ -182,7 +182,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
             },
             {
               ellipsis: true,
-              width: 100,
+              width: 120,
               align: 'right',
               title: t('table.count'),
               render: (_, record) => (
@@ -215,7 +215,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     );
                   }}
                   suffixIcon={<TurtleIcon name="arrowDown" />}
-                  placeholder="분류선택"
+                  placeholder={t('select category')}
                   dropdownStyle={{
                     background: '#fff',
                     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
@@ -230,7 +230,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={0}
                     value="exchange"
                   >
-                    교환
+                    {t('type.adjustment.process type.exchange')}
                   </Select.Option>
                   <Select.Option
                     style={{
@@ -239,14 +239,14 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     key={1}
                     value="takeback"
                   >
-                    반품
+                    {t('type.adjustment.process type.takeback')}
                   </Select.Option>
                 </Select>
               ),
             },
             {
               ellipsis: true,
-              width: 50,
+              width: 70,
               title: t('table.memo'),
               align: 'center',
               render: (_, record) => (
@@ -280,14 +280,14 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
             <TurtleText
               css={{ color: ' #6B6D73', marginRight: 8, fontSize: 15 }}
             >
-              금액 합계
+              {t('table.totalPrice')}
             </TurtleText>
             <TurtleText css={{ fontWeight: 700 }}>
               {cart.adjustmentItemList
                 .map((item) => item.product_count * item.product_price)
                 .reduce((totalPrice, price) => totalPrice + price, 0)
                 .toLocaleString()}
-              원
+              {t('description.won')}
             </TurtleText>
           </Col>
 
@@ -300,7 +300,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                 handleExchangeRefundCreate();
               }}
             >
-              교환/반품 등록하기
+              {t('button.register adjustment')}
             </PrimaryButton>
           </Col>
         </Row>

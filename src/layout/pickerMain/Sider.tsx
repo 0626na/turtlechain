@@ -97,7 +97,7 @@ const menus = [
     children: [
       {
         key: 'vendor',
-        label: '거래처',
+        label: t('title.vendor'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="vendorProduct" />
@@ -114,7 +114,7 @@ const menus = [
       },
       {
         key: 'order',
-        label: t('order.'),
+        label: t('title.order'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="order" />
@@ -124,12 +124,12 @@ const menus = [
         children: [
           {
             key: pathnames.order.create,
-            label: t('order.create'),
+            label: t('title.orderCreate'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.order.history,
-            label: t('order.history'),
+            label: t('title.orderDetail'),
             style: lastMainMenuContentStyle,
           },
         ],
@@ -144,7 +144,7 @@ const menus = [
     children: [
       {
         key: pathnames.etc.setting,
-        label: t('etc.setting'),
+        label: t('title.setting'),
         icon: (
           <span css={iconContainer}>
             <TurtleIcon name="setting" />
@@ -160,7 +160,7 @@ const menus = [
       //       target="_blank"
       //       href="https://turtlechain-guide.oopy.io/"
       //     >
-      //       {t('etc.tutorial')}
+      //       {t('title.tutorial')}
       //     </a>
       //   ),
       //   icon: (

@@ -1,39 +1,35 @@
-import {
-  DeleteOutlined,
-  PlusCircleOutlined,
-  PlusCircleTwoTone,
-} from '@ant-design/icons';
-import orderAPI, { RequestCreateOrderFormat } from '@apis/orderAPI';
+import { useEffect } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import orderAPI from '@apis/orderAPI';
 import { TurtleContentModal } from '@components/combine';
-import {
-  PrimaryButton,
-  TurtleDivider,
-  TurtleFormInput,
-  TurtleIcon,
-  TurtleText,
-} from '@components/element';
+import { PrimaryButton, TurtleDivider } from '@components/element';
 import AddColumnButton from '@components/element/button/AddColumnButton';
 import ColumnTitleInput from '@components/element/button/ColumnTitleInput';
-import PlusIcon from '@components/element/icon/PlusIcon';
 import TurtleStack from '@components/element/TurtleStack';
 import { css } from '@emotion/react';
-import useOrderCart from '@hooks/useOrderCart';
-import { PageTitle } from '@layout/page';
+import useOrderCart, { IorderColumn } from '@hooks/useOrderCart';
 import { message } from '@utils/message';
-import { Button, Col, Divider, Input, Modal, Row } from 'antd';
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
 }
-
+/**
+ *  발주서 헤더 설정 모달
+ * @param visible 모달 표시 유무
+ * @param closeModal 모달 닫을시 이벤트 함수
+ */
 function AddOrderColumnModal({ visible, closeModal }: Props) {
-  const { orderFormat, setOrderFormat } = useOrderCart();
-  const [mutateSwitch, setMutateSwitch] = useState(0);
-  const getOrderFormatQuery = useQuery(
+  const {
+    orderFormat,
+    setOrderFormat,
+    addNewOrderColumn,
+    changeOrderColumn,
+    deleteOrderColumn,
+  } = useOrderCart();
+
+  const { refetch } = useQuery(
     'getOrderFormatQuery',
     () => orderAPI.getOrderFormat(),
     {
@@ -51,26 +47,36 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
         }),
     },
   );
-
-  const createOrderFormatMutation = useMutation(orderAPI.createOrderFormat, {
+  const { mutate } = useMutation(orderAPI.createOrderFormat, {
     onSuccess: (data) => {
       if (data.msg === 'success')
-        message.success('양식 등록이 완료되었습니다.');
+        message.success(t('message.create new format'));
       closeModal();
     },
   });
 
-  useEffect(() => {
-    if (mutateSwitch !== 0) createOrderFormatMutation.mutate(orderFormat);
-  }, [mutateSwitch]);
+  const columnDataOutput = (column: IorderColumn) => {
+    return orderFormat[column].map((name, index) => (
+      <ColumnTitleInput
+        key={index}
+        id={String(index)}
+        value={name}
+        onChange={(e) =>
+          changeOrderColumn(column, e.currentTarget.id, e.currentTarget.value)
+        }
+        onDelete={() => deleteOrderColumn(column, name)}
+      />
+    ));
+  };
 
   useEffect(() => {
-    if (!visible) getOrderFormatQuery.refetch();
+    if (!visible) return;
+    refetch();
   }, [visible]);
 
   return (
     <TurtleContentModal
-      title="발주서 설정"
+      title={t('button.orderColumnSetting')}
       size="large"
       visible={visible}
       onClose={closeModal}
@@ -89,7 +95,7 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               font-size: 20px;
             `}
           >
-            {t('order.setting.title')}
+            {t('title.orderHeaderSettingSubtitle')}
           </span>
           <p
             css={css`
@@ -99,7 +105,9 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               color: #6b6d73;
             `}
           >
-            {t('order.setting.description')}
+            {t(
+              'description.is there a header name that you are using separately? If you add a header name here, you can register an Excel file without any problems even if it is different from the header name of the turtlechain order form',
+            )}
           </p>
         </div>
         {/* 종방향 정렬 container */}
@@ -119,93 +127,48 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
           >
             <AddColumnButton
               required={true}
-              text="거래처명"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  vendor_name: [...orderFormat.vendor_name, ''],
-                });
-              }}
+              text={t('button.vendorName')}
+              onClick={() => addNewOrderColumn('vendor_name')}
             />
             <AddColumnButton
               required={true}
-              text="거래처 주소"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  vendor_address: [...orderFormat.vendor_address, ''],
-                });
-              }}
+              text={t('button.vendorAddress')}
+              onClick={() => addNewOrderColumn('vendor_address')}
             />
             <AddColumnButton
               required={false}
-              text="휴대전화 번호"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  vendor_mobile: [...orderFormat.vendor_mobile, ''],
-                });
-              }}
+              text={t('button.vendorMobile')}
+              onClick={() => addNewOrderColumn('vendor_mobile')}
             />
             <AddColumnButton
               required={true}
-              text="거래처 상품명"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  product_name: [...orderFormat.product_name, ''],
-                });
-              }}
+              text={t('button.productName')}
+              onClick={() => addNewOrderColumn('product_name')}
             />
             <AddColumnButton
               required={false}
-              text="옵션"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  product_option: [...orderFormat.product_option, ''],
-                });
-              }}
+              text={t('button.productOption')}
+              onClick={() => addNewOrderColumn('product_option')}
             />
             <AddColumnButton
               required={false}
-              text="분류"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  order_type: [...orderFormat.order_type, ''],
-                });
-              }}
-            />
-            <AddColumnButton
-              required={true}
-              text="수량"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  product_count: [...orderFormat.product_count, ''],
-                });
-              }}
+              text={t('button.orderType')}
+              onClick={() => addNewOrderColumn('order_type')}
             />
             <AddColumnButton
               required={false}
-              text="가격"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  product_price: [...orderFormat.product_price, ''],
-                });
-              }}
+              text={t('button.productCount')}
+              onClick={() => addNewOrderColumn('product_count')}
             />
             <AddColumnButton
               required={false}
-              text="메모"
-              onClick={() => {
-                setOrderFormat({
-                  ...orderFormat,
-                  memo: [...orderFormat.memo, ''],
-                });
-              }}
+              text={t('button.productPrice')}
+              onClick={() => addNewOrderColumn('product_price')}
+            />
+            <AddColumnButton
+              required={false}
+              text={t('button.memo')}
+              onClick={() => addNewOrderColumn('memo')}
             />
           </div>
           {/* 경계선 */}
@@ -231,289 +194,54 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
               {/* 거래처명 */}
               <TurtleStack>
                 {orderFormat.vendor_name.length !== 0 &&
-                  orderFormat.vendor_name.map((name, index) => {
-                    return (
-                      <ColumnTitleInput
-                        key={index}
-                        id={String(index)}
-                        value={name}
-                        onChange={(e) =>
-                          setOrderFormat({
-                            ...orderFormat,
-                            vendor_name: orderFormat.vendor_name.map(
-                              (value, index) => {
-                                if (String(index) === e.currentTarget.id)
-                                  return e.currentTarget.value;
-                                return value;
-                              },
-                            ),
-                          })
-                        }
-                        onDelete={() => {
-                          setOrderFormat({
-                            ...orderFormat,
-                            vendor_name: orderFormat.vendor_name.filter(
-                              (vendorName) => vendorName !== name,
-                            ),
-                          });
-                        }}
-                      />
-                    );
-                  })}
+                  columnDataOutput('vendor_name')}
               </TurtleStack>
 
               {/* 거래처 주소 */}
               <TurtleStack>
                 {orderFormat.vendor_address.length !== 0 &&
-                  orderFormat.vendor_address.map((address, index) => (
-                    <ColumnTitleInput
-                      key={index}
-                      id={String(index)}
-                      value={address}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          vendor_address: orderFormat.vendor_address.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          vendor_address: orderFormat.vendor_address.filter(
-                            (vendorAddress) => vendorAddress !== address,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('vendor_address')}
               </TurtleStack>
 
               {/* 휴대전화 번호 */}
               <TurtleStack>
                 {orderFormat.vendor_mobile.length !== 0 &&
-                  orderFormat.vendor_mobile.map((mobile, index) => (
-                    <ColumnTitleInput
-                      value={mobile}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          vendor_mobile: orderFormat.vendor_mobile.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          vendor_mobile: orderFormat.vendor_mobile.filter(
-                            (vendorMobile) => vendorMobile !== mobile,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('vendor_mobile')}
               </TurtleStack>
 
               {/* 거래처 상품명 */}
               <TurtleStack>
                 {orderFormat.product_name.length !== 0 &&
-                  orderFormat.product_name.map((product, index) => (
-                    <ColumnTitleInput
-                      value={product}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_name: orderFormat.product_name.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_name: orderFormat.product_name.filter(
-                            (vendorProduct) => vendorProduct !== product,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('product_name')}
               </TurtleStack>
 
               {/* 옵션 */}
               <TurtleStack>
                 {orderFormat.product_option.length !== 0 &&
-                  orderFormat.product_option.map((option, index) => (
-                    <ColumnTitleInput
-                      value={option}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_option: orderFormat.product_option.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_option: orderFormat.product_option.filter(
-                            (vendorProduct) => vendorProduct !== option,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('product_option')}
               </TurtleStack>
 
               {/* 분류 */}
               <TurtleStack>
                 {orderFormat.order_type.length !== 0 &&
-                  orderFormat.order_type.map((orderType, index) => (
-                    <ColumnTitleInput
-                      value={orderType}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          order_type: orderFormat.order_type.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          order_type: orderFormat.order_type.filter(
-                            (type) => type !== orderType,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('order_type')}
               </TurtleStack>
 
               {/* 수량 */}
               <TurtleStack>
                 {orderFormat.product_count.length !== 0 &&
-                  orderFormat.product_count.map((count, index) => (
-                    <ColumnTitleInput
-                      value={count}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_count: orderFormat.product_count.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_count: orderFormat.product_count.filter(
-                            (productCount) => productCount !== count,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('product_count')}
               </TurtleStack>
 
               {/* 가격 */}
               <TurtleStack>
                 {orderFormat.product_price.length !== 0 &&
-                  orderFormat.product_price.map((price, index) => (
-                    <ColumnTitleInput
-                      value={price}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_price: orderFormat.product_price.map(
-                            (value, index) => {
-                              if (String(index) === e.currentTarget.id)
-                                return e.currentTarget.value;
-                              return value;
-                            },
-                          ),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          product_price: orderFormat.product_price.filter(
-                            (productPrice) => productPrice !== price,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                  columnDataOutput('product_price')}
               </TurtleStack>
 
               {/* 메모 */}
               <TurtleStack>
-                {orderFormat.memo.length !== 0 &&
-                  orderFormat.memo.map((memo, index) => (
-                    <ColumnTitleInput
-                      value={memo}
-                      id={String(index)}
-                      key={index}
-                      onChange={(e) =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          memo: orderFormat.memo.map((value, index) => {
-                            if (String(index) === e.currentTarget.id)
-                              return e.currentTarget.value;
-                            return value;
-                          }),
-                        })
-                      }
-                      onDelete={() =>
-                        setOrderFormat({
-                          ...orderFormat,
-                          memo: orderFormat.memo.filter(
-                            (vendorMemo) => vendorMemo !== memo,
-                          ),
-                        })
-                      }
-                    />
-                  ))}
+                {orderFormat.memo.length !== 0 && columnDataOutput('memo')}
               </TurtleStack>
             </div>
 
@@ -526,39 +254,8 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
                 justify-content: flex-end;
               `}
             >
-              <PrimaryButton
-                onClick={() => {
-                  setOrderFormat({
-                    vendor_name: orderFormat.vendor_name.filter(
-                      (name) => name !== '',
-                    ),
-                    vendor_address: orderFormat.vendor_address.filter(
-                      (address) => address !== '',
-                    ),
-                    vendor_mobile: orderFormat.vendor_mobile.filter(
-                      (mobile) => mobile !== '',
-                    ),
-                    order_type: orderFormat.order_type.filter(
-                      (type) => type !== '',
-                    ),
-                    product_count: orderFormat.product_count.filter(
-                      (count) => count !== '',
-                    ),
-                    product_name: orderFormat.product_name.filter(
-                      (name) => name !== '',
-                    ),
-                    product_option: orderFormat.product_option.filter(
-                      (option) => option !== '',
-                    ),
-                    product_price: orderFormat.product_price.filter(
-                      (price) => price !== '',
-                    ),
-                    memo: orderFormat.memo.filter((memo) => memo !== ''),
-                  });
-                  setMutateSwitch((prev) => prev + 1);
-                }}
-              >
-                저장하기
+              <PrimaryButton onClick={() => mutate(orderFormat)}>
+                {t('button.saving')}
               </PrimaryButton>
             </div>
           </div>
@@ -567,35 +264,5 @@ function AddOrderColumnModal({ visible, closeModal }: Props) {
     </TurtleContentModal>
   );
 }
-
-const $title = css`
-  font-size: 20px;
-  font-weight: 500;
-  color: #242934;
-`;
-
-const wrapper = css`
-  padding: 12px 36px 12px 36px;
-`;
-
-const columnHeader = css`
-  background-color: #f7f8f9;
-  width: 160px;
-  height: 40px;
-`;
-
-const columnContent = css`
-  width: 160px;
-  height: 40px;
-  border-radius: 14px;
-  margin-bottom: 10px;
-`;
-
-const columnVisibleContent = css`
-  width: 160px;
-  height: 40px;
-  border-radius: 14px;
-  visibility: hidden;
-`;
 
 export default AddOrderColumnModal;

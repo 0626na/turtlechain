@@ -1,51 +1,22 @@
-import vendorAPI, {
-  VendorAccount,
-  VendorPhone,
-  Wholesale,
-} from '@apis/vendorAPI';
+import React, { useMemo, useState } from 'react';
+import { VendorAccount, VendorPhone, Wholesale } from '@apis/vendorAPI';
 import wholesalerAPI, {
   RequestGetList,
   WholesalerStore,
 } from '@apis/wholesalerAPI';
-import { SearchFilter } from '@components/combine';
-import InputModal from '@components/combine/modal/InputModal';
 import {
-  MemoIcon,
   TurtleDropdown,
   TurtleIcon,
   TurtleSearchInput,
-  TurtleSearchSelect,
   TurtleTableTitle,
 } from '@components/element';
-import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import { PageContent } from '@layout/page';
-import VendorInfoUpdateModal from '@pages/vendor/history/modal/VendorInfoUpdateModal';
 import { phonePattern } from '@utils/pattern';
 import { Col, Pagination, Row, Table } from 'antd';
-import { message } from '@utils/message';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-
-const options = [
-  {
-    name: '거래처명',
-    value: 'store_name',
-  },
-  {
-    name: '휴대전화 번호',
-    value: 'mobile',
-  },
-  {
-    name: '계좌번호',
-    value: 'account_number',
-  },
-  {
-    name: '예금주',
-    value: 'account_holder',
-  },
-];
+import { useQuery } from 'react-query';
+import OrderVendorInfoUpdateModal from './modals/OrderVendorInfoUpdateModal';
 
 export interface OrderVendor {
   id: number;
@@ -63,12 +34,17 @@ export interface OrderVendor {
 
 function PageBody() {
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    search_type: 'store_name',
     search_string: '',
     page: 1,
-    page_size: 10,
+    page_size: 17,
   });
-  const getWholesalerStoreListQuery = useQuery(
+  const [
+    vendorUpdateModalVisible,
+    vendorUpdateModalOpen,
+    vendorUpdateModalClose,
+  ] = useModal();
+  const [selectedRow, setSelectedRow] = useState<WholesalerStore>();
+  const { data: wholeSalerStoreList, isLoading } = useQuery(
     [
       'getWholesalerStoreListQuery',
       searchQuery.page,
@@ -77,38 +53,50 @@ function PageBody() {
     () => wholesalerAPI.getList(searchQuery),
   );
 
+  const filterdList = useMemo(
+    () =>
+      wholeSalerStoreList?.data.store_list.filter((store) => {
+        return (
+          store.name.includes(searchQuery.search_string) ||
+          store.building.includes(searchQuery.search_string) ||
+          store.floor.includes(searchQuery.search_string) ||
+          store.col.includes(searchQuery.search_string) ||
+          store.loc.includes(searchQuery.search_string) ||
+          store.ext.includes(searchQuery.search_string) ||
+          store.store_phone[0].phone.includes(searchQuery.search_string) ||
+          store.store_account[0].account_number.includes(
+            searchQuery.search_string,
+          )
+        );
+      }),
+    [wholeSalerStoreList, searchQuery],
+  );
+
   return (
     <>
+      <OrderVendorInfoUpdateModal
+        selectedRow={selectedRow as WholesalerStore}
+        visible={vendorUpdateModalVisible}
+        closeModal={vendorUpdateModalClose}
+      />
       <PageContent>
         <Table
           size="small"
-          scroll={{ y: 648, x: 1608 }}
-          loading={getWholesalerStoreListQuery.isLoading}
-          dataSource={getWholesalerStoreListQuery.data?.data.store_list ?? []}
-          rowKey={(record) => record.id}
+          scroll={{ y: 'auto', x: 950 }}
+          loading={isLoading}
+          dataSource={filterdList ?? []}
           pagination={false}
+          rowKey={(record) => record.id}
           title={() => (
             <TurtleTableTitle
-              totalCount={
-                getWholesalerStoreListQuery.data?.data.total_count ?? 0
-              }
+              totalCount={wholeSalerStoreList?.data.total_count ?? 0}
               rightContent={
                 <Row>
-                  <Col css={marginRight}>
-                    <TurtleSearchSelect
-                      items={options}
-                      value={searchQuery.search_type}
-                      onChange={(value) =>
-                        setSearchQuery({
-                          ...searchQuery,
-                          search_type: String(value),
-                        })
-                      }
-                    />
-                  </Col>
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력해주세요"
+                      placeholder={t(
+                        'placeholder.search by vendor name, mobile, account number',
+                      )}
                       onSearch={(value) =>
                         setSearchQuery({
                           ...searchQuery,
@@ -126,10 +114,10 @@ function PageBody() {
             <Row justify="center">
               <Pagination
                 size="small"
-                total={getWholesalerStoreListQuery.data?.data.total_count ?? 0}
+                total={wholeSalerStoreList?.data.total_count ?? 0}
                 showSizeChanger={false}
+                pageSize={searchQuery.page_size}
                 current={searchQuery.page}
-                pageSize={10}
                 onChange={(page) => {
                   setSearchQuery({ ...searchQuery, page });
                 }}
@@ -139,13 +127,11 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              width: 176,
               title: t('table.vendorName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 176,
               title: t('table.vendorAddress'),
               render: (_, record) => {
                 if (record.ext !== '') {
@@ -161,7 +147,6 @@ function PageBody() {
 
             {
               ellipsis: true,
-              width: 176,
               title: t('table.mobile'),
               render: (_, record) => {
                 if (record.store_phone.length !== 0) {
@@ -176,7 +161,6 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 176,
               title: t('table.accountInfo'),
               render: (_, record) => {
                 if (record.store_account.length !== 0)
@@ -186,40 +170,20 @@ function PageBody() {
               },
             },
             {
-              width: 20,
-
               title: '',
               align: 'right',
+              width: 30,
               render: (_, record) => (
                 <TurtleDropdown
                   items={[
                     {
                       key: '1',
-                      label: '거래처명 수정',
-                      icon: <TurtleIcon name="updateVendorName" />,
-                    },
-                    {
-                      key: '2',
-                      label: '정보수정 요청',
+                      label: t('button.request info modify'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
-                      onClick: (e) => {},
-                    },
-                    {
-                      key: '3',
-                      type: 'divider',
-                    },
-                    {
-                      key: '4',
-                      label: (
-                        <span
-                          css={css`
-                            color: red;
-                          `}
-                        >
-                          삭제
-                        </span>
-                      ),
-                      icon: <TurtleIcon name="delete" danger />,
+                      onClick: (e) => {
+                        setSelectedRow(record);
+                        vendorUpdateModalOpen();
+                      },
                     },
                   ]}
                   triggerButton={<TurtleIcon name="more" />}
@@ -233,7 +197,4 @@ function PageBody() {
   );
 }
 
-const marginRight = css`
-  margin-right: 6px;
-`;
 export default PageBody;

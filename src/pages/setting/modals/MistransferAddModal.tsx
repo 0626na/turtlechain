@@ -73,7 +73,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
   // 0원 유효성검사
   const refundAmountValidator = (_: unknown, value: number) => {
     if (!value) {
-      return Promise.reject(new Error('금액을 확인해 주세요.'));
+      return Promise.reject(new Error(t('message.confirm price')));
     }
 
     return Promise.resolve();
@@ -96,7 +96,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('mistransfer.create')}
+        title={t('title.create mistransfer')}
         visible={visible}
         onClose={closeModal}
       >
@@ -142,20 +142,20 @@ function MistransferAddModal({ visible, closeModal }: Props) {
           <Form.Item
             name="vendor_name"
             rules={[{ required: true }]}
-            label="거래처명"
+            label={t('table.vendorName')}
           >
             <TurtleFormSearchInput
               readOnly
               onClick={openVendorModal}
               onSearch={openVendorModal}
-              placeholder={t('please input vendor name')}
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
 
           <Form.Item label={t('table.mobile')} name="vendor_phone">
             <TurtleFormInput
               disabled
-              placeholder="휴대전화 번호를 입력해주세요"
+              placeholder={t('placeholder.input mobile number')}
             />
           </Form.Item>
 
@@ -163,17 +163,26 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             <div css={flexGap}>
               <div css={{ flexBasis: '50%' }}>
                 <Form.Item name={['vendor_address', 'building']} noStyle>
-                  <TurtleFormSelect placeholder="상가" disabled />
+                  <TurtleFormSelect
+                    placeholder={t('placeholder.building')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '20%' }}>
                 <Form.Item name={['vendor_address', 'floor']} noStyle>
-                  <TurtleFormInput placeholder="층" disabled />
+                  <TurtleFormInput
+                    placeholder={t('placeholder.floor')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
                 <Form.Item name={['vendor_address', 'col_loc']} noStyle>
-                  <TurtleFormInput placeholder="열/호" disabled />
+                  <TurtleFormInput
+                    placeholder={t('placeholder.col loc')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
             </div>
@@ -183,21 +192,33 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             name={['vendor_address', 'ext']}
             label={t('table.vendorEtcAddress')}
           >
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+              disabled
+            />
           </Form.Item>
 
           <Form.Item label={t('table.accountInfo')}>
             <div css={flexGap}>
               <Form.Item name={['vendor_account', 'bank']} noStyle>
-                <TurtleFormSelect placeholder="은행" disabled />
+                <TurtleFormSelect
+                  placeholder={t('placeholder.bank')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name={['vendor_account', 'account_number']} noStyle>
-                <TurtleFormInput placeholder="계좌번호" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name={['vendor_account', 'account_holder']} noStyle>
-                <TurtleFormInput placeholder="예금주명" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                  disabled
+                />
               </Form.Item>
             </div>
           </Form.Item>
@@ -220,28 +241,40 @@ function MistransferAddModal({ visible, closeModal }: Props) {
           >
             <Switch css={$switch} disabled />
           </Form.Item>
-          <Form.Item label={t('mistransfer.recipient_accountInfo')}>
+          <Form.Item label={t('table.recipient_accountInfo')}>
             <div css={flexGap}>
               <Form.Item name={['store_account', 'bank']} noStyle>
-                <TurtleFormSelect placeholder="은행" disabled />
+                <TurtleFormSelect
+                  placeholder={t('placeholder.bank')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name={['store_account', 'account_number']} noStyle>
-                <TurtleFormInput placeholder="계좌번호" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item name={['store_account', 'account_holder']} noStyle>
-                <TurtleFormInput placeholder="예금주명" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                  disabled
+                />
               </Form.Item>
             </div>
           </Form.Item>
-          <Form.Item name="recipient_print" label="받는분 통장인쇄">
+          <Form.Item
+            name="recipient_print"
+            label={t('table.mistransfer recipient print')}
+          >
             <TurtleFormInput disabled />
           </Form.Item>
 
           <Form.Item
             name="refund_amt"
-            label={t('mistransfer.request price')}
+            label={t('table.request price')}
             rules={[
               {
                 required: true,
@@ -257,7 +290,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
             />
           </Form.Item>
 
-          <Form.Item name="memo" label={t('mistransfer.request memo')} required>
+          <Form.Item name="memo" label={t('table.request memo')} required>
             <TurtleFormInput placeholder={t('placeholder.request memo')} />
           </Form.Item>
 
@@ -274,7 +307,7 @@ function MistransferAddModal({ visible, closeModal }: Props) {
                   htmlType="submit"
                   loading={createMutation.isLoading}
                 >
-                  오입금 환불 요청하기
+                  {t('button.request mistransfer')}
                 </PrimaryButton>
               </Row>
             )}

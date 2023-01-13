@@ -1,98 +1,94 @@
 import React from 'react';
 import orderAPI, { CreatingOrdersItem, OrderItemList } from '@apis/orderAPI';
-import { TurtleContentModal } from '@components/combine';
-import { AnswerButton } from '@components/element';
+import { CreateModal } from '@components/combine';
 import useOrderCart from '@hooks/useOrderCart';
-import { Col, Row, Space, Typography } from 'antd';
 import { message } from '@utils/message';
 import moment from 'moment';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
+import useUser from '@hooks/useUser';
 
 interface Props {
   visible: boolean;
+  title: string;
+  description: string[];
   close: () => void;
+  items: { title: string; content: string }[];
 }
 
-function ConfirmOrderModal({ visible, close }: Props) {
-  const { cart, reset, calculateTotalPrice, integrationOrderList } =
-    useOrderCart();
+/**
+ * 발주등록 최종 확인 모달
+ * @param visible 모달 표시 유무
+ * @param close 모달 닫을때 이벤트 함수
+ * @param title 모달 제목
+ * @param description 모달 설명 파라미터
+ */
+function ConfirmOrderModal({
+  visible,
+  close,
+  title,
+  description,
+  ...props
+}: Props) {
+  const { cart, reset, integrationOrderList } = useOrderCart();
   const navigate = useNavigate();
+  const { user } = useUser();
 
-  //발주서 등록
+  /**
+   * 발주서 등록 react-query 함수
+   */
   const createOrderItemMutation = useMutation(orderAPI.createOrderItem, {
     onSuccess: (data) => {
       if (data.msg === 'success') {
-        message.success('발주서 등록이 완료되었습니다.', 4);
+        message.success(t('message.complete order'), 4);
         close();
         reset();
-        navigate('/picker/order/history');
+        user?.type === 'pi'
+          ? navigate('/picker/order/history')
+          : navigate('/order/history');
       }
     },
   });
 
   return (
     <>
-      <TurtleContentModal
-        size="small"
-        title="정말 발주할까요?"
+      <CreateModal
+        {...props}
         visible={visible}
+        loading={createOrderItemMutation.isLoading}
         onClose={close}
-      >
-        <Space direction="vertical">
-          <Typography.Paragraph>
-            실패에 남아있는 건은 발주에서 제외됩니다. <br />
-            발주 정보를 다시 한번 확인해주세요.
-          </Typography.Paragraph>
-
-          <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-            {`발주일자: ${moment().format('YYYY-MM-DD')}   `}
-          </Typography.Text>
-          <Typography.Text
-            style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주수량:  ${cart.successList.length}개  `}</Typography.Text>
-          <Typography.Text
-            style={{ fontSize: 16, fontWeight: 500 }}
-          >{`총 발주금액: ${calculateTotalPrice().toLocaleString()}원`}</Typography.Text>
-        </Space>
-        <Row justify="end">
-          <Col style={{ marginRight: 10 }}>
-            <AnswerButton type="NO" text="취소" onClick={close} />
-          </Col>
-          <Col>
-            <AnswerButton
-              type="YES"
-              text="요청"
-              onClick={() => {
-                createOrderItemMutation.mutate({
-                  rt_stores: [
-                    ...integrationOrderList().map<OrderItemList>((order) => ({
-                      rt_store_id: order.rt_store_id,
-                      orders: order.orders.map<CreatingOrdersItem>((item) => ({
-                        vendor_name: item.vendor_name,
-                        vendor_address: item.vendor_address,
-                        vendor_mobile: item.vendor_mobile,
-                        mobile: item.mobile,
-                        product_name: item.product_name,
-                        product_option: item.product_option,
-                        product_count: Number(item.product_count),
-                        product_price: Number(item.product_price),
-                        order_type: item.order_type,
-                        creation_type: item.creation_type,
-                        memo: item.memo,
-                        ws_store_id:
-                          item.ws_store_info.length !== 0
-                            ? item.ws_store_info[0].id
-                            : null,
-                      })),
-                    })),
-                  ],
-                });
-              }}
-            />
-          </Col>
-        </Row>
-      </TurtleContentModal>
+        title={title}
+        okText={t('button.order')}
+        description={description}
+        onOk={() => {
+          createOrderItemMutation.mutate({
+            rt_stores: [
+              ...integrationOrderList().map<OrderItemList>((order) => ({
+                rt_store_id: order.rt_store_id,
+                request_date: moment(cart.selectedDate).format('YYYY-MM-DD'),
+                orders: order.orders.map<CreatingOrdersItem>((item) => ({
+                  vendor_name: item.vendor_name,
+                  vendor_address: item.vendor_address,
+                  vendor_mobile: item.vendor_mobile,
+                  mobile: item.mobile,
+                  product_name: item.product_name,
+                  product_option: item.product_option,
+                  product_count: Number(item.product_count),
+                  product_price: Number(item.product_price),
+                  order_type: item.order_type,
+                  creation_type: item.creation_type,
+                  memo: item.memo,
+                  ws_store_id:
+                    item.ws_store_info.length !== 0
+                      ? item.ws_store_info[0].id
+                      : null,
+                })),
+              })),
+            ],
+          });
+        }}
+      />
     </>
   );
 }

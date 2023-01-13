@@ -1,4 +1,5 @@
 import { TurtleSearchInput } from '@components/element';
+import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 function SearchFilter({
   searchQuery,
   setSearchQuery,
-  placeholder = '검색어를 입력하세요',
+  placeholder = t('placeholder.input search query'),
 }: Props) {
   const [value, setValue] = useState('');
 

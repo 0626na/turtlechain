@@ -3,6 +3,7 @@ import { TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row } from 'antd';
+import { t } from 'i18next';
 
 interface Props {
   store: StoreShow;
@@ -22,7 +23,9 @@ function StorePickerCard({ store }: Props) {
                 : '#00b3be',
             }}
           />
-          <span css={marginLeft}>{store.is_closed ? '폐점' : '운영'}</span>
+          <span css={marginLeft}>
+            {store.is_closed ? t('table.closed') : t('table.open')}
+          </span>
         </div>
       </div>
 

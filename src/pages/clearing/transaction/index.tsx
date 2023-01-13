@@ -5,7 +5,7 @@ import PageBody from './PageBody';
 function Index() {
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('clearing.transaction.')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('title.ledger')}`} />
       <PageBody />
     </>
   );

@@ -16,10 +16,10 @@ const pathnames = {
     create: '/product/create',
   },
 
-  // order: {
-  //   create: '/order/create',
-  //   history: '/order/history',
-  // },
+  order: {
+    create: '/order/create',
+    history: '/order/history',
+  },
 
   warehousing: {
     create: '/warehousing/create',
@@ -118,7 +118,7 @@ const menus = [
     children: [
       {
         key: 'home',
-        label: '홈',
+        label: t('title.home'),
         icon: (
           <span css={iconContainer}>
             <GridIcon />
@@ -135,7 +135,7 @@ const menus = [
       },
       {
         key: 'vendor&product',
-        label: '거래처/상품',
+        label: t('title.vendor,product'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="vendorProduct" />
@@ -145,19 +145,19 @@ const menus = [
         children: [
           {
             key: pathnames.vendor.create,
-            label: t('vendor.create'),
+            label: t('title.create vendor'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.product.create,
-            label: t('product.create'),
+            label: t('title.create product'),
             style: mainMenuContentStyle,
           },
         ],
       },
       // {
       //   key: 'order',
-      //   label: t('order.'),
+      //   label: t('title.order'),
       //   icon: (
       //     <div css={iconContainer}>
       //       <TurtleIcon name="order" />
@@ -167,19 +167,19 @@ const menus = [
       //   children: [
       //     {
       //       key: pathnames.order.create,
-      //       label: t('order.create'),
+      //       label: t('title.orderCreate'),
       //       style: mainMenuContentStyle,
       //     },
       //     {
       //       key: pathnames.order.history,
-      //       label: t('order.history'),
+      //       label: t('title.orderDetail'),
       //       style: mainMenuContentStyle,
       //     },
       //   ],
       // },
       {
         key: 'warehousing',
-        label: t('warehousing.'),
+        label: t('title.warehousing'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="warehousing" />
@@ -189,24 +189,24 @@ const menus = [
         children: [
           {
             key: pathnames.warehousing.create,
-            label: t('warehousing.create'),
+            label: t('title.create warehousing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.warehousing.history,
-            label: t('warehousing.history'),
+            label: t('title.history warehousing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.warehousing.adjustment,
-            label: t('warehousing.adjustment.'),
+            label: t('title.adjustment'),
             style: mainMenuContentStyle,
           },
         ],
       },
       {
         key: 'clearing',
-        label: t('clearing.'),
+        label: t('title.clearing'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="clearing" />
@@ -216,17 +216,17 @@ const menus = [
         children: [
           {
             key: pathnames.clearing.create,
-            label: t('clearing.create'),
+            label: t('title.create clearing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.clearing.history,
-            label: t('clearing.history'),
+            label: t('title.history clearing'),
             style: mainMenuContentStyle,
           },
           {
             key: pathnames.clearing.transaction,
-            label: t('clearing.transaction.'),
+            label: t('title.ledger'),
             style: lastMainMenuContentStyle,
           },
         ],
@@ -240,7 +240,7 @@ const menus = [
     children: [
       {
         key: pathnames.etc.setting,
-        label: t('etc.setting'),
+        label: t('title.setting'),
         icon: (
           <div css={iconContainer}>
             <TurtleIcon name="setting" />
@@ -256,7 +256,7 @@ const menus = [
             target="_blank"
             href="https://turtlechain-guide.oopy.io/"
           >
-            {t('etc.tutorial')}
+            {t('title.tutorial')}
           </a>
         ),
         icon: (

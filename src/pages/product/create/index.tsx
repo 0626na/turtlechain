@@ -11,12 +11,12 @@ function ProductCreate() {
 
   return (
     <>
-      <Helmet title={`${t('turtleChain')} - ${t('product.create')}`} />
+      <Helmet title={`${t('turtleChain')} - ${t('title.create product')}`} />
       <PageHeader
-        title={t('product.create')}
+        title={t('title.create product')}
         button={
           <HistoryButton
-            text="상품목록"
+            text={t('button.product list')}
             onClick={() => {
               navigate('/product/history');
             }}

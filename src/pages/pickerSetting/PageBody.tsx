@@ -1,3 +1,4 @@
+import React, { useMemo, useState } from 'react';
 import pickerAPI from '@apis/pickerAPI';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import {
@@ -5,6 +6,7 @@ import {
   GridIcon,
   SpecialButton,
   TurtleIcon,
+  TurtleSearchInput,
   TurtleTableTitle,
   TurtleTag,
   TurtleText,
@@ -16,22 +18,47 @@ import { PageContent } from '@layout/page';
 import { phonePattern } from '@utils/pattern';
 import { Col, Row, Table } from 'antd';
 import { t } from 'i18next';
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import StorePickerCard from './card/StorePickerCard';
-import AddPickerModal from './modals/AddPickerModal';
 import DetailPickerModal from './modals/DetailPickerModal';
+import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
+import { message } from '@utils/message';
+import AddStoreForPickerModal from './modals/AddStoreForPickerModal';
 
 function PageBody() {
-  const [mode, setMode] = useState<'cardView' | 'listView'>('cardView');
+  const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
   const { user } = useUser();
   const [selectedRow, setSelectedRow] = useState<StoreShow>();
+  const [searchQuery, setSearchQuery] = useState('');
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
+  const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
-  const getStoreListQuery = useQuery(['getStoreList'], pickerAPI.getList, {
+  /**
+   * 현재 picker 계정에 등록된 쇼핑몰 리스트 불러오는 react-query
+   */
+  const {
+    data: storeList,
+    isLoading,
+    refetch,
+  } = useQuery(['getStoreList'], pickerAPI.getList, {
     enabled: !!user,
   });
+
+  const removeStoreMutation = useMutation(pickerAPI.remove, {
+    onSuccess: () => {
+      message.success(t('message.delete store'), 3);
+      refetch();
+    },
+  });
+
+  const filteredList = useMemo(() => {
+    return storeList?.data.store_list.filter(
+      (store) =>
+        store.name.includes(searchQuery) ||
+        store.store_phone[0].phone.includes(searchQuery),
+    );
+  }, [storeList, searchQuery]);
 
   const changeMode = () => {
     setMode((mode) => {
@@ -42,6 +69,16 @@ function PageBody() {
 
   return (
     <PageContent>
+      <DeleteOrderModal
+        visible={removeModalVisible}
+        onCancel={closeRemoveModal}
+        onOK={() => {
+          removeStoreMutation.mutate(Number(selectedRow?.id));
+
+          closeRemoveModal();
+        }}
+      />
+
       {/*
        * 쇼핑몰 상세보기 모달
        */}
@@ -54,7 +91,7 @@ function PageBody() {
       {/*
        * 쇼핑몰 추가 모달
        */}
-      <AddPickerModal
+      <AddStoreForPickerModal
         visible={addModalVisible}
         closeModal={closeAddDetailModal}
       />
@@ -82,7 +119,7 @@ function PageBody() {
                 color: #242934;
               `}
             >
-              <TurtleText>쇼핑몰 정보</TurtleText>
+              <TurtleText>{t('description.store info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -93,34 +130,46 @@ function PageBody() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
+            <TurtleText>{t('description.create store')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
 
       <TurtleTableTitle
-        totalCount={getStoreListQuery.data?.data.store_list.length ?? 0}
+        totalCount={storeList?.data.store_list.length ?? 0}
         rightContent={
-          <AddButton
-            icon={
-              mode === 'cardView' ? (
-                <TurtleIcon name="listView" />
-              ) : (
-                <GridIcon value="#6B6D73" />
-              )
-            }
-            onClick={() => {
-              changeMode();
-            }}
-          >
-            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
-          </AddButton>
+          <Row align="middle">
+            <Col css={css({ marginRight: 15 })}>
+              <TurtleSearchInput
+                placeholder={t('placeholder.input store name, mobile')}
+                onChange={(e) => setSearchQuery(e.currentTarget.value)}
+              />
+            </Col>
+            <Col>
+              <AddButton
+                icon={
+                  mode === 'cardView' ? (
+                    <TurtleIcon name="listView" />
+                  ) : (
+                    <GridIcon value="#6B6D73" />
+                  )
+                }
+                onClick={() => {
+                  changeMode();
+                }}
+              >
+                {mode === 'cardView'
+                  ? t('type.view.listView')
+                  : t('type.view.cardView')}
+              </AddButton>
+            </Col>
+          </Row>
         }
       />
 
       {mode === 'cardView' ? (
         <Row gutter={[27, 27]} css={cardsContainer}>
-          {getStoreListQuery.data?.data.store_list.map((item, idx) => (
+          {storeList?.data.store_list.map((item, idx) => (
             <Col
               key={idx}
               span={8}
@@ -139,8 +188,8 @@ function PageBody() {
       ) : (
         <Table
           size="small"
-          loading={getStoreListQuery.isLoading}
-          dataSource={getStoreListQuery.data?.data.store_list}
+          loading={isLoading}
+          dataSource={filteredList}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => {
@@ -149,11 +198,11 @@ function PageBody() {
             },
           })}
           pagination={{ position: ['bottomCenter'], showSizeChanger: false }}
-          scroll={{ x: 1400, y: 'auto' }}
+          scroll={{ x: 950, y: 'auto' }}
           columns={[
             {
               ellipsis: true,
-              width: 20,
+              width: 90,
               title: t('table.operatorStatus'),
               render: (_, record) => {
                 const { is_closed } = record;
@@ -164,19 +213,31 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              width: 50,
+
               title: t('table.retailerStoreName'),
               render: (_, record) => record.name,
             },
             {
               ellipsis: true,
-              width: 25,
+
               title: t('table.mobile'),
               render: (_, record) =>
                 record.store_phone[0]?.phone.replace(
                   phonePattern,
                   '$1-$2-$3',
                 ) ?? '',
+            },
+            {
+              render: (_, record) => (
+                <TurtleIcon
+                  name="delete"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRow({ ...record });
+                    openRemoveModal();
+                  }}
+                />
+              ),
             },
           ]}
         />

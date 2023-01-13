@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   MemoIcon,
   TurtleIcon,
@@ -11,14 +11,14 @@ import TurtleTableSelect from '@components/element/select/TurtleTableSelect';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useOrderCart from '@hooks/useOrderCart';
-import DeleteOrderModal from '@pages/order/create/modals/DeleteOrderModal';
+import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
 import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
-import OrderMemoModal from '../modals/OrderMemoModal';
-import { valueType } from 'antd/lib/statistic/utils';
+import OrderMemoModal from '../../../../components/combine/modal/OrderMemoModal';
 import { StoreOrder } from '@apis/orderAPI';
+import moment from 'moment';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -26,52 +26,58 @@ interface Props extends TabPaneProps {
 
 export const category = [
   {
-    value: '발주',
-    name: '발주',
+    value: 'order',
+    name: t('type.orderTypes.order'),
   },
   {
-    value: '미송',
-    name: '미송',
+    value: 'reserve',
+    name: t('type.orderTypes.reserve'),
   },
   {
-    value: '반품',
-    name: '반품',
+    value: 'takeback',
+    name: t('type.orderTypes.takeback'),
   },
   {
-    value: '교환',
-    name: '교환',
+    value: 'exchange',
+    name: t('type.orderTypes.exchange'),
   },
   {
-    value: '샘플',
-    name: '샘플',
+    value: 'sample',
+    name: t('type.orderTypes.sample'),
   },
   {
-    value: '픽업',
-    name: '픽업',
+    value: 'pickup',
+    name: t('type.orderTypes.pickup'),
   },
   {
-    value: '기타',
-    name: '기타',
+    value: 'extra',
+    name: t('type.orderTypes.extra'),
   },
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
   const options = [
     {
-      name: '쇼핑몰명',
+      name: t('button.storeName'),
       value: 'name',
     },
     {
-      name: '거래처명',
+      name: t('button.vendorName'),
       value: 'vendor_name',
     },
     {
-      name: '휴대전화번호',
+      name: t('button.mobile'),
       value: 'mobile',
     },
   ];
 
-  const { cart, setCart } = useOrderCart();
+  const {
+    cart,
+    setCart,
+    setSuccessListToMemo,
+    setSuccessListToOrderCount,
+    setSuccessListToOrderType,
+  } = useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
   const [selectOrderRowID, setSelectOrderRowID] = useState(0);
   const [deleteMode, setDeleteMode] = useState(false); //true: 쇼핑몰 삭제, false: 쇼핑몰 내부 거래처 데이터 삭제
@@ -102,8 +108,23 @@ function SuccessTab({ loading, ...props }: Props) {
           order.mobile.includes(searchQuery.search_string),
         ),
       }));
-    return cart.successList;
+
+    return cart.successList.filter((store) => store.orders.length !== 0);
   }, [cart.successList, searchQuery]);
+
+  /**
+   * 페이지 이동시 초기화
+   */
+  useEffect(
+    () =>
+      setCart({
+        successList: [],
+        failList: [],
+        parsingStatus: { success_count: 0, fail_count: 0, error_messages: [] },
+        selectedDate: moment(),
+      }),
+    [],
+  );
 
   return (
     <>
@@ -127,7 +148,7 @@ function SuccessTab({ loading, ...props }: Props) {
                   ),
                 })),
               });
-          message.success(t('message.successDelete'));
+          message.success(t('message.successDeleteOrder'));
           closeDeleteModal();
         }}
       />
@@ -144,20 +165,12 @@ function SuccessTab({ loading, ...props }: Props) {
         onOk={(value) => {
           setCart({
             ...cart,
-            successList: cart.successList.map((store) => {
-              if (store.id === selectedRowID) {
-                return {
-                  ...store,
-                  orders: store.orders.map((order) => {
-                    if (order.order_id === selectOrderRowID)
-                      return { ...order, memo: value };
-
-                    return order;
-                  }),
-                };
-              }
-              return store;
-            }),
+            successList: setSuccessListToMemo(
+              cart.successList,
+              selectedRowID,
+              selectOrderRowID,
+              value,
+            ),
           });
           message.success(t('message.successMemoInput'));
           closeMemoModal();
@@ -165,7 +178,12 @@ function SuccessTab({ loading, ...props }: Props) {
       />
       <Tabs.TabPane {...props}>
         <Table
-          scroll={{ x: 1608, y: 504, scrollToFirstRowOnChange: true }}
+          css={{
+            '&& tbody > tr:hover > td': {
+              backgroundColor: '#E2F6F7',
+            },
+          }}
+          scroll={{ x: 950, y: 'auto', scrollToFirstRowOnChange: true }}
           dataSource={filterdList}
           loading={loading}
           size="small"
@@ -194,7 +212,7 @@ function SuccessTab({ loading, ...props }: Props) {
 
                   <Col>
                     <TurtleSearchInput
-                      placeholder="검색어를 입력하세요"
+                      placeholder={t('placeholder.input search query')}
                       value={searchQuery.search_string}
                       onChange={(e) =>
                         setSearchQuery({
@@ -209,7 +227,9 @@ function SuccessTab({ loading, ...props }: Props) {
             />
           )}
           expandable={{
-            rowExpandable: (record) => record.type !== 'single',
+            rowExpandable: (record) => {
+              return record.type !== 'single';
+            },
             expandRowByClick: true,
             onExpand: (onExpand, record) => {
               if (!onExpand) {
@@ -220,17 +240,19 @@ function SuccessTab({ loading, ...props }: Props) {
               setSelectedRowID(Number(record.id));
             },
             expandIcon: ({ expanded, onExpand, record }) =>
-              expanded ? (
-                <TurtleIcon
-                  name="accordionUp"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ) : (
-                <TurtleIcon
-                  name="accordionDown"
-                  onClick={(e) => onExpand(record, e)}
-                />
-              ),
+              expanded
+                ? record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionUp"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  )
+                : record.type !== 'single' && (
+                    <TurtleIcon
+                      name="accordionDown"
+                      onClick={(e) => onExpand(record, e)}
+                    />
+                  ),
             expandedRowRender: (expandedRecord) => (
               <Table
                 size="small"
@@ -244,32 +266,32 @@ function SuccessTab({ loading, ...props }: Props) {
                     width: 184,
                   },
                   {
-                    title: '거래처명',
+                    title: t('table.vendorName'),
                     width: 136,
                     render: (_, record) => record.vendor_name ?? '',
                   },
                   {
-                    title: '거래처 주소',
+                    title: t('table.vendorAddress'),
                     width: 196,
                     render: (_, record) => record.vendor_address ?? '',
                   },
                   {
-                    title: '휴대전화번호',
+                    title: t('table.mobile'),
                     width: 156,
                     render: (_, record) => record.mobile ?? '',
                   },
                   {
-                    title: '거래처 상품명',
+                    title: t('table.vendorProductName'),
                     width: 216,
                     render: (_, record) => record.product_name ?? '',
                   },
                   {
-                    title: '옵션',
+                    title: t('table.option'),
                     width: 136,
                     render: (_, record) => record.product_option ?? '',
                   },
                   {
-                    title: '분류',
+                    title: t('table.type'),
                     width: 136,
                     render: (_, record) => (
                       <TurtleTableSelect
@@ -279,23 +301,11 @@ function SuccessTab({ loading, ...props }: Props) {
                           setCart({
                             ...cart,
                             failList: cart.failList,
-                            successList: cart.successList.map(
-                              (successItem) => ({
-                                rt_store_id: successItem.rt_store_id,
-                                rt_store_name: successItem.rt_store_name,
-                                type: successItem.type,
-                                orders:
-                                  successItem.rt_store_id ===
-                                  expandedRecord.rt_store_id
-                                    ? successItem.orders.map((order) => ({
-                                        ...order,
-                                        order_type:
-                                          order.order_id === record.order_id
-                                            ? value
-                                            : order.order_type,
-                                      }))
-                                    : successItem.orders,
-                              }),
+                            successList: setSuccessListToOrderType(
+                              cart.successList,
+                              value,
+                              expandedRecord.rt_store_id,
+                              Number(record.order_id),
                             ),
                           });
                         }}
@@ -303,33 +313,22 @@ function SuccessTab({ loading, ...props }: Props) {
                     ),
                   },
                   {
-                    title: '수량',
+                    title: t('table.count'),
                     align: 'right',
                     width: 136,
                     render: (_, record) => (
                       <TurtleTableNumberInput
                         step={1}
                         value={Number(record.product_count)}
-                        onChange={(value: valueType) => {
+                        onChange={(value) => {
                           setCart({
                             ...cart,
                             failList: cart.failList,
-                            successList: cart.successList.map(
-                              (successItem) => ({
-                                ...successItem,
-                                orders:
-                                  successItem.rt_store_id ===
-                                  expandedRecord.rt_store_id
-                                    ? successItem.orders.map((item) => ({
-                                        ...item,
-                                        product_count:
-                                          item.order_id === record.order_id &&
-                                          value !== null
-                                            ? value.toString()
-                                            : item.product_count,
-                                      }))
-                                    : successItem.orders,
-                              }),
+                            successList: setSuccessListToOrderCount(
+                              cart.successList,
+                              Number(record.order_id),
+                              expandedRecord.rt_store_id,
+                              String(value),
                             ),
                           });
                         }}
@@ -337,14 +336,14 @@ function SuccessTab({ loading, ...props }: Props) {
                     ),
                   },
                   {
-                    title: '공급가',
+                    title: t('table.supplyPrice'),
                     width: 136,
                     align: 'right',
                     render: (_, record) =>
                       Number(record.product_price).toLocaleString() ?? 0,
                   },
                   {
-                    title: '메모',
+                    title: t('table.memo'),
                     align: 'center',
                     width: 107,
                     render: (_, record) => (
@@ -380,34 +379,44 @@ function SuccessTab({ loading, ...props }: Props) {
           }}
           columns={[
             {
-              title: '쇼핑몰',
-              width: 184,
+              title: t('table.store'),
               render: (_, record) => record.rt_store_name ?? '',
             },
             {
-              title: '거래처',
-              width: 488,
+              title: t('table.vendor'),
               render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].vendor_name
+                    : '';
                 return (
                   record.orders.length !== 0 &&
-                  `${record.orders[0].vendor_name} 외 ${
-                    record.orders.length - 1
-                  }개`
+                  t('description.count except one', {
+                    name: record.orders[0].vendor_name,
+                    count: record.orders.length - 1,
+                  })
                 );
               },
             },
             {
-              title: '상품',
-              width: 488,
-              render: (_, record) =>
-                record.orders.length !== 0 &&
-                `${record.orders[0].product_name} 외 ${
-                  record.orders.length - 1
-                }건`,
+              title: t('table.product'),
+              render: (_, record) => {
+                if (record.type === 'single')
+                  return record.orders.length
+                    ? record.orders[0].product_name
+                    : '';
+
+                return (
+                  record.orders.length !== 0 &&
+                  t('description.count except one', {
+                    name: record.orders[0].product_name,
+                    count: record.orders.length - 1,
+                  })
+                );
+              },
             },
             {
-              title: '수량 합계',
-              width: 136,
+              title: t('table.countTotal'),
               render: (_, record) =>
                 record.orders.length !== 0 &&
                 record.orders.reduce(
@@ -416,27 +425,45 @@ function SuccessTab({ loading, ...props }: Props) {
                 ),
             },
             {
-              title: '공급가 합계',
-              width: 128,
+              title: t('table.supplyPriceTotal'),
               align: 'right',
-              render: (_, record) =>
-                record.orders.length !== 0 &&
-                record.orders
+              render: (_, record) => {
+                return record.orders
                   .reduce((acc, order) => acc + Number(order.product_price), 0)
-                  .toLocaleString(),
+                  .toLocaleString();
+              },
             },
             {
-              width: 124,
-              onCell: (record) => ({
-                style: { cursor: 'pointer' },
-                onClick: (e) => {
-                  e.stopPropagation();
-                  setSelectedRowID(Number(record.id));
-                  setDeleteMode(true);
-                  openDeleteModal();
-                },
-              }),
-              render: (_, record) => <TurtleIcon name="delete" />,
+              render: (_, record) => {
+                return (
+                  <div
+                    css={css({
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                    })}
+                  >
+                    {record.type === 'single' ? (
+                      <MemoIcon
+                        value={record.orders[0].memo ?? ''}
+                        onClick={() => {
+                          setSelectedRowID(Number(record.id));
+                          openMemoModal();
+                        }}
+                      />
+                    ) : null}
+                    <TurtleIcon
+                      name="delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRowID(Number(record.id));
+                        setDeleteMode(true);
+                        openDeleteModal();
+                      }}
+                    />
+                  </div>
+                );
+              },
             },
           ]}
         />

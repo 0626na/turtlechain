@@ -50,7 +50,7 @@ function PageBody() {
   // 입고장 마감 요청
   const confirmSheetMutation = useMutation(warehousingAPI.updateSheet, {
     onSuccess: () => {
-      message.success('입고서를 마감했어요');
+      message.success(t('message.confirm warehousing sheet'));
       closeConfirmModal();
       getWarehousingSheetQuery.refetch();
     },
@@ -59,7 +59,7 @@ function PageBody() {
   // 입고장 마감 취소 요청
   const cancelSheetMutation = useMutation(warehousingAPI.updateSheet, {
     onSuccess: () => {
-      message.success('입고서 마감을 취소했어요');
+      message.success(t('message.cancel confirm warehousing sheet'));
       closeCancelModal();
       getWarehousingSheetQuery.refetch();
     },
@@ -68,7 +68,7 @@ function PageBody() {
   // 입고장 삭제 요청
   const removeSheetMutation = useMutation(warehousingAPI.removeSheet, {
     onSuccess: () => {
-      message.success('입고서를 삭제했습니다.');
+      message.success(t('message.delete warehousing sheet'));
       closeRemoveModal();
       getWarehousingSheetQuery.refetch();
     },
@@ -97,8 +97,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={removeModalVisible}
-        title="정말 삭제할까요?"
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
+        title={t('title.really delete')}
+        description={[t('description.cannot reset')]}
         onCancel={closeRemoveModal}
         onOk={() => {
           removeSheetMutation.mutate({
@@ -106,8 +106,8 @@ function PageBody() {
             is_inactive: true,
           });
         }}
-        cancelText="취소"
-        okText="삭제"
+        cancelText={t('button.cancel')}
+        okText={t('button.delete')}
         loading={removeSheetMutation.isLoading}
       />
       {/**
@@ -115,8 +115,10 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={confirmModalVisible}
-        title="정말 마감할까요?"
-        description={['해당 입고서를 마감합니다.']}
+        title={t('title.really confirm')}
+        description={[
+          t('description.this will confirm stocked products for the invoice'),
+        ]}
         onCancel={closeConfirmModal}
         onOk={() => {
           confirmSheetMutation.mutate({
@@ -124,8 +126,8 @@ function PageBody() {
             is_confirmed: true,
           });
         }}
-        cancelText="취소"
-        okText="마감"
+        cancelText={t('button.cancel')}
+        okText={t('button.confirm')}
         loading={confirmSheetMutation.isLoading}
       />
       {/**
@@ -133,8 +135,8 @@ function PageBody() {
        */}
       <TurtleConfirmModal
         visible={cancelModalVisible}
-        title="정말 취소할까요?"
-        description={['해당 입고서의 마감을 취소합니다.']}
+        title={t('title.really cancel')}
+        description={[t('description.this will cancel the confirmation')]}
         onCancel={closeCancelModal}
         onOk={() => {
           cancelSheetMutation.mutate({
@@ -142,14 +144,14 @@ function PageBody() {
             is_confirmed: false,
           });
         }}
-        cancelText="취소"
-        okText="마감취소"
+        cancelText={t('button.cancel')}
+        okText={t('button.do cancel')}
         loading={cancelSheetMutation.isLoading}
       />
       {/**
        * 페이지
        */}
-      <PageTitle title="입고서 리스트" />
+      <PageTitle title={t('title.warehousing sheet list')} />
       <PageContent>
         <Table
           size="small"
@@ -181,15 +183,15 @@ function PageBody() {
                     items={[
                       {
                         value: '',
-                        name: t('warehousing.confirm.all'),
+                        name: t('type.all'),
                       },
                       {
                         value: '0',
-                        name: t('warehousing.confirm.false'),
+                        name: t('type.pending'),
                       },
                       {
                         value: '1',
-                        name: t('warehousing.confirm.true'),
+                        name: t('type.finish'),
                       },
                     ]}
                   />
@@ -215,7 +217,7 @@ function PageBody() {
               title: t('table.progressStatus'),
               render: (_, { is_confirmed }) => (
                 <TurtleTag color={is_confirmed ? 'cyan' : 'orange'}>
-                  {t(`warehousing.confirm.${is_confirmed}`)}
+                  {t(`type.adj status.${is_confirmed}`)}
                 </TurtleTag>
               ),
             },
@@ -271,7 +273,7 @@ function PageBody() {
                           openCancelModal();
                         }}
                       >
-                        마감취소
+                        {t('button.confirm cancel')}
                       </SelectButton>
                     )
                   ) : (
@@ -285,7 +287,7 @@ function PageBody() {
                         openConfirmModal();
                       }}
                     >
-                      마감하기
+                      {t('button.confirming')}
                     </ProcessButton>
                   )}
                 </>

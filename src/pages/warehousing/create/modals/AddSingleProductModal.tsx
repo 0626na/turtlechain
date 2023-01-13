@@ -64,7 +64,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
        *  메인 모달
        */}
       <TurtleContentModal
-        title={t('warehousing.addSingle')}
+        title={t('title.add warehousing')}
         visible={visible}
         onClose={closeModal}
       >
@@ -86,6 +86,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <Input hidden />
           </Form.Item>
 
+          {/* 상품명 */}
           <Form.Item
             name="product_name"
             label={t('table.productName')}
@@ -94,11 +95,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
             <TurtleFormSearchInput // 상품 검색 Input
               onClick={openProductModal}
               onSearch={openProductModal}
-              placeholder="상품명을 입력해주세요"
+              placeholder={t('placeholder.input product name')}
               readOnly
             />
           </Form.Item>
-
+          {/* 거래처 상품명 */}
           <Form.Item
             label={t('table.vendorProductName')}
             name="vendor_product_name"
@@ -106,10 +107,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 상품명 Input
               disabled
-              placeholder="거래처 상품명을 입력해주세요"
+              placeholder={t('placeholder.input vendor product name')}
             />
           </Form.Item>
 
+          {/* 상품 바코드 */}
           <Form.Item
             label={t('table.productCode')}
             name="product_code"
@@ -117,10 +119,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 바코드 Input
               disabled
-              placeholder="코드를 입력해주세요"
+              placeholder={t('placeholder.input product code')}
             />
           </Form.Item>
 
+          {/* 옵션 */}
           <Form.Item
             label={t('table.option')}
             name="product_option"
@@ -128,10 +131,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 상품 옵션 Input
               disabled
-              placeholder="옵션을 입력해주세요"
+              placeholder={t('placeholder.input option')}
             />
           </Form.Item>
 
+          {/* 가격 */}
           <Form.Item
             label={t('table.price')}
             name="price"
@@ -139,20 +143,25 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleNumberInput
               formatter={(value) => `${value}`.replace(pricePattern, ',')}
-              placeholder="ex. 7,000"
+              placeholder={t('placeholder.ex. price example')}
             />
           </Form.Item>
 
+          {/* 수량 */}
           <Form.Item
             label={t('table.count')}
             name="count"
             rules={[{ required: true }]}
           >
-            <TurtleNumberInput min={1} placeholder="ex. 10" />
+            <TurtleNumberInput
+              min={1}
+              placeholder={t('placeholder.ex. count example')}
+            />
           </Form.Item>
 
           <Divider />
 
+          {/* 거래처명 */}
           <Form.Item
             label={t('table.vendorName')}
             name="vendor_name"
@@ -160,10 +169,11 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처명 검색 Input
               disabled
-              placeholder="거래처명을 입력해주세요"
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
 
+          {/* 거래처 주소 */}
           <Form.Item
             name="vendor_address"
             label={t('table.vendorAddress')}
@@ -171,7 +181,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput // 거래처 주소 Input
               disabled
-              placeholder="거래처주소를 입력해주세요"
+              placeholder={t('placeholder.input vendor address')}
             />
           </Form.Item>
 
@@ -187,7 +197,7 @@ function AddSingleProductModal({ visible, closeModal }: Props) {
                   size="large"
                   htmlType="submit"
                 >
-                  {t('button.addWarehousing')}
+                  {t('button.add warehousing')}
                 </PrimaryButton>
               </Row>
             )}

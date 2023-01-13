@@ -98,7 +98,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
     }
 
     if (!form.getFieldValue('ws_store_info')?.name) {
-      message.warn('거래처를 선택해 주세요');
+      message.warn(t('message.select vendor'));
       return;
     }
 
@@ -121,7 +121,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
       />
 
       <TurtleContentModal
-        title={t('vendor.addSingle')}
+        title={t('title.add single vendor')}
         visible={visible}
         onClose={() => {
           closeModal();
@@ -155,6 +155,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
           <Form.Item name={['ws_store_info', 'id']} hidden>
             <TurtleFormSearchInput />
           </Form.Item>
+          {/* 거래처명 */}
           <Form.Item
             label={t('table.vendorName')}
             name={['ws_store_info', 'name']}
@@ -164,18 +165,23 @@ function AddSingleModal({ visible, closeModal }: Props) {
               readOnly
               onClick={openVendorModal}
               onSearch={openVendorModal}
-              placeholder="거래처명을 입력해주세요"
+              placeholder={t('placeholder.input vendor name')}
             />
           </Form.Item>
+          {/* 매장번호 */}
           <Form.Item
             name={['ws_store_info', 'phone']}
             label={t('table.wsStoreNumber')}
           >
-            <TurtleFormInput disabled placeholder="매장번호를 입력해주세요" />
+            <TurtleFormInput
+              disabled
+              placeholder={t('placeholder.input phone number')}
+            />
           </Form.Item>
           <Form.Item name={['ws_store_info', 'store_phone', 'id']} hidden>
             <TurtleFormInput />
           </Form.Item>
+          {/* 휴대전화 번호 */}
           <Form.Item
             label={t('table.mobile')}
             name={['ws_store_info', 'store_phone', 'phone']}
@@ -183,37 +189,55 @@ function AddSingleModal({ visible, closeModal }: Props) {
           >
             <TurtleFormInput
               disabled
-              placeholder="휴대전화번호를 입력해주세요"
+              placeholder={t('placeholder.input mobile number')}
             />
           </Form.Item>
+          {/* 거래처 주소 */}
           <Form.Item label={t('table.vendorAddress')} required>
             <div css={flexGap}>
               <div css={{ flexBasis: '50%' }}>
                 <Form.Item name={['ws_store_info', 'address']} hidden>
                   <TurtleFormSelect />
                 </Form.Item>
+                {/* 빌딩 */}
                 <Form.Item name={['ws_store_info', 'building']} noStyle>
-                  <TurtleFormSelect placeholder="상가" disabled />
+                  <TurtleFormSelect
+                    placeholder={t('placeholder.building')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '20%' }}>
+                {/* 층 */}
                 <Form.Item name={['ws_store_info', 'floor']} noStyle>
-                  <TurtleFormInput placeholder="층" disabled />
+                  <TurtleFormInput
+                    placeholder={t('placeholder.floor')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
               <div css={{ flexBasis: '30%' }}>
+                {/* 열-호 */}
                 <Form.Item name={['ws_store_info', 'col_loc']} noStyle>
-                  <TurtleFormInput placeholder="열/호" disabled />
+                  <TurtleFormInput
+                    placeholder={t('placeholder.col loc')}
+                    disabled
+                  />
                 </Form.Item>
               </div>
             </div>
           </Form.Item>
+          {/* 기타 주소 */}
           <Form.Item
             name={['ws_store_info', 'ext']}
             label={t('table.vendorEtcAddress')}
           >
-            <TurtleFormInput placeholder="기타 주소를 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input other address')}
+              disabled
+            />
           </Form.Item>
+          {/* 계좌정보 */}
           <Form.Item label={t('table.accountInfo')} required>
             <div css={flexGap}>
               <Form.Item name={['ws_store_info', 'store_account', 'id']} hidden>
@@ -223,30 +247,43 @@ function AddSingleModal({ visible, closeModal }: Props) {
                 name={['ws_store_info', 'store_account', 'bank']}
                 noStyle
               >
-                <TurtleFormSelect placeholder="은행" disabled />
+                <TurtleFormSelect
+                  placeholder={t('placeholder.bank')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item
                 name={['ws_store_info', 'store_account', 'account_number']}
                 noStyle
               >
-                <TurtleFormInput placeholder="계좌번호" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account number')}
+                  disabled
+                />
               </Form.Item>
 
               <Form.Item
                 name={['ws_store_info', 'store_account', 'account_holder']}
                 noStyle
               >
-                <TurtleFormInput placeholder="예금주명" disabled />
+                <TurtleFormInput
+                  placeholder={t('placeholder.account holder name')}
+                  disabled
+                />
               </Form.Item>
             </div>
           </Form.Item>
+          {/* 거래처코드 */}
           <Form.Item
             label={t('table.vendorCode')}
             name="vendor_code"
             rules={[{ required: true, message: '거래처코드를 입력해주세요' }]}
           >
-            <TurtleFormInput placeholder="거래처코드를 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input vendor code')}
+              disabled
+            />
           </Form.Item>
           <div css={flexEnd}>
             <AddButton
@@ -256,10 +293,11 @@ function AddSingleModal({ visible, closeModal }: Props) {
               }
               onClick={clickCreateVendorCode}
             >
-              코드만들기
+              {t('button.make code')}
             </AddButton>
           </div>
           <TurtleDivider marginBottom={37} marginTop={32} />
+          {/* 부가세 바로전달 */}
           <Form.Item
             name="isVatIncluded"
             label={t('table.vatIncluded')}
@@ -268,24 +306,33 @@ function AddSingleModal({ visible, closeModal }: Props) {
           >
             <Switch css={$switch} />
           </Form.Item>
-
+          {/* 상호명 */}
           <Form.Item name={['company', 'name']} label={t('table.wsStoreName')}>
-            <TurtleFormInput placeholder="상호명을 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input brand name')}
+              disabled
+            />
           </Form.Item>
+          {/* 사업자 번호 */}
           <Form.Item
             name={['company', 'biz_num']}
             label={t('table.wsCompanyNum')}
           >
             <TurtleFormInput
-              placeholder="사업자 번호를 입력해주세요"
+              placeholder={t('placeholder.input business number')}
               disabled
             />
           </Form.Item>
+          {/* 대표자명 */}
           <Form.Item name={['company', 'owner']} label={t('table.wsOwner')}>
-            <TurtleFormInput placeholder="대표자명을 입력해주세요" disabled />
+            <TurtleFormInput
+              placeholder={t('placeholder.input owner name')}
+              disabled
+            />
           </Form.Item>
+          {/* 메모 */}
           <Form.Item name="memo" label={t('table.memo')}>
-            <TurtleFormInput placeholder="메모를 입력해주세요" />
+            <TurtleFormInput placeholder={t('placeholder.input memo')} />
           </Form.Item>
 
           <Form.Item noStyle shouldUpdate>
@@ -299,7 +346,7 @@ function AddSingleModal({ visible, closeModal }: Props) {
                     !getFieldValue('vendor_code')
                   }
                 >
-                  {t('button.addVendor')}
+                  {t('button.add vendor')}
                 </PrimaryButton>
               </div>
             )}

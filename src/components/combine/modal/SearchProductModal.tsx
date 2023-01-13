@@ -60,7 +60,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
       <TurtleContentModal
         size="middle"
         visible={visible}
-        title={t('product.search')}
+        title={t('title.search product')}
         onClose={closeModal}
       >
         <Table

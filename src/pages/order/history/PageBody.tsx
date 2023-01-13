@@ -3,33 +3,41 @@ import { TertiaryButton, TurtleCard, TurtleIcon } from '@components/element';
 import { TurtleTableTitle } from '@components/element';
 import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
-import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import DetailModal from './modals/DetailModal';
 import useModal from '@hooks/useModal';
+import useStore from '@hooks/useStore';
+import DetailModal from '@pages/pickerOrder/history/modals/DetailModal';
 
 function PageBody() {
   const [sheetId, setSheetId] = useState(0);
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
-  const getOrderSheetsQuery = useQuery('getOrderSheetsQuery', () =>
-    orderAPI.getOrderSheets({
-      start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
-    }),
+  const { store } = useStore();
+  const getOrderSheetsQuery = useQuery(
+    'getOrderSheetsQuery',
+    () =>
+      orderAPI.getOrderSheets({
+        start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+        end_date: moment().format('YYYY-MM-DD'),
+        rt_store_id: Number(store.selected?.id),
+      }),
+    {
+      enabled: !!store.selected,
+    },
   );
   return (
     <>
-      <DetailModal
-        visible={detailModalVisible}
-        onclose={closeDetailModal}
-        sheetId={sheetId}
-      />
-      <PageHeader title={`${t('order.history')}`} />
+      {!!sheetId && (
+        <DetailModal
+          visible={detailModalVisible}
+          onclose={closeDetailModal}
+          sheetId={sheetId}
+        />
+      )}
       <PageTitle
-        title={`${t('order.present')}`}
+        title="발주현황"
         buttons={[
           <TertiaryButton
             text="발주서 다운"
@@ -94,7 +102,7 @@ function PageBody() {
               ellipsis: true,
               title: '발주 일자',
               render: (_, record) =>
-                moment(record.created_time).format('YYYY-MM-DD'),
+                moment(record.request_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,

@@ -46,12 +46,12 @@ function PendingTab({ isLoading }: Props) {
           memoUpdate(value, selectedRow as PendingItem, 'pendingList');
           closeMemoModal();
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요 👀',
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
 
       <Table
@@ -67,7 +67,7 @@ function PendingTab({ isLoading }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: 50,
+            width: 100,
             title: t('table.matching'),
             align: 'center',
             render: (_, record) => (
@@ -164,7 +164,7 @@ function PendingTab({ isLoading }: Props) {
                       alignItems: 'center',
                     }}
                   >
-                    <Tooltip title="정확한 세부정보를 선택해주세요">
+                    <Tooltip title={t('description.select specific info')}>
                       <div
                         css={{
                           marginRight: 4,
@@ -198,7 +198,6 @@ function PendingTab({ isLoading }: Props) {
               </div>
             ),
           },
-          ///
           {
             ellipsis: true,
             title: t('table.vendorAddress'),
@@ -312,7 +311,7 @@ function PendingTab({ isLoading }: Props) {
                         alignItems: 'center',
                       }}
                     >
-                      <Tooltip title="정확한 세부정보를 선택해주세요">
+                      <Tooltip title={t('description.select specific info')}>
                         <div
                           css={{
                             marginRight: 4,
@@ -358,8 +357,8 @@ function PendingTab({ isLoading }: Props) {
             title: (
               <TextWithTooltip
                 tooltipContent={[
-                  '당일결제 시, 부가세도 그 날에 함께 ',
-                  '전달되어야 하는 거래처를 체크해주세요. ',
+                  t('description.payment today'),
+                  t('description.check vendor'),
                 ]}
               >
                 {t('table.vatIncluded')}
@@ -378,35 +377,33 @@ function PendingTab({ isLoading }: Props) {
               );
             },
           },
+          // {
+          //   ellipsis: true,
+          //   width: 150,
+          //   title: (
+          //     <TextWithTooltip
+          //       tooltipContent={[t('description.another vendor name')]}
+          //     >
+          //       {t('table.useVendorName')}
+          //     </TextWithTooltip>
+          //   ),
+          //   render: (_, record) => (
+          //     <TurtleTableInput
+          //       size="small"
+          //       defaultValue={record.name}
+          //       onChange={(e) => {
+          //         handleUseVendorNameUpdate(
+          //           e.currentTarget.value,
+          //           record,
+          //           'pendingList',
+          //         );
+          //       }}
+          //     />
+          //   ),
+          // },
           {
             ellipsis: true,
-            width: 150,
-            title: (
-              <TextWithTooltip
-                tooltipContent={[
-                  '추천하는 거래처명이 아닌 다른 거래처명으로 사용하고 싶은 경우, 자유롭게 입력해주세요.',
-                ]}
-              >
-                {t('table.useVendorName')}
-              </TextWithTooltip>
-            ),
-            render: (_, record) => (
-              <TurtleTableInput
-                size="small"
-                defaultValue={record.name}
-                onChange={(e) => {
-                  handleUseVendorNameUpdate(
-                    e.currentTarget.value,
-                    record,
-                    'pendingList',
-                  );
-                }}
-              />
-            ),
-          },
-          {
-            ellipsis: true,
-            width: 50,
+
             title: t('table.memo'),
             align: 'center',
             onCell: (record) => ({

@@ -9,9 +9,11 @@ function PickerSetting() {
   return (
     <>
       <Helmet
-        title={`${t('turtleChain')} - ${t('picker')}- ${t('etc.setting')}`}
+        title={`${t('turtleChain')} - ${t('title.picker')}- ${t(
+          'title.setting',
+        )}`}
       />
-      <PageHeader title="설정" />
+      <PageHeader title={t('title.setting')} />
       <PageBody />
     </>
   );

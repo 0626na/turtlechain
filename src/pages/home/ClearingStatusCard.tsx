@@ -18,7 +18,7 @@ const item = (data: ClearingSheetShow) => (
   <div key={data.id} css={{ display: 'flex', justifyContent: 'space-between' }}>
     <div css={{ display: 'flex' }}>
       <TurtleTag color={statusColor[data.status]} size="large">
-        {t(`clearing.status.${data.status}`)}
+        {t(`type.status.${data.status}`)}
       </TurtleTag>
 
       <div
@@ -45,7 +45,8 @@ const item = (data: ClearingSheetShow) => (
         fontSize: 18,
       }}
     >
-      {data.total_deposit_amount.toLocaleString()}원
+      {data.total_deposit_amount.toLocaleString()}
+      {t('description.won')}
     </div>
   </div>
 );
@@ -71,7 +72,7 @@ function ClearingStatusCard({ clearingSheetList }: Props) {
             fontWeight: 500,
           }}
         >
-          최근 결제현황
+          {t('title.recent payments')}
         </h4>
         <div>
           <ArrowRightIcon value={theme.grey300} />

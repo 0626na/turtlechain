@@ -6,7 +6,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { css } from '@emotion/react';
 
 function index() {
-  const title = `${t('turtleChain')} - ${t('membershipInfo')}`;
+  const title = `${t('turtleChain')} - ${t('title.membershipInfo')}`;
 
   return (
     <>

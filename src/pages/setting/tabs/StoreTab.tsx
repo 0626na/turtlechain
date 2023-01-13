@@ -33,7 +33,7 @@ function StoreTab() {
 
   const getStoreListQuery = useQuery(
     ['getStoreList'],
-    retailerStoreAPI.getList,
+    () => retailerStoreAPI.getList({ page: 1, page_size: 100 }),
     {
       enabled: !!user,
       onSuccess: (data) => {
@@ -97,7 +97,7 @@ function StoreTab() {
                 color: #242934;
               `}
             >
-              <TurtleText>쇼핑몰 정보</TurtleText>
+              <TurtleText>{t('description.store info')}</TurtleText>
             </Col>
           </Row>
         </Col>
@@ -108,7 +108,7 @@ function StoreTab() {
               openAddDetailModal();
             }}
           >
-            <TurtleText>쇼핑몰 추가하기</TurtleText>
+            <TurtleText>{t('description.create store')}</TurtleText>
           </SpecialButton>
         </Col>
       </Row>
@@ -128,7 +128,9 @@ function StoreTab() {
               changeMode();
             }}
           >
-            {mode === 'cardView' ? '리스트로 보기' : '카드뷰로 보기'}
+            {mode === 'cardView'
+              ? t('type.view.listView')
+              : t('type.view.cardView')}
           </AddButton>
         }
       />
@@ -208,7 +210,8 @@ function StoreTab() {
               ellipsis: true,
               width: 140,
               title: t('table.inventory'),
-              render: (_, record) => t(`inventory.${record.inventory_type}`),
+              render: (_, record) =>
+                t(`type.inventory.${record.inventory_type}`),
             },
             {
               ellipsis: true,

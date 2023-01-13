@@ -10,8 +10,8 @@ import {
 } from '@components/element';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
-import { PageContent, PageTitle } from '@layout/page';
-import { Pagination, Popconfirm, Row, Switch, Table } from 'antd';
+import { PageContent } from '@layout/page';
+import { Pagination, Row, Switch, Table } from 'antd';
 import { t } from 'i18next';
 import { useMutation, useQuery } from 'react-query';
 import InputModal from '@components/combine/modal/InputModal';
@@ -20,7 +20,6 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
-import { phoneMaskingPattern, phonePattern } from '@utils/pattern';
 import { phoneMasking } from '@utils/phone';
 
 function PageBody() {
@@ -72,7 +71,7 @@ function PageBody() {
   // 거래처 부가세,메모,거래처이름 수정 요청
   const vendorUpdateMutation = useMutation(vendorAPI.update, {
     onSuccess: () => {
-      message.success('수정이 완료되었습니다.');
+      message.success(t('message.update is complete'));
       closeMemoModal();
       closeVatIncludedModal();
       closeUpdateVendorInfoModal();
@@ -83,7 +82,7 @@ function PageBody() {
   // 거래처 삭제 요청
   const vendorRemoveMutation = useMutation(vendorAPI.remove, {
     onSuccess: () => {
-      message.success('거래처가 삭제되었습니다.');
+      message.success(t('message.vendor is deleted'));
       closeRemoveModal();
       getVendorListQuery.refetch();
     },
@@ -116,12 +115,12 @@ function PageBody() {
             memo: value,
           });
         }}
-        title="메모"
+        title={t('table.memo')}
         description={[
-          '해당 건과 관련해 중요한 내용을 기록해보세요.',
-          '개인 메모로도 자유롭게 활용할 수 있어요👀',
+          t('description.input important memo'),
+          t('description.make use of memo'),
         ]}
-        placeholder="ex. 영수증 이중으로 확인 또 확인!"
+        placeholder={t('placeholder.ex, double check its invoices!')}
       />
       {/*
        * 거래처명 수정 모달
@@ -133,6 +132,7 @@ function PageBody() {
           vendorUpdateMutation.isLoading ? () => {} : closeupdateVendorNameModal
         }
         defaultValue={selectedRow?.vendor_name}
+        okText={t('button.check')}
         onOk={(value) => {
           vendorUpdateMutation.mutate({
             id: selectedRow?.id as number,
@@ -140,19 +140,19 @@ function PageBody() {
           });
           closeupdateVendorNameModal();
         }}
-        title="거래처명 수정"
+        title={t('title.update vendor name')}
         description={[
-          '선택한 거래처의 이름을 수정합니다.',
-          '원하는 거래처명을 입력해주세요.',
+          t('description.update select vendor'),
+          t('description.input vendor name'),
         ]}
       />
       {/**
        * 삭제 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 삭제할까요?"
-        description={['삭제 후에는 이전으로 되돌릴 수 없어요.']}
-        okText="삭제"
+        title={t('title.really delete')}
+        description={[t('description.cannot reset')]}
+        okText={t('button.delete')}
         visible={removeModalVisible}
         loading={vendorUpdateMutation.isLoading}
         onCancel={vendorUpdateMutation.isLoading ? () => {} : closeRemoveModal}
@@ -167,9 +167,9 @@ function PageBody() {
        * 부가세 바로전달 confirm 모달
        */}
       <TurtleConfirmModal
-        title="정말 변경할까요?"
-        description={['변경 후에는 변경된 방식으로 적용 됩니다.']}
-        okText="변경"
+        title={t('title.really update')}
+        description={[t('description.apply update info')]}
+        okText={t('button.change')}
         visible={vatIncludedModalVisible}
         loading={vendorUpdateMutation.isLoading}
         onCancel={
@@ -190,7 +190,6 @@ function PageBody() {
         visible={updateVendorInfoModalVisible}
         closeModal={closeUpdateVendorInfoModal}
       />
-      <PageTitle title="거래처 리스트" />
       <PageContent>
         <Table
           size="small"
@@ -204,7 +203,9 @@ function PageBody() {
               totalCount={totalCount ?? 0}
               rightContent={
                 <SearchFilter
-                  placeholder="거래처명, 휴대전화 번호, 계좌번호 검색"
+                  placeholder={t(
+                    'placeholder.search by vendor name, mobile, account number',
+                  )}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                 />
@@ -263,8 +264,8 @@ function PageBody() {
               title: (
                 <TextWithTooltip
                   tooltipContent={[
-                    '당일결제 시, 부가세도 그 날에 함께 ',
-                    '전달되어야 하는 거래처를 체크해주세요. ',
+                    t('description.payment today'),
+                    t('description.check vendor'),
                   ]}
                 >
                   {t('table.vatIncluded')}
@@ -282,7 +283,7 @@ function PageBody() {
               ),
             },
             {
-              width: 50,
+              width: 100,
               align: 'center',
               title: t('table.memo'),
               onCell: (record) => ({
@@ -303,7 +304,7 @@ function PageBody() {
                   items={[
                     {
                       key: '1',
-                      label: '거래처명 수정',
+                      label: t('table.edit vendor name'),
                       icon: <TurtleIcon name="updateVendorName" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -313,7 +314,7 @@ function PageBody() {
 
                     {
                       key: '2',
-                      label: '정보수정 요청',
+                      label: t('table.information update'),
                       icon: <TurtleIcon name="updateVendorInfo" />,
                       onClick: () => {
                         setSelectedRow(record);
@@ -334,7 +335,7 @@ function PageBody() {
                             color: red;
                           `}
                         >
-                          삭제
+                          {t('table.delete')}
                         </span>
                       ),
                       icon: <TurtleIcon name="delete" danger />,
