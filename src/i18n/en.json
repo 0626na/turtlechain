@@ -133,7 +133,9 @@
     "new password": "새 비밀번호",
     "email": "Email",
     "proccessed date": "Proccessed Date",
-    "vendorMessage": "거래처 쪽지"
+    "vendorMessage": "거래처 쪽지",
+    "message": "쪽지",
+    "account holder": "예금주"
   },
 
   "placeholder": {
