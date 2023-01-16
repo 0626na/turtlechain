@@ -27,7 +27,7 @@ function SuccessTab() {
         },
         {
           ellipsis: true,
-          title: t('table.vendorname'),
+          title: t('table.vendorAddress'),
           render: (_, record) => record.vendor_address,
         },
         {
