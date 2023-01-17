@@ -107,8 +107,6 @@ function SuccessTab({ loading, ...props }: Props) {
     return orderArray;
   }, [cart.successList, searchQuery]);
 
-  useEffect(() => {});
-
   const updateMemo = () => {
     if (cart.successList.length !== 0) {
       const orders: StoreOrder[] = [];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -17,25 +17,23 @@ import { Col, Row, Upload } from 'antd';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI, {
-  ResponseCreateOrderItemExcelParsing,
-  ResponseCreatePreParsing,
-} from '@apis/orderAPI';
+import orderAPI, { ResponseCreateOrderItemExcelParsing } from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import useStore from '@hooks/useStore';
-import AddNewOrderModal from '@pages/pickerOrder/create/modals/AddNewOrderModal';
+
 import ConfirmOrderModal from '@pages/pickerOrder/create/modals/ConfirmOrderModal';
 import OrderParsingProcessPresentModal from '@pages/pickerOrder/create/modals/OrderParsingProcessPresentModal';
-import OrderPreParsingWarningModal from '@pages/pickerOrder/create/modals/OrderPreParsingWarningModal';
 import OrderCreateBlockModal from './modals/OrderCreateBlockModal';
+import AddNewOrderModal from './modals/AddNewOrderModal';
 
 function PageBody() {
   const {
     cart,
+    reset,
     ready,
     countFailList,
     countOrdersForType,
@@ -114,15 +112,7 @@ function PageBody() {
     },
   );
 
-  /**
-   * 파싱하려는 발주서 엑셀파일
-   */
-  const uploadFiles = preParsingData?.files ?? [];
-
-  /**
-   * 프리파싱 결과
-   */
-  const preParsingResult = preParsingData?.preParsingResult;
+  useEffect(() => reset(), [store]);
 
   /**
    * 발주서 엑셀파일 파싱 상태
