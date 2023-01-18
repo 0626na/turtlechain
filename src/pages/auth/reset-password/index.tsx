@@ -1,17 +1,26 @@
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
-import { FindIdPageBody } from '@layout/auth';
-import ResetPasswordForm from './ResetPasswordForm';
+import { FindPageBody } from '@layout/auth';
+
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+import Reset from './Reset';
+import { PhoneAuthCard } from '@components/combine';
+
 function ResetPassword() {
   const title = `${t('turtleChain')} - ${t('auth.resetPassword')}`;
+  const [params, _] = useSearchParams();
 
   return (
     <>
       <Helmet title={title} />
-      <FindIdPageBody>
-        <ResetPasswordForm />
-      </FindIdPageBody>
+      <FindPageBody>
+        {params.get('phone') ? (
+          <Reset />
+        ) : (
+          <PhoneAuthCard type="reset-password" />
+        )}
+      </FindPageBody>
     </>
   );
 }

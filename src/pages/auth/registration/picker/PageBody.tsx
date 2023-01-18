@@ -109,7 +109,7 @@ function Pagebody() {
     <>
       {currentStep === 0 && (
         <div css={container}>
-          <div css={header}>{t('title.iput user info')}</div>
+          <div css={header}>{t('title.input user info')}</div>
 
           <div css={content}>
             <Form
