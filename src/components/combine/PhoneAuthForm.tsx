@@ -1,92 +1,55 @@
 import moment from 'moment';
 import { t } from 'i18next';
-import { useState, useEffect } from 'react';
 import { Form, Input, Button, Row } from 'antd';
-import { message } from '@utils/message';
-import { useMutation, useQueryClient } from 'react-query';
-import authAPI from '@apis/authAPI';
 import { css } from '@emotion/react';
 import React from 'react';
 import { TurtleIcon } from '@components/element';
 
+import { usePhoneAuth } from '@hooks/index';
 interface Props {
-  type?: 'registration'; // 회원가입에서의 버튼 색상이 다르기때문.
-  onSuccess?: (data: { phone: string; token: string }) => void; // 인증 성공 콜백
+  type: 'registration' | 'find'; //  회원가입에서와 아이디,비밀번호찾기에서의 구분
+  onSuccess: (data: { phone: string; token: string }) => void; // 인증 성공 콜백
 }
 
-type Auth = '인증하기' | '재발송' | '인증완료';
-
-function PhoneAuthModal({ onSuccess, type }: Props) {
+function PhoneAuthForm({ onSuccess, type }: Props) {
   const form = Form.useFormInstance();
-  const [session_key, setSessionKey] = useState('');
-  const [expire_time, setExpireTime] = useState<null | number>(null);
-  const [authStatus, setAuthStatus] = useState<Auth>(t('description.do'));
 
-  // 인증번호 생성 요청
-  const createOTPQuery = useMutation(authAPI.createPhoneOTP, {
-    onSuccess: ({ session_key, expire_time }) => {
-      message.success(t('message.success create auth num'));
-      setAuthStatus(t('description.retry'));
-      setSessionKey(session_key);
-      setExpireTime(calculateExpireTime(expire_time));
-    },
-  });
-
-  // 인증번호 확인 요청
-  const verifyOTPQuery = useMutation(authAPI.verifyPhoneOTP, {
-    onSuccess: (data) => {
-      message.success(t('message.success verify auth num'));
-      const token = data;
-      const phone = form.getFieldValue('phone');
-      setAuthStatus(t('description.success'));
-      onSuccess && onSuccess({ token, phone });
-      setSessionKey('');
-      setExpireTime(null);
-      form.setFieldsValue({ ...form.getFieldsValue(), otp_code: '' });
-    },
-    onError: () => {
-      message.warn(t('message.authentication number does not match'));
-    },
-  });
-
-  // 남은 시간 계산
-  const calculateExpireTime = (time: Date) => {
-    return moment.duration(moment(time).diff(moment())).asSeconds() * 1000;
-  };
+  const {
+    expire_time,
+    authStatus,
+    verifyOTPcode,
+    createPhoneOTPofFind,
+    createPhoneOTPofRegistration,
+    createOTPloading,
+    verifyOTPloading,
+  } = usePhoneAuth();
 
   // 인증코드 생성
   const handleCreate = () => {
     if (authStatus === t('description.success')) return;
 
-    const { phone } = form.getFieldsValue();
-    createOTPQuery.mutate({ phone });
+    if (type === 'registration') {
+      createPhoneOTPofRegistration(form.getFieldValue('phone'));
+
+      return;
+    }
+
+    if (type === 'find') {
+      createPhoneOTPofFind(form.getFieldValue('phone'));
+
+      return;
+    }
   };
 
   // 인증코드 확인
-  const handleVerify = () => {
-    const { otp_code } = form.getFieldsValue();
-    verifyOTPQuery.mutate({ session_key, otp_code });
+  const handleVerify = async () => {
+    const token = await verifyOTPcode(form.getFieldValue('otp_code'));
+
+    onSuccess({
+      phone: form.getFieldValue('phone'),
+      token: token ?? 'unknown',
+    });
   };
-
-  // 인증 남은 시간 카운트다운
-  useEffect(() => {
-    if (expire_time !== null) {
-      const countdown = setTimeout(() => {
-        if (expire_time > 0) {
-          setExpireTime(expire_time - 1000);
-          return;
-        }
-
-        setExpireTime(null);
-        clearTimeout(countdown);
-        message.warn(t('message.expired auth time'));
-      }, 1000);
-
-      return () => {
-        clearTimeout(countdown);
-      };
-    }
-  }, [expire_time]);
 
   return (
     <>
@@ -106,7 +69,7 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                   css={validateText}
                   type="link"
                   onClick={handleCreate}
-                  loading={createOTPQuery.isLoading}
+                  loading={createOTPloading}
                 >
                   {authStatus === t('description.success') ? (
                     <div css={authCheckCss.container}>
@@ -143,13 +106,12 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
                 <Button
                   css={button}
                   style={{
-                    ['--color' as string]:
-                      type === 'registration' ? '#6B6D73' : '#fff',
+                    ['--color' as string]: colorMap[type].color,
                     ['--background-color' as string]:
-                      type === 'registration' ? '#F0F3F6' : '#00b3be',
+                      colorMap[type].backgroundColor,
                   }}
                   disabled={!expire_time || !getFieldValue('otp_code')}
-                  loading={verifyOTPQuery.isLoading}
+                  loading={verifyOTPloading}
                   onClick={handleVerify}
                 >
                   확인
@@ -162,6 +124,17 @@ function PhoneAuthModal({ onSuccess, type }: Props) {
     </>
   );
 }
+
+const colorMap = {
+  registration: {
+    color: '#6B6D73',
+    backgroundColor: '#F0F3F6',
+  },
+  find: {
+    color: '#fff',
+    backgroundColor: '#00b3be',
+  },
+};
 
 const input = css({
   height: 44,
@@ -211,4 +184,4 @@ const authCheckCss = {
   }),
 };
 
-export default PhoneAuthModal;
+export default PhoneAuthForm;

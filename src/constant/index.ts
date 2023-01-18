@@ -8,3 +8,6 @@ export const TOKEN = 'TC_V2_TOKEN';
 
 // BIZ TYPE OPTIONS
 export const BIZ_TYPE_OPTIONS = ['entity', 'personal', 'simple'];
+
+//
+export const VERIFY_TC_USER = "verify_tc_user"

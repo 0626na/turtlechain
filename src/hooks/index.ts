@@ -8,6 +8,8 @@ import useVendorCart from './useVendorCart';
 import useWarehousingCart from './useWarehousingCart';
 import useUser from './useUser';
 import usePreset from './usePreset';
+import useResetPassword from './useResetPassword';
+import usePhoneAuth from './usePhoneAuth';
 
 export {
   useLogin,
@@ -20,4 +22,6 @@ export {
   useWarehousingCart,
   useUser,
   usePreset,
+  useResetPassword,
+  usePhoneAuth,
 };

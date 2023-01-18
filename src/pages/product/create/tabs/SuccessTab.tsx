@@ -177,7 +177,7 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => (
                 <TurtleTableWarningNumberInput
                   value={record.price}
-                  onChange={(value: valueType) => {
+                  onChange={(value) => {
                     updatePrice(record, Number(value));
                   }}
                 />

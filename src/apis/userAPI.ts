@@ -212,13 +212,14 @@ const update = async (data: RequestUpdate) => {
  *  아이디 찾기
  */
 
+type ID = { id: number; login_id: string };
 interface RequestGetID {
   phone: string;
   token: string;
 }
 
 interface ResponseGetID {
-  data: Array<{ id: number; login_id: string }>;
+  data: ID[];
 }
 
 const getID = async function (data: RequestGetID) {
