@@ -1,5 +1,6 @@
-import FindIdPageBody from './FindIdPageBody';
+import FindPageBody from './FindPageBody';
+
 import LoginPageBody from './LoginPageBody';
 import RegistrationPageBody from './RegistrationLayout';
 
-export { LoginPageBody, RegistrationPageBody, FindIdPageBody };
+export { LoginPageBody, RegistrationPageBody, FindPageBody };
