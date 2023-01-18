@@ -174,7 +174,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     updateExchangeTakebackItem(
                       'product_price',
                       record.index as number,
-                      value,
+                      value ?? 0,
                     );
                   }}
                 />
@@ -193,7 +193,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     updateExchangeTakebackItem(
                       'product_count',
                       record.index as number,
-                      value,
+                      value ?? 0,
                     );
                   }}
                 />

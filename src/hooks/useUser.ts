@@ -16,7 +16,7 @@ function useUser() {
   const [user, setUser] = useRecoilState(userState);
 
   const reloadUser = useCallback(async () => {
-    const { user_info } = await authAPI.verify();
+    const { user_info } = await authAPI.verifyLoginToken();
     setUser(user_info);
     setGtmUser(user_info.id);
   }, []);
