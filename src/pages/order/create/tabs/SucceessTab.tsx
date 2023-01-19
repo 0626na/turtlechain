@@ -72,7 +72,8 @@ export const options = [
 ];
 
 function SuccessTab({ loading, ...props }: Props) {
-  const { cart, setCart, setSuccessListToOrderCount } = useOrderCart();
+  const { cart, setCart, setSuccessListToOrderCount, countSucessOrdersCount } =
+    useOrderCart();
   const [selectedRowID, setSelectedRowID] = useState(-1);
 
   const [visibleDeleteModal, openDeleteModal, closeDeleteModal] = useModal();
@@ -177,7 +178,7 @@ function SuccessTab({ loading, ...props }: Props) {
           }}
           title={() => (
             <TurtleTableTitle
-              totalCount={cart.successList.length ?? 0}
+              totalCount={countSucessOrdersCount()}
               rightContent={
                 <Row>
                   <Col css={marginRight}>
