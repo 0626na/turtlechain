@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { TOKEN } from '@constant/index';
+import { PICKER, TOKEN } from '@constant/index';
 import { useCallback, useMemo, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +59,7 @@ const useLogin = function () {
           password,
         });
 
-        const isPicker = user_info.type === 'pi';
+        const isPicker = user_info.type === PICKER;
 
         isAutoLogin ? autoLogin(token) : login(token);
         routeHome(isPicker);
@@ -81,12 +81,14 @@ const useLogin = function () {
 
   const handleErrorMsg = useCallback((error: AxiosError) => {
     if (error.response?.status === 400) {
-      setErrorMsg(`${t('message.incorrectUser')}`);
+      setErrorMsg(`${t(`message.${error.response.data.msg}`)}`);
+
       return;
     }
 
     if (error.response) {
       setErrorMsg(`${t('message.networkError')}`);
+
       return;
     }
   }, []);

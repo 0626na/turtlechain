@@ -12,10 +12,10 @@ import { useMutation } from 'react-query';
 import { message } from '@utils/message';
 interface Props {
   visible: boolean;
-  onClickNext: () => void;
+  goCompanyStep: () => void;
 }
 
-function UserStep({ visible, onClickNext }: Props) {
+function UserStep({ visible, goCompanyStep }: Props) {
   const form = Form.useFormInstance();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
 
@@ -77,7 +77,8 @@ function UserStep({ visible, onClickNext }: Props) {
   };
 
   return (
-    <div style={{ display: visible ? 'block' : 'none' }}>
+    <section style={{ display: visible ? 'block' : 'none' }}>
+      {/* form state보존위해 display 속성으로 다룬다. */}
       <Form.Item
         rules={[{ required: true }]}
         name="user_name"
@@ -182,7 +183,7 @@ function UserStep({ visible, onClickNext }: Props) {
                 !checkDuplicated
               }
               onClick={() => {
-                onClickNext();
+                goCompanyStep();
               }}
             >
               {t('button.next')}
@@ -190,7 +191,7 @@ function UserStep({ visible, onClickNext }: Props) {
           </Row>
         )}
       </Form.Item>
-    </div>
+    </section>
   );
 }
 

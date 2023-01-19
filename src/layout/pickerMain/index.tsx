@@ -6,6 +6,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import useUser from '@hooks/useUser';
 import useLogin from '@hooks/useLogin';
+import { RETAILER } from '@constant/index';
 
 function MainLayout() {
   const { user, isStaff } = useUser();
@@ -15,7 +16,7 @@ function MainLayout() {
     return <Navigate to="/" replace={true} />;
   }
 
-  if (user?.type === 'rt' || isStaff) {
+  if (user?.type === RETAILER || isStaff) {
     return <Navigate to="/home" replace={true} />;
   }
 
