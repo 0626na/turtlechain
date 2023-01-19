@@ -55,11 +55,14 @@ const $menu = css`
 
 const iconMargin = css`
   margin-right: 4px;
+  display: flex;
+  align-items: center;
 `;
 
 const menuItem = {
   borderRadius: 6,
   height: 38,
+  fontSize: 13.5,
 };
 
 const $divider = {

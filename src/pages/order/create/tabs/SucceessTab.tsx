@@ -107,8 +107,6 @@ function SuccessTab({ loading, ...props }: Props) {
     return orderArray;
   }, [cart.successList, searchQuery]);
 
-  useEffect(() => {});
-
   const updateMemo = () => {
     if (cart.successList.length !== 0) {
       const orders: StoreOrder[] = [];
@@ -218,7 +216,7 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => record.vendor_name,
             },
             {
-              title: t('table.vendorName'),
+              title: t('table.vendorAddress'),
               width: 196,
               render: (_, record) => record.vendor_address,
             },

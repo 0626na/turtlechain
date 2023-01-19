@@ -103,7 +103,7 @@ export interface StoreOrder {
   product_price: string;
   product_count: string;
   order_type: string;
-  creation_type: 'excel' | 'single';
+  creation_type: string;
   memo: string;
 
   ws_store_info: WholesalerStore[];
@@ -271,7 +271,7 @@ export interface CreatingOrdersItem {
   product_name: string;
   product_option: string;
   product_count: number;
-  creation_type: 'excel' | 'single';
+  creation_type: string;
   product_price: number;
   order_type: string;
   memo: string;

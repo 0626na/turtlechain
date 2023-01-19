@@ -39,6 +39,7 @@ export interface AdjustmentItemShow {
   vendor_info: {
     id: number;
     vendor_name: string;
+    vendor_address: string;
   };
   product_info: {
     id: number;

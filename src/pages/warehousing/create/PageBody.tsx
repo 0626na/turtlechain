@@ -109,7 +109,7 @@ function PageBody() {
        *  confirm 모달
        */}
       <TurtleConfirmModal
-        title={t('do yo really want me to sign up?')}
+        title={t('title.really register')}
         description={[
           t(
             'description.products remaining in the failure are excluded from registration',
