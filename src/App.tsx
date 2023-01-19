@@ -32,7 +32,6 @@ import {
   RetailerPage,
   PickerPage,
   NewPage,
-  RetailerReturnPage,
   ClearingTransactionPage,
 } from './pages';
 
@@ -45,13 +44,10 @@ function App() {
         <Route path="/registration" element={<RegistrationLayout />}>
           <Route index element={<NewPage />} />
           <Route path="retailer" element={<RetailerPage />} />
-          <Route path="retailer/return" element={<RetailerReturnPage />} />
           <Route path="picker" element={<PickerPage />} />
         </Route>
-
         <Route path="/find-id" element={<FindIdPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-
         <Route path="/membership-info" element={<MembershipInfoPage />} />
 
         {/*

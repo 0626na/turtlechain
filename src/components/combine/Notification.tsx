@@ -19,6 +19,7 @@ import { ReactComponent as BellIcon } from '@icons/bell.svg';
 import { css } from '@emotion/react';
 import { t } from 'i18next';
 import useUser from '@hooks/useUser';
+import { PICKER } from '@constant/index';
 
 //TODO: 추후 notificationAPI로 이동 리팩토링 해야함
 interface Noti {
@@ -83,7 +84,7 @@ function Notification() {
         result.title = `요청한 신규거래처 ${noti.content.vendor_name} 정보가 승인되었어요. 이제 ${noti.content.vendor_name} 거래처를 추가할 수 있어요!`;
       }
     }
-    if (noti.type === 'modification_request' && user?.type !== 'pi') {
+    if (noti.type === 'modification_request' && user?.type !== PICKER) {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
         result.reason = `(반려사유 | ${noti.content.memo})`;
@@ -95,8 +96,7 @@ function Notification() {
       }
     }
 
-    console.log(noti);
-    if (noti.type === 'modification_request' && user?.type === 'pi') {
+    if (noti.type === 'modification_request' && user?.type === PICKER) {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;
         result.reason = `(반려사유 | ${noti.content.memo})`;
