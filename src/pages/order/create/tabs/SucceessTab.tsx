@@ -216,7 +216,7 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => record.vendor_name,
             },
             {
-              title: t('table.vendorName'),
+              title: t('table.vendorAddress'),
               width: 196,
               render: (_, record) => record.vendor_address,
             },

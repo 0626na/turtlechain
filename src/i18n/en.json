@@ -301,6 +301,7 @@
     "register warehousing sheet": "Save",
     "add pending delivery": "Add Pending Delivery",
     "add adjustment": "Add Invoice Issues",
+    "load adjustment": "교/반/미 불러오기",
     "add exchange/returns": "Add Exchange/Returns",
     "subscription paid plan": "Subscribe",
     "duplicateCheckProductCode": "Duplicate Check",
@@ -475,7 +476,9 @@
     "store info": "쇼핑몰 정보",
     "store modification": "쇼핑몰 수정",
     "preview of todays stock products": "Preview of today`s stock products",
-    "vendor detail message": "거래처 쪽지 상세보기"
+    "vendor detail message": "거래처 쪽지 상세보기",
+    "vendor search": "거래처 검색",
+    "load adjustment": "교환/반품/미송 불러오기"
   },
 
   "description": {

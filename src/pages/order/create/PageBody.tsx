@@ -29,6 +29,7 @@ import ConfirmOrderModal from '@pages/pickerOrder/create/modals/ConfirmOrderModa
 import OrderParsingProcessPresentModal from '@pages/pickerOrder/create/modals/OrderParsingProcessPresentModal';
 import OrderCreateBlockModal from './modals/OrderCreateBlockModal';
 import AddNewOrderModal from './modals/AddNewOrderModal';
+import LoadAdjustementModal from './modals/LoadAdjustementModal';
 
 function PageBody() {
   const {
@@ -58,6 +59,9 @@ function PageBody() {
     openParsingResultModal,
     closeParsingResultModal,
   ] = useModal();
+
+  const [adjustmentModalVisible, openAdjustmentModal, closeAdjustmentModal] =
+    useModal();
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   const {
@@ -143,6 +147,10 @@ function PageBody() {
 
   return (
     <>
+      <LoadAdjustementModal
+        visible={adjustmentModalVisible}
+        onClose={closeAdjustmentModal}
+      />
       <AddOrderColumnModal
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
@@ -235,6 +243,14 @@ function PageBody() {
                 icon: <TurtleIcon name="single" />,
                 onClick() {
                   openNewAddModal();
+                },
+              },
+              {
+                key: '2',
+                label: t('button.load adjustment'),
+                icon: <TurtleIcon name="bookMark" />,
+                onClick() {
+                  openAdjustmentModal();
                 },
               },
             ]}

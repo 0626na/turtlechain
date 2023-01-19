@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import { SearchFilter } from '@components/combine';
 import {
   TurtleConfirmModal,
@@ -7,16 +8,8 @@ import {
 } from '@components/element';
 import useWarehousingCart from '@hooks/useWarehousingCart';
 import { pricePattern } from '@utils/pattern';
-import {
-  Checkbox,
-  InputNumber,
-  Table,
-  TabPaneProps,
-  Tabs,
-  Tooltip,
-} from 'antd';
+import { Checkbox, Table, TabPaneProps, Tabs, Tooltip } from 'antd';
 import { t } from 'i18next';
-import React, { useEffect, useMemo, useState } from 'react';
 import useModal from '@hooks/useModal';
 import { WarehousingItemConnect } from '@apis/warehousingAPI';
 
@@ -143,9 +136,11 @@ function SuccessTab({ loading, ...props }: Props) {
                     visible={tooltipVisible}
                     title={
                       <span>
-                        {t('you have some pending deliveries!')}
+                        {t('description.you have some pending deliveries!')}
                         <br />
-                        {t('please double check so that you dont miss out')}
+                        {t(
+                          'description.please double check so that you dont miss out',
+                        )}
                       </span>
                     }
                     zIndex={1}

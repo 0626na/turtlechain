@@ -304,6 +304,7 @@
     "register warehousing sheet": "입고서 등록하기",
     "add pending delivery": "미송추가",
     "add adjustment": "교환/반품/미송 추가",
+    "load adjustment": "교/반/미 불러오기",
     "add exchange/returns": "교환/반품 추가",
     "subscription paid plan": "유료플랜 구독",
     "add store": "쇼핑몰 추가하기",
@@ -482,7 +483,8 @@
     "store modification": "쇼핑몰 수정",
     "preview of todays stock products": "입고서 미리보기",
     "vendor detail message": "거래처 쪽지 상세보기",
-    "vendor search": "거래처 검색"
+    "vendor search": "거래처 검색",
+    "load adjustment": "교환/반품/미송 불러오기"
   },
 
   "description": {
