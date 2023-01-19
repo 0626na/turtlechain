@@ -722,8 +722,8 @@
       "cardView": "카드뷰로 보기"
     },
     "adj status": {
-      "true": "대기",
-      "false": "마감"
+      "true": "마감",
+      "false": "대기"
     },
     "adj process": {
       "": "처리방식",
