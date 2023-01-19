@@ -8,6 +8,7 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
 import useUser from '@hooks/useUser';
+import { PICKER } from '@constant/index';
 
 interface Props {
   visible: boolean;
@@ -44,7 +45,7 @@ function ConfirmOrderModal({
         message.success(t('message.complete order'), 4);
         close();
         reset();
-        user?.type === 'pi'
+        user?.type === PICKER
           ? navigate('/picker/order/history')
           : navigate('/order/history');
       }

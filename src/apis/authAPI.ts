@@ -1,4 +1,4 @@
-import { VERIFY_TC_USER } from './../constant/index';
+import { PICKER, RETAILER, STAFF, VERIFY_TC_USER } from './../constant/index';
 import { v2Axios } from '.';
 
 export interface UserInfo {
@@ -8,7 +8,7 @@ export interface UserInfo {
   email: string;
   mobile_phone: string;
   company_id?: number;
-  type: 'rt' | 'pi' | 'st' | '';
+  type: typeof RETAILER | typeof PICKER | typeof STAFF | '';
 }
 
 /*

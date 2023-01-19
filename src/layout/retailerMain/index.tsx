@@ -6,6 +6,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 // import PickerSider from './PickerSider';
 import useUser from '@hooks/useUser';
 import useLogin from '@hooks/useLogin';
+import { PICKER } from '@constant/index';
 
 function MainLayout() {
   const { user } = useUser();
@@ -15,7 +16,7 @@ function MainLayout() {
     return <Navigate to="/" replace={true} />;
   }
 
-  if (user?.type === 'pi') {
+  if (user?.type === PICKER) {
     return <Navigate to="/picker/vendor" replace={true} />;
   }
 
