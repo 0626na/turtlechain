@@ -271,7 +271,7 @@ function SuccessTab({ loading, ...props }: Props) {
                 <TurtleTableNumberInput
                   step={1}
                   value={Number(record.product_count)}
-                  onChange={(value: valueType) =>
+                  onChange={(value) =>
                     setCart({
                       ...cart,
                       successList: setSuccessListToOrderCount(

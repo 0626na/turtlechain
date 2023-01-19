@@ -1,7 +1,8 @@
+import { RETAILER, PICKER } from './../constant/index';
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
-type UserType = 'rt' | 'pi' | 'ub';
+type UserType = typeof RETAILER | typeof PICKER;
 
 /*
  * 아이디,사업자정보 중복 체크
@@ -212,13 +213,14 @@ const update = async (data: RequestUpdate) => {
  *  아이디 찾기
  */
 
+type ID = { id: number; login_id: string };
 interface RequestGetID {
   phone: string;
   token: string;
 }
 
 interface ResponseGetID {
-  data: Array<{ id: number; login_id: string }>;
+  data: ID[];
 }
 
 const getID = async function (data: RequestGetID) {

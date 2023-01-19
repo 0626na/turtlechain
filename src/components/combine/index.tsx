@@ -7,6 +7,7 @@ import DaumPostcodeModal from './modal/DaumPostcodeModal';
 import PhoneAuthForm from './PhoneAuthForm';
 import CreateModal from './modal/CreateModal';
 import TextWithTooltip from './TextWithTooltip';
+import PhoneAuthCard from './PhoneAuthCard';
 
 export {
   Notification,
@@ -18,4 +19,5 @@ export {
   DaumPostcodeModal,
   PhoneAuthForm,
   TextWithTooltip,
+  PhoneAuthCard,
 };

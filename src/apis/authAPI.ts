@@ -1,3 +1,4 @@
+import { PICKER, RETAILER, STAFF, VERIFY_TC_USER } from './../constant/index';
 import { v2Axios } from '.';
 
 export interface UserInfo {
@@ -7,7 +8,7 @@ export interface UserInfo {
   email: string;
   mobile_phone: string;
   company_id?: number;
-  type: 'rt' | 'pi' | 'st' | '';
+  type: typeof RETAILER | typeof PICKER | typeof STAFF | '';
 }
 
 /*
@@ -40,11 +41,34 @@ export interface ResponseVerify {
   user_info: UserInfo;
 }
 
-const verify = async () => {
+const verifyLoginToken = async () => {
   const url = `auth/login/verify`;
   const response = await v2Axios.post<ResponseVerify>(url, {
     token: v2Axios.defaults.headers.common['Authorization'].substring(4),
   });
+
+  return response.data;
+};
+
+/*
+ * 유저 일치여부 확인
+ */
+
+// type VERIFY_TC_USER = "verify_tc_user"
+
+interface RequestVerifyUser {
+  action: typeof VERIFY_TC_USER;
+  mobile: string;
+}
+
+interface ResponseVerifyUser {
+  msg: string;
+  data: null;
+}
+
+const verifyUser = async (data: RequestVerifyUser) => {
+  const url = '/provisioning/verification';
+  const response = await v2Axios.post<ResponseVerifyUser>(url, data);
 
   return response.data;
 };
@@ -80,18 +104,20 @@ interface RequestVerifyPhoneOTP {
 }
 
 interface ResponseVerifyPhoneOTP {
+  msg: string;
   data: string;
 }
 
 const verifyPhoneOTP = async function (data: RequestVerifyPhoneOTP) {
   const url = '/auth/phone_otp/verify';
   const response = await v2Axios.post<ResponseVerifyPhoneOTP>(url, data);
-  return response.data.data;
+  return response.data;
 };
 
 const authAPI = {
+  verifyUser,
   login,
-  verify,
+  verifyLoginToken,
   createPhoneOTP,
   verifyPhoneOTP,
 };

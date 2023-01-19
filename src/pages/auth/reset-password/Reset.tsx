@@ -1,0 +1,194 @@
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { Form, Button, Input } from 'antd';
+import { message } from '@utils/message';
+import userAPI from '@apis/userAPI';
+import React from 'react';
+import { css } from '@emotion/react';
+import { TurtleFormLargeSelect, TurtleText } from '@components/element';
+import { theme } from '@styles/theme';
+import { t } from 'i18next';
+
+function ResetPassword() {
+  const navigate = useNavigate();
+  const [params, _] = useSearchParams();
+  const [form] = Form.useForm();
+
+  // 변경할 비밀번호의 아이디 리스트 요청
+  const { data = [] } = useQuery(
+    ['getID'],
+    () =>
+      userAPI.getID({
+        phone: params.get('phone') ?? '',
+        token: params.get('token') ?? '',
+      }),
+    {
+      enabled: !!params.get('phone') && !!params.get('token'),
+      onSuccess: (data) => {
+        form.setFieldsValue({ login_id: data[0]?.login_id });
+      },
+    },
+  );
+
+  const userList = data?.map((user) => ({
+    value: user.login_id,
+    name: user.login_id,
+  }));
+
+  // 비밀번호 재설정 요청
+  const resetPasswordMutation = useMutation(userAPI.resetPassword, {
+    onSuccess: () => {
+      message.success(t('message.success reset password'));
+      navigate('/');
+    },
+  });
+
+  const passwordConfirmValidator = (_: unknown, value: string) => {
+    if (form.getFieldValue('password') === value) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject(new Error(t('message.not match password')));
+  };
+
+  return (
+    <>
+      <div css={cardCss.self}>
+        <TurtleText css={cardCss.title}>
+          {t('button.reset password')}
+        </TurtleText>
+        <TurtleText css={cardCss.subTitle}>
+          {t('description.input new password')}
+        </TurtleText>
+      </div>
+
+      <Form
+        form={form}
+        layout="vertical"
+        css={formItemMargin}
+        onFinish={(value) => {
+          const { login_id, password } = value;
+          resetPasswordMutation.mutate({
+            login_id,
+            password,
+            phone: params.get('phone') ?? '',
+            token: params.get('token') ?? '',
+          });
+        }}
+      >
+        <Form.Item //
+          name="login_id"
+          label={t('table.id')}
+        >
+          <TurtleFormLargeSelect items={userList ?? []} showSearch />
+        </Form.Item>
+        <Form.Item //
+          name="password"
+          label={t('table.new password')}
+          rules={[
+            {
+              required: true,
+              message: t('description.required item'),
+            },
+          ]}
+        >
+          <Input.Password
+            css={input}
+            placeholder="문자,숫자 기호를 조합해 8자 이상"
+          />
+        </Form.Item>
+        <Form.Item //
+          name="confirmPassword"
+          label={t('table.confirm new password')}
+          rules={[
+            {
+              required: true,
+              validator: passwordConfirmValidator,
+            },
+          ]}
+        >
+          <Input.Password
+            css={input}
+            placeholder="비밀번호를 다시 한번 입력해주세요."
+          />
+        </Form.Item>
+        <Form.Item noStyle shouldUpdate>
+          {({ getFieldValue }) => (
+            <Button //
+              htmlType="submit"
+              css={button}
+              disabled={
+                !getFieldValue('password') ||
+                getFieldValue('password') !== getFieldValue('confirmPassword')
+              }
+              loading={resetPasswordMutation.isLoading}
+            >
+              {t('button.reset password')}
+            </Button>
+          )}
+        </Form.Item>
+      </Form>
+    </>
+  );
+}
+
+const input = css({
+  height: 44,
+  borderRadius: 8,
+  border: `1px solid ${theme.grey300} `,
+});
+
+const formItemMargin = css({
+  '.ant-form-item': {
+    marginBottom: 28,
+  },
+});
+
+const button = css`
+  margin: 12px 0 -20px;
+  background: #00b3be;
+  color: #fff;
+
+  height: 48px;
+  width: 100%;
+  &:hover {
+    color: #fff;
+    background: #00b3be;
+  }
+
+  // active 상태
+  &.ant-btn:focus {
+    color: #fff;
+    background: #00b3be;
+  }
+
+  &.ant-btn[disabled] {
+    background: #00b3be;
+    opacity: 0.5;
+
+    color: #fff;
+    border-color: #00b3be;
+  }
+`;
+
+const cardCss = {
+  self: css({
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: 40,
+  }),
+
+  title: css({
+    fontWeight: 700,
+    fontSize: 24,
+    color: '#141720',
+    marginBottom: 16,
+  }),
+
+  subTitle: css({
+    fontWeight: 400,
+    color: '#5b5d63',
+  }),
+};
+
+export default ResetPassword;
