@@ -78,7 +78,8 @@ function CompanyStep({ visible, loading }: Props) {
     return Promise.resolve();
   };
   return (
-    <div style={{ display: visible ? 'block' : 'none' }}>
+    <section style={{ display: visible ? 'block' : 'none' }}>
+      {/* form state보존위해 display 속성으로 다룬다. */}
       {/*
        * 주소찾기 모달
        */}
@@ -243,7 +244,7 @@ function CompanyStep({ visible, loading }: Props) {
           </Button>
         )}
       </Form.Item>
-    </div>
+    </section>
   );
 }
 

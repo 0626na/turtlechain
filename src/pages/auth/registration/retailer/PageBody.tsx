@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import { AxiosError } from 'axios';
-import { useState } from 'react';
+
 import { useMutation } from 'react-query';
 import React from 'react';
 import { message } from '@utils/message';
@@ -11,31 +11,39 @@ import UserStep from './step/UserStep';
 
 import { css } from '@emotion/react';
 
-import Completed from '../Completed';
 import { useSearchParams } from 'react-router-dom';
 import { t } from 'i18next';
+import { COMPANY, COMPLETED, RETAILER, USER } from '@constant/index';
+import CompletedStep from './step/CompletedStep';
 
 function Pagebody() {
   const [form] = Form.useForm();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // 가입 신청
   const registrationMutation = useMutation(userAPI.createRegistration, {
     onSuccess: () => {
-      setSearchParams({
-        step: 'completed',
-        user_name: form.getFieldValue('user_name'),
-      });
-      setCurrentStep((currentStep) => currentStep + 1);
+      goCompletedStep();
     },
     onError: (error: AxiosError) => {
       message.warn(error.response?.data.msg);
     },
   });
 
+  const goCompletedStep = () => {
+    setSearchParams({
+      step: COMPLETED,
+      user_name: form.getFieldValue('user_name'),
+    });
+  };
+
+  const isUserStep = searchParams.get('step') === USER;
+  const isCompanyStep = searchParams.get('step') === COMPANY;
+  const isCompletedStep = searchParams.get('step') === COMPLETED;
+
   return (
     <>
-      {currentStep !== 2 && (
+      {!isCompletedStep && (
         <div css={container}>
           {/*
            * 탭
@@ -50,14 +58,15 @@ function Pagebody() {
             <div
               css={tab}
               style={{
-                ['--background-color' as string]:
-                  currentStep === 1 ? '#5b5d63' : '#DEE4EB',
+                ['--background-color' as string]: isCompanyStep
+                  ? '#5b5d63'
+                  : '#DEE4EB',
               }}
             />
           </div>
 
           <div css={header}>
-            {currentStep === 0
+            {isUserStep
               ? t('title.input user info')
               : t('title.input company info')}
           </div>
@@ -69,8 +78,8 @@ function Pagebody() {
               form={form}
               onFinish={(value) => {
                 registrationMutation.mutate({
-                  // 계정정보
-                  user_type: 'rt',
+                  // 유저정보
+                  user_type: RETAILER,
                   user_name: value.user_name,
                   user_email: value.user_email,
                   user_mobile: value.user_mobile,
@@ -99,14 +108,14 @@ function Pagebody() {
               }}
             >
               <UserStep
-                visible={currentStep === 0}
-                onClickNext={() => {
-                  setCurrentStep((currentStep) => currentStep + 1);
+                visible={isUserStep}
+                goCompanyStep={() => {
+                  setSearchParams({ step: COMPANY });
                 }}
               />
 
               <CompanyStep
-                visible={currentStep === 1}
+                visible={isCompanyStep}
                 loading={registrationMutation.isLoading}
               />
             </Form>
@@ -114,7 +123,7 @@ function Pagebody() {
         </div>
       )}
 
-      <Completed visible={currentStep === 2} />
+      {isCompletedStep && <CompletedStep />}
     </>
   );
 }

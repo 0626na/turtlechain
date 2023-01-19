@@ -1,7 +1,8 @@
+import { RETAILER, PICKER } from './../constant/index';
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
-type UserType = 'rt' | 'pi' | 'ub';
+type UserType = typeof RETAILER | typeof PICKER;
 
 /*
  * 아이디,사업자정보 중복 체크
