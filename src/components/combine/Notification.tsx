@@ -96,7 +96,6 @@ function Notification() {
       }
     }
 
-    console.log(noti);
     if (noti.type === 'modification_request' && user?.type === PICKER) {
       if (noti.content.status === 'reject') {
         result.title = `요청한 거래처 ${noti.content.vendor_name} 정보수정이 반려되었어요.`;

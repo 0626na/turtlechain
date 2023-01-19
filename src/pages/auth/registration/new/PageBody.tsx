@@ -9,11 +9,11 @@ function Pagebody() {
   const navigate = useNavigate();
 
   const goRetailer = () => {
-    navigate('/registration/retailer');
+    navigate('/registration/retailer?step=user');
   };
 
   const goPicker = () => {
-    navigate('/registration/picker');
+    navigate('/registration/picker?step=user');
   };
 
   return (
