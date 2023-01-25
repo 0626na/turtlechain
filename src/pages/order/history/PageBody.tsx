@@ -60,10 +60,10 @@ function PageBody() {
         />
       )}
       <PageTitle
-        title="발주현황"
+        title={t('title.orderStatus')}
         buttons={[
           <TertiaryButton
-            text="발주서 다운"
+            text={t('button.orderDown')}
             disabled
             icon={<TurtleIcon name="download" />}
           />,
@@ -77,7 +77,7 @@ function PageBody() {
           value={[
             {
               color: 'cyan',
-              title: '성공',
+              title: t('title.success'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
 
@@ -89,7 +89,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: '실패',
+              title: t('title.fail'),
               count: 0,
               price: 0,
             },
@@ -119,7 +119,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              title: '분류',
+              title: t('table.type'),
               render: (_, record) =>
                 record.type === 'new' ? (
                   <TurtleTag color="orderHistoryCategoryFirst">
@@ -133,7 +133,7 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              title: '발주 일자',
+              title: t('table.orderDate'),
               render: (_, record) =>
                 moment(record.request_date).format('YYYY-MM-DD'),
             },
@@ -141,7 +141,7 @@ function PageBody() {
               ellipsis: true,
               width: 130,
               align: 'right',
-              title: '거래처 수',
+              title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
             },
             {
