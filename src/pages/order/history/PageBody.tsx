@@ -1,4 +1,4 @@
-import orderAPI from '@apis/orderAPI';
+import orderAPI, { OrderSheetList } from '@apis/orderAPI';
 import {
   TertiaryButton,
   TurtleCard,
@@ -15,10 +15,20 @@ import { useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import DetailModal from '@pages/pickerOrder/history/modals/DetailModal';
+import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
+import WholesalerMessageModal from '@pages/pickerOrder/history/modals/WholesalerMessageModal';
 
 function PageBody() {
   const [sheetId, setSheetId] = useState(0);
+  const [selectOrderSheet, setSelectOrderSheet] = useState<OrderSheetList>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
+  const [
+    detailMessageModalVisible,
+    openDetailMessageModal,
+    closeDetailMessageModal,
+  ] = useModal();
+
   const { store } = useStore();
   const getOrderSheetsQuery = useQuery(
     'getOrderSheetsQuery',
@@ -39,6 +49,14 @@ function PageBody() {
           visible={detailModalVisible}
           onclose={closeDetailModal}
           sheetId={sheetId}
+        />
+      )}
+      {!!selectOrderSheet && (
+        <WholesalerMessageModal
+          visible={detailMessageModalVisible}
+          onClose={closeDetailMessageModal}
+          sheetID={selectOrderSheet?.id}
+          isComment={selectOrderSheet.total_comment_count === 0 ? false : true}
         />
       )}
       <PageTitle
@@ -82,6 +100,7 @@ function PageBody() {
           size="small"
           rowKey={(record) => record.id}
           dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
+          pagination={{ position: ['bottomCenter'] }}
           onRow={(record) => {
             return {
               onClick: () => {
@@ -120,14 +139,37 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              title: '쇼핑몰',
-              render: (_, record) => record.rt_store_name,
-            },
-            {
-              ellipsis: true,
+              width: 130,
+              align: 'right',
               title: '거래처 수',
               render: (_, record) => record.total_store_count,
             },
+            {
+              title: t('table.vendorMessage'),
+              width: 100,
+              align: 'center',
+              render: (_, record) => {
+                return record.total_comment_count !== 0 ? (
+                  <div
+                    css={css({
+                      width: '100%',
+                      ':hover': {
+                        cursor: 'pointer',
+                        backgroundColor: theme.greenBg,
+                      },
+                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectOrderSheet(record);
+                      openDetailMessageModal();
+                    }}
+                  >
+                    <TurtleIcon name="memoMessage" />
+                  </div>
+                ) : null;
+              },
+            },
+            {},
           ]}
         />
       </PageContent>
