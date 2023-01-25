@@ -284,12 +284,12 @@ function PageBody() {
         >
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
                 {t('description.orderTotalCount')}
               </span>
               {'   '}
               {t('description.count', { count: countOrdersForType().total })}
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
                 {`(${t('type.orderTypes.order')} ${
                   countOrdersForType().order
                 }, ${t('type.orderTypes.exchange')} ${
