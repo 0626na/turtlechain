@@ -10,7 +10,7 @@ import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
@@ -42,6 +42,12 @@ function PageBody() {
       enabled: !!store.selected,
     },
   );
+
+  useEffect(() => {
+    if (!store.selected) return;
+    getOrderSheetsQuery.refetch();
+  }, [store.selected]);
+
   return (
     <>
       {!!sheetId && (
@@ -143,6 +149,19 @@ function PageBody() {
               align: 'right',
               title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
+            },
+            {
+              title: t('table.productCount'),
+              width: 130,
+              align: 'right',
+              render: (_, record) => record.total_item_subcount,
+            },
+            {
+              title: t('table.totalAmount'),
+              width: 130,
+              align: 'right',
+              render: (_, record) =>
+                record.total_success_price.toLocaleString(),
             },
             {
               title: t('table.vendorMessage'),

@@ -24,6 +24,7 @@
     "vendorAddress": "거래처 주소",
     "vendorCode": "거래처코드",
     "product": "상품",
+    "productCount": "상품 수",
     "productName": "상품명",
     "supplyPrice": "가격",
     "supplyPriceTotal": "금액 합계",
