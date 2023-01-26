@@ -17,7 +17,9 @@ export interface PendingItem extends SuccessItem {
   selectedWsStoreInfo?: SelectedWholesale;
 }
 
-interface FailItem extends ParsedVendor {}
+interface FailItem extends ParsedVendor {
+  memo?: string;
+}
 
 export interface SelectedWholesale extends Wholesale {
   selectedAccount?: VendorAccount;

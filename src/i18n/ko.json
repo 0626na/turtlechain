@@ -137,7 +137,8 @@
     "proccessed date": "처리일자",
     "vendorMessage": "거래처 쪽지",
     "message": "쪽지",
-    "account holder": "예금주"
+    "account holder": "예금주",
+    "fail reason": "실패사유"
   },
 
   "placeholder": {
