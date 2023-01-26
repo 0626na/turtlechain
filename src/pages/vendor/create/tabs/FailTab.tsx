@@ -27,14 +27,14 @@ function FailTab({ isLoading }: Props) {
         columns={[
           {
             ellipsis: true,
-            width: 50,
+            width: 100,
             title: t('table.vendorCode'),
             render: (_, record) =>
               record.vendor_code ?? <span css={fail}>(정보없음)</span>,
           },
           {
             ellipsis: true,
-            width: 300,
+            width: 200,
             title: t('table.retailerStoreInput'),
             render: (_, record) => {
               if (!!record.name || !!record.address) {
@@ -42,6 +42,10 @@ function FailTab({ isLoading }: Props) {
               }
               return <span css={fail}>(정보없음)</span>;
             },
+          },
+          {
+            title: t('table.fail reason'),
+            render: (_, record) => record.memo ?? '',
           },
         ]}
       />
