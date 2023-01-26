@@ -54,7 +54,7 @@ function TurtleTableTitle({
             <Divider type="vertical" />
             {t('description.total search amount')}{' '}
             <TurtleText css={count}>{searchAmount.toLocaleString()}</TurtleText>
-            ₩
+            {t('description.won')}
           </TurtleText>
         )}
         {!!searchCount && searchCount >= 0 && (

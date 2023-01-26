@@ -17,29 +17,31 @@ function index() {
       <PageHeader
         title={`${t('title.orderCreate')}`}
         button={
-          <Tooltip
-            visible={dateTooltipvisible}
-            title={t('description.you can change the order request date')}
-            placement="bottom"
-            zIndex={1}
-          >
-            <div onClick={() => setdateToolipVisible(false)}>
-              <TurtleDatePicker
-                date={cart.selectedDate}
-                disabledDate={(current) => {
-                  const yesterday = moment().subtract(1, 'day');
+          <div onClick={() => setdateToolipVisible(false)}>
+            <Tooltip
+              visible={dateTooltipvisible}
+              title={t('description.you can change the order request date')}
+              placement="bottom"
+              zIndex={1}
+            >
+              <div>
+                <TurtleDatePicker
+                  date={cart.selectedDate}
+                  disabledDate={(current) => {
+                    const yesterday = moment().subtract(1, 'day');
 
-                  return (
-                    yesterday.date() > current.date() ||
-                    moment().date() < current.date()
-                  );
-                }}
-                onchange={(value) => {
-                  setCart({ ...cart, selectedDate: value });
-                }}
-              />
-            </div>
-          </Tooltip>
+                    return (
+                      yesterday.date() > current.date() ||
+                      moment().date() < current.date()
+                    );
+                  }}
+                  onchange={(value) => {
+                    setCart({ ...cart, selectedDate: value });
+                  }}
+                />
+              </div>
+            </Tooltip>
+          </div>
         }
       />
       <PageBody />

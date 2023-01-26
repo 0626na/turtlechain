@@ -201,16 +201,16 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="발주서 미리보기"
+        title={t('title.orderPreview')}
         buttons={[
           <TertiaryButton
-            text="발주서 설정"
+            text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>발주 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('button.addOrder')}</SecondaryIconButton>
             }
             items={[
               {
@@ -262,12 +262,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${countSucessOrdersCount()})`}
+            tab={`${t('title.success')} (${countSucessOrdersCount()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`실패(${countFailList()})`}
+            tab={`${t('title.fail')} (${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -284,12 +284,12 @@ function PageBody() {
         >
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                발주수량 합계{' '}
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
+                {t('description.orderTotalCount')}
               </span>
               {'   '}
-              {`${countOrdersForType().total} 개 `}
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+              {t('description.count', { count: countOrdersForType().total })}
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
                 {`(${t('type.orderTypes.order')} ${
                   countOrdersForType().order
                 }, ${t('type.orderTypes.exchange')} ${

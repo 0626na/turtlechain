@@ -1,4 +1,4 @@
-import orderAPI from '@apis/orderAPI';
+import orderAPI, { OrderSheetList } from '@apis/orderAPI';
 import {
   TertiaryButton,
   TurtleCard,
@@ -10,15 +10,25 @@ import { PageContent, PageTitle } from '@layout/page';
 import { Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import useModal from '@hooks/useModal';
 import useStore from '@hooks/useStore';
 import DetailModal from '@pages/pickerOrder/history/modals/DetailModal';
+import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
+import WholesalerMessageModal from '@pages/pickerOrder/history/modals/WholesalerMessageModal';
 
 function PageBody() {
   const [sheetId, setSheetId] = useState(0);
+  const [selectOrderSheet, setSelectOrderSheet] = useState<OrderSheetList>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
+  const [
+    detailMessageModalVisible,
+    openDetailMessageModal,
+    closeDetailMessageModal,
+  ] = useModal();
+
   const { store } = useStore();
   const getOrderSheetsQuery = useQuery(
     'getOrderSheetsQuery',
@@ -32,6 +42,12 @@ function PageBody() {
       enabled: !!store.selected,
     },
   );
+
+  useEffect(() => {
+    if (!store.selected) return;
+    getOrderSheetsQuery.refetch();
+  }, [store.selected]);
+
   return (
     <>
       {!!sheetId && (
@@ -41,11 +57,19 @@ function PageBody() {
           sheetId={sheetId}
         />
       )}
+      {!!selectOrderSheet && (
+        <WholesalerMessageModal
+          visible={detailMessageModalVisible}
+          onClose={closeDetailMessageModal}
+          sheetID={selectOrderSheet?.id}
+          isComment={selectOrderSheet.total_comment_count === 0 ? false : true}
+        />
+      )}
       <PageTitle
-        title="발주현황"
+        title={t('title.orderStatus')}
         buttons={[
           <TertiaryButton
-            text="발주서 다운"
+            text={t('button.orderDown')}
             disabled
             icon={<TurtleIcon name="download" />}
           />,
@@ -59,7 +83,7 @@ function PageBody() {
           value={[
             {
               color: 'cyan',
-              title: '성공',
+              title: t('title.success'),
               count:
                 getOrderSheetsQuery.data?.data.order_sheet_list.length ?? 0,
 
@@ -71,7 +95,7 @@ function PageBody() {
             },
             {
               color: 'orange',
-              title: '실패',
+              title: t('title.fail'),
               count: 0,
               price: 0,
             },
@@ -82,6 +106,7 @@ function PageBody() {
           size="small"
           rowKey={(record) => record.id}
           dataSource={getOrderSheetsQuery.data?.data.order_sheet_list}
+          pagination={{ position: ['bottomCenter'] }}
           onRow={(record) => {
             return {
               onClick: () => {
@@ -100,7 +125,7 @@ function PageBody() {
           columns={[
             {
               ellipsis: true,
-              title: '분류',
+              title: t('table.type'),
               render: (_, record) =>
                 record.type === 'new' ? (
                   <TurtleTag color="orderHistoryCategoryFirst">
@@ -114,20 +139,56 @@ function PageBody() {
             },
             {
               ellipsis: true,
-              title: '발주 일자',
+              title: t('table.orderDate'),
               render: (_, record) =>
                 moment(record.request_date).format('YYYY-MM-DD'),
             },
             {
               ellipsis: true,
-              title: '쇼핑몰',
-              render: (_, record) => record.rt_store_name,
-            },
-            {
-              ellipsis: true,
-              title: '거래처 수',
+              width: 130,
+              align: 'right',
+              title: t('table.clientCount'),
               render: (_, record) => record.total_store_count,
             },
+            {
+              title: t('table.productCount'),
+              width: 130,
+              align: 'right',
+              render: (_, record) => record.total_item_subcount,
+            },
+            {
+              title: t('table.totalAmount'),
+              width: 130,
+              align: 'right',
+              render: (_, record) =>
+                record.total_success_price.toLocaleString(),
+            },
+            {
+              title: t('table.vendorMessage'),
+              width: 100,
+              align: 'center',
+              render: (_, record) => {
+                return record.total_comment_count !== 0 ? (
+                  <div
+                    css={css({
+                      width: '100%',
+                      ':hover': {
+                        cursor: 'pointer',
+                        backgroundColor: theme.greenBg,
+                      },
+                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectOrderSheet(record);
+                      openDetailMessageModal();
+                    }}
+                  >
+                    <TurtleIcon name="memoMessage" />
+                  </div>
+                ) : null;
+              },
+            },
+            {},
           ]}
         />
       </PageContent>

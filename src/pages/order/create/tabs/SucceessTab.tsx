@@ -28,45 +28,45 @@ interface Props extends TabPaneProps {
 export const category = [
   {
     value: 'order',
-    name: '발주',
+    name: t('type.orderTypes.order'),
   },
   {
     value: 'reserve',
-    name: '미송',
+    name: t('type.orderTypes.reserve'),
   },
   {
     value: 'takeback',
-    name: '반품',
+    name: t('type.orderTypes.takeback'),
   },
   {
     value: 'exchange',
-    name: '교환',
+    name: t('type.orderTypes.exchange'),
   },
   {
     value: 'sample',
-    name: '샘플',
+    name: t('types.orderTypes.sample'),
   },
   {
     value: 'pickup',
-    name: '픽업',
+    name: t('types.orderTypes.pickup'),
   },
   {
     value: 'extra',
-    name: '기타',
+    name: t('types.orderTypes.extra'),
   },
 ];
 
 export const options = [
   {
-    name: '거래처명',
+    name: t('table.vendorName'),
     value: 'vendor_name',
   },
   {
-    name: '거래처주소',
+    name: t('table.vendorAddress'),
     value: 'vendor_address',
   },
   {
-    name: '휴대전화번호',
+    name: t('table.mobile'),
     value: 'mobile',
   },
 ];

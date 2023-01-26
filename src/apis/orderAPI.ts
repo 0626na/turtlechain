@@ -330,6 +330,7 @@ export interface OrderSheetList {
   total_fail_count: number; //총 실패 건수
   total_success_price: number; //총 성공 금액
   total_fail_price: number; //총 실패 금액
+  total_item_subcount: number; //상품 갯수
   total_comment_count: number;
   order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify

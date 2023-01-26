@@ -245,7 +245,7 @@ function LoadAdjustementModal({ visible, onClose }: Props) {
                   });
                 }
 
-                message.success('발주서에 추가했습니다.');
+                message.success(t('message.add to order'));
                 onClose();
               }}
             >
