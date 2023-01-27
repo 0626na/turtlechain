@@ -85,16 +85,6 @@ function PageBody() {
     },
   });
 
-  //쇼핑몰 갯수
-  useQuery(['getStoreCount'], pickerAPI.getList, {
-    enabled: !!user?.id,
-    onSuccess: (data) =>
-      setTodayordersCount({
-        ...todayOrdersCount,
-        total: data.data.total_count,
-      }),
-  });
-
   //발주완료 갯수
   useQuery(
     'getOrdersCountQuery',
