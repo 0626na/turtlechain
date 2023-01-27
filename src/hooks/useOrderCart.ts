@@ -412,8 +412,31 @@ const useOrderCart = () => {
       });
     });
 
+    cart.failList.map((item) => {
+      item.orders.map((order) => {
+        if (order.mobile === '') return;
+
+        if (order.order_type === 'order')
+          orderCount.order += Number(order.product_count);
+        if (order.order_type === 'reserve')
+          orderCount.reserve += Number(order.product_count);
+        if (order.order_type === 'takeback')
+          orderCount.takeback += Number(order.product_count);
+        if (order.order_type === 'exchange')
+          orderCount.exchange += Number(order.product_count);
+        if (order.order_type === 'sample')
+          orderCount.sample += Number(order.product_count);
+        if (order.order_type === 'pickup')
+          orderCount.pickup += Number(order.product_count);
+        if (order.order_type === 'extra')
+          orderCount.extra += Number(order.product_count);
+
+        orderCount.total += Number(order.product_count);
+      });
+    });
+
     return orderCount;
-  }, [cart.successList]);
+  }, [cart.successList, cart.failList]);
 
   /**
    * 발주 데이터 초기화

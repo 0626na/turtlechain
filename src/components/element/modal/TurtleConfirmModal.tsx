@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
 import { t } from 'i18next';
 import React, { useEffect } from 'react';
 import AnswerButton from '../button/AnswerButton';
@@ -6,6 +7,7 @@ import TurtleIcon, { iconname } from '../icon/TurtleIcon';
 
 interface Props {
   visible: boolean;
+  highlight?: boolean;
   title: string;
   description: string[];
   onCancel: () => void;
@@ -26,7 +28,7 @@ function TurtleConfirmModal({
   title,
   description,
   children,
-
+  highlight = false,
   cancelText = `${t('button.cancel')}`,
   okText = `${t('button.integrate')}`,
   okDisabled = false,
@@ -74,7 +76,11 @@ function TurtleConfirmModal({
             <p css={$description}>
               {description.map((item, index) => (
                 <React.Fragment key={index}>
-                  {item}
+                  {highlight && description.length === index + 1 ? (
+                    <span css={css({ color: theme.bluegreen })}>{item}</span>
+                  ) : (
+                    item
+                  )}
                   <br />
                 </React.Fragment>
               ))}

@@ -103,7 +103,7 @@ export interface StoreOrder {
   product_price: string;
   product_count: string;
   order_type: string;
-  creation_type: 'excel' | 'single';
+  creation_type: string;
   memo: string;
 
   ws_store_info: WholesalerStore[];
@@ -271,7 +271,7 @@ export interface CreatingOrdersItem {
   product_name: string;
   product_option: string;
   product_count: number;
-  creation_type: 'excel' | 'single';
+  creation_type: string;
   product_price: number;
   order_type: string;
   memo: string;
@@ -330,6 +330,7 @@ export interface OrderSheetList {
   total_fail_count: number; //총 실패 건수
   total_success_price: number; //총 성공 금액
   total_fail_price: number; //총 실패 금액
+  total_item_subcount: number; //상품 갯수
   total_comment_count: number;
   order_price: number; //주문총액
   type: 'new' | 'modify'; //1차: new, 2차: modify
