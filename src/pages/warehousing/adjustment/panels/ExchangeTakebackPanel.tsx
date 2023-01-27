@@ -1,7 +1,6 @@
+import React, { useState } from 'react';
 import adjustmentAPI, { AdjustmentItem } from '@apis/adjustmentAPI';
-
 import InputModal from '@components/combine/modal/InputModal';
-
 import {
   ArrowRightIcon,
   MemoIcon,
@@ -19,7 +18,6 @@ import { message } from '@utils/message';
 import { Col, Collapse, CollapsePanelProps, Row, Select, Table } from 'antd';
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
-import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
 interface Props extends CollapsePanelProps {
@@ -39,7 +37,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
   const createMutation = useMutation(adjustmentAPI.create, {
     onSuccess: () => {
       queryClient.refetchQueries(['getAdjustmentListQuery'], { active: true });
-      message.success(t('successfully added exchange/returns'));
+      message.success(t('message.successfully added exchange/returns'));
       onClose();
     },
     onError: (error: AxiosError) => {
@@ -215,7 +213,7 @@ function ExchangeTakebackPanel({ activeKey, onClose, ...props }: Props) {
                     );
                   }}
                   suffixIcon={<TurtleIcon name="arrowDown" />}
-                  placeholder={t('select category')}
+                  placeholder={t('placeholder.select category')}
                   dropdownStyle={{
                     background: '#fff',
                     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',

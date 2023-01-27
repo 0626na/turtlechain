@@ -71,6 +71,7 @@ import { ReactComponent as QuestionCircle } from '@icons/questioncircle.svg';
 import { ReactComponent as Thunder } from '@icons/thunder.svg';
 import { ReactComponent as MenuPlus } from '@icons/menuplus.svg';
 import { ReactComponent as MemoMessage } from '@icons/memoMessage.svg';
+import { ReactComponent as BookMark } from '@icons/bookmark.svg';
 
 export type iconname =
   | 'checkMark'
@@ -132,7 +133,8 @@ export type iconname =
   | 'alertWarningRed'
   | 'menuplus'
   | 'thunder'
-  | 'memoMessage';
+  | 'memoMessage'
+  | 'bookMark';
 interface Props {
   danger?: boolean;
   name: iconname;
@@ -566,6 +568,9 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'memoMessage') {
     return <MemoMessage />;
+  }
+  if (name === 'bookMark') {
+    return <BookMark />;
   }
 
   return <></>;

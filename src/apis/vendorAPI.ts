@@ -140,6 +140,7 @@ const excel = async (data: RequestExcel) => {
 
 export interface RequestGetList {
   page: number;
+  page_size?: number;
   search_string: string;
   rt_store_id?: number;
 }
@@ -149,12 +150,9 @@ export interface ResponseGetList {
   data: { vendor_list: Vendor[]; total_count: number };
 }
 
-const getList = async (query: RequestGetList) => {
-  let url = 'provisioning/vendor?';
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetList>(url);
+const getList = async (params: RequestGetList) => {
+  const url = 'provisioning/vendor';
+  const response = await v2Axios.get<ResponseGetList>(url, { params });
 
   return response.data;
 };

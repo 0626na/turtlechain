@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PrimaryButton,
   SecondaryIconButton,
@@ -17,25 +17,24 @@ import { Col, Row, Upload } from 'antd';
 import { t } from 'i18next';
 import useOrderCart from '@hooks/useOrderCart';
 import { useMutation, useQuery } from 'react-query';
-import orderAPI, {
-  ResponseCreateOrderItemExcelParsing,
-  ResponseCreatePreParsing,
-} from '@apis/orderAPI';
+import orderAPI, { ResponseCreateOrderItemExcelParsing } from '@apis/orderAPI';
 import { css } from '@emotion/react';
 import pickerAPI from '@apis/pickerAPI';
 import useUser from '@hooks/useUser';
 import moment from 'moment';
 import { theme } from '@styles/theme';
 import useStore from '@hooks/useStore';
-import AddNewOrderModal from '@pages/pickerOrder/create/modals/AddNewOrderModal';
+
 import ConfirmOrderModal from '@pages/pickerOrder/create/modals/ConfirmOrderModal';
 import OrderParsingProcessPresentModal from '@pages/pickerOrder/create/modals/OrderParsingProcessPresentModal';
-import OrderPreParsingWarningModal from '@pages/pickerOrder/create/modals/OrderPreParsingWarningModal';
 import OrderCreateBlockModal from './modals/OrderCreateBlockModal';
+import AddNewOrderModal from './modals/AddNewOrderModal';
+import LoadAdjustementModal from './modals/LoadAdjustementModal';
 
 function PageBody() {
   const {
     cart,
+    reset,
     ready,
     countFailList,
     countOrdersForType,
@@ -60,6 +59,9 @@ function PageBody() {
     openParsingResultModal,
     closeParsingResultModal,
   ] = useModal();
+
+  const [adjustmentModalVisible, openAdjustmentModal, closeAdjustmentModal] =
+    useModal();
 
   //엑셀 파싱 전에 해당 파일이 등록이 이미 된 파일인지 확인 (프리파싱)
   const {
@@ -114,15 +116,7 @@ function PageBody() {
     },
   );
 
-  /**
-   * 파싱하려는 발주서 엑셀파일
-   */
-  const uploadFiles = preParsingData?.files ?? [];
-
-  /**
-   * 프리파싱 결과
-   */
-  const preParsingResult = preParsingData?.preParsingResult;
+  useEffect(() => reset(), [store]);
 
   /**
    * 발주서 엑셀파일 파싱 상태
@@ -153,6 +147,10 @@ function PageBody() {
 
   return (
     <>
+      <LoadAdjustementModal
+        visible={adjustmentModalVisible}
+        onClose={closeAdjustmentModal}
+      />
       <AddOrderColumnModal
         visible={orderColumnVisible}
         closeModal={closeSettingColumnModal}
@@ -189,10 +187,11 @@ function PageBody() {
       />
 
       <ConfirmOrderModal
+        highlight={true}
         title={t('title.really order')}
         description={[
-          t('description.failed orders are except'),
           t('description.please check order info again'),
+          t('description.failed orders are except'),
         ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
@@ -203,16 +202,16 @@ function PageBody() {
        * Page
        */}
       <PageTitle
-        title="발주서 미리보기"
+        title={t('title.orderPreview')}
         buttons={[
           <TertiaryButton
-            text="발주서 설정"
+            text={t('button.orderColumnSetting')}
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
           <TurtleDropdown
             triggerButton={
-              <SecondaryIconButton>발주 추가하기</SecondaryIconButton>
+              <SecondaryIconButton>{t('button.addOrder')}</SecondaryIconButton>
             }
             items={[
               {
@@ -247,6 +246,14 @@ function PageBody() {
                   openNewAddModal();
                 },
               },
+              {
+                key: '2',
+                label: t('button.load adjustment'),
+                icon: <TurtleIcon name="bookMark" />,
+                onClick() {
+                  openAdjustmentModal();
+                },
+              },
             ]}
           />,
         ]}
@@ -256,12 +263,12 @@ function PageBody() {
         <TurtleTabs>
           <SuccessTab
             key="success"
-            tab={`성공(${countSucessOrdersCount()})`}
+            tab={`${t('title.success')} (${countSucessOrdersCount()})`}
             loading={false}
           />
           <FailTab
             key="fail"
-            tab={`실패(${countFailList()})`}
+            tab={`${t('title.fail')} (${countFailList()})`}
             loading={false}
           />
         </TurtleTabs>
@@ -278,12 +285,12 @@ function PageBody() {
         >
           <Col css={css({ marginRight: 20 })}>
             <TurtleText>
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
-                발주수량 합계{' '}
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
+                {t('description.orderTotalCount')}
               </span>
               {'   '}
-              {`${countOrdersForType().total} 개 `}
-              <span css={css({ color: theme.grey400, fontWeight: 400 })}>
+              {t('description.count', { count: countOrdersForType().total })}
+              <span css={css({ color: theme.grey500, fontWeight: 400 })}>
                 {`(${t('type.orderTypes.order')} ${
                   countOrdersForType().order
                 }, ${t('type.orderTypes.exchange')} ${

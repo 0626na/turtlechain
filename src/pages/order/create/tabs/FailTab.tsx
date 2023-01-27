@@ -18,7 +18,7 @@ interface Props extends TabPaneProps {
 }
 
 function FailTab({ loading, ...props }: Props) {
-  const { cart, setCart } = useOrderCart();
+  const { cart, setCart, countFailList } = useOrderCart();
   const [selectRowID, setSelectRowID] = useState(0);
   const [searchQuery, setSearchQuery] = useState({
     type: 'vendor_name',
@@ -30,6 +30,7 @@ function FailTab({ loading, ...props }: Props) {
     openFailToSuccessModal,
     closeFailToSuccessModal,
   ] = useModal();
+
   const filterdList = useMemo(() => {
     if (cart.failList.length !== 0) {
       return cart.failList[0].orders.filter(
@@ -43,33 +44,34 @@ function FailTab({ loading, ...props }: Props) {
     return [];
   }, [cart.failList, searchQuery]);
 
+  const failToSuccessOrderContent = (
+    props: 'vendor_name' | 'vendor_address' | 'mobile',
+  ) => {
+    if (!cart.failList.length) return '';
+    if (
+      !cart.failList[0].orders.filter(
+        (order) => Number(order.order_id) === selectRowID,
+      ).length
+    )
+      return '';
+
+    return cart.failList[0].orders.filter(
+      (order) => Number(order.order_id) === selectRowID,
+    )[0][props];
+  };
+
   const modalItems = [
     {
       title: t('table.vendor'),
-      content:
-        cart.failList.length !== 0
-          ? cart.failList[0].orders.filter(
-              (order) => Number(order.order_id) === selectRowID,
-            )[0].vendor_name
-          : '',
+      content: failToSuccessOrderContent('vendor_name'),
     },
     {
       title: t('table.address'),
-      content:
-        cart.failList.length !== 0
-          ? cart.failList[0].orders.filter(
-              (order) => Number(order.order_id) === selectRowID,
-            )[0].vendor_address
-          : '',
+      content: failToSuccessOrderContent('vendor_address'),
     },
     {
       title: t('table.mobile'),
-      content:
-        cart.failList.length !== 0
-          ? cart.failList[0].orders.filter(
-              (order) => Number(order.order_id) === selectRowID,
-            )[0].mobile
-          : '',
+      content: failToSuccessOrderContent('mobile'),
     },
   ];
 
@@ -166,7 +168,7 @@ function FailTab({ loading, ...props }: Props) {
           }}
           title={() => (
             <TurtleTableTitle
-              totalCount={cart.failList.length ?? 0}
+              totalCount={countFailList()}
               rightContent={
                 <TurtleSearchInput
                   placeholder={t(

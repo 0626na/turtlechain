@@ -26,7 +26,7 @@ interface Props {
  * @param onOK 모달에서 설명하는 내용을 실행시, 이벤트 함수
  * @param successCount 발주성공한 갯수
  * @param failCount 파싱 과정에서 어떤 이유로 발주를 할수 없는 발주갯수
- * @message 발주 실패한 이유
+ * @param message 발주 실패한 이유
  * @size 모달 크기 파라미터
  */
 function OrderParsingProcessPresentModal({
