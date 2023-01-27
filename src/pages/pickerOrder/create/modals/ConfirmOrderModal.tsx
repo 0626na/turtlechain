@@ -13,6 +13,7 @@ import { PICKER } from '@constant/index';
 interface Props {
   visible: boolean;
   title: string;
+  highlight?: boolean;
   description: string[];
   close: () => void;
   items: { title: string; content: string }[];
@@ -30,6 +31,7 @@ function ConfirmOrderModal({
   close,
   title,
   description,
+  highlight,
   ...props
 }: Props) {
   const { cart, reset, integrationOrderList } = useOrderCart();
@@ -56,6 +58,7 @@ function ConfirmOrderModal({
     <>
       <CreateModal
         {...props}
+        highlight={highlight}
         visible={visible}
         loading={createOrderItemMutation.isLoading}
         onClose={close}
