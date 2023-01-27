@@ -21,6 +21,7 @@ import { css } from '@emotion/react';
 import { SearchFilter } from '@components/combine';
 import WholesalerMessageModal from './modals/WholesalerMessageModal';
 import { theme } from '@styles/theme';
+import useUser from '@hooks/useUser';
 
 function PageBody() {
   const options = [
@@ -45,6 +46,7 @@ function PageBody() {
     end_date: moment().format('YYYY-MM-DD'),
     search_string: '',
   });
+  const { user } = useUser();
 
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [
@@ -60,6 +62,9 @@ function PageBody() {
         start_date: searchQuery.start_date,
         end_date: searchQuery.end_date,
       }),
+    {
+      enabled: user?.type !== 'st',
+    },
   );
 
   const filteredList = useMemo(() => {
