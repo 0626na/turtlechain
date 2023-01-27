@@ -7,6 +7,7 @@ import React from 'react';
 interface Props {
   visible: boolean;
   title: string;
+  highlight?: boolean;
   description: string[];
   onClose: () => void;
   onOk: () => void;
@@ -34,12 +35,14 @@ function CreateModal({
   onClose,
   onOk,
   items,
+  highlight,
   okText = t('button.request'),
   ...props
 }: Props) {
   return (
     <div>
       <TurtleConfirmModal
+        highlight={highlight}
         onOk={onOk}
         onCancel={onClose}
         okText={okText}

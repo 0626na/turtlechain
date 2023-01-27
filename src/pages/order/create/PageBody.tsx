@@ -187,10 +187,11 @@ function PageBody() {
       />
 
       <ConfirmOrderModal
+        highlight={true}
         title={t('title.really order')}
         description={[
-          t('description.failed orders are except'),
           t('description.please check order info again'),
+          t('description.failed orders are except'),
         ]}
         visible={confirmModalVisible}
         close={closeConfirmModal}
