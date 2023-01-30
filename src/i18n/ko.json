@@ -683,7 +683,8 @@
       "add_past_subtract": "과거매입 등록",
       "add_past_unpaid": "과거매입 등록",
       "remove_past_subtract": "과거 차감 삭제",
-      "remove_past_unpaid": "과거 미결제 삭제"
+      "remove_past_unpaid": "과거 미결제 삭제",
+      "download order": "발주양식 다운"
     },
 
     "refund": "환불",
