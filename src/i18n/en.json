@@ -623,7 +623,8 @@
     "wrong transfer reversal": "Wrong Transfer Reversal",
     "at least one store": "At least one store is needed to use Turtlechain",
     "missing required header name, incorrect information entry or unregistered shopping mall is classified as an error order": "필수 헤더명이 제외된 경우, 오류발주서로 분류됩니다.",
-    "please enter a valid format for your mobile phone number": "올바른 형식의 휴대전화 번호를 입력해주세요."
+    "please enter a valid format for your mobile phone number": "올바른 형식의 휴대전화 번호를 입력해주세요.",
+    "download order": "발주양식 다운"
   },
 
   "type": {
