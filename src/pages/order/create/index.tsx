@@ -3,10 +3,11 @@ import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 import PageBody from './PageBody';
-import { Tooltip } from 'antd';
 import TurtleDatePicker from '@components/element/rangePicker/TurtleDatePicker';
 import useOrderCart from '@hooks/useOrderCart';
 import moment from 'moment';
+import { css } from '@emotion/react';
+import Tooltip from '@components/element/Tooltip';
 
 function index() {
   const { cart, setCart } = useOrderCart();
@@ -18,12 +19,7 @@ function index() {
         title={`${t('title.orderCreate')}`}
         button={
           <div onClick={() => setdateToolipVisible(false)}>
-            <Tooltip
-              visible={dateTooltipvisible}
-              title={t('description.you can change the order request date')}
-              placement="bottom"
-              zIndex={1}
-            >
+            <Tooltip message="날짜를 변경할수 있습니다.">
               <div>
                 <TurtleDatePicker
                   date={cart.selectedDate}
