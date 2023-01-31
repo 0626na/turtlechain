@@ -44,15 +44,15 @@ export const category = [
   },
   {
     value: 'sample',
-    name: t('types.orderTypes.sample'),
+    name: t('type.orderTypes.sample'),
   },
   {
     value: 'pickup',
-    name: t('types.orderTypes.pickup'),
+    name: t('type.orderTypes.pickup'),
   },
   {
     value: 'extra',
-    name: t('types.orderTypes.extra'),
+    name: t('type.orderTypes.extra'),
   },
 ];
 
