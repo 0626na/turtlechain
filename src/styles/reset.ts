@@ -1,3 +1,4 @@
+import { theme } from '@styles/theme';
 import { css } from '@emotion/react';
 
 export const reset = css`
@@ -248,5 +249,25 @@ export const reset = css`
   /* set button(top and bottom of the scrollbar) */
   ::-webkit-scrollbar-button {
     display: none;
+  }
+
+  .ant-pagination-item {
+    background-color: #ecf0f4;
+    border: none;
+    color: #787a80;
+  }
+  .ant-pagination-item:hover a,
+  .ant-pagination-item-active:hover,
+  .ant-pagination-item-active a {
+    color: #787a80;
+  }
+
+  .ant-radio-checked,
+  .ant-radio-inner {
+    border-color: #00b3be;
+  }
+
+  .ant-radio-inner::after {
+    background-color: #00b3be;
   }
 `;

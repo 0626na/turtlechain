@@ -94,10 +94,11 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const icon = css`
-  font-size: 24px;
-  margin: 6px;
-`;
+const icon = css({
+  fontSize: 24,
+  margin: 6,
+  background: '#edeff1',
+});
 
 const name = css`
   font-size: 16px;
