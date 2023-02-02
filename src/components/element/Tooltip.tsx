@@ -1,4 +1,5 @@
-import React from 'react';
+import { css } from '@emotion/react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 interface Props {
@@ -7,42 +8,37 @@ interface Props {
 }
 
 function Tooltip({ children, message }: Props) {
+  const [bVisible, bSetVisible] = useState(true);
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        bSetVisible(false);
+      }}
+    >
       {children}
       <ContentContainer>
-        <ContentStart />
-        <Content className="tooltip">{message}</Content>
+        <div css={bVisible ? visible : invisible}>
+          <ContentStartBottom />
+          <Content>{message}</Content>
+        </div>
       </ContentContainer>
     </Container>
   );
 }
 
-const tooltip = keyframes`
-from {
-  opacity:1;
-}
-
-to{
-  opacity:0;
-}
-  
-`;
+const invisible = css({ display: 'none' });
+const visible = css({ display: 'block' });
 
 const Container = styled.div`
   position: relative;
   width: fit-content;
   height: fit-content;
-  &:hover > .tooltip,
-  &:active > .tooltip {
-    opacity: 0;
-  }
+  z-index: 200;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
-  margin-top: 16px;
-
+  padding-top: 16px;
   position: absolute;
 `;
 
@@ -52,17 +48,33 @@ const ContentStart = styled.div`
   border-bottom: 10px solid black;
   border-top: 0px;
   position: absolute;
-  bottom: 27px;
+  bottom: 34px;
+  left: 50px;
+`;
+
+const ContentStartBottom = styled.div`
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black;
+  border-bottom: 0px;
+  position: absolute;
+  top: 50px;
   left: 50px;
 `;
 
 const Content = styled.div`
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-align: center;
+  text-overflow: clip;
+  height: 34px;
   border-radius: 8px;
   background-color: black;
-  font-size: 11px;
   padding: 8px 10px;
   color: white;
-  transition: all 0.3s;
-  opacity: 1;
+
+  font-size: 13px;
+  font-weight: 400;
 `;
 export default Tooltip;

@@ -19,7 +19,7 @@ function index() {
         title={`${t('title.orderCreate')}`}
         button={
           <div onClick={() => setdateToolipVisible(false)}>
-            <Tooltip message="날짜를 변경할수 있습니다.">
+            <Tooltip message="발주요청 일자를 변경할 수 있어요">
               <div>
                 <TurtleDatePicker
                   date={cart.selectedDate}
