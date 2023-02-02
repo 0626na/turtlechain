@@ -7,7 +7,7 @@ import TurtleDatePicker from '@components/element/rangePicker/TurtleDatePicker';
 import useOrderCart from '@hooks/useOrderCart';
 import moment from 'moment';
 import { css } from '@emotion/react';
-import Tooltip from '@components/element/Tooltip';
+import { Tooltip } from 'antd';
 
 function index() {
   const { cart, setCart } = useOrderCart();
@@ -19,7 +19,10 @@ function index() {
         title={`${t('title.orderCreate')}`}
         button={
           <div onClick={() => setdateToolipVisible(false)}>
-            <Tooltip message="발주요청 일자를 변경할 수 있어요">
+            <Tooltip
+              visible={dateTooltipvisible}
+              title={t('description.you can change the order request date')}
+            >
               <div>
                 <TurtleDatePicker
                   date={cart.selectedDate}

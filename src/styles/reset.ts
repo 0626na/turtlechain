@@ -223,8 +223,13 @@ export const reset = css`
   .ant-tooltip-inner {
     font-size: 13px;
     font-weight: 400;
+    border: transparent;
     border-radius: 12px;
     background-color: #30333b;
+  }
+
+  .ant-tooltip-arrow-content {
+    --antd-arrow-background-color: #30333b;
   }
 
   /* window에서도 스크롤바 mac처럼 둥글게 */

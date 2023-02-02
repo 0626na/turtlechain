@@ -30,7 +30,6 @@ import OrderParsingProcessPresentModal from '@pages/pickerOrder/create/modals/Or
 import OrderCreateBlockModal from './modals/OrderCreateBlockModal';
 import AddNewOrderModal from './modals/AddNewOrderModal';
 import LoadAdjustementModal from './modals/LoadAdjustementModal';
-import Tooltip from '@components/element/Tooltip';
 
 function PageBody() {
   const {
