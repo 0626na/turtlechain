@@ -18,7 +18,7 @@ function Tooltip({ children, message }: Props) {
       {children}
       <ContentContainer>
         <div css={bVisible ? visible : invisible}>
-          <ContentStartBottom />
+          <ContentStart />
           <Content>{message}</Content>
         </div>
       </ContentContainer>
@@ -33,7 +33,6 @@ const Container = styled.div`
   position: relative;
   width: fit-content;
   height: fit-content;
-  z-index: 200;
 `;
 
 const ContentContainer = styled.div`
@@ -73,8 +72,9 @@ const Content = styled.div`
   background-color: black;
   padding: 8px 10px;
   color: white;
-
+  position: absolute;
   font-size: 13px;
+  position: fixed;
   font-weight: 400;
 `;
 export default Tooltip;

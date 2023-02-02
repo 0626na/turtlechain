@@ -20,6 +20,8 @@ import { phonePattern } from '@utils/pattern';
 import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
 import { StoreOrder } from '@apis/orderAPI';
 import OrderMemoModal from '@components/combine/modal/OrderMemoModal';
+import Tooltip from '@components/element/Tooltip';
+import { relative } from 'path';
 
 interface Props extends TabPaneProps {
   loading: boolean;
@@ -222,7 +224,13 @@ function SuccessTab({ loading, ...props }: Props) {
               render: (_, record) => record.vendor_address,
             },
             {
-              title: t('table.mobile'),
+              title: (
+                <div css={css({ position: 'relative' })}>
+                  <Tooltip message="안녕닐스야ㄴㄹㄴㅁㅇ러ㅣ낭러ㅣㅏㄴ어리ㅏㅓ니ㅏ러ㅏㅣㄴ머리ㅓㄴ마ㅣ러마ㅣㄴ;ㅓ리ㅏ너리ㅏㅓ니ㅏㅓ리ㅏ너ㅣ러ㅣㅏ너ㅣ러ㅣㅏ너리ㅏㅓ니ㅓㄹ">
+                    {t('table.mobile')}
+                  </Tooltip>
+                </div>
+              ),
               width: 176,
               render: (_, record) =>
                 record.mobile.replace(phonePattern, '$1-$2-$3'),
