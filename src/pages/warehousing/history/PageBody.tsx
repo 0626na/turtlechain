@@ -43,7 +43,7 @@ function PageBody() {
     ['getWarehousingSheetQuery', searchQuery],
     () => warehousingAPI.getSheet(searchQuery),
     {
-      enabled: searchQuery.rt_store_id !== -1,
+      enabled: !!store.selected,
     },
   );
 
