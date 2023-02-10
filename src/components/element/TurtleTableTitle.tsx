@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { theme } from '@styles/theme';
 import { Col, Divider, Row } from 'antd';
 import { t } from 'i18next';
 import TurtleText from './TurtleText';
@@ -106,9 +107,9 @@ const container = css`
   font-weight: 500;
 `;
 
-const count = css`
-  color: #32acdd;
-  font-weight: 700;
-`;
+const count = css({
+  color: theme.bluegreen,
+  fontWeight: 700,
+});
 
 export default TurtleTableTitle;

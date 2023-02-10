@@ -3,10 +3,11 @@ import { PageHeader } from '@layout/page';
 import { t } from 'i18next';
 import { Helmet } from 'react-helmet';
 import PageBody from './PageBody';
-import { Tooltip } from 'antd';
 import TurtleDatePicker from '@components/element/rangePicker/TurtleDatePicker';
 import useOrderCart from '@hooks/useOrderCart';
 import moment from 'moment';
+import { css } from '@emotion/react';
+import { Tooltip } from 'antd';
 
 function index() {
   const { cart, setCart } = useOrderCart();
@@ -21,8 +22,6 @@ function index() {
             <Tooltip
               visible={dateTooltipvisible}
               title={t('description.you can change the order request date')}
-              placement="bottom"
-              zIndex={1}
             >
               <div>
                 <TurtleDatePicker

@@ -1,3 +1,4 @@
+import { theme } from '@styles/theme';
 import { Badge, Typography } from 'antd';
 import React from 'react';
 interface Props {
@@ -12,7 +13,8 @@ function TurtlePanelTitle({ count, activeKey, title }: Props) {
       <Badge
         count={count}
         style={{
-          backgroundColor: Number(activeKey) >= count ? '#32ACDD' : '#E2E5E9',
+          backgroundColor:
+            Number(activeKey) >= count ? theme.bluegreen : '#E2E5E9',
           color: Number(activeKey) >= count ? '' : '#A1A2A6',
           fontWeight: 500,
           marginTop: '1.5px',
