@@ -27,9 +27,13 @@ const colors = {
   etc: {
     color: 'gray',
   },
+  cafe24: {
+    color: 'gray',
+  },
 } as const;
 
 function StoreCard({ store }: Props) {
+  console.log('inventory type: ', store.inventory_type);
   return (
     <div css={card}>
       <div css={titleContainer}>
@@ -72,9 +76,12 @@ function StoreCard({ store }: Props) {
           </TextWithTooltip>
         </Col>
         <Col css={rightContentCss.self}>
-          <span>{`${store.store_account[0]?.bank ?? ''} ${
-            store.store_account[0]?.account_number ?? ''
-          } ${store.store_account[0]?.account_holder ?? ''}`}</span>
+          <span>
+            {`${store.store_account[0]?.bank ?? ''} ${
+              store.store_account[0]?.account_number ?? ''
+            } ${store.store_account[0]?.account_holder ?? ''}`.substring(0, 15)}
+            {store.store_account.length !== 0 && '....'}
+          </span>
         </Col>
       </Row>
 

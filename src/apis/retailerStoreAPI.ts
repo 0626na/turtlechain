@@ -1,6 +1,12 @@
 import { v2Axios } from '.';
 
-export type InventoryType = 'sellmate' | 'ezadmin' | 'turtlechain' | 'none';
+export type InventoryType =
+  | 'sellmate'
+  | 'ezadmin'
+  | 'turtlechain'
+  | 'none'
+  | 'cafe24'
+  | 'etc';
 export interface Store {
   name: string;
   email: string;
