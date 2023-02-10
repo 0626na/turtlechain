@@ -261,18 +261,25 @@ export const reset = css`
     border: none;
     color: #787a80;
   }
+
+  .ant-table-footer {
+    margin-top: 40px;
+  }
   .ant-pagination-item:hover a,
   .ant-pagination-item-active:hover,
   .ant-pagination-item-active a {
     color: #787a80;
   }
 
-  .ant-radio-checked,
-  .ant-radio-inner {
+  .ant-radio-checked .ant-radio-inner {
     border-color: #00b3be;
   }
 
   .ant-radio-inner::after {
     background-color: #00b3be;
+  }
+
+  .ant-switch-small.ant-switch-checked .ant-switch-handle {
+    left: calc(100% - 12px - 5px);
   }
 `;

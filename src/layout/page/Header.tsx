@@ -8,6 +8,7 @@ import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
 import useLogin from '@hooks/useLogin';
 import useUser from '@hooks/useUser';
+import { TurtleIcon } from '@components/element';
 
 interface Props {
   title: string;
@@ -25,7 +26,7 @@ function PageHeader({ title, button, onClickBefore }: Props) {
         <Col css={leftContnetStyled}>
           {onClickBefore && (
             <div css={iconContainer} onClick={onClickBefore}>
-              <ArrowLeftOutlined css={icon} />
+              <TurtleIcon name="arrowBack" />
             </div>
           )}
           <TurtleText css={textStyled}>{title}</TurtleText>

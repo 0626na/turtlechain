@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import React, { MouseEvent } from 'react';
 import { ReactComponent as Memo } from '@icons/memo.svg';
+import TurtleIcon from './TurtleIcon';
 
 interface Props {
   // 사용처에서 이벤트전파 제어를 하기위해 인자 타입을 지정해준다.
@@ -11,7 +12,7 @@ interface Props {
 function MemoIcon({ onClick, value }: Props) {
   return (
     <div css={iconContainer} onClick={onClick}>
-      <Memo css={{ stroke: value ? '#2ab8c1' : '#a1a2a6' }} />
+      {value ? <TurtleIcon name="memo" /> : <TurtleIcon name="blankMemo" />}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { ClearingInfo } from '@apis/clearingAPI';
 import { theme } from '@styles/theme';
 import useClearingCart from '@hooks/useClearingCart';
 import { t } from 'i18next';
+import backgroundImg from '../img/receiptBackground.svg';
 
 interface Props {
   visible: boolean;
@@ -130,7 +131,7 @@ const modalCss = {
   container: css({
     fontSize: 15,
     lineHeight: 1,
-    padding: 32,
+    padding: 56,
     height: 597,
     width: 400,
 
@@ -141,8 +142,10 @@ const modalCss = {
 
     display: 'flex',
     flexDirection: 'column',
-    boxShadow: '0px 8px 28px rgba(34, 44, 56, 0.28)',
-    background: '#fff',
+    backgroundColor: 'none',
+    backgroundImage: `url(${backgroundImg})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
     borderRadius: 4,
   }),
 
