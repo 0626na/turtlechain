@@ -114,7 +114,7 @@ const pageContent = css({
 const cardLayout = css({
   flex: 1,
   boxShadow: '0px 8px 20px rgba(41, 77, 119, 0.14)',
-  padding: '36px 36px 52px 36px',
+  padding: '32px 32px 52px 32px',
   borderRadius: 16,
 });
 

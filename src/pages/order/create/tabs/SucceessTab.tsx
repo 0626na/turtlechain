@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   MemoIcon,
   TurtleIcon,
@@ -15,7 +15,6 @@ import { Col, Row, Table, TabPaneProps, Tabs } from 'antd';
 import { message } from '@utils/message';
 import { t } from 'i18next';
 import { useState } from 'react';
-import { valueType } from 'antd/lib/statistic/utils';
 import { phonePattern } from '@utils/pattern';
 import DeleteOrderModal from '@components/combine/modal/DeleteOrderModal';
 import { StoreOrder } from '@apis/orderAPI';
@@ -44,15 +43,15 @@ export const category = [
   },
   {
     value: 'sample',
-    name: t('types.orderTypes.sample'),
+    name: t('type.orderTypes.sample'),
   },
   {
     value: 'pickup',
-    name: t('types.orderTypes.pickup'),
+    name: t('type.orderTypes.pickup'),
   },
   {
     value: 'extra',
-    name: t('types.orderTypes.extra'),
+    name: t('type.orderTypes.extra'),
   },
 ];
 

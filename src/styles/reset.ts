@@ -1,3 +1,4 @@
+import { theme } from '@styles/theme';
 import { css } from '@emotion/react';
 
 export const reset = css`
@@ -222,8 +223,13 @@ export const reset = css`
   .ant-tooltip-inner {
     font-size: 13px;
     font-weight: 400;
-    border-radius: 12px;
+    border: transparent;
+    border-radius: 8px;
     background-color: #30333b;
+  }
+
+  .ant-tooltip-arrow-content {
+    --antd-arrow-background-color: #30333b;
   }
 
   /* window에서도 스크롤바 mac처럼 둥글게 */
@@ -248,5 +254,32 @@ export const reset = css`
   /* set button(top and bottom of the scrollbar) */
   ::-webkit-scrollbar-button {
     display: none;
+  }
+
+  .ant-pagination-item {
+    background-color: #ecf0f4;
+    border: none;
+    color: #787a80;
+  }
+
+  .ant-table-footer {
+    margin-top: 32px;
+  }
+  .ant-pagination-item:hover a,
+  .ant-pagination-item-active:hover,
+  .ant-pagination-item-active a {
+    color: #787a80;
+  }
+
+  .ant-radio-checked .ant-radio-inner {
+    border-color: #00b3be;
+  }
+
+  .ant-radio-inner::after {
+    background-color: #00b3be;
+  }
+
+  .ant-switch-small.ant-switch-checked .ant-switch-handle {
+    left: calc(100% - 12px - 5px);
   }
 `;

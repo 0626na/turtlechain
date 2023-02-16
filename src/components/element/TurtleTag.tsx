@@ -88,7 +88,7 @@ const largeContainer = css`
   align-items: center;
   justify-content: center;
 
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 400;
   font-size: 12px;
 

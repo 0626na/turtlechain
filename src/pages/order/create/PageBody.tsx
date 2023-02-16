@@ -199,6 +199,14 @@ function PageBody() {
             onClick={openSettingColumnModal}
             icon={<TurtleIcon name="tuning" />}
           />,
+          <div>
+            <a href="https://turtlechain-public.s3.ap-northeast-2.amazonaws.com/turtlechain%E1%84%87%E1%85%A1%E1%86%AF%E1%84%8C%E1%85%AE%E1%84%89%E1%85%A5%E1%84%8B%E1%85%A3%E1%86%BC%E1%84%89%E1%85%B5%E1%86%A8(V2).xlsx">
+              <TertiaryButton
+                text={t('description.download order')}
+                icon={<TurtleIcon name="download" />}
+              />
+            </a>
+          </div>,
           <TurtleDropdown
             triggerButton={
               <SecondaryIconButton>{t('button.addOrder')}</SecondaryIconButton>
@@ -256,6 +264,7 @@ function PageBody() {
             tab={`${t('title.success')} (${countSucessOrdersCount()})`}
             loading={false}
           />
+
           <FailTab
             key="fail"
             tab={`${t('title.fail')} (${countFailList()})`}
