@@ -316,7 +316,7 @@ function FailTab({ loading, ...props }: Props) {
                           product_count:
                             searchSameRow(failItem, order, record) &&
                             value !== null
-                              ? value.toString()
+                              ? Number(value)
                               : order.product_count,
                         })),
                       })),

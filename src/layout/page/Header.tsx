@@ -1,9 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
-
 import { Avatar, Col, Dropdown, Menu, Row, Button } from 'antd';
 import { t } from 'i18next';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import TurtleText from '@components/element/TurtleText';
 import Notification from '@components/combine/Notification';
 import useLogin from '@hooks/useLogin';

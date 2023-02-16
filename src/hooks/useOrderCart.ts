@@ -24,8 +24,8 @@ export interface FailListForOutput {
   mobile: string;
   product_name: string;
   product_option: string;
-  product_count: string;
-  product_price: string;
+  product_count: number;
+  product_price: number;
   order_type: string;
   memo: string;
 }
@@ -536,7 +536,7 @@ const useOrderCart = () => {
       ...order,
       product_count:
         order.order_id === selectedOrderID && value !== 'null'
-          ? value
+          ? Number(value)
           : order.product_count,
     }));
 

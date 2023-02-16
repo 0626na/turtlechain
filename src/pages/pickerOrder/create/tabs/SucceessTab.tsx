@@ -89,6 +89,7 @@ function SuccessTab({ loading, ...props }: Props) {
   });
 
   const filterdList = useMemo(() => {
+    console.log('카트', cart);
     if (searchQuery.type === 'name')
       return cart.successList.filter((item) =>
         item.rt_store_name.includes(searchQuery.search_string),

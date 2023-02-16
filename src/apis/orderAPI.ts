@@ -100,8 +100,8 @@ export interface StoreOrder {
   mobile: string;
   product_name: string;
   product_option: string;
-  product_price: string;
-  product_count: string;
+  product_price: number;
+  product_count: number;
   order_type: string;
   creation_type: string;
   memo: string;
