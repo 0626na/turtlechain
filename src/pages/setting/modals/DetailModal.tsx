@@ -231,13 +231,12 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item //
+        <Form.Item
           name="inventory_type"
           label={t('table.inventory')}
           rules={[{ required: true }]}
         >
           <TurtleFormSelect
-            disabled
             placeholder={t('placeholder.select inventory')}
             items={[
               { value: 'sellmate', name: t('type.sellmate') },
@@ -249,33 +248,35 @@ function DetailModal({ visible, closeModal, selectedRow }: Props) {
           />
         </Form.Item>
 
-        <Form.Item label={t('table.inventory link key')}>
-          <Row gutter={[4, 0]}>
-            <Col span={11}>
-              <Form.Item
-                name="inventory_domain"
-                noStyle
-                label={t('table.domain')}
-              >
-                <TurtleFormInput
-                  placeholder={t('placeholder.domain')}
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col span={13}>
-              <Form.Item
-                name="inventory_key"
-                noStyle
-                label={t('table.inventory key')}
-              >
-                <TurtleFormInput
-                  placeholder={t('placeholder.invenyory key')}
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+        <Form.Item label={t('table.inventory link key')} shouldUpdate>
+          {({ getFieldValue }) => (
+            <Row gutter={[4, 0]}>
+              <Col span={11}>
+                <Form.Item
+                  name="inventory_domain"
+                  noStyle
+                  label={t('table.domain')}
+                >
+                  <TurtleFormInput
+                    placeholder={t('placeholder.domain')}
+                    disabled={getFieldValue('inventory_type') !== 'sellmate'}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={13}>
+                <Form.Item
+                  name="inventory_key"
+                  noStyle
+                  label={t('table.inventory key')}
+                >
+                  <TurtleFormInput
+                    placeholder={t('placeholder.inventory key')}
+                    disabled={getFieldValue('inventory_type') !== 'sellmate'}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form.Item>
 
         <TurtleDivider marginTop={32} marginBottom={32} />

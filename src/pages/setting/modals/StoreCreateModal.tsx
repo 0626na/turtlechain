@@ -220,7 +220,6 @@ function StoreCreateModal({ visible, closeModal }: Props) {
                 <Form.Item
                   name="inventory_domain"
                   noStyle
-                  shouldUpdate
                   label={t('table.domain')}
                 >
                   <TurtleFormInput
