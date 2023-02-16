@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
-import { PageHeader } from '@layout/page';
 import koKR from 'antd/es/locale/ko_KR';
-import './i18n';
+import { PageHeader } from '@layout/page';
 import 'moment/locale/ko';
 import 'antd/dist/antd.less';
 import { render, screen } from '@testing-library/react';
