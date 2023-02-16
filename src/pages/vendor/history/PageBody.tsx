@@ -261,6 +261,7 @@ function PageBody() {
             {
               ellipsis: true,
               width: 130,
+              align: 'center',
               title: (
                 <TextWithTooltip
                   tooltipContent={[
@@ -273,6 +274,7 @@ function PageBody() {
               ),
               render: (_, record) => (
                 <Switch
+                  size="small"
                   css={$switch}
                   onClick={() => {
                     setSelectedRow(record);
@@ -356,12 +358,19 @@ function PageBody() {
   );
 }
 
-const $switch = css`
-  width: 30px;
+const $switch = css({
+  width: '30px',
+  height: '20px',
 
-  &.ant-switch-checked {
-    background-color: #1a66f9;
-  }
-`;
+  '.ant-switch-checked': {
+    backgroundColor: '#1a66f9',
+  },
+
+  '.ant-switch-handle::before': {
+    width: 14,
+    height: 14,
+    marginTop: 0.5,
+  },
+});
 
 export default PageBody;

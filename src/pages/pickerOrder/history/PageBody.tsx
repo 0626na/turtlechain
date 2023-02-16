@@ -56,7 +56,7 @@ function PageBody() {
   ] = useModal();
 
   const { data: orderHistoryData } = useQuery(
-    ['getOrderSheetsQuery', searchQuery.end_date, searchQuery.end_date],
+    ['getOrderSheetsQuery', searchQuery.start_date, searchQuery.end_date],
     () =>
       orderAPI.getOrderSheets({
         start_date: searchQuery.start_date,

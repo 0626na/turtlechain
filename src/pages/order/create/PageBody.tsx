@@ -264,6 +264,7 @@ function PageBody() {
             tab={`${t('title.success')} (${countSucessOrdersCount()})`}
             loading={false}
           />
+
           <FailTab
             key="fail"
             tab={`${t('title.fail')} (${countFailList()})`}
