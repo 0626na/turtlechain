@@ -33,7 +33,6 @@ const colors = {
 } as const;
 
 function StoreCard({ store }: Props) {
-  console.log('inventory type: ', store.inventory_type);
   return (
     <div css={card}>
       <div css={titleContainer}>

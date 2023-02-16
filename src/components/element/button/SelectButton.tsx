@@ -45,6 +45,7 @@ const button = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 6px 10px;
 
   color: #00aab5;
   background-color: #ddf3f5;
