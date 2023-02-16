@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useCallback, useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Col, Form, Popconfirm, Radio, Row } from 'antd';
+import { useMutation, useQueryClient } from 'react-query';
+import { Col, Form, Radio, Row } from 'antd';
 import {
   SpecialButton,
   TurtleDivider,
@@ -199,6 +199,9 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           rules={[{ required: true }]}
         >
           <TurtleFormSelect
+            onChange={() => {
+              form.resetFields(['inventory_domain', 'inventory_key']);
+            }}
             placeholder={t('placeholder.select inventory')}
             items={[
               { value: 'sellmate', name: t('type.sellmate') },
@@ -210,33 +213,36 @@ function StoreCreateModal({ visible, closeModal }: Props) {
           />
         </Form.Item>
 
-        <Form.Item label={t('table.inventory link key')}>
-          <Row gutter={[4, 0]}>
-            <Col span={11}>
-              <Form.Item
-                name="inventory_domain"
-                noStyle
-                label={t('table.domain')}
-              >
-                <TurtleFormInput
-                  placeholder={t('placeholder.domain')}
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col span={13}>
-              <Form.Item
-                name="inventory_key"
-                noStyle
-                label={t('table.inventory key')}
-              >
-                <TurtleFormInput
-                  placeholder={t('placeholder.inventory key')}
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+        <Form.Item label={t('table.inventory link key')} shouldUpdate>
+          {({ getFieldValue }) => (
+            <Row gutter={[4, 0]}>
+              <Col span={11}>
+                <Form.Item
+                  name="inventory_domain"
+                  noStyle
+                  shouldUpdate
+                  label={t('table.domain')}
+                >
+                  <TurtleFormInput
+                    placeholder={t('placeholder.domain')}
+                    disabled={getFieldValue('inventory_type') !== 'sellmate'}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={13}>
+                <Form.Item
+                  name="inventory_key"
+                  noStyle
+                  label={t('table.inventory key')}
+                >
+                  <TurtleFormInput
+                    placeholder={t('placeholder.inventory key')}
+                    disabled={getFieldValue('inventory_type') !== 'sellmate'}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form.Item>
 
         <TurtleDivider marginTop={32} marginBottom={32} />

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '@styles/theme';
-import { DatePicker, DatePickerProps } from 'antd';
+import { DatePicker } from 'antd';
 import moment from 'moment';
 import useOrderCart from '@hooks/useOrderCart';
 import { RangePickerProps } from 'antd/lib/date-picker';
