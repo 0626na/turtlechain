@@ -224,7 +224,7 @@ export const reset = css`
     font-size: 13px;
     font-weight: 400;
     border: transparent;
-    border-radius: 12px;
+    border-radius: 8px;
     background-color: #30333b;
   }
 
@@ -263,7 +263,7 @@ export const reset = css`
   }
 
   .ant-table-footer {
-    margin-top: 40px;
+    margin-top: 32px;
   }
   .ant-pagination-item:hover a,
   .ant-pagination-item-active:hover,

@@ -103,7 +103,7 @@ const smallContainer = css`
 
   display: inline-flex;
   align-items: center;
-  border-radius: 8px;
+  border-radius: 4px;
 
   font-weight: 400;
   font-size: 12px;
