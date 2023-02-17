@@ -75,6 +75,9 @@ import { ReactComponent as BookMark } from '@icons/bookmark.svg';
 import { ReactComponent as ArrowBack } from '@icons/arrowBack.svg';
 import { ReactComponent as Memo } from '@icons/memo.svg';
 import { ReactComponent as BlankMemo } from '@icons/blankMemo.svg';
+import { ReactComponent as AccountManagement } from '@icons/idcard.svg';
+import { ReactComponent as Logout } from '@icons/logout.svg';
+
 export type iconname =
   | 'checkMark'
   | 'storePlus'
@@ -139,7 +142,9 @@ export type iconname =
   | 'bookMark'
   | 'arrowBack'
   | 'memo'
-  | 'blankMemo';
+  | 'blankMemo'
+  | 'accountManagement'
+  | 'logout';
 interface Props {
   danger?: boolean;
   name: iconname;
@@ -588,6 +593,14 @@ function TurtleIcon({ name, onClick, danger }: Props) {
 
   if (name === 'blankMemo') {
     return <BlankMemo />;
+  }
+
+  if (name === 'accountManagement') {
+    return <AccountManagement />;
+  }
+
+  if (name === 'logout') {
+    return <Logout />;
   }
 
   return <></>;

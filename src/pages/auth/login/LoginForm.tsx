@@ -18,6 +18,7 @@ import {
 import { useLogin } from '@hooks/index';
 import { css } from '@emotion/react';
 import { TurtleText } from '@components/element';
+import { theme } from '@styles/theme';
 
 function LoginForm() {
   const [form] = Form.useForm();
@@ -30,11 +31,13 @@ function LoginForm() {
         loginRequest(login_id, password, autoLogin);
       }}
     >
+      {/* 서비스 로고 */}
       <img
         css={logoImage}
         src={`${process.env.PUBLIC_URL}/assets/img/logo_login.png`}
         alt="logo"
       />
+      {/* 아이디 */}
       <Form.Item
         name="login_id"
         rules={[{ required: false }]}
@@ -46,6 +49,7 @@ function LoginForm() {
           prefix={<UserOutlined />}
         />
       </Form.Item>
+      {/* 패스워드 */}
       <Form.Item name="password" rules={[{ required: false }]}>
         <Input.Password
           css={input}
@@ -54,9 +58,11 @@ function LoginForm() {
         />
       </Form.Item>
       <Space>
+        {/* 자동로그인 체크 */}
         <Form.Item name="autoLogin" valuePropName="checked">
           <Checkbox>{t('description.autoLogin')}</Checkbox>
         </Form.Item>
+        {/* 아이디 찾기/비밀번호 재설정 */}
         <Form.Item>
           <Link style={{ color: '#7C7D82' }} to="/find-id">
             {t('description.findId')}
@@ -67,6 +73,7 @@ function LoginForm() {
           </Link>
         </Form.Item>
       </Space>
+      {/* 에러 메세지 */}
       {errorMsg && (
         <Row justify="center" style={{ marginBottom: 24 }}>
           <Typography.Text type="danger">
@@ -75,6 +82,7 @@ function LoginForm() {
           </Typography.Text>
         </Row>
       )}
+      {/* 로그인 버튼 */}
       <Form.Item>
         <Button
           css={loginbButton}
@@ -87,11 +95,12 @@ function LoginForm() {
         </Button>
       </Form.Item>
       <Divider />
+      {/* 서비스 가입 및 요금플랜 */}
       <Row justify="center">
         <Typography.Text type="secondary">
           {t('description.notMember')}{' '}
         </Typography.Text>
-        <Link to="/registration" style={{ color: '#00B594' }}>
+        <Link to="/registration" style={{ color: theme.bluegreen }}>
           &nbsp;&nbsp;{t('description.registration')}
         </Link>
       </Row>
@@ -99,10 +108,11 @@ function LoginForm() {
         <Typography.Text type="secondary">
           {t('description.wonderMembership')}{' '}
         </Typography.Text>
-        <Link to="/membership-info" style={{ color: '#00B594' }}>
+        <Link to="/membership-info" style={{ color: theme.bluegreen }}>
           &nbsp;&nbsp;{t('description.aboutMembership')}
         </Link>
       </Row>
+      {/* 카피라이트 */}
       <Row justify="center">
         <TurtleText
           css={css`
