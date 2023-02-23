@@ -7,7 +7,6 @@ import { v2Axios } from '@apis/index';
 import { message } from '@utils/message';
 import { useUser } from '.';
 import authAPI from '@apis/authAPI';
-import TagManager from 'react-gtm-module';
 
 const useLogin = function () {
   const navigate = useNavigate();

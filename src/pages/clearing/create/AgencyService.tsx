@@ -99,6 +99,7 @@ function AgencyService() {
                 excelMutation.mutate({
                   file,
                   rt_store_id: Number(store.selected?.id),
+                  request_date: cart.clearingRequestDate,
                 });
 
                 return false;
