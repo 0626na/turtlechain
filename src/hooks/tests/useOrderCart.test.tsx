@@ -6,9 +6,9 @@ import {
 import useOrderCart from '@hooks/useOrderCart';
 import { renderHook } from '@testing-library/react-hooks';
 import { act } from 'react-dom/test-utils';
-import order__onlySuccess from './testData/order__onlySuccess.json';
-import order__SuccessAndFail from './testData/order__SuccessAndFail.json';
-import order__singleAdd from './testData/order__singleAdd.json';
+import order__onlySuccess from './data/order__onlySuccess.json';
+import order__SuccessAndFail from './data/order__SuccessAndFail.json';
+import order__singleAdd from './data/order__singleAdd.json';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('useOrderCart hook Test', () => {

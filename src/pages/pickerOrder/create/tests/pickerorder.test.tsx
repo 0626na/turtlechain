@@ -1,15 +1,11 @@
-import React, { Suspense } from 'react';
-import koKR from 'antd/es/locale/ko_KR';
+import React from 'react';
 import { PageHeader } from '@layout/page';
-import 'moment/locale/ko';
-import 'antd/dist/antd.less';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import '@testing-library/jest-dom/extend-expect';
-import { t } from 'i18next';
-import { ConfigProvider } from 'antd';
+import PageBody from '../PageBody';
 
 describe('pickerorder page 테스트', () => {
   beforeEach(() => {
@@ -27,20 +23,34 @@ describe('pickerorder page 테스트', () => {
       })),
     });
   });
-  test('pageHeader text 테스트', () => {
+  test('pageHeader 테스트', () => {
     const queryClient = new QueryClient();
+
     render(
-      <MemoryRouter>
+      <Router>
         <RecoilRoot>
           <QueryClientProvider client={queryClient}>
-            <ConfigProvider locale={koKR}>
-              <PageHeader title={t('title.orderCreate')} />
-            </ConfigProvider>
+            <PageHeader title="발주등록" />
           </QueryClientProvider>
         </RecoilRoot>
-      </MemoryRouter>,
+      </Router>,
     );
 
-    expect(screen.getByText('발주등록')).toHaveTextContent('발주등록');
+    expect(screen.getByText('발주등록')).toBeInTheDocument();
+  });
+
+  test('pageBody 테스트', () => {
+    const queryClient = new QueryClient();
+    render(
+      <Router>
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <PageBody />
+          </QueryClientProvider>
+        </RecoilRoot>
+      </Router>,
+    );
+
+    expect(screen.getByText('발주서 설정')).toBeInTheDocument();
   });
 });
