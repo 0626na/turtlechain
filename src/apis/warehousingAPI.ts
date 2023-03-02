@@ -177,8 +177,8 @@ const create = async function (data: {
  */
 
 export interface RequestGetSheet {
-  rt_store_id: number;
-  is_confirmed?: number | '';
+  rt_store_id?: number;
+  is_confirmed?: '' | '0' | '1'; // "": 전체, 0: 마감전, 1: 마감
   start_date: string;
   end_date: string;
   did_settlement?: number;
@@ -240,7 +240,7 @@ const getItem = async (params: RequestGetItem) => {
 
 export interface RequestUpdateSheet {
   id: number;
-  is_confirmed: boolean;
+  is_confirmed: boolean; // true : 마감 , false : 취소
 }
 
 export interface ResponseUpdateSheet {
