@@ -9,6 +9,8 @@ import Notification from '@components/combine/Notification';
 import useLogin from '@hooks/useLogin';
 import useUser from '@hooks/useUser';
 import { TurtleIcon } from '@components/element';
+import { CSSProperties } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   title: string;
@@ -19,6 +21,7 @@ interface Props {
 function PageHeader({ title, button, onClickBefore }: Props) {
   const { logout } = useLogin();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -39,14 +42,40 @@ function PageHeader({ title, button, onClickBefore }: Props) {
           <Dropdown
             overlay={
               <Menu
+                css={css({
+                  width: 160,
+                  height: 92,
+                  boxShadow: `0px 4px 18px rgba(34,44,56,0.28)`,
+                  borderRadius: 8,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                })}
                 items={[
+                  {
+                    theme: 'dark',
+                    key: 0,
+                    label: t('button.account management'),
+                    icon: (
+                      <div css={dropDownIcon}>
+                        <TurtleIcon name="accountManagement" />
+                      </div>
+                    ),
+                    style: dropDownMenuItem as CSSProperties,
+                    onClick: () => navigate('/setting?tab=user'),
+                  },
                   {
                     key: 1,
                     label: (
-                      <Button type="text" onClick={logout}>
-                        {t('description.logout')}
-                      </Button>
+                      <div onClick={logout}>{t('description.logout')}</div>
                     ),
+                    icon: (
+                      <div css={dropDownIcon}>
+                        <TurtleIcon name="logout" />
+                      </div>
+                    ),
+                    style: dropDownMenuItem as CSSProperties,
                   },
                 ]}
               />
@@ -95,14 +124,22 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const icon = css({
-  fontSize: 24,
-  margin: 6,
-  background: '#edeff1',
-});
-
 const name = css`
   font-size: 16px;
 `;
+
+const dropDownMenuItem = {
+  width: 148,
+  height: 34,
+  padding: 6,
+  boxSizing: 'border-box',
+  borderRadius: 6,
+};
+
+const dropDownIcon = css({
+  display: 'flex',
+  alignItems: 'center',
+  marginRight: 8,
+});
 
 export default PageHeader;
