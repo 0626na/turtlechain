@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pagination, Popover, Radio, Row, Space, Table } from 'antd';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -25,7 +25,7 @@ interface Props {
 }
 
 function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
-  const [wholesaleList, setWholesaleList] = useState<Array<Wholesale>>([]);
+  const [wholesaleList, setWholesaleList] = useState<Wholesale[]>([]);
 
   const [searchQuery, setSearchQuery] = useState<RequestGetWholesale>({
     page: 1,
@@ -43,26 +43,25 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     },
   );
 
-  const onClickSelect = (record: Wholesale) => {
+  const onSelectWholesale = (record: Wholesale) => {
     if (record.store_phone.length !== 1) {
       message.warn(t('message.select mobile'));
+
       return;
     }
 
     if (record.store_account.length !== 1) {
       message.warn(t('message.select account'));
+
       return;
     }
 
     onFieldFillin(record);
     closeModal();
-    setSearchQuery({
-      page: 1,
-      search_string: '',
-    });
+    resetSearchQuery();
   };
 
-  const selectStorePhone = (record: Wholesale, storePhone: VendorPhone) => {
+  const onSelectPhone = (record: Wholesale, storePhone: VendorPhone) => {
     setWholesaleList(
       wholesaleList.map((vendor) =>
         vendor.id === record.id
@@ -75,10 +74,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
     );
   };
 
-  const selectStoreAccount = (
-    record: Wholesale,
-    storeAccount: VendorAccount,
-  ) => {
+  const onSelectAccount = (record: Wholesale, storeAccount: VendorAccount) => {
     setWholesaleList(
       wholesaleList.map((vendor) =>
         vendor.id === record.id
@@ -90,6 +86,16 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
       ),
     );
   };
+
+  const resetSearchQuery = () => {
+    setSearchQuery({ page: 1, search_string: '' });
+  };
+
+  useEffect(() => {
+    if (visible) return;
+
+    resetSearchQuery();
+  }, [visible]);
 
   return (
     <div
@@ -174,7 +180,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                                   value={storePhone.phone}
                                   key={storePhone.id}
                                   onClick={() => {
-                                    selectStorePhone(record, storePhone);
+                                    onSelectPhone(record, storePhone);
                                   }}
                                 >
                                   {phoneMasking(storePhone.phone)}
@@ -225,7 +231,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                                   key={storeAccount.id}
                                   value={storeAccount.account_number}
                                   onClick={() => {
-                                    selectStoreAccount(record, storeAccount);
+                                    onSelectAccount(record, storeAccount);
                                   }}
                                 >
                                   {makeAddress(storeAccount)}
@@ -252,7 +258,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
                 <SelectButton
                   size="small"
                   onClick={() => {
-                    onClickSelect(record);
+                    onSelectWholesale(record);
                   }}
                 >
                   {t('button.select')}
