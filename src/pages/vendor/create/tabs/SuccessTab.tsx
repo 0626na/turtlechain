@@ -8,7 +8,7 @@ import useVendorCart from '@hooks/useVendorCart';
 import InputModal from '@components/combine/modal/InputModal';
 import useModal from '@hooks/useModal';
 import { TextWithTooltip } from '@components/combine';
-import { phoneMasking } from '@utils/phone';
+import { phoneMasking } from '@utils/etc';
 
 interface Props {
   isLoading: boolean;

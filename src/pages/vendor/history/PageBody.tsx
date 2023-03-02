@@ -20,7 +20,7 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
-import { phoneMasking } from '@utils/phone';
+import { phoneMasking } from '@utils/etc';
 
 function PageBody() {
   const [vendorList, setVendorList] = useState<Vendor[]>();

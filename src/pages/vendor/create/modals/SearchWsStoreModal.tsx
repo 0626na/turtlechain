@@ -9,7 +9,6 @@ import vendorAPI, {
   VendorPhone,
   Wholesale,
 } from '@apis/vendorAPI';
-import { phonePattern } from '@utils/pattern';
 import {
   SelectButton,
   TurtleBadge,
@@ -18,7 +17,7 @@ import {
 import { SearchFilter, TurtleContentModal } from '@components/combine';
 import { css } from '@emotion/react';
 import { message } from '@utils/message';
-import { phoneMasking } from '@utils/phone';
+import { phoneMasking } from '@utils/etc';
 interface Props {
   visible: boolean;
   closeModal: () => void;
