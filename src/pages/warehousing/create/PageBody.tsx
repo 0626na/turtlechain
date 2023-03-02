@@ -24,11 +24,14 @@ import moment from 'moment';
 import AddSingleProductModal from './modals/AddSingleProductModal';
 import { t } from 'i18next';
 import { message } from '@utils/message';
+
 function PageBody() {
   const navigate = useNavigate();
   const { store, isStoreSelected } = useStore();
+
   const { cart, ready, reset, saveFile, totalCount, totalAmount } =
     useWarehousingCart();
+
   const [inventoryModalVisible, openInventoryModal, closeInventoryModal] =
     useModal();
   const [addingModalVisible, openAddingModal, closeAddingModal] = useModal();
