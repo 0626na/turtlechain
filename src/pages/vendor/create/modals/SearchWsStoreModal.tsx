@@ -34,7 +34,7 @@ function SearchWsStoreModal({ visible, closeModal, onFieldFillin }: Props) {
 
   // master 도매 검색 요청
   const getWholesaleQuery = useQuery(
-    ['getWholesale', searchQuery],
+    ['getWholesaleQuery', searchQuery],
     () => vendorAPI.getWholesale(searchQuery),
     {
       onSuccess: (data) => {
