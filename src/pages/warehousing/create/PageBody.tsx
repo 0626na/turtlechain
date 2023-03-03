@@ -171,13 +171,12 @@ function PageBody() {
                       saveFile(file);
                       parseExcelMutation.mutate({
                         files: file,
-                        rt_store_id: store.selected?.id as number,
+                        rt_store_id: Number(store.selected?.id),
                       });
                     }}
                   />
                 ),
                 icon: <TurtleIcon name="exel" />,
-                onClick: (e) => {},
               },
               {
                 key: '1',
