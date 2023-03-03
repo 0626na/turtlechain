@@ -9,6 +9,7 @@ import TurtleContentModal from '@components/element/modal/TurtleContentModal';
 import SearchFilter from '../SearchFilter';
 import useStore from '@hooks/useStore';
 import productAPI, { ProductShow, RequestGetList } from '@apis/productAPI';
+import { refinedValue } from '@utils/etc';
 
 interface Props {
   visible: boolean;
@@ -20,7 +21,7 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
   const { store } = useStore();
 
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: store.selected?.id,
+    rt_store_id: undefined,
     page: 1,
     search_string: '',
   });
@@ -31,15 +32,16 @@ function SearchProductModal({ visible, closeModal, onClickSelect }: Props) {
     () =>
       productAPI.getList({
         ...searchQuery,
-        rt_store_id: store.selected?.id ?? -1,
+        search_string: refinedValue(searchQuery.search_string),
       }),
     {
-      enabled: visible,
+      enabled: !!visible && !!searchQuery.rt_store_id,
     },
   );
 
   useEffect(() => {
     if (visible) return;
+
     setSearchQuery({
       page: 1,
       search_string: '',

@@ -27,9 +27,11 @@ function SuccessTab({ loading, ...props }: Props) {
     existMaybeReserve,
     vendorCount,
   } = useWarehousingCart();
+
   const [searchQuery, setSearchQuery] = useState({
     search_string: '',
   });
+
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
   const [selectedRow, setSelectedRow] = useState<WarehousingItemConnect>();

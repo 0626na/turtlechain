@@ -5,7 +5,7 @@ import useAdjustmentCart from '@hooks/useAdjustmentCart';
 import { Collapse } from 'antd';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
-import ExchangeRefundPanel from '../panels/ExchangeTakebackPanel';
+import ExchangeTakebackPanel from '../panels/ExchangeTakebackPanel';
 import WarehousingPanel from '../panels/WarehousingPanel';
 
 interface Props {
@@ -36,8 +36,8 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
         >
           <Collapse
             onChange={(key) => {
-              if (!key || key[0] !== '1') return;
-              setActiveKey(key[0]);
+              // 교환,반품 판넬에서 입고판넬로 돌아올때
+              if (key === '1') setActiveKey(key);
             }}
             activeKey={activeKey}
             css={collapse}
@@ -45,10 +45,7 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
             bordered={false}
           >
             <WarehousingPanel
-              activeKey={activeKey}
-              setActiveKey={setActiveKey}
               key="1"
-              style={{ border: '1px solid red' }}
               header={
                 <TurtlePanelTitle
                   count={1}
@@ -56,9 +53,12 @@ function ExchangeTakebackModal({ onClose, visible }: Props) {
                   title={t('title.search from stock list')}
                 />
               }
+              activeKey={activeKey}
+              goExchangeTakeBackPanel={() => {
+                setActiveKey('2');
+              }}
             />
-
-            <ExchangeRefundPanel
+            <ExchangeTakebackPanel
               key="2"
               header={
                 <TurtlePanelTitle

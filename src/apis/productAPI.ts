@@ -1,5 +1,6 @@
 import { v2Axios } from '.';
 import { RcFile } from 'antd/lib/upload';
+import { refinedValue } from '@utils/etc';
 
 export interface Product {
   vendor_id: number;
@@ -113,7 +114,7 @@ export interface ResponseGetList {
 }
 
 const getList = async function (params: RequestGetList) {
-  const url = 'provisioning/product?';
+  const url = 'provisioning/product';
   const response = await v2Axios.get<ResponseGetList>(url, { params });
 
   return response.data;

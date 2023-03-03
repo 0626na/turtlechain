@@ -33,7 +33,7 @@ function SearchFilter({
       onSearch={(value) => {
         setSearchQuery({
           ...searchQuery,
-          search_string: value,
+          search_string: value.trim(),
           page: 1,
         });
       }}

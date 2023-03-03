@@ -25,19 +25,20 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
+import { aMonthAgo, today } from '@utils/date';
 
 function PageBody() {
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
     store_id: store.selected?.id,
     credit_type: 'general',
-    start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD'),
+    start_date: aMonthAgo(),
+    end_date: today(),
     page: 1,
     page_size: 10,
     status: 'all',
   });
-  const [selectedRow, selectRow] = useState<ClearingSheetShow>();
+  const [selectedRow, setSelectedRow] = useState<ClearingSheetShow>();
   const [detailModalVisible, openDetailModal, closeDetailModal] = useModal();
   const [downloadModalVisible, openDownloadModal, closeDownloadModal] =
     useModal();
@@ -184,7 +185,7 @@ function PageBody() {
           scroll={{ y: 'auto' }}
           onRow={(record) => ({
             onClick: () => {
-              selectRow(record);
+              setSelectedRow(record);
               openDetailModal();
             },
           })}
@@ -291,7 +292,7 @@ function PageBody() {
                     <SelectButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        selectRow(record);
+                        setSelectedRow(record);
                         openRemoveModal();
                       }}
                     >

@@ -32,7 +32,8 @@ import ExchangeRefundModal from './modals/CreateExchangeTakebackModal';
 import AddReserveModal from './modals/CreateReserveModal';
 import AdjustmentProcessModal from './modals/ProcessModal';
 import DetailModal from './modals/DetailModal';
-import { RecoilValueReadOnly } from 'recoil';
+import { aWeekAgo } from '@utils/date';
+import { refinedValue } from '@utils/etc';
 
 function PageBody() {
   const { store } = useStore();
@@ -52,9 +53,9 @@ function PageBody() {
   const [tooltipVisible, setTooltipVisible] = useState(true);
   // 교환/반품/미송 검색 조건
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: null,
+    rt_store_id: undefined,
     is_cleared: '',
-    start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
+    start_date: aWeekAgo(),
     end_date: moment().format('YYYY-MM-DD'),
     search_string: '',
     page: 1,
@@ -63,7 +64,11 @@ function PageBody() {
   // 교환/반품/미송 검색 요청
   const getAdjustmentListQuery = useQuery(
     ['getAdjustmentListQuery', searchQuery],
-    () => adjustmentAPI.getList(searchQuery),
+    () =>
+      adjustmentAPI.getList({
+        ...searchQuery,
+        search_string: refinedValue(String(searchQuery.search_string)),
+      }),
     {
       enabled: !!searchQuery.rt_store_id,
     },
@@ -102,19 +107,15 @@ function PageBody() {
   const totalClearingPrice =
     getAdjustmentListQuery.data?.data.adjustment_summary?.cleared.price ?? 0;
 
-  const resetSearchQuery = () => {
+  useEffect(() => {
     setSearchQuery({
       is_cleared: '',
-      start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
+      start_date: aWeekAgo(),
       end_date: moment().format('YYYY-MM-DD'),
       search_string: '',
       page: 1,
-      rt_store_id: store.selected?.id as number,
+      rt_store_id: Number(store.selected?.id),
     });
-  };
-
-  useEffect(() => {
-    resetSearchQuery();
   }, [store.selected?.id]);
 
   useEffect(() => {
@@ -262,7 +263,7 @@ function PageBody() {
           rowKey={(record) => record.id}
           pagination={false}
           onRow={(record) => ({
-            onClick: () => {
+            onDoubleClick: () => {
               setSelectedRow(record);
               detailModalOpen();
             },

@@ -15,7 +15,6 @@ function AdjustmentStatusCard() {
       is_cleared: '',
       start_date: moment().startOf('month').format('YYYY-MM-DD'),
       end_date: moment().endOf('month').format('YYYY-MM-DD'),
-      rt_store_id: null,
     }),
   );
 
