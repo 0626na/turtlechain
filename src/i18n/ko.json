@@ -396,8 +396,8 @@
     "authentication number does not match": "인증번호가 일치하지 않습니다.",
     "already added store": "이미 같은 이름으로 등록된 쇼핑몰이 있어요. 구분할 수 있는 이름으로 다시 추가해주세요",
     "add to order": "발주서에 추가했습니다.",
-    "select mobile": "휴대전화번호를 선택해주세요",
-    "select account": "계좌번호를 선택해주세요"
+    "select mobile": "휴대전화번호를 하나 선택해주세요.",
+    "select account": "계좌정보를 하나 선택해주세요."
   },
 
   "title": {
