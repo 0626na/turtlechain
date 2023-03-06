@@ -1,7 +1,6 @@
 import { atom } from 'recoil';
 import { ClearingInfo } from '@apis/clearingAPI';
 import moment from 'moment';
-// import { AdjustmentItemShow } from '@apis/adjustmentAPI';
 
 export interface ClearingCartState {
   clearingRequestDate: string;

@@ -19,14 +19,14 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   });
 
   const getClearingItemQuery = useQuery(
-    ['getClearingItemQuery'], //
+    ['getClearingItemQuery'],
     () =>
       clearingAPI.getItem({
-        sheet_id: selectedRow?.id as number,
+        sheet_id: Number(selectedRow?.id),
         page_size: 10000,
       }),
     {
-      enabled: visible && !!selectedRow?.id,
+      enabled: !!visible && !!selectedRow?.id,
     },
   );
 
@@ -39,6 +39,8 @@ function DetailModal({ visible, onClose, selectedRow }: Props) {
   );
 
   useEffect(() => {
+    if (visible) return;
+
     setSearchQuery({ search_string: '' });
   }, [visible]);
 

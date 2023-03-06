@@ -10,6 +10,7 @@ import {
 } from '@components/element';
 import { css } from '@emotion/react';
 import { useAdjustmentCart, useStore } from '@hooks/index';
+import { aWeekAgo, today } from '@utils/date';
 import { Collapse, CollapsePanelProps, Table } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
@@ -18,11 +19,14 @@ import { useQuery } from 'react-query';
 
 interface Props extends CollapsePanelProps {
   activeKey: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setActiveKey: any;
+  goExchangeTakeBackPanel: () => void;
 }
 
-function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
+function WarehousingPanel({
+  activeKey,
+  goExchangeTakeBackPanel,
+  ...props
+}: Props) {
   const { store } = useStore();
   const { cart, setCart } = useAdjustmentCart();
   const { selectWarehousingItem, selectAllWarehousingItem } =
@@ -30,12 +34,12 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
 
   const [warehousingItemList, setWarehousingItemList] =
     useState<WarehousingItem[]>();
-
+  // 기간에대해서만 서버로부터 받아오고, 검색명은 서버요청없이 필터처리로 보여준다.
   const [searchString, setSearchString] = useState('');
   const [searchQuery, setSearchQuery] = useState({
     rt_store_id: store.selected?.id as number,
-    start_date: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD'),
+    start_date: aWeekAgo(),
+    end_date: today(),
     product_name: '',
   });
 
@@ -54,9 +58,10 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
       item.product_info.vendor_product_name.includes(searchString) ||
       item.product_info.name.includes(searchString),
   );
+
   const totalCount = filteredItemList?.length ?? 0;
 
-  const fillExchangeTakeBack = () => {
+  const fillExchangeTakeBackList = () => {
     setCart((cart) => ({
       ...cart,
       adjustmentItemList: cart.selectedWarehousingItemList.map(
@@ -81,10 +86,11 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
       ),
     }));
 
-    setActiveKey('2'); //  판넬 이동
+    goExchangeTakeBackPanel();
   };
 
   const isEmpty = cart.selectedWarehousingItemList.length === 0;
+
   return (
     <Collapse.Panel
       {...props}
@@ -110,7 +116,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
       >
         <TurtleFormSearchInput
           onSearch={(value) => {
-            setSearchString(value);
+            setSearchString(value.trim());
           }}
           placeholder={t('placeholder.search product name and reference')}
         />
@@ -211,7 +217,7 @@ function WarehousingPanel({ activeKey, setActiveKey, ...props }: Props) {
         <PrimaryButton
           disabled={isEmpty}
           onClick={() => {
-            fillExchangeTakeBack();
+            fillExchangeTakeBackList();
           }}
         >
           {t('button.next')}

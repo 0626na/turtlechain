@@ -13,6 +13,7 @@ import transactionAPI, { RequestGetItem } from '@apis/transactionAPI';
 import { useEffect, useState } from 'react';
 import { t } from 'i18next';
 import TurtleStatistics from '@components/element/TurtleStatistics';
+import { aWeekAgo, today } from '@utils/date';
 
 interface Props {
   visible: boolean;
@@ -23,9 +24,9 @@ interface Props {
 
 function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
   const [searchQuery, setSearchQuery] = useState<RequestGetItem>({
-    vendor_id: undefined,
-    start_date: moment().subtract(1, 'week').format('YYYY-MM-DD'),
-    end_date: moment().format('YYYY-MM-DD'),
+    vendor_id,
+    start_date: aWeekAgo(),
+    end_date: today(),
   });
 
   // 장부 상세내역 요청
@@ -39,13 +40,14 @@ function DetailModal({ visible, onClose, vendor_id, vendor_name }: Props) {
     );
 
   useEffect(() => {
-    if (!visible) return;
+    if (visible) return;
 
     setSearchQuery((searchQuery) => ({
       ...searchQuery,
-      vendor_id: vendor_id,
+      start_date: aWeekAgo(),
+      end_date: today(),
     }));
-  }, [vendor_id, visible]);
+  }, [visible]);
 
   return (
     <TurtleContentModal

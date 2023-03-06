@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Form, Input, Upload } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   AddButton,
@@ -23,7 +23,7 @@ import { AxiosError } from 'axios';
 import { RcFile } from 'antd/lib/upload';
 import { message } from '@utils/message';
 import usePreset from '@hooks/usePreset';
-import { phoneMasking } from '@utils/phone';
+import { phoneMasking } from '@utils/etc';
 interface Props {
   visible: boolean;
   closeModal: () => void;

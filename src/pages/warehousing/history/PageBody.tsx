@@ -22,10 +22,11 @@ import useModal from '@hooks/useModal';
 import DetailModal from './modals/DetailModal';
 import ProcessButton from '@components/element/button/ProcessButton';
 import { message } from '@utils/message';
+
 function PageBody() {
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetSheet>({
-    rt_store_id: -1,
+    rt_store_id: undefined,
     is_confirmed: '',
     start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
     end_date: moment().format('YYYY-MM-DD'),
@@ -43,7 +44,7 @@ function PageBody() {
     ['getWarehousingSheetQuery', searchQuery],
     () => warehousingAPI.getSheet(searchQuery),
     {
-      enabled: !!store.selected,
+      enabled: !!searchQuery.rt_store_id,
     },
   );
 
@@ -74,12 +75,15 @@ function PageBody() {
     },
   });
 
-  // 쇼핑몰 바뀔때 마다 입고서 리스트 재요청
+  // 쇼핑몰 바뀔때 마다 검색조건 초기화.
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
-      rt_store_id: store.selected?.id ?? -1,
-    }));
+    setSearchQuery({
+      rt_store_id: store.selected?.id,
+      is_confirmed: '',
+      start_date: moment().subtract(1, 'months').format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+      page: 1,
+    });
   }, [store.selected]);
 
   return (
@@ -172,12 +176,13 @@ function PageBody() {
               rightContent={
                 <Space>
                   <TurtleSearchSelect
-                    value={String(searchQuery.is_confirmed)}
+                    value={searchQuery.is_confirmed}
                     onChange={(is_confirmed) => {
+                      const value = is_confirmed as '' | '0' | '1';
+
                       setSearchQuery({
                         ...searchQuery,
-                        is_confirmed:
-                          is_confirmed === '' ? '' : Number(is_confirmed),
+                        is_confirmed: value,
                       });
                     }}
                     items={[

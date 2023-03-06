@@ -76,7 +76,6 @@
     ]
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
     "@types/file-saver": "^2.0.5",
     "@types/react-gtm-module": "^2.0.1",
     "@types/react-helmet": "^6.1.4",
