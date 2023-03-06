@@ -15,13 +15,7 @@ interface Props {
 }
 
 function SuccessTab({ isLoading }: Props) {
-  const {
-    cart,
-    vatIncludedUpdate,
-    handleUseVendorNameUpdate,
-    memoUpdate,
-    vendorRemove,
-  } = useVendorCart();
+  const { cart, vatIncludedUpdate, memoUpdate, vendorRemove } = useVendorCart();
 
   const [memoModalVisible, openMemoModal, closeMemoModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();

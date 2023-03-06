@@ -9,7 +9,6 @@ import vendorAPI, {
   VendorPhone,
   Wholesale,
 } from '@apis/vendorAPI';
-import { phonePattern } from '@utils/pattern';
 import {
   SelectButton,
   TurtleBadge,
