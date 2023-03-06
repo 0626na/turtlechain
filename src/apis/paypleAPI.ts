@@ -3,6 +3,7 @@ import { v2Axios } from '@apis/index';
 interface RequestAuthenticate {
   company_id: number;
   request_type: 'PAY' | 'AUTH';
+  user_id?: number;
 }
 
 interface ResponseAuthenticate {

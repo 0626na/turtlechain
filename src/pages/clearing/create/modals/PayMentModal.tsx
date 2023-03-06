@@ -15,13 +15,14 @@ import userAPI from '@apis/userAPI';
 interface Props {
   visible: boolean;
   closeModal: () => void;
+  isPicker: boolean;
 }
 
 /* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
-function PayMentModal({ visible, closeModal }: Props) {
+function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -151,6 +152,7 @@ function PayMentModal({ visible, closeModal }: Props) {
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
+                user_id: isPicker ? user?.id : 0,
               });
               setButtonLoading(true);
             }}
