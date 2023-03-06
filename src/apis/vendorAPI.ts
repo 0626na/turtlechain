@@ -63,7 +63,7 @@ export interface Wholesale {
   address: string;
   store_account: VendorAccount[];
   store_phone: VendorPhone[];
-  company: VendorCompany[];
+  //company: VendorCompany[];
   building: string;
   floor: string;
   col: string;

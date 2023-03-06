@@ -23,7 +23,6 @@ function PendingTab({ isLoading }: Props) {
   const {
     cart,
     vatIncludedUpdate,
-    handleUseVendorNameUpdate,
     memoUpdate,
     handleWholesaleStoreSelecte,
     handleAccountSelecte,
