@@ -53,6 +53,8 @@ const removeSubscription = async (data: RequestRemoveSubscription) => {
 export interface RequestUpdateTestAlimTalk {
   request_date: string;
   clearing_amount: number;
+  type: string;
+  user_id?: number;
 }
 
 export interface ResponseUpdateTestAlimTalk {

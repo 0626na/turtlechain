@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
 import useClearingCart from '@hooks/useClearingCart';
 import userAPI from '@apis/userAPI';
+import { type } from 'os';
 
 interface Props {
   visible: boolean;
@@ -166,6 +167,8 @@ function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
                 request_date: cart.clearingRequestDate,
                 clearing_amount:
                   Math.round((clearingPaymentTotal * 1.1) / 10) * 10,
+                type: isPicker ? 'order' : 'clearing',
+                user_id: isPicker ? user?.id : undefined,
               });
             }}
           />
