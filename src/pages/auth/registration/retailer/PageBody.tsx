@@ -14,7 +14,7 @@ import { css } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
 import { t } from 'i18next';
 import { COMPANY, COMPLETED, RETAILER, USER } from '@constant/index';
-import CompletedStep from './step/CompletedStep';
+import CompletedStep from '../CompletedStep';
 
 function Pagebody() {
   const [form] = Form.useForm();
