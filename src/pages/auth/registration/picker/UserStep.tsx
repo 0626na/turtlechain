@@ -15,16 +15,14 @@ import { PhoneAuthForm } from '@components/combine';
 
 import { CheckDuplicatedButton, SpecialButton } from '@components/element';
 
-import { PICKER } from '@constant/index';
-import AgreementCheckbox from '../../AgreementCheckbox';
+import { COMPLETED, PICKER } from '@constant/index';
+import AgreementCheckbox from '../AgreementCheckbox';
+import { useSearchParams } from 'react-router-dom';
 
-interface Props {
-  goCompletedStep: () => void;
-}
-
-function UserStep({ goCompletedStep }: Props) {
+function UserStep() {
   const [form] = Form.useForm();
   const [checkDuplicated, setCheckDuplicated] = useState(false);
+  const [, setSearchParams] = useSearchParams();
 
   // 가입 신청
   const registrationMutation = useMutation(userAPI.createRegistration, {
@@ -35,6 +33,13 @@ function UserStep({ goCompletedStep }: Props) {
       message.warn(error.response?.data.msg);
     },
   });
+
+  const goCompletedStep = () => {
+    setSearchParams({
+      step: COMPLETED,
+      user_name: form.getFieldValue('user_name'),
+    });
+  };
 
   // 아이디 중복체크 요청
   const dupCheckMutation = useMutation(userAPI.dupCheck, {
