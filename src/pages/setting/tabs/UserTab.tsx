@@ -423,6 +423,7 @@ function UserTab() {
                       changeCreditCardInfoMutation.mutate({
                         company_id: companyID,
                         request_type: 'AUTH',
+                        user_id: user?.id,
                       })
                     }
                   >
