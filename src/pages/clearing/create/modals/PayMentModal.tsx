@@ -135,8 +135,7 @@ function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
 
         <div css={modal.description}>
           <p>
-            정산서 생성은 유료플랜으로만 제공됩니다.
-            {/* {t('description.payment feature is only available as a paid plan')} */}
+            {t('description.payment feature is only available as a paid plan')}
           </p>
           <p>
             {t(

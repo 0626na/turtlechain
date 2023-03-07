@@ -409,29 +409,6 @@ const download = async function (query: RequestDownload) {
 };
 
 /*
- * 대량이체파일 다운로드
- */
-
-interface RequestDownloadDeposit {
-  clearing_sheet_id: number;
-  date: string;
-}
-
-const downloadDeposit = async (params: RequestDownloadDeposit) => {
-  const url = 'excel/download/deposit';
-  const response = await v2Axios.get(url, {
-    responseType: 'arraybuffer',
-    params: { clearing_sheet_id: params.clearing_sheet_id },
-  });
-
-  // 파일 저장
-  saveAs(
-    new Blob([response.data], { type: 'application/ms-excel' }),
-    `${moment(params.date).format('YYMMDD')}_대량이체파일.xlsx`,
-  );
-};
-
-/*
  *  정산서 파싱
  */
 
@@ -515,7 +492,6 @@ const clearingAPI = {
   download,
   parseExcel,
   createParse,
-  downloadDeposit,
 };
 
 export default clearingAPI;
