@@ -7,6 +7,7 @@ import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
 import { PageContent } from '@layout/page';
 import UserCard from '@pages/setting/cards/UserCard';
+import RemoveSubscriptionModal from '@pages/setting/modals/RemoveSubscriptionModal';
 import { theme } from '@styles/theme';
 import { message } from '@utils/message';
 import { emailPattern, phonePattern } from '@utils/pattern';
@@ -212,6 +213,11 @@ function UserTab() {
 
   return (
     <PageContent>
+      <RemoveSubscriptionModal
+        visible={removeSubscriptionModalvisible}
+        onClose={removeSubscriptionModalClose}
+        id={companyID}
+      />
       <div css={marginTop}>
         {!subscriptionData.is_subscribed ? (
           //구독 안한 상태

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import pickerAPI from '@apis/pickerAPI';
 import { StoreShow } from '@apis/retailerStoreAPI';
 import {
@@ -27,6 +27,7 @@ import { message } from '@utils/message';
 import AddStoreForPickerModal from './modals/AddStoreForPickerModal';
 import StoreTab from './tabs/StoreTab';
 import UserTab from './tabs/UserTab';
+import { useSearchParams } from 'react-router-dom';
 
 function PageBody() {
   const [mode, setMode] = useState<'cardView' | 'listView'>('listView');
@@ -37,6 +38,12 @@ function PageBody() {
   const [addModalVisible, openAddDetailModal, closeAddDetailModal] = useModal();
   const [removeModalVisible, openRemoveModal, closeRemoveModal] = useModal();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    // 초기 진입시 store로 설정.
+    if (!searchParams.get('tab')) setSearchParams({ tab: 'store' });
+  }, [searchParams, setSearchParams]);
   /**
    * 현재 picker 계정에 등록된 쇼핑몰 리스트 불러오는 react-query
    */
@@ -71,7 +78,13 @@ function PageBody() {
   };
 
   return (
-    <TurtleTabs color="dark">
+    <TurtleTabs
+      color="dark"
+      activeKey={searchParams.get('tab') as string}
+      onChange={(newKey) => {
+        setSearchParams({ tab: newKey });
+      }}
+    >
       <Tabs.TabPane key="store" tab={t('description.store management')}>
         <div css={whiteContainer}>
           <StoreTab />
