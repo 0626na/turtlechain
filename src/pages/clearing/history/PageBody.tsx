@@ -1,7 +1,6 @@
 import clearingAPI, {
   ClearingSheetShow,
   RequestGetSheet,
-  ResponseGetItem,
 } from '@apis/clearingAPI';
 import { RangeDateModal } from '@components/combine';
 import {
@@ -26,23 +25,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import DetailModal from './modals/DetailModal';
-import { convertToExcel } from '@utils/excel';
 import { aMonthAgo, today } from '@utils/date';
-
-const mockList: ClearingSheetShow[] = [
-  {
-    id: 1,
-    created_time: '20230103',
-    status: 'request',
-    store_id: 1,
-    store_name: 'test',
-    request_date: '20230104',
-    complete_date: '20230101',
-    total_clearing_amount: 10000,
-    total_deposit_amount: 10000,
-    included_vat_amount: 100000,
-  },
-];
 
 function PageBody() {
   const { store } = useStore();
@@ -76,8 +59,6 @@ function PageBody() {
       message.success(t('message.cancel clearing'));
     },
   });
-
-  const downloadExcelDepositMutation = useMutation(clearingAPI.downloadDeposit);
 
   const downloadExcelMutation = useMutation(clearingAPI.download, {
     onError: (error: AxiosError) => {
@@ -116,7 +97,6 @@ function PageBody() {
         buttons={[
           <TertiaryButton
             text={t('button.download clearing')}
-            // text={'이체내역 대량 다운'}
             icon={<TurtleIcon name="download" />}
             onClick={() => {
               openDownloadModal();
@@ -152,11 +132,8 @@ function PageBody() {
           });
         }}
         title={t('button.download clearing')}
-        // title={'이체내역 대량 다운'}
         description={[
           t('description.download selected clearing'),
-          // '선택한 기간의 이체내역을 다운로드합니다.',
-          // t('description.download selected clearing'),
           t('description.one minute to download'),
         ]}
         loading={loading}
@@ -169,8 +146,7 @@ function PageBody() {
           value={[
             {
               color: 'green',
-              // title: t('table.request'),
-              title: '정산',
+              title: t('table.request'),
               count:
                 getClearingSheetQuery.data?.data.clearing_summary.request
                   .count ?? 0,
@@ -178,32 +154,31 @@ function PageBody() {
                 getClearingSheetQuery.data?.data.clearing_summary.request
                   .amount ?? 0,
             },
-            // {
-            //   color: 'orange',
-            //   title: t('table.pending'),
-            //   count:
-            //     getClearingSheetQuery.data?.data.clearing_summary.pending
-            //       .count ?? 0,
-            //   price:
-            //     getClearingSheetQuery.data?.data.clearing_summary.pending
-            //       .amount ?? 0,
-            // },
-            // {
-            //   color: 'cyan',
-            //   title: t('table.complete'),
-            //   count:
-            //     getClearingSheetQuery.data?.data.clearing_summary.complete
-            //       .count ?? 0,
-            //   price:
-            //     getClearingSheetQuery.data?.data.clearing_summary.complete
-            //       .amount ?? 0,
-            // },
+            {
+              color: 'orange',
+              title: t('table.pending'),
+              count:
+                getClearingSheetQuery.data?.data.clearing_summary.pending
+                  .count ?? 0,
+              price:
+                getClearingSheetQuery.data?.data.clearing_summary.pending
+                  .amount ?? 0,
+            },
+            {
+              color: 'cyan',
+              title: t('table.complete'),
+              count:
+                getClearingSheetQuery.data?.data.clearing_summary.complete
+                  .count ?? 0,
+              price:
+                getClearingSheetQuery.data?.data.clearing_summary.complete
+                  .amount ?? 0,
+            },
           ]}
         />
         <Table
           size="small"
-          // dataSource={getClearingSheetQuery.data?.data.sheet_list}
-          dataSource={mockList}
+          dataSource={getClearingSheetQuery.data?.data.sheet_list}
           loading={loading}
           pagination={false}
           rowKey={(record) => record.id}
@@ -219,7 +194,7 @@ function PageBody() {
               totalCount={getClearingSheetQuery.data?.data.total_count ?? 0}
               rightContent={
                 <>
-                  {/* <TurtleSearchSelect
+                  <TurtleSearchSelect
                     value={searchQuery.status}
                     onChange={(value) => {
                       setSearchQuery({ ...searchQuery, status: value });
@@ -242,9 +217,9 @@ function PageBody() {
                         name: t('table.complete'),
                       },
                     ]}
-                  /> */}
+                  />
 
-                  {/* <Divider type="vertical" style={{ margin: 10 }} /> */}
+                  <Divider type="vertical" style={{ margin: 10 }} />
 
                   <TurtlePrimaryRangePicker
                     allowClear={false}
@@ -276,38 +251,35 @@ function PageBody() {
             </Row>
           )}
           columns={[
-            // {
-            //   ellipsis: true,
-            //   title: t('table.paymentStatus'),
-            //   render: (_, record) => {
-            //     const { status } = record;
-            //     const color =
-            //       status === 'request'
-            //         ? 'green'
-            //         : status === 'pending'
-            //         ? 'orange'
-            //         : 'cyan';
-            //     const text = t(`table.${status}`);
-            //     return <TurtleTag color={color}>{text}</TurtleTag>;
-            //   },
-            // },
             {
               ellipsis: true,
-              // title: t('table.paymentRequestDate'),
-              title: '생성 일자',
-              render: (_, record) =>
-                moment(record.request_date).format('YYYY-MM-DD'),
+              title: t('table.paymentStatus'),
+              render: (_, record) => {
+                const { status } = record;
+                const color =
+                  status === 'request'
+                    ? 'green'
+                    : status === 'pending'
+                    ? 'orange'
+                    : 'cyan';
+                const text = t(`table.${status}`);
+                return <TurtleTag color={color}>{text}</TurtleTag>;
+              },
             },
-            // {
-            //   ellipsis: true,
-            //   title: t('table.paymentCompleteDate'),
-            //   render: (_, record) => record.complete_date,
-            // },
+            {
+              ellipsis: true,
+              title: t('table.paymentRequestDate'),
+              render: (_, record) => record.request_date,
+            },
+            {
+              ellipsis: true,
+              title: t('table.paymentCompleteDate'),
+              render: (_, record) => record.complete_date,
+            },
             {
               ellipsis: true,
               align: 'right',
-              // title: t('table.paymentPrice'),
-              title: '이체할 금액',
+              title: t('table.paymentPrice'),
               render: (_, record) =>
                 record.total_deposit_amount.toLocaleString(),
             },
@@ -315,41 +287,21 @@ function PageBody() {
               ellipsis: true,
               align: 'center',
               render: (_, record) => (
-                <SelectButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // selectRow(record);
-                    downloadExcelDepositMutation.mutate({
-                      clearing_sheet_id: record.id,
-                      date: record.created_time,
-                    });
-                    // openRemoveModal();
-                  }}
-                >
-                  다운로드
-                  {/* {t('button.cancel request')} */}
-                </SelectButton>
+                <>
+                  {record.status === 'request' && (
+                    <SelectButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRow(record);
+                        openRemoveModal();
+                      }}
+                    >
+                      {t('button.cancel request')}
+                    </SelectButton>
+                  )}
+                </>
               ),
             },
-            // {
-            //   ellipsis: true,
-            //   align: 'center',
-            //   render: (_, record) => (
-            //     <>
-            //       {record.status === 'request' && (
-            //         <SelectButton
-            //           onClick={(e) => {
-            //             e.stopPropagation();
-            //             selectRow(record);
-            //             openRemoveModal();
-            //           }}
-            //         >
-            //           {t('button.cancel request')}
-            //         </SelectButton>
-            //       )}
-            //     </>
-            //   ),
-            // },
           ]}
         />
       </PageContent>
