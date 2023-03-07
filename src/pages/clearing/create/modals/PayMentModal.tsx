@@ -16,7 +16,7 @@ import { type } from 'os';
 interface Props {
   visible: boolean;
   closeModal: () => void;
-  isPicker: boolean;
+  isPicker?: boolean;
 }
 
 /* 구독 결제 모달창(payple)
