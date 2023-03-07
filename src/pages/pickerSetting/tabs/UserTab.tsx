@@ -1,24 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserInfo } from '@apis/authAPI';
 import paypleAPI from '@apis/paypleAPI';
-import userAPI from '@apis/userAPI';
-import { AnswerButton, TurtleFormInput, TurtleIcon } from '@components/element';
+import userAPI, { SubscriptionInfo } from '@apis/userAPI';
+import { TurtleIcon } from '@components/element';
 import { css } from '@emotion/react';
 import useModal from '@hooks/useModal';
 import useUser from '@hooks/useUser';
+import { PageContent } from '@layout/page';
+import UserCard from '@pages/setting/cards/UserCard';
 import { theme } from '@styles/theme';
 import { message } from '@utils/message';
-import { emailPattern, phonePattern, removeHyphen } from '@utils/pattern';
-import { Button, Col, Form, Row } from 'antd';
+import { emailPattern, phonePattern } from '@utils/pattern';
+import { Button, Form } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { t } from 'i18next';
 import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import UserCard from '../cards/UserCard';
-import RemoveSubscriptionModal from '../modals/RemoveSubscriptionModal';
-import { RequestConnectInventory } from '@apis/productAPI';
-import { SubscriptionInfo } from '@apis/userAPI';
 
 function UserTab() {
   const [searchParams] = useSearchParams();
@@ -213,88 +211,7 @@ function UserTab() {
   }, []);
 
   return (
-    <>
-      <RemoveSubscriptionModal
-        visible={removeSubscriptionModalvisible}
-        onClose={removeSubscriptionModalClose}
-        id={companyID}
-      />
-
-      <UserCard
-        title={t('title.basic information')}
-        icon={<TurtleIcon name="user" />}
-      >
-        <Form
-          form={form}
-          colon={false}
-          labelCol={{ span: 7 }}
-          wrapperCol={{ span: 17 }}
-          onValuesChange={() => {
-            showButtons();
-          }}
-          onFinish={({ email, mobile_phone }) => {
-            updateMutation.mutate({
-              user_id: user?.id,
-              email,
-              mobile_phone: mobile_phone.replace(removeHyphen, ''),
-            });
-          }}
-        >
-          <Form.Item label={t('table.user name')} name="name">
-            <TurtleFormInput disabled />
-          </Form.Item>
-          <Form.Item label={t('table.id')} name="login_id">
-            <TurtleFormInput disabled />
-          </Form.Item>
-          <Form.Item
-            label={t('table.email')}
-            name="email"
-            rules={[{ validator: emailValidator }]}
-          >
-            <TurtleFormInput placeholder={t('placeholder.input email')} />
-          </Form.Item>
-          <Form.Item
-            label={t('table.mobile')}
-            name="mobile_phone"
-            rules={[{ validator: mobileValidator }]}
-          >
-            <TurtleFormInput
-              placeholder={t('placeholder.input mobile number')}
-            />
-          </Form.Item>
-
-          {buttonsVisible && (
-            <Row
-              css={css`
-                margin-top: 32px;
-                margin-bottom: 8px;
-              `}
-              justify="end"
-              align="middle"
-            >
-              <Col>
-                <AnswerButton
-                  type="NO"
-                  text={t('button.cancel')}
-                  onClick={() => {
-                    // 취소를 누르면 최초 값으로 초기화.
-                    resetStates(user as UserInfo);
-                    hideButtons();
-                  }}
-                />
-              </Col>
-              <Col css={marginleft}>
-                <AnswerButton
-                  type="YES"
-                  text={t('button.saving')}
-                  htmlType="submit"
-                />
-              </Col>
-            </Row>
-          )}
-        </Form>
-        {/*  */}
-      </UserCard>
+    <PageContent>
       <div css={marginTop}>
         {!subscriptionData.is_subscribed ? (
           //구독 안한 상태
@@ -469,9 +386,13 @@ function UserTab() {
           </UserCard>
         )}
       </div>
-    </>
+    </PageContent>
   );
 }
+
+const marginTop = css`
+  margin-top: 24px;
+`;
 
 const button = css`
   width: 140px;
@@ -497,14 +418,6 @@ const button = css`
     background-color: #00b3be;
     border-color: #00b3be;
   }
-`;
-
-const marginTop = css`
-  margin-top: 24px;
-`;
-
-const marginleft = css`
-  margin-left: 8px;
 `;
 
 export default UserTab;
