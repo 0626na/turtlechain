@@ -157,12 +157,15 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         title={t('title.really register')}
         description={[
           t('description.cannot reset after register'),
-          t('description.confirm payment info'),
+          '정산 정보를 다시한번 확인해주세요.',
+          // t('description.confirm payment info'),
         ]}
         items={[
-          { title: t('table.payment date'), content: cart.clearingRequestDate },
+          // { title: t('table.payment date'), content: cart.clearingRequestDate },
+          { title: '정산요청 일자', content: cart.clearingRequestDate },
           {
-            title: t('table.unpaidAmount'),
+            // title: t('table.unpaidAmount'),
+            title: '정산요청 금액',
             content: t('description.price include vat', {
               price: (
                 Math.round((clearingPaymentTotal * 1.1) / 10) * 10
@@ -378,7 +381,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >
-              {t('button.send payment')}
+              정산서 생성 요청
+              {/* {t('button.send payment')} */}
             </PrimaryButton>
           </Col>
         </Row>
