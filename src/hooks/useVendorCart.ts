@@ -21,7 +21,6 @@ type PENDING_LIST = 'pendingList';
 
 const useVendorCart = () => {
   const [cart, setCart] = useRecoilState(vendorCartState);
-
   /**
    * cart 초기화
    */
@@ -33,6 +32,10 @@ const useVendorCart = () => {
     });
   }, []);
 
+  /**
+   * 거래처 데이터 신규추가
+   * @param {ResponseVendorInventory} data 파싱된 거래처 데이터 or 하나씩 추가로 생성된 거래처 데이터
+   */
   const ready = useCallback((data: ResponseVendorInventory) => {
     const initSuccessList = (vendorList: ParsedVendor[]) =>
       vendorList.map((vendor) => ({
@@ -58,6 +61,10 @@ const useVendorCart = () => {
     });
   }, []);
 
+  /**
+   * 거래처 데이터 하나씩 추가
+   * @param {SuccessItem} vendor 새로 추가하는 1개의 거래처
+   */
   const addSingleVendor = useCallback((vendor: SuccessItem) => {
     const isAlreadyExist = cart.successList.some(
       (item) => item.vendor_code === vendor.vendor_code,
@@ -76,6 +83,11 @@ const useVendorCart = () => {
     return true;
   }, []);
 
+  /**
+   * 부가세 바로전달 처리
+   * @param target 부가세 바로전달 처리를 체크한 거래처
+   * @param listName 성공/보류/실패 리스트
+   */
   const vatIncludedUpdate = (
     target: SuccessItem | PendingItem,
     listName: SUCCESS_LIST | PENDING_LIST,
@@ -93,6 +105,12 @@ const useVendorCart = () => {
     }));
   };
 
+  /**
+   * 거래처명 수정
+   * @param newVendorName 새 거래처 이름
+   * @param target 이름을 바꾸려는 거래처
+   * @param listName 성공/보류
+   */
   const handleUseVendorNameUpdate = (
     newVendorName: string,
     target: SuccessItem | PendingItem,
@@ -111,6 +129,12 @@ const useVendorCart = () => {
     }));
   };
 
+  /**
+   * 거래처 메모내용 수정
+   * @param newMemo 새 메모
+   * @param target 메모 수정하려는 거래처
+   * @param listName 성공/보류
+   */
   const memoUpdate = (
     newMemo: string,
     target: PendingItem | SuccessItem,
@@ -129,6 +153,10 @@ const useVendorCart = () => {
     }));
   };
 
+  /**
+   * 거래처 삭제
+   * @param targetVendorCode 삭제라혀는 거래처의 거래처 코드
+   */
   const vendorRemove = (targetVendorCode: string) => {
     setCart(() => ({
       ...cart,
@@ -138,6 +166,12 @@ const useVendorCart = () => {
     }));
   };
 
+  /**
+   * 도매처 찾기, 거래처등록에서 보류 상태의 거래처 매칭을 위한 도매처 검색
+   * @param wsStoreList
+   * @param selectedWsId
+   * @returns
+   */
   const findWsStore = (wsStoreList: Wholesale[], selectedWsId: number) => {
     const result = wsStoreList.find(
       (wholesale: Wholesale) => wholesale.id === selectedWsId,
@@ -146,6 +180,11 @@ const useVendorCart = () => {
     return result;
   };
 
+  /**
+   * 보류 상태의 거래처 매칭하기
+   * @param selectedWsStoreId
+   * @param selectedRow
+   */
   const handleWholesaleStoreSelecte = (
     selectedWsStoreId: number,
     selectedRow: PendingItem,
@@ -190,6 +229,11 @@ const useVendorCart = () => {
     }));
   };
 
+  /**
+   * 보류 탭의 거래처 데이터 성공탭으로 이전
+   * @param target
+   * @returns
+   */
   const convertToSuccessItem = (target: PendingItem) => {
     return {
       ...target,
@@ -204,6 +248,12 @@ const useVendorCart = () => {
     };
   };
 
+  /**
+   * 거래처 등록시, api request에 올릴수 있도록 변경
+   * @param vendor
+   * @param rt_store_id
+   * @returns
+   */
   const convertToMutateItem = (
     vendor: SuccessItem,
     rt_store_id: number,

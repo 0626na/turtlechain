@@ -5,13 +5,11 @@ import {
 import { warehousingCartState } from '@store/warehousingCartState';
 import { RcFile } from 'antd/lib/upload';
 import moment from 'moment';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
-import useStore from './useStore';
 
 const useWarehousingCart = () => {
   const [cart, setCart] = useRecoilState(warehousingCartState);
-  const { store } = useStore();
 
   const ready = useCallback(
     (data: ResponseConnectInventory) => {

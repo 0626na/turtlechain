@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
-import { MemoIcon, TurtleTableInput } from '@components/element';
+import { MemoIcon } from '@components/element';
 import { PendingItem } from '@store/vendorCartState';
 import { Dropdown, Menu, Switch, Table, Tooltip } from 'antd';
 
@@ -12,8 +12,8 @@ import useModal from '@hooks/useModal';
 import InputModal from '@components/combine/modal/InputModal';
 import { TextWithTooltip } from '@components/combine';
 import { theme } from '@styles/theme';
-import { phoneMaskingPattern } from '@utils/pattern';
-import { phoneMasking } from '@utils/phone';
+
+import { phoneMasking } from '@utils/etc';
 
 interface Props {
   isLoading: boolean;
@@ -23,7 +23,6 @@ function PendingTab({ isLoading }: Props) {
   const {
     cart,
     vatIncludedUpdate,
-    handleUseVendorNameUpdate,
     memoUpdate,
     handleWholesaleStoreSelecte,
     handleAccountSelecte,

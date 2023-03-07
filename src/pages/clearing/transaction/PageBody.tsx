@@ -106,7 +106,7 @@ function PageBody() {
                 <TurtleSearchInput
                   placeholder={t('placeholder.input vendor name')}
                   onChange={(e) => {
-                    filterVendor(e.currentTarget?.value);
+                    filterVendor(e.currentTarget?.value.trim());
                   }}
                 />
               }

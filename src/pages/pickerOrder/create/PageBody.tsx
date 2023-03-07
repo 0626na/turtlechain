@@ -30,6 +30,8 @@ import moment from 'moment';
 import { theme } from '@styles/theme';
 import OrderParsingProcessPresentModal from './modals/OrderParsingProcessPresentModal';
 import OrderPreParsingWarningModal from './modals/OrderPreParsingWarningModal';
+import PayMentModal from '@pages/clearing/create/modals/PayMentModal';
+import userAPI from '@apis/userAPI';
 
 function PageBody() {
   const {
@@ -52,12 +54,25 @@ function PageBody() {
   const [confirmModalVisible, openConfirmModal, closeConfirmModal] = useModal();
   const [preparsingModalVisible, openPreparsingModal, closePreparsingModal] =
     useModal();
+  const [paypalModalVisible, openPaypalModal, closePaypalModal] = useModal();
   const [newAddModalVisible, openNewAddModal, closeNewAddModal] = useModal();
   const [
     orderParsingProcessModalVisible,
     openParsingProcessModal,
     closeParsingProcessModal,
   ] = useModal();
+
+  /**
+   * 사입자 구독여부 확인
+   */
+  const { data: isSubscription } = useQuery(
+    'subscription',
+    () =>
+      userAPI.getSubscriptionCheck({ company_id: Number(user?.company_id) }),
+    {
+      enabled: user !== null,
+    },
+  );
 
   /**
    * 등록된 전체 쇼핑몰 갯수
@@ -193,6 +208,11 @@ function PageBody() {
         visible={confirmModalVisible}
         close={closeConfirmModal}
         items={confirmModalItems}
+      />
+      <PayMentModal
+        visible={paypalModalVisible}
+        closeModal={closePaypalModal}
+        isPicker={true}
       />
 
       {createPreParsingMutation.isSuccess && (
@@ -422,7 +442,9 @@ function PageBody() {
             <PrimaryButton
               disabled={cart.successList.length === 0}
               onClick={() => {
-                openConfirmModal();
+                isSubscription?.data.is_expired
+                  ? openConfirmModal()
+                  : openPaypalModal();
               }}
             >
               {t('button.do order')}

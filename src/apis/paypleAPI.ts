@@ -3,6 +3,7 @@ import { v2Axios } from '@apis/index';
 interface RequestAuthenticate {
   company_id: number;
   request_type: 'PAY' | 'AUTH';
+  user_id?: number;
 }
 
 interface ResponseAuthenticate {
@@ -52,6 +53,8 @@ const removeSubscription = async (data: RequestRemoveSubscription) => {
 export interface RequestUpdateTestAlimTalk {
   request_date: string;
   clearing_amount: number;
+  type: string;
+  user_id?: number;
 }
 
 export interface ResponseUpdateTestAlimTalk {

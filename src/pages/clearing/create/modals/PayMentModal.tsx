@@ -11,17 +11,19 @@ import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
 import useClearingCart from '@hooks/useClearingCart';
 import userAPI from '@apis/userAPI';
+import { type } from 'os';
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
+  isPicker: boolean;
 }
 
 /* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
-function PayMentModal({ visible, closeModal }: Props) {
+function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -151,6 +153,7 @@ function PayMentModal({ visible, closeModal }: Props) {
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
+                user_id: isPicker ? user?.id : 0,
               });
               setButtonLoading(true);
             }}
@@ -164,6 +167,8 @@ function PayMentModal({ visible, closeModal }: Props) {
                 request_date: cart.clearingRequestDate,
                 clearing_amount:
                   Math.round((clearingPaymentTotal * 1.1) / 10) * 10,
+                type: isPicker ? 'order' : 'clearing',
+                user_id: isPicker ? user?.id : undefined,
               });
             }}
           />

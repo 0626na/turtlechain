@@ -338,6 +338,7 @@ function UserTab() {
                           changeCreditCardInfoMutation.mutate({
                             company_id: companyID,
                             request_type: 'PAY',
+                            user_id: user?.id,
                           })
                         }
                       >
@@ -356,6 +357,7 @@ function UserTab() {
                             changeCreditCardInfoMutation.mutate({
                               company_id: companyID,
                               request_type: 'PAY',
+                              user_id: user?.id,
                             })
                           }
                         >
@@ -369,26 +371,6 @@ function UserTab() {
                       </div>
                     )}
                   </div>
-                  {/* 최초구독의 경우 */}
-                  {isNewSubscription && (
-                    <div
-                      css={css({
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: '#FBF0E6',
-                        color: theme.orangeTx,
-                        borderRadius: 8,
-                        width: 143,
-                        height: 26,
-                        padding: '6px 7px',
-                      })}
-                    >
-                      <TurtleIcon name="thunder" />
-                      <span>
-                        {t('description.the first months fee is 100won')}
-                      </span>
-                    </div>
-                  )}
                 </div>
                 {currentSubscriptionStatus && (
                   <div css={css({ paddingTop: 10, color: theme.grey500 })}>
@@ -441,6 +423,7 @@ function UserTab() {
                       changeCreditCardInfoMutation.mutate({
                         company_id: companyID,
                         request_type: 'AUTH',
+                        user_id: user?.id,
                       })
                     }
                   >

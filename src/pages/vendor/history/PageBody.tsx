@@ -20,14 +20,14 @@ import { message } from '@utils/message';
 import { css } from '@emotion/react';
 import VendorInfoUpdateModal from './modal/VendorInfoUpdateModal';
 import { TextWithTooltip } from '@components/combine';
-import { phoneMasking } from '@utils/phone';
+import { phoneMasking } from '@utils/etc';
 
 function PageBody() {
   const [vendorList, setVendorList] = useState<Vendor[]>();
   const [selectedRow, setSelectedRow] = useState<Vendor>();
   const { store } = useStore();
   const [searchQuery, setSearchQuery] = useState<RequestGetList>({
-    rt_store_id: -1,
+    rt_store_id: undefined,
     page: 1,
     search_string: '',
   });
@@ -46,16 +46,13 @@ function PageBody() {
     openUpdateVendorNameModal,
     closeupdateVendorNameModal,
   ] = useModal();
+
   // 거래처 리스트 불러오기 요청
   const getVendorListQuery = useQuery(
     ['getVendorListQuery', searchQuery],
-    () =>
-      vendorAPI.getList({
-        ...searchQuery,
-        rt_store_id: store.selected?.id as number,
-      }),
+    () => vendorAPI.getList(searchQuery),
     {
-      enabled: (store.selected?.id as number) !== undefined,
+      enabled: searchQuery.rt_store_id !== undefined,
       onSuccess: (data) => {
         setVendorList(
           data.data.vendor_list.map((vendor) => ({
@@ -90,11 +87,11 @@ function PageBody() {
 
   // 쇼핑몰 바뀔때 상품 리스트 재검색
   useEffect(() => {
-    setSearchQuery((searchQuery) => ({
-      ...searchQuery,
+    setSearchQuery({
+      search_string: '',
       rt_store_id: store.selected?.id,
       page: 1,
-    }));
+    });
   }, [store.selected]);
 
   const totalCount = getVendorListQuery.data?.data.total_count;
@@ -190,6 +187,7 @@ function PageBody() {
         visible={updateVendorInfoModalVisible}
         closeModal={closeUpdateVendorInfoModal}
       />
+
       <PageContent>
         <Table
           size="small"

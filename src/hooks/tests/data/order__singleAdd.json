@@ -1,0 +1,24 @@
+{
+  "data": {
+    "id": 0,
+    "rt_store_id": 100184,
+    "rt_store_name": "깡언니",
+    "type": "single",
+    "orders": [
+      {
+        "vendor_name": "신발파는 닐스네",
+        "vendor_address": "APM 1층 1",
+        "vendor_mobile": "",
+        "mobile": "01085779193",
+        "product_name": "화이트 턴업 와이드PT",
+        "product_option": "[XS-White]",
+        "product_count": 1,
+        "product_price": 10000,
+        "order_type": "order",
+        "creation_type": "single",
+        "memo": "",
+        "ws_store_info": []
+      }
+    ]
+  }
+}

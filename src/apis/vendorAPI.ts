@@ -1,3 +1,4 @@
+import { refinedValue } from './../utils/etc';
 import { RcFile } from 'antd/lib/upload';
 import { v2Axios } from '.';
 
@@ -62,7 +63,7 @@ export interface Wholesale {
   address: string;
   store_account: VendorAccount[];
   store_phone: VendorPhone[];
-  company: VendorCompany[];
+  //company: VendorCompany[];
   building: string;
   floor: string;
   col: string;
@@ -152,7 +153,9 @@ export interface ResponseGetList {
 
 const getList = async (params: RequestGetList) => {
   const url = 'provisioning/vendor';
-  const response = await v2Axios.get<ResponseGetList>(url, { params });
+  const response = await v2Axios.get<ResponseGetList>(url, {
+    params: { ...params, search_string: refinedValue(params.search_string) },
+  });
 
   return response.data;
 };
@@ -285,12 +288,13 @@ export interface ResponseGetWholesale {
 }
 
 // 마스터 도매 검색
-const getWholesale = async (query: RequestGetWholesale) => {
-  let url = `provisioning/search_wholesale?`;
-  for (const [key, value] of Object.entries(query)) {
-    url = url + `${key}=${value}&`;
-  }
-  const response = await v2Axios.get<ResponseGetWholesale>(url);
+const getWholesale = async (params: RequestGetWholesale) => {
+  const url = 'provisioning/search_wholesale';
+
+  const response = await v2Axios.get<ResponseGetWholesale>(url, {
+    params: { ...params, search_string: refinedValue(params.search_string) },
+  });
+
   return response.data;
 };
 

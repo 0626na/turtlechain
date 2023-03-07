@@ -1,10 +1,9 @@
+import React from 'react';
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import RetailerMainLayout from '@layout/retailerMain';
 import PickerMainLayout from '@layout/pickerMain';
 import RegistrationLayout from '@layout/auth/RegistrationLayout';
-
-import React from 'react';
 import {
   ClearingCreatePage,
   ClearingHistoryPage,
@@ -40,7 +39,6 @@ function App() {
     <Suspense fallback={<></>}>
       <Routes>
         <Route index element={<LoginPage />} />
-
         <Route path="/registration" element={<RegistrationLayout />}>
           <Route index element={<NewPage />} />
           <Route path="retailer" element={<RetailerPage />} />

@@ -44,7 +44,6 @@ function PageBody() {
     useModal();
   const [confirmModalVisivle, openConfirmModal, closeConfirmModal] = useModal();
   const [addModalVisivle, openAddModal, closeAddModal] = useModal();
-  const [alertBarVisible, openAlertModal, closeAlertModal] = useModal(true);
 
   /**
    * 쇼핑몰 변경시 cart 초기화한다.
