@@ -140,6 +140,10 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       />
 
       <PayMentModal
+        description={[
+          '결제요청 기능은 유료플랜으로만 제공됩니다.',
+          '서베스를 구독하면,모든 거래처 상품을 한 번에 결제할 수 있어요.',
+        ]}
         visible={paymentModalVisible}
         closeModal={paymentModalClose}
       />
