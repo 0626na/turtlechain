@@ -141,8 +141,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
 
       <PayMentModal
         description={[
-          '결제요청 기능은 유료플랜으로만 제공됩니다.',
-          '서비스를 구독하면,모든 거래처 상품을 한 번에 결제할 수 있어요.',
+          '정산서 생성은 유료플랜으로만 제공됩니다.',
+          '서비스를 구독하면,모든 거래처 상품을 한 번에 정산할 수 있어요.',
         ]}
         visible={paymentModalVisible}
         closeModal={paymentModalClose}
@@ -161,12 +161,15 @@ function ClearingPanel({ activeKey, ...props }: Props) {
         title={t('title.really register')}
         description={[
           t('description.cannot reset after register'),
-          t('description.confirm payment info'),
+          '정산 정보를 다시한번 확인해주세요.',
+          // t('description.confirm payment info'),
         ]}
         items={[
-          { title: t('table.payment date'), content: cart.clearingRequestDate },
+          // { title: t('table.payment date'), content: cart.clearingRequestDate },
+          { title: '정산요청 일자', content: cart.clearingRequestDate },
           {
-            title: t('table.unpaidAmount'),
+            // title: t('table.unpaidAmount'),
+            title: '정산요청 금액',
             content: t('description.price include vat', {
               price: (
                 Math.round((clearingPaymentTotal * 1.1) / 10) * 10
@@ -382,7 +385,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
               }}
               icon={<TurtleIcon name="rightTriangle" />}
             >
-              {t('button.send payment')}
+              정산서 생성 요청
+              {/* {t('button.send payment')} */}
             </PrimaryButton>
           </Col>
         </Row>

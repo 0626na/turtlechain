@@ -88,20 +88,21 @@ function SubscriptionBar() {
         <div css={alertBarCss.self}>
           <TurtleIcon name="exclamationMark" />
           <span css={alertBarCss.text}>
-            결제요청을 보내려면 서비스 구독이 필요합니다.
+            정산서를 생성하려면 서비스 구독이 필요합니다.
           </span>
 
           <SelectButton
             onClick={() => {
               if (!user?.company_id) return;
+
               authenticateMutation.mutate({
+                user_id: user.id,
                 company_id: user.company_id,
                 request_type: 'PAY',
               });
             }}
-            icon={<TurtleIcon name="alertBarArrowRight" />}
           >
-            첫달 이용 100원
+            구독하기
           </SelectButton>
 
           <div

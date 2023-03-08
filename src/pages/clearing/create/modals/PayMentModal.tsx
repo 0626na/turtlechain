@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { message } from '@utils/message';
 import useClearingCart from '@hooks/useClearingCart';
 import userAPI from '@apis/userAPI';
-import { type } from 'os';
 
 interface Props {
   visible: boolean;

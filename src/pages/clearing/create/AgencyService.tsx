@@ -16,7 +16,7 @@ import { t } from 'i18next';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
-import ExelModal from './modals/ExelModal';
+import ExcelModal from './modals/ExcelModal';
 
 // 대행서비스
 function AgencyService() {
@@ -52,7 +52,7 @@ function AgencyService() {
       {/*
        * 파싱 결과 모달
        */}
-      <ExelModal visible={modalVisible} onClose={closeModal} />
+      <ExcelModal visible={modalVisible} onClose={closeModal} />
 
       <div css={inner}>
         <span css={clearingDate}>{t('table.payment date')}</span>
