@@ -42,7 +42,7 @@ function PayMentModal({
         company_id: user?.company_id ?? 0,
       }),
     {
-      enabled: visible && user !== null,
+      enabled: visible && user?.company_id !== undefined,
       refetchInterval: (data) => {
         if (data?.data.is_expired) {
           setButtonLoading(false);
