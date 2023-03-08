@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import orderAPI, { OrderSheetList } from '@apis/orderAPI';
 import {
+  TertiaryButton,
   TurtleCard,
   TurtleDivider,
   TurtleIcon,
@@ -286,7 +287,10 @@ function PageBody() {
                 ) : null;
               },
             },
-            {},
+            {
+              title: '발주내역 다운로드',
+              render: (_, record) => <TertiaryButton text="내역 다운로드" />,
+            },
           ]}
         />
       </PageContent>

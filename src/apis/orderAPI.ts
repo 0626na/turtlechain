@@ -488,6 +488,19 @@ const updateOrderHistoryMemo = async (data: RequestUpdateOrderHistoryMemo) => {
   return response.data;
 };
 
+/**
+ * 발주서 내역 다운로드
+ */
+
+export interface RequestOrderDownload {
+  sheetId: number;
+}
+
+const orderDownload = async (data: RequestOrderDownload) => {
+  const url = `excel/downloag/order?${data.sheetId}`;
+  const response = await v2Axios.post(url, data);
+};
+
 const orderAPI = {
   getOrderFormat,
   createOrderFormat,
