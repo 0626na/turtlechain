@@ -17,13 +17,19 @@ interface Props {
   visible: boolean;
   closeModal: () => void;
   isPicker?: boolean;
+  description?: string[];
 }
 
 /* 구독 결제 모달창(payple)
  *
  * https://developer.payple.kr/integration/recurring-payment
  */
-function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
+function PayMentModal({
+  visible,
+  closeModal,
+  description,
+  isPicker = false,
+}: Props) {
   const navigate = useNavigate();
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -135,12 +141,16 @@ function PayMentModal({ visible, closeModal, isPicker = false }: Props) {
 
         <div css={modal.description}>
           <p>
-            {t('description.payment feature is only available as a paid plan')}
-          </p>
-          <p>
-            {t(
-              'description.if you subscribe to the service, you can pay for all the client products at once',
-            )}
+            {description?.map((item, index) => {
+              return description.length === index + 1 ? (
+                <>{item}</>
+              ) : (
+                <>
+                  {item}
+                  <br />
+                </>
+              );
+            })}
           </p>
         </div>
 

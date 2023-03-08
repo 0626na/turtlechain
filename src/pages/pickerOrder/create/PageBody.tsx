@@ -210,6 +210,10 @@ function PageBody() {
         items={confirmModalItems}
       />
       <PayMentModal
+        description={[
+          '발주하기 기능은 유료플랜으로만 제공됩니다.',
+          '서비스를 구독하면, 모든 거래처 상품을 한번에 발주할 수 있어요.',
+        ]}
         visible={paypalModalVisible}
         closeModal={closePaypalModal}
         isPicker={true}
