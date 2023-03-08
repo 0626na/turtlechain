@@ -112,7 +112,8 @@ function PageBody() {
       <TurtleConfirmModal
         visible={removeModalVisible}
         title={t('title.really cancel')}
-        description={[t('description.cannot return clearing')]}
+        // description={[t('description.cannot return clearing')]}
+        description={['취소 후에는 다시 정산요청을 보내야해요.']}
         onCancel={closeRemoveModal}
         onOk={() => {
           removeSheetMutation.mutate({
@@ -314,25 +315,38 @@ function PageBody() {
                 </SelectButton>
               ),
             },
-            // {
-            //   ellipsis: true,
-            //   align: 'center',
-            //   render: (_, record) => (
-            //     <>
-            //       {record.status === 'request' && (
-            //         <SelectButton
-            //           onClick={(e) => {
-            //             e.stopPropagation();
-            //             selectRow(record);
-            //             openRemoveModal();
-            //           }}
-            //         >
-            //           {t('button.cancel request')}
-            //         </SelectButton>
-            //       )}
-            //     </>
-            //   ),
-            // },
+            {
+              ellipsis: true,
+              align: 'center',
+              onCell: (record) => ({
+                style: {
+                  cursor: 'pointer',
+                  display: record.status === 'request' ? '' : 'none',
+                },
+                onClick: (e) => {
+                  e.stopPropagation();
+                  setSelectedRow(record);
+                  openRemoveModal();
+                },
+              }),
+              render: (_, record) => (
+                <>
+                  {/* {record.status === 'request' && (
+                    <SelectButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRow(record);
+                        openRemoveModal();
+                      }}
+                    >
+                      {t('button.cancel request')}
+                    </SelectButton>
+                    
+                  )} */}
+                  <TurtleIcon name="delete" />
+                </>
+              ),
+            },
           ]}
         />
       </PageContent>

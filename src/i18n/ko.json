@@ -548,7 +548,7 @@
     "today": "오늘",
     "confirm adjustment payment": "결제에서 제외 또는 포함할 교환/반품/미송을 확인해주세요.",
     "input payment price": "거래처별 금액을 확인하고 결제할 금액을 입력해주세요.",
-    "cannot return clearing": "취소 후에는 다시 결제요청을 보내야해요.",
+    "cannot return clearing": "취소 후에는 다시 정산요청을 보내야해요.",
     "download selected clearing": "선택한 기간의 결제내역을 다운로드합니다.",
     "one minute to download": "정보의 양에 따라 최대 1분 정도 걸릴 수 있어요.",
     "look around ledger": "거래처를 선택하고 잔금 및 여러 금액 정보를 확인해보세요.",
