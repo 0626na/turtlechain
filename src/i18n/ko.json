@@ -334,7 +334,7 @@
     "success create store": "쇼핑몰 등록을 완료했어요.",
     "input store": "쇼핑몰을 입력해주세요",
     "delete store": "쇼핑몰을 삭제했어요.",
-    "success create clearing": "정산요청이 완료됐어요",
+    "success create clearing": "결제요청이 완료됐어요",
     "not match password": "비밀번호가 일치하지 않습니다.",
     "success create auth num": "인증번호를 문자메세지로 보냈어요",
     "success verify auth num": "인증번호를 확인했어요",

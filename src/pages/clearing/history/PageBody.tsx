@@ -57,7 +57,8 @@ function PageBody() {
     onSuccess: () => {
       getClearingSheetQuery.refetch();
       closeRemoveModal();
-      message.success(t('message.cancel clearing'));
+      // message.success(t('message.cancel clearing'));
+      message.success('성공적으로 삭제되었습니다');
     },
   });
 
@@ -113,7 +114,7 @@ function PageBody() {
         visible={removeModalVisible}
         title={t('title.really cancel')}
         // description={[t('description.cannot return clearing')]}
-        description={['취소 후에는 다시 정산요청을 보내야해요.']}
+        description={['삭제 후에는 다시 정산서를 생성해야해요.']}
         onCancel={closeRemoveModal}
         onOk={() => {
           removeSheetMutation.mutate({

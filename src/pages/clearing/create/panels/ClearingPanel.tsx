@@ -80,7 +80,8 @@ function ClearingPanel({ activeKey, ...props }: Props) {
   // 정산서 생성 및 정산 상품추가
   const createClearingMutation = useMutation(clearingAPI.create, {
     onSuccess: () => {
-      message.success(t('message.success create clearing'));
+      // message.success(t('message.success create clearing'));
+      message.success('정산서가 성공적으로 생성되었습니다.');
       navigate('/clearing/history');
     },
   });
