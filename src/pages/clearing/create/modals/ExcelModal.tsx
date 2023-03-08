@@ -149,7 +149,8 @@ function ExelModal({ visible, onClose }: Props) {
             }}
             icon={<TurtleIcon name="rightTriangle" />}
           >
-            {t('button.send payment')}
+            정산서 생성
+            {/* {t('button.send payment')} */}
           </PrimaryButton>
         </footer>
       </TurtleContentModal>
