@@ -136,7 +136,7 @@ function CompanyStep({ visible, loading }: Props) {
                 <CheckDuplicatedButton
                   onClick={() => {
                     dupCheckMutation.mutate({
-                      biz_num: form.getFieldValue('company_biz_num'),
+                      biz_num: form.getFieldValue('company_biz_num').trim(),
                     });
                   }}
                   isDuplicated={checkDuplicated}
