@@ -162,7 +162,7 @@ function PayMentModal({
               authenticateMutation.mutate({
                 company_id: Number(user?.company_id),
                 request_type: 'PAY',
-                user_id: isPicker ? user?.id : 0,
+                user_id: user?.id,
               });
               setButtonLoading(true);
             }}
@@ -177,7 +177,7 @@ function PayMentModal({
                 clearing_amount:
                   Math.round((clearingPaymentTotal * 1.1) / 10) * 10,
                 type: isPicker ? 'order' : 'clearing',
-                user_id: isPicker ? user?.id : undefined,
+                user_id: user?.id,
               });
             }}
           />
