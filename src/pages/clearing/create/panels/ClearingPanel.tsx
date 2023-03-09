@@ -143,7 +143,7 @@ function ClearingPanel({ activeKey, ...props }: Props) {
       <PayMentModal
         description={[
           '정산서 생성은 유료플랜으로만 제공됩니다.',
-          '서비스를 구독하면,모든 거래처 상품을 한 번에 정산할 수 있어요.',
+          '서비스를 구독하면 은행 이체파일을 생성할 수 있어요.',
         ]}
         visible={paymentModalVisible}
         closeModal={paymentModalClose}
