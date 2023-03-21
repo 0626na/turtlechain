@@ -167,7 +167,7 @@ function PayMentModal({
               setButtonLoading(true);
             }}
           />
-          <TertiaryButton
+          {/* <TertiaryButton
             loading={buttonLoading}
             text={t('button.testNotificationKakaoTalk')}
             size="large"
@@ -180,7 +180,7 @@ function PayMentModal({
                 user_id: user?.id,
               });
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>
@@ -234,6 +234,11 @@ const modal = {
     color: theme.grey600,
     lineHeight: 1.4,
   }),
-  buttonContainer: css({ display: 'flex', flexDirection: 'column', gap: 12 }),
+  buttonContainer: css({
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  }),
 };
 export default PayMentModal;
