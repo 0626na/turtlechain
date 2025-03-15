@@ -1,5 +1,19 @@
 # 터틀체인 2.0
 
+## 제가 담당했던 작업 설명
+
+저는 이 터틀체인에서 다음과 같은 부분을 담당했습니다.
+- 발주시스템
+  - src/pages/pickerOrder
+  - src/pages/pickerSetting
+  - src/pages/pickerVendor
+- custom hook 개발
+  - src/hooks/useOrderCart.ts
+- 구독시스템
+  - src/pages/setting/tabs/UserTab.tsx
+- 공용 컴포넌트 및 공용 state 개발
+
+
 ### 🛠 프론트 개발환경 구성
 
 ```shell
